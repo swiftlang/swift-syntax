@@ -76,10 +76,7 @@ public final class SyntaxTreeDeserializer {
   }
 
   private func addToLookupTable(_ node: RawSyntax) {
-    guard let id = node.id else {
-      return
-    }
-    nodeLookupTable[id] = node
+    nodeLookupTable[node.id] = node
   }
 }
 

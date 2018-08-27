@@ -1,4 +1,4 @@
-//===--------------- SwiftLanguage.swift - Swift Syntax Library -----------===//
+//===--------------- SwiftSyntax.swift - Swift Syntax Library -------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -120,6 +120,16 @@ public final class SyntaxTreeDeserializer {
   }
 }
 
+fileprivate extension Array {
+  func withUnsafeData<T>(_ body: (Data) throws -> T) rethrows -> T {
+    return try self.withUnsafeBufferPointer {
+        (pointer: UnsafeBufferPointer<Element>) -> T in
+      let data = Data(buffer: pointer)
+      return try body(data)
+    }
+  }
+}
+
 /// Namespace for functions to retrieve a syntax tree from the swift compiler
 /// and deserializing it.
 public enum SyntaxTreeParser {
@@ -133,11 +143,13 @@ public enum SyntaxTreeParser {
   public static func parse(_ url: URL) throws -> SourceFileSyntax {
     let swiftcRunner = try SwiftcRunner(sourceFile: url)
     let result = try swiftcRunner.invoke()
-    let syntaxTreeData = result.stdoutData
-    let deserializer = SyntaxTreeDeserializer()
-    // FIXME: We should use ByteTree as the internal transfer format
-    return try deserializer.deserialize(syntaxTreeData,
-                                        serializationFormat: .json)
+    return try result.output.dematerialize().withUnsafeData {
+        (syntaxTreeData: Data) -> SourceFileSyntax in
+      let deserializer = SyntaxTreeDeserializer()
+      // FIXME: We should use ByteTree as the internal transfer format
+      return try deserializer.deserialize(syntaxTreeData,
+                                          serializationFormat: .json)
+    }
   }
 }
 

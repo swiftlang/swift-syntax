@@ -1,4 +1,3 @@
-
 %{
   # -*- mode: Swift -*-
   from gyb_syntax_support import *

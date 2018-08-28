@@ -143,13 +143,10 @@ public enum SyntaxTreeParser {
   public static func parse(_ url: URL) throws -> SourceFileSyntax {
     let swiftcRunner = try SwiftcRunner(sourceFile: url)
     let result = try swiftcRunner.invoke()
-    return try result.output.dematerialize().withUnsafeData {
-        (syntaxTreeData: Data) -> SourceFileSyntax in
-      let deserializer = SyntaxTreeDeserializer()
-      // FIXME: We should use ByteTree as the internal transfer format
-      return try deserializer.deserialize(syntaxTreeData,
-                                          serializationFormat: .json)
-    }
+    let syntaxTreeData = result.stdoutData
+    let deserializer = SyntaxTreeDeserializer()
+    // FIXME: We should use ByteTree as the internal transfer format
+    return try deserializer.deserialize(syntaxTreeData,
+                                        serializationFormat: .json)
   }
 }
-

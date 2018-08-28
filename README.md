@@ -10,14 +10,25 @@ code.
 
 ## Usage
 
-First, install the latest Swift `master` toolchain from
-[swift.org](https://swift.org/download/#snapshots). This will
-ensure you have the latest version of SwiftSyntax, which is necessary as
-SwiftSyntax evolves. Next, select that toolchain in Xcode, using
-the File>Toolchains menu.
+Add this repository to the `Package.swift` manifest of your project:
 
-Then, open a new Swift file or create a new Swift package and
-`import SwiftSyntax`. From there, you'll be able to use the SwiftSyntax API.
+```swift
+import PackageDescription
+
+let package = Package(
+  name: "MyTool",
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-syntax.git", .branch("<#Specify Release tag#>")),
+  ],
+  targets: [
+    .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
+  ]
+)
+```
+
+Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to use. Tags will be created for every release of the compiler in the form `swift-4.2-RELEASE` and for every nightly build in the form `swift-4.2-DEVELOPMENT-SNAPSHOT-2018-08-25-a`.
+
+Then, import `SwiftSyntax` in your Swift code.
 
 ## Example
 

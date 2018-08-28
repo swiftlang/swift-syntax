@@ -1,4 +1,4 @@
-// RUN: %lit-test-helper classify-syntax -source-file %s | %FileCheck %s
+// RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
 enum List<T> {
   case Nil

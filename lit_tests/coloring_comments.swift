@@ -1,4 +1,4 @@
-// RUN: %lit-test-helper classify-syntax -source-file %s | %FileCheck %s
+// RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
 // CHECK: <comment-block>/* foo is the best */</comment-block>
 /* foo is the best */

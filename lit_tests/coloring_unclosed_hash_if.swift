@@ -1,4 +1,4 @@
-// RUN: %lit-test-helper classify-syntax -source-file %s | %FileCheck %s
+// RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
 // CHECK: <#kw>#if</#kw> <#id>d</#id>
 // CHECK-NEXT: <kw>func</kw> bar() {

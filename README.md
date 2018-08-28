@@ -16,13 +16,13 @@ Add this repository to the `Package.swift` manifest of your project:
 import PackageDescription
 
 let package = Package(
-name: "MyTool",
-dependencies: [
-.package(url: "https://github.com/apple/swift-syntax.git", .branch("<#Specify Release tag#>")),
-],
-targets: [
-.target(name: "MyTool", dependencies: ["SwiftSyntax"]),
-]
+  name: "MyTool",
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-syntax.git", .branch("<#Specify Release tag#>")),
+  ],
+  targets: [
+    .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
+  ]
 )
 ```
 

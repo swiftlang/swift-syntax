@@ -98,14 +98,14 @@ private func run(_ executable: URL, arguments: [String] = []) -> ProcessResult {
 
 enum InvocationError: Error, CustomStringConvertible {
   case couldNotFindSwiftc
-  case couldNotFindSDK
+  case couldNotFindSDK(message: String)
 
   var description: String {
     switch self {
     case .couldNotFindSwiftc:
       return "could not locate swift compiler binary"
-    case .couldNotFindSDK:
-      return "could not locate macOS SDK"
+    case .couldNotFindSDK(let message):
+      return "could not locate macOS SDK: \(message)"
     }
   }
 }
@@ -142,14 +142,22 @@ struct SwiftcRunner {
 
   #if os(macOS)
   /// The location of the macOS SDK, or `nil` if it could not be found.
-  private static let macOSSDK: String? = {
-    let url = URL(fileURLWithPath: "/usr/bin/env")
-    let result = run(url, arguments: ["xcrun", "--show-sdk-path"])
-    guard result.wasSuccessful else { return nil }
+  private static func getMacOSSDK() throws -> String {
+    guard let xcrunPath = lookupExecutablePath(filename: "xcrun") else {
+      throw InvocationError.couldNotFindSDK(message: "Could not find xcrun")
+    }
+    let result = run(xcrunPath, arguments: ["--show-sdk-path"])
+    guard result.wasSuccessful else { 
+      throw InvocationError.couldNotFindSDK(message: "Executing xcrun " +
+        "--show-sdk-path finished with non-zero-exit code \(result.exitCode)")
+    }
     let toolPath = result.stdout.trimmingCharacters(in: .whitespacesAndNewlines)
-    if toolPath.isEmpty { return nil }
+    if toolPath.isEmpty {
+      throw InvocationError.couldNotFindSDK(message: "Tool path is empty " +
+        "(running \(xcrunPath))")
+    }
     return toolPath
-  }()
+  }
   #endif
 
   /// Internal static cache of the Swiftc path.
@@ -178,11 +186,8 @@ struct SwiftcRunner {
     var arguments = ["-frontend", "-emit-syntax"]
     arguments.append(sourceFile.path)
     #if os(macOS)
-    guard let sdk = SwiftcRunner.macOSSDK else {
-      throw InvocationError.couldNotFindSDK
-    }
     arguments.append("-sdk")
-    arguments.append(sdk)
+    arguments.append(try SwiftcRunner.getMacOSSDK())
     #endif
     return run(swiftcURL, arguments: arguments)
   }

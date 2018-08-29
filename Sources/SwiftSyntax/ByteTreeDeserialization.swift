@@ -22,6 +22,17 @@ struct ByteTreeUserInfoKey: Hashable {
   }
 }
 
+public enum ByteTreeDecodingError: Error, CustomStringConvertible {
+  case invalidEnumRawValue(type: String, value: Int)
+
+  public var description: String {
+    switch self {
+      case .invalidEnumRawValue(let type, let value):
+        return "Invalid raw value \"\(value)\" for \(type)"
+    }
+  }
+}
+
 /// A type that can be deserialized from ByteTree into a scalar value that
 /// doesn't have any child nodes
 protocol ByteTreeScalarDecodable {
@@ -32,7 +43,8 @@ protocol ByteTreeScalarDecodable {
   ///   - size: The length of the serialized data in bytes
   /// - Returns: The deserialized value
   static func read(from pointer: UnsafeRawPointer, size: Int,
-                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>) -> Self
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
+  ) throws -> Self
 }
 
 /// A type that can be deserialized from ByteTree into an object with child
@@ -50,7 +62,8 @@ protocol ByteTreeObjectDecodable {
   /// - Returns: The deserialized object
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
                    numFields: Int, 
-                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>) -> Self
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
+  ) throws -> Self
 }
 
 // MARK: - Reader objects
@@ -92,9 +105,9 @@ struct ByteTreeObjectReader {
   /// - Returns: The decoded field
   mutating func readField<FieldType: ByteTreeScalarDecodable>(
     _ objectType: FieldType.Type, index: Int
-  ) -> FieldType {
+  ) throws -> FieldType {
     advanceAndValidateIndex(index)
-    return reader.pointee.read(objectType)
+    return try reader.pointee.read(objectType)
   }
 
   /// Read the field at the given index as the specified type. All indicies must
@@ -107,9 +120,9 @@ struct ByteTreeObjectReader {
   /// - Returns: The decoded field
   mutating func readField<FieldType: ByteTreeObjectDecodable>(
     _ objectType: FieldType.Type, index: Int
-  ) -> FieldType {
+  ) throws -> FieldType {
     advanceAndValidateIndex(index)
-    return reader.pointee.read(objectType)
+    return try reader.pointee.read(objectType)
   }
 
   /// Read and immediately discard the field at the specified index. This
@@ -178,7 +191,7 @@ struct ByteTreeReader {
   ) throws -> T {
     var reader = ByteTreeReader(pointer: pointer, userInfo: userInfo)
     try reader.readAndValidateProtocolVersion(protocolVersionValidation)
-    return reader.read(rootObjectType)
+    return try reader.read(rootObjectType)
   }
 
   /// Deserialize an object tree from the ByteTree data at the given memory
@@ -266,15 +279,15 @@ struct ByteTreeReader {
   /// - Returns: The deserialized object
   fileprivate mutating func read<T: ByteTreeObjectDecodable>(
     _ objectType: T.Type
-  ) -> T {
+  ) throws -> T {
     let numFields = readObjectLength()
     var objectReader = ByteTreeObjectReader(reader: &self,
                                             numFields: numFields)
     defer {
       objectReader.finalize()
     }
-    return T.read(from: &objectReader, numFields: numFields, 
-                  userInfo: userInfo)
+    return try T.read(from: &objectReader, numFields: numFields, 
+                      userInfo: userInfo)
   }
 
   /// Read the next field in the tree as a scalar of the specified type.
@@ -283,12 +296,12 @@ struct ByteTreeReader {
   /// - Returns: The deserialized scalar
   fileprivate mutating func read<T: ByteTreeScalarDecodable>(
     _ scalarType: T.Type
-  ) -> T {
+  ) throws -> T {
     let fieldSize = readScalarLength()
     defer {
       pointer = pointer.advanced(by: fieldSize)
     }
-    return T.read(from: pointer, size: fieldSize, userInfo: userInfo)
+    return try T.read(from: pointer, size: fieldSize, userInfo: userInfo)
   }
 
   /// Discard the next scalar field, advancing the pointer to the next field
@@ -338,12 +351,12 @@ extension Optional: ByteTreeObjectDecodable
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
                    numFields: Int, 
                    userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
-  ) -> Optional<Wrapped> {
+  ) throws -> Optional<Wrapped> {
     if numFields == 0 {
       return nil
     } else {
-      return Wrapped.read(from: reader, numFields: numFields,
-                          userInfo: userInfo)
+      return try Wrapped.read(from: reader, numFields: numFields,
+                              userInfo: userInfo)
     }
   }
 }
@@ -354,9 +367,9 @@ extension Array: ByteTreeObjectDecodable
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
                    numFields: Int, 
                    userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
-  ) -> Array<Element> {
-    return (0..<numFields).map {
-      return reader.pointee.readField(Element.self, index: $0)
+  ) throws -> Array<Element> {
+    return try (0..<numFields).map {
+      return try reader.pointee.readField(Element.self, index: $0)
     }
   }
 }

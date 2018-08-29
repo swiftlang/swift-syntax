@@ -343,7 +343,7 @@ extension RawSyntax {
 
 extension RawSyntax: Codable {
   /// Creates a RawSyntax from the provided Foundation Decoder.
-  required convenience init(from decoder: Decoder) throws {
+  convenience init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     let id = try container.decodeIfPresent(SyntaxNodeId.self, forKey: .id)
     let omitted = try container.decodeIfPresent(Bool.self, forKey: .omitted) ?? false

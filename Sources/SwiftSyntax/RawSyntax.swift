@@ -85,7 +85,7 @@ fileprivate enum RawSyntaxData {
 /// Represents the raw tree structure underlying the syntax tree. These nodes
 /// have no notion of identity and only provide structure to the tree. They
 /// are immutable and can be freely shared between syntax nodes.
-struct RawSyntax {
+final class RawSyntax {
   fileprivate let data: RawSyntaxData
   let presence: SourcePresence
 
@@ -123,6 +123,13 @@ struct RawSyntax {
         return Box(SourceLength(of: kind.text))
       }
     }).value
+  }
+    
+  /// Creates a copy of `other`.
+  init(_ other: RawSyntax) {
+    self.data = other.data
+    self.presence = other.presence
+    self.id = other.id
   }
 
   init(kind: SyntaxKind, layout: [RawSyntax?], presence: SourcePresence,
@@ -336,7 +343,7 @@ extension RawSyntax {
 
 extension RawSyntax: Codable {
   /// Creates a RawSyntax from the provided Foundation Decoder.
-  init(from decoder: Decoder) throws {
+  required convenience init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     let id = try container.decodeIfPresent(SyntaxNodeId.self, forKey: .id)
     let omitted = try container.decodeIfPresent(Bool.self, forKey: .omitted) ?? false
@@ -352,7 +359,7 @@ extension RawSyntax: Codable {
       guard let lookupNode = lookupFunc(id) else {
         throw IncrementalDecodingError.nodeLookupFailed(id)
       }
-      self = lookupNode
+      self.init(lookupNode)
       return
     }
 

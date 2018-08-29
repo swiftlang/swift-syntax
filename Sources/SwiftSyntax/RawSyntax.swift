@@ -24,6 +24,15 @@ extension CodingUserInfoKey {
     CodingUserInfoKey(rawValue: "SwiftSyntax.RawSyntax.OmittedNodeLookup")!
 }
 
+/// Box a value type into a reference type
+class Box<T> {
+  let value: T
+
+  init(_ value: T) {
+    self.value = value
+  }
+}
+
 /// A ID that uniquely identifies a syntax node and stays stable across multiple
 /// incremental parses
 public struct SyntaxNodeId: Hashable, Codable {
@@ -72,11 +81,11 @@ struct RawSyntax: Codable {
   /// incremental parses
   let id: SyntaxNodeId
 
-  var _contentLength = AtomicCache<SourceLength>()
+  var _contentLength = AtomicCache<Box<SourceLength>>()
 
   /// The length of this node excluding its leading and trailing trivia
   var contentLength: SourceLength {
-    return _contentLength.value() {
+    return _contentLength.value({
       switch data {
       case .node(kind: _, layout: let layout):
         let firstElementIndex = layout.firstIndex(where: { $0 != nil })
@@ -97,11 +106,11 @@ struct RawSyntax: Codable {
             contentLength += element.trailingTriviaLength
           }
         }
-        return contentLength
+        return Box(contentLength)
       case .token(kind: let kind, leadingTrivia: _, trailingTrivia: _):
-        return SourceLength(of: kind.text)
+        return Box(SourceLength(of: kind.text))
       }
-    }
+    }).value
   }
 
   init(kind: SyntaxKind, layout: [RawSyntax?], presence: SourcePresence,

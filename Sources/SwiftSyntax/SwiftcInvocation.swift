@@ -63,10 +63,6 @@ private func runCore(_ executable: URL, _ arguments: [String] = [])
   }
 
   let process = Process()
-  process.terminationHandler = { process in
-    stdoutPipe.fileHandleForReading.readabilityHandler = nil
-    stderrPipe.fileHandleForReading.readabilityHandler = nil
-  }
   process.launchPath = executable.path
   process.arguments = arguments
   process.standardOutput = stdoutPipe

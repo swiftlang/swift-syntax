@@ -46,6 +46,14 @@ public enum SerializationFormat {
   case byteTree
 }
 
+fileprivate struct WeakReference<T: AnyObject> {
+  weak private(set) var value: T?
+
+  init(_ value: T) {
+    self.value = value
+  }
+}
+
 /// Deserializes the syntax tree from its serialized form to an object tree in
 /// Swift. To deserialize incrementally transferred syntax trees, the same
 /// instance of the deserializer must be used for all subsequent
@@ -56,7 +64,14 @@ public final class SyntaxTreeDeserializer {
 
   /// Syntax nodes that have already been parsed and are able to be reused if
   /// they were omitted in an incremental syntax tree transfer
-  private var nodeLookupTable: [SyntaxNodeId: RawSyntax] = [:]
+  private var nodeLookupTable: [SyntaxNodeId: WeakReference<RawSyntax>] = [:]
+
+  /// Keep a strong reference to the syntax tree that contains the nodes in the
+  /// `nodeLookupTable`. Because `nodeLookupTable` only holds a weak reference 
+  /// to the RawSyntax nodes, all retired `RawSyntax` nodes will be deallocated
+  /// once we set a new tree. The weak references in `nodeLookupTable` will then
+  /// become `nil` but will also never be accessed again.
+  private var nodeLookupTree: RawSyntax? = nil
 
   /// The IDs of the nodes that were reused as part of incremental syntax
   /// parsing during the last deserialization
@@ -70,7 +85,9 @@ public final class SyntaxTreeDeserializer {
     let decoder = JSONDecoder()
     decoder.userInfo[.rawSyntaxDecodedCallback] = self.addToLookupTable
     decoder.userInfo[.omittedNodeLookupFunction] = self.lookupNode
-    return try decoder.decode(RawSyntax.self, from: data)
+    let tree = try decoder.decode(RawSyntax.self, from: data)
+    self.nodeLookupTree = tree
+    return tree
   }
 
   /// Deserialize the given data as a ByteTree encoded syntax tree
@@ -78,11 +95,13 @@ public final class SyntaxTreeDeserializer {
     var userInfo: [ByteTreeUserInfoKey: Any] = [:]
     userInfo[.rawSyntaxDecodedCallback] = self.addToLookupTable
     userInfo[.omittedNodeLookupFunction] = self.lookupNode
-    return try ByteTreeReader.read(RawSyntax.self, from: data,
+    let tree = try ByteTreeReader.read(RawSyntax.self, from: data,
                                             userInfo: &userInfo) {
       (version: ByteTreeProtocolVersion) in
       return version.major == 1
     }
+    self.nodeLookupTree = tree
+    return tree
   }
 
   /// Decode a serialized form of SourceFileSyntax to a syntax tree.
@@ -112,11 +131,17 @@ public final class SyntaxTreeDeserializer {
 
   private func lookupNode(id: SyntaxNodeId) -> RawSyntax? {
     reusedNodeIds.insert(id)
-    return nodeLookupTable[id]
+    guard let weakRef = nodeLookupTable[id] else {
+      return nil
+    }
+    guard let value = weakRef.value else {
+      fatalError("Trying to retrieve a node that has since been deallocated")
+    }
+    return value
   }
 
   private func addToLookupTable(_ node: RawSyntax) {
-    nodeLookupTable[node.id] = node
+    nodeLookupTable[node.id] = WeakReference(node)
   }
 }
 

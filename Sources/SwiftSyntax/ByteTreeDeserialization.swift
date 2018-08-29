@@ -32,7 +32,7 @@ protocol ByteTreeScalarDecodable {
   ///   - size: The length of the serialized data in bytes
   /// - Returns: The deserialized value
   static func read(from pointer: UnsafeRawPointer, size: Int,
-                   userInfo: [ByteTreeUserInfoKey: Any]) -> Self
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>) -> Self
 }
 
 /// A type that can be deserialized from ByteTree into an object with child
@@ -49,8 +49,8 @@ protocol ByteTreeObjectDecodable {
   ///                object
   /// - Returns: The deserialized object
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
-                   numFields: Int, userInfo: [ByteTreeUserInfoKey: Any]
-                  ) -> Self
+                   numFields: Int, 
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>) -> Self
 }
 
 // MARK: - Reader objects
@@ -274,7 +274,7 @@ struct ByteTreeReader {
       objectReader.finalize()
     }
     return T.read(from: &objectReader, numFields: numFields, 
-      userInfo: userInfo)
+                  userInfo: &userInfo)
   }
 
   /// Read the next field in the tree as a scalar of the specified type.
@@ -288,7 +288,7 @@ struct ByteTreeReader {
     defer {
       pointer = pointer.advanced(by: fieldSize)
     }
-    return T.read(from: pointer, size: fieldSize, userInfo: userInfo)
+    return T.read(from: pointer, size: fieldSize, userInfo: &userInfo)
   }
 
   /// Discard the next scalar field, advancing the pointer to the next field
@@ -312,7 +312,7 @@ struct ByteTreeReader {
 // multiple types
 extension ByteTreeScalarDecodable where Self : FixedWidthInteger {
   static func read(from pointer: UnsafeRawPointer, size: Int,
-                   userInfo: [ByteTreeUserInfoKey: Any]
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
   ) -> Self {
     assert(size == MemoryLayout<Self>.size)
     return pointer.bindMemory(to: Self.self, capacity: 1).pointee
@@ -325,7 +325,8 @@ extension UInt32: ByteTreeScalarDecodable {}
 
 extension String: ByteTreeScalarDecodable {
   static func read(from pointer: UnsafeRawPointer, size: Int,
-                   userInfo: [ByteTreeUserInfoKey: Any]) -> String {
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
+  ) -> String {
     let data = Data(bytes: pointer, count: size)
     return String(data: data, encoding: .utf8)!
   }
@@ -335,7 +336,8 @@ extension Optional: ByteTreeObjectDecodable
   where
   Wrapped: ByteTreeObjectDecodable {
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
-                   numFields: Int, userInfo: [ByteTreeUserInfoKey: Any]
+                   numFields: Int, 
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
   ) -> Optional<Wrapped> {
     if numFields == 0 {
       return nil
@@ -350,7 +352,8 @@ extension Array: ByteTreeObjectDecodable
   where
   Element: ByteTreeObjectDecodable {
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
-                   numFields: Int, userInfo: [ByteTreeUserInfoKey: Any]
+                   numFields: Int, 
+                   userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
   ) -> Array<Element> {
     return (0..<numFields).map {
       return reader.pointee.readField(Element.self, index: $0)

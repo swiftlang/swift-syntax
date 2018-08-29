@@ -48,8 +48,9 @@ protocol ByteTreeObjectDecodable {
   ///   - numFields: The number of fields that are present in the serialized
   ///                object
   /// - Returns: The deserialized object
-  static func read(from reader: ByteTreeObjectReader, numFields: Int,
-                   userInfo: [ByteTreeUserInfoKey: Any]) -> Self
+  static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
+                   numFields: Int, userInfo: [ByteTreeUserInfoKey: Any]
+                  ) -> Self
 }
 
 // MARK: - Reader objects
@@ -267,7 +268,8 @@ class ByteTreeReader {
     let numFields = readObjectLength()
     let objectReader = ByteTreeObjectReader(reader: self,
                                             numFields: numFields)
-    return T.read(from: objectReader, numFields: numFields, userInfo: userInfo)
+    return T.read(from: &objectReader, numFields: numFields, 
+      userInfo: userInfo)
   }
 
   /// Read the next field in the tree as a scalar of the specified type.
@@ -327,8 +329,8 @@ extension String: ByteTreeScalarDecodable {
 extension Optional: ByteTreeObjectDecodable
   where
   Wrapped: ByteTreeObjectDecodable {
-  static func read(from reader: ByteTreeObjectReader, numFields: Int,
-                   userInfo: [ByteTreeUserInfoKey: Any]
+  static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
+                   numFields: Int, userInfo: [ByteTreeUserInfoKey: Any]
   ) -> Optional<Wrapped> {
     if numFields == 0 {
       return nil
@@ -342,11 +344,11 @@ extension Optional: ByteTreeObjectDecodable
 extension Array: ByteTreeObjectDecodable
   where
   Element: ByteTreeObjectDecodable {
-  static func read(from reader: ByteTreeObjectReader, numFields: Int,
-                   userInfo: [ByteTreeUserInfoKey: Any]
+  static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
+                   numFields: Int, userInfo: [ByteTreeUserInfoKey: Any]
   ) -> Array<Element> {
     return (0..<numFields).map {
-      return reader.readField(Element.self, index: $0)
+      return reader.pointee.readField(Element.self, index: $0)
     }
   }
 }

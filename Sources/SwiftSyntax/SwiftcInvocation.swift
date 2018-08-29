@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2018 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -26,7 +26,7 @@ struct ProcessResult {
   /// The process exit code. A non-zero exit code usually indicates failure.
   let exitCode: Int
 
-  /// The contents of the process's stdout as Data. 
+  /// The contents of the process's stdout as Data.
   let stdoutData: Data
 
   /// The contents of the process's stderr as Data.
@@ -48,105 +48,101 @@ struct ProcessResult {
   }
 }
 
+private func runCore(_ executable: URL, _ arguments: [String] = [])
+    -> ProcessResult {
+  let stdoutPipe = Pipe()
+  var stdoutData = Data()
+  stdoutPipe.fileHandleForReading.readabilityHandler = { file in
+    stdoutData.append(file.availableData)
+  }
+
+  let stderrPipe = Pipe()
+  var stderrData = Data()
+  stderrPipe.fileHandleForReading.readabilityHandler = { file in
+    stderrData.append(file.availableData)
+  }
+
+  let process = Process()
+  process.terminationHandler = { process in
+    stdoutPipe.fileHandleForReading.readabilityHandler = nil
+    stderrPipe.fileHandleForReading.readabilityHandler = nil
+  }
+  process.launchPath = executable.path
+  process.arguments = arguments
+  process.standardOutput = stdoutPipe
+  process.standardError = stderrPipe
+  process.launch()
+  process.waitUntilExit()
+
+  return ProcessResult(exitCode: Int(process.terminationStatus),
+                       stdoutData: stdoutData,
+                       stderrData: stderrData)
+}
+
 /// Runs the provided executable with the provided arguments and returns the
 /// contents of stdout and stderr as Data.
 /// - Parameters:
 ///   - executable: The full file URL to the executable you're running.
 ///   - arguments: A list of strings to pass to the process as arguments.
 /// - Returns: A ProcessResult containing stdout, stderr, and the exit code.
-func run(_ executable: URL, arguments: [String] = []) -> ProcessResult {
+private func run(_ executable: URL, arguments: [String] = []) -> ProcessResult {
+#if _runtime(_ObjC)
   // Use an autoreleasepool to prevent memory- and file-descriptor leaks.
-  return autoreleasepool {
-    () -> ProcessResult in
-    
-    let stdoutPipe = Pipe()
-    var stdoutData = Data()
-    stdoutPipe.fileHandleForReading.readabilityHandler = { file in
-      stdoutData.append(file.availableData)
-    }
-    
-    let stderrPipe = Pipe()
-    var stderrData = Data()
-    stderrPipe.fileHandleForReading.readabilityHandler = { file in
-      stderrData.append(file.availableData)
-    }
-    
-    let process = Process()
-    
-    process.terminationHandler = { process in
-      stdoutPipe.fileHandleForReading.readabilityHandler = nil
-      stderrPipe.fileHandleForReading.readabilityHandler = nil
-    }
-    
-    process.launchPath = executable.path
-    process.arguments = arguments
-    process.standardOutput = stdoutPipe
-    process.standardError = stderrPipe
-    process.launch()
-    process.waitUntilExit()
-    return ProcessResult(exitCode: Int(process.terminationStatus),
-                         stdoutData: stdoutData,
-                         stderrData: stderrData)
+  return autoreleasepool { () -> ProcessResult in
+    runCore(executable, arguments)
   }
+#else
+  return runCore(executable, arguments)
+#endif
 }
 
-/// Finds the dylib or executable which the provided address falls in.
-/// - Parameter dsohandle: A pointer to a symbol in the object file you're
-///                        looking for. If not provided, defaults to the
-///                        caller's `#dsohandle`, which will give you the
-///                        object file the caller resides in.
-/// - Returns: A File URL pointing to the object where the provided address
-///            resides. This may be a dylib, shared object, static library,
-///            or executable. If unable to find the appropriate object, returns
-///            `nil`.
-func findFirstObjectFile(for dsohandle: UnsafeRawPointer = #dsohandle) -> URL? {
-  var info = dl_info()
-  if dladdr(dsohandle, &info) == 0 {
-    return nil
-  }
-  let path = String(cString: info.dli_fname)
-  return URL(fileURLWithPath: path)
-}
-
-enum InvocationError: Error {
+enum InvocationError: Error, CustomStringConvertible {
   case couldNotFindSwiftc
   case couldNotFindSDK
-  case abort(code: Int)
+
+  var description: String {
+    switch self {
+    case .couldNotFindSwiftc:
+      return "could not locate swift compiler binary"
+    case .couldNotFindSDK:
+      return "could not locate macOS SDK"
+    }
+  }
 }
 
 struct SwiftcRunner {
-  /// Gets the `swiftc` binary packaged alongside this library.
-  /// - Returns: The path to `swiftc` relative to the path of this library
-  ///            file, or `nil` if it could not be found.
-  /// - Note: This makes assumptions about your Swift installation directory
-  ///         structure. Importantly, it assumes that the directory tree is
-  ///         shaped like this:
-  ///         ```
-  ///         install_root/
-  ///           - bin/
-  ///             - swiftc
-  ///           - lib/
-  ///             - swift/
-  ///               - ${target}/
-  ///                 - libswiftSwiftSyntax.[dylib|so]
-  ///         ```
-  static func locateSwiftc() -> URL? {
-    guard let libraryPath = findFirstObjectFile() else { return nil }
-    let swiftcURL = libraryPath.deletingLastPathComponent()
-                               .deletingLastPathComponent()
-                               .deletingLastPathComponent()
-                               .deletingLastPathComponent()
-                               .appendingPathComponent("bin")
-                               .appendingPathComponent("swiftc")
-    guard FileManager.default.fileExists(atPath: swiftcURL.path) else {
-      return nil
+  private static func getSearchPaths() -> [URL] {
+    let cwd = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+    let pathEnvVar = ProcessInfo.processInfo.environment["PATH"] ?? ""
+    let paths = pathEnvVar.split(separator: ":").map(String.init).map {
+      (path: String) -> URL in
+      if path.hasPrefix("/") {
+        return URL(fileURLWithPath: path)
+      } else {
+        return cwd.appendingPathComponent(path)
+      }
     }
-    return swiftcURL
+    return paths
+  }
+
+  private static func lookupExecutablePath(filename: String) -> URL? {
+    let paths = getSearchPaths()
+    for path in paths {
+      let url = path.appendingPathComponent(filename)
+      if FileManager.default.fileExists(atPath: url.path) {
+        return url
+      }
+    }
+    return nil
+  }
+
+  private static func locateSwiftc() -> URL? {
+    return lookupExecutablePath(filename: "swiftc")
   }
 
 #if os(macOS)
   /// The location of the macOS SDK, or `nil` if it could not be found.
-  static let macOSSDK: String? = {
+  private static let macOSSDK: String? = {
     let url = URL(fileURLWithPath: "/usr/bin/env")
     let result = run(url, arguments: ["xcrun", "--show-sdk-path"])
     guard result.wasSuccessful else { return nil }
@@ -157,13 +153,13 @@ struct SwiftcRunner {
 #endif
 
   /// Internal static cache of the Swiftc path.
-  static let _swiftcURL: URL? = SwiftcRunner.locateSwiftc()
+  private static let _swiftcURL: URL? = SwiftcRunner.locateSwiftc()
 
   /// The URL where the `swiftc` binary lies.
-  let swiftcURL: URL
+  private let swiftcURL: URL
 
   /// The source file being parsed.
-  let sourceFile: URL
+  private let sourceFile: URL
 
   /// Creates a SwiftcRunner that will parse and emit the syntax
   /// tree for a provided source file.

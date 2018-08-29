@@ -1,4 +1,4 @@
-//===--------------- SwiftLanguage.swift - Swift Syntax Library -----------===//
+//===--------------- SwiftSyntax.swift - Swift Syntax Library -------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -31,9 +31,6 @@ extension Syntax {
   fileprivate static func encodeSourceFileSyntaxInternal(_ url: URL) throws -> Data {
     let swiftcRunner = try SwiftcRunner(sourceFile: url)
     let result = try swiftcRunner.invoke()
-    guard result.wasSuccessful else {
-      throw ParserError.swiftcFailed(result.exitCode, result.stderr)
-    }
     return result.stdoutData
   }
 

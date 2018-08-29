@@ -61,7 +61,7 @@ protocol ByteTreeObjectDecodable {
 struct ByteTreeObjectReader {
   /// The reader that holds a reference to the data from which the object is
   /// read
-  private let reader: ByteTreeReader
+  private let reader: UnsafeMutablePointer<ByteTreeReader>
 
   /// The number of fields this object is expected to have
   private let numFields: Int
@@ -69,7 +69,8 @@ struct ByteTreeObjectReader {
   /// The index of the field that is expected to be read next.
   private var nextIndex: Int = 0
 
-  fileprivate init(reader: ByteTreeReader, numFields: Int) {
+  fileprivate init(reader: UnsafeMutablePointer<ByteTreeReader>, 
+                   numFields: Int) {
     self.reader = reader
     self.numFields = numFields
   }
@@ -93,7 +94,7 @@ struct ByteTreeObjectReader {
     _ objectType: FieldType.Type, index: Int
   ) -> FieldType {
     advanceAndValidateIndex(index)
-    return reader.read(objectType)
+    return reader.pointee.read(objectType)
   }
 
   /// Read the field at the given index as the specified type. All indicies must
@@ -108,7 +109,7 @@ struct ByteTreeObjectReader {
     _ objectType: FieldType.Type, index: Int
   ) -> FieldType {
     advanceAndValidateIndex(index)
-    return reader.read(objectType)
+    return reader.pointee.read(objectType)
   }
 
   /// Read and immediately discard the field at the specified index. This
@@ -117,7 +118,7 @@ struct ByteTreeObjectReader {
   /// - Parameter index: The index of the field that shall be discarded
   mutating func discardField(index: Int) {
     advanceAndValidateIndex(index)
-    reader.discardField()
+    reader.pointee.discardField()
   }
 
   // This method needs to be called before the reader gets destructed
@@ -130,7 +131,7 @@ struct ByteTreeObjectReader {
 }
 
 /// Reader for reading the ByteTree format into Swift objects
-class ByteTreeReader {
+struct ByteTreeReader {
   enum DeserializationError: Error, CustomStringConvertible {
     case versionValidationFailed(ByteTreeReader.ProtocolVersion)
 
@@ -175,7 +176,7 @@ class ByteTreeReader {
     userInfo: [ByteTreeUserInfoKey: Any],
     protocolVersionValidation: (ProtocolVersion) -> Bool
   ) throws -> T {
-    let reader = ByteTreeReader(pointer: pointer, userInfo: userInfo)
+    var reader = ByteTreeReader(pointer: pointer, userInfo: userInfo)
     try reader.readAndValidateProtocolVersion(protocolVersionValidation)
     return reader.read(rootObjectType)
   }
@@ -211,13 +212,13 @@ class ByteTreeReader {
   ///
   /// - Parameter type: The type as which the current data should be read
   /// - Returns: The read value
-  private func readRaw<T>(_ type: T.Type) -> T {
+  private mutating func readRaw<T>(_ type: T.Type) -> T {
     let result = pointer.bindMemory(to: T.self, capacity: 1).pointee
     pointer = pointer.advanced(by: MemoryLayout<T>.size)
     return result
   }
 
-  private func readFieldLength() -> (isObject: Bool, length: Int) {
+  private mutating func readFieldLength() -> (isObject: Bool, length: Int) {
     let raw = UInt32(littleEndian: readRaw(UInt32.self))
     let isObject = (raw & (UInt32(1) << 31)) != 0
     let length = Int(raw & ~(UInt32(1) << 31))
@@ -228,7 +229,7 @@ class ByteTreeReader {
   /// Read the number of fields in an object.
   ///
   /// - Returns: The number of fields in the following object
-  private func readObjectLength() -> Int {
+  private mutating func readObjectLength() -> Int {
     let (isObject, length) = readFieldLength()
     assert(isObject)
     return length
@@ -237,7 +238,7 @@ class ByteTreeReader {
   /// Read the size of a scalar in bytes
   ///
   /// - Returns: The size of the following scalar in bytes
-  private func readScalarLength() -> Int {
+  private mutating func readScalarLength() -> Int {
     let (isObject, length) = readFieldLength()
     assert(!isObject)
     return length
@@ -248,7 +249,7 @@ class ByteTreeReader {
   ///
   /// - Parameter validationCallback: A callback that determines if the given
   ///             protocol version can be read
-  private func readAndValidateProtocolVersion(
+  private mutating func readAndValidateProtocolVersion(
     _ validationCallback: (ProtocolVersion) -> Bool
   ) throws {
     let protocolVersion = ProtocolVersion(littleEndian: 
@@ -263,11 +264,11 @@ class ByteTreeReader {
   ///
   /// - Parameter objectType: The type as which the next field shall be read
   /// - Returns: The deserialized object
-  fileprivate func read<T: ByteTreeObjectDecodable>(
+  fileprivate mutating func read<T: ByteTreeObjectDecodable>(
     _ objectType: T.Type
   ) -> T {
     let numFields = readObjectLength()
-    let objectReader = ByteTreeObjectReader(reader: self,
+    var objectReader = ByteTreeObjectReader(reader: &self,
                                             numFields: numFields)
     defer {
       objectReader.finalize()
@@ -280,7 +281,7 @@ class ByteTreeReader {
   ///
   /// - Parameter scalarType: The type as which the field shall be read
   /// - Returns: The deserialized scalar
-  fileprivate func read<T: ByteTreeScalarDecodable>(
+  fileprivate mutating func read<T: ByteTreeScalarDecodable>(
     _ scalarType: T.Type
   ) -> T {
     let fieldSize = readScalarLength()
@@ -291,7 +292,7 @@ class ByteTreeReader {
   }
 
   /// Discard the next scalar field, advancing the pointer to the next field
-  fileprivate func discardField() {
+  fileprivate mutating func discardField() {
     let (isObject, length) = readFieldLength()
     if isObject {
       // Discard object by discarding all its objects

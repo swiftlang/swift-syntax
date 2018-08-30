@@ -134,14 +134,20 @@ fileprivate extension Array {
 /// and deserializing it.
 public enum SyntaxTreeParser {
   /// Parses the Swift file at the provided URL into a full-fidelity Syntax tree
-  /// - Parameter url: The URL you wish to parse.
+  ///
+  /// - Parameters:
+  ///   - url: The URL you wish to parse.
+  ///   - swiftcURL: The path to a `swiftc` executable that shall be used to
+  ///                parse the file. If `nil`, `swiftc` will be inferred from
+  ///                `PATH`.
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParseError.couldNotFindSwiftc` if `swiftc` could not be
   ///           located, `ParseError.invalidFile` if the file is invalid.
   ///           FIXME: Fill this out with all error cases.
-  public static func parse(_ url: URL) throws -> SourceFileSyntax {
-    let swiftcRunner = try SwiftcRunner(sourceFile: url)
+  public static func parse(_ url: URL, swiftcURL: URL? = nil) throws
+      -> SourceFileSyntax {
+    let swiftcRunner = try SwiftcRunner(sourceFile: url, swiftcURL: swiftcURL)
     let result = try swiftcRunner.invoke()
     let syntaxTreeData = result.stdoutData
     let deserializer = SyntaxTreeDeserializer()

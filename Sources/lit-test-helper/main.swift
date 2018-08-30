@@ -53,6 +53,9 @@ func printHelp() {
       -out FILENAME
             The file to which the source representation of the post-edit syntax
             tree shall be written.
+      -swiftc FILENAME
+            If specified, the path to the swiftc executable to parse the file.
+            If not specified, swiftc will be looked up from PATH.
     """)
 }
 
@@ -107,8 +110,9 @@ func performRoundTrip(args: CommandLineArguments) throws {
 
 func performClassifySyntax(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
+  let swiftcURL = args["-swiftc"].map(URL.init(fileURLWithPath:))
 
-  let tree = try SyntaxTreeParser.parse(treeURL)
+  let tree = try SyntaxTreeParser.parse(treeURL, swiftcURL: swiftcURL)
   let classifications = SyntaxClassifier.classifyTokensInTree(tree)
   let printer = ClassifiedSyntaxTreePrinter(classifications: classifications)
   let result = printer.print(tree: tree)

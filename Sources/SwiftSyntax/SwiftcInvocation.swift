@@ -165,15 +165,22 @@ struct SwiftcRunner {
   /// The source file being parsed.
   private let sourceFile: URL
 
-  /// Creates a SwiftcRunner that will parse and emit the syntax
-  /// tree for a provided source file.
   /// - Parameter sourceFile: The URL to the source file you're trying
   ///                         to parse.
-  init(sourceFile: URL) throws {
-    guard let url = SwiftcRunner._swiftcURL else {
+
+  /// Creates a SwiftcRunner that will parse and emit the syntax
+  /// tree for a provided source file.
+  /// - Parameters:
+  ///   - sourceFile: The URL to the source file you're trying to parse
+  ///   - swiftcURL: The path to a `swiftc` executable that shall be used to
+  ///                parse the file. If `nil`, `swiftc` will be inferred from
+  ///                `PATH`.
+  /// - Throws: When the swiftc executable cannot be found
+  init(sourceFile: URL, swiftcURL: URL? = nil) throws {
+    guard let swiftcURL = swiftcURL ?? SwiftcRunner._swiftcURL else {
       throw InvocationError.couldNotFindSwiftc
     }
-    self.swiftcURL = url
+    self.swiftcURL = swiftcURL
     self.sourceFile = sourceFile
   }
 

@@ -164,9 +164,14 @@ def run_tests(swift_test_exec, build_dir, release, swift_build_exec,
               filecheck_exec, swiftc_exec, swift_syntax_test_exec, verbose):
     print('** Running SwiftSyntax Tests **')
 
+    optional_swiftc_exec = swiftc_exec
+    if optional_swiftc_exec == 'swift':
+      optional_swiftc_exec = None
+
     lit_success = run_lit_tests(swift_build_exec=swift_build_exec,
                                 build_dir=build_dir,
                                 release=release,
+                                swiftc_exec=optional_swiftc_exec,
                                 filecheck_exec=filecheck_exec,
                                 swift_syntax_test_exec=swift_syntax_test_exec,
                                 verbose=verbose)
@@ -217,8 +222,8 @@ def find_lit_test_helper_exec(swift_build_exec, build_dir, release):
     return bin_dir.strip() + '/lit-test-helper'
 
 
-def run_lit_tests(swift_build_exec, build_dir, release, filecheck_exec,
-                  swift_syntax_test_exec, verbose):
+def run_lit_tests(swift_build_exec, build_dir, release, swiftc_exec, 
+                  filecheck_exec, swift_syntax_test_exec, verbose):
     print('** Running lit-based tests **')
 
     check_lit_exec()
@@ -232,6 +237,8 @@ def run_lit_tests(swift_build_exec, build_dir, release, filecheck_exec,
     lit_call = [LIT_EXEC]
     lit_call.extend([PACKAGE_DIR + '/lit_tests'])
     
+    if swiftc_exec:
+        lit_call.extend(['--param', 'SWIFTC=' + swiftc_exec])
     if filecheck_exec:
         lit_call.extend(['--param', 'FILECHECK=' + filecheck_exec])
     if lit_test_helper_exec:

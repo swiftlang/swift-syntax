@@ -13,10 +13,11 @@ public class AbsolutePositionTestCase: XCTestCase {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("visitor.swift"))
       let parsed = try SourceFileSyntax.parse(getInput("visitor.swift"))
-      XCTAssertEqual(parsed.position.byteOffset, 0)
-      XCTAssertEqual(parsed.eofToken.positionAfterSkippingLeadingTrivia.byteOffset,
-                  source.count)
-      XCTAssertEqual(parsed.position.byteOffset, 0)
+      XCTAssertEqual(parsed.position.utf8Offset, 0)
+      XCTAssertEqual(
+        parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset,
+        source.count)
+      XCTAssertEqual(parsed.position.utf8Offset, 0)
       XCTAssertEqual(parsed.byteSize, source.count)
     }())
   }
@@ -25,9 +26,10 @@ public class AbsolutePositionTestCase: XCTestCase {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("closure.swift"))
       let parsed = try SourceFileSyntax.parse(getInput("closure.swift"))
-      XCTAssertEqual(parsed.eofToken.positionAfterSkippingLeadingTrivia.byteOffset,
-                  source.count)
-      XCTAssertEqual(parsed.position.byteOffset, 0)
+      XCTAssertEqual(
+        parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset,
+        source.count)
+      XCTAssertEqual(parsed.position.utf8Offset, 0)
       XCTAssertEqual(parsed.byteSize, source.count)
     }())
   }
@@ -37,8 +39,9 @@ public class AbsolutePositionTestCase: XCTestCase {
       let parsed = try SourceFileSyntax.parse(getInput("visitor.swift"))
       let renamed = FuncRenamer().visit(parsed) as! SourceFileSyntax
       let renamedSource = renamed.description
-      XCTAssertEqual(renamed.eofToken.positionAfterSkippingLeadingTrivia.byteOffset,
-                  renamedSource.count)
+      XCTAssertEqual(
+        renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset,
+        renamedSource.count)
       XCTAssertEqual(renamed.byteSize, renamedSource.count)
     }())
   }
@@ -53,8 +56,8 @@ public class AbsolutePositionTestCase: XCTestCase {
           _ = node.positionAfterSkippingLeadingTrivia
         }
         override func visit(_ node: TokenSyntax) {
-          XCTAssertEqual(node.position.byteOffset + node.leadingTrivia.byteSize,
-                      node.positionAfterSkippingLeadingTrivia.byteOffset)
+          XCTAssertEqual(node.positionAfterSkippingLeadingTrivia.utf8Offset,
+            node.position.utf8Offset + node.leadingTrivia.byteSize)
         }
       }
       Visitor().visit(parsed)
@@ -106,8 +109,9 @@ public class AbsolutePositionTestCase: XCTestCase {
     let state = root.statements[idx]
     XCTAssertEqual(state.leadingTrivia!.count, 3)
     XCTAssertEqual(state.trailingTrivia!.count, 1)
-    XCTAssertEqual(state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
-      + state.byteSizeAfterTrimmingTrivia, state.byteSize)
+    XCTAssertEqual(state.byteSize,
+      state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
+        + state.byteSizeAfterTrimmingTrivia)
     XCTAssertFalse(root.statements.isImplicit)
   }
 

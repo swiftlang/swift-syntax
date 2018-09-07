@@ -1,13 +1,13 @@
 import XCTest
 import SwiftSyntax
 
-func loc(_ file: String = #file, line: Int = #line,
+fileprivate func loc(_ file: String = #file, line: Int = #line,
          column: Int = #line) -> SourceLocation {
   return SourceLocation(line: line, column: column, offset: 0, file: file)
 }
 
 /// Adds static constants to Diagnostic.Message.
-extension Diagnostic.Message {
+fileprivate extension Diagnostic.Message {
   /// Error thrown when a conversion between two types is impossible.
   static func cannotConvert(fromType: String,
                             toType: String) -> Diagnostic.Message {
@@ -27,7 +27,7 @@ extension Diagnostic.Message {
   }
 }
 
-public class DiagnosticsTestCase: XCTestCase {
+public class DiagnosticTestCase: XCTestCase {
   public func testDiagnosticEmission() {
     let startLoc = loc()
     let fixLoc = loc()
@@ -60,7 +60,7 @@ public class DiagnosticsTestCase: XCTestCase {
 
   public func testSourceLocations() {
     let engine = DiagnosticEngine()
-    engine.addConsumer(PrintingDiagnosticConsumer())
+    // engine.addConsumer(PrintingDiagnosticConsumer())
     let url = getInput("diagnostics.swift")
 
     class Visitor: SyntaxVisitor {
@@ -81,14 +81,14 @@ public class DiagnosticsTestCase: XCTestCase {
     }
 
     XCTAssertNoThrow(try {
-      let file = try SourceFileSyntax.parse(url)
-      Visitor(url: url, engine: engine).visit(file)
+      let file = try SyntaxTreeParser.parse(url)
+       Visitor(url: url, engine: engine).visit(file)
     }())
 
-    XCTAssertEqual(6, engine.diagnostics.count)
-    let lines = Set(engine.diagnostics.compactMap { $0.location?.line })
-    XCTAssertEqual([1, 3, 5, 7, 9, 11], lines)
-    let columns = Set(engine.diagnostics.compactMap { $0.location?.column })
-    XCTAssertEqual([6, 2], columns)
+     XCTAssertEqual(6, engine.diagnostics.count)
+     let lines = Set(engine.diagnostics.compactMap { $0.location?.line })
+     XCTAssertEqual([1, 3, 5, 7, 9, 11], lines)
+     let columns = Set(engine.diagnostics.compactMap { $0.location?.column })
+     XCTAssertEqual([6, 2], columns)
   }
 }

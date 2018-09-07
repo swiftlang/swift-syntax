@@ -1,13 +1,13 @@
 import XCTest
 import SwiftSyntax
 
-struct Foo {
+fileprivate struct Foo {
   public let x: Int
   private(set) var y: [Bool]
 }
 
 #if os(macOS)
-class Test: NSObject {
+fileprivate class Test: NSObject {
   @objc var bar: Int = 0
   func test() {
     print(#selector(function))
@@ -22,9 +22,9 @@ public class ParseFileTestCase: XCTestCase {
   public func testParseSingleFile() {
     let currentFile = URL(fileURLWithPath: #file)
     XCTAssertNoThrow(try {
-      let currentFileContents = try String(contentsOf: currentFile)
-      let parsed = try SourceFileSyntax.parse(currentFile)
-      XCTAssertEqual("\(parsed)", currentFileContents)
+      let fileContents = try String(contentsOf: currentFile)
+      let parsed = try SyntaxTreeParser.parse(currentFile)
+      XCTAssertEqual("\(parsed)", fileContents)
     }())
   }
 }

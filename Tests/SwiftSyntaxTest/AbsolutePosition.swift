@@ -12,7 +12,7 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testVisitor() {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("visitor.swift"))
-      let parsed = try SourceFileSyntax.parse(getInput("visitor.swift"))
+      let parsed = try SyntaxTreeParser.parse(getInput("visitor.swift"))
       XCTAssertEqual(parsed.position.utf8Offset, 0)
       XCTAssertEqual(
         parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset,
@@ -25,7 +25,7 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testClosure() {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("closure.swift"))
-      let parsed = try SourceFileSyntax.parse(getInput("closure.swift"))
+      let parsed = try SyntaxTreeParser.parse(getInput("closure.swift"))
       XCTAssertEqual(
         parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset,
         source.count)
@@ -36,7 +36,7 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   public func testRename() {
     XCTAssertNoThrow(try {
-      let parsed = try SourceFileSyntax.parse(getInput("visitor.swift"))
+      let parsed = try SyntaxTreeParser.parse(getInput("visitor.swift"))
       let renamed = FuncRenamer().visit(parsed) as! SourceFileSyntax
       let renamedSource = renamed.description
       XCTAssertEqual(
@@ -48,7 +48,7 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   public func testCurrentFile() {
     XCTAssertNoThrow(try {
-      let parsed = try SourceFileSyntax.parse(URL(fileURLWithPath: #file))
+      let parsed = try SyntaxTreeParser.parse(URL(fileURLWithPath: #file))
       class Visitor: SyntaxVisitor {
         override func visitPre(_ node: Syntax) {
           _ = node.position
@@ -103,7 +103,7 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   public func testTrivias() {
     let idx = 5
-    let root = createSourceFile(idx + 1)
+    let root = self.createSourceFile(idx + 1)
     XCTAssertEqual(root.leadingTrivia!.count, 3)
     XCTAssertEqual(root.trailingTrivia!.count, 0)
     let state = root.statements[idx]
@@ -116,7 +116,17 @@ public class AbsolutePositionTestCase: XCTestCase {
   }
 
   public func testImplicit() {
-    let root = createSourceFile(0)
+    let root = self.createSourceFile(0)
     XCTAssertTrue(root.statements.isImplicit)
+  }
+
+  public func testWithoutSourceFileRoot() {
+    let item = SyntaxFactory.makeCodeBlockItem(
+      item: SyntaxFactory.makeReturnStmt(
+        returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
+          .withLeadingTrivia(.newlines(1)).withTrailingTrivia(.newlines(1)),
+          expression: nil), semicolon: nil)
+     XCTAssertEqual(0, item.position.utf8Offset)
+     XCTAssertEqual(1, item.positionAfterSkippingLeadingTrivia.utf8Offset)
   }
 }

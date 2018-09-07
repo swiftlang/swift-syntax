@@ -72,7 +72,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
       let parsed = try SyntaxTreeParser.parse(getInput("nested-blocks.swift"))
       let visitor = VisitCollections()
       visitor.visit(parsed)
-      XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
+      XCTAssertEqual(visitor.numberOfCodeBlockItems, 4)
     }())
   }
 }

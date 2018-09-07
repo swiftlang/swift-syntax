@@ -27,7 +27,7 @@ public enum ParserError: Error, CustomStringConvertible {
   case invalidFile
 
   public var description: String {
-    switch self{
+    switch self {
     case let .swiftcFailed(exitCode, stderr):
       let stderrLines = stderr.split(separator: "\n")
       return """

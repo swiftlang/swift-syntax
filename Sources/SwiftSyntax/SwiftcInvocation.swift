@@ -52,36 +52,21 @@ private func runCore(_ executable: URL, _ arguments: [String] = [])
     -> ProcessResult {
   let stdoutPipe = Pipe()
   var stdoutData = Data()
-
-#if os(macOS)
-  stdoutPipe.fileHandleForReading.readabilityHandler = { file in
-    stdoutData.append(file.availableData)
-  }
-#else
-  // Temporary fix until swift-corelibs-foundation supports .readabilityHandler
   let stdoutSource = DispatchSource.makeReadSource(
 		fileDescriptor: stdoutPipe.fileHandleForReading.fileDescriptor)
   stdoutSource.setEventHandler {
     stdoutData.append(stdoutPipe.fileHandleForReading.availableData)
   }
   stdoutSource.resume()
-#endif
 
   let stderrPipe = Pipe()
   var stderrData = Data()
-
-#if os(macOS)
-  stderrPipe.fileHandleForReading.readabilityHandler = { file in
-    stderrData.append(file.availableData)
-  }
-#else
   let stderrSource = DispatchSource.makeReadSource(
 		fileDescriptor: stderrPipe.fileHandleForReading.fileDescriptor)
   stderrSource.setEventHandler {
     stderrData.append(stderrPipe.fileHandleForReading.availableData)
   }
   stderrSource.resume()
-#endif
 
   let process = Process()
   process.launchPath = executable.path

@@ -106,7 +106,8 @@ def generate_gyb_files(verbose):
         # Generate the new file
         check_call([GYB_EXEC] +
                    [swiftsyntax_sources_dir + '/' + gyb_file] +
-                   ['-o', temp_files_dir + '/' + output_file_name],
+                   ['-o', temp_files_dir + '/' + output_file_name] +
+                   ['--line-directive='],
                    verbose=verbose)
 
         # Copy the file if different from the file already present in 

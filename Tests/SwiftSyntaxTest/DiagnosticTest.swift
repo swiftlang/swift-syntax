@@ -28,6 +28,12 @@ fileprivate extension Diagnostic.Message {
 }
 
 public class DiagnosticTestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testDiagnosticEmission", testDiagnosticEmission),
+    ("testSourceLocations", testSourceLocations),
+  ]
+
   public func testDiagnosticEmission() {
     let startLoc = loc()
     let fixLoc = loc()

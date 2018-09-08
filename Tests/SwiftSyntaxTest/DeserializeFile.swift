@@ -1,7 +1,12 @@
 import XCTest
 import SwiftSyntax
 
-public class DecodeSytnaxTestCase: XCTestCase {
+public class DecodeSyntaxTestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testBasic", testBasic),
+  ]
+
   public func testBasic() {
     XCTAssertNoThrow(try {
       let inputFile = getInput("visitor.swift")

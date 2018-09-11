@@ -114,10 +114,10 @@ extension TokenKind: ByteTreeObjectDecodable {
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
                    numFields: Int, 
                    userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
-  ) -> TokenKind {
+  ) throws -> TokenKind {
     // Explicitly spell out all TokenKinds to keep the serialized value stable
     // even if its members get reordered or members get removed
-    let kind = reader.pointee.readField(UInt8.self, index: 0)
+    let kind = try reader.pointee.readField(UInt8.self, index: 0)
     switch kind {
     case 0: return .eof
 % for token in SYNTAX_TOKENS:
@@ -125,7 +125,7 @@ extension TokenKind: ByteTreeObjectDecodable {
 %   if token.text: # The token does not have text associated with it
       return .${token.swift_kind()}
 %   else:
-      let text = reader.pointee.readField(String.self, index: 1)
+      let text = try reader.pointee.readField(String.self, index: 1)
       return .${token.swift_kind()}(text)
 %   end
 % end
@@ -133,12 +133,13 @@ extension TokenKind: ByteTreeObjectDecodable {
       if numFields > 1 {
         // Default to an unknown token with the passed text if we don't know 
         // its kind.
-        let text = reader.pointee.readField(String.self, index: 1)
+        let text = try reader.pointee.readField(String.self, index: 1)
         return .unknown(text)
       } else {
         // If we were not passed the token's text, we cannot recover since we 
         // would lose roundtripness.
-        fatalError("Unknown TokenKind \(kind)")
+        throw ByteTreeDecodingError.invalidEnumRawValue(type: "\(self)", 
+                                                        value: Int(kind))
       }
     }
   }

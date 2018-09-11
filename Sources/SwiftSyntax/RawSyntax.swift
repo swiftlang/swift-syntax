@@ -409,33 +409,32 @@ extension RawSyntax: ByteTreeObjectDecodable {
   static func read(from reader: UnsafeMutablePointer<ByteTreeObjectReader>, 
                    numFields: Int, 
                    userInfo: UnsafePointer<[ByteTreeUserInfoKey: Any]>
-  ) -> RawSyntax {
+  ) throws -> RawSyntax {
     let syntaxNode: RawSyntax
-    let type = reader.pointee.readField(SyntaxType.self, index: 0)
-    let id = reader.pointee.readField(SyntaxNodeId.self, index: 1)
+    let type = try reader.pointee.readField(SyntaxType.self, index: 0)
+    let id = try reader.pointee.readField(SyntaxNodeId.self, index: 1)
     switch type {
     case .token:
-      let presence = reader.pointee.readField(SourcePresence.self, index: 2)
-      let kind = reader.pointee.readField(TokenKind.self, index: 3)
-      let leadingTrivia = reader.pointee.readField(Trivia.self, index: 4)
-      let trailingTrivia = reader.pointee.readField(Trivia.self, index: 5)
+      let presence = try reader.pointee.readField(SourcePresence.self, index: 2)
+      let kind = try reader.pointee.readField(TokenKind.self, index: 3)
+      let leadingTrivia = try reader.pointee.readField(Trivia.self, index: 4)
+      let trailingTrivia = try reader.pointee.readField(Trivia.self, index: 5)
       syntaxNode = RawSyntax(kind: kind, leadingTrivia: leadingTrivia,
                              trailingTrivia: trailingTrivia,
                              presence: presence, id: id)
     case .layout:
-      let presence = reader.pointee.readField(SourcePresence.self, index: 2)
-      let kind = reader.pointee.readField(SyntaxKind.self, index: 3)
-      let layout = reader.pointee.readField([RawSyntax?].self, index: 4)
+      let presence = try reader.pointee.readField(SourcePresence.self, index: 2)
+      let kind = try reader.pointee.readField(SyntaxKind.self, index: 3)
+      let layout = try reader.pointee.readField([RawSyntax?].self, index: 4)
       syntaxNode = RawSyntax(kind: kind, layout: layout, presence: presence,
                              id: id)
     case .omitted:
       guard let lookupFunc = userInfo.pointee[.omittedNodeLookupFunction] as?
         (SyntaxNodeId) -> RawSyntax? else {
-          fatalError("omittedNodeLookupFunction is required when decoding an " +
-                     "incrementally transferred syntax tree")
+          throw IncrementalDecodingError.noLookupFunctionPassed
       }
       guard let lookupNode = lookupFunc(id) else {
-        fatalError("Node lookup for id \(id) failed")
+        throw IncrementalDecodingError.nodeLookupFailed(id)
       }
       syntaxNode = lookupNode
     }

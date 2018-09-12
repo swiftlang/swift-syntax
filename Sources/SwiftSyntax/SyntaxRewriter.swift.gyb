@@ -2,6 +2,14 @@
   from gyb_syntax_support import *
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
+
+  # gyb_syntax_support was updated post-4.2 to allow list nodes to be
+  # visited. We can't cherrypick that in cleanly because those files
+  # live in apple/swift, so we've simply copied the updated implementation
+  # here and updated the calls below.
+  # See: https://github.com/apple/swift/commit/a66931e7
+  def PATCHED_is_visitable(node):
+    return not node.is_base()
 }%
 //// Automatically Generated From SyntaxFactory.swift.gyb.
 //// Do Not Edit Directly!
@@ -28,9 +36,12 @@
 open class SyntaxRewriter {
   public init() {}
 % for node in SYNTAX_NODES:
-%   if is_visitable(node):
-  open func visit(_ node: ${node.name}) -> ${node.base_type} {
-%   cast = ('as! ' + node.base_type) if node.base_type != 'Syntax' else ''
+%   if PATCHED_is_visitable(node):
+%     # See: https://github.com/apple/swift/commit/a66931e7
+%     base_type = 'Syntax' if node.base_kind == 'SyntaxCollection' \
+%                 else node.base_type
+  open func visit(_ node: ${node.name}) -> ${base_type} {
+%   cast = ('as! ' + base_type) if base_type != 'Syntax' else ''
     return visitChildren(node) ${cast}
   }
 
@@ -70,7 +81,7 @@ open class SyntaxRewriter {
     switch node.raw.kind {
     case .token: return visit(node as! TokenSyntax)
 % for node in SYNTAX_NODES:
-%   if is_visitable(node):
+%   if PATCHED_is_visitable(node):
     case .${node.swift_syntax_kind}: return visit(node as! ${node.name})
 %   end
 % end
@@ -97,7 +108,7 @@ open class SyntaxRewriter {
 open class SyntaxVisitor {
     public init() {}
 % for node in SYNTAX_NODES:
-%   if is_visitable(node):
+%   if PATCHED_is_visitable(node):
   open func visit(_ node: ${node.name}) {
     visitChildren(node)
   }
@@ -120,7 +131,7 @@ open class SyntaxVisitor {
     switch node.raw.kind {
     case .token: visit(node as! TokenSyntax)
 % for node in SYNTAX_NODES:
-%   if is_visitable(node):
+%   if PATCHED_is_visitable(node):
     case .${node.swift_syntax_kind}: visit(node as! ${node.name})
 %   end
 % end

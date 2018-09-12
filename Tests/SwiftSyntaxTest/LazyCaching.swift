@@ -2,6 +2,12 @@ import XCTest
 import SwiftSyntax
 
 public class LazyCachingTestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testPathological", testPathological),
+    ("testTwoAccesses", testTwoAccesses),
+  ]
+
   public func testPathological() {
     let tuple = SyntaxFactory.makeVoidTupleType()
 

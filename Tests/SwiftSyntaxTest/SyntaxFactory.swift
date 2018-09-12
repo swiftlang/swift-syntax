@@ -16,7 +16,13 @@ func cannedStructDecl() -> StructDeclSyntax {
   }
 }
 
-public class SyntaxFactoryTestCase: XCTestCase {
+public class SyntaxFactoryAPITestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testGenerated", testGenerated),
+    ("testTokenSyntax", testTokenSyntax),
+    ("testFunctionCallSyntaxBuilder", testFunctionCallSyntaxBuilder),
+  ]
 
   public func testGenerated() {
 

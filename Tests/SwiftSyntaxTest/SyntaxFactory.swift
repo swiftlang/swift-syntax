@@ -17,6 +17,13 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
 }
 
 public class SyntaxFactoryAPITestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testGenerated", testGenerated),
+    ("testTokenSyntax", testTokenSyntax),
+    ("testFunctionCallSyntaxBuilder", testFunctionCallSyntaxBuilder),
+  ]
+
   public func testGenerated() {
 
     let structDecl = cannedStructDecl()

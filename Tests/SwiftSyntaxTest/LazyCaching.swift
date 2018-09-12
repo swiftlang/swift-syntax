@@ -1,7 +1,13 @@
 import XCTest
 import SwiftSyntax
 
-class LazyCachingTestCase: XCTestCase {
+public class LazyCachingTestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testPathological", testPathological),
+    ("testTwoAccesses", testTwoAccesses),
+  ]
+
   public func testPathological() {
     let tuple = SyntaxFactory.makeVoidTupleType()
 

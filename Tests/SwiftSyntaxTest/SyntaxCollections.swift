@@ -9,6 +9,17 @@ fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
 }
 
 public class SyntaxCollectionsAPITestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testAppendingElement", testAppendingElement),
+    ("testInsertingElement", testInsertingElement),
+    ("testPrependingElement", testPrependingElement),
+    ("testRemovingFirstElement", testRemovingFirstElement),
+    ("testRemovingLastElement", testRemovingLastElement),
+    ("testRemovingElement", testRemovingElement),
+    ("testReplacingElement", testReplacingElement),
+  ]
+
   public func testAppendingElement() {
       let arrayElementList = SyntaxFactory.makeArrayElementList([
           integerLiteralElement(0)

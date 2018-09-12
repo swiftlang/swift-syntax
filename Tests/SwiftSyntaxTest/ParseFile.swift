@@ -19,6 +19,11 @@ fileprivate class Test: NSObject {
 #endif
 
 public class ParseFileTestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testParseSingleFile", testParseSingleFile)
+  ]
+
   public func testParseSingleFile() {
     let currentFile = URL(fileURLWithPath: #file)
     XCTAssertNoThrow(try {

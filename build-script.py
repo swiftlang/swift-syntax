@@ -77,7 +77,7 @@ def check_rsync():
             fatal_error('Error: Could not find rsync.')
 
 
-def generate_gyb_files(verbose):
+def generate_gyb_files(verbose, add_source_locations):
     print('** Generating gyb Files **')
 
     check_gyb_exec()
@@ -103,10 +103,17 @@ def generate_gyb_files(verbose):
         # Slice off the '.gyb' to get the name for the output file
         output_file_name = gyb_file[:-4]
 
+        # Source locations are added by default by gyb, and cleared by passing
+        # `--line-directive=` (nothing following the `=`) to the generator. Our
+        # flag is the reverse; we don't want them by default, only if requested.
+        line_directive_flags = [] if add_source_locations \
+                                  else ['--line-directive=']
+
         # Generate the new file
         check_call([GYB_EXEC] +
                    [swiftsyntax_sources_dir + '/' + gyb_file] +
-                   ['-o', temp_files_dir + '/' + output_file_name],
+                   ['-o', temp_files_dir + '/' + output_file_name] +
+                   line_directive_flags,
                    verbose=verbose)
 
         # Copy the file if different from the file already present in 
@@ -311,6 +318,10 @@ section for arguments that need to be specified for this.
     basic_group.add_argument('-r', '--release', action='store_true', help='''
       Build as a release build.
       ''')
+    basic_group.add_argument('--add-source-locations', action='store_true',
+                             help='''
+      Insert ###sourceLocation comments in generated code for line-directive.
+      ''')
 
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
@@ -344,7 +355,8 @@ section for arguments that need to be specified for this.
 
 
     try:
-        generate_gyb_files(args.verbose)
+        generate_gyb_files(verbose=args.verbose,
+                           add_source_locations=args.add_source_locations)
     except subprocess.CalledProcessError as e:
         printerr('Error: Generating .gyb files failed')
         printerr('Executing: %s' % ' '.join(e.cmd))

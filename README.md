@@ -65,7 +65,7 @@ Note that it is not currently supported to SwiftSyntax while building the Swift 
 
 Running `@swift-ci Please test` on the main Swift repository will also test the most recent version of SwiftSyntax. 
 
-Testing SwiftSyntax from its own repository will be available in the near future.
+Testing SwiftSyntax from its own repository is now available by commenting `@swift-ci Please test macOS platform`.
 
 ## Example
 

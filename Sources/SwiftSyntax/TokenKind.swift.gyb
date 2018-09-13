@@ -45,6 +45,19 @@ public enum TokenKind: Codable {
     }
   }
 
+  public var isKeyword: Bool {
+    switch self {
+    case .eof: return false
+% for token in SYNTAX_TOKENS:
+%   if token.is_keyword:
+    case .${token.swift_kind()}: return true
+%   else:
+    case .${token.swift_kind()}: return false
+%   end
+% end
+    }
+  }
+
   /// Keys for serializing and deserializing token kinds.
   enum CodingKeys: String, CodingKey {
     case kind, text

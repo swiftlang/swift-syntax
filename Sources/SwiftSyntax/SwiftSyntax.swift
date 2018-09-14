@@ -46,31 +46,23 @@ public enum SerializationFormat {
   case byteTree
 }
 
-fileprivate struct WeakReference<T: AnyObject> {
-  weak private(set) var value: T?
-
-  init(_ value: T) {
-    self.value = value
-  }
-}
+// For WeakLookupTable.
+extension RawSyntax : Identifiable {}
 
 /// Deserializes the syntax tree from its serialized form to an object tree in
 /// Swift. To deserialize incrementally transferred syntax trees, the same
 /// instance of the deserializer must be used for all subsequent
 /// deserializations.
 public final class SyntaxTreeDeserializer {
-  // FIXME: This lookup table just accumulates nodes, we should invalidate nodes
-  // that are no longer used at some point and remove them from the table
-
   /// Syntax nodes that have already been parsed and are able to be reused if
   /// they were omitted in an incremental syntax tree transfer
-  private var nodeLookupTable: [SyntaxNodeId: WeakReference<RawSyntax>] = [:]
+  private var nodeLookupTable: WeakLookupTable<RawSyntax> = .init()
 
   /// Keep a strong reference to the syntax tree that contains the nodes in the
   /// `nodeLookupTable`. Because `nodeLookupTable` only holds a weak reference 
   /// to the RawSyntax nodes, all retired `RawSyntax` nodes will be deallocated
   /// once we set a new tree. The weak references in `nodeLookupTable` will then
-  /// become `nil` but will also never be accessed again.
+  /// become `nil` and the slot will be reused to refer another node.
   private var nodeLookupTree: RawSyntax? = nil
 
   /// The IDs of the nodes that were reused as part of incremental syntax
@@ -131,17 +123,11 @@ public final class SyntaxTreeDeserializer {
 
   private func lookupNode(id: SyntaxNodeId) -> RawSyntax? {
     reusedNodeIds.insert(id)
-    guard let weakRef = nodeLookupTable[id] else {
-      return nil
-    }
-    guard let value = weakRef.value else {
-      fatalError("Trying to retrieve a node that has since been deallocated")
-    }
-    return value
+    return nodeLookupTable[id]
   }
 
   private func addToLookupTable(_ node: RawSyntax) {
-    nodeLookupTable[node.id] = WeakReference(node)
+    nodeLookupTable.insert(node)
   }
 }
 

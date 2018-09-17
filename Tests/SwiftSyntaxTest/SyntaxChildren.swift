@@ -1,7 +1,13 @@
 import XCTest
 import SwiftSyntax
 
-public class SyntaxChilderenTestCase: XCTestCase {
+public class SyntaxChildrenAPITestCase: XCTestCase {
+
+  public static let allTests = [
+    ("testIterateWithAllPresent", testIterateWithAllPresent),
+    ("testIterateWithSomeMissing", testIterateWithSomeMissing),
+    ("testIterateWithAllMissing", testIterateWithAllMissing),
+  ]
 
   public func testIterateWithAllPresent() {
     let returnStmt = SyntaxFactory.makeReturnStmt(

@@ -52,15 +52,21 @@ private func runCore(_ executable: URL, _ arguments: [String] = [])
     -> ProcessResult {
   let stdoutPipe = Pipe()
   var stdoutData = Data()
-  stdoutPipe.fileHandleForReading.readabilityHandler = { file in
-    stdoutData.append(file.availableData)
+  let stdoutSource = DispatchSource.makeReadSource(
+		fileDescriptor: stdoutPipe.fileHandleForReading.fileDescriptor)
+  stdoutSource.setEventHandler {
+    stdoutData.append(stdoutPipe.fileHandleForReading.availableData)
   }
+  stdoutSource.resume()
 
   let stderrPipe = Pipe()
   var stderrData = Data()
-  stderrPipe.fileHandleForReading.readabilityHandler = { file in
-    stderrData.append(file.availableData)
+  let stderrSource = DispatchSource.makeReadSource(
+		fileDescriptor: stderrPipe.fileHandleForReading.fileDescriptor)
+  stderrSource.setEventHandler {
+    stderrData.append(stderrPipe.fileHandleForReading.availableData)
   }
+  stderrSource.resume()
 
   let process = Process()
   process.launchPath = executable.path

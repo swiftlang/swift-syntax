@@ -26,7 +26,13 @@ let package = Package(
 )
 ```
 
-Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to use. Tags will be created for every release of the compiler in the form `swift-4.2-RELEASE` and for every nightly build in the form `swift-4.2-DEVELOPMENT-SNAPSHOT-2018-08-25-a`.
+Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to use (see the following table for mapping details). Tags will be created for every nightly build in the form `<SwiftSyntax Release Tag>-DEVELOPMENT-SNAPSHOT-<DATE>`.
+
+
+| Swift Release Tag | SwiftSyntax Release Tag  |
+|:-------------------:|:-------------------------:|
+| swift-4.2-RELEASE   | 0.40200.0 |
+
 
 Then, import `SwiftSyntax` in your Swift code.
 

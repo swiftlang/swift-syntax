@@ -338,7 +338,7 @@ extension RawSyntax {
     case .node(_, let layout):
       for child in layout {
         guard let child = child else { continue }
-        guard let result = child.leadingTrivia else { continue }
+        guard let result = child.leadingTrivia else { break }
         return result
       }
       return nil
@@ -352,7 +352,7 @@ extension RawSyntax {
     case .node(_, let layout):
       for child in layout.reversed() {
         guard let child = child else { continue }
-        guard let result = child.trailingTrivia else { continue }
+        guard let result = child.trailingTrivia else { break }
         return result
       }
       return nil

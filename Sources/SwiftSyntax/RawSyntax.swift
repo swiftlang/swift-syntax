@@ -124,13 +124,6 @@ final class RawSyntax {
       }
     }).value
   }
-    
-  /// Creates a copy of `other`.
-  init(_ other: RawSyntax) {
-    self.data = other.data
-    self.presence = other.presence
-    self.id = other.id
-  }
 
   init(kind: SyntaxKind, layout: [RawSyntax?], presence: SourcePresence,
        id: SyntaxNodeId? = nil) {
@@ -341,7 +334,17 @@ extension RawSyntax {
   }
 }
 
-extension RawSyntax: Codable {
+// This is needed purely to have a self assignment initializer for
+// RawSyntax.init(from:Decoder) so we can reuse omitted nodes, instead of
+// copying them.
+private protocol _RawSyntaxFactory {}
+extension _RawSyntaxFactory {
+  init(_instance: Self) {
+    self = _instance
+  }
+}
+
+extension RawSyntax: Codable, _RawSyntaxFactory {
   /// Creates a RawSyntax from the provided Foundation Decoder.
   convenience init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -359,7 +362,7 @@ extension RawSyntax: Codable {
       guard let lookupNode = lookupFunc(id) else {
         throw IncrementalDecodingError.nodeLookupFailed(id)
       }
-      self.init(lookupNode)
+      self.init(_instance: lookupNode)
       return
     }
 

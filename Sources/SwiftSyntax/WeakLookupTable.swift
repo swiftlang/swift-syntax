@@ -188,7 +188,9 @@ class WeakLookupTable<Element: Identifiable & AnyObject> {
     return reserveCapacity(estimatedCount &+ 1)
   }
 
-  /// Inserts the given object into the table.
+  /// Inserts the given object into the table if the table doesn't already
+  /// contain an object with the same identifier.
+  /// - returns: true if the object was inserted
   @discardableResult
   func insert(_ obj: Element) -> Bool {
     var (pos, alreadyExists) = _findHole(obj.id)

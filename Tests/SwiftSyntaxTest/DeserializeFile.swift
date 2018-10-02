@@ -15,4 +15,18 @@ public class DecodeSyntaxTestCase: XCTestCase {
       XCTAssertEqual("\(parsed)", source)
     }())
   }
+
+  public func testIncrementalDeserialize() {
+    XCTAssertNoThrow(try {
+      let deserializer = SyntaxTreeDeserializer()
+      var tree: SourceFileSyntax? = nil
+      let responses = try (1...3).map {
+        try Data(contentsOf: getInput("incremental-deserialize-\($0).json"))
+      }
+      for data in responses {
+        tree = try deserializer.deserialize(data, serializationFormat: .json)
+      }
+      XCTAssertEqual(tree?.description, "x\ny")
+    }())
+  }
 }

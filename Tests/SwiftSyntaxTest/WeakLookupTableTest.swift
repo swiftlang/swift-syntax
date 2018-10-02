@@ -108,6 +108,18 @@ public class WeakLookupTableTestCase: XCTestCase {
 
     _ = tree // Prevents 'never read' warning
   }
+
+  func testSameIdentifierDifferentObject() {
+    let table = WeakLookupTable<MinimalNode>()
+
+    let object1 = MinimalNode(id: "1", children: [])
+    let object2 = MinimalNode(id: "1", children: [])
+
+    XCTAssertTrue(table.insert(object1))
+    XCTAssert(table["1"] === object1)
+    XCTAssertFalse(table.insert(object2))
+    XCTAssert(table["1"] === object1)
+  }
 }
 
 #endif // DEBUG

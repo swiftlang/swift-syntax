@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "SwiftSyntax",
   products: [
-    .library(name: "SwiftSyntax", type: .dynamic, targets: ["SwiftSyntax"]),
+    .library(name: "SwiftSyntax", targets: ["SwiftSyntax"]),
   ],
   targets: [
     .target(name: "SwiftSyntax"),

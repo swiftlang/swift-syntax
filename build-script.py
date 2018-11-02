@@ -44,10 +44,10 @@ def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT,
     return process.returncode
 
 
-def check_call(cmd, verbose=False):
+def check_call(cmd, env=os.environ, verbose=False):
     if verbose:
         print(' '.join([escapeCmdArg(arg) for arg in cmd]))
-    return subprocess.check_call(cmd, stderr=subprocess.STDOUT)
+    return subprocess.check_call(cmd, env=env, stderr=subprocess.STDOUT)
 
 
 def realpath(path):
@@ -146,7 +146,7 @@ def get_swiftpm_invocation(spm_exec, build_dir, release):
     return swiftpm_call
 
 
-def build_swiftsyntax(swift_build_exec, build_dir, build_test_util, release,
+def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir, build_test_util, release,
                       verbose):
     print('** Building SwiftSyntax **')
 
@@ -161,8 +161,9 @@ def build_swiftsyntax(swift_build_exec, build_dir, build_test_util, release,
 
     if verbose:
         swiftpm_call.extend(['--verbose'])
-
-    check_call(swiftpm_call, verbose=verbose)
+    _environ = dict(os.environ)
+    _environ['SWIFT_EXEC'] = swiftc_exec
+    check_call(swiftpm_call, env=_environ, verbose=verbose)
 
 
 ## Testing
@@ -365,6 +366,7 @@ section for arguments that need to be specified for this.
 
     try:
         build_swiftsyntax(swift_build_exec=args.swift_build_exec,
+                          swiftc_exec=args.swiftc_exec,
                           build_dir=args.build_dir,
                           build_test_util=args.test,
                           release=args.release,

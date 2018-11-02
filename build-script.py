@@ -276,7 +276,7 @@ def run_xctests(swift_test_exec, build_dir, release, swiftc_exec, verbose):
     if verbose:
         swiftpm_call.extend(['--verbose'])
 
-    subenv = os.environ
+    subenv = dict(os.environ)
     if swiftc_exec:
         # Add the swiftc exec to PATH so that SwiftSyntax finds it
         subenv['PATH'] = realpath(swiftc_exec + '/..') + ':' + subenv['PATH']

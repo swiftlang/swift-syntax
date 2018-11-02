@@ -364,6 +364,8 @@ section for arguments that need to be specified for this.
         sys.exit(1)
 
     try:
+        _environ = dict(os.environ)
+        os.environ['SWIFT_EXEC'] = args.swiftc_exec
         build_swiftsyntax(swift_build_exec=args.swift_build_exec,
                           build_dir=args.build_dir,
                           build_test_util=args.test,
@@ -373,7 +375,9 @@ section for arguments that need to be specified for this.
         printerr('Error: Building SwiftSyntax failed')
         printerr('Executing: %s' % ' '.join(e.cmd))
         printerr(e.output)
-        sys.exit(1)
+    finally:
+        os.environ.clear()
+        os.environ.update(_environ)
 
     if args.test:
         try:

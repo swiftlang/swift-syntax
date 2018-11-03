@@ -163,6 +163,7 @@ def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir, build_test_util,
         swiftpm_call.extend(['--verbose'])
     _environ = dict(os.environ)
     _environ['SWIFT_EXEC'] = swiftc_exec
+    _environ['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
     check_call(swiftpm_call, env=_environ, verbose=verbose)
 
 

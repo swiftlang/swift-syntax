@@ -7,7 +7,8 @@ import os
 import subprocess
 import sys
 import tempfile
-
+import errno
+import platform
 
 PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
@@ -22,6 +23,9 @@ LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
 def printerr(message):
     print(message, file=sys.stderr)
 
+def note(message):
+    print("--- %s: note: %s" % (os.path.basename(sys.argv[0]), message))
+    sys.stdout.flush()
 
 def fatal_error(message):
     printerr(message)
@@ -129,6 +133,14 @@ def generate_gyb_files(verbose, add_source_locations):
 
 ## Building swiftSyntax
 
+def get_installed_name():
+    # we have to use this name in the installed dylib so that the compiler will
+    # treat it as a part of stdlib to copy the dylib to the framework dir.
+    return 'swiftSwiftSyntax'
+
+def get_installed_dylib_name():
+    return 'lib' + get_installed_name() + '.dylib'
+
 def get_swiftpm_invocation(spm_exec, build_dir, release):
     if spm_exec == 'swift build':
         swiftpm_call = ['swift', 'build']
@@ -143,6 +155,8 @@ def get_swiftpm_invocation(spm_exec, build_dir, release):
     if build_dir:
         swiftpm_call.extend(['--build-path', build_dir])
 
+    # Swift compiler needs to know the module link name.
+    swiftpm_call.extend(['-Xswiftc', '-module-link-name', '-Xswiftc', get_installed_name()])
     return swiftpm_call
 
 
@@ -285,6 +299,48 @@ def run_xctests(swift_test_exec, build_dir, release, swiftc_exec, verbose):
 
     return call(swiftpm_call, env=subenv, verbose=verbose) == 0
 
+def delete_rpath(rpath, binary):
+    if platform.system() == 'Darwin':
+        cmd = ["install_name_tool", "-delete_rpath", rpath, binary]
+        note("removing RPATH from %s: %s" % (binary, ' '.join(cmd)))
+        result = subprocess.call(cmd)
+        if result != 0:
+            fatal_error("command failed with exit status %d" % (result,))
+    else:
+        fatal_error("unable to remove RPATHs on this platform")
+
+def change_id_rpath(rpath, binary):
+    if platform.system() == 'Darwin':
+        cmd = ["install_name_tool", "-id", rpath, binary]
+        note("changing id in %s: %s" % (binary, ' '.join(cmd)))
+        result = subprocess.call(cmd)
+        if result != 0:
+            fatal_error("command failed with exit status %d" % (result,))
+    else:
+        fatal_error("unable to invoke install_name_tool on this platform")
+
+def check_and_sync(file_path, install_path):
+    cmd = ["rsync", "-a", file_path, install_path]
+    note("installing %s: %s" % (os.path.basename(file_path), ' '.join(cmd)))
+    result = subprocess.check_call(cmd)
+    if result != 0:
+        fatal_error("install failed with exit status %d" % (result,))
+
+def install(build_dir, dylib_dir, swiftmodule_dir, stdlib_rpath):
+    dylibPath = build_dir + '/libSwiftSyntax.dylib'
+    modulePath = build_dir + '/SwiftSyntax.swiftmodule'
+    docPath = build_dir + '/SwiftSyntax.swiftdoc'
+    # users should find the dylib as if it's a part of stdlib.
+    change_id_rpath('@rpath/' + get_installed_dylib_name(), dylibPath)
+    # we don't wanna hard-code the stdlib dylibs into rpath.
+    delete_rpath(stdlib_rpath, dylibPath)
+    check_and_sync(file_path=dylibPath,
+                   install_path=dylib_dir+'/'+get_installed_dylib_name())
+    # Optionally install .swiftmodule
+    if swiftmodule_dir:
+        check_and_sync(file_path=modulePath,install_path=swiftmodule_dir)
+        check_and_sync(file_path=docPath,install_path=swiftmodule_dir)
+    return
 
 ### Main
 
@@ -324,7 +380,18 @@ section for arguments that need to be specified for this.
                              help='''
       Insert ###sourceLocation comments in generated code for line-directive.
       ''')
-
+    basic_group.add_argument('--install', action='store_true',
+                             help='''
+      Install the build artifact to a specified toolchain directory.
+      ''')
+    basic_group.add_argument('--dylib-dir',
+                             help='''
+      The directory to where the .dylib should be installed.
+      ''')
+    basic_group.add_argument('--swiftmodule-dir',
+                             help='''
+      The directory to where the .swiftmodule should be installed.
+      ''')
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
@@ -355,6 +422,21 @@ section for arguments that need to be specified for this.
 
     args = parser.parse_args(sys.argv[1:])
 
+    if args.install:
+        if not args.dylib_dir:
+            fatal_error('Must specify directory to install')
+        if not args.build_dir:
+            fatal_error('Must specify build directory to copy from')
+        if args.release:
+            build_dir=args.build_dir + '/release'
+        else:
+            # will this ever happen?
+            build_dir=args.build_dir + '/debug'
+        stdlib_rpath = realpath(os.path.dirname(args.swiftc_exec) + '/../lib/swift/macosx/')
+        install(build_dir=build_dir, dylib_dir=args.dylib_dir,
+                swiftmodule_dir=args.swiftmodule_dir,
+                stdlib_rpath=stdlib_rpath)
+        sys.exit(0)
 
     try:
         generate_gyb_files(verbose=args.verbose,

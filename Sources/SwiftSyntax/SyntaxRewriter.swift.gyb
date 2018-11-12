@@ -98,19 +98,32 @@ open class SyntaxVisitor {
     public init() {}
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
+  /// Visting ${node.name} specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: whether we should visit the descendents of node.
   open func visit(_ node: ${node.name}) -> Bool {
     return true
   }
 %   end
 % end
 
+  /// Visting UnknownSyntax specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: whether we should visit the descendents of node.
   open func visit(_ node: UnknownSyntax) -> Bool {
     return true
   }
 
+  /// Whether we should ever visit a given syntax kind.
+  ///   - Parameter kind: the input kind we're checking.
+  ///   - Returns: whether we should visit syntax nodes of this kind.
   open func shouldVisit(_ kind: SyntaxKind) -> Bool {
     return true
   }
+
+  /// Whether we should ever visit a given token kind.
+  ///   - Parameter kind: the input token kind we're checking.
+  ///   - Returns: whether we should visit tokens of this kind.
   open func shouldVisit(_ kind: TokenKind) -> Bool {
     return true
   }

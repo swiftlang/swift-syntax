@@ -52,7 +52,7 @@ class ClassifiedSyntaxTreePrinter: SyntaxVisitor {
 
   func print(tree: SourceFileSyntax) -> String {
     result = ""
-    visit(tree)
+    tree.walk(self)
     // Emit the last closing tag
     recordCurrentClassification(.none)
     return result

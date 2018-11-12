@@ -24,7 +24,7 @@
 import Foundation
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-internal enum SyntaxKind: String, Codable {
+public enum SyntaxKind: String, Codable {
   case token = "Token"
   case unknown = "Unknown"
 % for node in SYNTAX_NODES:

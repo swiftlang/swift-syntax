@@ -476,14 +476,13 @@ extension RawSyntax {
       let shouldVisit = visitor.shouldVisit(kind)
       var visitChildren = true
       if shouldVisit {
-
         // Visit this node realizes a syntax node.
-        visitChildren = visitor.visitCurrent()
+        visitor.visitPre()
+        visitChildren = visitor.visit()
       }
       if visitChildren {
         for (offset, element) in layout.enumerated() {
           guard let element = element else { continue }
-
           // Teach the visitor to navigate to this child.
           visitor.addChildIdx(offset)
           element.accept(visitor)
@@ -494,7 +493,8 @@ extension RawSyntax {
       }
     case .token(let kind, _, _):
       if visitor.shouldVisit(kind) {
-        _ = visitor.visitCurrent()
+        visitor.visitPre()
+        _ = visitor.visit()
         visitor.visitPost()
       }
     }

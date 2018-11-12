@@ -140,6 +140,45 @@ open class SyntaxVisitor {
   }
 }
 
+
+/// A wrapper over Syntax. A syntax node is only realized when explicitly asked;
+/// otherwise the node is represented as a child index list from a realized
+/// ancestor.
+class PendingSyntaxNode {
+  let parent: PendingSyntaxNode?
+  private var kind: PendingSyntaxNodeKind
+
+  private enum PendingSyntaxNodeKind {
+    /// We already have a `Syntax` node realised for this node
+    case realized(node: Syntax)
+    /// This node does not have a `Syntax` node instantiated yet. If needed, we
+    /// need to compute it from its parent RawSyntax node
+    case virtual(index: Int)
+  }
+
+  var node: Syntax {
+    switch kind {
+    case .realized(let node):
+      return node
+    case .virtual(let index):
+      let _node = parent!.node.child(at: index)!
+      kind = .realized(node: _node)
+      return _node
+    }
+  }
+
+  init(_ root: Syntax) {
+    self.parent = nil
+    self.kind = .realized(node: root)
+  }
+
+  init(_ parent: PendingSyntaxNode, _ idx: Int) {
+    self.parent = parent
+    self.kind = .virtual(index: idx)
+  }
+}
+
+
 /// The raw syntax walker traverses the raw syntax tree to find
 /// node kinds the SyntaxVisitor is interested and feed these syntax nodes to
 /// SyntaxVisitor.
@@ -147,17 +186,11 @@ open class SyntaxVisitor {
 /// not interesting to users' SyntaxVisitor.
 class RawSyntaxVisitor {
   private let visitor: SyntaxVisitor
-  private var childIdxChain: [Int]
-  private var nodeChain: [Syntax]
+  private var currentNode: PendingSyntaxNode?
 
   required init(_ visitor: SyntaxVisitor, _ root: Syntax) {
     self.visitor = visitor
-    self.nodeChain = [root]
-    self.childIdxChain = []
-  }
-
-  convenience init(_ another: RawSyntaxVisitor, _ root: Syntax) {
-    self.init(another.visitor, root)
+    self.currentNode = PendingSyntaxNode(root)
   }
 
   func shouldVisit(_ kind: SyntaxKind) -> Bool {
@@ -169,31 +202,25 @@ class RawSyntaxVisitor {
   }
 
   func addChildIdx(_ idx: Int) {
-    childIdxChain.append(idx)
+    currentNode = PendingSyntaxNode(currentNode!, idx)
   }
 
   func moveUp() {
-    if childIdxChain.isEmpty {
-      nodeChain.removeLast()
-    } else {
-      childIdxChain.removeLast()
-    }
+    currentNode = currentNode!.parent
+  }
+
+  func visitPre() {
+    visitor.visitPre(currentNode!.node)
   }
 
   func visitPost() {
-    visitor.visitPost(nodeChain.last!)
+    visitor.visitPost(currentNode!.node)
   }
 
   // The current raw syntax node is interesting for the user, so realize a
   // correponding syntax node and feed it into the visitor.
-  func visitCurrent() -> Bool {
-    for id in childIdxChain {
-      nodeChain.append(nodeChain.last!.child(at: id)!)
-    }
-    childIdxChain.removeAll(keepingCapacity: true)
-    let node = nodeChain.last!
-    visitor.visitPre(node)
-    return visitor.visit(node)
+  func visit() -> Bool {
+    return visitor.visit(currentNode!.node)
   }
 }
 

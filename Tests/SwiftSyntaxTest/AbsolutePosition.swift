@@ -69,7 +69,7 @@ public class AbsolutePositionTestCase: XCTestCase {
             node.position.utf8Offset + node.leadingTrivia.byteSize)
         }
       }
-      Visitor().visit(parsed)
+      parsed.walk(Visitor())
     }())
   }
 

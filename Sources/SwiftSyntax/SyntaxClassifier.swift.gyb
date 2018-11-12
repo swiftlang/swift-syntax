@@ -50,7 +50,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
     force: Bool = false
   ) {
     contextStack.append((classification: classification, force: force))
-    visit(node)
+    node.walk(self)
     contextStack.removeLast()
   }
 
@@ -71,6 +71,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
   }
 
   override func visit(_ token: TokenSyntax) {
+    assert(token.isPresent)
     // FIXME: We need to come up with some way in which the SyntaxClassifier can
     // classify trivia (i.e. comments). In particular we need to be able to
     // look into the comments to find things like URLs or keywords like MARK.
@@ -94,12 +95,12 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
-  override func visit(_ node: ${node.name}) {
+  override func visit(_ node: ${node.name}) -> Bool {
     if skipNodeIds.contains(node.raw.id) {
-      return
+      return false
     }
 %     if node.is_unknown() or node.is_syntax_collection():
-    super.visit(node)
+    return true
 %     else:
 %       for child in node.children:
 %         if child.is_optional:
@@ -109,7 +110,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
             classification: .${child.classification.swift_name}, 
             force: ${"true" if child.force_classification else "false"})
 %           else:
-      visit(${child.swift_name})
+      ${child.swift_name}.walk(self)
 %           end
     }
 %         else:
@@ -118,12 +119,12 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
           classification: .${child.classification.swift_name}, 
           force: ${"true" if child.force_classification else "false"})
 %           else:
-    visit(node.${child.swift_name})
+    node.${child.swift_name}.walk(self)
 %           end
 %         end
 %       end
+    return false
 %     end
-
   }
 %   end
 % end
@@ -139,7 +140,7 @@ public enum SyntaxClassifier {
   ) -> [TokenSyntax: SyntaxClassification] {
     let classifier = _SyntaxClassifier()
     classifier.skipNodeIds = skipNodes
-    classifier.visit(syntaxTree)
+    syntaxTree.walk(classifier)
     return classifier.classifications
   }
 }

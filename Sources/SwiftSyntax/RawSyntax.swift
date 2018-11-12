@@ -466,3 +466,37 @@ extension SyntaxNodeId: ByteTreeScalarDecodable {
     return SyntaxNodeId(rawValue: UInt(rawValue))
   }
 }
+
+extension RawSyntax {
+  func accept(_ visitor: RawSyntaxVisitor) {
+    defer { visitor.moveUp() }
+    guard isPresent else { return }
+    switch data {
+    case .node(let kind,let layout):
+      let shouldVisit = visitor.shouldVisit(kind)
+      var visitChildren = true
+      if shouldVisit {
+        // Visit this node realizes a syntax node.
+        visitor.visitPre()
+        visitChildren = visitor.visit()
+      }
+      if visitChildren {
+        for (offset, element) in layout.enumerated() {
+          guard let element = element else { continue }
+          // Teach the visitor to navigate to this child.
+          visitor.addChildIdx(offset)
+          element.accept(visitor)
+        }
+      }
+      if shouldVisit {
+        visitor.visitPost()
+      }
+    case .token(let kind, _, _):
+      if visitor.shouldVisit(kind) {
+        visitor.visitPre()
+        _ = visitor.visit()
+        visitor.visitPost()
+      }
+    }
+  }
+}

@@ -43,8 +43,6 @@ def install(swiftc_exec, build_dir, dylib_dir, module_dir):
         '--build-dir', build_dir, '-v'])
 
 def main():
-    if not os.geteuid() == 0:
-        fatal_error("\n!!!!!!!!Run this script with root access!!!!!!!!\n")
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='''
@@ -61,6 +59,11 @@ existing toolchain and install the build artifacts back to the toolchain.
         ''')
 
     args = parser.parse_args(sys.argv[1:])
+    if not args.toolchain_dir:
+        fatal_error("Need to specify --toolchain-dir")
+    if not os.geteuid() == 0:
+        fatal_error("\n!!!!!!!!Run this script with root access!!!!!!!!\n")
+
     build_dir = tempfile.mkdtemp()
     swiftc_exec = args.toolchain_dir + '/usr/bin/swiftc'
     dylib_dir = args.toolchain_dir + '/usr/lib/swift/macosx'

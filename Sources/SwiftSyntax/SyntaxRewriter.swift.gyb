@@ -158,7 +158,7 @@ open class SyntaxVisitor {
 /// otherwise the node is represented as a child index list from a realized
 /// ancestor.
 class PendingSyntaxNode {
-  let parent: PendingSyntaxNode?
+  let parent: PendingSyntaxNode!
   private var kind: PendingSyntaxNodeKind
 
   private enum PendingSyntaxNodeKind {
@@ -174,7 +174,7 @@ class PendingSyntaxNode {
     case .realized(let node):
       return node
     case .virtual(let index):
-      let _node = parent!.node.child(at: index)!
+      let _node = parent.node.child(at: index)!
       kind = .realized(node: _node)
       return _node
     }
@@ -199,7 +199,7 @@ class PendingSyntaxNode {
 /// not interesting to users' SyntaxVisitor.
 class RawSyntaxVisitor {
   private let visitor: SyntaxVisitor
-  private var currentNode: PendingSyntaxNode?
+  private var currentNode: PendingSyntaxNode!
 
   required init(_ visitor: SyntaxVisitor, _ root: Syntax) {
     self.visitor = visitor
@@ -215,25 +215,25 @@ class RawSyntaxVisitor {
   }
 
   func addChildIdx(_ idx: Int) {
-    currentNode = PendingSyntaxNode(currentNode!, idx)
+    currentNode = PendingSyntaxNode(currentNode, idx)
   }
 
   func moveUp() {
-    currentNode = currentNode!.parent
+    currentNode = currentNode.parent
   }
 
   func visitPre() {
-    visitor.visitPre(currentNode!.node)
+    visitor.visitPre(currentNode.node)
   }
 
   func visitPost() {
-    visitor.visitPost(currentNode!.node)
+    visitor.visitPost(currentNode.node)
   }
 
   // The current raw syntax node is interesting for the user, so realize a
   // correponding syntax node and feed it into the visitor.
   func visit() -> Bool {
-    return visitor.visit(currentNode!.node)
+    return visitor.visit(currentNode.node)
   }
 }
 

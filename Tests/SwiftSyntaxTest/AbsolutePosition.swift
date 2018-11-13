@@ -64,9 +64,10 @@ public class AbsolutePositionTestCase: XCTestCase {
           _ = node.byteSize
           _ = node.positionAfterSkippingLeadingTrivia
         }
-        override func visit(_ node: TokenSyntax) {
+        override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
           XCTAssertEqual(node.positionAfterSkippingLeadingTrivia.utf8Offset,
             node.position.utf8Offset + node.leadingTrivia.byteSize)
+          return .skipChildren
         }
       }
       parsed.walk(Visitor())

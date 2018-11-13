@@ -70,7 +70,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
     }
   }
 
-  override func visit(_ token: TokenSyntax) {
+  override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     assert(token.isPresent)
     // FIXME: We need to come up with some way in which the SyntaxClassifier can
     // classify trivia (i.e. comments). In particular we need to be able to
@@ -91,16 +91,17 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
     assert(classifications[token] == nil,
            "\(token) has already been classified")
     classifications[token] = classification
+    return .skipChildren
   }
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
-  override func visit(_ node: ${node.name}) -> Bool {
+  override func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
     if skipNodeIds.contains(node.raw.id) {
-      return false
+      return .skipChildren
     }
 %     if node.is_unknown() or node.is_syntax_collection():
-    return true
+    return .visitChildren
 %     else:
 %       for child in node.children:
 %         if child.is_optional:
@@ -123,7 +124,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
 %           end
 %         end
 %       end
-    return false
+    return .skipChildren
 %     end
   }
 %   end

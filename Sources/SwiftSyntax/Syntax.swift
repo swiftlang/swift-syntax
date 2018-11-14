@@ -105,6 +105,11 @@ extension Syntax {
     return raw.kind.isPattern
   }
 
+  /// Whether or not this node represents an unknown node.
+  public var isUnknown: Bool {
+    return raw.kind.isUnknown
+  }
+
   /// The parent of this syntax node, or `nil` if this node is the root.
   public var parent: Syntax? {
     guard let parentData = data.parent else { return nil }

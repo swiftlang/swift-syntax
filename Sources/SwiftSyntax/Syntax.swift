@@ -239,9 +239,9 @@ extension Syntax {
     in file: URL,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    let pos = afterLeadingTrivia ? 
-      data.position :
-      data.positionAfterSkippingLeadingTrivia
+    let pos = afterLeadingTrivia ?
+      data.positionAfterSkippingLeadingTrivia :
+      data.position
     return SourceLocation(file: file.path, position: pos)
   }
 

@@ -94,24 +94,35 @@ open class SyntaxRewriter {
   }
 }
 
+/// The enum describes how the SyntaxVistor should continue after visiting
+/// the current node.
+public enum SyntaxVisitorContinueKind {
+
+  /// The visitor should visit the descendents of the current node.
+  case visitChildren
+
+  /// The visitor should avoid visiting the descendents of the current node.
+  case skipChildren
+}
+
 open class SyntaxVisitor {
     public init() {}
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   /// Visting ${node.name} specifically.
   ///   - Parameter node: the node we are visiting.
-  ///   - Returns: whether we should visit the descendents of node.
-  open func visit(_ node: ${node.name}) -> Bool {
-    return true
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+    return .visitChildren
   }
 %   end
 % end
 
   /// Visting UnknownSyntax specifically.
   ///   - Parameter node: the node we are visiting.
-  ///   - Returns: whether we should visit the descendents of node.
-  open func visit(_ node: UnknownSyntax) -> Bool {
-    return true
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
   }
 
   /// Whether we should ever visit a given syntax kind.
@@ -128,7 +139,9 @@ open class SyntaxVisitor {
     return true
   }
 
-  open func visit(_ token: TokenSyntax) {}
+  open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return .skipChildren
+  }
 
   /// The function called before visiting the node and its descendents.
   ///   - node: the node we are about to visit.
@@ -138,18 +151,17 @@ open class SyntaxVisitor {
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: Syntax) {}
 
-  public func visit(_ node: Syntax) -> Bool {
+  public func visit(_ node: Syntax) -> SyntaxVisitorContinueKind {
     switch node.raw.kind {
-    case .token: visit(node as! TokenSyntax)
+    case .token: return visit(node as! TokenSyntax)
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
     case .${node.swift_syntax_kind}: return visit(node as! ${node.name})
 %   end
 % end
     case .unknown: return visit(node as! UnknownSyntax)
-    default: break
+    default: return .skipChildren
     }
-    return false
   }
 }
 
@@ -158,7 +170,7 @@ open class SyntaxVisitor {
 /// otherwise the node is represented as a child index list from a realized
 /// ancestor.
 class PendingSyntaxNode {
-  let parent: PendingSyntaxNode?
+  let parent: PendingSyntaxNode!
   private var kind: PendingSyntaxNodeKind
 
   private enum PendingSyntaxNodeKind {
@@ -174,7 +186,7 @@ class PendingSyntaxNode {
     case .realized(let node):
       return node
     case .virtual(let index):
-      let _node = parent!.node.child(at: index)!
+      let _node = parent.node.child(at: index)!
       kind = .realized(node: _node)
       return _node
     }
@@ -199,7 +211,7 @@ class PendingSyntaxNode {
 /// not interesting to users' SyntaxVisitor.
 class RawSyntaxVisitor {
   private let visitor: SyntaxVisitor
-  private var currentNode: PendingSyntaxNode?
+  private var currentNode: PendingSyntaxNode!
 
   required init(_ visitor: SyntaxVisitor, _ root: Syntax) {
     self.visitor = visitor
@@ -215,25 +227,25 @@ class RawSyntaxVisitor {
   }
 
   func addChildIdx(_ idx: Int) {
-    currentNode = PendingSyntaxNode(currentNode!, idx)
+    currentNode = PendingSyntaxNode(currentNode, idx)
   }
 
   func moveUp() {
-    currentNode = currentNode!.parent
+    currentNode = currentNode.parent
   }
 
   func visitPre() {
-    visitor.visitPre(currentNode!.node)
+    visitor.visitPre(currentNode.node)
   }
 
   func visitPost() {
-    visitor.visitPost(currentNode!.node)
+    visitor.visitPost(currentNode.node)
   }
 
   // The current raw syntax node is interesting for the user, so realize a
   // correponding syntax node and feed it into the visitor.
-  func visit() -> Bool {
-    return visitor.visit(currentNode!.node)
+  func visit() -> SyntaxVisitorContinueKind {
+    return visitor.visit(currentNode.node)
   }
 }
 

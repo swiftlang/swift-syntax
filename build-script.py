@@ -161,13 +161,16 @@ def get_swiftpm_invocation(spm_exec, build_dir, release):
 
 
 def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir, build_test_util, release,
-                      verbose):
+                      verbose, disable_sandbox=False):
     print('** Building SwiftSyntax **')
 
     swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
                                           build_dir=build_dir,
                                           release=release)
     swiftpm_call.extend(['--product', 'SwiftSyntax'])
+
+    if disable_sandbox:
+      swiftpm_call.append('--disable-sandbox')
 
     # Only build lit-test-helper if we are planning to run tests
     if build_test_util:
@@ -392,6 +395,13 @@ section for arguments that need to be specified for this.
                              help='''
       The directory to where the .swiftmodule should be installed.
       ''')
+
+    build_group = parser.add_argument_group('Build')
+    build_group.add_argument('--disable-sandbox',
+                             action='store_true',
+                             help='Disable sandboxes when building with '
+                                  'Swift PM')
+
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
@@ -453,7 +463,8 @@ section for arguments that need to be specified for this.
                           build_dir=args.build_dir,
                           build_test_util=args.test,
                           release=args.release,
-                          verbose=args.verbose)
+                          verbose=args.verbose,
+                          disable_sandbox=args.disable_sandbox)
     except subprocess.CalledProcessError as e:
         printerr('Error: Building SwiftSyntax failed')
         printerr('Executing: %s' % ' '.join(e.cmd))

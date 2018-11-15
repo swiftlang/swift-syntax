@@ -270,7 +270,7 @@ public enum SyntaxVerifierError: Error, CustomStringConvertible {
 
 public class SyntaxVerifier: SyntaxVisitor {
 
-  var UnknownNodes: [Syntax] = []
+  var unknownNodes: [Syntax] = []
 
   override public func shouldVisit(_ node: SyntaxKind) -> Bool {
     return node.isUnknown
@@ -282,13 +282,13 @@ public class SyntaxVerifier: SyntaxVisitor {
 
   override public func visitPre(_ node: Syntax) {
     assert(node.isUnknown)
-    UnknownNodes.append(node)
+    unknownNodes.append(node)
   }
 
   private func verify(_ node: Syntax) throws {
     node.walk(self)
-    if !UnknownNodes.isEmpty {
-      throw SyntaxVerifierError.unknownSyntaxFound(node: UnknownNodes.first!)
+    if let unknownNode = unknownNodes.first {
+      throw SyntaxVerifierError.unknownSyntaxFound(node: unknownNode)
     }
   }
 

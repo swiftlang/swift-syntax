@@ -22,6 +22,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     ("testGenerated", testGenerated),
     ("testTokenSyntax", testTokenSyntax),
     ("testFunctionCallSyntaxBuilder", testFunctionCallSyntaxBuilder),
+    ("testUnknownSyntax", testUnknownSyntax),
   ]
 
   public func testGenerated() {
@@ -114,5 +115,12 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
 
     XCTAssertEqual("\(callWithTerminator)",
                    "print(\"Hello, world!\", terminator: \" \")")
+  }
+
+  public func testUnknownSyntax() {
+    let expr = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
+    XCTAssertFalse(expr.isUnknown)
+    XCTAssertTrue(SyntaxFactory.makeUnknownSyntax(
+      tokens: [SyntaxFactory.makeLeftBraceToken()]).isUnknown)
   }
 }

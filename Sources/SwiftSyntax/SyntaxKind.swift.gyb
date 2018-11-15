@@ -45,6 +45,18 @@ public enum SyntaxKind: String, Codable {
 %   end
 % end
 
+  public var isUnknown: Bool {
+    switch self {
+% for name, nodes in grouped_nodes.items():
+%   if name not in ["Syntax", "SyntaxCollection"]:
+    case .unknown${name}: return true
+%   end
+% end
+    case .unknown: return true
+    default: return false
+    }
+  }
+
   public init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
     let kind = try container.decode(String.self)

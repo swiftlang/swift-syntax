@@ -19,6 +19,7 @@ public class AbsolutePositionTestCase: XCTestCase {
     ("testTrivias", testTrivias),
     ("testImplicit", testImplicit),
     ("testWithoutSourceFileRoot", testWithoutSourceFileRoot),
+    ("testSourceLocation", testSourceLocation),
   ]
 
   public func testVisitor() {
@@ -64,9 +65,10 @@ public class AbsolutePositionTestCase: XCTestCase {
           _ = node.byteSize
           _ = node.positionAfterSkippingLeadingTrivia
         }
-        override func visit(_ node: TokenSyntax) {
+        override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
           XCTAssertEqual(node.positionAfterSkippingLeadingTrivia.utf8Offset,
             node.position.utf8Offset + node.leadingTrivia.byteSize)
+          return .skipChildren
         }
       }
       parsed.walk(Visitor())
@@ -137,5 +139,30 @@ public class AbsolutePositionTestCase: XCTestCase {
           expression: nil), semicolon: nil, errorTokens: nil)
      XCTAssertEqual(0, item.position.utf8Offset)
      XCTAssertEqual(1, item.positionAfterSkippingLeadingTrivia.utf8Offset)
+  }
+
+  public func testSourceLocation() {
+    let url = URL(fileURLWithPath: "/tmp/test.swift")
+    let root = self.createSourceFile(2)
+    guard let secondReturnStmt = root.child(at: 0)?.child(at: 1) else {
+      fatalError("out of sync with createSourceFile")
+    }
+    let startLoc = secondReturnStmt.startLocation(in: url)
+    XCTAssertEqual(startLoc.line, 4)
+    XCTAssertEqual(startLoc.column, 18)
+
+    let startLocBeforeTrivia =
+      secondReturnStmt.startLocation(in: url, afterLeadingTrivia: false)
+    XCTAssertEqual(startLocBeforeTrivia.line, 3)
+    XCTAssertEqual(startLocBeforeTrivia.column, 1)
+
+    let endLoc = secondReturnStmt.endLocation(in: url)
+    XCTAssertEqual(endLoc.line, 4)
+    XCTAssertEqual(endLoc.column, 24)
+
+    let endLocAfterTrivia =
+      secondReturnStmt.endLocation(in: url, afterTrailingTrivia: true)
+    XCTAssertEqual(endLocAfterTrivia.line, 5)
+    XCTAssertEqual(endLocAfterTrivia.column, 1)
   }
 }

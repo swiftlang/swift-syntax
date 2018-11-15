@@ -13,12 +13,13 @@ code.
 Add this repository to the `Package.swift` manifest of your project:
 
 ```swift
+// swift-tools-version:4.2
 import PackageDescription
 
 let package = Package(
   name: "MyTool",
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", .branch("<#Specify Release tag#>")),
+    .package(url: "https://github.com/apple/swift-syntax.git", .exact("<#Specify Release tag#>")),
   ],
   targets: [
     .target(name: "MyTool", dependencies: ["SwiftSyntax"]),

@@ -115,11 +115,12 @@ class ClassifiedSyntaxTreePrinter: SyntaxVisitor {
     }
   }
 
-  override func visit(_ node: TokenSyntax) {
+  override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
     visit(node.leadingTrivia)
     let classification = classifications[node] ?? SyntaxClassification.none
     recordCurrentClassification(classification)
     result += node.text
     visit(node.trailingTrivia)
+    return .skipChildren
   }
 }

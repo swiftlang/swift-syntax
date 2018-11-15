@@ -478,7 +478,7 @@ extension RawSyntax {
       if shouldVisit {
         // Visit this node realizes a syntax node.
         visitor.visitPre()
-        visitChildren = visitor.visit()
+        visitChildren = visitor.visit() == .visitChildren
       }
       if visitChildren {
         for (offset, element) in layout.enumerated() {

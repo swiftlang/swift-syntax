@@ -13,9 +13,9 @@ public class SyntaxVisitorTestCase: XCTestCase {
   public func testBasic() {
     class FuncCounter: SyntaxVisitor {
       var funcCount = 0
-      override func visit(_ node: FunctionDeclSyntax) -> Bool {
+      override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
         funcCount += 1
-        return true
+        return .visitChildren
       }
     }
     XCTAssertNoThrow(try {
@@ -70,9 +70,9 @@ public class SyntaxVisitorTestCase: XCTestCase {
     class VisitCollections: SyntaxVisitor {
       var numberOfCodeBlockItems = 0
 
-      override func visit(_ items: CodeBlockItemListSyntax) -> Bool {
+      override func visit(_ items: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
         numberOfCodeBlockItems += items.count
-        return true
+        return .visitChildren
       }
     }
 

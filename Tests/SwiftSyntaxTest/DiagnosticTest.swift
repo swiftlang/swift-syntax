@@ -76,14 +76,14 @@ public class DiagnosticTestCase: XCTestCase {
         self.url = url
         self.engine = engine
       }
-      override func visit(_ function: FunctionDeclSyntax) -> Bool {
+      override func visit(_ function: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
         let startLoc = function.identifier.startLocation(in: url)
         let endLoc = function.endLocation(in: url)
         engine.diagnose(.badFunction(function.identifier), location: startLoc) {
           $0.highlight(function.identifier.sourceRange(in: self.url))
         }
         engine.diagnose(.endOfFunction(function.identifier), location: endLoc)
-        return true
+        return .visitChildren
       }
     }
 

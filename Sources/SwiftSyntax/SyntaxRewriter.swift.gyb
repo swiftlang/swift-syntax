@@ -256,3 +256,45 @@ extension Syntax {
     data.raw.accept(RawSyntaxVisitor(visitor, self))
   }
 }
+
+public enum SyntaxVerifierError: Error, CustomStringConvertible {
+  case unknownSyntaxFound(node: Syntax)
+
+  public var description: String {
+    switch self {
+      case .unknownSyntaxFound(let node):
+        return "unknown syntax node for \"\(node)\""
+    }
+  }
+}
+
+public class SyntaxVerifier: SyntaxVisitor {
+
+  var UnknownNodes: [Syntax] = []
+
+  override public func shouldVisit(_ node: SyntaxKind) -> Bool {
+    return node.isUnknown
+  }
+
+  override public func shouldVisit(_ node: TokenKind) -> Bool {
+    return false
+  }
+
+  override public func visitPre(_ node: Syntax) {
+    assert(node.isUnknown)
+    UnknownNodes.append(node)
+  }
+
+  private func verify(_ node: Syntax) throws {
+    node.walk(self)
+    if !UnknownNodes.isEmpty {
+      throw SyntaxVerifierError.unknownSyntaxFound(node: UnknownNodes.first!)
+    }
+  }
+
+  private override init() {}
+
+  public static func verify(_ node: Syntax) throws {
+    try SyntaxVerifier().verify(node)
+  }
+}

@@ -120,7 +120,10 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
   public func testUnknownSyntax() {
     let expr = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
     XCTAssertFalse(expr.isUnknown)
-    XCTAssertTrue(SyntaxFactory.makeUnknownSyntax(
-      tokens: [SyntaxFactory.makeLeftBraceToken()]).isUnknown)
+    let unknown = SyntaxFactory.makeUnknownSyntax(
+      tokens: [SyntaxFactory.makeLeftBraceToken()])
+    XCTAssertTrue(unknown.isUnknown)
+    XCTAssertNoThrow(try SyntaxVerifier.verify(expr))
+    XCTAssertThrowsError(try SyntaxVerifier.verify(unknown))
   }
 }

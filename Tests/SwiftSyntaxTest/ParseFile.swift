@@ -30,6 +30,7 @@ public class ParseFileTestCase: XCTestCase {
       let fileContents = try String(contentsOf: currentFile)
       let parsed = try SyntaxTreeParser.parse(currentFile)
       XCTAssertEqual("\(parsed)", fileContents)
+      try SyntaxVerifier.verify(parsed)
     }())
   }
 }

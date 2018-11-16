@@ -1,498 +1,692 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
+
+"""
+"""
+
+
+from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
+import collections
 import os
+import platform
+import shlex
 import subprocess
 import sys
 import tempfile
-import errno
-import platform
 
-PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
-WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
+from copy import copy
 
-INCR_TRANSFER_ROUNDTRIP_EXEC = \
-    WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
-GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
-LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
 
-### Generic helper functions
+try:
+    from pipes import quote
+except ImportError:
+    # Python 3
+    from shutil import quote
 
-def printerr(message):
-    print(message, file=sys.stderr)
 
-def note(message):
-    print("--- %s: note: %s" % (os.path.basename(sys.argv[0]), message))
-    sys.stdout.flush()
+try:
+    basestring
+except NameError:
+    # Python 3
+    basestring = str
 
-def fatal_error(message):
-    printerr(message)
+
+# -----------------------------------------------------------------------------
+# Constants
+
+PACKAGE_DIR = os.path.abspath(os.path.dirname(__file__))
+WORKSPACE_DIR = os.path.realpath(os.path.join(PACKAGE_DIR, os.pardir))
+
+# We have to use this name in the installed dylib so that the compiler will
+# treat it as a part of stdlib to copy the dylib to the framework dir.
+INSTALL_NAME = 'swiftSwiftSyntax'
+INSTALL_DYLIB_NAME = 'lib{}.dylib'.format(INSTALL_NAME)
+
+GYB_EXEC = os.path.join(WORKSPACE_DIR, 'swift', 'utils', 'gyb')
+LIT_EXEC = os.path.join(WORKSPACE_DIR, 'llvm', 'utils', 'lit', 'lit.py')
+
+INCR_TRANSFER_ROUNDTRIP_EXEC = os.path.join(
+    WORKSPACE_DIR, 'swift', 'utils', 'incrparse',
+    'incr_transfer_round_trip.py')
+
+
+# -----------------------------------------------------------------------------
+# Helpers
+
+def _print(*objects, **kwargs):
+    """Simple backport of the Python 3 print with flush support.
+    """
+
+    # Keyword only arguments
+    sep = kwargs.get('sep', ' ')
+    end = kwargs.get('end', '\n')
+    file = kwargs.get('file', sys.stdout)
+    flush = kwargs.get('flush', False)
+
+    file.write(sep.join(objects) + end)
+
+    if flush:
+        file.flush()
+
+
+def info(*objects):
+    """Prints a message to stderr and then flushes the output.
+    """
+
+    _print(*objects, file=sys.stdout)
+
+
+def note(*objects):
+    """Prints a note to stderr and then flushes the output.
+    """
+
+    _print('NOTE:', *objects, file=sys.stdout)
+
+
+def error(*objects):
+    """Prints an error message to stderr and then flushes the output.
+    """
+
+    _print('ERROR:', *objects, file=sys.stderr)
+
+
+def fatal_error(*objects):
+    """Prints an error message to stdout and then exits with error code 1.
+    """
+
+    error(*objects)
     sys.exit(1)
 
-def escapeCmdArg(arg):
-    if '"' in arg or ' ' in arg:
-        return '"%s"' % arg.replace('"', '\\"')
-    else:
-        return arg
+
+def log_section(name):
+    """Function decorator used to log a section header before running the
+    wrapped function and then an ending header after.
+    """
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            info('-- {}'.format(name))
+            result = func(*args, **kwargs)
+            info('-- END: {}'.format(name))
+            return result
+
+        return wrapper
+    return decorator
 
 
-def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT, 
-         verbose=False):
+def build_swiftpm_command(swiftpm_exec,
+                          products=None,
+                          build_dir=None,
+                          swiftc_args=None,
+                          disable_sandbox=False,
+                          release=False,
+                          verbose=False):
+    """Builds and returns a valid Swift PM command using the provided
+    executable path and option combination.
+    """
+
+    command = shlex.split(swiftpm_exec)
+    command += ['--package-path', PACKAGE_DIR]
+
+    if build_dir:
+        command += ['--build-path', build_dir]
+    if release:
+        command += ['--configuration', 'release']
     if verbose:
-        print(' '.join([escapeCmdArg(arg) for arg in cmd]))
-    process = subprocess.Popen(cmd, env=env, stdout=stdout, stderr=stderr)
-    process.wait()
+        command.append('--verbose')
 
-    return process.returncode
+    if disable_sandbox:
+        command.append('--disable-sandbox')
 
+    for product in products or []:
+        command += ['--product', product]
 
-def check_call(cmd, env=os.environ, verbose=False):
-    if verbose:
-        print(' '.join([escapeCmdArg(arg) for arg in cmd]))
-    return subprocess.check_call(cmd, env=env, stderr=subprocess.STDOUT)
+    for arg in swiftc_args or []:
+        command += ['-Xswiftc', arg]
 
-
-def realpath(path):
-    if path is None:
-        return None
-    return os.path.realpath(path)
+    return command
 
 
-### Build phases
+# -----------------------------------------------------------------------------
+# Shell Utilities
 
-## Generating gyb files
+def quote_command(command):
+    """Returns a quoted and escaped shell command. Commands can be strings or
+    an iterable of strings.
+    """
 
-def check_gyb_exec():
-    if not os.path.exists(GYB_EXEC):
-        fatal_error('''
-Error: Could not find gyb. 
+    if isinstance(command, basestring):
+        return quote(command)
 
-Make sure you have the main swift repo checked out next to the swift-syntax 
-repository.
-Refer to README.md for more information.
-''')
+    if isinstance(command, collections.Iterable):
+        return ' '.join(map(quote, command))
 
-
-def check_rsync():
-    with open(os.devnull, 'w')  as DEVNULL:
-        if call(['rsync', '--version'], stdout=DEVNULL) != 0:
-            fatal_error('Error: Could not find rsync.')
+    raise TypeError('Invalid command type {}', type(command).__name__)
 
 
-def generate_gyb_files(verbose, add_source_locations):
-    print('** Generating gyb Files **')
+def check_call(command, *args, **kwargs):
+    """Simple wrapper around the subprocess.check_call function which adds
+    a verbose option to output the command before executing it.
+    """
 
-    check_gyb_exec()
-    check_rsync()
+    if kwargs.pop('verbose', False):
+        _print(quote_command(command))
 
-    swiftsyntax_sources_dir = PACKAGE_DIR + '/Sources/SwiftSyntax'
-    temp_files_dir = tempfile.gettempdir()
-    generated_files_dir = swiftsyntax_sources_dir + '/gyb_generated'
+    return subprocess.check_call(command, *args, **kwargs)
 
-    if not os.path.exists(temp_files_dir):
-        os.makedirs(temp_files_dir)
-    if not os.path.exists(generated_files_dir):
-        os.makedirs(generated_files_dir)
 
-    # Generate the new .swift files in a temporary directory and only copy them
-    # to Sources/SwiftSyntax/gyb_generated if they are different than the files
-    # already residing there. This way we don't touch the generated .swift
-    # files if they haven't changed and don't trigger a rebuild.
-    for gyb_file in os.listdir(swiftsyntax_sources_dir):
-        if not gyb_file.endswith('.gyb'):
+def mkdir_p(path):
+    """Similar to the 'mkdir -p' command, this function recursively creates all
+    directories in the given path if they don't already exist.
+    """
+
+    if os.path.exists(path):
+        return
+
+    os.makedirs(path)
+
+
+def rsync(source, dest, archive=False, checksum=False, verbose=False):
+    """Simple wrapper around the rsync command line utility.
+    """
+
+    command = ['rsync']
+    if archive:
+        command += ['--archive']
+    if checksum:
+        command += ['--checksum']
+
+    command.append(source)
+    command.append(dest)
+
+    try:
+        check_call(command, verbose=verbose)
+    except subprocess.CalledProcessError:
+        fatal_error('Failed to rsync {} to {}!'.format(source, dest))
+
+
+# -----------------------------------------------------------------------------
+# Environment Validation
+
+MISSING_FILE_EPILOG = """
+Make sure you have the main swift repo checked out next to the swift-syntax
+repository. Refer to the README.md file for more information.
+"""
+
+
+def validate_file_exists(name, exec_path):
+    """Helper function used to validate a file exists at an expected path. If
+    not a fatal error is reported and the script exits.
+    """
+
+    if os.path.exists(exec_path):
+        return
+
+    fatal_error('Could not find {}\n{}'.format(name, MISSING_FILE_EPILOG))
+
+
+def find_gyb():
+    validate_file_exists('gyb', GYB_EXEC)
+
+
+def find_lit():
+    validate_file_exists('lit.py', LIT_EXEC)
+
+
+def find_incr_transfer_roundtrip():
+    validate_file_exists('incr_transfer_round_trip.py',
+                         INCR_TRANSFER_ROUNDTRIP_EXEC)
+
+
+def find_rsync():
+    with open(os.devnull, 'w') as devnull:
+        try:
+            check_call(['rsync', '--version'], stdout=devnull, stderr=devnull)
+        except subprocess.CalledProcessError:
+            fatal_error('Could not find rsync.')
+
+
+# -----------------------------------------------------------------------------
+# Gyb Pre-process
+
+@log_section('Templating Gyb Files')
+def template_gyb_files(verbose, add_source_locations):
+    """Template the .swift.gyb sources and install them in the gyb_generated
+    directory. If the sources haven't changed the generated files will not be
+    updated via the use of rsync's --checksum feature, which avoids unnecessary
+    rebuilds.
+    """
+
+    temp_dir = tempfile.gettempdir()
+    sources_dir = os.path.join(PACKAGE_DIR, 'Sources', 'SwiftSyntax')
+    generated_dir = os.path.join(sources_dir, 'gyb_generated')
+
+    mkdir_p(temp_dir)
+    mkdir_p(generated_dir)
+
+    for file in os.listdir(sources_dir):
+        if not file.endswith('.gyb'):
             continue
 
-        # Slice off the '.gyb' to get the name for the output file
-        output_file_name = gyb_file[:-4]
+        # Strip off the '.gyb' extension to get the name for the output file.
+        output_file_name = file.rstrip('.gyb')
+
+        gyb_command = [
+            GYB_EXEC,
+            os.path.join(sources_dir, file),
+            '-o', os.path.join(temp_dir, output_file_name),
+        ]
 
         # Source locations are added by default by gyb, and cleared by passing
         # `--line-directive=` (nothing following the `=`) to the generator. Our
-        # flag is the reverse; we don't want them by default, only if requested.
-        line_directive_flags = [] if add_source_locations \
-                                  else ['--line-directive=']
+        # flag is the reverse; we don't want them by default, only if
+        # requested.
+        if add_source_locations:
+            gyb_command.append('--line-directive=')
 
-        # Generate the new file
-        check_call([GYB_EXEC] +
-                   [swiftsyntax_sources_dir + '/' + gyb_file] +
-                   ['-o', temp_files_dir + '/' + output_file_name] +
-                   line_directive_flags,
-                   verbose=verbose)
+        try:
+            check_call(gyb_command, verbose=verbose)
+        except subprocess.CalledProcessError:
+            fatal_error('Failed to template Gyb file {}'.format(file))
 
-        # Copy the file if different from the file already present in 
-        # gyb_generated
-        check_call(['rsync'] +
-                   ['--checksum'] +
-                   [temp_files_dir + '/' + output_file_name] +
-                   [generated_files_dir + '/' + output_file_name],
-                   verbose=verbose)
-
-    print('Done Generating gyb Files')
+        # Copy the file if different from the file already present in
+        # gyb_generated.
+        rsync(
+            source=os.path.join(temp_dir, output_file_name),
+            dest=os.path.join(generated_dir, output_file_name),
+            checksum=True,
+            verbose=verbose)
 
 
-## Building swiftSyntax
+# -----------------------------------------------------------------------------
+# Build
 
-def get_installed_name():
-    # we have to use this name in the installed dylib so that the compiler will
-    # treat it as a part of stdlib to copy the dylib to the framework dir.
-    return 'swiftSwiftSyntax'
+@log_section('Build SwiftSyntax')
+def build_swiftsyntax(swift_build_exec,
+                      swiftc_exec,
+                      build_dir,
+                      build_test_util,
+                      disable_sandbox=False,
+                      release=False,
+                      verbose=False):
+    """Builds the SwiftSyntax dylib and optionally the lit-test-helper using
+    Swift PM.
+    """
 
-def get_installed_dylib_name():
-    return 'lib' + get_installed_name() + '.dylib'
-
-def get_swiftpm_invocation(spm_exec, build_dir, release):
-    if spm_exec == 'swift build':
-        swiftpm_call = ['swift', 'build']
-    elif spm_exec == 'swift test':
-        swiftpm_call = ['swift', 'test']
-    else:
-        swiftpm_call = [spm_exec]
-
-    swiftpm_call.extend(['--package-path', PACKAGE_DIR])
-    if release:
-        swiftpm_call.extend(['--configuration', 'release'])
-    if build_dir:
-        swiftpm_call.extend(['--build-path', build_dir])
-
-    # Swift compiler needs to know the module link name.
-    swiftpm_call.extend(['-Xswiftc', '-module-link-name', '-Xswiftc', get_installed_name()])
-    return swiftpm_call
-
-
-def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir, build_test_util, release,
-                      verbose, disable_sandbox=False):
-    print('** Building SwiftSyntax **')
-
-    swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
-                                          build_dir=build_dir,
-                                          release=release)
-    swiftpm_call.extend(['--product', 'SwiftSyntax'])
-
-    if disable_sandbox:
-      swiftpm_call.append('--disable-sandbox')
+    products = ['SwiftSyntax']
 
     # Only build lit-test-helper if we are planning to run tests
     if build_test_util:
-        swiftpm_call.extend(['--product', 'lit-test-helper'])
+        products.append('lit-test-helper')
 
-    if verbose:
-        swiftpm_call.extend(['--verbose'])
-    _environ = dict(os.environ)
-    _environ['SWIFT_EXEC'] = swiftc_exec
-    _environ['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
-    check_call(swiftpm_call, env=_environ, verbose=verbose)
+    # Swift compiler needs to know the module link name.
+    swiftc_args = ['-module-link-name', INSTALL_NAME]
 
+    command = build_swiftpm_command(
+        swiftpm_exec=swift_build_exec,
+        products=products,
+        build_dir=build_dir,
+        swiftc_args=swiftc_args,
+        disable_sandbox=disable_sandbox,
+        release=release,
+        verbose=verbose)
 
-## Testing
+    env = copy(os.environ)
+    env['SWIFT_EXEC'] = swiftc_exec
+    env['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
 
-def run_tests(swift_test_exec, build_dir, release, swift_build_exec,
-              filecheck_exec, swiftc_exec, swift_syntax_test_exec, verbose):
-    print('** Running SwiftSyntax Tests **')
-
-    optional_swiftc_exec = swiftc_exec
-    if optional_swiftc_exec == 'swift':
-      optional_swiftc_exec = None
-
-    lit_success = run_lit_tests(swift_build_exec=swift_build_exec,
-                                build_dir=build_dir,
-                                release=release,
-                                swiftc_exec=optional_swiftc_exec,
-                                filecheck_exec=filecheck_exec,
-                                swift_syntax_test_exec=swift_syntax_test_exec,
-                                verbose=verbose)
-    if not lit_success:
-        return False
-
-    xctest_success = run_xctests(swift_test_exec=swift_test_exec,
-                                 build_dir=build_dir,
-                                 release=release,
-                                 swiftc_exec=swiftc_exec,
-                                 verbose=verbose)
-    if not xctest_success:
-        return False
-
-    return True
-
-# Lit-based tests
-
-def check_lit_exec():
-    if not os.path.exists(LIT_EXEC):
-        fatal_error('''
-Error: Could not find lit.py. 
-
-Make sure you have the llvm repo checked out next to the swift-syntax repo. 
-Refer to README.md for more information.
-''')
+    try:
+        check_call(command, env=env, verbose=verbose)
+    except subprocess.CalledProcessError:
+        fatal_error('Failed to build SwiftSyntax')
 
 
-def check_incr_transfer_roundtrip_exec():
-    if not os.path.exists(INCR_TRANSFER_ROUNDTRIP_EXEC):
-        fatal_error('''
-Error: Could not find incr_transfer_round_trip.py. 
+# -----------------------------------------------------------------------------
+# Test
 
-Make sure you have the main swift repo checked out next to the swift-syntax 
-repo. 
-Refer to README.md for more information.
-''')
+def find_lit_test_helper_exec(swift_build_exec, build_dir, release=False):
+    """Finds and returns the path to the built list-test-helper executable
+    using Swift PM.
+    """
+
+    product = 'list-test-helper'
+    command = shlex.split(swift_build_exec) + [
+        '--product', product,
+        '--package-path', PACKAGE_DIR,
+    ]
+
+    if build_dir:
+        command += ['--build-path', build_dir]
+    if release:
+        command += ['--configuration', 'release']
+
+    command.append('--show-bin-path')
+
+    bin_path = subprocess.check_output(command).strip()
+    return os.path.join(bin_path, product)
 
 
-def find_lit_test_helper_exec(swift_build_exec, build_dir, release):
-    swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
-                                          build_dir=build_dir,
-                                          release=release)
-    swiftpm_call.extend(['--product', 'lit-test-helper'])
-    swiftpm_call.extend(['--show-bin-path'])
+@log_section('Running Lit Tests')
+def run_lit_tests(swift_build_exec,
+                  swiftc_exec,
+                  build_dir,
+                  filecheck_exec,
+                  swift_syntax_test_exec,
+                  release=False,
+                  verbose=False):
+    """Runs the Lit test suite for the build SwiftSyntax.
+    """
 
-    bin_dir = subprocess.check_output(swiftpm_call, stderr=subprocess.STDOUT)
-    return bin_dir.strip() + '/lit-test-helper'
+    lit_test_helper_exec = find_lit_test_helper_exec(
+        swift_build_exec=swift_build_exec,
+        build_dir=build_dir,
+        release=release)
 
+    command = [
+        LIT_EXEC,
+        os.path.join(PACKAGE_DIR, 'lit_tests'),
+    ]
 
-def run_lit_tests(swift_build_exec, build_dir, release, swiftc_exec, 
-                  filecheck_exec, swift_syntax_test_exec, verbose):
-    print('** Running lit-based tests **')
-
-    check_lit_exec()
-    check_incr_transfer_roundtrip_exec()
-
-    lit_test_helper_exec = \
-        find_lit_test_helper_exec(swift_build_exec=swift_build_exec,
-                                  build_dir=build_dir,
-                                  release=release)
-
-    lit_call = [LIT_EXEC]
-    lit_call.extend([PACKAGE_DIR + '/lit_tests'])
-    
     if swiftc_exec:
-        lit_call.extend(['--param', 'SWIFTC=' + swiftc_exec])
+        command += ['--param', 'SWIFTC=' + swiftc_exec]
     if filecheck_exec:
-        lit_call.extend(['--param', 'FILECHECK=' + filecheck_exec])
+        command += ['--param', 'FILECHECK=' + filecheck_exec]
     if lit_test_helper_exec:
-        lit_call.extend(['--param', 'LIT_TEST_HELPER=' + lit_test_helper_exec])
+        command += ['--param', 'LIT_TEST_HELPER=' + lit_test_helper_exec]
     if swift_syntax_test_exec:
-        lit_call.extend(['--param', 'SWIFT_SYNTAX_TEST=' +
-                         swift_syntax_test_exec])
-    lit_call.extend(['--param', 'INCR_TRANSFER_ROUND_TRIP.PY=' +
-                     INCR_TRANSFER_ROUNDTRIP_EXEC])
+        command += ['--param', 'SWIFT_SYNTAX_TEST=' + swift_syntax_test_exec]
+
+    command += [
+        '--param',
+        'INCR_TRANSFER_ROUND_TRIP.PY=' + INCR_TRANSFER_ROUNDTRIP_EXEC
+    ]
 
     # Print all failures
-    lit_call.extend(['--verbose'])
+    command.append('--verbose')
+
     # Don't show all commands if verbose is not enabled
     if not verbose:
-        lit_call.extend(['--succinct'])
+        command.append('--succinct')
 
-    return call(lit_call, verbose=verbose) == 0
+    try:
+        check_call(command, verbose=verbose)
+    except subprocess.CalledProcessError:
+        fatal_error('Lit test suite failed!')
 
 
-## XCTest based tests
-
+@log_section('Running XCTest Tests')
 def run_xctests(swift_test_exec, build_dir, release, swiftc_exec, verbose):
-    print('** Running XCTests **')
-    swiftpm_call = get_swiftpm_invocation(spm_exec=swift_test_exec,
-                                          build_dir=build_dir,
-                                          release=release)
+    """Runs the XCTest test suite for the built SwiftSyntax.
+    """
 
-    if verbose:
-        swiftpm_call.extend(['--verbose'])
+    command = build_swiftpm_command(
+        swiftpm_exec=swift_test_exec,
+        build_dir=build_dir,
+        release=release,
+        verbose=verbose)
 
-    subenv = dict(os.environ)
+    env = copy(os.environ)
     if swiftc_exec:
-        # Add the swiftc exec to PATH so that SwiftSyntax finds it
-        subenv['PATH'] = realpath(swiftc_exec + '/..') + ':' + subenv['PATH']
+        env['SWIFTC_EXEC'] = swiftc_exec
 
-    return call(swiftpm_call, env=subenv, verbose=verbose) == 0
+    try:
+        check_call(command, env=env, verbose=verbose)
+    except subprocess.CalledProcessError:
+        fatal_error('XCTest test suite failed!')
 
-def delete_rpath(rpath, binary):
-    if platform.system() == 'Darwin':
-        cmd = ["install_name_tool", "-delete_rpath", rpath, binary]
-        note("removing RPATH from %s: %s" % (binary, ' '.join(cmd)))
-        result = subprocess.call(cmd)
-        if result != 0:
-            fatal_error("command failed with exit status %d" % (result,))
-    else:
-        fatal_error("unable to remove RPATHs on this platform")
 
-def change_id_rpath(rpath, binary):
-    if platform.system() == 'Darwin':
-        cmd = ["install_name_tool", "-id", rpath, binary]
-        note("changing id in %s: %s" % (binary, ' '.join(cmd)))
-        result = subprocess.call(cmd)
-        if result != 0:
-            fatal_error("command failed with exit status %d" % (result,))
-    else:
-        fatal_error("unable to invoke install_name_tool on this platform")
+# -----------------------------------------------------------------------------
+# Install
 
-def check_and_sync(file_path, install_path):
-    cmd = ["rsync", "-a", file_path, install_path]
-    note("installing %s: %s" % (os.path.basename(file_path), ' '.join(cmd)))
-    result = subprocess.check_call(cmd)
-    if result != 0:
-        fatal_error("install failed with exit status %d" % (result,))
+def delete_rpath(rpath, binary, verbose=False):
+    """Uses install_name_tool on Darwin systems to delete the rpath name in
+    the given Mach-O binary.
+    """
 
-def install(build_dir, dylib_dir, swiftmodule_dir, stdlib_rpath):
-    dylibPath = build_dir + '/libSwiftSyntax.dylib'
-    modulePath = build_dir + '/SwiftSyntax.swiftmodule'
-    docPath = build_dir + '/SwiftSyntax.swiftdoc'
-    # users should find the dylib as if it's a part of stdlib.
-    change_id_rpath('@rpath/' + get_installed_dylib_name(), dylibPath)
-    # we don't wanna hard-code the stdlib dylibs into rpath.
-    delete_rpath(stdlib_rpath, dylibPath)
-    check_and_sync(file_path=dylibPath,
-                   install_path=dylib_dir+'/'+get_installed_dylib_name())
-    # Optionally install .swiftmodule
+    if platform.system() != 'Darwin':
+        fatal_error('Unable to remove RPATHs on this platform')
+
+    command = ['install_name_tool', '-delete_rpath', rpath, binary]
+
+    note('Removing RPATH from {}'.format(binary))
+    check_call(command, verbose=verbose)
+
+
+def change_rpath_id(rpath, binary, verbose=False):
+    """Uses install_name_tool on Darwin systems to change the rpath name in
+    the given Mach-O binary.
+    """
+
+    if platform.system() != 'Darwin':
+        fatal_error('Unable to invoke install_name_tool on this platform')
+
+    command = ['install_name_tool', '-id', rpath, binary]
+
+    note('Changing id in {}'.format(binary))
+    check_call(command, verbose=verbose)
+
+
+@log_section('Installing SwiftSyntax')
+def install(build_dir,
+            dylib_dir,
+            swiftmodule_dir,
+            stdlib_rpath,
+            verbose=False):
+    """Installs the built SwiftSyntax dylib, swiftmodule and swiftdoc in the
+    given build dir.
+    """
+
+    dylib_path = os.path.join(build_dir, 'libSwiftSyntax.dylib')
+    module_path = os.path.join(build_dir, 'SwiftSyntax.swiftmodule')
+    doc_path = os.path.join(build_dir, 'SwiftSyntax.swiftdoc')
+
+    # Users should find the dylib as if it's a part of stdlib.
+    dylib_rpath = os.path.join('@rpath', INSTALL_DYLIB_NAME)
+    change_rpath_id(dylib_rpath, dylib_path, verbose=verbose)
+
+    # We don't wanna hard-code the stdlib dylibs into rpath.
+    delete_rpath(stdlib_rpath, dylib_path, verbose=verbose)
+
+    install_path = os.path.join(dylib_path, INSTALL_DYLIB_NAME)
+    rsync(dylib_path, install_path, archive=True, verbose=verbose)
+
+    # Optionally install the swiftmodule file.
     if swiftmodule_dir:
-        check_and_sync(file_path=modulePath,install_path=swiftmodule_dir)
-        check_and_sync(file_path=docPath,install_path=swiftmodule_dir)
-    return
+        rsync(module_path, swiftmodule_dir, archive=True, verbose=verbose)
+        rsync(doc_path, swiftmodule_dir, archive=True, verbose=verbose)
 
-### Main
 
-def main():
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='''
+# -----------------------------------------------------------------------------
+
+ARGUMENT_PARSER_DESCRIPTION = """
 Build and test script for SwiftSytnax.
 
-Build SwiftSyntax by generating all necessary files form the corresponding
-.swift.gyb files first. For this, SwiftSyntax needs to be check out alongside
+Build SwiftSyntax by generating all necessary files from the corresponding
+.swift.gyb files first. For this, SwiftSyntax needs to be checked out alongside
 the main swift repo (http://github.com/apple/swift/) in the following structure
+
 - (containing directory)
   - swift
   - swift-syntax
+
 It is not necessary to build the compiler project.
 
 The build script can also drive the test suite included in the SwiftSyntax
 repo. This requires a custom build of the compiler project since it accesses
-test utilities that are not shipped as part of the toolchains. See the Testing
+test utilities that are not shipped as part of the toolchains. See the "Test"
 section for arguments that need to be specified for this.
-''')
+"""
 
-    basic_group = parser.add_argument_group('Basic')
 
-    basic_group.add_argument('--build-dir', default=None, help='''
-        The directory in which build products shall be put. If omitted a
-        directory named '.build' will be put in the swift-syntax directory.
-        ''')
-    basic_group.add_argument('-v', '--verbose', action='store_true', help='''
-        Enable extensive logging of executed steps.
-        ''')
-    basic_group.add_argument('-r', '--release', action='store_true', help='''
-      Build as a release build.
-      ''')
-    basic_group.add_argument('--add-source-locations', action='store_true',
-                             help='''
-      Insert ###sourceLocation comments in generated code for line-directive.
-      ''')
-    basic_group.add_argument('--install', action='store_true',
-                             help='''
-      Install the build artifact to a specified toolchain directory.
-      ''')
-    basic_group.add_argument('--dylib-dir',
-                             help='''
-      The directory to where the .dylib should be installed.
-      ''')
-    basic_group.add_argument('--swiftmodule-dir',
-                             help='''
-      The directory to where the .swiftmodule should be installed.
-      ''')
+def parse_args():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=ARGUMENT_PARSER_DESCRIPTION)
 
+    # -------------------------------------------------------------------------
+    parser.add_argument('-v', '--verbose',
+                        action='store_true',
+                        help='Enable extensive logging of executed steps.')
+
+    parser.add_argument('--swiftc-exec',
+                        default='swiftc',
+                        help='Path to the swift executable. If not specified '
+                             'the swiftc exeuctable will be inferred from '
+                             'PATH.')
+
+    # Used by both the build/test and install modes
+    parser.add_argument('--build-dir',
+                        help='Swift PM build directory. If omitted a '
+                             'directory named ".build" will be put in the '
+                             'swift-syntax directory.')
+
+    # -------------------------------------------------------------------------
     build_group = parser.add_argument_group('Build')
+
+    build_group.add_argument('-r', '--release',
+                             action='store_true',
+                             help='Build as a release build.')
+
+    build_group.add_argument('--swift-build-exec',
+                             default='swift build',
+                             help='Path to the swift-build executable that '
+                                  'is used to build SwiftPM projects. If '
+                                  'not specified the the "swift build" '
+                                  'command will be used.')
+
+    build_group.add_argument('--add-source-locations',
+                             action='store_true',
+                             help='Insert "###sourceLocation" comments in '
+                                  'generated code for line-directive.')
+
     build_group.add_argument('--disable-sandbox',
                              action='store_true',
-                             help='Disable sandboxes when building with '
-                                  'Swift PM')
+                             help='Disable Swift PM sandboxes when building.')
 
-    testing_group = parser.add_argument_group('Testing')
-    testing_group.add_argument('-t', '--test', action='store_true',
-                               help='Run tests')
-    
-    testing_group.add_argument('--swift-build-exec', default='swift build',
-                               help='''
-      Path to the swift-build executable that is used to build SwiftPM projects
-      If not specified the the 'swift build' command will be used.
-      ''')
-    testing_group.add_argument('--swift-test-exec', default='swift test',
-                               help='''
-      Path to the swift-test executable that is used to test SwiftPM projects
-      If not specified the the 'swift test' command will be used.
-      ''')
-    testing_group.add_argument('--swiftc-exec', default='swiftc', help='''
-      Path to the swift executable. If not specified the swiftc exeuctable
-      will be inferred from PATH.
-      ''')
-    testing_group.add_argument('--swift-syntax-test-exec', default=None,
-                               help='''
-      Path to the swift-syntax-test executable that was built from the main
-      Swift repo. If not specified, it will be looked up from PATH.
-      ''')
-    testing_group.add_argument('--filecheck-exec', default=None, help='''
-      Path to the FileCheck executable that was built as part of the LLVM
-      repository. If not specified, it will be looked up from PATH.
-      ''')
+    # -------------------------------------------------------------------------
+    test_group = parser.add_argument_group('Test')
 
-    args = parser.parse_args(sys.argv[1:])
+    test_group.add_argument('-t', '--test',
+                            action='store_true',
+                            help='Run tests')
+
+    test_group.add_argument('--swift-test-exec',
+                            default='swift test',
+                            help='Path to the swift-test executable that '
+                                 'is used to test SwiftPM projects. If not '
+                                 'specified then the "swift test" command '
+                                 'will be used.')
+
+    test_group.add_argument('--swift-syntax-test-exec',
+                            help='Path to the swift-syntax-test executable '
+                                 'that was built from the main Swift repo. '
+                                 'If not specified, it will be looked up '
+                                 'from PATH.')
+
+    test_group.add_argument('--filecheck-exec',
+                            help='Path to the FileCheck executable that was '
+                                 'built as part of the LLVM repository. If '
+                                 'not specified, it will be looked up from '
+                                 'PATH.')
+
+    # -------------------------------------------------------------------------
+    install_group = parser.add_argument_group('Install')
+
+    install_group.add_argument('--install',
+                               action='store_true',
+                               help='Install the build artifact to a '
+                                    'specified toolchain directory.')
+
+    install_group.add_argument('--dylib-dir',
+                               help='The directory to where the .dylib should '
+                                    'be installed.')
+
+    install_group.add_argument('--swiftmodule-dir',
+                               help='The directory to where the .swiftmodule '
+                                    'should be installed.')
+
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    # -------------------------------------------------------------------------
+    # Install
 
     if args.install:
-        if not args.dylib_dir:
-            fatal_error('Must specify directory to install')
         if not args.build_dir:
             fatal_error('Must specify build directory to copy from')
+        if not args.dylib_dir:
+            fatal_error('Must specify directory to install')
+
+        find_rsync()
+
         if args.release:
-            build_dir=args.build_dir + '/release'
+            build_dir = os.path.join(args.build_dir, 'release')
         else:
-            # will this ever happen?
-            build_dir=args.build_dir + '/debug'
-        stdlib_rpath = realpath(os.path.dirname(args.swiftc_exec) + '/../lib/swift/macosx/')
-        install(build_dir=build_dir, dylib_dir=args.dylib_dir,
-                swiftmodule_dir=args.swiftmodule_dir,
-                stdlib_rpath=stdlib_rpath)
+            # Will or should we ever install non-release builds?
+            build_dir = os.path.join(args.build_dir, 'debug')
+
+        # Ensure the dylib install dir exists.
+        mkdir_p(args.dylib_dir)
+
+        swiftc_dir = os.path.dirname(args.swiftc_exec)
+        stdlib_rpath = os.path.realpath(
+            os.path.join(swiftc_dir, os.pardir, 'lib', 'swift', 'macosx'))
+
+        install(
+            build_dir=build_dir,
+            dylib_dir=args.dylib_dir,
+            swiftmodule_dir=args.swiftmodule_dir,
+            stdlib_rpath=stdlib_rpath)
+
         sys.exit(0)
 
-    try:
-        generate_gyb_files(verbose=args.verbose,
-                           add_source_locations=args.add_source_locations)
-    except subprocess.CalledProcessError as e:
-        printerr('Error: Generating .gyb files failed')
-        printerr('Executing: %s' % ' '.join(e.cmd))
-        printerr(e.output)
-        sys.exit(1)
+    # -------------------------------------------------------------------------
+    # Validate Build Environment
 
-    try:
-        build_swiftsyntax(swift_build_exec=args.swift_build_exec,
-                          swiftc_exec=args.swiftc_exec,
-                          build_dir=args.build_dir,
-                          build_test_util=args.test,
-                          release=args.release,
-                          verbose=args.verbose,
-                          disable_sandbox=args.disable_sandbox)
-    except subprocess.CalledProcessError as e:
-        printerr('Error: Building SwiftSyntax failed')
-        printerr('Executing: %s' % ' '.join(e.cmd))
-        printerr(e.output)
-        sys.exit(1)
+    find_gyb()
+    find_rsync()
 
     if args.test:
-        try:
-            success = run_tests(swift_test_exec=args.swift_test_exec,
-                                build_dir=realpath(args.build_dir),
-                                release=args.release,
-                                swift_build_exec=args.swift_build_exec,
-                                filecheck_exec=realpath(args.filecheck_exec),
-                                swiftc_exec=realpath(args.swiftc_exec),
-                                swift_syntax_test_exec=
-                                  realpath(args.swift_syntax_test_exec),
-                                verbose=args.verbose)
-            if not success:
-                # An error message has already been printed by the failing test
-                # suite
-                sys.exit(1)
-            else:
-                print('** All tests passed **')
-        except subprocess.CalledProcessError as e:
-            printerr('Error: Running tests failed')
-            printerr('Executing: %s' % ' '.join(e.cmd))
-            printerr(e.output)
-            sys.exit(1)
+        find_lit()
+        find_incr_transfer_roundtrip()
+
+    # -------------------------------------------------------------------------
+    # Build and Test
+
+    template_gyb_files(
+        add_source_locations=args.add_source_locations,
+        verbose=args.verbose)
+
+    build_swiftsyntax(
+        swift_build_exec=args.swift_build_exec,
+        swiftc_exec=args.swiftc_exec,
+        build_dir=args.build_dir,
+        build_test_util=args.test,
+        disable_sandbox=args.disable_sandbox,
+        release=args.release,
+        verbose=args.verbose)
+
+    if args.test:
+        run_lit_tests(
+            swift_build_exec=args.swift_build_exec,
+            build_dir=args.build_dir,
+            release=args.release,
+            swiftc_exec=args.swiftc_exec,
+            filecheck_exec=args.filecheck_exec,
+            swift_syntax_test_exec=args.swift_syntax_test_exec,
+            verbose=args.verbose)
+
+        run_xctests(
+            swift_test_exec=args.swift_test_exec,
+            build_dir=args.build_dir,
+            release=args.release,
+            swiftc_exec=args.swiftc_exec,
+            verbose=args.verbose)
 
 
 if __name__ == '__main__':

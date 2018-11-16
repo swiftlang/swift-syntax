@@ -303,14 +303,14 @@ def template_gyb_files(verbose, add_source_locations):
 # -----------------------------------------------------------------------------
 # Build
 
-@log_section('Build SwiftSyntax')
-def build_swiftsyntax(swift_build_exec,
-                      swiftc_exec,
-                      build_dir,
-                      build_test_util,
-                      disable_sandbox=False,
-                      release=False,
-                      verbose=False):
+@log_section('Building SwiftSyntax')
+def build(swift_build_exec,
+          swiftc_exec,
+          build_dir,
+          build_test_util,
+          disable_sandbox=False,
+          release=False,
+          verbose=False):
     """Builds the SwiftSyntax dylib and optionally the lit-test-helper using
     Swift PM.
     """
@@ -662,7 +662,7 @@ def main():
         add_source_locations=args.add_source_locations,
         verbose=args.verbose)
 
-    build_swiftsyntax(
+    build(
         swift_build_exec=args.swift_build_exec,
         swiftc_exec=args.swiftc_exec,
         build_dir=args.build_dir,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-"""
+"""Utility script used to build, test and install SwiftSyntax.
 """
 
 
@@ -75,21 +75,21 @@ def info(*objects):
     """Prints a message to stderr and then flushes the output.
     """
 
-    _print(*objects, file=sys.stdout)
+    _print(*objects, file=sys.stdout, flush=True)
 
 
 def note(*objects):
     """Prints a note to stderr and then flushes the output.
     """
 
-    _print('NOTE:', *objects, file=sys.stdout)
+    _print('NOTE:', *objects, file=sys.stdout, flush=True)
 
 
 def error(*objects):
     """Prints an error message to stderr and then flushes the output.
     """
 
-    _print('ERROR:', *objects, file=sys.stderr)
+    _print('ERROR:', *objects, file=sys.stderr, flush=True)
 
 
 def fatal_error(*objects):
@@ -283,7 +283,7 @@ def template_gyb_files(verbose, add_source_locations):
         # `--line-directive=` (nothing following the `=`) to the generator. Our
         # flag is the reverse; we don't want them by default, only if
         # requested.
-        if add_source_locations:
+        if not add_source_locations:
             gyb_command.append('--line-directive=')
 
         try:

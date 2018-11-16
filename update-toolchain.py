@@ -51,11 +51,11 @@ def _print(*objects, **kwargs):
 
 
 def info(*objects):
-    _print(*objects, file=sys.stdout)
+    _print(*objects, file=sys.stdout, flush=True)
 
 
 def error(*objects):
-    _print('ERROR:', *objects, file=sys.stderr)
+    _print('ERROR:', *objects, file=sys.stderr, flush=True)
 
 
 def fatal_error(*objects):

@@ -351,7 +351,7 @@ def find_lit_test_helper_exec(swift_build_exec, build_dir, release=False):
     using Swift PM.
     """
 
-    product = 'list-test-helper'
+    product = 'lit-test-helper'
     command = shlex.split(swift_build_exec) + [
         '--product', product,
         '--package-path', PACKAGE_DIR,

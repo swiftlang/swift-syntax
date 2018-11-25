@@ -127,10 +127,10 @@ func performClassifySyntax(args: CommandLineArguments) throws {
 class NodePrinter: SyntaxVisitor {
   override func visitPre(_ node: Syntax) {
     assert(!node.isUnknown)
-    print("<\(type(of: node))>", terminator:"")
+    print("<\(type(of: node))>", terminator: "")
   }
   override func visitPost(_ node: Syntax) {
-    print("</\(type(of: node))>", terminator:"")
+    print("</\(type(of: node))>", terminator: "")
   }
   override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     print(token, terminator:"")

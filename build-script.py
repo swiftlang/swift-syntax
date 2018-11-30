@@ -264,7 +264,7 @@ def run_lit_tests(swift_build_exec, build_dir, release, swiftc_exec,
     lit_call.extend([PACKAGE_DIR + '/lit_tests'])
     
     if swiftc_exec:
-        lit_call.extend(['--param', 'SWIFTC=' + swiftc_exec])
+        lit_call.extend(['--param', 'SWIFTC=' + realpath(swiftc_exec)])
     if filecheck_exec:
         lit_call.extend(['--param', 'FILECHECK=' + filecheck_exec])
     if lit_test_helper_exec:
@@ -280,7 +280,6 @@ def run_lit_tests(swift_build_exec, build_dir, release, swiftc_exec,
     # Don't show all commands if verbose is not enabled
     if not verbose:
         lit_call.extend(['--succinct'])
-
     return call(lit_call, verbose=verbose) == 0
 
 
@@ -299,7 +298,7 @@ def run_xctests(swift_test_exec, build_dir, release, swiftc_exec, verbose):
     if swiftc_exec:
         # Add the swiftc exec to PATH so that SwiftSyntax finds it
         subenv['PATH'] = realpath(swiftc_exec + '/..') + ':' + subenv['PATH']
-
+    subenv['SWIFT_EXEC'] = swiftc_exec
     return call(swiftpm_call, env=subenv, verbose=verbose) == 0
 
 def delete_rpath(rpath, binary):
@@ -478,7 +477,7 @@ section for arguments that need to be specified for this.
                                 release=args.release,
                                 swift_build_exec=args.swift_build_exec,
                                 filecheck_exec=realpath(args.filecheck_exec),
-                                swiftc_exec=realpath(args.swiftc_exec),
+                                swiftc_exec=args.swiftc_exec,
                                 swift_syntax_test_exec=
                                   realpath(args.swift_syntax_test_exec),
                                 verbose=args.verbose)

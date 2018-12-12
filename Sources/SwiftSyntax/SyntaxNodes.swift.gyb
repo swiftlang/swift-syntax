@@ -66,6 +66,7 @@ public protocol ${node.name}: Syntax {}
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
+/// Syntax nodes are not thread-safe.
 public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
 %     if node.children:
   enum Cursor: Int {
@@ -145,9 +146,9 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
     return lhs._data === rhs._data
   }
 
-  /// A unique hash value for this node.
-  public var hashValue: Int {
-    return ObjectIdentifier(_data).hashValue
+  /// Feed the essential parts of this node to the supplied hasher.
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(ObjectIdentifier(_data))
   }
 }
 

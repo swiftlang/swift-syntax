@@ -124,6 +124,27 @@ func performClassifySyntax(args: CommandLineArguments) throws {
   }
 }
 
+class NodePrinter: SyntaxVisitor {
+  override func visitPre(_ node: Syntax) {
+    assert(!node.isUnknown)
+    print("<\(type(of: node))>", terminator: "")
+  }
+  override func visitPost(_ node: Syntax) {
+    print("</\(type(of: node))>", terminator: "")
+  }
+  override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    print(token, terminator:"")
+    return .visitChildren
+  }
+}
+
+func printSyntaxTree(args: CommandLineArguments) throws {
+  let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
+  let swiftcURL = args["-swiftc"].map(URL.init(fileURLWithPath:))
+  let tree = try SyntaxTreeParser.parse(treeURL, swiftcURL: swiftcURL)
+  tree.walk(NodePrinter())
+}
+
 do {
   let args = try CommandLineArguments.parse(CommandLine.arguments.dropFirst())
 
@@ -133,6 +154,8 @@ do {
     try performClassifySyntax(args: args)
   } else if args.has("-deserialize") {
     try performDeserialize(args: args)
+  } else if args.has("-print-source") {
+    try printSyntaxTree(args: args)
   } else if args.has("-help") {
     printHelp()
   } else {

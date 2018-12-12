@@ -36,9 +36,9 @@ final class SyntaxData: Equatable {
   let indexInParent: Int
   weak var parent: SyntaxData?
 
-  let childCaches: [AtomicCache<SyntaxData>]
+  let childCaches: [LazyNonThreadSafeCache<SyntaxData>]
 
-  private let positionCache: AtomicCache<Box<AbsolutePosition>>
+  private let positionCache: LazyNonThreadSafeCache<Box<AbsolutePosition>>
 
   fileprivate func calculatePosition() -> AbsolutePosition {
     guard let parent = parent else {
@@ -92,8 +92,8 @@ final class SyntaxData: Equatable {
     self.raw = raw
     self.indexInParent = indexInParent
     self.parent = parent
-    self.childCaches = raw.layout.map { _ in AtomicCache<SyntaxData>() }
-    self.positionCache = AtomicCache<Box<AbsolutePosition>>()
+    self.childCaches = raw.layout.map { _ in LazyNonThreadSafeCache<SyntaxData>() }
+    self.positionCache = LazyNonThreadSafeCache<Box<AbsolutePosition>>()
   }
 
   /// The index path from this node to the root. This can be used to uniquely

@@ -93,7 +93,7 @@ final class RawSyntax {
   /// incremental parses
   let id: SyntaxNodeId
 
-  var _contentLength = AtomicCache<Box<SourceLength>>()
+  var _contentLength = LazyNonThreadSafeCache<Box<SourceLength>>()
 
   /// The length of this node excluding its leading and trailing trivia
   var contentLength: SourceLength {

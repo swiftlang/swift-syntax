@@ -66,6 +66,7 @@ public protocol ${node.name}: Syntax {}
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
+/// Syntax nodes are not thread-safe.
 public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
 %     if node.children:
   enum Cursor: Int {

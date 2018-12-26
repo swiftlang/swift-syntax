@@ -80,6 +80,10 @@ extension Syntax {
     return raw.isMissing
   }
 
+  public var isToken: Bool {
+    return raw.isToken
+  }
+
   /// Whether or not this node represents an Expression.
   public var isExpr: Bool {
     return raw.kind.isExpr
@@ -119,6 +123,42 @@ extension Syntax {
   /// The index of this node in the parent's children.
   public var indexInParent: Int {
     return data.indexInParent
+  }
+
+  public var hasParent: Bool {
+    return parent != nil
+  }
+
+  public var nextNode: Syntax? {
+    if let parent = self.parent {
+      for i in indexInParent+1 ..< parent.numberOfChildren {
+        if let C = parent.child(at: i) {
+          if C.isPresent && C.firstToken != nil {
+            return C
+          }
+        }
+      }
+      return parent.nextNode
+    }
+    return nil
+  }
+
+  public var firstToken: TokenSyntax? {
+    if isToken {
+      return (self as! TokenSyntax)
+    }
+
+    for i in 0 ..< numberOfChildren {
+      if let child = child(at: i) {
+        if child.isMissing {
+          continue
+        }
+        if let token = child.firstToken {
+          return token
+        }
+      }
+    }
+    return nil
   }
 
   /// The absolute position of the starting point of this node. If the first token

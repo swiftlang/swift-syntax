@@ -25,7 +25,7 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testVisitor() {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("visitor.swift"))
-      let parsed = try SyntaxTreeParser.parse(getInput("visitor.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("visitor.swift"))
       XCTAssertEqual(0, parsed.position.utf8Offset)
       XCTAssertEqual(source.count,
         parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
@@ -37,7 +37,7 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testClosure() {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("closure.swift"))
-      let parsed = try SyntaxTreeParser.parse(getInput("closure.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("closure.swift"))
       XCTAssertEqual(source.count, 
         parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
       XCTAssertEqual(0, parsed.position.utf8Offset)
@@ -47,7 +47,7 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   public func testRename() {
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxTreeParser.parse(getInput("visitor.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("visitor.swift"))
       let renamed = FuncRenamer().visit(parsed) as! SourceFileSyntax
       let renamedSource = renamed.description
       XCTAssertEqual(renamedSource.count, 
@@ -58,7 +58,7 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   public func testCurrentFile() {
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxTreeParser.parse(URL(fileURLWithPath: #file))
+      let parsed = try SyntaxParser.parse(url: URL(fileURLWithPath: #file))
       class Visitor: SyntaxVisitor {
         override func visitPre(_ node: Syntax) {
           _ = node.position

@@ -17,6 +17,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import _InternalSwiftSyntaxParser
+
 /// Enumerates the kinds of tokens in the Swift language.
 public enum TokenKind: Codable {
   case eof
@@ -152,6 +154,34 @@ extension TokenKind: ByteTreeObjectDecodable {
         // If we were not passed the token's text, we cannot recover since we 
         // would lose roundtripness.
         throw ByteTreeDecodingError.invalidEnumRawValue(type: "\(self)", 
+                                                        value: Int(kind))
+      }
+    }
+  }
+}
+
+extension TokenKind {
+  static func fromRawValue(kind: swiftparse_token_kind_t,
+                           text: Substring) throws -> TokenKind {
+    switch kind {
+    case 0: return .eof
+% for token in SYNTAX_TOKENS:
+    case ${token.serialization_code}:
+%   if token.text: # The token does not have text associated with it
+      return .${token.swift_kind()}
+%   else:
+      return .${token.swift_kind()}(String(text))
+%   end
+% end
+    default:
+      if !text.isEmpty {
+        // Default to an unknown token with the passed text if we don't know
+        // its kind.
+        return .unknown(String(text))
+      } else {
+        // If we were not passed the token's text, we cannot recover since we
+        // would lose roundtripness.
+        throw ByteTreeDecodingError.invalidEnumRawValue(type: "\(self)",
                                                         value: Int(kind))
       }
     }

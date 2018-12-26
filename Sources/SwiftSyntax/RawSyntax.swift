@@ -163,6 +163,10 @@ final class RawSyntax {
     }
   }
 
+  var isToken: Bool {
+    return tokenKind != nil
+  }
+
   /// Whether this node is present in the original source.
   var isPresent: Bool {
     return presence == .present

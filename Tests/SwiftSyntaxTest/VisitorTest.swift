@@ -19,7 +19,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
       }
     }
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxTreeParser.parse(getInput("visitor.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("visitor.swift"))
       let counter = FuncCounter()
       let hashBefore = parsed.hashValue
       parsed.walk(counter)
@@ -36,7 +36,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
       }
     }
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxTreeParser.parse(getInput("closure.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("closure.swift"))
       let rewriter = ClosureRewriter()
       let rewritten = rewriter.visit(parsed)
       XCTAssertEqual(parsed.description, rewritten.description)
@@ -57,7 +57,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
       }
     }
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxTreeParser.parse(getInput("near-empty.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("near-empty.swift"))
       let rewriter = VisitAnyRewriter(transform: { _ in
          return SyntaxFactory.makeIdentifier("")
       })
@@ -77,7 +77,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
     }
 
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxTreeParser.parse(getInput("nested-blocks.swift"))
+      let parsed = try SyntaxParser.parse(url: getInput("nested-blocks.swift"))
       let visitor = VisitCollections()
       parsed.walk(visitor)
       XCTAssertEqual(4, visitor.numberOfCodeBlockItems)

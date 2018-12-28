@@ -12,12 +12,6 @@
 
 import Foundation
 
-/// A unique identifier for a node in the tree.
-/// Currently, this is an index path from the current node to the root of the
-/// tree. It's an implementation detail and shouldn't be
-/// exposed to clients.
-typealias NodeIdentifier = [Int]
-
 /// SyntaxData is the underlying storage for each Syntax node.
 /// It's modelled as an array that stores and caches a SyntaxData for each raw
 /// syntax node in its layout. It is up to the specific Syntax nodes to maintain
@@ -95,18 +89,6 @@ final class SyntaxData: Equatable {
     self.childCaches = raw.layout.map { _ in LazyNonThreadSafeCache<SyntaxData>() }
     self.positionCache = LazyNonThreadSafeCache<Box<AbsolutePosition>>()
   }
-
-  /// The index path from this node to the root. This can be used to uniquely
-  /// identify this node in the tree.
-  lazy private(set) var pathToRoot: NodeIdentifier = {
-    var path = [Int]()
-    var node = self
-    while let parent = node.parent {
-      path.append(node.indexInParent)
-      node = parent
-    }
-    return path
-  }()
 
   /// Returns the child data at the provided index in this data's layout.
   /// This child is cached and will be used in subsequent accesses.

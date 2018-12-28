@@ -25,14 +25,6 @@ func printHelp() {
     Utility to test SwiftSyntax syntax tree creation.
 
     Actions (must specify one):
-      -deserialize
-            Deserialize a full pre-edit syntax tree (-pre-edit-tree) and write
-            the source representation of the syntax tree to an out file (-out).
-      -deserialize-incremental
-            Deserialize a full pre-edit syntax tree (-pre-edit-tree), parse an
-            incrementally transferred post-edit syntax tree (-incr-tree) and
-            write the source representation of the post-edit syntax tree to an
-            out file (-out).
       -classify-syntax
             Parse the given source file (-source-file) and output it with
             tokens classified for syntax colouring.
@@ -71,14 +63,6 @@ func printHelp() {
       -incremental-reuse-log FILENAME
             Path to which a log should be written that describes all the nodes
             reused during incremental parsing.
-      -pre-edit-tree FILENAME
-            The path to a JSON serialized pre-edit syntax tree
-      -incr-tree FILENAME
-            The path to a JSON serialized incrementally transferred post-edit
-            syntax tree
-      -serialization-format {json,byteTree} [default: json]
-            The format that shall be used to serialize/deserialize the syntax
-            tree. Defaults to json.
       -out FILENAME
             The file to which the source representation of the post-edit syntax
             tree shall be written.
@@ -86,22 +70,6 @@ func printHelp() {
 }
 
 extension CommandLineArguments {
-  func getSerializationFormat() throws -> SerializationFormat {
-    switch self["-serialization-format"] {
-    case nil:
-      return .json
-    case "json":
-      return .json
-    case "byteTree":
-      return .byteTree
-    default:
-      throw CommandLineArguments.InvalidArgumentValueError(
-        argName: "-serialization-format",
-        value: self["-serialization-format"]!
-      )
-    }
-  }
-
   func getIncrementalEdits() throws -> [IncrementalEdit] {
     let regex = try NSRegularExpression(
       pattern: "([0-9]+):([0-9]+)-([0-9]+):([0-9]+)=(.*)")
@@ -224,38 +192,6 @@ struct SourceRegion {
 struct IncrementalEdit {
   let region: SourceRegion
   let replacement: String
-}
-
-func performDeserialize(args: CommandLineArguments) throws {
-  let fileURL = URL(fileURLWithPath: try args.getRequired("-pre-edit-tree"))
-  let outURL = URL(fileURLWithPath: try args.getRequired("-out"))
-  let format = try args.getSerializationFormat()
-
-  let fileData = try Data(contentsOf: fileURL)
-
-  let deserializer = SyntaxTreeDeserializer()
-  let tree = try deserializer.deserialize(fileData, serializationFormat: format)
-
-  let sourceRepresenation = tree.description
-  try sourceRepresenation.write(to: outURL, atomically: false, encoding: .utf8)
-}
-
-func performRoundTrip(args: CommandLineArguments) throws {
-  let preEditTreeURL =
-    URL(fileURLWithPath: try args.getRequired("-pre-edit-tree"))
-  let incrTreeURL = URL(fileURLWithPath: try args.getRequired("-incr-tree"))
-  let outURL = URL(fileURLWithPath: try args.getRequired("-out"))
-  let format = try args.getSerializationFormat()
-
-  let preEditTreeData = try Data(contentsOf: preEditTreeURL)
-  let incrTreeData = try Data(contentsOf: incrTreeURL)
-
-  let deserializer = SyntaxTreeDeserializer()
-  _ = try deserializer.deserialize(preEditTreeData, serializationFormat: format)
-  let tree = try deserializer.deserialize(incrTreeData,
-                                          serializationFormat: format)
-  let sourceRepresenation = tree.description
-  try sourceRepresenation.write(to: outURL, atomically: false, encoding: .utf8)
 }
 
 func performClassifySyntax(args: CommandLineArguments) throws {
@@ -458,16 +394,12 @@ func printSyntaxTree(args: CommandLineArguments) throws {
 do {
   let args = try CommandLineArguments.parse(CommandLine.arguments.dropFirst())
 
-  if args.has("-deserialize-incremental") {
-    try performRoundTrip(args: args)
-  } else if args.has("-classify-syntax") {
+  if args.has("-classify-syntax") {
     try performClassifySyntax(args: args)
   } else if args.has("-parse-incremental") {
     try performParseIncremental(args: args)
   } else if args.has("-roundtrip") {
     try performRoundtrip(args: args)
-  } else if args.has("-deserialize") {
-    try performDeserialize(args: args)
   } else if args.has("-print-tree") {
     try printSyntaxTree(args: args)
   } else if args.has("-help") {

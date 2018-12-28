@@ -4,7 +4,6 @@ import SwiftSyntaxTest
 XCTMain({ () -> [XCTestCaseEntry] in
   var testCases: [XCTestCaseEntry] = [
     testCase(AbsolutePositionTestCase.allTests),
-    testCase(DecodeSyntaxTestCase.allTests),
     testCase(DiagnosticTestCase.allTests),
     // We need to make syntax node thread safe to enable these tests
     // testCase(LazyCachingTestCase.allTests),
@@ -14,8 +13,5 @@ XCTMain({ () -> [XCTestCaseEntry] in
     testCase(SyntaxFactoryAPITestCase.allTests),
     testCase(SyntaxVisitorTestCase.allTests),
   ]
-#if DEBUG
-  testCases.append(testCase(WeakLookupTableTestCase.allTests))
-#endif
   return testCases
 }())

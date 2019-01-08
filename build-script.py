@@ -157,6 +157,9 @@ def get_swiftpm_invocation(spm_exec, build_dir, release):
 
     # Swift compiler needs to know the module link name.
     swiftpm_call.extend(['-Xswiftc', '-module-link-name', '-Xswiftc', get_installed_name()])
+
+    # To speed up compilation.
+    swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
     return swiftpm_call
 
 

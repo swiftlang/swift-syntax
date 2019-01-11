@@ -118,6 +118,8 @@ public struct SyntaxParser {
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
       let node = makeRawNode(cnode, source: source)
+      // Transfer ownership of the object to the C parser. We get ownership back
+      // via `moveFromCRawNode()`.
       let bits = Unmanaged.passRetained(node)
       return bits.toOpaque()
     }
@@ -183,6 +185,11 @@ func makeRawNode(_ cnodeptr: CSyntaxNodePtr, source: String) -> RawSyntax {
     var layout = [RawSyntax?]()
     layout.reserveCapacity(Int(cnode.layout_data.nodes_count))
     for i in 0..<Int(cnode.layout_data.nodes_count) {
+      // The parser guarantees that the `RawSyntax` pointers we passed via the
+      // node handler, we'll get them back in a depth-first fashion.
+      // From the memory management perspective we gave ownership of the
+      // `RawSyntax` object to the C parser via the node handler and now we get
+      // ownership back.
       let subnode = moveFromCRawNode(cnode.layout_data.nodes![i])
       layout.append(subnode)
     }
@@ -196,6 +203,7 @@ func moveFromCRawNode(_ ptr: UnsafeMutableRawPointer?) -> RawSyntax? {
   guard let ptr = ptr else {
     return nil
   }
+  // Get ownership back from the C parser.
   let node: RawSyntax = Unmanaged.fromOpaque(ptr).takeRetainedValue()
   return node
 }

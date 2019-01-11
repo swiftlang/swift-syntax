@@ -22,6 +22,7 @@ typealias CTriviaPiece = swiftparse_trivia_piece_t
 typealias CSyntaxNodePtr = UnsafePointer<CSyntaxNode>
 typealias CTriviaPiecePtr = UnsafePointer<CTriviaPiece>
 typealias CSyntaxKind = swiftparse_syntax_kind_t
+typealias CTokenKind = swiftparse_token_kind_t
 typealias CParseLookupResult = swiftparse_lookup_result_t
 
 /// A list of possible errors that could be encountered while parsing a

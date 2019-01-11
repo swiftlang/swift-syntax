@@ -22,7 +22,6 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import _InternalSwiftSyntaxParser
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: String, Codable {
@@ -122,7 +121,7 @@ extension SyntaxKind: ByteTreeScalarDecodable {
 }
 
 extension SyntaxKind {
-  static func fromRawValue(_ rawValue: swiftparse_syntax_kind_t) -> SyntaxKind {
+  static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
     // Explicitly spell out all SyntaxKinds to keep the serialized value stable
     // even if its members get reordered or members get removed
     switch rawValue {

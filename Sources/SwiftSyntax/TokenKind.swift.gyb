@@ -17,8 +17,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InternalSwiftSyntaxParser
-
 /// Enumerates the kinds of tokens in the Swift language.
 public enum TokenKind: Codable {
   case eof
@@ -161,7 +159,7 @@ extension TokenKind: ByteTreeObjectDecodable {
 }
 
 extension TokenKind {
-  static func fromRawValue(kind: swiftparse_token_kind_t,
+  static func fromRawValue(kind: CTokenKind,
                            text: Substring) throws -> TokenKind {
     switch kind {
     case 0: return .eof

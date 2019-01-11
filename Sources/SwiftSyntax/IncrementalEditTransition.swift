@@ -65,10 +65,27 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
   public init(previousTree: SourceFileSyntax,
               edits: [SourceEdit],
               reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
-    assert(validEditArray(edits))
+    assert(IncrementalEditTransition.isEditArrayValid(edits))
     self.previousTree = previousTree
     self.edits = edits
     self.reusedDelegate = reusedNodeDelegate
+  }
+
+  /// Checks the requirements for the edits array to:
+  ///   1. not be overlapping.
+  ///   2. should be in increasing source offset order.
+  public static func isEditArrayValid(_ edits: [SourceEdit]) -> Bool {
+    for i in 1..<edits.count {
+      let prevEdit = edits[i-1]
+      let curEdit = edits[i]
+      if curEdit.range.offset < prevEdit.range.endOffset {
+        return false
+      }
+      if curEdit.intersectsRange(prevEdit.range) {
+        return false
+      }
+    }
+    return true
   }
 
   public func lookUp(_ newOffset: Int, kind: SyntaxKind) -> Syntax? {
@@ -164,21 +181,4 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
     }
     return offset
   }
-}
-
-/// Checks the requirements for the edits array to:
-///   1. not be overlapping.
-///   2. should be in increasing source offset order.
-fileprivate func validEditArray(_ edits: [SourceEdit]) -> Bool {
-  for i in 1..<edits.count {
-    let prevEdit = edits[i-1]
-    let curEdit = edits[i]
-    if curEdit.range.offset < prevEdit.range.endOffset {
-      return false
-    }
-    if curEdit.intersectsRange(prevEdit.range) {
-      return false
-    }
-  }
-  return true
 }

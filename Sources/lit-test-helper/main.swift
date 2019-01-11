@@ -261,7 +261,7 @@ func performRoundTrip(args: CommandLineArguments) throws {
 func performClassifySyntax(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
 
-  let tree = try SyntaxParser.parse(url: treeURL)
+  let tree = try SyntaxParser.parse(treeURL)
   let classifications = SyntaxClassifier.classifyTokensInTree(tree)
   let printer = ClassifiedSyntaxTreePrinter(classifications: classifications)
   let result = printer.print(tree: tree)
@@ -333,7 +333,7 @@ func performParseIncremental(args: CommandLineArguments) throws {
   let postEditURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
   let expectedReparseRegions = try args.getReparseRegions()
 
-  let preEditTree = try SyntaxParser.parse(url: preEditURL)
+  let preEditTree = try SyntaxParser.parse(preEditURL)
   let edits = try parseIncrementalEditArguments(args: args)
   let regionCollector = IncrementalParseReusedNodeCollector()
   let editTransition = IncrementalEditTransition(previousTree: preEditTree,
@@ -425,7 +425,7 @@ func verifyReusedRegions(expectedReparseRegions: [SourceRegion],
 
 func performRoundtrip(args: CommandLineArguments) throws {
   let sourceURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let tree = try SyntaxParser.parse(url: sourceURL)
+  let tree = try SyntaxParser.parse(sourceURL)
   let treeText = tree.description
 
   if let outURL = args["-out"].map(URL.init(fileURLWithPath:)) {
@@ -451,7 +451,7 @@ class NodePrinter: SyntaxVisitor {
 
 func printSyntaxTree(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let tree = try SyntaxParser.parse(url: treeURL)
+  let tree = try SyntaxParser.parse(treeURL)
   tree.walk(NodePrinter())
 }
 

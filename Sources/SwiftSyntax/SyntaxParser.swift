@@ -95,7 +95,7 @@ public struct SyntaxParser {
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
-  public static func parse(url: URL) throws -> SourceFileSyntax {
+  public static func parse(_ url: URL) throws -> SourceFileSyntax {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     var fileData = try Data(contentsOf: url)
     fileData.append(0) // null terminate.

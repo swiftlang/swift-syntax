@@ -11,7 +11,7 @@ public class DecodeSyntaxTestCase: XCTestCase {
     XCTAssertNoThrow(try {
       let inputFile = getInput("visitor.swift")
       let source = try String(contentsOf: inputFile)
-      let parsed = try SyntaxParser.parse(url: inputFile)
+      let parsed = try SyntaxParser.parse(inputFile)
       XCTAssertEqual("\(parsed)", source)
     }())
   }

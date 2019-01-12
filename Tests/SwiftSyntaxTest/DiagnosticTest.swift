@@ -88,7 +88,7 @@ public class DiagnosticTestCase: XCTestCase {
     }
 
     XCTAssertNoThrow(try {
-      let file = try SyntaxTreeParser.parse(url)
+      let file = try SyntaxParser.parse(url)
        file.walk(Visitor(url: url, engine: engine))
     }())
 

@@ -35,11 +35,14 @@ struct CommandLineArguments {
     }
   }
 
-  private let args: [String: String]
+  private let args: [String: [String]]
 
   static func parse<T: Sequence>(_ args: T) throws -> CommandLineArguments
     where T.Element == String {
-      var parsedArgs: [String: String] = [:]
+      var parsedArgs: [String: [String]] = [:]
+      let addArg = { (key: String, val: String) in
+        parsedArgs[key, default: []].append(val)
+      }
       var currentKey: String? = nil
       for arg in args {
         if arg.hasPrefix("-") {
@@ -47,12 +50,12 @@ struct CommandLineArguments {
           if let currentKey = currentKey {
             // The last key didn't have a value. Just add it with an empty string as
             // the value to the parsed args
-            parsedArgs[currentKey] = ""
+            addArg(currentKey, "")
           }
           currentKey = arg
         } else {
           if let currentKey = currentKey {
-            parsedArgs[currentKey] = arg
+            addArg(currentKey, arg)
           } else {
             throw UnkeyedArgumentError(argName: arg)
           }
@@ -62,17 +65,18 @@ struct CommandLineArguments {
       if let currentKey = currentKey {
         // The last key didn't have a value. Just add it with an empty string as
         // the value to the parsed args
-        parsedArgs[currentKey] = ""
+        addArg(currentKey, "")
       }
       return CommandLineArguments(args: parsedArgs)
   }
 
   subscript(key: String) -> String? {
-    return args[key]
+    let keyargs = args[key, default: []]
+    return keyargs.last
   }
 
   func getRequired(_ key: String) throws -> String {
-    if let value = args[key] {
+    if let value = self[key] {
       return value
     } else {
       throw MissingArgumentError(argName: key)
@@ -80,6 +84,18 @@ struct CommandLineArguments {
   }
 
   func has(_ key: String) -> Bool {
-    return args[key] != nil
+    return self[key] != nil
+  }
+
+  func getRequiredValues(_ key: String) throws -> [String] {
+    if let value = args[key] {
+      return value
+    } else {
+      throw MissingArgumentError(argName: key)
+    }
+  }
+
+  func getValues(_ key: String) throws -> [String] {
+    return args[key, default: []]
   }
 }

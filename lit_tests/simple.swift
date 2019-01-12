@@ -1,12 +1,10 @@
 // RUN: %empty-directory(%t)
 // RUN: %incr-transfer-roundtrip %s --test-case REPLACE
-// RUN: %incr-transfer-roundtrip %s --test-case REPLACE --serialization-format byteTree
 // RUN: %incr-transfer-roundtrip %s --test-case INSERT
 // RUN: %incr-transfer-roundtrip %s --test-case REMOVE
 // RUN: %incr-transfer-roundtrip %s --test-case CLASS_SURROUNDING
 // RUN: %incr-transfer-roundtrip %s --test-case MULTI_EDIT
 // RUN: %incr-transfer-roundtrip %s --test-case REPLACE_WITH_MULTI_BYTE_CHAR
-// RUN: %incr-transfer-roundtrip %s --test-case REPLACE_WITH_MULTI_BYTE_CHAR --serialization-format byteTree
 
 func start() {}
 

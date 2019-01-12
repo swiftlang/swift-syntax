@@ -119,3 +119,24 @@ extension SyntaxKind: ByteTreeScalarDecodable {
     }
   }
 }
+
+extension SyntaxKind {
+  static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
+    // Explicitly spell out all SyntaxKinds to keep the serialized value stable
+    // even if its members get reordered or members get removed
+    switch rawValue {
+    case 0:
+      return .token
+    case 1:
+      return .unknown
+% for name, nodes in grouped_nodes.items():
+%   for node in nodes:
+    case ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}:
+      return .${node.swift_syntax_kind}
+%   end
+% end
+    default:
+      return .unknown
+    }
+  }
+}

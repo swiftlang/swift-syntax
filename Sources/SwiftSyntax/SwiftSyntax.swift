@@ -20,27 +20,6 @@ import Darwin
 import Glibc
 #endif
 
-/// A list of possible errors that could be encountered while parsing a
-/// Syntax tree.
-public enum ParserError: Error, CustomStringConvertible {
-  case swiftcFailed(Int, String)
-  case invalidFile
-
-  public var description: String {
-    switch self{
-    case let .swiftcFailed(exitCode, stderr):
-      let stderrLines = stderr.split(separator: "\n")
-      return """
-      swiftc returned with non-zero exit code \(exitCode)
-      stderr:
-        \(stderrLines.joined(separator: "\n  "))
-      """
-    case .invalidFile:
-      return "swiftc created an invalid syntax file"
-    }
-  }
-}
-
 public enum SerializationFormat {
   case json
   case byteTree
@@ -114,7 +93,7 @@ public final class SyntaxTreeDeserializer {
       rawSyntax = try deserializeByteTree(data)
     }
     guard let file = makeSyntax(rawSyntax) as? SourceFileSyntax else {
-      throw ParserError.invalidFile
+      throw ParserError.invalidSyntaxData
     }
     return file
   }
@@ -138,32 +117,5 @@ fileprivate extension Array {
       let data = Data(buffer: pointer)
       return try body(data)
     }
-  }
-}
-
-/// Namespace for functions to retrieve a syntax tree from the swift compiler
-/// and deserializing it.
-public enum SyntaxTreeParser {
-  /// Parses the Swift file at the provided URL into a full-fidelity Syntax tree
-  ///
-  /// - Parameters:
-  ///   - url: The URL you wish to parse.
-  ///   - swiftcURL: The path to a `swiftc` executable that shall be used to
-  ///                parse the file. If `nil`, `swiftc` will be inferred from
-  ///                `PATH`.
-  /// - Returns: A top-level Syntax node representing the contents of the tree,
-  ///            if the parse was successful.
-  /// - Throws: `ParseError.couldNotFindSwiftc` if `swiftc` could not be
-  ///           located, `ParseError.invalidFile` if the file is invalid.
-  ///           FIXME: Fill this out with all error cases.
-  public static func parse(_ url: URL, swiftcURL: URL? = nil) throws
-      -> SourceFileSyntax {
-    let swiftcRunner = try SwiftcRunner(sourceFile: url, swiftcURL: swiftcURL)
-    let result = try swiftcRunner.invoke()
-    let syntaxTreeData = result.stdoutData
-    let deserializer = SyntaxTreeDeserializer()
-    // FIXME: We should use ByteTree as the internal transfer format
-    return try deserializer.deserialize(syntaxTreeData,
-                                        serializationFormat: .json)
   }
 }

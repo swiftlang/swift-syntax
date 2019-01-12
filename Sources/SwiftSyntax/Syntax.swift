@@ -80,6 +80,11 @@ extension Syntax {
     return raw.isMissing
   }
 
+  /// Whether or not this node is a token one.
+  public var isToken: Bool {
+    return raw.isToken
+  }
+
   /// Whether or not this node represents an Expression.
   public var isExpr: Bool {
     return raw.kind.isExpr
@@ -119,6 +124,45 @@ extension Syntax {
   /// The index of this node in the parent's children.
   public var indexInParent: Int {
     return data.indexInParent
+  }
+
+  /// Whether or not this node has a parent.
+  public var hasParent: Bool {
+    return parent != nil
+  }
+
+  /// Recursively walks through the tree to find the next token semantically
+  /// after this node.
+  public var nextToken: TokenSyntax? {
+    guard let parent = self.parent else {
+      return nil
+    }
+    for i in indexInParent+1 ..< parent.numberOfChildren {
+      guard let C = parent.child(at: i) else {
+        continue
+      }
+      if C.isPresent, let token = C.firstToken {
+        return token
+      }
+    }
+    return parent.nextToken
+  }
+
+  /// Returns the first token node that is part of this syntax node.
+  public var firstToken: TokenSyntax? {
+    if isToken {
+      return (self as! TokenSyntax)
+    }
+
+    for child in children {
+      if child.isMissing {
+        continue
+      }
+      if let token = child.firstToken {
+        return token
+      }
+    }
+    return nil
   }
 
   /// The absolute position of the starting point of this node. If the first token

@@ -254,3 +254,22 @@ extension TriviaPiece: ByteTreeObjectDecodable {
     }
   }
 }
+
+extension TriviaPiece {
+  static func fromRawValue(kind: CTriviaKind, length: Int,
+                           text: Substring) throws -> TriviaPiece {
+    switch kind {
+% for trivia in TRIVIAS:
+    case ${trivia.serialization_code}:
+%   if trivia.is_collection():
+      return .${trivia.lower_name}s(length/${trivia.characters_len()})
+%   else:
+      return .${trivia.lower_name}(String(text))
+%   end
+% end
+    default:
+      throw ByteTreeDecodingError.invalidEnumRawValue(type: "\(self)",
+                                                      value: Int(kind))
+    }
+  }
+}

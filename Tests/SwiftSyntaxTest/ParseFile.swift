@@ -28,7 +28,7 @@ public class ParseFileTestCase: XCTestCase {
     let currentFile = URL(fileURLWithPath: #file)
     XCTAssertNoThrow(try {
       let fileContents = try String(contentsOf: currentFile)
-      let parsed = try SyntaxTreeParser.parse(currentFile)
+      let parsed = try SyntaxParser.parse(currentFile)
       XCTAssertEqual("\(parsed)", fileContents)
       try SyntaxVerifier.verify(parsed)
     }())

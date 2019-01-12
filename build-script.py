@@ -203,8 +203,7 @@ def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir,
 ## Testing
 
 def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
-              release, swift_build_exec, filecheck_exec, swiftc_exec,
-              swift_syntax_test_exec, verbose):
+              release, swift_build_exec, filecheck_exec, swiftc_exec, verbose):
     print('** Running SwiftSyntax Tests **')
 
     optional_swiftc_exec = swiftc_exec
@@ -218,7 +217,6 @@ def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
                                 release=release,
                                 swiftc_exec=optional_swiftc_exec,
                                 filecheck_exec=filecheck_exec,
-                                swift_syntax_test_exec=swift_syntax_test_exec,
                                 verbose=verbose)
     if not lit_success:
         return False
@@ -273,8 +271,7 @@ def find_lit_test_helper_exec(swift_build_exec, parser_header_dir, parser_lib_di
 
 
 def run_lit_tests(swift_build_exec, build_dir, parser_header_dir, parser_lib_dir,
-                  release, swiftc_exec, filecheck_exec, swift_syntax_test_exec,
-                  verbose):
+                  release, swiftc_exec, filecheck_exec, verbose):
     print('** Running lit-based tests **')
 
     check_lit_exec()
@@ -296,9 +293,6 @@ def run_lit_tests(swift_build_exec, build_dir, parser_header_dir, parser_lib_dir
         lit_call.extend(['--param', 'FILECHECK=' + filecheck_exec])
     if lit_test_helper_exec:
         lit_call.extend(['--param', 'LIT_TEST_HELPER=' + lit_test_helper_exec])
-    if swift_syntax_test_exec:
-        lit_call.extend(['--param', 'SWIFT_SYNTAX_TEST=' +
-                         swift_syntax_test_exec])
     lit_call.extend(['--param', 'INCR_TRANSFER_ROUND_TRIP.PY=' +
                      INCR_TRANSFER_ROUNDTRIP_EXEC])
 
@@ -524,8 +518,6 @@ section for arguments that need to be specified for this.
                                 swift_build_exec=args.swift_build_exec,
                                 filecheck_exec=realpath(args.filecheck_exec),
                                 swiftc_exec=args.swiftc_exec,
-                                swift_syntax_test_exec=
-                                  realpath(args.swift_syntax_test_exec),
                                 verbose=args.verbose)
             if not success:
                 # An error message has already been printed by the failing test

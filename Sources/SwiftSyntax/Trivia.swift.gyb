@@ -17,7 +17,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InternalSwiftSyntaxParser
 import Foundation
 
 /// A contiguous stretch of a single kind of trivia. The constituent part of
@@ -257,7 +256,7 @@ extension TriviaPiece: ByteTreeObjectDecodable {
 }
 
 extension TriviaPiece {
-  static func fromRawValue(kind: swiftparse_trivia_kind_t, length: Int,
+  static func fromRawValue(kind: CTriviaKind, length: Int,
                            text: Substring) throws -> TriviaPiece {
     switch kind {
 % for trivia in TRIVIAS:

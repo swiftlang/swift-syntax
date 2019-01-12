@@ -145,9 +145,8 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
     // a StructDecl inside and `private struc Foo {}` parses as two
     // CodeBlockItems one for `private` and one for `struc Foo {}`
     var nextLeafNodeLength = 0
-    if let nextNode = node.nextNode {
-      let nextLeafNode = nextNode.firstToken!
-      let nextRawNode = nextLeafNode.raw
+    if let nextToken = node.nextToken {
+      let nextRawNode = nextToken.raw
       assert(nextRawNode.isPresent)
       nextLeafNodeLength += nextRawNode.contentLength.utf8Length
       nextLeafNodeLength += nextRawNode.leadingTriviaLength.utf8Length

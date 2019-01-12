@@ -163,6 +163,7 @@ final class RawSyntax {
     }
   }
 
+  /// Whether or not this node is a token one.
   var isToken: Bool {
     return tokenKind != nil
   }

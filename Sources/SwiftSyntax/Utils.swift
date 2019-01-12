@@ -74,7 +74,7 @@ extension String {
     return utf8.withContiguousStorageIfAvailable { _ in 0 } != nil
   }
 
-  mutating func makeNativeUTF8() {
+  mutating func makeNativeUTF8IfNeeded() {
     if !isNativeUTF8 {
       self += ""
     }

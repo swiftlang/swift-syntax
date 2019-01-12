@@ -77,9 +77,7 @@ public struct SyntaxParser {
     // If the string is backed by an NSString then such indexing will become
     // extremely slow.
     var utf8Source = source
-    if !utf8Source.isNativeUTF8 {
-      utf8Source.makeNativeUTF8()
-    }
+    utf8Source.makeNativeUTF8IfNeeded()
 
     let rawSyntax = parseRaw(utf8Source, parseLookup: parseLookup)
 

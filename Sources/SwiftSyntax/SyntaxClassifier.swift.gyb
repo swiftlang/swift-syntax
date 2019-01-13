@@ -30,9 +30,6 @@ public enum SyntaxClassification {
 
 fileprivate class _SyntaxClassifier: SyntaxVisitor {
 
-  /// Don't classify nodes with these IDs or any of their children
-  var skipNodeIds: Set<SyntaxNodeId> = []
-
   /// The top of the `contextStack` determines the classification for all tokens
   /// encountered that do not have a native classification. If `force` is `true`
   /// the top of the stack also determines the classification of tokens with a
@@ -41,8 +38,8 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
       [(classification: .none, force: false)]
 
   /// The classifications that have determined so far are collected in this
-  /// dictionary
-  var classifications: [TokenSyntax: SyntaxClassification] = [:]
+  /// array.
+  var classifications: [(TokenSyntax, SyntaxClassification)] = []
 
   private func visit(
     _ node: Syntax, 
@@ -88,18 +85,13 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
         classification = .editorPlaceholder
       }
     }
-    assert(classifications[token] == nil,
-           "\(token) has already been classified")
-    classifications[token] = classification
+    classifications.append((token, classification))
     return .skipChildren
   }
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   override func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
-    if skipNodeIds.contains(node.raw.id) {
-      return .skipChildren
-    }
 %     if node.is_unknown() or node.is_syntax_collection():
     return .visitChildren
 %     else:
@@ -136,11 +128,9 @@ public enum SyntaxClassifier {
   /// If a `IncrementalTreeTransferSession` is passed, only nodes that have 
   /// changed since the last transfer will be classified.
   public static func classifyTokensInTree(
-    _ syntaxTree: SourceFileSyntax,
-    skipNodes: Set<SyntaxNodeId> = []
-  ) -> [TokenSyntax: SyntaxClassification] {
+    _ syntaxTree: SourceFileSyntax
+  ) -> [(TokenSyntax, SyntaxClassification)] {
     let classifier = _SyntaxClassifier()
-    classifier.skipNodeIds = skipNodes
     syntaxTree.walk(classifier)
     return classifier.classifications
   }

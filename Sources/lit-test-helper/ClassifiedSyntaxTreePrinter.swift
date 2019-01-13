@@ -38,21 +38,23 @@ extension SyntaxClassification {
   }
 }
 
-class ClassifiedSyntaxTreePrinter: SyntaxVisitor {
-  private let classifications: [TokenSyntax: SyntaxClassification]
+class ClassifiedSyntaxTreePrinter {
+  private let classifications: [(TokenSyntax, SyntaxClassification)]
   private var currentClassification = SyntaxClassification.none
   private var skipNextNewline = false
   private var result = ""
 
   // MARK: Public interface
 
-  init(classifications: [TokenSyntax: SyntaxClassification]) {
+  init(classifications: [(TokenSyntax, SyntaxClassification)]) {
     self.classifications = classifications
   }
 
   func print(tree: SourceFileSyntax) -> String {
     result = ""
-    tree.walk(self)
+    for (token, classification) in classifications {
+      print(node: token, classification: classification)
+    }
     // Emit the last closing tag
     recordCurrentClassification(.none)
     return result
@@ -76,7 +78,7 @@ class ClassifiedSyntaxTreePrinter: SyntaxVisitor {
     currentClassification = classification
   }
 
-  private func visit(_ piece: TriviaPiece) {
+  private func print(_ piece: TriviaPiece) {
     let classification: SyntaxClassification
     switch piece {
     case .spaces, .tabs, .verticalTabs, .formfeeds:
@@ -109,18 +111,16 @@ class ClassifiedSyntaxTreePrinter: SyntaxVisitor {
     piece.write(to: &result)
   }
 
-  private func visit(_ trivia: Trivia) {
+  private func print(_ trivia: Trivia) {
     for piece in trivia {
-      visit(piece)
+      print(piece)
     }
   }
 
-  override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-    visit(node.leadingTrivia)
-    let classification = classifications[node] ?? SyntaxClassification.none
+  private func print(node: TokenSyntax, classification: SyntaxClassification) {
+    print(node.leadingTrivia)
     recordCurrentClassification(classification)
     result += node.text
-    visit(node.trailingTrivia)
-    return .skipChildren
+    print(node.trailingTrivia)
   }
 }

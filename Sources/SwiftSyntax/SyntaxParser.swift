@@ -162,7 +162,7 @@ func makeRawToken(_ c_node: CSyntaxNode, source: String) -> RawSyntax {
   let tokLen = Int(c_node.range.length) - leadingTriviaLen - trailingTriviaLen
 
   let text = source.utf8Slice(offset: tokOffset, length: tokLen)
-  let tokKind = try! TokenKind.fromRawValue(kind: kind, text: text)
+  let tokKind = TokenKind.fromRawValue(kind: kind, text: text)
   let leadingTrivia = toTrivia(tokdat.leading_trivia,
                                count: Int(tokdat.leading_trivia_count),
                                offset: offset, source: source)
@@ -227,6 +227,6 @@ func toTriviaPiece(_ c_piece: CTriviaPiece, offset: Int,
                    source: String) -> TriviaPiece {
   let kind = c_piece.kind
   let text = source.utf8Slice(offset: offset, length: Int(c_piece.length))
-  return try! TriviaPiece.fromRawValue(kind: kind, length: Int(c_piece.length),
-                                       text: text)
+  return TriviaPiece.fromRawValue(kind: kind, length: Int(c_piece.length),
+                                  text: text)
 }

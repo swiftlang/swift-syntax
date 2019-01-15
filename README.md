@@ -37,6 +37,16 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 
 Then, import `SwiftSyntax` in your Swift code.
 
+### Some Example Users
+
+[**Swift AST Explorer**](https://swift-ast-explorer.kishikawakatsumi.com/): a Swift AST visualizer.
+
+[**Swift Stress Tester**](https://github.com/apple/swift-stress-tester): a test driver for sourcekitd and Swift evolution.
+
+[**SwiftRewriter**](https://github.com/inamiy/SwiftRewriter): a Swift code formatter.
+
+[**SwiftPack**](https://github.com/omochi/SwiftPack): a tool for automatically embedding Swift library source.
+
 ## Contributing
 
 ### Building SwiftSyntax from `master`

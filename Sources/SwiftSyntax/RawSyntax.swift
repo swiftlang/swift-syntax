@@ -176,7 +176,7 @@ final class RawSyntax {
   ///   - index: The index of the child to replace.
   ///   - newChild: The new child that should occupy that index in the node.
   func replacingChild(_ index: Int,
-                      with newChild: RawSyntax) -> RawSyntax {
+                      with newChild: RawSyntax?) -> RawSyntax {
     precondition(index < layout.count, "Cursor \(index) reached past layout")
     var newLayout = layout
     newLayout[index] = newChild

@@ -170,7 +170,7 @@ final class SyntaxData: Equatable {
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(_ child: RawSyntax, 
+  func replacingChild(_ child: RawSyntax?,
     at index: Int) -> (root: SyntaxData, newValue: SyntaxData) {
     let newRaw = raw.replacingChild(index, with: child)
     return replacingSelf(newRaw)
@@ -186,7 +186,7 @@ final class SyntaxData: Equatable {
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild<CursorType: RawRepresentable>(_ child: RawSyntax, 
+  func replacingChild<CursorType: RawRepresentable>(_ child: RawSyntax?,
     at cursor: CursorType) -> (root: SyntaxData, newValue: SyntaxData)
     where CursorType.RawValue == Int {
     return replacingChild(child, at: cursor.rawValue)

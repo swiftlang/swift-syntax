@@ -61,7 +61,7 @@ public enum SyntaxFactory {
     let layout: [RawSyntax?] = [
 %     for child in node.children:
 %       if child.is_optional:
-      ${child.swift_name}?.data.raw ?? ${make_missing_swift_child(child)},
+      ${child.swift_name}?.data.raw,
 %       else:
       ${child.swift_name}.data.raw,
 %       end
@@ -88,7 +88,11 @@ public enum SyntaxFactory {
     let data = SyntaxData(raw: RawSyntax(kind: .${node.swift_syntax_kind},
                                          layout: [
 %     for child in node.children:
+%       if child.is_optional:
+      nil,
+%       else:
       ${make_missing_swift_child(child)},
+%       end
 %     end
     ], presence: .present))
     return ${node.name}(root: data, data: data)

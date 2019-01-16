@@ -22,6 +22,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     ("testGenerated", testGenerated),
     ("testTokenSyntax", testTokenSyntax),
     ("testFunctionCallSyntaxBuilder", testFunctionCallSyntaxBuilder),
+    ("testWithOptionalChild", testWithOptionalChild),
     ("testUnknownSyntax", testUnknownSyntax),
   ]
 
@@ -115,6 +116,33 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
 
     XCTAssertEqual("\(callWithTerminator)",
                    "print(\"Hello, world!\", terminator: \" \")")
+  }
+
+  public func testWithOptionalChild() {
+    let string = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
+    let printID = SyntaxFactory.makeVariableExpr("print")
+    let arg = FunctionCallArgumentSyntax {
+      $0.useExpression(string)
+    }
+    let call1 = FunctionCallExprSyntax {
+      $0.useCalledExpression(printID)
+      $0.useLeftParen(SyntaxFactory.makeLeftParenToken())
+      $0.addFunctionCallArgument(arg)
+      $0.useRightParen(SyntaxFactory.makeRightParenToken())
+    }
+    XCTAssertNotNil(call1.leftParen)
+    XCTAssertNotNil(call1.rightParen)
+
+    let call2 = call1.withLeftParen(nil).withRightParen(nil)
+    XCTAssertNil(call2.leftParen)
+    XCTAssertNil(call2.rightParen)
+
+    let call3 = FunctionCallExprSyntax {
+      $0.useCalledExpression(printID)
+      $0.addFunctionCallArgument(arg)
+    }
+    XCTAssertNil(call3.leftParen)
+    XCTAssertNil(call3.rightParen)
   }
 
   public func testUnknownSyntax() {

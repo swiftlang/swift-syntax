@@ -41,6 +41,9 @@ final class RawSyntax {
   /// The length of this node excluding its leading and trailing trivia
   var contentLength: SourceLength {
     return _contentLength.value({
+      if isMissing {
+        return Box(SourceLength.zero)
+      }
       switch data {
       case .node(kind: _, layout: let layout):
         let firstElementIndex = layout.firstIndex(where: { $0 != nil })

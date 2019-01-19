@@ -131,6 +131,23 @@ extension Syntax {
     return parent != nil
   }
 
+  /// Recursively walks through the tree to find the token semantically before
+  /// this node.
+  public var previousToken: TokenSyntax? {
+    guard let parent = self.parent else {
+      return nil
+    }
+    for i in (0..<indexInParent).reversed() {
+      guard let C = parent.child(at: i) else {
+        continue
+      }
+      if let token = C.lastToken {
+        return token
+      }
+    }
+    return parent.previousToken
+  }
+
   /// Recursively walks through the tree to find the next token semantically
   /// after this node.
   public var nextToken: TokenSyntax? {
@@ -141,7 +158,7 @@ extension Syntax {
       guard let C = parent.child(at: i) else {
         continue
       }
-      if C.isPresent, let token = C.firstToken {
+      if let token = C.firstToken {
         return token
       }
     }
@@ -150,16 +167,29 @@ extension Syntax {
 
   /// Returns the first token node that is part of this syntax node.
   public var firstToken: TokenSyntax? {
+    if isMissing { return nil }
     if isToken {
       return (self as! TokenSyntax)
     }
 
     for child in children {
-      if child.isMissing {
-        continue
-      }
       if let token = child.firstToken {
         return token
+      }
+    }
+    return nil
+  }
+
+  /// Returns the last token node that is part of this syntax node.
+  public var lastToken: TokenSyntax? {
+    if isMissing { return nil }
+    if isToken {
+      return (self as! TokenSyntax)
+    }
+
+    for child in children.reversed() {
+      if let tok = child.lastToken {
+        return tok
       }
     }
     return nil
@@ -263,6 +293,18 @@ extension Syntax {
     guard raw.layout.indices.contains(index) else { return nil }
     guard let childData = data.cachedChild(at: index) else { return nil }
     return makeSyntax(root: _root, data: childData)
+  }
+
+  /// Passes to a closure every present token node that is part of this node.
+  public func forEachToken(_ receiver: (TokenSyntax)->()) {
+    if isMissing { return }
+    if isToken {
+      receiver(self as! TokenSyntax)
+      return
+    }
+    for child in children {
+      child.forEachToken(receiver)
+    }
   }
 
   /// A source-accurate description of this node.

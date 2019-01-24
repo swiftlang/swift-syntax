@@ -70,6 +70,19 @@ public enum TokenKind {
 % end
     }
   }
+
+  var sourceLength: SourceLength {
+    switch self {
+    case .eof: return .zero
+% for token in SYNTAX_TOKENS:
+%   if token.text:
+    case .${token.swift_kind()}: return SourceLength(utf8Length: ${len(token.text.decode('string_escape'))})
+%   else:
+    case .${token.swift_kind()}(let text): return SourceLength(of: text)
+%   end
+% end
+    }
+  }
 }
 
 extension TokenKind: Equatable {

@@ -31,14 +31,14 @@ public enum SyntaxFactory {
   public static func makeToken(_ kind: TokenKind, presence: SourcePresence,
                  leadingTrivia: Trivia = [],
                  trailingTrivia: Trivia = []) -> TokenSyntax {
-    let raw = RawSyntax(kind: kind, leadingTrivia: leadingTrivia,
+    let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
                         trailingTrivia: trailingTrivia, presence: presence)
     let data = SyntaxData(raw: raw)
     return TokenSyntax(root: data, data: data)
   }
 
   public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> Syntax {
-    let raw = RawSyntax(kind: .unknown, layout: tokens.map { $0.data.raw },
+    let raw = RawSyntax.createAndCalcLength(kind: .unknown, layout: tokens.map { $0.data.raw },
                         presence: .present)
     let data = SyntaxData(raw: raw)
     return UnknownSyntax(root: data, data: data)
@@ -67,7 +67,7 @@ public enum SyntaxFactory {
 %       end
 %     end
     ]
-    let raw = RawSyntax(kind: SyntaxKind.${node.swift_syntax_kind},
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
                         layout: layout, presence: SourcePresence.present)
     let data = SyntaxData(raw: raw)
     return ${node.name}(root: data, data: data)
@@ -75,7 +75,7 @@ public enum SyntaxFactory {
 %   elif node.is_syntax_collection():
   public static func make${node.syntax_kind}(
     _ elements: [${node.collection_element_type}]) -> ${node.name} {
-    let raw = RawSyntax(kind: SyntaxKind.${node.swift_syntax_kind},
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
                         layout: elements.map { $0.data.raw },
                         presence: SourcePresence.present)
     let data = SyntaxData(raw: raw)
@@ -94,7 +94,7 @@ public enum SyntaxFactory {
       ${make_missing_swift_child(child)},
 %       end
 %     end
-    ], presence: .present))
+    ], length: .zero, presence: .present))
     return ${node.name}(root: data, data: data)
   }
 %   end

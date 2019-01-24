@@ -12,50 +12,6 @@
 // This file provides the Diagnostic, Note, and FixIt types.
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
-/// Represents a source location in a Swift file.
-public struct SourceLocation: Codable {
-  /// The line in the file where this location resides.
-  public let line: Int
-
-  /// The UTF-8 byte offset from the beginning of the line where this location
-  /// resides.
-  public let column: Int
-
-  /// The UTF-8 byte offset into the file where this location resides.
-  public let offset: Int
-
-  /// The file in which this location resides.
-  public let file: String
-
-  public init(file: String, position: AbsolutePosition) {
-    self.init(line: position.line, column: position.column,
-              offset: position.utf8Offset, file: file)
-  }
-
-  public init(line: Int, column: Int, offset: Int, file: String) {
-    self.line = line
-    self.column = column
-    self.offset = offset
-    self.file = file
-  }
-}
-
-/// Represents a start and end location in a Swift file.
-public struct SourceRange: Codable {
-  /// The beginning location in the source range.
-  public let start: SourceLocation
-
-  /// The beginning location in the source range.
-  public let end: SourceLocation
-
-  public init(start: SourceLocation, end: SourceLocation) {
-    self.start = start
-    self.end = end
-  }
-}
-
 /// A FixIt represents a change to source code in order to "correct" a
 /// diagnostic.
 public enum FixIt: Codable {

@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
 /// Box a value type into a reference type
 class Box<T> {
   let value: T
@@ -34,52 +32,21 @@ fileprivate enum RawSyntaxData {
 /// are immutable and can be freely shared between syntax nodes.
 final class RawSyntax {
   fileprivate let data: RawSyntaxData
+  let totalLength: SourceLength
   let presence: SourcePresence
 
-  var _contentLength = LazyNonThreadSafeCache<Box<SourceLength>>()
-
-  /// The length of this node excluding its leading and trailing trivia
-  var contentLength: SourceLength {
-    return _contentLength.value({
-      if isMissing {
-        return Box(SourceLength.zero)
-      }
-      switch data {
-      case .node(kind: _, layout: let layout):
-        let firstElementIndex = layout.firstIndex(where: { $0 != nil })
-        let lastElementIndex = layout.lastIndex(where: { $0 != nil })
-
-        var contentLength = SourceLength.zero
-        for (offset, element) in layout.enumerated() {
-          guard let element = element else {
-            continue
-          }
-          // Skip the node's leading trivia
-          if offset != firstElementIndex {
-            contentLength += element.leadingTriviaLength
-          }
-          contentLength += element.contentLength
-          // Skip the node's trailing trivia
-          if offset != lastElementIndex {
-            contentLength += element.trailingTriviaLength
-          }
-        }
-        return Box(contentLength)
-      case .token(kind: let kind, leadingTrivia: _, trailingTrivia: _):
-        return Box(SourceLength(of: kind.text))
-      }
-    }).value
-  }
-
-  init(kind: SyntaxKind, layout: [RawSyntax?], presence: SourcePresence) {
+  init(kind: SyntaxKind, layout: [RawSyntax?], length: SourceLength,
+       presence: SourcePresence) {
     self.data = .node(kind: kind, layout: layout)
+    self.totalLength = length
     self.presence = presence
   }
 
   init(kind: TokenKind, leadingTrivia: Trivia, trailingTrivia: Trivia,
-       presence: SourcePresence) {
+       length: SourceLength, presence: SourcePresence) {
     self.data = .token(kind: kind, leadingTrivia: leadingTrivia,
                        trailingTrivia: trailingTrivia)
+    self.totalLength = length
     self.presence = presence
   }
 
@@ -129,7 +96,8 @@ final class RawSyntax {
   /// - Returns: A new RawSyntax `.node` with the provided kind and layout, with
   ///            `.missing` source presence.
   static func missing(_ kind: SyntaxKind) -> RawSyntax {
-    return RawSyntax(kind: kind, layout: [], presence: .missing)
+    return RawSyntax(kind: kind, layout: [], length: SourceLength.zero,
+      presence: .missing)
   }
 
   /// Creates a RawSyntax token that's marked missing in the source with the
@@ -138,7 +106,8 @@ final class RawSyntax {
   /// - Returns: A new RawSyntax `.token` with the provided kind, no
   ///            leading/trailing trivia, and `.missing` source presence.
   static func missingToken(_ kind: TokenKind) -> RawSyntax {
-    return RawSyntax(kind: kind, leadingTrivia: [], trailingTrivia: [], presence: .missing)
+    return RawSyntax(kind: kind, leadingTrivia: [], trailingTrivia: [],
+      length: SourceLength.zero, presence: .missing)
   }
 
   /// Returns a new RawSyntax node with the provided layout instead of the
@@ -149,7 +118,8 @@ final class RawSyntax {
   func replacingLayout(_ newLayout: [RawSyntax?]) -> RawSyntax {
     switch data {
     case let .node(kind, _):
-      return RawSyntax(kind: kind, layout: newLayout, presence: presence)
+      return .createAndCalcLength(kind: kind, layout: newLayout,
+        presence: presence)
     case .token(_, _, _): return self
     }
   }
@@ -251,9 +221,47 @@ extension RawSyntax {
     return trailingTrivia?.sourceLength ?? .zero
   }
 
-  /// The length of this node including all of its trivia
-  var totalLength: SourceLength {
-    return leadingTriviaLength + contentLength + trailingTriviaLength
+  /// The length of this node excluding its leading and trailing trivia.
+  var contentLength: SourceLength {
+    return totalLength - leadingTriviaLength - trailingTriviaLength
+  }
+
+  /// Convenience function to create a RawSyntax when its byte length is not
+  /// known in advance, e.g. it is programmatically constructed instead of
+  /// created by the parser.
+  ///
+  /// This is a separate function than in the initializer to make it more
+  /// explicit and visible in the code for the instances where we don't have
+  /// the length of the raw node already available.
+  static func createAndCalcLength(kind: SyntaxKind, layout: [RawSyntax?],
+      presence: SourcePresence) -> RawSyntax {
+    let length: SourceLength
+    if case .missing = presence {
+      length = SourceLength.zero
+    } else {
+      length = layout.compactMap({ $0?.totalLength }).reduce(.zero, +)
+    }
+    return .init(kind: kind, layout: layout, length: length, presence: presence)
+  }
+
+  /// Convenience function to create a RawSyntax when its byte length is not
+  /// known in advance, e.g. it is programmatically constructed instead of
+  /// created by the parser.
+  ///
+  /// This is a separate function than in the initializer to make it more
+  /// explicit and visible in the code for the instances where we don't have
+  /// the length of the raw node already available.
+  static func createAndCalcLength(kind: TokenKind, leadingTrivia: Trivia,
+      trailingTrivia: Trivia, presence: SourcePresence) -> RawSyntax {
+    let length: SourceLength
+    if case .missing = presence {
+      length = SourceLength.zero
+    } else {
+      length = kind.sourceLength + leadingTrivia.sourceLength +
+        trailingTrivia.sourceLength
+    }
+    return .init(kind: kind, leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia, length: length, presence: presence)
   }
 }
 

@@ -134,9 +134,7 @@ def generate_gyb_files(verbose, add_source_locations):
 ## Building swiftSyntax
 
 def get_installed_name():
-    # we have to use this name in the installed dylib so that the compiler will
-    # treat it as a part of stdlib to copy the dylib to the framework dir.
-    return 'swiftSwiftSyntax'
+    return 'SwiftSyntax'
 
 def get_installed_dylib_name():
     return 'lib' + get_installed_name() + '.dylib'

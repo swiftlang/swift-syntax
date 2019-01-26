@@ -102,8 +102,8 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
     return node
   }
 
-  fileprivate func lookUpFrom(_ node: Syntax, nodeOffset: Int, prevOffset: Int,
-                              kind: SyntaxKind) -> (Int, Syntax?) {
+  fileprivate func lookUpFrom(_ node: _SyntaxBase, nodeOffset: Int, prevOffset: Int,
+                              kind: SyntaxKind) -> (Int, _SyntaxBase?) {
     if nodeCanBeReused(node, nodeOffset: nodeOffset, prevOffset: prevOffset,
                        kind: kind) {
       return (nodeOffset, node)
@@ -117,7 +117,7 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
       }
       let childEnd = childOffset + child.byteSize
       if childOffset <= prevOffset && prevOffset < childEnd {
-        return lookUpFrom(child, nodeOffset: childOffset,
+        return lookUpFrom(child.base, nodeOffset: childOffset,
                           prevOffset: prevOffset, kind: kind)
       }
       // The next child starts where the previous child ended
@@ -126,7 +126,7 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
     return (0, nil)
   }
 
-  fileprivate func nodeCanBeReused(_ node: Syntax, nodeOffset: Int,
+  fileprivate func nodeCanBeReused(_ node: _SyntaxBase, nodeOffset: Int,
                                    prevOffset: Int, kind: SyntaxKind) -> Bool {
     // Computing the value of NodeStart on the fly is faster than determining a
     // node's absolute position, but make sure the values match in an assertion

@@ -39,7 +39,7 @@ public enum SyntaxFactory {
 
   public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> Syntax {
     let raw = RawSyntax.createAndCalcLength(kind: .unknown,
-      layout: tokens.map { $0.data.raw }, presence: .present)
+      layout: tokens.map { $0.raw }, presence: .present)
     let data = SyntaxData(raw: raw)
     return UnknownSyntax(root: data, data: data)
   }
@@ -61,9 +61,9 @@ public enum SyntaxFactory {
     let layout: [RawSyntax?] = [
 %     for child in node.children:
 %       if child.is_optional:
-      ${child.swift_name}?.data.raw,
+      ${child.swift_name}?.raw,
 %       else:
-      ${child.swift_name}.data.raw,
+      ${child.swift_name}.raw,
 %       end
 %     end
     ]
@@ -76,7 +76,7 @@ public enum SyntaxFactory {
   public static func make${node.syntax_kind}(
     _ elements: [${node.collection_element_type}]) -> ${node.name} {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
-      layout: elements.map { $0.data.raw }, presence: SourcePresence.present)
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
     let data = SyntaxData(raw: raw)
     return ${node.name}(root: data, data: data)
   }

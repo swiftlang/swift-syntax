@@ -33,9 +33,6 @@ Each node will have:
 - An `addX(_ x: XSyntax)` method for children that are collections. This will
   append the provided node to the collection and return a new node with that
   collection replaced.
-- (in DEBUG mode) a `validate()` method that's called in the initializer. This
-  only validates that all the children are the right kind/token, and does not
-  raise an error if, say, a non-optional child is missing.
 """
 }%
 

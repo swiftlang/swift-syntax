@@ -253,7 +253,7 @@ extension Syntax {
   public func walk(_ visitor: SyntaxVisitor) {
 
     // Traverse the raw syntax tree by using the current syntax node as root.
-    data.raw.accept(RawSyntaxVisitor(visitor, self))
+    raw.accept(RawSyntaxVisitor(visitor, self))
   }
 }
 

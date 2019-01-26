@@ -239,7 +239,11 @@ extension RawSyntax {
     if case .missing = presence {
       length = SourceLength.zero
     } else {
-      length = layout.compactMap({ $0?.totalLength }).reduce(.zero, +)
+      var totalen = SourceLength.zero
+      for child in layout {
+        totalen += child?.totalLength ?? .zero
+      }
+      length = totalen
     }
     return .init(kind: kind, layout: layout, length: length, presence: presence)
   }

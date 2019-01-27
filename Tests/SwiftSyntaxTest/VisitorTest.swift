@@ -21,10 +21,8 @@ public class SyntaxVisitorTestCase: XCTestCase {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
       let counter = FuncCounter()
-      let hashBefore = parsed.hashValue
       parsed.walk(counter)
       XCTAssertEqual(counter.funcCount, 3)
-      XCTAssertEqual(hashBefore, parsed.hashValue)
     }())
   }
 

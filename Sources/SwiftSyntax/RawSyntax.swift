@@ -10,15 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Box a value type into a reference type
-class Box<T> {
-  let value: T
-
-  init(_ value: T) {
-    self.value = value
-  }
-}
-
 /// The data that is specific to a tree or token node
 fileprivate enum RawSyntaxData {
   /// A tree node with a kind and an array of children
@@ -70,6 +61,14 @@ final class RawSyntax {
     switch data {
     case .node(_, let layout): return layout
     case .token(_, _, _): return []
+    }
+  }
+
+  /// The number of children, `present` or `missing`, in this node.
+  var numberOfChildren: Int {
+    switch data {
+    case .node(_, let layout): return layout.count
+    case .token(_, _, _): return 0
     }
   }
 

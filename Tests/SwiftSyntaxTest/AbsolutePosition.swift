@@ -149,9 +149,7 @@ public class AbsolutePositionTestCase: XCTestCase {
     let filePath = "/tmp/test.swift"
     let root = self.createSourceFile(2)
     let converter = SourceLocationConverter(file: filePath, tree: root)
-    guard let secondReturnStmt = root.child(at: 0)?.child(at: 1) else {
-      fatalError("out of sync with createSourceFile")
-    }
+    let secondReturnStmt = root.statements[1]
     let startLoc = secondReturnStmt.startLocation(converter: converter)
     XCTAssertEqual(startLoc.line, 8)
     XCTAssertEqual(startLoc.column, 1)

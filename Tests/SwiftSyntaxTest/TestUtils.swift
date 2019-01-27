@@ -25,3 +25,37 @@ func XCTAssertNext<Iterator: IteratorProtocol>(
 func XCTAssertNextIsNil<Iterator: IteratorProtocol>(_ iterator: inout Iterator) {
   XCTAssertNil(iterator.next())
 }
+
+extension SyntaxCollection {
+  /// Gets the child at the provided index in this node's present children.
+  /// This is not provided by the Syntax API because its performance is O(n).
+  /// We add it here in `SyntaxCollection` for testing purposes.
+  func child(at index: Int) -> Syntax? {
+    guard index >= 0 && index < self.count else { return nil }
+    var iter = SyntaxChildren(self).makeIterator()
+    for _ in 0..<index { _ = iter.next() }
+    return iter.next()!
+  }
+
+  subscript(_ index: Int) -> Syntax {
+    return child(at: index)!
+  }
+}
+
+// Add equatable conformance for testing purposes.
+
+extension TokenSyntax: Equatable {
+  public static func ==(lhs: TokenSyntax, rhs: TokenSyntax) -> Bool {
+    return lhs.description == rhs.description
+  }
+}
+extension MemberDeclBlockSyntax: Equatable {
+  public static func ==(lhs: MemberDeclBlockSyntax, rhs: MemberDeclBlockSyntax) -> Bool {
+    return lhs.description == rhs.description
+  }
+}
+extension StructDeclSyntax: Equatable {
+  public static func ==(lhs: StructDeclSyntax, rhs: StructDeclSyntax) -> Bool {
+    return lhs.description == rhs.description
+  }
+}

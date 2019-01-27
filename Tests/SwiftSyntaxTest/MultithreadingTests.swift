@@ -1,15 +1,14 @@
 import XCTest
 import SwiftSyntax
 
-public class LazyCachingTestCase: XCTestCase {
+public class MultithreadingTestCase: XCTestCase {
 
   public static let allTests = [
-    ("testPathological", disabledtestPathological),
-    ("testTwoAccesses", disabledtestTwoAccesses),
+    ("testPathological", testPathological),
+    ("testTwoAccesses", testTwoAccesses),
   ]
 
-  // FIXME: re-enable this test when syntax nodes are thread safe
-  public func disabledtestPathological() {
+  public func testPathological() {
     let tuple = SyntaxFactory.makeVoidTupleType()
 
     DispatchQueue.concurrentPerform(iterations: 100) { _ in
@@ -17,8 +16,7 @@ public class LazyCachingTestCase: XCTestCase {
     }
   }
 
-  // FIXME: re-enable this test when syntax nodes are thread safe
-  public func disabledtestTwoAccesses() {
+  public func testTwoAccesses() {
     let tuple = SyntaxFactory.makeVoidTupleType()
 
     let queue1 = DispatchQueue(label: "queue1")

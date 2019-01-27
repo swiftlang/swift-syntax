@@ -1,5 +1,6 @@
 %{
   from gyb_syntax_support import *
+  NODE_MAP = create_node_map()
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -17,24 +18,29 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
+public protocol SyntaxCollection: Syntax, Sequence {
+  /// The number of elements, `present` or `missing`, in this collection.
+  var count: Int { get }
+}
 
 % for node in SYNTAX_NODES:
 %   if node.collection_element:
+%     element_node = NODE_MAP.get(node.collection_element)
 
 /// `${node.name}` represents a collection of one or more
 /// `${node.collection_element_type}` nodes. ${node.name} behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ${node.name}: _SyntaxBase {
-  let _root: SyntaxData
-  unowned let _data: SyntaxData
+public struct ${node.name}: _SyntaxBase, SyntaxCollection {
+  let data: SyntaxData
 
   /// Creates a Syntax node from the provided root and data.
-  internal init(root: SyntaxData, data: SyntaxData) {
-    self._root = root
-    self._data = data
+  internal init(_ data: SyntaxData) {
+    self.data = data
   }
+
+  /// The number of elements, `present` or `missing`, in this collection.
+  public var count: Int { return raw.numberOfChildren }
 
   /// Creates a new `${node.name}` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
@@ -45,8 +51,8 @@ public struct ${node.name}: _SyntaxBase {
   internal func replacingLayout(
     _ layout: [RawSyntax?]) -> ${node.name} {
     let newRaw = data.raw.replacingLayout(layout)
-    let (newRoot, newData) = data.replacingSelf(newRaw)
-    return ${node.name}(root: newRoot, data: newData)
+    let newData = data.replacingSelf(newRaw)
+    return ${node.name}(newData)
   }
 
   /// Creates a new `${node.name}` by appending the provided syntax element
@@ -137,56 +143,37 @@ public struct ${node.name}: _SyntaxBase {
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
-
-  /// Returns an iterator over the elements of this syntax collection.
-  public func makeIterator() -> ${node.name}Iterator {
-    return ${node.name}Iterator(collection: self)
-  }
 }
 
-/// Conformance for `${node.name}`` to the Collection protocol.
-extension ${node.name}: Collection {
-  public var startIndex: Int {
-    return data.childCaches.startIndex
-  }
+/// Conformance for `${node.name}`` to the Sequence protocol.
+extension ${node.name}: Sequence {
+  public struct Iterator: IteratorProtocol {
+    private let parent: _SyntaxBase
+    private var iterator: PresentRawSyntaxChildren.Iterator
 
-  public var endIndex: Int {
-    return data.childCaches.endIndex
-  }
-
-  public func index(after i: Int) -> Int {
-    return data.childCaches.index(after: i)
-  }
-
-  public subscript(_ index: Int) -> ${node.collection_element_type} {
-%   cast = '' if node.collection_element_type == 'Syntax' \
-%          else 'as! ' + node.collection_element_type
-    return child(at: index)! ${cast}
-  }
-}
-
-/// A type that iterates over a `${node.name}` using its indices.
-public struct ${node.name}Iterator: IteratorProtocol {
-  public typealias Element = ${node.collection_element_type}
-
-  private let collection: ${node.name}
-  private var index: ${node.name}.Index
-
-  fileprivate init(collection: ${node.name}) {
-    self.collection = collection
-    self.index = collection.startIndex
-  }
-
-  public mutating func next() -> Element? {
-    guard
-      !(self.collection.isEmpty || self.index == self.collection.endIndex)
-    else {
-      return nil
+    public init(collection node: ${node.name}) {
+      self.iterator = .init(parent: node.data.absoluteRaw)
+      self.parent = node
     }
 
-    let result = collection[index]
-    collection.formIndex(after: &index)
-    return result
+    public mutating func next() -> ${node.collection_element_type}? {
+      guard let absoluteRaw = iterator.next() else { return nil }
+      let data = SyntaxData(absoluteRaw, parent: self.parent)
+%   is_constructable = node.collection_element_type != 'Syntax' and \
+%       not (element_node and element_node.is_base())
+%   if is_constructable:
+      return ${node.collection_element_type}(data)
+%   else:
+%     cast = '' if node.collection_element_type == 'Syntax' \
+%         else 'as! ' + node.collection_element_type
+      return (makeSyntax(data) ${cast})
+%   end
+    }
+  }
+
+  /// Returns an iterator over the elements of this syntax collection.
+  public func makeIterator() -> Iterator {
+    return Iterator(collection: self)
   }
 }
 

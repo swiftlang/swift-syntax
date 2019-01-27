@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
 /// An indicator of whether a Syntax node was found or written in the source.
 ///
 /// A `missing` node does not mean, necessarily, that the source item is

@@ -17,38 +17,25 @@ public protocol Syntax:
   CustomStringConvertible, TextOutputStreamable {}
 
 internal protocol _SyntaxBase: Syntax {
-  /// The type of sequence containing the indices of present children.
-  typealias PresentChildIndicesSequence =
-    LazyFilterSequence<Range<Int>>
-    
-  /// The root of the tree this node is currently in.
-  var _root: SyntaxData { get } // Must be of type SyntaxData
-
   /// The data backing this node.
-  /// - note: This is unowned, because the reference to the root data keeps it
-  ///         alive. This means there is an implicit relationship -- the data
-  ///         property must be a descendent of the root. This relationship must
-  ///         be preserved in all circumstances where Syntax nodes are created.
-  var _data: SyntaxData { get }
+  var data: SyntaxData { get }
 }
 
 extension _SyntaxBase {
-  var data: SyntaxData { return _data }
-
   /// Access the raw syntax.
   var raw: RawSyntax {
     return data.raw
   }
 
-  /// An iterator over children of this node.
-  var children: SyntaxChildren {
-    return SyntaxChildren(node: self)
+  /// A sequence over the `present` children of this node.
+  var children: SyntaxBaseChildren {
+    return SyntaxBaseChildren(self)
   }
 
-  /// The number of children, `present` or `missing`, in this node.
-  /// This value can be used safely with `child(at:)`.
-  var numberOfChildren: Int {
-    return data.childCaches.count
+  /// A reversed sequence over the `present` children of this node.
+  /// This is more efficient than doing `children.reversed()`.
+  var childrenReversed: SyntaxBaseChildrenReversed {
+    return SyntaxBaseChildrenReversed(self)
   }
 
   /// Whether or not this node is marked as `present`.
@@ -98,8 +85,7 @@ extension _SyntaxBase {
 
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: _SyntaxBase? {
-    guard let parentData = data.parent else { return nil }
-    return makeSyntax(root: _root, data: parentData)
+    return data.parent
   }
 
   /// The index of this node in the parent's children.
@@ -118,11 +104,9 @@ extension _SyntaxBase {
     guard let parent = self.parent else {
       return nil
     }
-    for i in (0..<indexInParent).reversed() {
-      guard let C = parent.child(at: i) else {
-        continue
-      }
-      if let token = C.lastToken {
+    for absoluteRaw in PresentRawSyntaxPreviousSiblings(self) {
+      let child = makeSyntax(SyntaxData(absoluteRaw, parent: parent))
+      if let token = child.lastToken {
         return token
       }
     }
@@ -135,11 +119,9 @@ extension _SyntaxBase {
     guard let parent = self.parent else {
       return nil
     }
-    for i in indexInParent+1 ..< parent.numberOfChildren {
-      guard let C = parent.child(at: i) else {
-        continue
-      }
-      if let token = C.firstToken {
+    for absoluteRaw in PresentRawSyntaxNextSiblings(self) {
+      let child = makeSyntax(SyntaxData(absoluteRaw, parent: parent))
+      if let token = child.firstToken {
         return token
       }
     }
@@ -168,7 +150,7 @@ extension _SyntaxBase {
       return (self as! TokenSyntax)
     }
 
-    for child in children.reversed() {
+    for child in childrenReversed {
       if let tok = child.lastToken {
         return tok
       }
@@ -253,27 +235,11 @@ extension _SyntaxBase {
 
   /// The root of the tree in which this node resides.
   var root: _SyntaxBase {
-    return makeSyntax(root: _root,  data: _root)
-  }
-
-  /// The sequence of indices that correspond to child nodes that are not
-  /// missing.
-  ///
-  /// This property is an implementation detail of `SyntaxChildren`.
-  internal var presentChildIndices: _SyntaxBase.PresentChildIndicesSequence {
-    return raw.layout.indices.lazy.filter {
-      self.raw.layout[$0]?.isPresent == true
+    var this: _SyntaxBase = self
+    while let parent = this.parent {
+      this = parent
     }
-  }
-
-  /// Gets the child at the provided index in this node's children.
-  /// - Parameter index: The index of the child node you're looking for.
-  /// - Returns: A _SyntaxBase node for the provided child, or `nil` if there
-  ///            is not a child at that index in the node.
-  func child(at index: Int) -> _SyntaxBase? {
-    guard raw.layout.indices.contains(index) else { return nil }
-    guard let childData = data.cachedChild(at: index) else { return nil }
-    return makeSyntax(root: _root, data: childData)
+    return this
   }
 
   /// Passes to a closure every present token node that is part of this node.
@@ -316,15 +282,15 @@ extension Syntax {
     return base.raw
   }
 
-  /// An iterator over children of this node.
+  /// A sequence over the `present` children of this node.
   public var children: SyntaxChildren {
-    return base.children
+    return SyntaxChildren(base)
   }
 
-  /// The number of children, `present` or `missing`, in this node.
-  /// This value can be used safely with `child(at:)`.
-  public var numberOfChildren: Int {
-    return base.numberOfChildren
+  /// A reversed sequence over the `present` children of this node.
+  /// This is more efficient than doing `children.reversed()`.
+  public var childrenReversed: SyntaxChildrenReversed {
+    return SyntaxChildrenReversed(base)
   }
 
   /// Whether or not this node is marked as `present`.
@@ -489,14 +455,6 @@ extension Syntax {
     return base.root
   }
 
-  /// Gets the child at the provided index in this node's children.
-  /// - Parameter index: The index of the child node you're looking for.
-  /// - Returns: A Syntax node for the provided child, or `nil` if there
-  ///            is not a child at that index in the node.
-  public func child(at index: Int) -> Syntax? {
-    return base.child(at: index)
-  }
-
   /// Passes to a closure every present token node that is part of this node.
   public func forEachToken(_ receiver: (TokenSyntax)->()) {
     return base.forEachToken(receiver)
@@ -515,22 +473,15 @@ extension Syntax {
   }
 }
 
-/// Determines if two nodes are equal to each other.
-public func ==(lhs: Syntax, rhs: Syntax) -> Bool {
-  return lhs.base.data === rhs.base.data
-}
-
 /// MARK: - Nodes
 
 /// A Syntax node representing a single token.
-public struct TokenSyntax: _SyntaxBase, Hashable {
-  let _root: SyntaxData
-  unowned let _data: SyntaxData 
+public struct TokenSyntax: _SyntaxBase {
+  let data: SyntaxData
 
   /// Creates a Syntax node from the provided root and data.
-  internal init(root: SyntaxData, data: SyntaxData) {
-    self._root = root
-    self._data = data
+  internal init(_ data: SyntaxData) {
+    self.data = data
   }
 
   /// The text of the token as written in the source code.
@@ -547,8 +498,8 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     let newRaw = RawSyntax.createAndCalcLength(kind: tokenKind,
       leadingTrivia: raw.leadingTrivia!, trailingTrivia: raw.trailingTrivia!,
       presence: raw.presence)
-    let (root, newData) = data.replacingSelf(newRaw)
-    return TokenSyntax(root: root, data: newData)
+    let newData = data.replacingSelf(newRaw)
+    return TokenSyntax(newData)
   }
 
   /// Returns a new TokenSyntax with its leading trivia replaced
@@ -560,8 +511,8 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     let newRaw = RawSyntax.createAndCalcLength(kind: raw.tokenKind!,
       leadingTrivia: leadingTrivia, trailingTrivia: raw.trailingTrivia!,
       presence: raw.presence)
-    let (root, newData) = data.replacingSelf(newRaw)
-    return TokenSyntax(root: root, data: newData)
+    let newData = data.replacingSelf(newRaw)
+    return TokenSyntax(newData)
   }
 
   /// Returns a new TokenSyntax with its trailing trivia replaced
@@ -574,8 +525,8 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
                            leadingTrivia: raw.leadingTrivia!,
                            trailingTrivia: trailingTrivia,
                            presence: raw.presence)
-    let (root, newData) = data.replacingSelf(newRaw)
-    return TokenSyntax(root: root, data: newData)
+    let newData = data.replacingSelf(newRaw)
+    return TokenSyntax(newData)
   }
 
   /// Returns a new TokenSyntax with its leading trivia removed.
@@ -636,13 +587,5 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
     return raw.totalLength
-  }
-
-  public static func ==(lhs: TokenSyntax, rhs: TokenSyntax) -> Bool {
-    return lhs._data === rhs._data
-  }
-
-  public var hashValue: Int {
-    return ObjectIdentifier(_data).hashValue
   }
 }

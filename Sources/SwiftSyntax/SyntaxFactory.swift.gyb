@@ -33,15 +33,15 @@ public enum SyntaxFactory {
                                trailingTrivia: Trivia = []) -> TokenSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia, presence: presence)
-    let data = SyntaxData(raw: raw)
-    return TokenSyntax(root: data, data: data)
+    let data = SyntaxData.forRoot(raw)
+    return TokenSyntax(data)
   }
 
   public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> Syntax {
     let raw = RawSyntax.createAndCalcLength(kind: .unknown,
       layout: tokens.map { $0.raw }, presence: .present)
-    let data = SyntaxData(raw: raw)
-    return UnknownSyntax(root: data, data: data)
+    let data = SyntaxData.forRoot(raw)
+    return UnknownSyntax(data)
   }
 
 /// MARK: Syntax Node Creation APIs
@@ -69,23 +69,23 @@ public enum SyntaxFactory {
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
       layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData(raw: raw)
-    return ${node.name}(root: data, data: data)
+    let data = SyntaxData.forRoot(raw)
+    return ${node.name}(data)
   }
 %   elif node.is_syntax_collection():
   public static func make${node.syntax_kind}(
     _ elements: [${node.collection_element_type}]) -> ${node.name} {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
       layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData(raw: raw)
-    return ${node.name}(root: data, data: data)
+    let data = SyntaxData.forRoot(raw)
+    return ${node.name}(data)
   }
 %   end
 
 %   if not node.is_base():
   public static func makeBlank${node.syntax_kind}() -> ${node.name} {
-    let data = SyntaxData(raw: RawSyntax(kind: .${node.swift_syntax_kind},
-                                         layout: [
+    let data = SyntaxData.forRoot(RawSyntax(kind: .${node.swift_syntax_kind},
+      layout: [
 %     for child in node.children:
 %       if child.is_optional:
       nil,
@@ -94,7 +94,7 @@ public enum SyntaxFactory {
 %       end
 %     end
     ], length: .zero, presence: .present))
-    return ${node.name}(root: data, data: data)
+    return ${node.name}(data)
   }
 %   end
 % end

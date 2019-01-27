@@ -60,11 +60,6 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     XCTAssertNotNil(structDecl.members.parent)
     XCTAssertEqual(structDecl.members.parent as? StructDeclSyntax, structDecl)
 
-    // Ensure that accessing children via named identifiers is exactly the
-    // same as accessing them as their underlying data.
-    XCTAssertEqual(structDecl.members,
-                structDecl.child(at: 7) as? MemberDeclBlockSyntax)
-
     XCTAssertEqual("\(structDecl.members.rightBrace)",
                    """
 

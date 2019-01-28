@@ -54,7 +54,7 @@ Since SwiftSyntax relies on definitions in the main Swift repository to generate
 
 To build the `master` version of SwiftSyntax, check out `swift-syntax` download latest Swift Snapshots (master) from https://swift.org/download/#snapshots.
 
-And run `swift-syntax/build-script.py --swiftc-exec Toolchain/usr/bin/swiftc`. SwiftSyntax is now being built with the Toolchain Swift compiler installed on the system.
+And run `swift-syntax/build-script.py --swiftc-exec swift-DEVELOPMENT-SNAPSHOT-<DATE>/usr/bin/swiftc`. SwiftSyntax is now being built with the downloaded Toolchain Swift compiler.
 
 Swift-CI will automatically run the code generation step whenever a new toolchain (development snapshot or release) is published. It should thus almost never be necessary to perform the above build yourself. 
 

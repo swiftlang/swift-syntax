@@ -12,7 +12,7 @@ import platform
 
 PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-INCR_TRANSFER_ROUNDTRIP_EXEC = PACKAGE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
+INCR_TRANSFER_ROUNDTRIP_EXEC = PACKAGE_DIR + '/utils/incrparse/incr_transfer_round_trip.py'
 GYB_EXEC = PACKAGE_DIR + '/utils/gyb'
 LIT_EXEC = PACKAGE_DIR + '/utils/lit/lit.py'
 

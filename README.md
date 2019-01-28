@@ -52,14 +52,9 @@ Then, import `SwiftSyntax` in your Swift code.
 ### Building SwiftSyntax from `master`
 Since SwiftSyntax relies on definitions in the main Swift repository to generate the layout of the syntax tree using `gyb`, a checkout of [apple/swift](https://github.com/apple/swift) is still required to build `master` of SwiftSyntax.
 
-To build the `master` version of SwiftSyntax, check `swift-syntax` and  `swift` out side by side
-```
-- (enclosing directory)
-  - swift
-  - swift-syntax
-```
+To build the `master` version of SwiftSyntax, check out `swift-syntax` download latest Swift Snapshots (master) from https://swift.org/download/#snapshots.
 
-And run `swift-syntax/build-script.py`. SwiftSyntax is now being built with the Swift compiler installed on the system.
+And run `swift-syntax/build-script.py --swiftc-exec Toolchain/usr/bin/swiftc`. SwiftSyntax is now being built with the Toolchain Swift compiler installed on the system.
 
 Swift-CI will automatically run the code generation step whenever a new toolchain (development snapshot or release) is published. It should thus almost never be necessary to perform the above build yourself. 
 

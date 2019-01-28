@@ -16,6 +16,12 @@ INCR_TRANSFER_ROUNDTRIP_EXEC = PACKAGE_DIR + '/utils/incrparse/incr_transfer_rou
 GYB_EXEC = PACKAGE_DIR + '/utils/gyb'
 LIT_EXEC = PACKAGE_DIR + '/utils/lit/lit.py'
 
+WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
+if os.path.exists(WORKSPACE_DIR + "/swift"):
+    INCR_TRANSFER_ROUNDTRIP_EXEC = WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
+    GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
+    LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
+
 ### Generic helper functions
 
 def printerr(message):

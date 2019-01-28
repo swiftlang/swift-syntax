@@ -426,7 +426,8 @@ section for arguments that need to be specified for this.
     testing_group.add_argument('--swift-build-exec', default='swift build',
                                help='''
       Path to the swift-build executable that is used to build SwiftPM projects
-      If not specified the the 'swift build' command will be used.
+      If not specified the the 'swift build' command will be used,
+      or will be inferred from the given swiftc-exec path.
       ''')
     testing_group.add_argument('--swift-test-exec', default='swift test',
                                help='''
@@ -434,7 +435,7 @@ section for arguments that need to be specified for this.
       If not specified the the 'swift test' command will be used.
       ''')
     testing_group.add_argument('--swiftc-exec', default='swiftc', help='''
-      Path to the swift executable. If not specified the swiftc exeuctable
+      Path to the swift executable. If not specified the swiftc executable
       will be inferred from PATH.
       ''')
     testing_group.add_argument('--syntax-parser-header-dir', default=None,
@@ -460,6 +461,11 @@ section for arguments that need to be specified for this.
       ''')
 
     args = parser.parse_args(sys.argv[1:])
+
+    # use swift-build from swiftc path by default
+    swift_build_exec = args.swift_build_exec
+    if args.swiftc_exec != "swiftc" and args.swift_build_exec == 'swift build':
+        swift_build_exec = realpath(os.path.dirname(args.swiftc_exec)) + '/swift-build'
 
     if args.install:
         if not args.dylib_dir:
@@ -487,7 +493,7 @@ section for arguments that need to be specified for this.
         sys.exit(1)
 
     try:
-        build_swiftsyntax(swift_build_exec=args.swift_build_exec,
+        build_swiftsyntax(swift_build_exec=swift_build_exec,
                           swiftc_exec=args.swiftc_exec,
                           build_dir=args.build_dir,
                           parser_header_dir=args.syntax_parser_header_dir,
@@ -509,7 +515,7 @@ section for arguments that need to be specified for this.
                                 parser_header_dir=args.syntax_parser_header_dir,
                                 parser_lib_dir=args.syntax_parser_lib_dir,
                                 release=args.release,
-                                swift_build_exec=args.swift_build_exec,
+                                swift_build_exec=swift_build_exec,
                                 filecheck_exec=realpath(args.filecheck_exec),
                                 swiftc_exec=args.swiftc_exec,
                                 verbose=args.verbose)

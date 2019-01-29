@@ -423,6 +423,9 @@ section for arguments that need to be specified for this.
                              help='''
       The path to an xcconfig file for generating Xcode projct.
       ''')
+    basic_group.add_argument('--use-xcbuild', action='store_true', help='''
+      Use Xcode to build the product.
+      ''')
     basic_group.add_argument('--dylib-dir',
                              help='''
       The directory to where the .dylib should be installed.
@@ -479,7 +482,10 @@ section for arguments that need to be specified for this.
       ''')
 
     args = parser.parse_args(sys.argv[1:])
-
+    if args.use_xcbuild:
+        # building/installing by xcode is handled separately.
+        note("Building/installing swiftsyntax by using xcode")
+        sys.exit(0)
     if args.install:
         if not args.dylib_dir:
             fatal_error('Must specify directory to install')

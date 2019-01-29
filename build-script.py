@@ -18,6 +18,16 @@ INCR_TRANSFER_ROUNDTRIP_EXEC = \
 GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
 LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
 
+### Generate Xcode project
+
+def xcode_gen(config):
+    print('** Generate SwiftSyntax as an Xcode project **')
+    os.chdir(PACKAGE_DIR)
+    swiftpm_call = ['swift', 'package', 'generate-xcodeproj']
+    if config:
+        swiftpm_call.extend(['--xcconfig-overrides', config])
+    check_call(swiftpm_call)
+
 ### Generic helper functions
 
 def printerr(message):
@@ -168,7 +178,6 @@ def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
     # To speed up compilation.
     swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
     return swiftpm_call
-
 
 def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir,
                       parser_header_dir, parser_lib_dir,
@@ -406,6 +415,14 @@ section for arguments that need to be specified for this.
                              help='''
       Install the build artifact to a specified toolchain directory.
       ''')
+    basic_group.add_argument('--generate-xcodeproj', action='store_true',
+                             help='''
+      Generate an Xcode project for SwiftSyntax.
+      ''')
+    basic_group.add_argument('--xcconfig-path',
+                             help='''
+      The path to an xcconfig file for generating Xcode projct.
+      ''')
     basic_group.add_argument('--dylib-dir',
                              help='''
       The directory to where the .dylib should be installed.
@@ -487,6 +504,10 @@ section for arguments that need to be specified for this.
         printerr('Executing: %s' % ' '.join(e.cmd))
         printerr(e.output)
         sys.exit(1)
+
+    if args.generate_xcodeproj:
+      xcode_gen(config=args.xcconfig_path)
+      sys.exit(0)
 
     try:
         build_swiftsyntax(swift_build_exec=args.swift_build_exec,

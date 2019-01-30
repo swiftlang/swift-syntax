@@ -29,17 +29,17 @@
 
 public enum SyntaxFactory {
   public static func makeToken(_ kind: TokenKind, presence: SourcePresence,
-                 leadingTrivia: Trivia = [],
-                 trailingTrivia: Trivia = []) -> TokenSyntax {
+                               leadingTrivia: Trivia = [],
+                               trailingTrivia: Trivia = []) -> TokenSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
-                        trailingTrivia: trailingTrivia, presence: presence)
+      trailingTrivia: trailingTrivia, presence: presence)
     let data = SyntaxData(raw: raw)
     return TokenSyntax(root: data, data: data)
   }
 
   public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> Syntax {
-    let raw = RawSyntax.createAndCalcLength(kind: .unknown, layout: tokens.map { $0.data.raw },
-                        presence: .present)
+    let raw = RawSyntax.createAndCalcLength(kind: .unknown,
+      layout: tokens.map { $0.data.raw }, presence: .present)
     let data = SyntaxData(raw: raw)
     return UnknownSyntax(root: data, data: data)
   }
@@ -68,7 +68,7 @@ public enum SyntaxFactory {
 %     end
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
-                        layout: layout, presence: SourcePresence.present)
+      layout: layout, presence: SourcePresence.present)
     let data = SyntaxData(raw: raw)
     return ${node.name}(root: data, data: data)
   }
@@ -76,8 +76,7 @@ public enum SyntaxFactory {
   public static func make${node.syntax_kind}(
     _ elements: [${node.collection_element_type}]) -> ${node.name} {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
-                        layout: elements.map { $0.data.raw },
-                        presence: SourcePresence.present)
+      layout: elements.map { $0.data.raw }, presence: SourcePresence.present)
     let data = SyntaxData(raw: raw)
     return ${node.name}(root: data, data: data)
   }

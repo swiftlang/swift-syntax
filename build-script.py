@@ -438,6 +438,11 @@ section for arguments that need to be specified for this.
                              help='Disable sandboxes when building with '
                                   'Swift PM')
 
+    build_group.add_argument('--degyb-only',
+                             action='store_true',
+                             help='The script only generates swift files from gyb '
+                                  'and skips the rest of the build')
+
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
@@ -499,6 +504,9 @@ section for arguments that need to be specified for this.
     try:
         generate_gyb_files(verbose=args.verbose,
                            add_source_locations=args.add_source_locations)
+        # Skip the rest of the build if we should perform degyb only
+        if args.degyb_only:
+            sys.exit(0)
     except subprocess.CalledProcessError as e:
         printerr('Error: Generating .gyb files failed')
         printerr('Executing: %s' % ' '.join(e.cmd))

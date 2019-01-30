@@ -160,7 +160,7 @@ func makeRawToken(_ c_node: CSyntaxNode, source: String) -> RawSyntax {
   let offset = Int(c_node.range.offset)
   let totalLen = Int(c_node.range.length)
   let tokOffset = offset + leadingTriviaLen
-  let tokLen = totalLen - leadingTriviaLen - trailingTriviaLen
+  let tokLen = totalLen - (leadingTriviaLen + trailingTriviaLen)
 
   let text = source.utf8Slice(offset: tokOffset, length: tokLen)
   let tokKind = TokenKind.fromRawValue(kind: kind, text: text)

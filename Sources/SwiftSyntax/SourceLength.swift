@@ -34,7 +34,6 @@ public struct SourceLength: Comparable {
 
   /// Combine the length of two source length.
   public static func +(lhs: SourceLength, rhs: SourceLength) -> SourceLength {
-    _ = lhs == rhs
     let utf8Length = lhs.utf8Length + rhs.utf8Length
     return SourceLength(utf8Length: utf8Length)
   }

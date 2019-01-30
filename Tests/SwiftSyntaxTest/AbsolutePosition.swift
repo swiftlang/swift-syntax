@@ -155,7 +155,7 @@ public class AbsolutePositionTestCase: XCTestCase {
     let startLoc = secondReturnStmt.startLocation(converter: converter)
     XCTAssertEqual(startLoc.line, 6)
     XCTAssertEqual(startLoc.column, 1)
-    XCTAssertEqual(converter.positionFor(line: startLoc.line, column: startLoc.column),
+    XCTAssertEqual(converter.position(ofLine: startLoc.line, column: startLoc.column),
       secondReturnStmt.positionAfterSkippingLeadingTrivia)
 
     let startLocBeforeTrivia =
@@ -163,7 +163,7 @@ public class AbsolutePositionTestCase: XCTestCase {
         afterLeadingTrivia: false)
     XCTAssertEqual(startLocBeforeTrivia.line, 4)
     XCTAssertEqual(startLocBeforeTrivia.column, 1)
-    XCTAssertEqual(converter.positionFor(line: startLocBeforeTrivia.line, column: startLocBeforeTrivia.column),
+    XCTAssertEqual(converter.position(ofLine: startLocBeforeTrivia.line, column: startLocBeforeTrivia.column),
       secondReturnStmt.position)
 
     let endLoc = secondReturnStmt.endLocation(converter: converter)

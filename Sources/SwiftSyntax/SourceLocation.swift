@@ -114,7 +114,7 @@ public final class SourceLocationConverter {
   /// - Parameters:
   ///   - line: A 1-based line number.
   ///   - column: A 1-based, UTF8 offset from the start of line.
-  public func positionFor(line: Int, column: Int) -> AbsolutePosition {
+  public func position(ofLine line: Int, column: Int) -> AbsolutePosition {
     let lineIdx = line-1
     guard lineIdx >= lines.startIndex else {
       return .startOfFile

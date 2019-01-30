@@ -223,7 +223,7 @@ extension RawSyntax {
 
   /// The length of this node excluding its leading and trailing trivia.
   var contentLength: SourceLength {
-    return totalLength - leadingTriviaLength - trailingTriviaLength
+    return totalLength - (leadingTriviaLength + trailingTriviaLength)
   }
 
   /// Convenience function to create a RawSyntax when its byte length is not

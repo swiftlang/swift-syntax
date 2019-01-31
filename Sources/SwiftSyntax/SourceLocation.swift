@@ -239,15 +239,43 @@ fileprivate extension String {
   func forEachLineLength(
     prefix: SourceLength = .zero, body: (SourceLength) -> ()
   ) -> SourceLength {
+    let utf8 = self.utf8
+    let startIndex = utf8.startIndex
+    let endIndex = utf8.endIndex
+    var curIdx = startIndex
     var lineLength = prefix
-    for char in self {
-      lineLength += SourceLength(utf8Length: String(char).utf8.count)
-      if char.isNewline {
+    let advanceLengthByOne = { ()->() in
+      lineLength += SourceLength(utf8Length: 1)
+      curIdx = utf8.index(after: curIdx)
+    }
+
+    while curIdx < endIndex {
+      let char = utf8[curIdx]
+      advanceLengthByOne()
+
+      /// From https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#grammar_line-break
+      /// * line-break → U+000A
+      /// * line-break → U+000D
+      /// * line-break → U+000D followed by U+000A
+      let isNewline = { () -> Bool in
+        if char == 10 { return true }
+        if char == 13 {
+          if curIdx < endIndex && utf8[curIdx] == 10 { advanceLengthByOne() }
+          return true
+        }
+        return false
+      }
+
+      if isNewline() {
         body(lineLength)
         lineLength = .zero
       }
     }
     return lineLength
+  }
+
+  func containsSwiftNewline() -> Bool {
+    return utf8.contains { $0 == 10 || $0 == 13 }
   }
 }
 
@@ -264,10 +292,10 @@ fileprivate extension TriviaPiece {
          let .tabs(count),
          let .verticalTabs(count),
          let .formfeeds(count),
-         let .backticks(count),
-         let .carriageReturns(count):
+         let .backticks(count):
       lineLength += SourceLength(utf8Length: count)
-    case let .newlines(count):
+    case let .newlines(count),
+         let .carriageReturns(count):
       let newLineLength = SourceLength(utf8Length: 1)
       body(lineLength + newLineLength)
       for _ in 1..<count {
@@ -284,7 +312,7 @@ fileprivate extension TriviaPiece {
     case let .lineComment(text),
          let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
-      assert(!text.contains{ $0.isNewline }, "line comment created that contained a new-line character")
+      assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
       lineLength += SourceLength(utf8Length: text.utf8.count)
     case let .blockComment(text),
          let .docBlockComment(text),

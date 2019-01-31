@@ -97,11 +97,11 @@ public class AbsolutePositionTestCase: XCTestCase {
         .newlines(1),
         .backticks(1),
         .docLineComment("/// some comment"),
-        .newlines(1),
+        .carriageReturns(1),
         ])
     let trailing = Trivia(pieces: [
-        .docLineComment("/// This is comment"),
-        .newlines(1),
+        .blockComment("/* This is comment \r\r\n */"),
+        .carriageReturnLineFeeds(1),
         ])
     let items : [CodeBlockItemSyntax] =
       [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax {
@@ -153,7 +153,7 @@ public class AbsolutePositionTestCase: XCTestCase {
       fatalError("out of sync with createSourceFile")
     }
     let startLoc = secondReturnStmt.startLocation(converter: converter)
-    XCTAssertEqual(startLoc.line, 6)
+    XCTAssertEqual(startLoc.line, 8)
     XCTAssertEqual(startLoc.column, 1)
     XCTAssertEqual(converter.position(ofLine: startLoc.line, column: startLoc.column),
       secondReturnStmt.positionAfterSkippingLeadingTrivia)
@@ -161,19 +161,19 @@ public class AbsolutePositionTestCase: XCTestCase {
     let startLocBeforeTrivia =
       secondReturnStmt.startLocation(converter: converter,
         afterLeadingTrivia: false)
-    XCTAssertEqual(startLocBeforeTrivia.line, 4)
+    XCTAssertEqual(startLocBeforeTrivia.line, 6)
     XCTAssertEqual(startLocBeforeTrivia.column, 1)
     XCTAssertEqual(converter.position(ofLine: startLocBeforeTrivia.line, column: startLocBeforeTrivia.column),
       secondReturnStmt.position)
 
     let endLoc = secondReturnStmt.endLocation(converter: converter)
-    XCTAssertEqual(endLoc.line, 6)
+    XCTAssertEqual(endLoc.line, 8)
     XCTAssertEqual(endLoc.column, 7)
 
     let endLocAfterTrivia =
       secondReturnStmt.endLocation(converter: converter,
         afterTrailingTrivia: true)
-    XCTAssertEqual(endLocAfterTrivia.line, 7)
+    XCTAssertEqual(endLocAfterTrivia.line, 11)
     XCTAssertEqual(endLocAfterTrivia.column, 1)
 
     XCTAssertTrue(converter.isValid(line: startLoc.line, column: startLoc.column))

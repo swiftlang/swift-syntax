@@ -46,7 +46,7 @@ public struct ${Builder} {
       layout[idx] = list.appending(elt.raw)
     } else {
       layout[idx] = RawSyntax(kind: SyntaxKind.${child.swift_syntax_kind},
-                              layout: [elt.raw],
+                              layout: [elt.raw], length: elt.raw.totalLength,
                               presence: SourcePresence.present)
     }
   }
@@ -68,7 +68,7 @@ public struct ${Builder} {
 %       end
 %     end
 
-    return SyntaxData(raw: RawSyntax(kind: .${node.swift_syntax_kind},
+    return SyntaxData(raw: RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
                                      layout: layout, presence: .present))
   }
 }

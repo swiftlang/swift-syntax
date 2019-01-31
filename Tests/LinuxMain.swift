@@ -14,6 +14,7 @@ XCTMain({ () -> [XCTestCaseEntry] in
     testCase(SyntaxFactoryAPITestCase.allTests),
     testCase(SyntaxAPITestCase.allTests),
     testCase(SyntaxVisitorTestCase.allTests),
+    testCase(TokenSyntaxTestCase.allTests),
   ]
   return testCases
 }())

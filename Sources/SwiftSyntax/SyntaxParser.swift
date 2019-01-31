@@ -158,8 +158,9 @@ func makeRawToken(_ c_node: CSyntaxNode, source: String) -> RawSyntax {
   }
 
   let offset = Int(c_node.range.offset)
+  let totalLen = Int(c_node.range.length)
   let tokOffset = offset + leadingTriviaLen
-  let tokLen = Int(c_node.range.length) - leadingTriviaLen - trailingTriviaLen
+  let tokLen = totalLen - (leadingTriviaLen + trailingTriviaLen)
 
   let text = source.utf8Slice(offset: tokOffset, length: tokLen)
   let tokKind = TokenKind.fromRawValue(kind: kind, text: text)
@@ -171,7 +172,9 @@ func makeRawToken(_ c_node: CSyntaxNode, source: String) -> RawSyntax {
                                 offset: tokOffset+tokLen, source: source)
   let presence: SourcePresence = c_node.present ? .present : .missing
   return RawSyntax(kind: tokKind, leadingTrivia: leadingTrivia,
-                   trailingTrivia: trailingTrivia, presence: presence)
+                   trailingTrivia: trailingTrivia,
+                   length: SourceLength(utf8Length: totalLen),
+                   presence: presence)
 }
 
 fileprivate
@@ -192,8 +195,10 @@ func makeRawNode(_ cnodeptr: CSyntaxNodePtr, source: String) -> RawSyntax {
       let subnode = moveFromCRawNode(cnode.layout_data.nodes![i])
       layout.append(subnode)
     }
+    let totalLen = Int(cnode.range.length)
     let presence: SourcePresence = cnode.present ? .present : .missing
-    return RawSyntax(kind: kind, layout: layout, presence: presence)
+    return RawSyntax(kind: kind, layout: layout,
+      length: SourceLength(utf8Length: totalLen), presence: presence)
   }
 }
 

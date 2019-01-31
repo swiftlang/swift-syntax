@@ -147,12 +147,10 @@ extension TriviaPiece {
 % for trivia in TRIVIAS:
 %   if trivia.is_new_line:
     case let .${trivia.lower_name}s(count):
-      return SourceLength(newlines: count, columnsAtLastLine: 0, 
-                          utf8Length: count * ${trivia.characters_len()})
+      return SourceLength(utf8Length: count * ${trivia.characters_len()})
 %   elif trivia.is_collection():
     case let .${trivia.lower_name}s(count):
-      return SourceLength(newlines: 0, columnsAtLastLine: count, 
-                          utf8Length: count)
+      return SourceLength(utf8Length: count)
 %   else:
     case let .${trivia.lower_name}(text):
       return SourceLength(of: text)

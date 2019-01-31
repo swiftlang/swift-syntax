@@ -11,17 +11,17 @@
 //===----------------------------------------------------------------------===//
 
 /// An absolute position in a source file as text - the absolute utf8Offset from
-/// the start, line, and column.
-public struct AbsolutePosition {
+/// the start of the file.
+public struct AbsolutePosition: Comparable {
   public let utf8Offset: Int
-  public let line: Int
-  public let column: Int
 
-  static let startOfFile = AbsolutePosition(line: 1, column: 1, utf8Offset: 0)
+  static let startOfFile = AbsolutePosition(utf8Offset: 0)
 
-  public init(line: Int, column: Int, utf8Offset: Int) {
-    self.line = line
-    self.column = column
+  public init(utf8Offset: Int) {
     self.utf8Offset = utf8Offset
+  }
+
+  public static func <(lhs: AbsolutePosition, rhs: AbsolutePosition) -> Bool {
+    return lhs.utf8Offset < rhs.utf8Offset
   }
 }

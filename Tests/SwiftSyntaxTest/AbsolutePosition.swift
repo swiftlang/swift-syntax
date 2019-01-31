@@ -96,9 +96,13 @@ public class AbsolutePositionTestCase: XCTestCase {
     let leading = Trivia(pieces: [
         .newlines(1),
         .backticks(1),
-        .docLineComment("/// some comment")
+        .docLineComment("/// some comment"),
+        .carriageReturns(1),
         ])
-    let trailing = Trivia.docLineComment("/// This is comment\n")
+    let trailing = Trivia(pieces: [
+        .blockComment("/* This is comment \r\r\n */"),
+        .carriageReturnLineFeeds(1),
+        ])
     let items : [CodeBlockItemSyntax] =
       [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax {
         $0.useItem(ReturnStmtSyntax {
@@ -115,11 +119,11 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testTrivias() {
     let idx = 5
     let root = self.createSourceFile(idx + 1)
-    XCTAssertEqual(3, root.leadingTrivia!.count)
+    XCTAssertEqual(4, root.leadingTrivia!.count)
     XCTAssertEqual(0, root.trailingTrivia!.count)
     let state = root.statements[idx]
-    XCTAssertEqual(3, state.leadingTrivia!.count)
-    XCTAssertEqual(1, state.trailingTrivia!.count)
+    XCTAssertEqual(4, state.leadingTrivia!.count)
+    XCTAssertEqual(2, state.trailingTrivia!.count)
     XCTAssertEqual(state.byteSize,
       state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
         + state.byteSizeAfterTrimmingTrivia)
@@ -142,27 +146,40 @@ public class AbsolutePositionTestCase: XCTestCase {
   }
 
   public func testSourceLocation() {
-    let url = URL(fileURLWithPath: "/tmp/test.swift")
+    let filePath = "/tmp/test.swift"
     let root = self.createSourceFile(2)
+    let converter = SourceLocationConverter(file: filePath, tree: root)
     guard let secondReturnStmt = root.child(at: 0)?.child(at: 1) else {
       fatalError("out of sync with createSourceFile")
     }
-    let startLoc = secondReturnStmt.startLocation(in: url)
-    XCTAssertEqual(startLoc.line, 4)
-    XCTAssertEqual(startLoc.column, 18)
+    let startLoc = secondReturnStmt.startLocation(converter: converter)
+    XCTAssertEqual(startLoc.line, 8)
+    XCTAssertEqual(startLoc.column, 1)
+    XCTAssertEqual(converter.position(ofLine: startLoc.line, column: startLoc.column),
+      secondReturnStmt.positionAfterSkippingLeadingTrivia)
 
     let startLocBeforeTrivia =
-      secondReturnStmt.startLocation(in: url, afterLeadingTrivia: false)
-    XCTAssertEqual(startLocBeforeTrivia.line, 3)
+      secondReturnStmt.startLocation(converter: converter,
+        afterLeadingTrivia: false)
+    XCTAssertEqual(startLocBeforeTrivia.line, 6)
     XCTAssertEqual(startLocBeforeTrivia.column, 1)
+    XCTAssertEqual(converter.position(ofLine: startLocBeforeTrivia.line, column: startLocBeforeTrivia.column),
+      secondReturnStmt.position)
 
-    let endLoc = secondReturnStmt.endLocation(in: url)
-    XCTAssertEqual(endLoc.line, 4)
-    XCTAssertEqual(endLoc.column, 24)
+    let endLoc = secondReturnStmt.endLocation(converter: converter)
+    XCTAssertEqual(endLoc.line, 8)
+    XCTAssertEqual(endLoc.column, 7)
 
     let endLocAfterTrivia =
-      secondReturnStmt.endLocation(in: url, afterTrailingTrivia: true)
-    XCTAssertEqual(endLocAfterTrivia.line, 5)
+      secondReturnStmt.endLocation(converter: converter,
+        afterTrailingTrivia: true)
+    XCTAssertEqual(endLocAfterTrivia.line, 11)
     XCTAssertEqual(endLocAfterTrivia.column, 1)
+
+    XCTAssertTrue(converter.isValid(line: startLoc.line, column: startLoc.column))
+    XCTAssertFalse(converter.isValid(line: startLoc.line, column: startLoc.column+50))
+    XCTAssertFalse(converter.isValid(line: 0, column: startLoc.column))
+    XCTAssertTrue(converter.isValid(position: secondReturnStmt.position))
+    XCTAssertFalse(converter.isValid(position: secondReturnStmt.position+SourceLength(utf8Length: 100)))
   }
 }

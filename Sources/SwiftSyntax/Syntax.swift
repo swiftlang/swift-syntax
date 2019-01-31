@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
@@ -320,57 +318,6 @@ extension Syntax {
     where Target: TextOutputStream {
     data.raw.write(to: &target)
   }
-
-  /// The starting location, in the provided file, of this Syntax node.
-  /// - Parameters:
-  ///   - file: The file URL this node resides in.
-  ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
-  ///                         the node's location. Defaults to `true`.
-  public func startLocation(
-    in file: URL,
-    afterLeadingTrivia: Bool = true
-  ) -> SourceLocation {
-    let pos = afterLeadingTrivia ?
-      data.positionAfterSkippingLeadingTrivia :
-      data.position
-    return SourceLocation(file: file.path, position: pos)
-  }
-
-
-  /// The ending location, in the provided file, of this Syntax node.
-  /// - Parameters:
-  ///   - file: The file URL this node resides in.
-  ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
-  ///                          the node's location. Defaults to `false`.
-  public func endLocation(
-    in file: URL,
-    afterTrailingTrivia: Bool = false
-  ) -> SourceLocation {
-    var pos = data.position
-    pos += raw.leadingTriviaLength
-    pos += raw.contentLength
-    if afterTrailingTrivia {
-      pos += raw.trailingTriviaLength
-    }
-    return SourceLocation(file: file.path, position: pos)
-  }
-
-  /// The source range, in the provided file, of this Syntax node.
-  /// - Parameters:
-  ///   - file: The file URL this node resides in.
-  ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
-  ///                          the node's start location. Defaults to `true`.
-  ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
-  ///                          the node's end location. Defaults to `false`.
-  public func sourceRange(
-    in file: URL,
-    afterLeadingTrivia: Bool = true,
-    afterTrailingTrivia: Bool = false
-  ) -> SourceRange {
-    let start = startLocation(in: file, afterLeadingTrivia: afterLeadingTrivia)
-    let end = endLocation(in: file, afterTrailingTrivia: afterTrailingTrivia)
-    return SourceRange(start: start, end: end)
-  }
 }
 
 /// Determines if two nodes are equal to each other.
@@ -402,9 +349,9 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax(kind: tokenKind, leadingTrivia: raw.leadingTrivia!,
-                           trailingTrivia: raw.trailingTrivia!,
-                           presence: raw.presence)
+    let newRaw = RawSyntax.createAndCalcLength(kind: tokenKind,
+      leadingTrivia: raw.leadingTrivia!, trailingTrivia: raw.trailingTrivia!,
+      presence: raw.presence)
     let (root, newData) = data.replacingSelf(newRaw)
     return TokenSyntax(root: root, data: newData)
   }
@@ -415,9 +362,9 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax(kind: raw.tokenKind!, leadingTrivia: leadingTrivia,
-                           trailingTrivia: raw.trailingTrivia!,
-                           presence: raw.presence)
+    let newRaw = RawSyntax.createAndCalcLength(kind: raw.tokenKind!,
+      leadingTrivia: leadingTrivia, trailingTrivia: raw.trailingTrivia!,
+      presence: raw.presence)
     let (root, newData) = data.replacingSelf(newRaw)
     return TokenSyntax(root: root, data: newData)
   }
@@ -428,7 +375,7 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax(kind: raw.tokenKind!,
+    let newRaw = RawSyntax.createAndCalcLength(kind: raw.tokenKind!,
                            leadingTrivia: raw.leadingTrivia!,
                            trailingTrivia: trailingTrivia,
                            presence: raw.presence)

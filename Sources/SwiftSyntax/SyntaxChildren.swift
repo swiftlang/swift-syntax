@@ -97,7 +97,7 @@ struct PresentRawSyntaxChildren: Sequence {
 }
 
 /// Reversed Sequence of `PresentRawSyntaxChildren`.
-struct PresentRawSyntaxChildrenReversed: Sequence {
+struct ReversedPresentRawSyntaxChildren: Sequence {
   struct Iterator: IteratorProtocol {
     let parent: RawSyntax
     var previousChildInfo: AbsoluteSyntaxInfo
@@ -162,7 +162,7 @@ struct PresentRawSyntaxNextSiblings: Sequence {
 
 /// Sequence of the sibling nodes preceding the provided node, in reverse order.
 struct PresentRawSyntaxPreviousSiblings: Sequence {
-  typealias Iterator = PresentRawSyntaxChildrenReversed.Iterator
+  typealias Iterator = ReversedPresentRawSyntaxChildren.Iterator
 
   private let node: _SyntaxBase
 
@@ -204,13 +204,17 @@ struct SyntaxBaseChildren: Sequence {
   func makeIterator() -> Iterator {
     return Iterator(node: node)
   }
+
+  func reversed() -> ReversedSyntaxBaseChildren {
+    return ReversedSyntaxBaseChildren(node)
+  }
 }
 
 /// Reversed Sequence of `SyntaxBaseChildren`.
-struct SyntaxBaseChildrenReversed: Sequence {
+struct ReversedSyntaxBaseChildren: Sequence {
   struct Iterator: IteratorProtocol {
     let parent: _SyntaxBase
-    var iterator: PresentRawSyntaxChildrenReversed.Iterator
+    var iterator: ReversedPresentRawSyntaxChildren.Iterator
 
     init(node: _SyntaxBase) {
       self.iterator = .init(parent: node.data.absoluteRaw)
@@ -232,6 +236,10 @@ struct SyntaxBaseChildrenReversed: Sequence {
 
   func makeIterator() -> Iterator {
     return Iterator(node: node)
+  }
+
+  func reversed() -> SyntaxBaseChildren {
+    return SyntaxBaseChildren(node)
   }
 }
 
@@ -262,12 +270,16 @@ public struct SyntaxChildren: Sequence {
   public func makeIterator() -> Iterator {
     return Iterator(node: node)
   }
+
+  public func reversed() -> ReversedSyntaxChildren {
+    return ReversedSyntaxChildren(node)
+  }
 }
 
 /// Reversed Sequence of `SyntaxChildren`.
-public struct SyntaxChildrenReversed: Sequence {
+public struct ReversedSyntaxChildren: Sequence {
   public struct Iterator: IteratorProtocol {
-    var iterator: SyntaxBaseChildrenReversed.Iterator
+    var iterator: ReversedSyntaxBaseChildren.Iterator
 
     init(node: _SyntaxBase) {
       self.iterator = .init(node: node)
@@ -290,5 +302,9 @@ public struct SyntaxChildrenReversed: Sequence {
 
   public func makeIterator() -> Iterator {
     return Iterator(node: node)
+  }
+
+  public func reversed() -> SyntaxChildren {
+    return SyntaxChildren(node)
   }
 }

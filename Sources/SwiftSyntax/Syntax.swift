@@ -32,12 +32,6 @@ extension _SyntaxBase {
     return SyntaxBaseChildren(self)
   }
 
-  /// A reversed sequence over the `present` children of this node.
-  /// This is more efficient than doing `children.reversed()`.
-  var childrenReversed: SyntaxBaseChildrenReversed {
-    return SyntaxBaseChildrenReversed(self)
-  }
-
   /// Whether or not this node is marked as `present`.
   var isPresent: Bool {
     return raw.isPresent
@@ -150,7 +144,7 @@ extension _SyntaxBase {
       return (self as! TokenSyntax)
     }
 
-    for child in childrenReversed {
+    for child in children.reversed() {
       if let tok = child.lastToken {
         return tok
       }
@@ -285,12 +279,6 @@ extension Syntax {
   /// A sequence over the `present` children of this node.
   public var children: SyntaxChildren {
     return SyntaxChildren(base)
-  }
-
-  /// A reversed sequence over the `present` children of this node.
-  /// This is more efficient than doing `children.reversed()`.
-  public var childrenReversed: SyntaxChildrenReversed {
-    return SyntaxChildrenReversed(base)
   }
 
   /// Whether or not this node is marked as `present`.

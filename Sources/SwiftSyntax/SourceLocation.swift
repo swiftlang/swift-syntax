@@ -253,8 +253,8 @@ fileprivate func computeLines(
     lines.append(position)
   }
   var curPrefix: SourceLength = .zero
-  tree.forEachToken {
-    curPrefix = $0.forEachLineLength(prefix: curPrefix, body: addLine)
+  for token in tree.tokens {
+    curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
   }
   position += curPrefix
   return (lines, position)

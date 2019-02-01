@@ -236,16 +236,9 @@ extension _SyntaxBase {
     return this
   }
 
-  /// Passes to a closure every present token node that is part of this node.
-  func forEachToken(_ receiver: (TokenSyntax)->()) {
-    if isMissing { return }
-    if isToken {
-      receiver(self as! TokenSyntax)
-      return
-    }
-    for child in children {
-      child.forEachToken(receiver)
-    }
+  /// Sequence of tokens that are part of this Syntax node.
+  var tokens: TokenSequence {
+    return TokenSequence(self)
   }
 
   /// A source-accurate description of this node.
@@ -443,9 +436,9 @@ extension Syntax {
     return base.root
   }
 
-  /// Passes to a closure every present token node that is part of this node.
-  public func forEachToken(_ receiver: (TokenSyntax)->()) {
-    return base.forEachToken(receiver)
+  /// Sequence of tokens that are part of this Syntax node.
+  public var tokens: TokenSequence {
+    return base.tokens
   }
 
   /// A source-accurate description of this node.
@@ -575,5 +568,87 @@ public struct TokenSyntax: _SyntaxBase {
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
     return raw.totalLength
+  }
+}
+
+/// Sequence of tokens that are part of the provided Syntax node.
+public struct TokenSequence: Sequence {
+  public struct Iterator: IteratorProtocol {
+    var nextToken: TokenSyntax?
+    let endPosition: AbsolutePosition
+
+    init(_ token: TokenSyntax?, endPosition: AbsolutePosition) {
+      self.nextToken = token
+      self.endPosition = endPosition
+    }
+
+    public mutating func next() -> TokenSyntax? {
+      guard let token = self.nextToken else { return nil }
+      self.nextToken = token.nextToken
+      // Make sure we stop once we reach the end of the containing node.
+      if let nextTok = self.nextToken, nextTok.position >= self.endPosition {
+        self.nextToken = nil
+      }
+      return token
+    }
+  }
+
+  let node: _SyntaxBase
+
+  init(_ node: _SyntaxBase) {
+    self.node = node
+  }
+
+  public init(_ node: Syntax) {
+    self.node = node.base
+  }
+
+  public func makeIterator() -> Iterator {
+    return Iterator(node.firstToken, endPosition: node.endPosition)
+  }
+
+  public func reversed() -> ReversedTokenSequence {
+    return ReversedTokenSequence(node)
+  }
+}
+
+/// Reverse sequence of tokens that are part of the provided Syntax node.
+public struct ReversedTokenSequence: Sequence {
+  public struct Iterator: IteratorProtocol {
+    var nextToken: TokenSyntax?
+    let startPosition: AbsolutePosition
+
+    init(_ token: TokenSyntax?, startPosition: AbsolutePosition) {
+      self.nextToken = token
+      self.startPosition = startPosition
+    }
+
+    public mutating func next() -> TokenSyntax? {
+      guard let token = self.nextToken else { return nil }
+      self.nextToken = token.previousToken
+      // Make sure we stop once we went beyond the start of the containing node.
+      if let nextTok = self.nextToken, nextTok.position < self.startPosition {
+        self.nextToken = nil
+      }
+      return token
+    }
+  }
+
+  let node: _SyntaxBase
+
+  init(_ node: _SyntaxBase) {
+    self.node = node
+  }
+
+  public init(_ node: Syntax) {
+    self.node = node.base
+  }
+
+  public func makeIterator() -> Iterator {
+    return Iterator(node.lastToken, startPosition: node.position)
+  }
+
+  public func reversed() -> TokenSequence {
+    return TokenSequence(node)
   }
 }

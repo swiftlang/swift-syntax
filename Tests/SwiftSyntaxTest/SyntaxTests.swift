@@ -22,8 +22,7 @@ public class SyntaxAPITestCase: XCTestCase {
     XCTAssertEqual("\(funcKW.nextToken!.previousToken!)", "func ")
     XCTAssertEqual("\(funcKW.previousToken!)", "{ ")
 
-    var toks = [TokenSyntax]()
-    funcKW.parent!.forEachToken { toks.append($0) }
+    let toks = Array(funcKW.parent!.tokens)
     XCTAssertEqual(toks.count, 6)
     guard toks.count == 6 else {
       return
@@ -34,5 +33,17 @@ public class SyntaxAPITestCase: XCTestCase {
     XCTAssertEqual("\(toks[3])", ") ")
     XCTAssertEqual("\(toks[4])", "{")
     XCTAssertEqual("\(toks[5])", "} ")
+
+    let rtoks = Array(funcKW.parent!.tokens.reversed())
+    XCTAssertEqual(rtoks.count, 6)
+    guard rtoks.count == 6 else {
+      return
+    }
+    XCTAssertEqual("\(rtoks[5])", "func ")
+    XCTAssertEqual("\(rtoks[4])", "f")
+    XCTAssertEqual("\(rtoks[3])", "(")
+    XCTAssertEqual("\(rtoks[2])", ") ")
+    XCTAssertEqual("\(rtoks[1])", "{")
+    XCTAssertEqual("\(rtoks[0])", "} ")
   }
 }

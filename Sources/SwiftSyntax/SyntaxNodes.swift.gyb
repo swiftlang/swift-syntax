@@ -37,12 +37,22 @@ Each node will have:
 }%
 
 /// A wrapper around a raw Syntax layout.
-public struct UnknownSyntax: _SyntaxBase {
+public struct UnknownSyntax: _SyntaxBase, Hashable {
   let data: SyntaxData
 
   /// Creates an `UnknownSyntax` node from the provided root and data.
   internal init(_ data: SyntaxData) {
     self.data = data
+  }
+
+  /// Determines if two `UnknownSyntax` nodes are equal to each other.
+  public static func ==(lhs: UnknownSyntax, rhs: UnknownSyntax) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
+  }
+
+  /// Feed the essential parts of this node to the supplied hasher.
+  public func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
   }
 }
 
@@ -61,7 +71,7 @@ public protocol ${node.name}: Syntax {}
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
-public struct ${node.name}: ${base_type}, _SyntaxBase {
+public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
 %     if node.children:
   enum Cursor: Int {
 %       for child in node.children:
@@ -143,6 +153,16 @@ public struct ${node.name}: ${base_type}, _SyntaxBase {
     return ${node.name}(newData)
   }
 %     end
+
+  /// Determines if two `${node.name}` nodes are equal to each other.
+  public static func ==(lhs: ${node.name}, rhs: ${node.name}) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
+  }
+
+  /// Feed the essential parts of this node to the supplied hasher.
+  public func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
+  }
 }
 
 %   end

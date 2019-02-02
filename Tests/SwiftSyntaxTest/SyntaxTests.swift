@@ -45,5 +45,15 @@ public class SyntaxAPITestCase: XCTestCase {
     XCTAssertEqual("\(rtoks[2])", ") ")
     XCTAssertEqual("\(rtoks[1])", "{")
     XCTAssertEqual("\(rtoks[0])", "} ")
+
+    XCTAssertEqual(toks[0], rtoks[5])
+    XCTAssertEqual(toks[1], rtoks[4])
+    XCTAssertEqual(toks[2], rtoks[3])
+    XCTAssertEqual(toks[3], rtoks[2])
+    XCTAssertEqual(toks[4], rtoks[1])
+    XCTAssertEqual(toks[5], rtoks[0])
+
+    let tokset = Set(toks+rtoks)
+    XCTAssertEqual(tokset.count, 6)
   }
 }

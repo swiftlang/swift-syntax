@@ -454,10 +454,20 @@ extension Syntax {
   }
 }
 
+/// Determines if two nodes are equal to each other.
+func ==(lhs: _SyntaxBase, rhs: _SyntaxBase) -> Bool {
+  return lhs.data.nodeId == rhs.data.nodeId
+}
+
+/// Determines if two nodes are equal to each other.
+public func ==(lhs: Syntax, rhs: Syntax) -> Bool {
+  return lhs.base.data.nodeId == rhs.base.data.nodeId
+}
+
 /// MARK: - Nodes
 
 /// A Syntax node representing a single token.
-public struct TokenSyntax: _SyntaxBase {
+public struct TokenSyntax: _SyntaxBase, Hashable {
   let data: SyntaxData
 
   /// Creates a Syntax node from the provided root and data.
@@ -568,6 +578,14 @@ public struct TokenSyntax: _SyntaxBase {
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
     return raw.totalLength
+  }
+
+  public static func ==(lhs: TokenSyntax, rhs: TokenSyntax) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
   }
 }
 

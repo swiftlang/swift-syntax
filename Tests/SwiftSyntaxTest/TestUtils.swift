@@ -41,21 +41,3 @@ extension SyntaxCollection {
     return child(at: index)!
   }
 }
-
-// Add equatable conformance for testing purposes.
-
-extension TokenSyntax: Equatable {
-  public static func ==(lhs: TokenSyntax, rhs: TokenSyntax) -> Bool {
-    return lhs.description == rhs.description
-  }
-}
-extension MemberDeclBlockSyntax: Equatable {
-  public static func ==(lhs: MemberDeclBlockSyntax, rhs: MemberDeclBlockSyntax) -> Bool {
-    return lhs.description == rhs.description
-  }
-}
-extension StructDeclSyntax: Equatable {
-  public static func ==(lhs: StructDeclSyntax, rhs: StructDeclSyntax) -> Bool {
-    return lhs.description == rhs.description
-  }
-}

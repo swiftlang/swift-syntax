@@ -15,31 +15,68 @@
 struct AbsoluteSyntaxInfo {
   let offset: UInt32
   let indexInParent: UInt32
+  let nodeId: NodeIdentity
 
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
     let newIndexInParent = self.indexInParent + 1
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
+    let newNodeId = nodeId.advancedBySibling(raw)
+    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
   }
 
   func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     let newOffset = self.offset - UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
     let newIndexInParent = self.indexInParent - 1
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
+    let newNodeId = nodeId.reversedBySibling(raw)
+    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
   }
 
   func advancedToFirstChild() -> AbsoluteSyntaxInfo {
-    return .init(offset: self.offset, indexInParent: 0)
+    let newNodeId = nodeId.advancedToFirstChild()
+    return .init(offset: self.offset, indexInParent: 0, nodeId: newNodeId)
   }
 
   func advancedToEndOfChildren(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
     let newOffset = self.offset + UInt32(truncatingIfNeeded: raw.totalLength.utf8Length)
     let newIndexInParent = UInt32(truncatingIfNeeded: raw.numberOfChildren)
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
+    let newNodeId = nodeId.advancedToEndOfChildren(raw)
+    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
   }
 
   static var forRoot: AbsoluteSyntaxInfo {
-    return .init(offset: 0, indexInParent: 0)
+    return .init(offset: 0, indexInParent: 0, nodeId: .newRoot())
+  }
+}
+
+/// Provides a stable and unique identity for `Syntax` nodes.
+struct NodeIdentity: Hashable {
+  /// Unique value for each root node created.
+  let rootId: UInt32
+  /// Unique value for a node within its own tree.
+  let indexInTree: UInt32
+
+  func advancedBySibling(_ raw: RawSyntax?) -> NodeIdentity {
+    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  func reversedBySibling(_ raw: RawSyntax?) -> NodeIdentity {
+    let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  func advancedToFirstChild() -> NodeIdentity {
+    let newIndexInTree = self.indexInTree + 1
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  func advancedToEndOfChildren(_ raw: RawSyntax) -> NodeIdentity {
+    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw.totalNodes)
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  static func newRoot() -> NodeIdentity {
+    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()), indexInTree: 0)
   }
 }
 
@@ -67,6 +104,8 @@ struct SyntaxData {
   var raw: RawSyntax { return absoluteRaw.raw }
 
   var indexInParent: Int { return Int(absoluteRaw.info.indexInParent) }
+
+  var nodeId: NodeIdentity { return absoluteRaw.info.nodeId }
 
   /// The position of the start of this node's leading trivia
   var position: AbsolutePosition {

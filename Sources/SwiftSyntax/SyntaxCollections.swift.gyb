@@ -31,7 +31,7 @@ public protocol SyntaxCollection: Syntax, Sequence {
 /// `${node.collection_element_type}` nodes. ${node.name} behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ${node.name}: _SyntaxBase, SyntaxCollection {
+public struct ${node.name}: _SyntaxBase, Hashable, SyntaxCollection {
   let data: SyntaxData
 
   /// Creates a Syntax node from the provided root and data.
@@ -142,6 +142,16 @@ public struct ${node.name}: _SyntaxBase, SyntaxCollection {
     var newLayout = data.raw.layout
     newLayout.removeLast()
     return replacingLayout(newLayout)
+  }
+
+  /// Determines if two `${node.name}` nodes are equal to each other.
+  public static func ==(lhs: ${node.name}, rhs: ${node.name}) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
+  }
+
+  /// Feed the essential parts of this node to the supplied hasher.
+  public func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
   }
 }
 

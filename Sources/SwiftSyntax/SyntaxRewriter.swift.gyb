@@ -78,19 +78,25 @@ open class SyntaxRewriter {
     }
   }
 
-  func visitChildren(_ node: Syntax) -> Syntax {
+  func visitChildren(_ nodeS: Syntax) -> Syntax {
     // Visit all children of this node, returning `nil` if child is not
     // present. This will ensure that there are always the same number
     // of children after transforming.
-    let newLayout = (0..<node.numberOfChildren).map { (i: Int) -> RawSyntax? in
-      guard let child = node.child(at: i) else { return nil }
-      return visit(child).raw
+    let node = nodeS.base
+    let newLayout = RawSyntaxChildren(node).map { (n: (RawSyntax?, AbsoluteSyntaxInfo)) -> RawSyntax? in
+      let (raw, info) = n
+      guard let child = raw else { return nil }
+      let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
+      let data = SyntaxData(absoluteRaw, parent: node)
+      return visit(makeSyntax(data)).raw
     }
 
     // Sanity check, ensure the new children are the same length.
     assert(newLayout.count == node.raw.layout.count)
 
-    return makeSyntax(node.raw.replacingLayout(newLayout))
+    let newRaw = node.raw.replacingLayout(newLayout)
+    let newData = node.base.data.replacingSelf(newRaw)
+    return makeSyntax(newData)
   }
 }
 
@@ -186,7 +192,9 @@ class PendingSyntaxNode {
     case .realized(let node):
       return node
     case .virtual(let index):
-      let _node = parent.node.child(at: index)!
+      let base = parent.node.base
+      let data = base.data.child(at: index, parent: base)!
+      let _node = makeSyntax(data)
       kind = .realized(node: _node)
       return _node
     }
@@ -253,7 +261,7 @@ extension Syntax {
   public func walk(_ visitor: SyntaxVisitor) {
 
     // Traverse the raw syntax tree by using the current syntax node as root.
-    data.raw.accept(RawSyntaxVisitor(visitor, self))
+    raw.accept(RawSyntaxVisitor(visitor, self))
   }
 }
 

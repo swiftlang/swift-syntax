@@ -156,6 +156,41 @@ public final class SourceLocationConverter {
   }
 }
 
+extension _SyntaxBase {
+  func startLocation(
+    converter: SourceLocationConverter,
+    afterLeadingTrivia: Bool = true
+  ) -> SourceLocation {
+    let pos = afterLeadingTrivia ?
+      data.positionAfterSkippingLeadingTrivia :
+      data.position
+    return converter.location(for: pos)
+  }
+
+  func endLocation(
+    converter: SourceLocationConverter,
+    afterTrailingTrivia: Bool = false
+  ) -> SourceLocation {
+    var pos = data.position
+    pos += raw.leadingTriviaLength
+    pos += raw.contentLength
+    if afterTrailingTrivia {
+      pos += raw.trailingTriviaLength
+    }
+    return converter.location(for: pos)
+  }
+
+  func sourceRange(
+    converter: SourceLocationConverter,
+    afterLeadingTrivia: Bool = true,
+    afterTrailingTrivia: Bool = false
+  ) -> SourceRange {
+    let start = startLocation(converter: converter, afterLeadingTrivia: afterLeadingTrivia)
+    let end = endLocation(converter: converter, afterTrailingTrivia: afterTrailingTrivia)
+    return SourceRange(start: start, end: end)
+  }
+}
+
 extension Syntax {
   /// The starting location, in the provided file, of this Syntax node.
   /// - Parameters:
@@ -167,10 +202,8 @@ extension Syntax {
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    let pos = afterLeadingTrivia ?
-      data.positionAfterSkippingLeadingTrivia :
-      data.position
-    return converter.location(for: pos)
+    return base.startLocation(converter: converter,
+      afterLeadingTrivia: afterLeadingTrivia)
   }
 
   /// The ending location, in the provided file, of this Syntax node.
@@ -183,13 +216,8 @@ extension Syntax {
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
   ) -> SourceLocation {
-    var pos = data.position
-    pos += raw.leadingTriviaLength
-    pos += raw.contentLength
-    if afterTrailingTrivia {
-      pos += raw.trailingTriviaLength
-    }
-    return converter.location(for: pos)
+    return base.endLocation(converter: converter,
+      afterTrailingTrivia: afterTrailingTrivia)
   }
 
   /// The source range, in the provided file, of this Syntax node.
@@ -205,9 +233,9 @@ extension Syntax {
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    let start = startLocation(converter: converter, afterLeadingTrivia: afterLeadingTrivia)
-    let end = endLocation(converter: converter, afterTrailingTrivia: afterTrailingTrivia)
-    return SourceRange(start: start, end: end)
+    return base.sourceRange(converter: converter,
+      afterLeadingTrivia: afterLeadingTrivia,
+      afterTrailingTrivia: afterTrailingTrivia)
   }
 }
 
@@ -225,8 +253,8 @@ fileprivate func computeLines(
     lines.append(position)
   }
   var curPrefix: SourceLength = .zero
-  tree.forEachToken {
-    curPrefix = $0.forEachLineLength(prefix: curPrefix, body: addLine)
+  for token in tree.tokens {
+    curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
   }
   position += curPrefix
   return (lines, position)

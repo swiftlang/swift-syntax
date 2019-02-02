@@ -33,21 +33,26 @@ Each node will have:
 - An `addX(_ x: XSyntax)` method for children that are collections. This will
   append the provided node to the collection and return a new node with that
   collection replaced.
-- (in DEBUG mode) a `validate()` method that's called in the initializer. This
-  only validates that all the children are the right kind/token, and does not
-  raise an error if, say, a non-optional child is missing.
 """
 }%
 
 /// A wrapper around a raw Syntax layout.
-public struct UnknownSyntax: _SyntaxBase {
-  let _root: SyntaxData
-  unowned let _data: SyntaxData 
+public struct UnknownSyntax: _SyntaxBase, Hashable {
+  let data: SyntaxData
 
   /// Creates an `UnknownSyntax` node from the provided root and data.
-  internal init(root: SyntaxData, data: SyntaxData) {
-    self._root = root
-    self._data = data
+  internal init(_ data: SyntaxData) {
+    self.data = data
+  }
+
+  /// Determines if two `UnknownSyntax` nodes are equal to each other.
+  public static func ==(lhs: UnknownSyntax, rhs: UnknownSyntax) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
+  }
+
+  /// Feed the essential parts of this node to the supplied hasher.
+  public func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
   }
 }
 
@@ -66,7 +71,6 @@ public protocol ${node.name}: Syntax {}
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
-/// Syntax nodes are not thread-safe.
 public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
 %     if node.children:
   enum Cursor: Int {
@@ -76,35 +80,39 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
   }
 %     end
 
-  let _root: SyntaxData
-  unowned let _data: SyntaxData 
+  let data: SyntaxData
 
   /// Creates a `${node.name}` node from the provided root and data.
-  internal init(root: SyntaxData, data: SyntaxData) {
-    self._root = root
-    self._data = data
+  internal init(_ data: SyntaxData) {
+    self.data = data
   }
 
 %     for child in node.children:
+%       child_node = NODE_MAP.get(child.syntax_kind)
 %       ret_type = child.type_name
 %       cast_symbol = 'as!'
 %       if child.is_optional:
 %         ret_type += '?'
 %         cast_symbol = 'as?'
 %       end
-%       cast = '' if child.type_name == 'Syntax' \
-%                 else '%s %s' % (cast_symbol, child.type_name)
 %       for line in dedented_lines(child.description):
   /// ${line}
 %       end
   public var ${child.swift_name}: ${ret_type} {
-    let child = data.cachedChild(at: Cursor.${child.swift_name})
+    let child = data.child(at: Cursor.${child.swift_name}, parent: self)
 %       if child.is_optional:
     if child == nil { return nil }
 %       end
-    return makeSyntax(root: _root, data: child!) ${cast}
+%       child_is_constructable = child.type_name != 'Syntax' and \
+%         not (child_node and child_node.is_base())
+%       if child_is_constructable:
+    return ${child.type_name}(child!)
+%       else:
+%         cast = '' if child.type_name == 'Syntax' \
+%                   else '%s %s' % (cast_symbol, child.type_name)
+    return makeSyntax(child!) ${cast}
+%       end
   }
-%       child_node = NODE_MAP.get(child.syntax_kind)
 %       if child_node and child_node.is_syntax_collection():
 %         child_elt = child_node.collection_element_name
 %         child_elt_type = child_node.collection_element_type
@@ -125,9 +133,9 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
                              length: element.raw.totalLength,
                              presence: .present)
     }
-    let (root, newData) = data.replacingChild(collection,
-                                              at: Cursor.${child.swift_name})
-    return ${node.name}(root: root, data: newData)
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.${child.swift_name})
+    return ${node.name}(newData)
   }
 %       end
 
@@ -141,20 +149,19 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
 %       else:
     let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
 %       end
-    let (root, newData) = data.replacingChild(raw,
-                                              at: Cursor.${child.swift_name})
-    return ${node.name}(root: root, data: newData)
+    let newData = data.replacingChild(raw, at: Cursor.${child.swift_name})
+    return ${node.name}(newData)
   }
 %     end
 
   /// Determines if two `${node.name}` nodes are equal to each other.
   public static func ==(lhs: ${node.name}, rhs: ${node.name}) -> Bool {
-    return lhs._data === rhs._data
+    return lhs.data.nodeId == rhs.data.nodeId
   }
 
   /// Feed the essential parts of this node to the supplied hasher.
   public func hash(into hasher: inout Hasher) {
-    hasher.combine(ObjectIdentifier(_data))
+    return data.nodeId.hash(into: &hasher)
   }
 }
 

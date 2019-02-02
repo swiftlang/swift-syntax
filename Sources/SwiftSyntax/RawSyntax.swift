@@ -10,19 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Box a value type into a reference type
-class Box<T> {
-  let value: T
-
-  init(_ value: T) {
-    self.value = value
-  }
-}
-
 /// The data that is specific to a tree or token node
 fileprivate enum RawSyntaxData {
   /// A tree node with a kind and an array of children
-  case node(kind: SyntaxKind, layout: [RawSyntax?])
+  case node(kind: SyntaxKind, layout: [RawSyntax?], totalNodes: Int)
   /// A token with a token kind, leading trivia, and trailing trivia
   case token(kind: TokenKind, leadingTrivia: Trivia, trailingTrivia: Trivia)
 }
@@ -37,7 +28,11 @@ final class RawSyntax {
 
   init(kind: SyntaxKind, layout: [RawSyntax?], length: SourceLength,
        presence: SourcePresence) {
-    self.data = .node(kind: kind, layout: layout)
+    var totalSubNodes = 0
+    for subnode in layout {
+      totalSubNodes += subnode?.totalNodes ?? 0
+    }
+    self.data = .node(kind: kind, layout: layout, totalNodes: totalSubNodes)
     self.totalLength = length
     self.presence = presence
   }
@@ -53,14 +48,14 @@ final class RawSyntax {
   /// The syntax kind of this raw syntax.
   var kind: SyntaxKind {
     switch data {
-    case .node(let kind, _): return kind
+    case .node(let kind, _, _): return kind
     case .token(_, _, _): return .token
     }
   }
 
   var tokenKind: TokenKind? {
     switch data {
-    case .node(_, _): return nil
+    case .node(_, _, _): return nil
     case .token(let kind, _, _): return kind
     }
   }
@@ -68,8 +63,24 @@ final class RawSyntax {
   /// The layout of the children of this Raw syntax node.
   var layout: [RawSyntax?] {
     switch data {
-    case .node(_, let layout): return layout
+    case .node(_, let layout, _): return layout
     case .token(_, _, _): return []
+    }
+  }
+
+  /// The number of children, `present` or `missing`, in this node.
+  var numberOfChildren: Int {
+    switch data {
+    case .node(_, let layout, _): return layout.count
+    case .token(_, _, _): return 0
+    }
+  }
+
+  /// Total number of nodes in this sub-tree, including `self` node.
+  var totalNodes: Int {
+    switch data {
+    case .node(_, _, let totalSubNodes): return totalSubNodes+1
+    case .token(_, _, _): return 1
     }
   }
 
@@ -117,7 +128,7 @@ final class RawSyntax {
   /// - Parameter newLayout: The children of the new node you're creating.
   func replacingLayout(_ newLayout: [RawSyntax?]) -> RawSyntax {
     switch data {
-    case let .node(kind, _):
+    case let .node(kind, _, _):
       return .createAndCalcLength(kind: kind, layout: newLayout,
         presence: presence)
     case .token(_, _, _): return self
@@ -164,7 +175,7 @@ extension RawSyntax: TextOutputStreamable {
   func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
     switch data {
-    case .node(_, let layout):
+    case .node(_, let layout, _):
       for child in layout {
         guard let child = child else { continue }
         child.write(to: &target)
@@ -185,7 +196,7 @@ extension RawSyntax: TextOutputStreamable {
 extension RawSyntax {
   var leadingTrivia: Trivia? {
     switch data {
-    case .node(_, let layout):
+    case .node(_, let layout, _):
       for child in layout {
         guard let child = child else { continue }
         guard let result = child.leadingTrivia else { break }
@@ -199,7 +210,7 @@ extension RawSyntax {
 
   var trailingTrivia: Trivia? {
     switch data {
-    case .node(_, let layout):
+    case .node(_, let layout, _):
       for child in layout.reversed() {
         guard let child = child else { continue }
         guard let result = child.trailingTrivia else { break }
@@ -284,7 +295,7 @@ extension RawSyntax {
     defer { visitor.moveUp() }
     guard isPresent else { return }
     switch data {
-    case .node(let kind,let layout):
+    case .node(let kind,let layout, _):
       let shouldVisit = visitor.shouldVisit(kind)
       var visitChildren = true
       if shouldVisit {

@@ -68,8 +68,8 @@ public struct ${Builder} {
 %       end
 %     end
 
-    return SyntaxData(raw: RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
-                                     layout: layout, presence: .present))
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
+      layout: layout, presence: .present))
   }
 }
 
@@ -86,7 +86,7 @@ extension ${node.name} {
     var builder = ${Builder}()
     build(&builder)
     let data = builder.buildData()
-    self.init(root: data, data: data)
+    self.init(data)
   }
 }
 

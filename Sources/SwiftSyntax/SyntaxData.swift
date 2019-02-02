@@ -10,53 +10,106 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
+/// AbsoluteSyntaxInfo represents the information that relates a RawSyntax to a
+/// source file tree, like its absolute source offset.
+struct AbsoluteSyntaxInfo {
+  let offset: UInt32
+  let indexInParent: UInt32
+  let nodeId: SyntaxIdentifier
+
+  func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
+    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
+    let newIndexInParent = self.indexInParent + 1
+    let newNodeId = nodeId.advancedBySibling(raw)
+    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
+  }
+
+  func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
+    let newOffset = self.offset - UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
+    let newIndexInParent = self.indexInParent - 1
+    let newNodeId = nodeId.reversedBySibling(raw)
+    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
+  }
+
+  func advancedToFirstChild() -> AbsoluteSyntaxInfo {
+    let newNodeId = nodeId.advancedToFirstChild()
+    return .init(offset: self.offset, indexInParent: 0, nodeId: newNodeId)
+  }
+
+  func advancedToEndOfChildren(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
+    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw.totalLength.utf8Length)
+    let newIndexInParent = UInt32(truncatingIfNeeded: raw.numberOfChildren)
+    let newNodeId = nodeId.advancedToEndOfChildren(raw)
+    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
+  }
+
+  static var forRoot: AbsoluteSyntaxInfo {
+    return .init(offset: 0, indexInParent: 0, nodeId: .newRoot())
+  }
+}
+
+/// Provides a stable and unique identity for `Syntax` nodes.
+public struct SyntaxIdentifier: Hashable {
+  /// Unique value for each root node created.
+  let rootId: UInt32
+  /// Unique value for a node within its own tree.
+  let indexInTree: UInt32
+
+  func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
+    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
+    let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  func advancedToFirstChild() -> SyntaxIdentifier {
+    let newIndexInTree = self.indexInTree + 1
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  func advancedToEndOfChildren(_ raw: RawSyntax) -> SyntaxIdentifier {
+    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw.totalNodes)
+    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+  }
+
+  static func newRoot() -> SyntaxIdentifier {
+    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()), indexInTree: 0)
+  }
+}
+
+struct AbsoluteRawSyntax {
+  let raw: RawSyntax
+  let info: AbsoluteSyntaxInfo
+
+  func replacingSelf(_ newRaw: RawSyntax) -> AbsoluteRawSyntax {
+    return .init(raw: newRaw, info: info)
+  }
+
+  static func forRoot(_ raw: RawSyntax) -> AbsoluteRawSyntax {
+    return .init(raw: raw, info: .forRoot)
+  }
+}
 
 /// SyntaxData is the underlying storage for each Syntax node.
-/// It's modelled as an array that stores and caches a SyntaxData for each raw
-/// syntax node in its layout. It is up to the specific Syntax nodes to maintain
-/// the correct layout of their SyntaxData backing stores.
 ///
 /// SyntaxData is an implementation detail, and should not be exposed to clients
-/// of libSyntax.
-///
-/// The following relationships are preserved:
-///   parent.cachedChild(at: indexInParent) === self
-///   raw.layout.count == childCaches.count
-///   pathToRoot.first === indexInParent
-final class SyntaxData: Equatable {
+/// of SwiftSyntax.
+struct SyntaxData {
+  let parent: _SyntaxBase?
+  let absoluteRaw: AbsoluteRawSyntax
 
-  let raw: RawSyntax
-  let indexInParent: Int
-  weak var parent: SyntaxData?
+  var raw: RawSyntax { return absoluteRaw.raw }
 
-  let childCaches: [LazyNonThreadSafeCache<SyntaxData>]
+  var indexInParent: Int { return Int(absoluteRaw.info.indexInParent) }
 
-  private let positionCache: LazyNonThreadSafeCache<Box<AbsolutePosition>>
-
-  fileprivate func calculatePosition() -> AbsolutePosition {
-    guard let parent = parent else {
-      // If this node is SourceFileSyntax, its location is the start of the file.
-      return AbsolutePosition.startOfFile
-    }
-
-    // If the node is the first child of its parent, the location is same with
-    // the parent's location.
-    guard indexInParent != 0 else { return parent.position }
-
-    // Otherwise, the location is same with the previous sibling's location
-    // adding the stride of the sibling.
-    for idx in (0..<indexInParent).reversed() {
-      if let sibling = parent.cachedChild(at: idx) {
-        return sibling.position + sibling.raw.totalLength
-      }
-    }
-    return parent.position
-  }
+  var nodeId: SyntaxIdentifier { return absoluteRaw.info.nodeId }
 
   /// The position of the start of this node's leading trivia
   var position: AbsolutePosition {
-    return positionCache.value({ return Box(calculatePosition()) }).value
+    return AbsolutePosition(utf8Offset: Int(absoluteRaw.info.offset))
   }
 
   /// The position of the start of this node's content, skipping its trivia
@@ -74,68 +127,52 @@ final class SyntaxData: Equatable {
     return endPosition + raw.trailingTriviaLength
   }
 
-  /// Creates a SyntaxData with the provided raw syntax, pointing to the
-  /// provided index, in the provided parent.
+  /// Creates a `SyntaxData` with the provided raw syntax and parent.
   /// - Parameters:
-  ///   - raw: The raw syntax underlying this node.
-  ///   - indexInParent: The index in the parent's layout where this node will
-  ///                    reside.
+  ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
   ///   - parent: The parent of this node, or `nil` if this node is the root.
-  required init(raw: RawSyntax, indexInParent: Int = 0, 
-                parent: SyntaxData? = nil) {
-    self.raw = raw
-    self.indexInParent = indexInParent
+  init(_ absoluteRaw: AbsoluteRawSyntax, parent: _SyntaxBase?) {
+    self.absoluteRaw = absoluteRaw
     self.parent = parent
-    self.childCaches = raw.layout.map { _ in LazyNonThreadSafeCache<SyntaxData>() }
-    self.positionCache = LazyNonThreadSafeCache<Box<AbsolutePosition>>()
+  }
+
+  /// Creates a `SyntaxData` for a root raw node.
+  static func forRoot(_ raw: RawSyntax) -> SyntaxData {
+    return SyntaxData(.forRoot(raw), parent: nil)
   }
 
   /// Returns the child data at the provided index in this data's layout.
-  /// This child is cached and will be used in subsequent accesses.
+  /// - Note: This has O(n) performance, prefer using a proper Sequence type
+  ///         if applicable, instead of this.
   /// - Note: This function traps if the index is out of the bounds of the
   ///         data's layout.
   ///
   /// - Parameter index: The index to create and cache.
+  /// - Parameter parent: The parent to associate the child with. This is
+  ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided index.
-  func cachedChild(at index: Int) -> SyntaxData? {
+  func child(at index: Int, parent: _SyntaxBase) -> SyntaxData? {
     if raw.layout[index] == nil { return nil }
-    return childCaches[index].value { realizeChild(index) }
+    var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
+    for _ in 0..<index { _ = iter.next() }
+    let (raw, info) = iter.next()!
+    return SyntaxData(AbsoluteRawSyntax(raw: raw!, info: info), parent: parent)
   }
 
   /// Returns the child data at the provided cursor in this data's layout.
-  /// This child is cached and will be used in subsequent accesses.
+  /// - Note: This has O(n) performance, prefer using a proper Sequence type
+  ///         if applicable, instead of this.
   /// - Note: This function traps if the cursor is out of the bounds of the
   ///         data's layout.
   ///
   /// - Parameter cursor: The cursor to create and cache.
+  /// - Parameter parent: The parent to associate the child with. This is
+  ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided cursor.
-  func cachedChild<CursorType: RawRepresentable>(
-    at cursor: CursorType) -> SyntaxData?
+  func child<CursorType: RawRepresentable>(
+    at cursor: CursorType, parent: _SyntaxBase) -> SyntaxData?
     where CursorType.RawValue == Int {
-    return cachedChild(at: cursor.rawValue)
-  }
-
-  /// Walks up the provided node's parent tree looking for the receiver.
-  /// - parameter data: The potential child data.
-  /// - returns: `true` if the receiver exists in the parent chain of the
-  ///            provided data.
-  /// - seealso: isDescendent(of:)
-  func isAncestor(of data: SyntaxData) -> Bool {
-    return data.isDescendent(of: self)
-  }
-
-  /// Walks up the receiver's parent tree looking for the provided node.
-  /// - parameter data: The potential ancestor data.
-  /// - returns: `true` if the data exists in the parent chain of the receiver.
-  /// - seealso: isAncestor(of:)
-  func isDescendent(of data: SyntaxData) -> Bool {
-    if data == self { return true }
-    var node = self
-    while let parent = node.parent {
-      if parent == data { return true }
-      node = parent
-    }
-    return false
+    return child(at: cursor.rawValue, parent: parent)
   }
 
   /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
@@ -144,19 +181,16 @@ final class SyntaxData: Equatable {
   /// - returns: A tuple of both the new root node and the new data with the raw
   ///            layout replaced.
   func replacingSelf(
-    _ newRaw: RawSyntax) -> (root: SyntaxData, newValue: SyntaxData) {
+    _ newRaw: RawSyntax) -> SyntaxData {
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent = parent {
-      let (root, newParent) = parent.replacingChild(newRaw, at: indexInParent)
-      let newMe = newParent.cachedChild(at: indexInParent)!
-      return (root: root, newValue: newMe)
+      let parentData = parent.data.replacingChild(newRaw, at: indexInParent)
+      let newParent = makeSyntax(parentData)
+      return SyntaxData(absoluteRaw.replacingSelf(newRaw), parent: newParent)
     } else {
-      // Otherwise, we're already the root, so return the new data as both the
-      // new root and the new data.
-      let newMe = SyntaxData(raw: newRaw, indexInParent: indexInParent,
-                             parent: nil)
-      return (root: newMe, newValue: newMe)
+      // Otherwise, we're already the root, so return the new root data.
+      return .forRoot(newRaw)
     }
   }
 
@@ -170,8 +204,7 @@ final class SyntaxData: Equatable {
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(_ child: RawSyntax?,
-    at index: Int) -> (root: SyntaxData, newValue: SyntaxData) {
+  func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
     let newRaw = raw.replacingChild(index, with: child)
     return replacingSelf(newRaw)
   }
@@ -187,39 +220,8 @@ final class SyntaxData: Equatable {
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
   func replacingChild<CursorType: RawRepresentable>(_ child: RawSyntax?,
-    at cursor: CursorType) -> (root: SyntaxData, newValue: SyntaxData)
+    at cursor: CursorType) -> SyntaxData
     where CursorType.RawValue == Int {
     return replacingChild(child, at: cursor.rawValue)
-  }
-
-  /// Creates the child's syntax data for the provided cursor.
-  ///
-  /// - Parameter cursor: The cursor pointing into the raw syntax's layout for
-  ///                     the child you're creating.
-  /// - Returns: A new SyntaxData for the specific child you're
-  ///            creating, whose parent is pointing to self.
-  func realizeChild<CursorType: RawRepresentable>(
-    _ cursor: CursorType) -> SyntaxData
-      where CursorType.RawValue == Int {
-    return realizeChild(cursor.rawValue)
-  }
-
-  /// Creates the child's syntax data for the provided index.
-  ///
-  /// - Parameter cursor: The cursor pointing into the raw syntax's layout for
-  ///                     the child you're creating.
-  /// - Returns: A new SyntaxData for the specific child you're
-  ///            creating, whose parent is pointing to self.
-  func realizeChild(_ index: Int) -> SyntaxData {
-    return SyntaxData(raw: raw.layout[index]!,
-                      indexInParent: index,
-                      parent: self)
-  }
-
-  /// Tells whether two SyntaxData nodes have the same identity.
-  /// This is not structural equality.
-  /// - Returns: True if both datas are exactly the same.
-  static func ==(lhs: SyntaxData, rhs: SyntaxData) -> Bool {
-    return lhs === rhs
   }
 }

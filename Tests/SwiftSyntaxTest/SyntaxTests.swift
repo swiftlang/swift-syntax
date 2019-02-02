@@ -22,8 +22,7 @@ public class SyntaxAPITestCase: XCTestCase {
     XCTAssertEqual("\(funcKW.nextToken!.previousToken!)", "func ")
     XCTAssertEqual("\(funcKW.previousToken!)", "{ ")
 
-    var toks = [TokenSyntax]()
-    funcKW.parent!.forEachToken { toks.append($0) }
+    let toks = Array(funcKW.parent!.tokens)
     XCTAssertEqual(toks.count, 6)
     guard toks.count == 6 else {
       return
@@ -34,5 +33,34 @@ public class SyntaxAPITestCase: XCTestCase {
     XCTAssertEqual("\(toks[3])", ") ")
     XCTAssertEqual("\(toks[4])", "{")
     XCTAssertEqual("\(toks[5])", "} ")
+
+    let rtoks = Array(funcKW.parent!.tokens.reversed())
+    XCTAssertEqual(rtoks.count, 6)
+    guard rtoks.count == 6 else {
+      return
+    }
+    XCTAssertEqual("\(rtoks[5])", "func ")
+    XCTAssertEqual("\(rtoks[4])", "f")
+    XCTAssertEqual("\(rtoks[3])", "(")
+    XCTAssertEqual("\(rtoks[2])", ") ")
+    XCTAssertEqual("\(rtoks[1])", "{")
+    XCTAssertEqual("\(rtoks[0])", "} ")
+
+    XCTAssertEqual(toks[0], rtoks[5])
+    XCTAssertEqual(toks[1], rtoks[4])
+    XCTAssertEqual(toks[2], rtoks[3])
+    XCTAssertEqual(toks[3], rtoks[2])
+    XCTAssertEqual(toks[4], rtoks[1])
+    XCTAssertEqual(toks[5], rtoks[0])
+
+    let tokset = Set(toks+rtoks)
+    XCTAssertEqual(tokset.count, 6)
+
+    XCTAssertEqual(toks[0].uniqueIdentifier, rtoks[5].uniqueIdentifier)
+    XCTAssertEqual(toks[1].uniqueIdentifier, rtoks[4].uniqueIdentifier)
+    XCTAssertEqual(toks[2].uniqueIdentifier, rtoks[3].uniqueIdentifier)
+    XCTAssertEqual(toks[3].uniqueIdentifier, rtoks[2].uniqueIdentifier)
+    XCTAssertEqual(toks[4].uniqueIdentifier, rtoks[1].uniqueIdentifier)
+    XCTAssertEqual(toks[5].uniqueIdentifier, rtoks[0].uniqueIdentifier)
   }
 }

@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
   name: "SwiftSyntax",
   targets: [
-    .target(name: "SwiftSyntax"),
+    .target(name: "_CSwiftSyntax"),
+    .target(name: "SwiftSyntax", dependencies: ["_CSwiftSyntax"]),
     .testTarget(name: "SwiftSyntaxTest", dependencies: ["SwiftSyntax"], exclude: ["Inputs"]),
     .target(name: "lit-test-helper", dependencies: ["SwiftSyntax"])
   ]

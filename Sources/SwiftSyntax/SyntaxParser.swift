@@ -81,7 +81,7 @@ public struct SyntaxParser {
 
     let rawSyntax = parseRaw(utf8Source, parseLookup: parseLookup)
 
-    guard let file = makeSyntax(rawSyntax) as? SourceFileSyntax else {
+    guard let file = makeSyntax(.forRoot(rawSyntax)) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
     }
     return file

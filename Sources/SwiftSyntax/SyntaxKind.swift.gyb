@@ -64,32 +64,21 @@ public enum SyntaxKind: String {
   }
 }
 
-/// Creates a Syntax node from the provided RawSyntax using the appropriate
-/// Syntax type, as specified by its kind.
-/// - Parameters:
-///   - raw: The raw syntax with which to create this node.
-///   - root: The root of this tree, or `nil` if the new node is the root.
-internal func makeSyntax(_ raw: RawSyntax) -> Syntax {
-  let data = SyntaxData(raw: raw)
-  return makeSyntax(root: nil, data: data)
-}
-
 /// Creates a Syntax node from the provided SyntaxData using the appropriate
 /// Syntax type, as specified by its kind.
 /// - Parameters:
 ///   - root: The root of this tree, or `nil` if the new node is the root.
 ///   - data: The data for this new node.
-internal func makeSyntax(root: SyntaxData?, data: SyntaxData) -> Syntax {
-  let root = root ?? data
+internal func makeSyntax(_ data: SyntaxData) -> _SyntaxBase {
   switch data.raw.kind {
-  case .token: return TokenSyntax(root: root, data: data)
-  case .unknown: return UnknownSyntax(root: root, data: data)
+  case .token: return TokenSyntax(data)
+  case .unknown: return UnknownSyntax(data)
 % for node in SYNTAX_NODES:
   case .${node.swift_syntax_kind}:
 %   if node.is_base():
-    return Unknown${node.name}(root: root, data: data)
+    return Unknown${node.name}(data)
 %   else:
-    return ${node.name}(root: root, data: data)
+    return ${node.name}(data)
 %   end
 % end
   }

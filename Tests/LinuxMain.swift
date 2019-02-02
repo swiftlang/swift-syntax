@@ -6,8 +6,7 @@ XCTMain({ () -> [XCTestCaseEntry] in
     testCase(AbsolutePositionTestCase.allTests),
     testCase(DiagnosticTestCase.allTests),
     testCase(IncrementalParsingTestCase.allTests),
-    // We need to make syntax node thread safe to enable these tests
-    // testCase(LazyCachingTestCase.allTests),
+    testCase(MultithreadingTestCase.allTests),
     testCase(ParseFileTestCase.allTests),
     testCase(SyntaxChildrenAPITestCase.allTests),
     testCase(SyntaxCollectionsAPITestCase.allTests),

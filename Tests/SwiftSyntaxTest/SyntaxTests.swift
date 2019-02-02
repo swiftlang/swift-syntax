@@ -55,5 +55,12 @@ public class SyntaxAPITestCase: XCTestCase {
 
     let tokset = Set(toks+rtoks)
     XCTAssertEqual(tokset.count, 6)
+
+    XCTAssertEqual(toks[0].uniqueIdentifier, rtoks[5].uniqueIdentifier)
+    XCTAssertEqual(toks[1].uniqueIdentifier, rtoks[4].uniqueIdentifier)
+    XCTAssertEqual(toks[2].uniqueIdentifier, rtoks[3].uniqueIdentifier)
+    XCTAssertEqual(toks[3].uniqueIdentifier, rtoks[2].uniqueIdentifier)
+    XCTAssertEqual(toks[4].uniqueIdentifier, rtoks[1].uniqueIdentifier)
+    XCTAssertEqual(toks[5].uniqueIdentifier, rtoks[0].uniqueIdentifier)
   }
 }

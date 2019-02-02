@@ -15,7 +15,7 @@
 struct AbsoluteSyntaxInfo {
   let offset: UInt32
   let indexInParent: UInt32
-  let nodeId: NodeIdentity
+  let nodeId: SyntaxIdentifier
 
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
@@ -49,33 +49,33 @@ struct AbsoluteSyntaxInfo {
 }
 
 /// Provides a stable and unique identity for `Syntax` nodes.
-struct NodeIdentity: Hashable {
+public struct SyntaxIdentifier: Hashable {
   /// Unique value for each root node created.
   let rootId: UInt32
   /// Unique value for a node within its own tree.
   let indexInTree: UInt32
 
-  func advancedBySibling(_ raw: RawSyntax?) -> NodeIdentity {
+  func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  func reversedBySibling(_ raw: RawSyntax?) -> NodeIdentity {
+  func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  func advancedToFirstChild() -> NodeIdentity {
+  func advancedToFirstChild() -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree + 1
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  func advancedToEndOfChildren(_ raw: RawSyntax) -> NodeIdentity {
+  func advancedToEndOfChildren(_ raw: RawSyntax) -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw.totalNodes)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
-  static func newRoot() -> NodeIdentity {
+  static func newRoot() -> SyntaxIdentifier {
     return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()), indexInTree: 0)
   }
 }
@@ -105,7 +105,7 @@ struct SyntaxData {
 
   var indexInParent: Int { return Int(absoluteRaw.info.indexInParent) }
 
-  var nodeId: NodeIdentity { return absoluteRaw.info.nodeId }
+  var nodeId: SyntaxIdentifier { return absoluteRaw.info.nodeId }
 
   /// The position of the start of this node's leading trivia
   var position: AbsolutePosition {

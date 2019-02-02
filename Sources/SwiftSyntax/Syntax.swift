@@ -241,6 +241,11 @@ extension _SyntaxBase {
     return TokenSequence(self)
   }
 
+  /// Returns a value representing the unique identity of the node.
+  var uniqueIdentifier: SyntaxIdentifier {
+    return data.nodeId
+  }
+
   /// A source-accurate description of this node.
   public var description: String {
     var s = ""
@@ -439,6 +444,11 @@ extension Syntax {
   /// Sequence of tokens that are part of this Syntax node.
   public var tokens: TokenSequence {
     return base.tokens
+  }
+
+  /// Returns a value representing the unique identity of the node.
+  public var uniqueIdentifier: SyntaxIdentifier {
+    return base.uniqueIdentifier
   }
 
   /// A source-accurate description of this node.

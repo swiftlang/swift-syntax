@@ -10,93 +10,908 @@
 //
 //===----------------------------------------------------------------------===//
 
+/// Represents the tail-allocated elements of `RawSyntax`'s `ManagedBuffer`.
+typealias RawSyntaxDataElement = UInt64
+fileprivate typealias DataElementPtr = UnsafePointer<RawSyntaxDataElement>
+fileprivate typealias MutableDataElementPtr = UnsafeMutablePointer<RawSyntaxDataElement>
+
+/// Convenience function to write a value into a `RawSyntaxDataElement`.
+fileprivate func writeElement<T>(_ ptr: MutableDataElementPtr, with value: T) {
+  castElementAs(ptr).initialize(to: value)
+}
+
+/// Convenience function to read a value from a `RawSyntaxDataElement`.
+fileprivate func readElement<T>(_ ptr: DataElementPtr) -> T {
+  return castElementAs(ptr).pointee
+}
+
+fileprivate func castElementAs<T>(_ ptr: DataElementPtr) -> UnsafePointer<T> {
+  assert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
+  return UnsafePointer<T>(OpaquePointer(ptr))
+}
+
+fileprivate func castElementAs<T>(_ ptr: MutableDataElementPtr) -> UnsafeMutablePointer<T> {
+  assert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
+  return UnsafeMutablePointer<T>(ptr)
+}
+
+/// Calculates the number of `RawSyntaxDataElement`s needed to fit the given
+/// number of bytes.
+fileprivate func numberOfElements(forBytes size: Int) -> Int {
+  let (words, remainder) = Int(size).quotientAndRemainder(
+    dividingBy: MemoryLayout<RawSyntaxDataElement>.stride)
+  let elemsForString = remainder == 0 ? words : words+1
+  return elemsForString
+}
+
+/// Calculates the number of `RawSyntaxDataElement`s needed to fit the given
+/// value.
+fileprivate func numberOfElements<T>(for value: T) -> Int {
+  return numberOfElements(forBytes: MemoryLayout<T>.size)
+}
+
+/// Low-level data specific to token nodes.
+///
+/// There's additional data that are tail-allocated. The data are as follows:
+///
+/// * For a parsed token (`TokenData.isConstructed` is false):
+///   * List of leading `CTriviaPiece`s
+///   * List of trailing `CTriviaPiece`s
+///   * A string buffer. If `TokenData.hasText` is false then the buffer is empty
+///     otherwise it contains the full text for the token, including the trivia.
+///     `TokenData.hasText` is true if there's any custom text in any of the trivia
+///     or the token kind.
+/// * For a constructed token (`TokenData.isConstructed` is true):
+///   * A `ConstructedTokenData` value
+///
+/// Testing showed that, during parsing, copying the full token length, when
+/// there is any custom text, is more efficient than trying to copy only the
+/// individual strings from trivia or token kind containing custom text.
+fileprivate struct TokenData {
+  let leadingTriviaCount: UInt16
+  let trailingTriviaCount: UInt16
+  let tokenKind: CTokenKind
+  let hasText: Bool
+  private let isConstructed: Bool
+
+  private init(
+    kind: CTokenKind,
+    leadingTriviaCount: UInt16,
+    trailingTriviaCount: UInt16,
+    hasText: Bool,
+    isConstructed: Bool
+  ) {
+    self.tokenKind = kind
+    self.leadingTriviaCount = leadingTriviaCount
+    self.trailingTriviaCount = trailingTriviaCount
+    self.hasText = hasText
+    self.isConstructed = isConstructed
+  }
+
+  /// Returns header `RawSyntaxData` value and number of elements to tail-allocate.
+  static func dataAndExtraCapacity(
+    for cnode: CSyntaxNode
+  ) -> (RawSyntaxData, Int) {
+    assert(cnode.kind == 0)
+    let data = cnode.token_data
+    let leadingTriviaCount = Int(data.leading_trivia_count)
+    let trailingTriviaCount = Int(data.trailing_trivia_count)
+    let totalTrivia = leadingTriviaCount + trailingTriviaCount
+
+    let hasTriviaText = { (count: Int, p: CTriviaPiecePtr?) -> Bool in
+      for i in 0..<count {
+        if TriviaPiece.hasText(kind: p![i].kind) { return true }
+      }
+      return false
+    }
+    let hasText = TokenKind.hasText(kind: data.kind) ||
+      hasTriviaText(leadingTriviaCount, data.leading_trivia) ||
+      hasTriviaText(trailingTriviaCount, data.trailing_trivia)
+    let textSize = hasText ? Int(cnode.range.length) : 0
+
+    let rawData: RawSyntaxData = .token(.init(kind: data.kind,
+      leadingTriviaCount: data.leading_trivia_count,
+      trailingTriviaCount: data.trailing_trivia_count,
+      hasText: hasText, isConstructed: false))
+
+    let capacity = totalTrivia + numberOfElements(forBytes: textSize)
+    return (rawData, capacity)
+  }
+
+  /// Initializes the tail-allocated elements.
+  static func initializeExtra(
+    _ cnode: CSyntaxNode,
+    source: String,
+    hasText: Bool,
+    extraPtr: MutableDataElementPtr
+  ) {
+    let data = cnode.token_data
+    let leadingTriviaCount = Int(data.leading_trivia_count)
+    let trailingTriviaCount = Int(data.trailing_trivia_count)
+    var curPtr = extraPtr
+    for i in 0..<leadingTriviaCount {
+      writeElement(curPtr, with: data.leading_trivia![i])
+      curPtr = curPtr.successor()
+    }
+    for i in 0..<trailingTriviaCount {
+      writeElement(curPtr, with: data.trailing_trivia![i])
+      curPtr = curPtr.successor()
+    }
+
+    if hasText {
+      let startOffset = Int(cnode.range.offset)
+      var charPtr = UnsafeMutablePointer<UInt8>(curPtr)
+      let utf8 = source.utf8
+      let begin = utf8.index(utf8.startIndex, offsetBy: startOffset)
+      let end = utf8.index(begin, offsetBy: Int(cnode.range.length))
+      for ch in utf8[begin..<end] {
+        charPtr.pointee = ch
+        charPtr = charPtr.successor()
+      }
+    }
+  }
+
+  /// Returns header `RawSyntaxData` value and number of elements to tail-allocate.
+  static func dataAndExtraCapacity(
+    for data: ConstructedTokenData
+  ) -> (RawSyntaxData, Int) {
+    let rawData: RawSyntaxData = .token(.init(kind: /*irrelevant*/0,
+      leadingTriviaCount: UInt16(truncatingIfNeeded: data.leadingTrivia.count),
+      trailingTriviaCount: UInt16(truncatingIfNeeded: data.trailingTrivia.count),
+      hasText: /*irrelevant*/false, isConstructed: true))
+    let capacity = numberOfElements(for: data)
+    return (rawData, capacity)
+  }
+
+  /// Initializes the tail-allocated elements.
+  static func initializeExtra(
+    _ data: ConstructedTokenData,
+    extraPtr: MutableDataElementPtr
+  ) {
+    writeElement(extraPtr, with: data)
+  }
+
+  /// De-initializes memory from tail-allocated data.
+  fileprivate func deinitialize(extraPtr: MutableDataElementPtr) {
+    if isConstructed {
+      let ptr: UnsafeMutablePointer<ConstructedTokenData> = castElementAs(extraPtr)
+      ptr.deinitialize(count: 1)
+    }
+  }
+
+  private var isParsed: Bool { return !isConstructed }
+
+  private func parsedData(
+    length: UInt32, extraPtr: DataElementPtr
+  ) -> UnsafeTokenData {
+    assert(isParsed)
+    let leadingTriviaCount = Int(self.leadingTriviaCount)
+    let trailingTriviaCount = Int(self.trailingTriviaCount)
+    var curPtr = extraPtr
+    let leadingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece> =
+      .init(start: castElementAs(curPtr), count: leadingTriviaCount)
+    curPtr = curPtr.advanced(by: leadingTriviaCount)
+    let trailingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece> =
+      .init(start: castElementAs(curPtr), count: trailingTriviaCount)
+    curPtr = curPtr.advanced(by: trailingTriviaCount)
+    let textSize = hasText ? Int(length) : 0
+    let textBuffer: UnsafeBufferPointer<UInt8> =
+      .init(start: castElementAs(curPtr), count: textSize)
+    return .init(length: length, tokenKind: tokenKind,
+      leadingTriviaBuffer: leadingTriviaBuffer,
+      trailingTriviaBuffer: trailingTriviaBuffer,
+      fullTextBuffer: textBuffer)
+  }
+
+  fileprivate func formTokenKind(
+    length: UInt32, extraPtr: DataElementPtr
+  ) -> TokenKind {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return data.formTokenKind()
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      return tok.kind
+    }
+  }
+
+  /// Returns the leading `Trivia` length for a token node.
+  /// - Returns: .zero if called on a layout node.
+  fileprivate func getLeadingTriviaLength(
+    length: UInt32, extraPtr: DataElementPtr
+  ) -> SourceLength {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return SourceLength(utf8Length: data.getLeadingTriviaLength())
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      return tok.leadingTrivia.sourceLength
+    }
+  }
+
+  /// Returns the trailing `Trivia` length for a token node.
+  /// - Returns: .zero if called on a layout node.
+  fileprivate func getTrailingTriviaLength(
+    length: UInt32, extraPtr: DataElementPtr
+  ) -> SourceLength {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return SourceLength(utf8Length: data.getTrailingTriviaLength())
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      return tok.trailingTrivia.sourceLength
+    }
+  }
+
+  /// Returns the leading `Trivia` for a token node.
+  /// - Returns: nil if called on a layout node.
+  fileprivate func formLeadingTrivia(
+    length: UInt32, extraPtr: DataElementPtr
+  ) -> Trivia {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return data.formLeadingTrivia()
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      return tok.leadingTrivia
+    }
+  }
+
+  /// Returns the trailing `Trivia` for a token node.
+  /// - Returns: nil if called on a layout node.
+  fileprivate func formTrailingTrivia(
+    length: UInt32, extraPtr: DataElementPtr
+  ) -> Trivia {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return data.formTrailingTrivia()
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      return tok.trailingTrivia
+    }
+  }
+
+  /// Prints the RawSyntax token. If self is a layout node it does nothing.
+  fileprivate func write<Target>(
+    to target: inout Target, length: UInt32, extraPtr: DataElementPtr
+  ) where Target: TextOutputStream {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return data.write(to: &target)
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      for piece in tok.leadingTrivia {
+        piece.write(to: &target)
+      }
+      target.write(tok.kind.text)
+      for piece in tok.trailingTrivia {
+        piece.write(to: &target)
+      }
+    }
+  }
+}
+
+/// Convenience wrapper over the tail-allocated data for a token node.
+fileprivate struct UnsafeTokenData {
+  let length: UInt32
+  let tokenKind: CTokenKind
+  let leadingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
+  let trailingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
+  let fullTextBuffer: UnsafeBufferPointer<UInt8>
+
+  var hasText: Bool { return fullTextBuffer.count != 0 }
+
+  static var emptyBuffer: UnsafeBufferPointer<UInt8> {
+    return .init(start: nil, count: 0)
+  }
+
+  func formTokenKind() -> TokenKind {
+    if !hasText {
+      return TokenKind.fromRawValue(kind: tokenKind,
+        textBuffer: UnsafeTokenData.emptyBuffer)
+    }
+    let leadingTriviaLength = self.getLeadingTriviaLength()
+    let trailingTriviaLength = self.getTrailingTriviaLength()
+    let tokenLength = Int(length) - (leadingTriviaLength + trailingTriviaLength)
+    let tokenText = getTextSlice(start: leadingTriviaLength, length: tokenLength)
+    return TokenKind.fromRawValue(kind: tokenKind, textBuffer: tokenText)
+  }
+
+  func formLeadingTrivia() -> Trivia {
+    var newPieces: [TriviaPiece] = []
+    newPieces.reserveCapacity(leadingTriviaBuffer.count)
+    if !hasText {
+      for cpiece in leadingTriviaBuffer {
+        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
+          length: Int(cpiece.length), textBuffer: UnsafeTokenData.emptyBuffer)
+        newPieces.append(newPiece)
+      }
+    } else {
+      var textOffset = 0
+      for cpiece in leadingTriviaBuffer {
+        let len = Int(cpiece.length)
+        let textBuffer = getTextSlice(start: textOffset, length: len)
+        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind, length: len,
+          textBuffer: textBuffer)
+        newPieces.append(newPiece)
+        textOffset += len
+      }
+    }
+    return .init(pieces: newPieces)
+  }
+
+  func formTrailingTrivia() -> Trivia {
+    var newPieces: [TriviaPiece] = []
+    newPieces.reserveCapacity(trailingTriviaBuffer.count)
+    if !hasText {
+      for cpiece in trailingTriviaBuffer {
+        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
+          length: Int(cpiece.length), textBuffer: UnsafeTokenData.emptyBuffer)
+        newPieces.append(newPiece)
+      }
+    } else {
+      let leadingTriviaLength = self.getLeadingTriviaLength()
+      let trailingTriviaLength = self.getTrailingTriviaLength()
+      let tokenLength = Int(length) - (leadingTriviaLength + trailingTriviaLength)
+      var textOffset = leadingTriviaLength + tokenLength
+      for cpiece in trailingTriviaBuffer {
+        let len = Int(cpiece.length)
+        let textBuffer = getTextSlice(start: textOffset, length: len)
+        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind, length: len,
+          textBuffer: textBuffer)
+        newPieces.append(newPiece)
+        textOffset += len
+      }
+    }
+    return .init(pieces: newPieces)
+  }
+
+  func write<Target>(
+    to target: inout Target
+  ) where Target: TextOutputStream {
+    if hasText {
+      // FIXME: A way to print the buffer directly and avoid the copy ?
+      target.write(String(decoding: fullTextBuffer, as: UTF8.self))
+    } else {
+      func printTrivia(_ buf: UnsafeBufferPointer<CTriviaPiece>) {
+        let emptyBuffer: UnsafeBufferPointer<UInt8> = .init(start: nil, count: 0)
+        for cpiece in buf {
+          let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
+            length: Int(cpiece.length), textBuffer: emptyBuffer)
+          newPiece.write(to: &target)
+        }
+      }
+      printTrivia(leadingTriviaBuffer)
+      let tokKind = TokenKind.fromRawValue(kind: tokenKind,
+        textBuffer: UnsafeTokenData.emptyBuffer)
+      target.write(tokKind.text)
+      printTrivia(trailingTriviaBuffer)
+    }
+  }
+
+  func getLeadingTriviaLength() -> Int {
+    var len = 0
+    for piece in leadingTriviaBuffer { len += Int(piece.length) }
+    return len
+  }
+
+  func getTrailingTriviaLength() -> Int {
+    var len = 0
+    for piece in trailingTriviaBuffer { len += Int(piece.length) }
+    return len
+  }
+
+  func getTextSlice(start: Int, length: Int) -> UnsafeBufferPointer<UInt8> {
+    return .init(rebasing: fullTextBuffer[start..<start+length])
+  }
+}
+
+/// Low-level data specific to layout nodes.
+///
+/// There's additional data that are tail-allocated. The data are as follows:
+///
+/// * For a parsed token (`LayoutData.isConstructed` is false):
+///   * List of `CClientNode?` values
+/// * For a constructed token (`LayoutData.isConstructed` is true):
+///   * A `ConstructedLayoutData` value
+fileprivate struct LayoutData {
+  let nodeCount: UInt32
+  let totalSubNodeCount: UInt32
+  let syntaxKind: SyntaxKind
+  private let isConstructed: Bool
+
+  private init(
+    kind: SyntaxKind,
+    nodeCount: UInt32,
+    totalSubNodeCount: UInt32,
+    isConstructed: Bool
+  ) {
+    assert(kind != .token)
+    self.syntaxKind = kind
+    self.nodeCount = nodeCount
+    self.totalSubNodeCount = totalSubNodeCount
+    self.isConstructed = isConstructed
+  }
+
+  /// Returns header `RawSyntaxData` value and number of elements to tail-allocate.
+  static func dataAndExtraCapacity(
+    for kind: SyntaxKind,
+    data: CLayoutData
+  ) -> (RawSyntaxData, Int) {
+    var totalCount = 0
+    for i in 0..<Int(data.nodes_count) {
+      if let raw = RawSyntax.getFromOpaque(data.nodes![i]) {
+        totalCount += raw.totalNodes
+      }
+    }
+    let totalSubNodeCount = UInt32(truncatingIfNeeded: totalCount)
+    let rawData: RawSyntaxData = .layout(.init(kind: kind,
+      nodeCount: data.nodes_count, totalSubNodeCount: totalSubNodeCount,
+      isConstructed: false))
+    return (rawData, Int(data.nodes_count))
+  }
+
+  /// Initializes the tail-allocated elements.
+  static func initializeExtra(
+    _ data: CLayoutData,
+    extraPtr: MutableDataElementPtr
+  ) {
+    var curPtr = extraPtr
+    for i in 0..<Int(data.nodes_count) {
+      writeElement(curPtr, with: data.nodes![i])
+      curPtr = curPtr.successor()
+    }
+  }
+
+  /// Returns header `RawSyntaxData` value and number of elements to tail-allocate.
+  static func dataAndExtraCapacity(
+    for kind: SyntaxKind,
+    data: ConstructedLayoutData
+  ) -> (RawSyntaxData, Int) {
+    var totalCount = 0
+    for raw in data.layout {
+      totalCount += raw?.totalNodes ?? 0
+    }
+    let rawData: RawSyntaxData = .layout(.init(kind: kind,
+      nodeCount: UInt32(truncatingIfNeeded: data.layout.count),
+      totalSubNodeCount: UInt32(truncatingIfNeeded: totalCount),
+      isConstructed: true))
+    let capacity = numberOfElements(for: data)
+    return (rawData, capacity)
+  }
+
+  /// Initializes the tail-allocated elements.
+  static func initializeExtra(
+    _ data: ConstructedLayoutData,
+    extraPtr: MutableDataElementPtr
+  ) {
+    writeElement(extraPtr, with: data)
+  }
+
+  /// De-initializes memory from tail-allocated data.
+  fileprivate func deinitialize(extraPtr: MutableDataElementPtr) {
+    if isParsed {
+      for i in 0..<numberOfChildren {
+        let cnode: CClientNode? = readElement(extraPtr.advanced(by: i))
+        _ = RawSyntax.moveFromOpaque(cnode)
+      }
+    } else {
+      let ptr: UnsafeMutablePointer<ConstructedLayoutData> = castElementAs(extraPtr)
+      ptr.deinitialize(count: 1)
+    }
+  }
+
+  private var isParsed: Bool { return !isConstructed }
+
+  /// Total number of nodes in this sub-tree, including `self` node.
+  var totalNodes: Int {
+    return Int(totalSubNodeCount) + 1
+  }
+
+  var numberOfChildren: Int {
+    return Int(nodeCount)
+  }
+
+  func child(
+    at index: Int,
+    extraPtr: DataElementPtr
+  ) -> RawSyntax? {
+    if isParsed {
+      let cnode: CClientNode? = readElement(extraPtr.advanced(by: index))
+      return RawSyntax.getFromOpaque(cnode)
+    } else {
+      let p: UnsafePointer<ConstructedLayoutData> = castElementAs(extraPtr)
+      return p.pointee.layout[index]
+    }
+  }
+
+  func hasChild(
+    at index: Int,
+    extraPtr: DataElementPtr
+  ) -> Bool {
+    if isParsed {
+      let cnode: CClientNode? = readElement(extraPtr.advanced(by: index))
+      return cnode != nil
+    } else {
+      let p: UnsafePointer<ConstructedLayoutData> = castElementAs(extraPtr)
+      return p.pointee.layout[index] != nil
+    }
+  }
+
+  func formLayoutArray(extraPtr: DataElementPtr) -> [RawSyntax?] {
+    if isParsed {
+      var layout: [RawSyntax?] = []
+      layout.reserveCapacity(numberOfChildren)
+      let p: UnsafePointer<CClientNode?> = castElementAs(extraPtr)
+      for i in 0..<numberOfChildren {
+        layout.append(.getFromOpaque(p[i]))
+      }
+      return layout
+    } else {
+      let p: UnsafePointer<ConstructedLayoutData> = castElementAs(extraPtr)
+      return p.pointee.layout
+    }
+  }
+}
+
+/// Value used when a token is programmatically constructed, instead of the
+/// parser producing it.
+fileprivate struct ConstructedTokenData {
+  let kind: TokenKind
+  let leadingTrivia: Trivia
+  let trailingTrivia: Trivia
+
+  func writeToken<Target>(
+    to target: inout Target
+  ) where Target: TextOutputStream {
+    for piece in leadingTrivia {
+      piece.write(to: &target)
+    }
+    target.write(kind.text)
+    for piece in trailingTrivia {
+      piece.write(to: &target)
+    }
+  }
+}
+
+/// Value used when a layout node is programmatically constructed, instead of the
+/// parser producing it.
+fileprivate struct ConstructedLayoutData {
+  let layout: [RawSyntax?]
+}
+
 /// The data that is specific to a tree or token node
 fileprivate enum RawSyntaxData {
-  /// A tree node with a kind and an array of children
-  case node(kind: SyntaxKind, layout: [RawSyntax?], totalNodes: Int)
   /// A token with a token kind, leading trivia, and trailing trivia
-  case token(kind: TokenKind, leadingTrivia: Trivia, trailingTrivia: Trivia)
+  case token(TokenData)
+  /// A tree node with a kind and an array of children
+  case layout(LayoutData)
+}
+
+/// Header for `RawSyntax`.
+struct RawSyntaxBase {
+  fileprivate let data: RawSyntaxData
+  fileprivate let byteLength: UInt32
+  fileprivate let isPresent: Bool
+
+  fileprivate init(data: RawSyntaxData, byteLength: Int, isPresent: Bool) {
+    self.data = data
+    self.byteLength = UInt32(truncatingIfNeeded: byteLength)
+    self.isPresent = isPresent
+  }
+
+  fileprivate func deinitialize(extraPtr: MutableDataElementPtr) {
+    switch data {
+    case .token(let data): data.deinitialize(extraPtr: extraPtr)
+    case .layout(let data): data.deinitialize(extraPtr: extraPtr)
+    }
+  }
+
+  fileprivate var kind: SyntaxKind {
+    switch data {
+    case .token(_): return .token
+    case .layout(let data): return data.syntaxKind
+    }
+  }
+
+  fileprivate var isToken: Bool {
+    switch data {
+    case .token(_): return true
+    case .layout(_): return false
+    }
+  }
+
+  fileprivate func child(
+    at index: Int,
+    extraPtr: DataElementPtr
+  ) -> RawSyntax? {
+    switch data {
+    case .token(_): return nil
+    case .layout(let data): return data.child(at: index, extraPtr: extraPtr)
+    }
+  }
+
+  fileprivate func hasChild(
+    at index: Int,
+    extraPtr: DataElementPtr
+  ) -> Bool {
+    switch data {
+    case .token(_): return false
+    case .layout(let data): return data.hasChild(at: index, extraPtr: extraPtr)
+    }
+  }
+
+  /// The number of children, `present` or `missing`, in this node.
+  fileprivate var numberOfChildren: Int {
+    switch data {
+    case .token(_): return 0
+    case .layout(let data): return data.numberOfChildren
+    }
+  }
+
+  /// Total number of nodes in this sub-tree, including `self` node.
+  fileprivate var totalNodes: Int {
+    switch data {
+    case .token(_): return 1
+    case .layout(let data): return data.totalNodes
+    }
+  }
+
+  fileprivate func formLayoutArray(extraPtr: DataElementPtr) -> [RawSyntax?] {
+    switch data {
+    case .token(_): return []
+    case .layout(let data): return data.formLayoutArray(extraPtr: extraPtr)
+    }
+  }
+
+  /// Returns the `TokenKind` for a token node.
+  /// - Returns: nil if called on a layout node.
+  fileprivate func formTokenKind(extraPtr: DataElementPtr) -> TokenKind? {
+    switch data {
+    case .token(let data):
+      return data.formTokenKind(length: byteLength, extraPtr: extraPtr)
+    case .layout(_): return nil
+    }
+  }
+
+  /// Returns the leading `Trivia` length for a token node.
+  /// - Returns: .zero if called on a layout node.
+  fileprivate func getTokenLeadingTriviaLength(
+    extraPtr: DataElementPtr
+  ) -> SourceLength {
+    switch data {
+    case .token(let data):
+      return data.getLeadingTriviaLength(length: byteLength, extraPtr: extraPtr)
+    case .layout(_): return .zero
+    }
+  }
+
+  /// Returns the trailing `Trivia` length for a token node.
+  /// - Returns: .zero if called on a layout node.
+  fileprivate func getTokenTrailingTriviaLength(
+    extraPtr: DataElementPtr
+  ) -> SourceLength {
+    switch data {
+    case .token(let data):
+      return data.getTrailingTriviaLength(length: byteLength, extraPtr: extraPtr)
+    case .layout(_): return .zero
+    }
+  }
+
+  /// Returns the leading `Trivia` for a token node.
+  /// - Returns: nil if called on a layout node.
+  fileprivate func formTokenLeadingTrivia(extraPtr: DataElementPtr) -> Trivia? {
+    switch data {
+    case .token(let data):
+      return data.formLeadingTrivia(length: byteLength, extraPtr: extraPtr)
+    case .layout(_): return nil
+    }
+  }
+
+  /// Returns the trailing `Trivia` for a token node.
+  /// - Returns: nil if called on a layout node.
+  fileprivate func formTokenTrailingTrivia(extraPtr: DataElementPtr) -> Trivia? {
+    switch data {
+    case .token(let data):
+      return data.formTrailingTrivia(length: byteLength, extraPtr: extraPtr)
+    case .layout(_): return nil
+    }
+  }
+
+  /// Prints the RawSyntax token. If self is a layout node it does nothing.
+  fileprivate func writeToken<Target>(
+    to target: inout Target, extraPtr: DataElementPtr
+  ) where Target: TextOutputStream {
+    switch data {
+    case .token(let data):
+      data.write(to: &target, length: byteLength, extraPtr: extraPtr)
+    case .layout(_): return
+    }
+  }
 }
 
 /// Represents the raw tree structure underlying the syntax tree. These nodes
 /// have no notion of identity and only provide structure to the tree. They
 /// are immutable and can be freely shared between syntax nodes.
-final class RawSyntax {
-  fileprivate let data: RawSyntaxData
-  let totalLength: SourceLength
-  let presence: SourcePresence
+///
+/// This is using ManagedBuffer as its underlying storage in order to reduce
+/// heap allocations down to a single one, when it's created by the parser.
+final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
+  /// Create a token or layout node using the C parser library object.
+  static func create(
+    from p: UnsafePointer<CSyntaxNode>,
+    source: String
+  ) -> RawSyntax {
+    let cnode = p.pointee
+    let byteLength = Int(cnode.range.length)
+    let isPresent = cnode.present
 
-  init(kind: SyntaxKind, layout: [RawSyntax?], length: SourceLength,
-       presence: SourcePresence) {
-    var totalSubNodes = 0
-    for subnode in layout {
-      totalSubNodes += subnode?.totalNodes ?? 0
+    let data: RawSyntaxData
+    let capacity: Int
+    if cnode.kind == 0 {
+      (data, capacity) = TokenData.dataAndExtraCapacity(for: cnode)
+    } else {
+      (data, capacity) = LayoutData.dataAndExtraCapacity(
+        for: SyntaxKind.fromRawValue(cnode.kind), data: cnode.layout_data)
     }
-    self.data = .node(kind: kind, layout: layout, totalNodes: totalSubNodes)
-    self.totalLength = length
-    self.presence = presence
+    let buffer = self.create(minimumCapacity: capacity) { _ in
+      RawSyntaxBase(data: data, byteLength: byteLength, isPresent: isPresent)
+    }
+
+    let raw = unsafeDowncast(buffer, to: RawSyntax.self)
+    raw.withUnsafeMutablePointers {
+      switch $0.pointee.data {
+      case .token(let tokdata):
+        TokenData.initializeExtra(cnode, source: source,
+          hasText: tokdata.hasText, extraPtr: $1)
+      case .layout(_):
+        LayoutData.initializeExtra(cnode.layout_data, extraPtr: $1)
+      }
+    }
+    return raw
   }
 
-  init(kind: TokenKind, leadingTrivia: Trivia, trailingTrivia: Trivia,
-       length: SourceLength, presence: SourcePresence) {
-    self.data = .token(kind: kind, leadingTrivia: leadingTrivia,
-                       trailingTrivia: trailingTrivia)
-    self.totalLength = length
-    self.presence = presence
+  /// Create a layout node using the programmatic APIs.
+  static func create(
+    kind: SyntaxKind,
+    layout: [RawSyntax?],
+    length: SourceLength,
+    presence: SourcePresence
+  ) -> RawSyntax {
+    let layoutData = ConstructedLayoutData(layout: layout)
+    let (data, capacity) =
+      LayoutData.dataAndExtraCapacity(for: kind, data: layoutData)
+    let buffer = self.create(minimumCapacity: capacity) { _ in
+      RawSyntaxBase(data: data, byteLength: length.utf8Length,
+        isPresent: presence == .present)
+    }
+    let raw = unsafeDowncast(buffer, to: RawSyntax.self)
+    raw.withUnsafeMutablePointerToElements {
+      LayoutData.initializeExtra(layoutData, extraPtr: $0)
+    }
+    return raw
+  }
+
+  /// Create a token node using the programmatic APIs.
+  static func create(
+    kind: TokenKind,
+    leadingTrivia: Trivia,
+    trailingTrivia: Trivia,
+    length: SourceLength,
+    presence: SourcePresence
+  ) -> RawSyntax {
+    let tokdata = ConstructedTokenData(kind: kind, leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+    let (data, capacity) = TokenData.dataAndExtraCapacity(for: tokdata)
+    let buffer = self.create(minimumCapacity: capacity) { _ in
+      RawSyntaxBase(data: data, byteLength: length.utf8Length,
+        isPresent: presence == .present)
+    }
+    let raw = unsafeDowncast(buffer, to: RawSyntax.self)
+    raw.withUnsafeMutablePointerToElements {
+      TokenData.initializeExtra(tokdata, extraPtr: $0)
+    }
+    return raw
+  }
+
+  deinit {
+    return withUnsafeMutablePointers {
+      $0.pointee.deinitialize(extraPtr: $1)
+    }
   }
 
   /// The syntax kind of this raw syntax.
   var kind: SyntaxKind {
-    switch data {
-    case .node(let kind, _, _): return kind
-    case .token(_, _, _): return .token
+    return header.kind
+  }
+
+  /// Whether or not this node is a token one.
+  var isToken: Bool {
+    return header.isToken
+  }
+
+  func child(at index: Int) -> RawSyntax? {
+    return withUnsafeMutablePointers {
+      $0.pointee.child(at: index, extraPtr: $1)
     }
   }
 
-  var tokenKind: TokenKind? {
-    switch data {
-    case .node(_, _, _): return nil
-    case .token(let kind, _, _): return kind
-    }
-  }
-
-  /// The layout of the children of this Raw syntax node.
-  var layout: [RawSyntax?] {
-    switch data {
-    case .node(_, let layout, _): return layout
-    case .token(_, _, _): return []
+  func hasChild(at index: Int) -> Bool {
+    return withUnsafeMutablePointers {
+      $0.pointee.hasChild(at: index, extraPtr: $1)
     }
   }
 
   /// The number of children, `present` or `missing`, in this node.
   var numberOfChildren: Int {
-    switch data {
-    case .node(_, let layout, _): return layout.count
-    case .token(_, _, _): return 0
-    }
+    return header.numberOfChildren
   }
 
   /// Total number of nodes in this sub-tree, including `self` node.
   var totalNodes: Int {
-    switch data {
-    case .node(_, _, let totalSubNodes): return totalSubNodes+1
-    case .token(_, _, _): return 1
-    }
-  }
-
-  /// Whether or not this node is a token one.
-  var isToken: Bool {
-    return tokenKind != nil
+    return header.totalNodes
   }
 
   /// Whether this node is present in the original source.
   var isPresent: Bool {
-    return presence == .present
+    return header.isPresent
   }
 
   /// Whether this node is missing from the original source.
   var isMissing: Bool {
-    return presence == .missing
+    return !isPresent
+  }
+
+  var presence: SourcePresence {
+    return isPresent ? .present : .missing
+  }
+
+  var totalLength: SourceLength {
+    return SourceLength(utf8Length: Int(header.byteLength))
+  }
+
+  func formTokenKind() -> TokenKind? {
+    return withUnsafeMutablePointers {
+      $0.pointee.formTokenKind(extraPtr: $1)
+    }
+  }
+
+  /// Returns the leading `Trivia` length for a token node.
+  /// - Returns: .zero if called on a layout node.
+  var tokenLeadingTriviaLength: SourceLength {
+    return withUnsafeMutablePointers {
+      $0.pointee.getTokenLeadingTriviaLength(extraPtr: $1)
+    }
+  }
+
+  /// Returns the trailing `Trivia` length for a token node.
+  /// - Returns: .zero if called on a layout node.
+  var tokenTrailingTriviaLength: SourceLength {
+    return withUnsafeMutablePointers {
+      $0.pointee.getTokenTrailingTriviaLength(extraPtr: $1)
+    }
+  }
+
+  /// Returns the leading `Trivia` for a token node.
+  /// - Returns: nil if called on a layout node.
+  func formTokenLeadingTrivia() -> Trivia? {
+    return withUnsafeMutablePointers {
+      $0.pointee.formTokenLeadingTrivia(extraPtr: $1)
+    }
+  }
+
+  /// Returns the trailing `Trivia` for a token node.
+  /// - Returns: nil if called on a layout node.
+  func formTokenTrailingTrivia() -> Trivia? {
+    return withUnsafeMutablePointers {
+      $0.pointee.formTokenTrailingTrivia(extraPtr: $1)
+    }
+  }
+
+  func formLayoutArray() -> [RawSyntax?] {
+    return withUnsafeMutablePointers {
+      $0.pointee.formLayoutArray(extraPtr: $1)
+    }
   }
 
   /// Creates a RawSyntax node that's marked missing in the source with the
@@ -107,8 +922,7 @@ final class RawSyntax {
   /// - Returns: A new RawSyntax `.node` with the provided kind and layout, with
   ///            `.missing` source presence.
   static func missing(_ kind: SyntaxKind) -> RawSyntax {
-    return RawSyntax(kind: kind, layout: [], length: SourceLength.zero,
-      presence: .missing)
+    return create(kind: kind, layout: [], length: .zero, presence: .missing)
   }
 
   /// Creates a RawSyntax token that's marked missing in the source with the
@@ -117,8 +931,8 @@ final class RawSyntax {
   /// - Returns: A new RawSyntax `.token` with the provided kind, no
   ///            leading/trailing trivia, and `.missing` source presence.
   static func missingToken(_ kind: TokenKind) -> RawSyntax {
-    return RawSyntax(kind: kind, leadingTrivia: [], trailingTrivia: [],
-      length: SourceLength.zero, presence: .missing)
+    return create(kind: kind, leadingTrivia: [], trailingTrivia: [],
+      length: .zero, presence: .missing)
   }
 
   /// Returns a new RawSyntax node with the provided layout instead of the
@@ -127,12 +941,8 @@ final class RawSyntax {
   ///         is returned.
   /// - Parameter newLayout: The children of the new node you're creating.
   func replacingLayout(_ newLayout: [RawSyntax?]) -> RawSyntax {
-    switch data {
-    case let .node(kind, _, _):
-      return .createAndCalcLength(kind: kind, layout: newLayout,
-        presence: presence)
-    case .token(_, _, _): return self
-    }
+    if isToken { return self }
+    return .createAndCalcLength(kind: kind, layout: newLayout, presence: presence)
   }
 
   /// Creates a new RawSyntax with the provided child appended to its layout.
@@ -141,7 +951,7 @@ final class RawSyntax {
   ///         is returned.
   /// - Return: A new RawSyntax node with the provided child at the end.
   func appending(_ child: RawSyntax) -> RawSyntax {
-    var newLayout = layout
+    var newLayout = formLayoutArray()
     newLayout.append(child)
     return replacingLayout(newLayout)
   }
@@ -151,7 +961,7 @@ final class RawSyntax {
   /// - Returns: The child at the provided index.
   subscript<CursorType: RawRepresentable>(_ index: CursorType) -> RawSyntax?
     where CursorType.RawValue == Int {
-      return layout[index.rawValue]
+      return child(at: index.rawValue)
   }
 
   /// Replaces the child at the provided index in this node with the provided
@@ -161,10 +971,28 @@ final class RawSyntax {
   ///   - newChild: The new child that should occupy that index in the node.
   func replacingChild(_ index: Int,
                       with newChild: RawSyntax?) -> RawSyntax {
-    precondition(index < layout.count, "Cursor \(index) reached past layout")
-    var newLayout = layout
+    precondition(index < numberOfChildren, "Cursor \(index) reached past layout")
+    var newLayout = formLayoutArray()
     newLayout[index] = newChild
     return replacingLayout(newLayout)
+  }
+}
+
+extension RawSyntax {
+  static func moveFromOpaque(_ cn: CClientNode?) -> RawSyntax? {
+    if let subnode = cn {
+      return Unmanaged<RawSyntax>.fromOpaque(subnode).takeRetainedValue()
+    } else {
+      return nil
+    }
+  }
+
+  static func getFromOpaque(_ cn: CClientNode?) -> RawSyntax? {
+    if let subnode = cn {
+      return Unmanaged<RawSyntax>.fromOpaque(subnode).takeUnretainedValue()
+    } else {
+      return nil
+    }
   }
 }
 
@@ -174,62 +1002,64 @@ extension RawSyntax: TextOutputStreamable {
   /// - Parameter stream: The stream on which to output this node.
   func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
-    switch data {
-    case .node(_, let layout, _):
-      for child in layout {
-        guard let child = child else { continue }
-        child.write(to: &target)
+    guard isPresent else { return }
+    if isToken {
+      withUnsafeMutablePointers {
+        $0.pointee.writeToken(to: &target, extraPtr: $1)
       }
-    case let .token(kind, leadingTrivia, trailingTrivia):
-      guard isPresent else { return }
-      for piece in leadingTrivia {
-        piece.write(to: &target)
-      }
-      target.write(kind.text)
-      for piece in trailingTrivia {
-        piece.write(to: &target)
+    } else {
+      for i in 0..<self.numberOfChildren {
+        self.child(at: i)?.write(to: &target)
       }
     }
   }
 }
 
 extension RawSyntax {
-  var leadingTrivia: Trivia? {
-    switch data {
-    case .node(_, let layout, _):
-      for child in layout {
-        guard let child = child else { continue }
-        guard let result = child.leadingTrivia else { break }
-        return result
+  /// Return the first `present` token of a layout node or self if it is a token.
+  var firstPresentToken: RawSyntax? {
+    guard isPresent else { return nil }
+    if isToken { return self }
+    for i in 0..<self.numberOfChildren {
+      if let token = self.child(at: i)?.firstPresentToken {
+        return token
       }
-      return nil
-    case let .token(_, leadingTrivia, _):
-      return leadingTrivia
     }
+    return nil
   }
 
-  var trailingTrivia: Trivia? {
-    switch data {
-    case .node(_, let layout, _):
-      for child in layout.reversed() {
-        guard let child = child else { continue }
-        guard let result = child.trailingTrivia else { break }
-        return result
+  /// Return the last `present` token of a layout node or self if it is a token.
+  var lastPresentToken: RawSyntax? {
+    guard isPresent else { return nil }
+    if isToken { return self }
+    for i in (0..<self.numberOfChildren).reversed() {
+      if let token = self.child(at: i)?.lastPresentToken {
+        return token
       }
-      return nil
-    case let .token(_, _, trailingTrivia):
-      return trailingTrivia
     }
+    return nil
+  }
+
+  func formLeadingTrivia() -> Trivia? {
+    guard let token = self.firstPresentToken else { return nil }
+    return token.formTokenLeadingTrivia()
+  }
+
+  func formTrailingTrivia() -> Trivia? {
+    guard let token = self.lastPresentToken else { return nil }
+    return token.formTokenTrailingTrivia()
   }
 }
 
 extension RawSyntax {
   var leadingTriviaLength: SourceLength {
-    return leadingTrivia?.sourceLength ?? .zero
+    guard let token = self.firstPresentToken else { return .zero }
+    return token.tokenLeadingTriviaLength
   }
 
   var trailingTriviaLength: SourceLength {
-    return trailingTrivia?.sourceLength ?? .zero
+    guard let token = self.lastPresentToken else { return .zero }
+    return token.tokenTrailingTriviaLength
   }
 
   /// The length of this node excluding its leading and trailing trivia.
@@ -256,7 +1086,7 @@ extension RawSyntax {
       }
       length = totalen
     }
-    return .init(kind: kind, layout: layout, length: length, presence: presence)
+    return create(kind: kind, layout: layout, length: length, presence: presence)
   }
 
   /// Convenience function to create a RawSyntax when its byte length is not
@@ -275,27 +1105,24 @@ extension RawSyntax {
       length = kind.sourceLength + leadingTrivia.sourceLength +
         trailingTrivia.sourceLength
     }
-    return .init(kind: kind, leadingTrivia: leadingTrivia,
+    return create(kind: kind, leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia, length: length, presence: presence)
-  }
-}
-
-// This is needed purely to have a self assignment initializer for
-// RawSyntax.init(from:Decoder) so we can reuse omitted nodes, instead of
-// copying them.
-private protocol _RawSyntaxFactory {}
-extension _RawSyntaxFactory {
-  init(_instance: Self) {
-    self = _instance
   }
 }
 
 extension RawSyntax {
   func accept(_ visitor: RawSyntaxVisitor) {
+    // FIXME: Simplify visitation, this deferred 'shouldVisit` visitation
+    // mechanism is unnecessary now.
     defer { visitor.moveUp() }
     guard isPresent else { return }
-    switch data {
-    case .node(let kind,let layout, _):
+    if let tokKind = self.formTokenKind() {
+      if visitor.shouldVisit(tokKind) {
+        visitor.visitPre()
+        _ = visitor.visit()
+        visitor.visitPost()
+      }
+    } else {
       let shouldVisit = visitor.shouldVisit(kind)
       var visitChildren = true
       if shouldVisit {
@@ -304,20 +1131,15 @@ extension RawSyntax {
         visitChildren = visitor.visit() == .visitChildren
       }
       if visitChildren {
-        for (offset, element) in layout.enumerated() {
-          guard let element = element else { continue }
+        for offset in 0..<numberOfChildren {
+          let child = self.child(at: offset)
+          guard let element = child else { continue }
           // Teach the visitor to navigate to this child.
           visitor.addChildIdx(offset)
           element.accept(visitor)
         }
       }
       if shouldVisit {
-        visitor.visitPost()
-      }
-    case .token(let kind, _, _):
-      if visitor.shouldVisit(kind) {
-        visitor.visitPre()
-        _ = visitor.visit()
         visitor.visitPost()
       }
     }

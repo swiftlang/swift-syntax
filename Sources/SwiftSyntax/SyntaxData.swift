@@ -152,7 +152,7 @@ struct SyntaxData {
   ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided index.
   func child(at index: Int, parent: _SyntaxBase) -> SyntaxData? {
-    if raw.layout[index] == nil { return nil }
+    if !raw.hasChild(at: index) { return nil }
     var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
     for _ in 0..<index { _ = iter.next() }
     let (raw, info) = iter.next()!

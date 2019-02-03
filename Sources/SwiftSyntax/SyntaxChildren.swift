@@ -29,10 +29,10 @@ struct RawSyntaxChildren: Sequence {
 
     mutating func next() -> (RawSyntax?, AbsoluteSyntaxInfo)? {
       let idx = Int(nextChildInfo.indexInParent)
-      guard idx < parent.layout.endIndex else {
+      guard idx < parent.numberOfChildren else {
         return nil
       }
-      let child = parent.layout[idx]
+      let child = parent.child(at: idx)
       let thisItem = (child, nextChildInfo)
       nextChildInfo = nextChildInfo.advancedBySibling(child)
       return thisItem
@@ -115,10 +115,10 @@ struct ReversedPresentRawSyntaxChildren: Sequence {
     mutating func next() -> AbsoluteRawSyntax? {
       while true {
         let prevIdx = Int(previousChildInfo.indexInParent)
-        guard prevIdx > parent.layout.startIndex else {
+        guard prevIdx > 0 else {
           return nil
         }
-        let child = parent.layout[prevIdx-1]
+        let child = parent.child(at: prevIdx-1)
         previousChildInfo = previousChildInfo.reversedBySibling(child)
         if let n = child, n.isPresent {
           return AbsoluteRawSyntax(raw: n, info: previousChildInfo)

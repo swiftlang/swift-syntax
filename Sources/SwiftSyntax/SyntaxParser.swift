@@ -24,7 +24,10 @@ typealias CTriviaPiecePtr = UnsafePointer<CTriviaPiece>
 typealias CSyntaxKind = swiftparse_syntax_kind_t
 typealias CTokenKind = swiftparse_token_kind_t
 typealias CTriviaKind = swiftparse_trivia_kind_t
+typealias CTokenData = swiftparse_token_data_t
+typealias CLayoutData = swiftparse_layout_data_t
 typealias CParseLookupResult = swiftparse_lookup_result_t
+typealias CClientNode = swiftparse_client_node_t
 
 /// A list of possible errors that could be encountered while parsing a
 /// Syntax tree.
@@ -116,7 +119,7 @@ public struct SyntaxParser {
     }
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
-      let node = makeRawNode(cnode, source: source)
+      let node = RawSyntax.create(from: cnode, source: source)
       // Transfer ownership of the object to the C parser. We get ownership back
       // via `moveFromCRawNode()`.
       let bits = Unmanaged.passRetained(node)
@@ -140,98 +143,8 @@ public struct SyntaxParser {
     }
 
     let c_top = swiftparse_parse_string(c_parser, source)
-    return moveFromCRawNode(c_top)!
-  }
-}
 
-fileprivate
-func makeRawToken(_ c_node: CSyntaxNode, source: String) -> RawSyntax {
-  let tokdat = c_node.token_data
-  let kind = tokdat.kind
-  var leadingTriviaLen = 0
-  for i in 0..<Int(tokdat.leading_trivia_count) {
-    leadingTriviaLen += Int(tokdat.leading_trivia![i].length)
-  }
-  var trailingTriviaLen = 0
-  for i in 0..<Int(tokdat.trailing_trivia_count) {
-    trailingTriviaLen += Int(tokdat.trailing_trivia![i].length)
-  }
-
-  let offset = Int(c_node.range.offset)
-  let totalLen = Int(c_node.range.length)
-  let tokOffset = offset + leadingTriviaLen
-  let tokLen = totalLen - (leadingTriviaLen + trailingTriviaLen)
-
-  let text = source.utf8Slice(offset: tokOffset, length: tokLen)
-  let tokKind = TokenKind.fromRawValue(kind: kind, text: text)
-  let leadingTrivia = toTrivia(tokdat.leading_trivia,
-                               count: Int(tokdat.leading_trivia_count),
-                               offset: offset, source: source)
-  let trailingTrivia = toTrivia(tokdat.trailing_trivia,
-                                count: Int(tokdat.trailing_trivia_count),
-                                offset: tokOffset+tokLen, source: source)
-  let presence: SourcePresence = c_node.present ? .present : .missing
-  return RawSyntax(kind: tokKind, leadingTrivia: leadingTrivia,
-                   trailingTrivia: trailingTrivia,
-                   length: SourceLength(utf8Length: totalLen),
-                   presence: presence)
-}
-
-fileprivate
-func makeRawNode(_ cnodeptr: CSyntaxNodePtr, source: String) -> RawSyntax {
-  let cnode = cnodeptr.pointee
-  let kind = SyntaxKind.fromRawValue(cnode.kind)
-  if kind == .token {
-    return makeRawToken(cnode, source: source)
-  } else {
-    var layout = [RawSyntax?]()
-    layout.reserveCapacity(Int(cnode.layout_data.nodes_count))
-    for i in 0..<Int(cnode.layout_data.nodes_count) {
-      // The parser guarantees that the `RawSyntax` pointers we passed via the
-      // node handler, we'll get them back in a depth-first fashion.
-      // From the memory management perspective we gave ownership of the
-      // `RawSyntax` object to the C parser via the node handler and now we get
-      // ownership back.
-      let subnode = moveFromCRawNode(cnode.layout_data.nodes![i])
-      layout.append(subnode)
-    }
-    let totalLen = Int(cnode.range.length)
-    let presence: SourcePresence = cnode.present ? .present : .missing
-    return RawSyntax(kind: kind, layout: layout,
-      length: SourceLength(utf8Length: totalLen), presence: presence)
-  }
-}
-
-fileprivate
-func moveFromCRawNode(_ ptr: UnsafeMutableRawPointer?) -> RawSyntax? {
-  guard let ptr = ptr else {
-    return nil
-  }
   // Get ownership back from the C parser.
-  let node: RawSyntax = Unmanaged.fromOpaque(ptr).takeRetainedValue()
-  return node
-}
-
-fileprivate
-func toTrivia(_ cptr: CTriviaPiecePtr?, count: Int, offset: Int,
-              source: String) -> Trivia {
-  var pieces = [TriviaPiece]()
-  pieces.reserveCapacity(count)
-  var offs = offset
-  for i in 0..<count {
-    let c_piece = cptr![i]
-    let piece = toTriviaPiece(c_piece, offset: offs, source: source)
-    pieces.append(piece)
-    offs += Int(c_piece.length)
+    return RawSyntax.moveFromOpaque(c_top)!
   }
-  return Trivia(pieces: pieces)
-}
-
-fileprivate
-func toTriviaPiece(_ c_piece: CTriviaPiece, offset: Int,
-                   source: String) -> TriviaPiece {
-  let kind = c_piece.kind
-  let text = source.utf8Slice(offset: offset, length: Int(c_piece.length))
-  return TriviaPiece.fromRawValue(kind: kind, length: Int(c_piece.length),
-                                  text: text)
 }

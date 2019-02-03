@@ -84,7 +84,7 @@ public enum SyntaxFactory {
 
 %   if not node.is_base():
   public static func makeBlank${node.syntax_kind}() -> ${node.name} {
-    let data = SyntaxData.forRoot(RawSyntax(kind: .${node.swift_syntax_kind},
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .${node.swift_syntax_kind},
       layout: [
 %     for child in node.children:
 %       if child.is_optional:

@@ -105,7 +105,10 @@ extension TokenKind: Equatable {
 
 extension TokenKind {
   static func fromRawValue(kind: CTokenKind,
-                           text: Substring) -> TokenKind {
+                           textBuffer: UnsafeBufferPointer<UInt8>) -> TokenKind {
+    let convertToString = { () -> String in
+      return String(decoding: textBuffer, as: UTF8.self)
+    }
     switch kind {
     case 0: return .eof
 % for token in SYNTAX_TOKENS:
@@ -113,19 +116,35 @@ extension TokenKind {
 %   if token.text: # The token does not have text associated with it
       return .${token.swift_kind()}
 %   else:
-      return .${token.swift_kind()}(String(text))
+      return .${token.swift_kind()}(convertToString())
 %   end
 % end
     default:
-      if !text.isEmpty {
+      if !textBuffer.isEmpty {
         // Default to an unknown token with the passed text if we don't know
         // its kind.
-        return .unknown(String(text))
+        return .unknown(convertToString())
       } else {
         // If we were not passed the token's text, we cannot recover since we
         // would lose roundtripness.
         fatalError("unexpected token kind \(kind)")
       }
+    }
+  }
+
+  static func hasText(kind: CTokenKind) -> Bool {
+    switch kind {
+    case 0: return false
+% for token in SYNTAX_TOKENS:
+    case ${token.serialization_code}:
+%   if token.text: # The token does not have text associated with it
+      return false
+%   else:
+      return true
+%   end
+% end
+    default:
+      fatalError("unexpected token kind \(kind)")
     }
   }
 }

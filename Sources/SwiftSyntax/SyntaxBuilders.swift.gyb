@@ -45,9 +45,9 @@ public struct ${Builder} {
     if let list = layout[idx] {
       layout[idx] = list.appending(elt.raw)
     } else {
-      layout[idx] = RawSyntax(kind: SyntaxKind.${child.swift_syntax_kind},
-                              layout: [elt.raw], length: elt.raw.totalLength,
-                              presence: SourcePresence.present)
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.${child.swift_syntax_kind},
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
     }
   }
 %       else:

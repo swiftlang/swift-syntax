@@ -57,9 +57,9 @@ fileprivate func numberOfElements<T>(for value: T) -> Int {
 /// * For a parsed token (`TokenData.isConstructed` is false):
 ///   * List of leading `CTriviaPiece`s
 ///   * List of trailing `CTriviaPiece`s
-///   * A string buffer. If `TokenData.hasText` is false then the buffer is empty
+///   * A string buffer. If `TokenData.hasCustomText` is false then the buffer is empty
 ///     otherwise it contains the full text for the token, including the trivia.
-///     `TokenData.hasText` is true if there's any custom text in any of the trivia
+///     `TokenData.hasCustomText` is true if there's any custom text in any of the trivia
 ///     or the token kind.
 /// * For a constructed token (`TokenData.isConstructed` is true):
 ///   * A `ConstructedTokenData` value
@@ -277,7 +277,7 @@ fileprivate struct TokenData {
     }
   }
 
-  /// Prints the RawSyntax token. If self is a layout node it does nothing.
+  /// Prints the RawSyntax token.
   fileprivate func write<Target>(
     to target: inout Target, length: UInt32, extraPtr: DataElementPtr
   ) where Target: TextOutputStream {
@@ -298,6 +298,7 @@ fileprivate struct TokenData {
 }
 
 /// Convenience wrapper over the tail-allocated data for a token node.
+/// This is used only for tokens created during parsing.
 fileprivate struct UnsafeTokenData {
   let length: UInt32
   let tokenKind: CTokenKind

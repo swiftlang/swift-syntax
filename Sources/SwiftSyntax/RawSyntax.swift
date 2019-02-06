@@ -71,20 +71,25 @@ fileprivate struct TokenData {
   let leadingTriviaCount: UInt16
   let trailingTriviaCount: UInt16
   let tokenKind: CTokenKind
-  let hasText: Bool
+  /// Returns true if there's any custom text in any of the trivia or the token kind.
+  ///
+  /// If true then there is a string buffer in the tail-allocated storage for
+  /// the full token range (including trivia).
+  /// It is ignored for a constructed token node (`isConstructed` == true).
+  let hasCustomText: Bool
   private let isConstructed: Bool
 
   private init(
     kind: CTokenKind,
     leadingTriviaCount: UInt16,
     trailingTriviaCount: UInt16,
-    hasText: Bool,
+    hasCustomText: Bool,
     isConstructed: Bool
   ) {
     self.tokenKind = kind
     self.leadingTriviaCount = leadingTriviaCount
     self.trailingTriviaCount = trailingTriviaCount
-    self.hasText = hasText
+    self.hasCustomText = hasCustomText
     self.isConstructed = isConstructed
   }
 
@@ -104,15 +109,15 @@ fileprivate struct TokenData {
       }
       return false
     }
-    let hasText = TokenKind.hasText(kind: data.kind) ||
+    let hasCustomText = TokenKind.hasText(kind: data.kind) ||
       hasTriviaText(leadingTriviaCount, data.leading_trivia) ||
       hasTriviaText(trailingTriviaCount, data.trailing_trivia)
-    let textSize = hasText ? Int(cnode.range.length) : 0
+    let textSize = hasCustomText ? Int(cnode.range.length) : 0
 
     let rawData: RawSyntaxData = .token(.init(kind: data.kind,
       leadingTriviaCount: data.leading_trivia_count,
       trailingTriviaCount: data.trailing_trivia_count,
-      hasText: hasText, isConstructed: false))
+      hasCustomText: hasCustomText, isConstructed: false))
 
     let capacity = totalTrivia + numberOfElements(forBytes: textSize)
     return (rawData, capacity)
@@ -122,7 +127,7 @@ fileprivate struct TokenData {
   static func initializeExtra(
     _ cnode: CSyntaxNode,
     source: String,
-    hasText: Bool,
+    hasCustomText: Bool,
     extraPtr: MutableDataElementPtr
   ) {
     let data = cnode.token_data
@@ -138,7 +143,8 @@ fileprivate struct TokenData {
       curPtr = curPtr.successor()
     }
 
-    if hasText {
+    if hasCustomText {
+      // Copy the full token text, including trivia.
       let startOffset = Int(cnode.range.offset)
       var charPtr = UnsafeMutablePointer<UInt8>(curPtr)
       let utf8 = source.utf8
@@ -158,7 +164,7 @@ fileprivate struct TokenData {
     let rawData: RawSyntaxData = .token(.init(kind: /*irrelevant*/0,
       leadingTriviaCount: UInt16(truncatingIfNeeded: data.leadingTrivia.count),
       trailingTriviaCount: UInt16(truncatingIfNeeded: data.trailingTrivia.count),
-      hasText: /*irrelevant*/false, isConstructed: true))
+      hasCustomText: /*irrelevant*/false, isConstructed: true))
     let capacity = numberOfElements(for: data)
     return (rawData, capacity)
   }
@@ -194,13 +200,13 @@ fileprivate struct TokenData {
     let trailingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece> =
       .init(start: castElementAs(curPtr), count: trailingTriviaCount)
     curPtr = curPtr.advanced(by: trailingTriviaCount)
-    let textSize = hasText ? Int(length) : 0
+    let textSize = hasCustomText ? Int(length) : 0
     let textBuffer: UnsafeBufferPointer<UInt8> =
       .init(start: castElementAs(curPtr), count: textSize)
     return .init(length: length, tokenKind: tokenKind,
       leadingTriviaBuffer: leadingTriviaBuffer,
       trailingTriviaBuffer: trailingTriviaBuffer,
-      fullTextBuffer: textBuffer)
+      fullTextBuffer: textBuffer, hasCustomText: hasCustomText)
   }
 
   fileprivate func formTokenKind(
@@ -298,15 +304,16 @@ fileprivate struct UnsafeTokenData {
   let leadingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
   let trailingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
   let fullTextBuffer: UnsafeBufferPointer<UInt8>
-
-  var hasText: Bool { return fullTextBuffer.count != 0 }
+  let hasCustomText: Bool
 
   static var emptyBuffer: UnsafeBufferPointer<UInt8> {
     return .init(start: nil, count: 0)
   }
 
   func formTokenKind() -> TokenKind {
-    if !hasText {
+    if fullTextBuffer.isEmpty {
+      // Fast path, there's no text in the buffer so no need to determine the
+      // token length.
       return TokenKind.fromRawValue(kind: tokenKind,
         textBuffer: UnsafeTokenData.emptyBuffer)
     }
@@ -320,7 +327,9 @@ fileprivate struct UnsafeTokenData {
   func formLeadingTrivia() -> Trivia {
     var newPieces: [TriviaPiece] = []
     newPieces.reserveCapacity(leadingTriviaBuffer.count)
-    if !hasText {
+    if fullTextBuffer.isEmpty {
+      // Fast path, there's no text in the buffer so no need to determine the
+      // trivia piece length.
       for cpiece in leadingTriviaBuffer {
         let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
           length: Int(cpiece.length), textBuffer: UnsafeTokenData.emptyBuffer)
@@ -343,7 +352,9 @@ fileprivate struct UnsafeTokenData {
   func formTrailingTrivia() -> Trivia {
     var newPieces: [TriviaPiece] = []
     newPieces.reserveCapacity(trailingTriviaBuffer.count)
-    if !hasText {
+    if fullTextBuffer.isEmpty {
+      // Fast path, there's no text in the buffer so no need to determine the
+      // trivia piece length.
       for cpiece in trailingTriviaBuffer {
         let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
           length: Int(cpiece.length), textBuffer: UnsafeTokenData.emptyBuffer)
@@ -369,7 +380,8 @@ fileprivate struct UnsafeTokenData {
   func write<Target>(
     to target: inout Target
   ) where Target: TextOutputStream {
-    if hasText {
+    if hasCustomText {
+      // Fast path, we recorded the full token text, including trivia.
       // FIXME: A way to print the buffer directly and avoid the copy ?
       target.write(String.fromBuffer(fullTextBuffer))
     } else {
@@ -763,7 +775,7 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
       switch $0.pointee.data {
       case .token(let tokdata):
         TokenData.initializeExtra(cnode, source: source,
-          hasText: tokdata.hasText, extraPtr: $1)
+          hasCustomText: tokdata.hasCustomText, extraPtr: $1)
       case .layout(_):
         LayoutData.initializeExtra(cnode.layout_data, extraPtr: $1)
       }

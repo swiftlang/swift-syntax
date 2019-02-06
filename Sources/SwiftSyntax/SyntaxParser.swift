@@ -34,13 +34,13 @@ public enum ParserError: Error, CustomStringConvertible {
   case invalidSyntaxData
 
   /// The SwiftSyntax parser library isn't compatible with this client
-  case hashVerificationFailed
+  case parserCompatibilityCheckFailed
 
   public var description: String {
     switch self {
     case .invalidSyntaxData:
       return "parser created invalid syntax data"
-    case .hashVerificationFailed:
+    case .parserCompatibilityCheckFailed:
       return "SwiftSyntax parser library isn't compatible"
     }
   }
@@ -83,13 +83,16 @@ public struct SyntaxParser {
     source: String,
     parseLookup: IncrementalParseLookup? = nil
   ) throws -> SourceFileSyntax {
+    guard nodeHashVerifyResult else {
+      throw ParserError.parserCompatibilityCheckFailed
+    }
     // Get a native UTF8 string for efficient indexing with UTF8 byte offsets.
     // If the string is backed by an NSString then such indexing will become
     // extremely slow.
     var utf8Source = source
     utf8Source.makeNativeUTF8IfNeeded()
 
-    let rawSyntax = try parseRaw(utf8Source, parseLookup: parseLookup)
+    let rawSyntax = parseRaw(utf8Source, parseLookup: parseLookup)
 
     guard let file = makeSyntax(rawSyntax) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
@@ -117,11 +120,8 @@ public struct SyntaxParser {
   private static func parseRaw(
     _ source: String,
     parseLookup: IncrementalParseLookup?
-  ) throws -> RawSyntax {
+  ) -> RawSyntax {
     assert(source.isNativeUTF8)
-    guard nodeHashVerifyResult else {
-      throw ParserError.hashVerificationFailed
-    }
     let c_parser = swiftparse_parser_create()
     defer {
       swiftparse_parser_dispose(c_parser)

@@ -286,13 +286,7 @@ fileprivate struct TokenData {
       return data.write(to: &target)
     } else {
       let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
-      for piece in tok.leadingTrivia {
-        piece.write(to: &target)
-      }
-      target.write(tok.kind.text)
-      for piece in tok.trailingTrivia {
-        piece.write(to: &target)
-      }
+      tok.write(to: &target)
     }
   }
 }
@@ -574,7 +568,7 @@ fileprivate struct ConstructedTokenData {
   let leadingTrivia: Trivia
   let trailingTrivia: Trivia
 
-  func writeToken<Target>(
+  func write<Target>(
     to target: inout Target
   ) where Target: TextOutputStream {
     for piece in leadingTrivia {

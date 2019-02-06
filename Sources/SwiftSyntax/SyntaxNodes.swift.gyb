@@ -19,6 +19,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import _InternalSwiftSyntaxParser
+
 %{
 """
 Each Syntax node implements the protocol of a more generic node. For example,
@@ -198,5 +200,12 @@ extension StructDeclSyntax {
       leadingTrivia: identifier.leadingTrivia,
       trailingTrivia: identifier.trailingTrivia)
     return withIdentifier(newToken)
+  }
+}
+
+extension SyntaxParser {
+  static func verifyNodeDeclarationHash() -> Bool {
+    return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
+      "${calculate_node_hash()}"
   }
 }

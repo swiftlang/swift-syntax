@@ -33,10 +33,15 @@ public enum ParserError: Error, CustomStringConvertible {
   /// normal circumstances, and it should be reported as a bug.
   case invalidSyntaxData
 
+  /// The SwiftSyntax parser library isn't compatible with this client
+  case hashVerificationFailed
+
   public var description: String {
     switch self {
     case .invalidSyntaxData:
       return "parser created invalid syntax data"
+    case .hashVerificationFailed:
+      return "SwiftSyntax parser library isn't compatible"
     }
   }
 }
@@ -61,6 +66,11 @@ public protocol IncrementalParseLookup {
 
 /// Namespace for functions to parse swift source and retrieve a syntax tree.
 public struct SyntaxParser {
+
+  /// True if the parser library is compatible with the SwiftSyntax client;
+  /// false otherwise.
+  fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
+
   /// Parses the string into a full-fidelity Syntax tree.
   ///
   /// - Parameters:
@@ -79,7 +89,7 @@ public struct SyntaxParser {
     var utf8Source = source
     utf8Source.makeNativeUTF8IfNeeded()
 
-    let rawSyntax = parseRaw(utf8Source, parseLookup: parseLookup)
+    let rawSyntax = try parseRaw(utf8Source, parseLookup: parseLookup)
 
     guard let file = makeSyntax(rawSyntax) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
@@ -107,9 +117,11 @@ public struct SyntaxParser {
   private static func parseRaw(
     _ source: String,
     parseLookup: IncrementalParseLookup?
-  ) -> RawSyntax {
+  ) throws -> RawSyntax {
     assert(source.isNativeUTF8)
-
+    guard nodeHashVerifyResult else {
+      throw ParserError.hashVerificationFailed
+    }
     let c_parser = swiftparse_parser_create()
     defer {
       swiftparse_parser_dispose(c_parser)

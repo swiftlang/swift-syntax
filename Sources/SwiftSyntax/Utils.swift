@@ -70,6 +70,12 @@ public struct SourceEdit {
 }
 
 extension String {
+  static func fromBuffer(_ textBuffer: UnsafeBufferPointer<UInt8>) -> String {
+    // The string function crashes if the buffer is empty with nil pointer (SR-9869).
+    guard !textBuffer.isEmpty else { return String() }
+    return String(decoding: textBuffer, as: UTF8.self)
+  }
+
   var isNativeUTF8: Bool {
     return utf8.withContiguousStorageIfAvailable { _ in 0 } != nil
   }

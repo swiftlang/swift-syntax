@@ -169,7 +169,7 @@ extension TriviaPiece {
 %   if trivia.is_collection():
       return .${trivia.lower_name}s(length/${trivia.characters_len()})
 %   else:
-      return .${trivia.lower_name}(String(decoding: textBuffer, as: UTF8.self))
+      return .${trivia.lower_name}(.fromBuffer(textBuffer))
 %   end
 % end
     default:

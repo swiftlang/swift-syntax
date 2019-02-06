@@ -371,7 +371,7 @@ fileprivate struct UnsafeTokenData {
   ) where Target: TextOutputStream {
     if hasText {
       // FIXME: A way to print the buffer directly and avoid the copy ?
-      target.write(String(decoding: fullTextBuffer, as: UTF8.self))
+      target.write(String.fromBuffer(fullTextBuffer))
     } else {
       func printTrivia(_ buf: UnsafeBufferPointer<CTriviaPiece>) {
         let emptyBuffer: UnsafeBufferPointer<UInt8> = .init(start: nil, count: 0)

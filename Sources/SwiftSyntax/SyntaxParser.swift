@@ -33,10 +33,15 @@ public enum ParserError: Error, CustomStringConvertible {
   /// normal circumstances, and it should be reported as a bug.
   case invalidSyntaxData
 
+  /// The SwiftSyntax parser library isn't compatible with this client
+  case parserCompatibilityCheckFailed
+
   public var description: String {
     switch self {
     case .invalidSyntaxData:
       return "parser created invalid syntax data"
+    case .parserCompatibilityCheckFailed:
+      return "SwiftSyntax parser library isn't compatible"
     }
   }
 }
@@ -61,6 +66,11 @@ public protocol IncrementalParseLookup {
 
 /// Namespace for functions to parse swift source and retrieve a syntax tree.
 public struct SyntaxParser {
+
+  /// True if the parser library is compatible with the SwiftSyntax client;
+  /// false otherwise.
+  fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
+
   /// Parses the string into a full-fidelity Syntax tree.
   ///
   /// - Parameters:
@@ -73,6 +83,9 @@ public struct SyntaxParser {
     source: String,
     parseLookup: IncrementalParseLookup? = nil
   ) throws -> SourceFileSyntax {
+    guard nodeHashVerifyResult else {
+      throw ParserError.parserCompatibilityCheckFailed
+    }
     // Get a native UTF8 string for efficient indexing with UTF8 byte offsets.
     // If the string is backed by an NSString then such indexing will become
     // extremely slow.
@@ -109,7 +122,6 @@ public struct SyntaxParser {
     parseLookup: IncrementalParseLookup?
   ) -> RawSyntax {
     assert(source.isNativeUTF8)
-
     let c_parser = swiftparse_parser_create()
     defer {
       swiftparse_parser_dispose(c_parser)

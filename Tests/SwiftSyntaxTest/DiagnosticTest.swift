@@ -69,14 +69,14 @@ public class DiagnosticTestCase: XCTestCase {
     // engine.addConsumer(PrintingDiagnosticConsumer())
     let url = getInput("diagnostics.swift")
 
-    class Visitor: SyntaxVisitor {
+    struct Visitor: SyntaxVisitor {
       let converter: SourceLocationConverter
       let engine: DiagnosticEngine
       init(converter: SourceLocationConverter, engine: DiagnosticEngine) {
         self.converter = converter
         self.engine = engine
       }
-      override func visit(_ function: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+      func visit(_ function: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
         let startLoc = function.identifier.startLocation(converter: converter)
         let endLoc = function.endLocation(converter: converter)
         engine.diagnose(.badFunction(function.identifier), location: startLoc) {
@@ -90,7 +90,8 @@ public class DiagnosticTestCase: XCTestCase {
     XCTAssertNoThrow(try {
       let file = try SyntaxParser.parse(url)
       let converter = SourceLocationConverter(file: url.path, tree: file)
-      file.walk(Visitor(converter: converter, engine: engine))
+      var visitor = Visitor(converter: converter, engine: engine)
+      file.walk(&visitor)
     }())
 
      XCTAssertEqual(6, engine.diagnostics.count)

@@ -54,7 +54,7 @@ open class SyntaxRewriter {
     return nil
   }
 
-  /// The function called after visting the node and its descendents.
+  /// The function called after visiting the node and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: Syntax) {}
 
@@ -111,198 +111,177 @@ public enum SyntaxVisitorContinueKind {
   case skipChildren
 }
 
-open class SyntaxVisitor {
-    public init() {}
+public protocol SyntaxVisitor {
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
-  /// Visting ${node.name} specifically.
+  /// Visiting `${node.name}` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-%   end
-% end
+  mutating func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind
 
-  /// Visting UnknownSyntax specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// Whether we should ever visit a given syntax kind.
-  ///   - Parameter kind: the input kind we're checking.
-  ///   - Returns: whether we should visit syntax nodes of this kind.
-  open func shouldVisit(_ kind: SyntaxKind) -> Bool {
-    return true
-  }
-
-  /// Whether we should ever visit a given token kind.
-  ///   - Parameter kind: the input token kind we're checking.
-  ///   - Returns: whether we should visit tokens of this kind.
-  open func shouldVisit(_ kind: TokenKind) -> Bool {
-    return true
-  }
-
-  open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return .skipChildren
-  }
-
-  /// The function called before visiting the node and its descendents.
-  ///   - node: the node we are about to visit.
-  open func visitPre(_ node: Syntax) {}
-
-  /// The function called after visting the node and its descendents.
+  /// The function called after visiting `${node.name}` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: Syntax) {}
-
-  public func visit(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    switch node.raw.kind {
-    case .token: return visit(node as! TokenSyntax)
-% for node in SYNTAX_NODES:
-%   if is_visitable(node):
-    case .${node.swift_syntax_kind}: return visit(node as! ${node.name})
+  mutating func visitPost(_ node: ${node.name})
 %   end
 % end
-    case .unknown: return visit(node as! UnknownSyntax)
-    default: return .skipChildren
-    }
+
+  /// Visiting `TokenSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind
+
+  /// The function called after visiting the node and its descendents.
+  ///   - node: the node we just finished visiting.
+  mutating func visitPost(_ node: TokenSyntax)
+
+  /// Visiting `UnknownSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind
+
+  /// The function called after visiting the node and its descendents.
+  ///   - node: the node we just finished visiting.
+  mutating func visitPost(_ node: UnknownSyntax)
+}
+
+public extension SyntaxVisitor {
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  mutating func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  mutating func visitPost(_ node: ${node.name}) {}
+%   end
+% end
+
+  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  mutating func visitPost(_ node: TokenSyntax) {}
+
+  mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  mutating func visitPost(_ node: UnknownSyntax) {}
+}
+
+/// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
+///
+/// This is a separate protocol because this kind of visitation is slower than
+/// the type-specific visitation of `SyntaxVisitor`. Use `SyntaxAnyVisitor` if
+/// the `visitAny(_)` function would be useful to have, otherwise use
+/// `SyntaxVisitor`.
+///
+/// This works by introducing default implementations of the type-specific
+/// visit function that delegate to `visitAny(_)`. A conformant type that
+/// provides a custom type-specific visit function, should also call
+/// `visitAny(_)` in its implementation, if calling `visitAny` is needed:
+///
+///     struct MyVisitor: SyntaxAnyVisitor {
+///       func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+///         <code>
+///       }
+///
+///       func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+///         <code>
+///         // Call this to pass tokens to `visitAny(_)` as well if needed
+///         visitAny(token)
+///       }
+///
+public protocol SyntaxAnyVisitor: SyntaxVisitor {
+  mutating func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind
+  mutating func visitAnyPost(_ node: Syntax)
+}
+
+public extension SyntaxAnyVisitor {
+  mutating func visitAnyPost(_ node: Syntax) {}
+
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  mutating func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+    return visitAny(node)
+  }
+  mutating func visitPost(_ node: ${node.name}) {
+    return visitAnyPost(node)
+  }
+%   end
+% end
+
+  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(token)
+  }
+  mutating func visitPost(_ node: TokenSyntax) {
+    return visitAnyPost(node)
+  }
+
+  mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node)
+  }
+  mutating func visitPost(_ node: UnknownSyntax) {
+    return visitAnyPost(node)
   }
 }
 
-
-/// A wrapper over Syntax. A syntax node is only realized when explicitly asked;
-/// otherwise the node is represented as a child index list from a realized
-/// ancestor.
-class PendingSyntaxNode {
-  let parent: PendingSyntaxNode!
-  private var kind: PendingSyntaxNodeKind
-
-  private enum PendingSyntaxNodeKind {
-    /// We already have a `Syntax` node realised for this node
-    case realized(node: Syntax)
-    /// This node does not have a `Syntax` node instantiated yet. If needed, we
-    /// need to compute it from its parent RawSyntax node
-    case virtual(index: Int)
-  }
-
-  var node: Syntax {
-    switch kind {
-    case .realized(let node):
-      return node
-    case .virtual(let index):
-      let base = parent.node.base
-      let data = base.data.child(at: index, parent: base)!
-      let _node = makeSyntax(data)
-      kind = .realized(node: _node)
-      return _node
-    }
-  }
-
-  init(_ root: Syntax) {
-    self.parent = nil
-    self.kind = .realized(node: root)
-  }
-
-  init(_ parent: PendingSyntaxNode, _ idx: Int) {
-    self.parent = parent
-    self.kind = .virtual(index: idx)
-  }
-}
-
-
-/// The raw syntax walker traverses the raw syntax tree to find
-/// node kinds the SyntaxVisitor is interested and feed these syntax nodes to
-/// SyntaxVisitor.
-/// By traversing the raw syntax tree, we avoid realizing syntax nodes that're
-/// not interesting to users' SyntaxVisitor.
-class RawSyntaxVisitor {
-  private let visitor: SyntaxVisitor
-  private var currentNode: PendingSyntaxNode!
-
-  required init(_ visitor: SyntaxVisitor, _ root: Syntax) {
-    self.visitor = visitor
-    self.currentNode = PendingSyntaxNode(root)
-  }
-
-  func shouldVisit(_ kind: SyntaxKind) -> Bool {
-    return visitor.shouldVisit(kind)
-  }
-
-  func shouldVisit(_ kind: TokenKind) -> Bool {
-    return visitor.shouldVisit(kind)
-  }
-
-  func addChildIdx(_ idx: Int) {
-    currentNode = PendingSyntaxNode(currentNode, idx)
-  }
-
-  func moveUp() {
-    currentNode = currentNode.parent
-  }
-
-  func visitPre() {
-    visitor.visitPre(currentNode.node)
-  }
-
-  func visitPost() {
-    visitor.visitPost(currentNode.node)
-  }
-
-  // The current raw syntax node is interesting for the user, so realize a
-  // correponding syntax node and feed it into the visitor.
-  func visit() -> SyntaxVisitorContinueKind {
-    return visitor.visit(currentNode.node)
+extension _SyntaxBase {
+  func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
+    guard isPresent else { return }
+    return doVisit(data, &visitor)
   }
 }
 
 extension Syntax {
-  public func walk(_ visitor: SyntaxVisitor) {
-
-    // Traverse the raw syntax tree by using the current syntax node as root.
-    raw.accept(RawSyntaxVisitor(visitor, self))
+  public func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
+    return base.walk(&visitor)
   }
 }
 
-public enum SyntaxVerifierError: Error, CustomStringConvertible {
-  case unknownSyntaxFound(node: Syntax)
-
-  public var description: String {
-    switch self {
-      case .unknownSyntaxFound(let node):
-        return "unknown syntax node for \"\(node)\""
+fileprivate func doVisit<Visitor>(
+  _ data: SyntaxData, _ visitor: inout Visitor
+) where Visitor : SyntaxVisitor {
+  // Create the node types directly instead of going through `makeSyntax()`
+  // which has additional cost for casting back and forth from `_SyntaxBase`.
+  switch data.raw.kind {
+  case .token:
+    let node = TokenSyntax(data)
+    _ = visitor.visit(node)
+    // No children to visit.
+    visitor.visitPost(node)
+  case .unknown:
+    let node = UnknownSyntax(data)
+    let needsChildren = visitor.visit(node) == .visitChildren
+    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
+    if needsChildren && data.raw.numberOfChildren > 0 {
+      visitChildren(data, parent: node, &visitor)
     }
+    visitor.visitPost(node)
+% for node in SYNTAX_NODES:
+  case .${node.swift_syntax_kind}:
+%   if node.is_base():
+    let node = Unknown${node.name}(data)
+    let needsChildren = visitor.visit(node) == .visitChildren
+    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
+    if needsChildren && data.raw.numberOfChildren > 0 {
+      visitChildren(data, parent: node, &visitor)
+    }
+    visitor.visitPost(node)
+%   else:
+    let node = ${node.name}(data)
+    let needsChildren = visitor.visit(node) == .visitChildren
+    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
+    if needsChildren && data.raw.numberOfChildren > 0 {
+      visitChildren(data, parent: node, &visitor)
+    }
+    visitor.visitPost(node)
+%   end
+% end
   }
 }
 
-public class SyntaxVerifier: SyntaxVisitor {
-
-  var unknownNodes: [Syntax] = []
-
-  override public func shouldVisit(_ node: SyntaxKind) -> Bool {
-    return node.isUnknown
-  }
-
-  override public func shouldVisit(_ node: TokenKind) -> Bool {
-    return false
-  }
-
-  override public func visitPre(_ node: Syntax) {
-    assert(node.isUnknown)
-    unknownNodes.append(node)
-  }
-
-  private func verify(_ node: Syntax) throws {
-    node.walk(self)
-    if let unknownNode = unknownNodes.first {
-      throw SyntaxVerifierError.unknownSyntaxFound(node: unknownNode)
-    }
-  }
-
-  private override init() {}
-
-  public static func verify(_ node: Syntax) throws {
-    try SyntaxVerifier().verify(node)
+fileprivate func visitChildren<Visitor>(
+  _ data: SyntaxData, parent: _SyntaxBase, _ visitor: inout Visitor
+) where Visitor : SyntaxVisitor {
+  for childRaw in PresentRawSyntaxChildren(data.absoluteRaw) {
+    let childData = SyntaxData(childRaw, parent: parent)
+    doVisit(childData, &visitor)
   }
 }

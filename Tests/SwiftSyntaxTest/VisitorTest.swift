@@ -11,18 +11,18 @@ public class SyntaxVisitorTestCase: XCTestCase {
   ]
 
   public func testBasic() {
-    class FuncCounter: SyntaxVisitor {
+    struct FuncCounter: SyntaxVisitor {
       var funcCount = 0
-      override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+      mutating func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
         funcCount += 1
         return .visitChildren
       }
     }
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
-      let counter = FuncCounter()
+      var counter = FuncCounter()
       let hashBefore = parsed.hashValue
-      parsed.walk(counter)
+      parsed.walk(&counter)
       XCTAssertEqual(counter.funcCount, 3)
       XCTAssertEqual(hashBefore, parsed.hashValue)
     }())
@@ -67,10 +67,10 @@ public class SyntaxVisitorTestCase: XCTestCase {
   }
 
   public func testSyntaxRewriterVisitCollection() {
-    class VisitCollections: SyntaxVisitor {
+    struct VisitCollections: SyntaxVisitor {
       var numberOfCodeBlockItems = 0
 
-      override func visit(_ items: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+      mutating func visit(_ items: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
         numberOfCodeBlockItems += items.count
         return .visitChildren
       }
@@ -78,8 +78,8 @@ public class SyntaxVisitorTestCase: XCTestCase {
 
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("nested-blocks.swift"))
-      let visitor = VisitCollections()
-      parsed.walk(visitor)
+      var visitor = VisitCollections()
+      parsed.walk(&visitor)
       XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
     }())
   }

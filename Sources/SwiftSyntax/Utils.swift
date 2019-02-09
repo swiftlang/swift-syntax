@@ -70,6 +70,10 @@ public struct SourceEdit {
 }
 
 extension String {
+  static func fromBuffer(_ textBuffer: UnsafeBufferPointer<UInt8>) -> String {
+    return String(decoding: textBuffer, as: UTF8.self)
+  }
+
   var isNativeUTF8: Bool {
     return utf8.withContiguousStorageIfAvailable { _ in 0 } != nil
   }

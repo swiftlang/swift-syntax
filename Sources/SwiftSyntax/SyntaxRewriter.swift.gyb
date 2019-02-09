@@ -92,7 +92,7 @@ open class SyntaxRewriter {
     }
 
     // Sanity check, ensure the new children are the same length.
-    assert(newLayout.count == node.raw.layout.count)
+    assert(newLayout.count == node.raw.numberOfChildren)
 
     let newRaw = node.raw.replacingLayout(newLayout)
     let newData = node.base.data.replacingSelf(newRaw)

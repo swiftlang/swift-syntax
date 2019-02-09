@@ -130,10 +130,8 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
     if let col = raw[Cursor.${child.swift_name}] {
       collection = col.appending(element.raw)
     } else {
-      collection = RawSyntax(kind: SyntaxKind.${child_node.swift_syntax_kind},
-                             layout: [element.raw],
-                             length: element.raw.totalLength,
-                             presence: .present)
+      collection = RawSyntax.create(kind: SyntaxKind.${child_node.swift_syntax_kind},
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
     }
     let newData = data.replacingChild(collection,
                                       at: Cursor.${child.swift_name})

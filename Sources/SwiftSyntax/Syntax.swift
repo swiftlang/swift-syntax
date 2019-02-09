@@ -191,14 +191,14 @@ extension _SyntaxBase {
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
   var leadingTrivia: Trivia? {
-    return raw.leadingTrivia
+    return raw.formLeadingTrivia()
   }
 
   /// The trailing trivia of this syntax node. Trailing trivia is attached to
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
   var trailingTrivia: Trivia? {
-    return raw.trailingTrivia
+    return raw.formTrailingTrivia()
   }
 
   /// The length this node's leading trivia takes up spelled out in source.
@@ -497,7 +497,7 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
       fatalError("TokenSyntax must have token as its raw")
     }
     let newRaw = RawSyntax.createAndCalcLength(kind: tokenKind,
-      leadingTrivia: raw.leadingTrivia!, trailingTrivia: raw.trailingTrivia!,
+      leadingTrivia: raw.formLeadingTrivia()!, trailingTrivia: raw.formTrailingTrivia()!,
       presence: raw.presence)
     let newData = data.replacingSelf(newRaw)
     return TokenSyntax(newData)
@@ -509,8 +509,8 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax.createAndCalcLength(kind: raw.tokenKind!,
-      leadingTrivia: leadingTrivia, trailingTrivia: raw.trailingTrivia!,
+    let newRaw = RawSyntax.createAndCalcLength(kind: raw.formTokenKind()!,
+      leadingTrivia: leadingTrivia, trailingTrivia: raw.formTrailingTrivia()!,
       presence: raw.presence)
     let newData = data.replacingSelf(newRaw)
     return TokenSyntax(newData)
@@ -522,8 +522,8 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax.createAndCalcLength(kind: raw.tokenKind!,
-                           leadingTrivia: raw.leadingTrivia!,
+    let newRaw = RawSyntax.createAndCalcLength(kind: raw.formTokenKind()!,
+                           leadingTrivia: raw.formLeadingTrivia()!,
                            trailingTrivia: trailingTrivia,
                            presence: raw.presence)
     let newData = data.replacingSelf(newRaw)
@@ -547,26 +547,17 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
 
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return raw.leadingTrivia!
+    return raw.formLeadingTrivia()!
   }
 
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return raw.trailingTrivia!
+    return raw.formTrailingTrivia()!
   }
 
   /// The kind of token this node represents.
   public var tokenKind: TokenKind {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return raw.tokenKind!
+    return raw.formTokenKind()!
   }
 
   /// The length this node takes up spelled out in the source, excluding its

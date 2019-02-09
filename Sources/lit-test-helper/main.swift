@@ -272,12 +272,12 @@ func performParseIncremental(args: CommandLineArguments) throws {
   let preEditTree = try SyntaxParser.parse(preEditURL)
   let edits = try parseIncrementalEditArguments(args: args)
   let regionCollector = IncrementalParseReusedNodeCollector()
-  let editTransition = IncrementalEditTransition(previousTree: preEditTree,
+  let editTransition = IncrementalParseTransition(previousTree: preEditTree,
     edits: edits, reusedNodeDelegate: regionCollector)
 
   let postEditText = try String(contentsOf: postEditURL)
   let postEditTree =
-    try SyntaxParser.parse(source: postEditText, parseLookup: editTransition)
+    try SyntaxParser.parse(source: postEditText, parseTransition: editTransition)
 
   let postTreeDump = postEditTree.description
 

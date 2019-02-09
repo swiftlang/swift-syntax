@@ -14,8 +14,8 @@ public class IncrementalParsingTestCase: XCTestCase {
 
     var tree = try! SyntaxParser.parse(source: original)
     let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
-    let lookup = IncrementalEditTransition(previousTree: tree, edits: [sourceEdit])
-    tree = try! SyntaxParser.parse(source: step.0, parseLookup: lookup)
+    let lookup = IncrementalParseTransition(previousTree: tree, edits: [sourceEdit])
+    tree = try! SyntaxParser.parse(source: step.0, parseTransition: lookup)
     XCTAssertEqual("\(tree)", step.0)
   }
 }

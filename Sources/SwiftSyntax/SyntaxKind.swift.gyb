@@ -21,14 +21,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-public enum SyntaxKind: String {
-  case token = "Token"
-  case unknown = "Unknown"
+internal enum SyntaxKind: CSyntaxKind {
+  case token = 0
+  case unknown = 1
 % for node in SYNTAX_NODES:
-  case ${node.swift_syntax_kind} = "${node.syntax_kind}"
+  case ${node.swift_syntax_kind} = ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}
 % end
 
 % for name, nodes in grouped_nodes.items():
@@ -56,11 +54,11 @@ public enum SyntaxKind: String {
     default: return false
     }
   }
+}
 
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.singleValueContainer()
-    let kind = try container.decode(String.self)
-    self = SyntaxKind(rawValue: kind) ?? .unknown
+extension SyntaxKind {
+  static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
+    return SyntaxKind(rawValue: rawValue)!
   }
 }
 
@@ -81,27 +79,5 @@ internal func makeSyntax(_ data: SyntaxData) -> _SyntaxBase {
     return ${node.name}(data)
 %   end
 % end
-  }
-}
-
-
-extension SyntaxKind {
-  static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
-    // Explicitly spell out all SyntaxKinds to keep the serialized value stable
-    // even if its members get reordered or members get removed
-    switch rawValue {
-    case 0:
-      return .token
-    case 1:
-      return .unknown
-% for name, nodes in grouped_nodes.items():
-%   for node in nodes:
-    case ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}:
-      return .${node.swift_syntax_kind}
-%   end
-% end
-    default:
-      return .unknown
-    }
   }
 }

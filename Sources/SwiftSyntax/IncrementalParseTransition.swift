@@ -1,4 +1,4 @@
-//===------ IncrementalEditTransition.swift - Edit Transition State -------===//
+//===------ IncrementalParseTransition.swift - Parse Transition State -----===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Accepts the re-used `Syntax` nodes that `IncrementalEditTransition`
+/// Accepts the re-used `Syntax` nodes that `IncrementalParseTransition`
 /// determined they should be re-used for a parse invocation.
 ///
 /// The client can use this information to potentially avoid unnecessary work
@@ -42,10 +42,10 @@ public final class IncrementalParseReusedNodeCollector:
 }
 
 /// Keeps track of a previously parsed syntax tree and the source edits that
-/// occurred since it was created and provides the `IncrementalParseLookup`
-/// implementation to allow the parser to skip regions of the new source that
-/// can be associated with valid `Syntax` nodes from the previous tree.
-public final class IncrementalEditTransition: IncrementalParseLookup {
+/// occurred since it was created and provides a mechanism for the parser to
+/// skip regions of an incrementally updated source that was already parsed
+/// during a previous parse invocation.
+public final class IncrementalParseTransition {
   // The implementation is based on `SyntaxParsingCache` from the swift
   // repository.
 
@@ -65,7 +65,7 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
   public init(previousTree: SourceFileSyntax,
               edits: [SourceEdit],
               reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
-    assert(IncrementalEditTransition.isEditArrayValid(edits))
+    assert(IncrementalParseTransition.isEditArrayValid(edits))
     self.previousTree = previousTree
     self.edits = edits
     self.reusedDelegate = reusedNodeDelegate
@@ -88,7 +88,19 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
     return true
   }
 
-  public func lookUp(_ newOffset: Int, kind: SyntaxKind) -> Syntax? {
+  /// Does a lookup to see if the current source `offset` should be associated
+  /// with a known `Syntax` node and its region skipped during parsing.
+  ///
+  /// The implementation is responsible for checking whether an incremental edit
+  /// has invalidated the previous `Syntax` node.
+  ///
+  /// - Parameters:
+  ///   - offset: The byte offset of the source string that is currently parsed.
+  ///   - kind: The `SyntaxKind` that the parser expects at this position.
+  /// - Returns: A `Syntax` node from the previous parse invocation,
+  ///            representing the contents of this region, if it is still valid
+  ///            to re-use. `nil` otherwise.
+  func lookUp(_ newOffset: Int, kind: SyntaxKind) -> _SyntaxBase? {
     guard let prevOffset = translateToPreEditOffset(newOffset) else {
       return nil
     }
@@ -117,7 +129,7 @@ public final class IncrementalEditTransition: IncrementalParseLookup {
       }
       let childEnd = childOffset + child.byteSize
       if childOffset <= prevOffset && prevOffset < childEnd {
-        return lookUpFrom(child.base, nodeOffset: childOffset,
+        return lookUpFrom(child, nodeOffset: childOffset,
                           prevOffset: prevOffset, kind: kind)
       }
       // The next child starts where the previous child ended

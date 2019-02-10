@@ -18,6 +18,7 @@ public class SyntaxCollectionsAPITestCase: XCTestCase {
     ("testRemovingLastElement", testRemovingLastElement),
     ("testRemovingElement", testRemovingElement),
     ("testReplacingElement", testReplacingElement),
+    ("testIteration", testIteration),
   ]
 
   public func testAppendingElement() {
@@ -111,5 +112,31 @@ public class SyntaxCollectionsAPITestCase: XCTestCase {
 
       XCTAssertNotNil(newArrayElementList.child(at: 2))
       XCTAssertEqual("\(newArrayElementList.child(at: 2)!)", "3")
+  }
+
+  public func testIteration() {
+    let arrayElementList = SyntaxFactory.makeArrayElementList([
+        integerLiteralElement(0),
+        integerLiteralElement(1),
+        integerLiteralElement(2)
+    ])
+
+    let elems = Array(arrayElementList)
+    XCTAssertEqual(elems.count, 3)
+    guard elems.count == 3 else {
+      return
+    }
+    XCTAssertEqual("\(elems[0])", "0")
+    XCTAssertEqual("\(elems[1])", "1")
+    XCTAssertEqual("\(elems[2])", "2")
+
+    let relems = Array(arrayElementList.reversed())
+    XCTAssertEqual(relems.count, 3)
+    guard relems.count == 3 else {
+      return
+    }
+    XCTAssertEqual("\(relems[2])", "0")
+    XCTAssertEqual("\(relems[1])", "1")
+    XCTAssertEqual("\(relems[0])", "2")
   }
 }

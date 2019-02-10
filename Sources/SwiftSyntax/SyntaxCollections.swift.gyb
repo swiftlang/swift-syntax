@@ -157,6 +157,22 @@ public struct ${node.name}: _SyntaxBase, Hashable, SyntaxCollection {
 
 /// Conformance for `${node.name}`` to the Sequence protocol.
 extension ${node.name}: Sequence {
+  fileprivate static func nextElement<Iter>(
+    _ iterator: inout Iter, parent: _SyntaxBase
+  ) -> ${node.collection_element_type}? where Iter: AbsoluteRawSyntaxIteratorProtocol {
+    guard let absoluteRaw = iterator.next() else { return nil }
+    let data = SyntaxData(absoluteRaw, parent: parent)
+%   is_constructable = node.collection_element_type != 'Syntax' and \
+%       not (element_node and element_node.is_base())
+%   if is_constructable:
+    return ${node.collection_element_type}(data)
+%   else:
+%     cast = '' if node.collection_element_type == 'Syntax' \
+%         else 'as! ' + node.collection_element_type
+    return (makeSyntax(data) ${cast})
+%   end
+  }
+
   public struct Iterator: IteratorProtocol {
     private let parent: _SyntaxBase
     private var iterator: PresentRawSyntaxChildren.Iterator
@@ -167,23 +183,44 @@ extension ${node.name}: Sequence {
     }
 
     public mutating func next() -> ${node.collection_element_type}? {
-      guard let absoluteRaw = iterator.next() else { return nil }
-      let data = SyntaxData(absoluteRaw, parent: self.parent)
-%   is_constructable = node.collection_element_type != 'Syntax' and \
-%       not (element_node and element_node.is_base())
-%   if is_constructable:
-      return ${node.collection_element_type}(data)
-%   else:
-%     cast = '' if node.collection_element_type == 'Syntax' \
-%         else 'as! ' + node.collection_element_type
-      return (makeSyntax(data) ${cast})
-%   end
+      return ${node.name}.nextElement(&iterator, parent: parent)
     }
   }
 
   /// Returns an iterator over the elements of this syntax collection.
   public func makeIterator() -> Iterator {
     return Iterator(collection: self)
+  }
+
+  public func reversed() -> Reversed {
+    return Reversed(collection: self)
+  }
+
+  public struct Reversed: Sequence {
+    public struct Iterator: IteratorProtocol {
+      private let parent: _SyntaxBase
+      private var iterator: ReversedPresentRawSyntaxChildren.Iterator
+
+      public init(collection node: ${node.name}) {
+        self.iterator = .init(parent: node.data.absoluteRaw)
+        self.parent = node
+      }
+
+      public mutating func next() -> ${node.collection_element_type}? {
+        return ${node.name}.nextElement(&iterator, parent: parent)
+      }
+    }
+
+    let collection: ${node.name}
+
+    /// Returns an iterator over the elements of this syntax collection.
+    public func makeIterator() -> Iterator {
+      return Iterator(collection: collection)
+    }
+
+    public func reversed() -> ${node.name} {
+      return collection
+    }
   }
 }
 

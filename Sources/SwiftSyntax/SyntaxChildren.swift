@@ -54,10 +54,14 @@ struct RawSyntaxChildren: Sequence {
   }
 }
 
+protocol AbsoluteRawSyntaxIteratorProtocol:
+  IteratorProtocol where Element == AbsoluteRawSyntax {
+}
+
 /// Sequence of `AbsoluteRawSyntax` formed from all the `present` layout
 /// children nodes of a raw node.
 struct PresentRawSyntaxChildren: Sequence {
-  struct Iterator: IteratorProtocol {
+  struct Iterator: AbsoluteRawSyntaxIteratorProtocol {
     var iterator: RawSyntaxChildren.Iterator
 
     init(parent: AbsoluteRawSyntax) {
@@ -98,7 +102,7 @@ struct PresentRawSyntaxChildren: Sequence {
 
 /// Reversed Sequence of `PresentRawSyntaxChildren`.
 struct ReversedPresentRawSyntaxChildren: Sequence {
-  struct Iterator: IteratorProtocol {
+  struct Iterator: AbsoluteRawSyntaxIteratorProtocol {
     let parent: RawSyntax
     var previousChildInfo: AbsoluteSyntaxInfo
 

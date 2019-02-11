@@ -53,7 +53,7 @@ extension _SyntaxBase {
   }
 
   /// Whether or not this node represents an SyntaxCollection.
-  var isSyntaxCollection: Bool {
+  var isCollection: Bool {
     return raw.kind.isSyntaxCollection
   }
 
@@ -305,8 +305,8 @@ extension Syntax {
   }
 
   /// Whether or not this node represents an SyntaxCollection.
-  public var isSyntaxCollection: Bool {
-    return base.isSyntaxCollection
+  public var isCollection: Bool {
+    return base.isCollection
   }
 
   /// Whether or not this node represents a Declaration.

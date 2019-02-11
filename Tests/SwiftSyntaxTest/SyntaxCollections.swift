@@ -27,10 +27,10 @@ public class SyntaxCollectionsAPITestCase: XCTestCase {
       ])
 
       let newArrayElementList = arrayElementList.appending(integerLiteralElement(1))
-      XCTAssert(newArrayElementList.isSyntaxCollection)
+      XCTAssert(newArrayElementList.isCollection)
       XCTAssertEqual(newArrayElementList.count, 2)
       XCTAssertNotNil(newArrayElementList.child(at: 1))
-      XCTAssert(!newArrayElementList.child(at: 1)!.isSyntaxCollection)
+      XCTAssert(!newArrayElementList.child(at: 1)!.isCollection)
       XCTAssertEqual("\(newArrayElementList.child(at: 1)!)", "1")
   }
 

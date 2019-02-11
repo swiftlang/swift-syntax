@@ -1116,39 +1116,3 @@ extension RawSyntax {
       trailingTrivia: trailingTrivia, length: length, presence: presence)
   }
 }
-
-extension RawSyntax {
-  func accept(_ visitor: RawSyntaxVisitor) {
-    // FIXME: Simplify visitation, this deferred 'shouldVisit` visitation
-    // mechanism is unnecessary now.
-    defer { visitor.moveUp() }
-    guard isPresent else { return }
-    if let tokKind = self.formTokenKind() {
-      if visitor.shouldVisit(tokKind) {
-        visitor.visitPre()
-        _ = visitor.visit()
-        visitor.visitPost()
-      }
-    } else {
-      let shouldVisit = visitor.shouldVisit(kind)
-      var visitChildren = true
-      if shouldVisit {
-        // Visit this node realizes a syntax node.
-        visitor.visitPre()
-        visitChildren = visitor.visit() == .visitChildren
-      }
-      if visitChildren {
-        for offset in 0..<numberOfChildren {
-          let child = self.child(at: offset)
-          guard let element = child else { continue }
-          // Teach the visitor to navigate to this child.
-          visitor.addChildIdx(offset)
-          element.accept(visitor)
-        }
-      }
-      if shouldVisit {
-        visitor.visitPost()
-      }
-    }
-  }
-}

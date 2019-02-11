@@ -371,15 +371,16 @@ func performRoundtrip(args: CommandLineArguments) throws {
   }
 }
 
-class NodePrinter: SyntaxVisitor {
-  override func visitPre(_ node: Syntax) {
+struct NodePrinter: SyntaxAnyVisitor {
+  func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     assert(!node.isUnknown)
     print("<\(type(of: node))>", terminator: "")
+    return .visitChildren
   }
-  override func visitPost(_ node: Syntax) {
+  func visitAnyPost(_ node: Syntax) {
     print("</\(type(of: node))>", terminator: "")
   }
-  override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+  func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     print(token, terminator:"")
     return .visitChildren
   }
@@ -388,7 +389,8 @@ class NodePrinter: SyntaxVisitor {
 func printSyntaxTree(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
   let tree = try SyntaxParser.parse(treeURL)
-  tree.walk(NodePrinter())
+  var printer = NodePrinter()
+  tree.walk(&printer)
 }
 
 do {

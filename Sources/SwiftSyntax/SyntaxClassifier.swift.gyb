@@ -28,7 +28,7 @@ public enum SyntaxClassification {
 % end
 }
 
-fileprivate class _SyntaxClassifier: SyntaxVisitor {
+fileprivate struct _SyntaxClassifier: SyntaxVisitor {
 
   /// The top of the `contextStack` determines the classification for all tokens
   /// encountered that do not have a native classification. If `force` is `true`
@@ -41,13 +41,13 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
   /// array.
   var classifications: [(TokenSyntax, SyntaxClassification)] = []
 
-  private func visit(
+  mutating private func visit(
     _ node: Syntax, 
     classification: SyntaxClassification, 
     force: Bool = false
   ) {
     contextStack.append((classification: classification, force: force))
-    node.walk(self)
+    node.walk(&self)
     contextStack.removeLast()
   }
 
@@ -67,7 +67,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
     }
   }
 
-  override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     assert(token.isPresent)
     // FIXME: We need to come up with some way in which the SyntaxClassifier can
     // classify trivia (i.e. comments). In particular we need to be able to
@@ -91,7 +91,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
-  override func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+  mutating func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
 %     if node.is_unknown() or node.is_syntax_collection():
     return .visitChildren
 %     else:
@@ -103,7 +103,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
             classification: .${child.classification.swift_name}, 
             force: ${"true" if child.force_classification else "false"})
 %           else:
-      ${child.swift_name}.walk(self)
+      ${child.swift_name}.walk(&self)
 %           end
     }
 %         else:
@@ -112,7 +112,7 @@ fileprivate class _SyntaxClassifier: SyntaxVisitor {
           classification: .${child.classification.swift_name}, 
           force: ${"true" if child.force_classification else "false"})
 %           else:
-    node.${child.swift_name}.walk(self)
+    node.${child.swift_name}.walk(&self)
 %           end
 %         end
 %       end
@@ -130,8 +130,8 @@ public enum SyntaxClassifier {
   public static func classifyTokensInTree(
     _ syntaxTree: SourceFileSyntax
   ) -> [(TokenSyntax, SyntaxClassification)] {
-    let classifier = _SyntaxClassifier()
-    syntaxTree.walk(classifier)
+    var classifier = _SyntaxClassifier()
+    syntaxTree.walk(&classifier)
     return classifier.classifications
   }
 }

@@ -32,7 +32,7 @@ public enum SyntaxKind: String {
 % end
 
 % for name, nodes in grouped_nodes.items():
-%   if name not in ["Syntax", "SyntaxCollection"]:
+%   if name not in ["Syntax"]:
   /// Whether the underlying kind is a sub-kind of ${name}Syntax.
   public var is${name}: Bool {
     switch self {

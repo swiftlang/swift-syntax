@@ -52,6 +52,11 @@ extension _SyntaxBase {
     return raw.kind.isExpr
   }
 
+  /// Whether or not this node represents an SyntaxCollection.
+  var isCollection: Bool {
+    return raw.kind.isSyntaxCollection
+  }
+
   /// Whether or not this node represents a Declaration.
   var isDecl: Bool {
     return raw.kind.isDecl
@@ -297,6 +302,11 @@ extension Syntax {
   /// Whether or not this node represents an Expression.
   public var isExpr: Bool {
     return base.isExpr
+  }
+
+  /// Whether or not this node represents an SyntaxCollection.
+  public var isCollection: Bool {
+    return base.isCollection
   }
 
   /// Whether or not this node represents a Declaration.

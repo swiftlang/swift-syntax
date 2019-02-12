@@ -49,26 +49,8 @@ public enum ParserError: Error, CustomStringConvertible {
   }
 }
 
-/// Provides a mechanism for the parser to skip regions of an incrementally
-/// updated source that were already parsed during a previous parse invocation.
-public protocol IncrementalParseLookup {
-  /// Does a lookup to see if the current source `offset` should be associated
-  /// with a known `Syntax` node and its region skipped during parsing.
-  ///
-  /// The implementation is responsible for checking whether an incremental edit
-  /// has invalidated the previous `Syntax` node.
-  ///
-  /// - Parameters:
-  ///   - offset: The byte offset of the source string that is currently parsed.
-  ///   - kind: The `SyntaxKind` that the parser expects at this position.
-  /// - Returns: A `Syntax` node from the previous parse invocation,
-  ///            representing the contents of this region, if it is still valid
-  ///            to re-use. `nil` otherwise.
-  func lookUp(_ offset: Int, kind: SyntaxKind) -> Syntax?
-}
-
 /// Namespace for functions to parse swift source and retrieve a syntax tree.
-public struct SyntaxParser {
+public enum SyntaxParser {
 
   /// True if the parser library is compatible with the SwiftSyntax client;
   /// false otherwise.
@@ -78,13 +60,13 @@ public struct SyntaxParser {
   ///
   /// - Parameters:
   ///   - source: The source string to parse.
-  ///   - parseLookup: Optional mechanism for incremental re-parsing.
+  ///   - parseTransition: Optional mechanism for incremental re-parsing.
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
   public static func parse(
     source: String,
-    parseLookup: IncrementalParseLookup? = nil
+    parseTransition: IncrementalParseTransition? = nil
   ) throws -> SourceFileSyntax {
     guard nodeHashVerifyResult else {
       throw ParserError.parserCompatibilityCheckFailed
@@ -95,7 +77,7 @@ public struct SyntaxParser {
     var utf8Source = source
     utf8Source.makeNativeUTF8IfNeeded()
 
-    let rawSyntax = parseRaw(utf8Source, parseLookup: parseLookup)
+    let rawSyntax = parseRaw(utf8Source, parseTransition)
 
     guard let file = makeSyntax(.forRoot(rawSyntax)) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
@@ -122,7 +104,7 @@ public struct SyntaxParser {
 
   private static func parseRaw(
     _ source: String,
-    parseLookup: IncrementalParseLookup?
+    _ parseTransition: IncrementalParseTransition?
   ) -> RawSyntax {
     assert(source.isNativeUTF8)
     let c_parser = swiftparse_parser_create()
@@ -139,12 +121,11 @@ public struct SyntaxParser {
     }
     swiftparse_parser_set_node_handler(c_parser, nodeHandler);
 
-    if let parseLookup = parseLookup {
+    if let parseTransition = parseTransition {
       let nodeLookup = {
             (offset: Int, kind: CSyntaxKind) -> CParseLookupResult in
         guard let foundNode =
-            parseLookup.lookUp(offset,
-                               kind: SyntaxKind.fromRawValue(kind)) else {
+            parseTransition.lookUp(offset, kind: .fromRawValue(kind)) else {
           return CParseLookupResult(length: 0, node: nil)
         }
         let lengthToSkip = foundNode.byteSize

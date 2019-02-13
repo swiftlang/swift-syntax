@@ -1074,6 +1074,10 @@ extension RawSyntax {
     return totalLength - (leadingTriviaLength + trailingTriviaLength)
   }
 
+  var tokenContentLength: SourceLength {
+    return totalLength - (tokenLeadingTriviaLength + tokenTrailingTriviaLength)
+  }
+
   /// Convenience function to create a RawSyntax when its byte length is not
   /// known in advance, e.g. it is programmatically constructed instead of
   /// created by the parser.

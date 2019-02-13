@@ -557,12 +557,12 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
 
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
-    return raw.formLeadingTrivia()!
+    return raw.formTokenLeadingTrivia()!
   }
 
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
-    return raw.formTrailingTrivia()!
+    return raw.formTokenTrailingTrivia()!
   }
 
   /// The kind of token this node represents.
@@ -573,17 +573,17 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   public var contentLength: SourceLength {
-    return raw.contentLength
+    return raw.tokenContentLength
   }
   
   /// The length this node's leading trivia takes up spelled out in source.
   public var leadingTriviaLength: SourceLength {
-    return raw.leadingTriviaLength
+    return raw.tokenLeadingTriviaLength
   }
 
   /// The length this node's trailing trivia takes up spelled out in source.
   public var trailingTriviaLength: SourceLength {
-    return raw.trailingTriviaLength
+    return raw.tokenTrailingTriviaLength
   }
 
   /// The length of this node including all of its trivia.

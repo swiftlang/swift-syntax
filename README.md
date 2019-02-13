@@ -47,6 +47,8 @@ Then, import `SwiftSyntax` in your Swift code.
 
 [**SwiftPack**](https://github.com/omochi/SwiftPack): a tool for automatically embedding Swift library source.
 
+[**Periphery**](https://github.com/peripheryapp/periphery): a tool to detect unused code.
+
 ## Contributing
 
 ### Building SwiftSyntax from `master`

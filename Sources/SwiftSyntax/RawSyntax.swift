@@ -32,7 +32,7 @@ fileprivate func castElementAs<T>(_ ptr: DataElementPtr) -> UnsafePointer<T> {
 
 fileprivate func castElementAs<T>(_ ptr: MutableDataElementPtr) -> UnsafeMutablePointer<T> {
   assert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
-  return UnsafeMutablePointer<T>(ptr)
+  return UnsafeMutableRawPointer(ptr).assumingMemoryBound(to: T.self)
 }
 
 /// Calculates the number of `RawSyntaxDataElement`s needed to fit the given
@@ -146,7 +146,7 @@ fileprivate struct TokenData {
     if hasCustomText {
       // Copy the full token text, including trivia.
       let startOffset = Int(cnode.range.offset)
-      var charPtr = UnsafeMutablePointer<UInt8>(curPtr)
+      var charPtr = UnsafeMutableRawPointer(curPtr).assumingMemoryBound(to: UInt8.self)
       let utf8 = source.utf8
       let begin = utf8.index(utf8.startIndex, offsetBy: startOffset)
       let end = utf8.index(begin, offsetBy: Int(cnode.range.length))

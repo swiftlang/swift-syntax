@@ -5,6 +5,7 @@ public class SyntaxAPITestCase: XCTestCase {
 
   public static let allTests = [
     ("testSyntaxAPI", testSyntaxAPI),
+    ("testPositions", testPositions),
   ]
 
   public func testSyntaxAPI() {
@@ -62,5 +63,29 @@ public class SyntaxAPITestCase: XCTestCase {
     XCTAssertEqual(toks[3].uniqueIdentifier, rtoks[2].uniqueIdentifier)
     XCTAssertEqual(toks[4].uniqueIdentifier, rtoks[1].uniqueIdentifier)
     XCTAssertEqual(toks[5].uniqueIdentifier, rtoks[0].uniqueIdentifier)
+  }
+
+  public func testPositions() {
+    func testFuncKw(_ funcKW: TokenSyntax) {
+      XCTAssertEqual("\(funcKW)", "  func ")
+      XCTAssertEqual(funcKW.position, AbsolutePosition(utf8Offset: 0))
+      XCTAssertEqual(funcKW.positionAfterSkippingLeadingTrivia, AbsolutePosition(utf8Offset: 2))
+      XCTAssertEqual(funcKW.endPositionBeforeTrailingTrivia, AbsolutePosition(utf8Offset: 6))
+      XCTAssertEqual(funcKW.endPosition, AbsolutePosition(utf8Offset: 7))
+      XCTAssertEqual(funcKW.contentLength, SourceLength(utf8Length: 4))
+    }
+    do {
+      let source = "  func f() {}"
+      let tree = try! SyntaxParser.parse(source: source)
+      let funcKW = tree.firstToken!
+      testFuncKw(funcKW)
+    }
+    do {
+      let leading = Trivia(pieces: [ .spaces(2) ])
+      let trailing = Trivia(pieces: [ .spaces(1) ])
+      let funcKW = SyntaxFactory.makeFuncKeyword(
+        leadingTrivia: leading, trailingTrivia: trailing)
+      testFuncKw(funcKW)
+    }
   }
 }

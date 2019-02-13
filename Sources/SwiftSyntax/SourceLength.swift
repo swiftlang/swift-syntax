@@ -64,4 +64,15 @@ extension AbsolutePosition {
   public static func +=(lhs: inout AbsolutePosition, rhs: SourceLength) {
     lhs = lhs + rhs
   }
+
+  public static func -(
+    lhs: AbsolutePosition, rhs: SourceLength
+  ) -> AbsolutePosition {
+    let utf8Offset = lhs.utf8Offset - rhs.utf8Length
+    return AbsolutePosition(utf8Offset: utf8Offset)
+  }
+
+  public static func -=(lhs: inout AbsolutePosition, rhs: SourceLength) {
+    lhs = lhs - rhs
+  }
 }

@@ -170,15 +170,14 @@ extension _SyntaxBase {
     return data.positionAfterSkippingLeadingTrivia
   }
 
-  /// The absolute position where this node (excluding its trailing trivia)
-  /// ends.
-  var endPosition: AbsolutePosition {
-    return data.endPosition
+  /// The end position of this node's content, before any trailing trivia.
+  var endPositionBeforeTrailingTrivia: AbsolutePosition {
+    return data.endPositionBeforeTrailingTrivia
   }
 
-  /// The absolute position where this node's trailing trivia ends
-  var endPositionAfterTrailingTrivia: AbsolutePosition {
-    return data.endPositionAfterTrailingTrivia
+  /// The end position of this node, including its trivia.
+  var endPosition: AbsolutePosition {
+    return data.endPosition
   }
 
   /// The textual byte length of this node including leading and trailing trivia.
@@ -384,15 +383,14 @@ extension Syntax {
     return base.positionAfterSkippingLeadingTrivia
   }
 
-  /// The absolute position where this node (excluding its trailing trivia)
-  /// ends.
-  public var endPosition: AbsolutePosition {
-    return base.endPosition
+  /// The end position of this node's content.
+  public var endPositionBeforeTrailingTrivia: AbsolutePosition {
+    return base.endPositionBeforeTrailingTrivia
   }
 
-  /// The absolute position where this node's trailing trivia ends
-  public var endPositionAfterTrailingTrivia: AbsolutePosition {
-    return base.endPositionAfterTrailingTrivia
+  /// The end position of this node, including its trivia
+  public var endPosition: AbsolutePosition {
+    return base.endPosition
   }
 
   /// The textual byte length of this node including leading and trailing trivia.

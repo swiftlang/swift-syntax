@@ -117,14 +117,14 @@ struct SyntaxData {
     return position + raw.leadingTriviaLength
   }
 
-  /// The end position of this node's content, excluding its trivia
-  var endPosition: AbsolutePosition {
-    return positionAfterSkippingLeadingTrivia + raw.contentLength
+  /// The end position of this node's content, before any trailing trivia.
+  var endPositionBeforeTrailingTrivia: AbsolutePosition {
+    return endPosition - raw.trailingTriviaLength
   }
 
-  /// The end position of this node's trivia
-  var endPositionAfterTrailingTrivia: AbsolutePosition {
-    return endPosition + raw.trailingTriviaLength
+  /// The end position of this node, including its trivia.
+  var endPosition: AbsolutePosition {
+    return position + raw.totalLength
   }
 
   /// Creates a `SyntaxData` with the provided raw syntax and parent.

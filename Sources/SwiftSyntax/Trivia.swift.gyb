@@ -161,19 +161,19 @@ extension TriviaPiece {
 }
 
 extension TriviaPiece {
-  static func fromRawValue(kind: CTriviaKind, length: Int,
+  static func fromRawValue(_ piece: CTriviaPiece,
                            textBuffer: UnsafeBufferPointer<UInt8>) -> TriviaPiece {
-    switch kind {
+    switch piece.kind {
 % for trivia in TRIVIAS:
     case ${trivia.serialization_code}:
 %   if trivia.is_collection():
-      return .${trivia.lower_name}s(length/${trivia.characters_len()})
+      return .${trivia.lower_name}s(Int(piece.length)/${trivia.characters_len()})
 %   else:
       return .${trivia.lower_name}(.fromBuffer(textBuffer))
 %   end
 % end
     default:
-      fatalError("unexpected trivia piece kind \(kind)")
+      fatalError("unexpected trivia piece kind \(piece.kind)")
     }
   }
 

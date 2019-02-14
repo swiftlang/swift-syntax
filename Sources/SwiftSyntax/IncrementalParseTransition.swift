@@ -104,48 +104,35 @@ public final class IncrementalParseTransition {
     guard let prevOffset = translateToPreEditOffset(newOffset) else {
       return nil
     }
-    let (nodeOffset, node) = lookUpFrom(previousTree, nodeOffset: 0,
-                                        prevOffset: prevOffset, kind: kind)
+    let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
+    let node = lookUpFrom(previousTree, prevPosition: prevPosition, kind: kind)
     if let delegate = reusedDelegate, let node = node {
       delegate.parserReusedNode(
-        range: ByteSourceRange(offset: nodeOffset, length: node.byteSize),
+        range: ByteSourceRange(offset: newOffset, length: node.byteSize),
         previousNode: node)
     }
     return node
   }
 
-  fileprivate func lookUpFrom(_ node: _SyntaxBase, nodeOffset: Int, prevOffset: Int,
-                              kind: SyntaxKind) -> (Int, _SyntaxBase?) {
-    if nodeCanBeReused(node, nodeOffset: nodeOffset, prevOffset: prevOffset,
-                       kind: kind) {
-      return (nodeOffset, node)
+  fileprivate func lookUpFrom(
+    _ node: _SyntaxBase, prevPosition: AbsolutePosition, kind: SyntaxKind
+  ) -> _SyntaxBase? {
+    if nodeCanBeReused(node, prevPosition: prevPosition, kind: kind) {
+      return node
     }
 
-    // Compute the child's position on the fly
-    var childOffset = nodeOffset
     for child in node.children {
-      if child.isMissing {
-        continue
+      if child.position <= prevPosition && prevPosition < child.endPosition {
+        return lookUpFrom(child, prevPosition: prevPosition, kind: kind)
       }
-      let childEnd = childOffset + child.byteSize
-      if childOffset <= prevOffset && prevOffset < childEnd {
-        return lookUpFrom(child, nodeOffset: childOffset,
-                          prevOffset: prevOffset, kind: kind)
-      }
-      // The next child starts where the previous child ended
-      childOffset = childEnd
     }
-    return (0, nil)
+    return nil
   }
 
-  fileprivate func nodeCanBeReused(_ node: _SyntaxBase, nodeOffset: Int,
-                                   prevOffset: Int, kind: SyntaxKind) -> Bool {
-    // Computing the value of NodeStart on the fly is faster than determining a
-    // node's absolute position, but make sure the values match in an assertion
-    // build
-    assert(nodeOffset == node.position.utf8Offset);
-
-    if nodeOffset != prevOffset {
+  fileprivate func nodeCanBeReused(
+    _ node: _SyntaxBase, prevPosition: AbsolutePosition, kind: SyntaxKind
+  ) -> Bool {
+    if node.position != prevPosition {
       return false
     }
     if node.raw.kind != kind {
@@ -158,17 +145,20 @@ public final class IncrementalParseTransition {
     // CodeBlockItems one for `private` and one for `struc Foo {}`
     var nextLeafNodeLength = 0
     if let nextToken = node.nextToken {
-      let nextRawNode = nextToken.raw
-      assert(nextRawNode.isPresent)
-      nextLeafNodeLength += nextRawNode.contentLength.utf8Length
-      nextLeafNodeLength += nextRawNode.leadingTriviaLength.utf8Length
+      assert(nextToken.isPresent)
+      nextLeafNodeLength = nextToken.byteSize - nextToken.trailingTriviaLength.utf8Length
     }
 
     for edit in edits {
       // Check if this node or the trivia of the next node has been edited. If
       // it has, we cannot reuse it.
-      if edit.intersectsOrTouchesRange(ByteSourceRange(offset: nodeOffset,
-                                  length: node.byteSize + nextLeafNodeLength)) {
+      let nodeAffectRange = ByteSourceRange(offset: node.position.utf8Offset,
+        length: node.byteSize + nextLeafNodeLength)
+      if edit.range.offset > nodeAffectRange.endOffset {
+        // Remaining edits don't affect the node. (Edits are sorted)
+        break
+      }
+      if edit.intersectsOrTouchesRange(nodeAffectRange) {
         return false
       }
     }

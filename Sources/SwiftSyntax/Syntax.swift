@@ -185,6 +185,11 @@ extension _SyntaxBase {
     return totalLength.utf8Length
   }
 
+  /// The byte source range of this node including leading and trailing trivia.
+  var byteRange: ByteSourceRange {
+    return ByteSourceRange(offset: position.utf8Offset, length: byteSize)
+  }
+
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   var contentLength: SourceLength {
@@ -396,6 +401,11 @@ extension Syntax {
   /// The textual byte length of this node including leading and trailing trivia.
   public var byteSize: Int {
     return base.byteSize
+  }
+
+  /// The byte source range of this node including leading and trailing trivia.
+  public var byteRange: ByteSourceRange {
+    return base.byteRange
   }
 
   /// The length this node takes up spelled out in the source, excluding its

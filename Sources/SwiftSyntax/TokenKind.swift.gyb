@@ -145,3 +145,40 @@ extension TokenKind {
     }
   }
 }
+
+/// Plain token kind value, without an associated `String` value.
+internal enum RawTokenKind: CTokenKind {
+  case eof = 0
+% for token in SYNTAX_TOKENS:
+  case ${token.swift_kind()} = ${token.serialization_code}
+% end
+
+  static func fromRawValue(_ rawValue: CTokenKind) -> RawTokenKind {
+    return RawTokenKind(rawValue: rawValue)!
+  }
+}
+
+extension TokenKind {
+  internal func withUnsafeTokenText<Result>(
+    _ body: (UnsafeTokenText) -> Result
+  ) -> Result {
+    switch self {
+    case .eof:
+      return body(.init(kind: .eof, length: 0))
+% for token in SYNTAX_TOKENS:
+%   if token.text:
+    case .${token.swift_kind()}:
+      let length = ${len(token.text.decode('string_escape'))}
+      return body(.init(kind: .${token.swift_kind()}, length: length))
+%   else:
+    case .${token.swift_kind()}(var text):
+      text.makeNativeUTF8IfNeeded()
+      let length = text.utf8.count
+      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
+        return body(.init(kind: .${token.swift_kind()}, length: length, customText: buf))
+      })!
+%   end
+% end
+    }
+  }
+}

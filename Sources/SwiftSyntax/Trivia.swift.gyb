@@ -196,3 +196,46 @@ extension TriviaPiece {
     }
   }
 }
+
+/// Plain trivia piece kind value, without an associated `String` value.
+internal enum TriviaPieceKind: CTriviaKind {
+% for trivia in TRIVIAS:
+    /// ${trivia.comment}
+%   if trivia.is_collection():
+    case ${trivia.lower_name}s = ${trivia.serialization_code}
+%   else:
+    case ${trivia.lower_name} = ${trivia.serialization_code}
+%   end
+% end
+
+  static func fromRawValue(_ rawValue: CTriviaKind) -> TriviaPieceKind {
+    return TriviaPieceKind(rawValue: rawValue)!
+  }
+}
+
+extension TriviaPiece {
+  internal func withUnsafeTriviaPiece<Result>(
+    _ body: (UnsafeTriviaPiece) -> Result
+  ) -> Result {
+    switch self {
+% for trivia in TRIVIAS:
+%   if trivia.is_new_line:
+    case let .${trivia.lower_name}s(count):
+      let length = count * ${trivia.characters_len()}
+      return body(.init(kind: .${trivia.lower_name}s, length: length))
+%   elif trivia.is_collection():
+    case let .${trivia.lower_name}s(count):
+      let length = count
+      return body(.init(kind: .${trivia.lower_name}s, length: length))
+%   else:
+    case var .${trivia.lower_name}(text):
+      text.makeNativeUTF8IfNeeded()
+      let length = text.utf8.count
+      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
+        return body(.init(kind: .${trivia.lower_name}, length: length, customText: buf))
+      })!
+%   end
+% end
+    }
+  }
+}

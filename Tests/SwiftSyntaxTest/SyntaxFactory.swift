@@ -75,11 +75,22 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     let preSpacedTok = tok.withLeadingTrivia(.spaces(3))
     XCTAssertEqual("\(preSpacedTok)", "   struct")
 
+    var mutablePreSpacedTok = tok
+    mutablePreSpacedTok.leadingTrivia = .spaces(4)
+    XCTAssertEqual("\(mutablePreSpacedTok)", "    struct")
+
     let postSpacedTok = tok.withTrailingTrivia(.spaces(6))
     XCTAssertEqual("\(postSpacedTok)", "struct      ")
 
+    var mutablePostSpacedTok = tok
+    mutablePostSpacedTok.trailingTrivia = .spaces(3)
+    XCTAssertEqual("\(mutablePostSpacedTok)", "struct   ")
+
     let prePostSpacedTok = preSpacedTok.withTrailingTrivia(.spaces(4))
     XCTAssertEqual("\(prePostSpacedTok)", "   struct    ")
+
+    mutablePreSpacedTok.trailingTrivia = .spaces(2)
+    XCTAssertEqual("\(mutablePreSpacedTok)", "    struct  ")
   }
 
   public func testFunctionCallSyntaxBuilder() {

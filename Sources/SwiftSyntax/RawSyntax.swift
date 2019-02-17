@@ -16,7 +16,7 @@ fileprivate typealias DataElementPtr = UnsafePointer<RawSyntaxDataElement>
 fileprivate typealias MutableDataElementPtr = UnsafeMutablePointer<RawSyntaxDataElement>
 
 /// Convenience function to write a value into a `RawSyntaxDataElement`.
-fileprivate func writeElement<T>(_ ptr: MutableDataElementPtr, with value: T) {
+fileprivate func initializeElement<T>(_ ptr: MutableDataElementPtr, with value: T) {
   castElementAs(ptr).initialize(to: value)
 }
 
@@ -38,16 +38,21 @@ fileprivate func castElementAs<T>(_ ptr: MutableDataElementPtr) -> UnsafeMutable
 /// Calculates the number of `RawSyntaxDataElement`s needed to fit the given
 /// number of bytes.
 fileprivate func numberOfElements(forBytes size: Int) -> Int {
-  let (words, remainder) = Int(size).quotientAndRemainder(
+  let (words, remainder) = size.quotientAndRemainder(
     dividingBy: MemoryLayout<RawSyntaxDataElement>.stride)
-  let elemsForString = remainder == 0 ? words : words+1
-  return elemsForString
+  let numOfElems = remainder == 0 ? words : words+1
+  return numOfElems
 }
 
 /// Calculates the number of `RawSyntaxDataElement`s needed to fit the given
 /// value.
 fileprivate func numberOfElements<T>(for value: T) -> Int {
   return numberOfElements(forBytes: MemoryLayout<T>.size)
+}
+
+/// Convenience property to refer to an empty string buffer.
+fileprivate var emptyStringBuffer: UnsafeBufferPointer<UInt8> {
+  return .init(start: nil, count: 0)
 }
 
 /// Low-level data specific to token nodes.
@@ -135,11 +140,11 @@ fileprivate struct TokenData {
     let trailingTriviaCount = Int(data.trailing_trivia_count)
     var curPtr = extraPtr
     for i in 0..<leadingTriviaCount {
-      writeElement(curPtr, with: data.leading_trivia![i])
+      initializeElement(curPtr, with: data.leading_trivia![i])
       curPtr = curPtr.successor()
     }
     for i in 0..<trailingTriviaCount {
-      writeElement(curPtr, with: data.trailing_trivia![i])
+      initializeElement(curPtr, with: data.trailing_trivia![i])
       curPtr = curPtr.successor()
     }
 
@@ -174,7 +179,7 @@ fileprivate struct TokenData {
     _ data: ConstructedTokenData,
     extraPtr: MutableDataElementPtr
   ) {
-    writeElement(extraPtr, with: data)
+    initializeElement(extraPtr, with: data)
   }
 
   /// De-initializes memory from tail-allocated data.
@@ -189,7 +194,7 @@ fileprivate struct TokenData {
 
   private func parsedData(
     length: UInt32, extraPtr: DataElementPtr
-  ) -> UnsafeTokenData {
+  ) -> UnsafeParsedTokenData {
     assert(isParsed)
     let leadingTriviaCount = Int(self.leadingTriviaCount)
     let trailingTriviaCount = Int(self.trailingTriviaCount)
@@ -293,7 +298,7 @@ fileprivate struct TokenData {
 
 /// Convenience wrapper over the tail-allocated data for a token node.
 /// This is used only for tokens created during parsing.
-fileprivate struct UnsafeTokenData {
+fileprivate struct UnsafeParsedTokenData {
   let length: UInt32
   let tokenKind: CTokenKind
   let leadingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
@@ -301,16 +306,11 @@ fileprivate struct UnsafeTokenData {
   let fullTextBuffer: UnsafeBufferPointer<UInt8>
   let hasCustomText: Bool
 
-  static var emptyBuffer: UnsafeBufferPointer<UInt8> {
-    return .init(start: nil, count: 0)
-  }
-
   func formTokenKind() -> TokenKind {
     if fullTextBuffer.isEmpty {
       // Fast path, there's no text in the buffer so no need to determine the
       // token length.
-      return TokenKind.fromRawValue(kind: tokenKind,
-        textBuffer: UnsafeTokenData.emptyBuffer)
+      return TokenKind.fromRawValue(kind: tokenKind, textBuffer: emptyStringBuffer)
     }
     let leadingTriviaLength = self.getLeadingTriviaLength()
     let trailingTriviaLength = self.getTrailingTriviaLength()
@@ -326,8 +326,7 @@ fileprivate struct UnsafeTokenData {
       // Fast path, there's no text in the buffer so no need to determine the
       // trivia piece length.
       for cpiece in leadingTriviaBuffer {
-        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
-          length: Int(cpiece.length), textBuffer: UnsafeTokenData.emptyBuffer)
+        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: emptyStringBuffer)
         newPieces.append(newPiece)
       }
     } else {
@@ -335,8 +334,7 @@ fileprivate struct UnsafeTokenData {
       for cpiece in leadingTriviaBuffer {
         let len = Int(cpiece.length)
         let textBuffer = getTextSlice(start: textOffset, length: len)
-        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind, length: len,
-          textBuffer: textBuffer)
+        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: textBuffer)
         newPieces.append(newPiece)
         textOffset += len
       }
@@ -351,8 +349,7 @@ fileprivate struct UnsafeTokenData {
       // Fast path, there's no text in the buffer so no need to determine the
       // trivia piece length.
       for cpiece in trailingTriviaBuffer {
-        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
-          length: Int(cpiece.length), textBuffer: UnsafeTokenData.emptyBuffer)
+        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: emptyStringBuffer)
         newPieces.append(newPiece)
       }
     } else {
@@ -363,8 +360,7 @@ fileprivate struct UnsafeTokenData {
       for cpiece in trailingTriviaBuffer {
         let len = Int(cpiece.length)
         let textBuffer = getTextSlice(start: textOffset, length: len)
-        let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind, length: len,
-          textBuffer: textBuffer)
+        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: textBuffer)
         newPieces.append(newPiece)
         textOffset += len
       }
@@ -381,16 +377,14 @@ fileprivate struct UnsafeTokenData {
       target.write(String.fromBuffer(fullTextBuffer))
     } else {
       func printTrivia(_ buf: UnsafeBufferPointer<CTriviaPiece>) {
-        let emptyBuffer: UnsafeBufferPointer<UInt8> = .init(start: nil, count: 0)
         for cpiece in buf {
-          let newPiece = TriviaPiece.fromRawValue(kind: cpiece.kind,
-            length: Int(cpiece.length), textBuffer: emptyBuffer)
+          let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: emptyStringBuffer)
           newPiece.write(to: &target)
         }
       }
       printTrivia(leadingTriviaBuffer)
       let tokKind = TokenKind.fromRawValue(kind: tokenKind,
-        textBuffer: UnsafeTokenData.emptyBuffer)
+        textBuffer: emptyStringBuffer)
       target.write(tokKind.text)
       printTrivia(trailingTriviaBuffer)
     }
@@ -465,7 +459,7 @@ fileprivate struct LayoutData {
   ) {
     var curPtr = extraPtr
     for i in 0..<Int(data.nodes_count) {
-      writeElement(curPtr, with: data.nodes![i])
+      initializeElement(curPtr, with: data.nodes![i])
       curPtr = curPtr.successor()
     }
   }
@@ -492,7 +486,7 @@ fileprivate struct LayoutData {
     _ data: ConstructedLayoutData,
     extraPtr: MutableDataElementPtr
   ) {
-    writeElement(extraPtr, with: data)
+    initializeElement(extraPtr, with: data)
   }
 
   /// De-initializes memory from tail-allocated data.

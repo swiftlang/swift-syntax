@@ -10,41 +10,72 @@
 //
 //===----------------------------------------------------------------------===//
 
+struct AbsoluteSyntaxPosition {
+  let offset: UInt32
+  let indexInParent: UInt32
+
+  func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxPosition {
+    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
+    let newIndexInParent = self.indexInParent + 1
+    return .init(offset: newOffset, indexInParent: newIndexInParent)
+  }
+
+  func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxPosition {
+    let newOffset = self.offset - UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
+    let newIndexInParent = self.indexInParent - 1
+    return .init(offset: newOffset, indexInParent: newIndexInParent)
+  }
+
+  func advancedToFirstChild() -> AbsoluteSyntaxPosition {
+    return .init(offset: self.offset, indexInParent: 0)
+  }
+
+  func advancedToEndOfChildren(_ raw: RawSyntax) -> AbsoluteSyntaxPosition {
+    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw.totalLength.utf8Length)
+    let newIndexInParent = UInt32(truncatingIfNeeded: raw.numberOfChildren)
+    return .init(offset: newOffset, indexInParent: newIndexInParent)
+  }
+
+  static var forRoot: AbsoluteSyntaxPosition {
+    return .init(offset: 0, indexInParent: 0)
+  }
+}
+
 /// AbsoluteSyntaxInfo represents the information that relates a RawSyntax to a
 /// source file tree, like its absolute source offset.
 struct AbsoluteSyntaxInfo {
-  let offset: UInt32
-  let indexInParent: UInt32
+  let position: AbsoluteSyntaxPosition
   let nodeId: SyntaxIdentifier
 
+  var offset: UInt32 { return position.offset }
+  var indexInParent: UInt32 { return position.indexInParent }
+
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
-    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
-    let newIndexInParent = self.indexInParent + 1
+    let newPosition = position.advancedBySibling(raw)
     let newNodeId = nodeId.advancedBySibling(raw)
-    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
+    return .init(position: newPosition, nodeId: newNodeId)
   }
 
   func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
-    let newOffset = self.offset - UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
-    let newIndexInParent = self.indexInParent - 1
+    let newPosition = position.reversedBySibling(raw)
     let newNodeId = nodeId.reversedBySibling(raw)
-    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
+    return .init(position: newPosition, nodeId: newNodeId)
   }
 
   func advancedToFirstChild() -> AbsoluteSyntaxInfo {
+    let newPosition = position.advancedToFirstChild()
     let newNodeId = nodeId.advancedToFirstChild()
-    return .init(offset: self.offset, indexInParent: 0, nodeId: newNodeId)
+    return .init(position: newPosition, nodeId: newNodeId)
   }
 
   func advancedToEndOfChildren(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
-    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw.totalLength.utf8Length)
-    let newIndexInParent = UInt32(truncatingIfNeeded: raw.numberOfChildren)
+    let newPosition = position.advancedToEndOfChildren(raw)
     let newNodeId = nodeId.advancedToEndOfChildren(raw)
-    return .init(offset: newOffset, indexInParent: newIndexInParent, nodeId: newNodeId)
+    return .init(position: newPosition, nodeId: newNodeId)
   }
 
   static var forRoot: AbsoluteSyntaxInfo {
-    return .init(offset: 0, indexInParent: 0, nodeId: .newRoot())
+    return .init(position: .forRoot, nodeId: .newRoot())
   }
 }
 

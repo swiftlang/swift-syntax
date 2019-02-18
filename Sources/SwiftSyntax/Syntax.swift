@@ -13,7 +13,7 @@
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
-public protocol Syntax: 
+public protocol Syntax:
   CustomStringConvertible, TextOutputStreamable {}
 
 internal protocol _SyntaxBase: Syntax {
@@ -261,7 +261,7 @@ extension _SyntaxBase {
     self.write(to: &s)
     return s
   }
-  
+
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
   public func write<Target>(to target: inout Target)
@@ -507,7 +507,7 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   public var text: String {
     return tokenKind.text
   }
-  
+
   /// Returns a new TokenSyntax with its kind replaced
   /// by the provided token kind.
   public func withKind(_ tokenKind: TokenKind) -> TokenSyntax {
@@ -565,17 +565,32 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
 
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
-    return raw.formTokenLeadingTrivia()!
+    get {
+      return raw.formTokenLeadingTrivia()!
+    }
+    set {
+      self = withLeadingTrivia(newValue)
+    }
   }
 
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
-    return raw.formTokenTrailingTrivia()!
+    get {
+      return raw.formTokenTrailingTrivia()!
+    }
+    set {
+      self = withTrailingTrivia(newValue)
+    }
   }
 
   /// The kind of token this node represents.
   public var tokenKind: TokenKind {
-    return raw.formTokenKind()!
+    get {
+      return raw.formTokenKind()!
+    }
+    set {
+      self = withKind(newValue)
+    }
   }
 
   /// The length this node takes up spelled out in the source, excluding its
@@ -583,7 +598,7 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   public var contentLength: SourceLength {
     return raw.tokenContentLength
   }
-  
+
   /// The length this node's leading trivia takes up spelled out in source.
   public var leadingTriviaLength: SourceLength {
     return raw.tokenLeadingTriviaLength

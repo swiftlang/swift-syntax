@@ -62,6 +62,13 @@ extension TriviaPiece: TextOutputStreamable {
   }
 }
 
+extension TriviaPiece: CustomDebugStringConvertible {
+  /// Returns a description used by dump.
+  public var debugDescription: String {
+    return "TriviaPiece"
+  }
+}
+
 /// A collection of leading or trailing trivia. This is the main data structure
 /// for thinking about trivia.
 public struct Trivia {

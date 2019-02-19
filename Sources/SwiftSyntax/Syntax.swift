@@ -14,7 +14,7 @@
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
 public protocol Syntax:
-  CustomStringConvertible, TextOutputStreamable {}
+  CustomStringConvertible, CustomDebugStringConvertible, TextOutputStreamable {}
 
 internal protocol _SyntaxBase: Syntax {
   /// The data backing this node.
@@ -273,6 +273,11 @@ extension _SyntaxBase {
   /// A source-accurate description of this node.
   public var description: String {
     return data.raw.description
+  }
+
+  /// Returns a description used by dump.
+  public var debugDescription: String {
+    return "\(type(of: self))"
   }
 
   /// Prints the raw value of this node to the provided stream.
@@ -654,6 +659,17 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   }
 }
 
+extension TokenSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "text": text,
+      "leadingTrivia": leadingTrivia,
+      "trailingTrivia": trailingTrivia,
+      "tokenKind": tokenKind,
+    ])
+  }
+}
+
 /// Sequence of tokens that are part of the provided Syntax node.
 public struct TokenSequence: Sequence {
   public struct Iterator: IteratorProtocol {
@@ -695,6 +711,13 @@ public struct TokenSequence: Sequence {
   }
 }
 
+extension TokenSequence: CustomReflectable {
+  public var customMirror: Mirror {
+    let keyAndValues = enumerated().map { (label: String($0.0) as String?, value: $0.1 as Any) }
+    return Mirror(self, children: keyAndValues)
+  }
+}
+
 /// Reverse sequence of tokens that are part of the provided Syntax node.
 public struct ReversedTokenSequence: Sequence {
   public struct Iterator: IteratorProtocol {
@@ -733,6 +756,12 @@ public struct ReversedTokenSequence: Sequence {
 
   public func reversed() -> TokenSequence {
     return TokenSequence(node)
+  }
+}
+
+extension ReversedTokenSequence: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, unlabeledChildren: self.map{ $0 })
   }
 }
 

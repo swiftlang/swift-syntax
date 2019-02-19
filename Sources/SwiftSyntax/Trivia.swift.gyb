@@ -109,6 +109,8 @@ public struct Trivia {
 % end
 }
 
+extension Trivia: Equatable {}
+
 /// Conformance for Trivia to the Collection protocol.
 extension Trivia: Collection {
   public var startIndex: Int {
@@ -140,6 +142,8 @@ extension Trivia: ExpressibleByArrayLiteral {
 public func +(lhs: Trivia, rhs: Trivia) -> Trivia {
   return Trivia(pieces: lhs.pieces + rhs.pieces)
 }
+
+extension TriviaPiece: Equatable {}
 
 extension TriviaPiece {
   public var sourceLength: SourceLength {

@@ -527,11 +527,7 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax.createAndCalcLength(kind: raw.formTokenKind()!,
-      leadingTrivia: leadingTrivia, trailingTrivia: raw.formTrailingTrivia()!,
-      presence: raw.presence)
-    let newData = data.replacingSelf(newRaw)
-    return TokenSyntax(newData)
+    return TokenSyntax(data.withLeadingTrivia(leadingTrivia))
   }
 
   /// Returns a new TokenSyntax with its trailing trivia replaced
@@ -540,12 +536,7 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
     guard raw.kind == .token else {
       fatalError("TokenSyntax must have token as its raw")
     }
-    let newRaw = RawSyntax.createAndCalcLength(kind: raw.formTokenKind()!,
-                           leadingTrivia: raw.formLeadingTrivia()!,
-                           trailingTrivia: trailingTrivia,
-                           presence: raw.presence)
-    let newData = data.replacingSelf(newRaw)
-    return TokenSyntax(newData)
+    return TokenSyntax(data.withTrailingTrivia(trailingTrivia))
   }
 
   /// Returns a new TokenSyntax with its leading trivia removed.

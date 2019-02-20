@@ -159,6 +159,53 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
   }
 %     end
 
+  /// Returns a new `${node.name}` with its leading trivia replaced
+  /// by the provided trivia.
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> ${node.name} {
+    return ${node.name}(data.withLeadingTrivia(leadingTrivia))
+  }
+
+  /// Returns a new `${node.name}` with its trailing trivia replaced
+  /// by the provided trivia.
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> ${node.name} {
+    return ${node.name}(data.withTrailingTrivia(trailingTrivia))
+  }
+
+  /// Returns a new `${node.name}` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> ${node.name} {
+    return withLeadingTrivia([])
+  }
+
+  /// Returns a new `${node.name}` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> ${node.name} {
+    return withTrailingTrivia([])
+  }
+
+  /// Returns a new `${node.name}` with all trivia removed.
+  public func withoutTrivia() -> ${node.name} {
+    return withoutLeadingTrivia().withoutTrailingTrivia()
+  }
+
+  /// The leading trivia (spaces, newlines, etc.) associated with this `${node.name}`.
+  public var leadingTrivia: Trivia? {
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
+  }
+
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `${node.name}`.
+  public var trailingTrivia: Trivia? {
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
+  }
+
   /// Determines if two `${node.name}` nodes are equal to each other.
   public static func ==(lhs: ${node.name}, rhs: ${node.name}) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId

@@ -88,24 +88,26 @@ public class AbsolutePositionTestCase: XCTestCase {
     _ = root.statements[idx].positionAfterSkippingLeadingTrivia
   }
 
+  static let leadingTrivia = Trivia(pieces: [
+    .newlines(1),
+    .backticks(1),
+    .docLineComment("/// some comment"),
+    .carriageReturns(1),
+  ])
+
+  static let trailingTrivia = Trivia(pieces: [
+    .blockComment("/* This is comment \r\r\n */"),
+    .carriageReturnLineFeeds(1),
+  ])
+
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
-    let leading = Trivia(pieces: [
-        .newlines(1),
-        .backticks(1),
-        .docLineComment("/// some comment"),
-        .carriageReturns(1),
-        ])
-    let trailing = Trivia(pieces: [
-        .blockComment("/* This is comment \r\r\n */"),
-        .carriageReturnLineFeeds(1),
-        ])
     let items : [CodeBlockItemSyntax] =
       [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax {
         $0.useItem(ReturnStmtSyntax {
           $0.useReturnKeyword(
             SyntaxFactory.makeReturnKeyword(
-              leadingTrivia: leading,
-              trailingTrivia: trailing))
+              leadingTrivia: AbsolutePositionTestCase.leadingTrivia,
+              trailingTrivia: AbsolutePositionTestCase.trailingTrivia))
         })}, count: count)
     return SyntaxFactory.makeSourceFile(
       statements: SyntaxFactory.makeCodeBlockItemList(items),
@@ -124,6 +126,40 @@ public class AbsolutePositionTestCase: XCTestCase {
       state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
         + state.byteSizeAfterTrimmingTrivia)
     XCTAssertFalse(root.statements.isImplicit)
+
+    // Test Node trivia setters and getters
+
+    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.leadingTrivia)
+    XCTAssertEqual([], root.trailingTrivia)
+
+    var modifiedRoot1 = root.withLeadingTrivia([.spaces(6), .tabs(1)])
+    XCTAssertEqual([.spaces(6), .tabs(1)], modifiedRoot1.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.leadingTrivia)
+    modifiedRoot1.leadingTrivia = [.blockComment("/* this is a comment */")]
+    XCTAssertEqual([.blockComment("/* this is a comment */")], modifiedRoot1.leadingTrivia)
+
+    var modifiedRoot2 = root.withTrailingTrivia([.backticks(2)])
+    XCTAssertEqual([.backticks(2)], modifiedRoot2.trailingTrivia)
+    XCTAssertEqual([], root.trailingTrivia)
+    modifiedRoot2.trailingTrivia = [.carriageReturns(1), .newlines(2)]
+    XCTAssertEqual([.carriageReturns(1), .newlines(2)], modifiedRoot2.trailingTrivia)
+
+    // Test Collection trivia setters and getters
+
+    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.statements.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTestCase.trailingTrivia, root.statements.trailingTrivia)
+
+    var modifiedStatements1 = root.withLeadingTrivia([.carriageReturnLineFeeds(3)])
+    XCTAssertEqual([.carriageReturnLineFeeds(3)], modifiedStatements1.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.statements.leadingTrivia)
+    modifiedStatements1.leadingTrivia = [.garbageText("GARBAGE")]
+    XCTAssertEqual([.garbageText("GARBAGE")], modifiedStatements1.leadingTrivia)
+
+    var modifiedStatements2 = root.withTrailingTrivia([.formfeeds(1), .carriageReturns(3)])
+    XCTAssertEqual([.formfeeds(1), .carriageReturns(3)], modifiedStatements2.trailingTrivia)
+    XCTAssertEqual(AbsolutePositionTestCase.trailingTrivia, root.statements.trailingTrivia)
+    modifiedStatements2.trailingTrivia = [.verticalTabs(4)]
+    XCTAssertEqual([.verticalTabs(4)], modifiedStatements2.trailingTrivia)
   }
 
   public func testImplicit() {

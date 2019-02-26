@@ -10,6 +10,7 @@ code.
 
 ## Usage
 
+### Declare SwiftPM dependency with release tag
 Add this repository to the `Package.swift` manifest of your project:
 
 ```swift
@@ -27,7 +28,7 @@ let package = Package(
 )
 ```
 
-Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to use (see the following table for mapping details). Tags will be created for every nightly build in the form `<SwiftSyntax Release Tag>-DEVELOPMENT-SNAPSHOT-<DATE>`.
+Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to use (see the following table for mapping details).
 
 
 | Swift Release Tag | SwiftSyntax Release Tag  |
@@ -36,6 +37,39 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 
 
 Then, import `SwiftSyntax` in your Swift code.
+
+
+### Declare SwiftPM dependency with nightly build
+
+1. Download and install the latest Trunk Development (master) [toolchain](https://swift.org/download/#snapshots).
+
+2. Define the `TOOLCHAINS` environment variable as below to have the `swift` command point inside the toolchain:
+
+```
+$ export TOOLCHAINS=swift
+```
+
+3. To make sure everything is setup correctly, check the result of `xcrun --find swift`. It should point inside the OSS toolchain.
+
+4. Add this entry to the `Package.swift` manifest of your project:
+
+```swift
+// swift-tools-version:4.2
+import PackageDescription
+
+let package = Package(
+  name: "MyTool",
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-syntax.git", .revision("swift-DEVELOPMENT-SNAPSHOT-2019-02-26")),
+  ],
+  targets: [
+    .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
+  ]
+)
+```
+
+Tags will be created for every nightly build in the form of `swift-DEVELOPMENT-SNAPSHOT-<DATE>`. Revision field
+should be specified with the intended tag.
 
 ### Some Example Users
 

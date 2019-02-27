@@ -713,8 +713,7 @@ public struct TokenSequence: Sequence {
 
 extension TokenSequence: CustomReflectable {
   public var customMirror: Mirror {
-    let keyAndValues = enumerated().map { (label: String($0.0) as String?, value: $0.1 as Any) }
-    return Mirror(self, children: keyAndValues)
+    return Mirror(self, unlabeledChildren: self.map{ $0 })
   }
 }
 

@@ -58,10 +58,10 @@ def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT,
     return process.returncode
 
 
-def check_call(cmd, env=os.environ, verbose=False):
+def check_call(cmd, cwd=None, env=os.environ, verbose=False):
     if verbose:
         print(' '.join([escapeCmdArg(arg) for arg in cmd]))
-    return subprocess.check_call(cmd, env=env, stderr=subprocess.STDOUT)
+    return subprocess.check_call(cmd, cwd=cwd, env=env, stderr=subprocess.STDOUT)
 
 
 def realpath(path):
@@ -91,7 +91,7 @@ def check_rsync():
             fatal_error('Error: Could not find rsync.')
 
 
-def generate_gyb_files(verbose, add_source_locations):
+def generate_gyb_files(verbose, add_source_locations, tar_path):
     print('** Generating gyb Files **')
 
     check_gyb_exec()
@@ -139,7 +139,14 @@ def generate_gyb_files(verbose, add_source_locations):
                    verbose=verbose)
 
     print('Done Generating gyb Files')
-
+    if not tar_path:
+      return
+    tar_command = ['tar', '-c', '-z', '-f', tar_path]
+    for degybed_file in os.listdir(generated_files_dir):
+        if not degybed_file.endswith('.swift'):
+            continue
+        tar_command.append(degybed_file)
+    check_call(tar_command, cwd=generated_files_dir)
 
 ## Building swiftSyntax
 
@@ -443,6 +450,10 @@ section for arguments that need to be specified for this.
                              help='The script only generates swift files from gyb '
                                   'and skips the rest of the build')
 
+    build_group.add_argument('--degyb-tar-path',
+                             help='The path to where we should tar the gyb-generated'
+                                  'files')
+
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
@@ -503,7 +514,8 @@ section for arguments that need to be specified for this.
 
     try:
         generate_gyb_files(verbose=args.verbose,
-                           add_source_locations=args.add_source_locations)
+                           add_source_locations=args.add_source_locations,
+                           tar_path=args.degyb_tar_path)
         # Skip the rest of the build if we should perform degyb only
         if args.degyb_only:
             sys.exit(0)

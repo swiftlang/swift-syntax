@@ -71,6 +71,9 @@ let package = Package(
 Tags will be created for every nightly build in the form of `swift-DEVELOPMENT-SNAPSHOT-<DATE>`. Revision field
 should be specified with the intended tag.
 
+Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require
+the Swift compiler source because we always push gyb-generated files to a tag.
+
 ### Some Example Users
 
 [**Swift AST Explorer**](https://swift-ast-explorer.kishikawakatsumi.com/): a Swift AST visualizer.

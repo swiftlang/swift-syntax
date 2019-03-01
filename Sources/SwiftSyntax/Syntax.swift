@@ -277,7 +277,7 @@ extension _SyntaxBase {
 
   /// Returns a description used by dump.
   public var debugDescription: String {
-    return "\(type(of: self))"
+    return String(reflecting: type(of: self))
   }
 
   /// Prints the raw value of this node to the provided stream.

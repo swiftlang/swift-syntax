@@ -18,7 +18,7 @@ public class CustomReflectableTests: XCTestCase {
     let testCases: [UInt: TestCase] = [
       #line: .init(syntax: SyntaxFactory.makeUnknownSyntax(tokens: []),
                    expectedDumped: """
-                                   - UnknownSyntax
+                                   - SwiftSyntax.UnknownSyntax
 
                                    """),
       #line: .init(syntax: SyntaxFactory.makeToken(.associatedtypeKeyword,
@@ -26,7 +26,7 @@ public class CustomReflectableTests: XCTestCase {
                                                    leadingTrivia: [],
                                                    trailingTrivia: []),
                    expectedDumped: """
-                                   ▿ TokenSyntax
+                                   ▿ SwiftSyntax.TokenSyntax
                                      - text: "associatedtype"
                                      ▿ leadingTrivia: SwiftSyntax.Trivia
                                        - pieces: 0 elements
@@ -51,14 +51,14 @@ public class CustomReflectableTests: XCTestCase {
         return .init(syntax: expr.tokens,
                      expectedDumped: """
                                      ▿ SwiftSyntax.TokenSequence
-                                       ▿ TokenSyntax
+                                       ▿ SwiftSyntax.TokenSyntax
                                          - text: "["
                                          ▿ leadingTrivia: SwiftSyntax.Trivia
                                            - pieces: 0 elements
                                          ▿ trailingTrivia: SwiftSyntax.Trivia
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
-                                       ▿ TokenSyntax
+                                       ▿ SwiftSyntax.TokenSyntax
                                          - text: "]"
                                          ▿ leadingTrivia: SwiftSyntax.Trivia
                                            - pieces: 0 elements
@@ -84,14 +84,14 @@ public class CustomReflectableTests: XCTestCase {
         return .init(syntax: expr.tokens.reversed(),
                      expectedDumped: """
                                      ▿ SwiftSyntax.ReversedTokenSequence
-                                       ▿ TokenSyntax
+                                       ▿ SwiftSyntax.TokenSyntax
                                          - text: "]"
                                          ▿ leadingTrivia: SwiftSyntax.Trivia
                                            - pieces: 0 elements
                                          ▿ trailingTrivia: SwiftSyntax.Trivia
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
-                                       ▿ TokenSyntax
+                                       ▿ SwiftSyntax.TokenSyntax
                                          - text: "["
                                          ▿ leadingTrivia: SwiftSyntax.Trivia
                                            - pieces: 0 elements
@@ -123,12 +123,12 @@ public class CustomReflectableTests: XCTestCase {
         let tuples = SyntaxFactory.makeTupleElementList(elements)
         return .init(syntax: tuples,
                      expectedDumped: """
-                                     ▿ TupleElementListSyntax
-                                       ▿ TupleElementSyntax
+                                     ▿ SwiftSyntax.TupleElementListSyntax
+                                       ▿ SwiftSyntax.TupleElementSyntax
                                          - label: nil
                                          - colon: nil
-                                         ▿ expression: IntegerLiteralExprSyntax
-                                           ▿ digits: TokenSyntax
+                                         ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                           ▿ digits: SwiftSyntax.TokenSyntax
                                              - text: "1"
                                              ▿ leadingTrivia: SwiftSyntax.Trivia
                                                - pieces: 0 elements
@@ -137,11 +137,11 @@ public class CustomReflectableTests: XCTestCase {
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "1"
                                          - trailingComma: nil
-                                       ▿ TupleElementSyntax
+                                       ▿ SwiftSyntax.TupleElementSyntax
                                          - label: nil
                                          - colon: nil
-                                         ▿ expression: IntegerLiteralExprSyntax
-                                           ▿ digits: TokenSyntax
+                                         ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                           ▿ digits: SwiftSyntax.TokenSyntax
                                              - text: "2"
                                              ▿ leadingTrivia: SwiftSyntax.Trivia
                                                - pieces: 0 elements
@@ -176,12 +176,12 @@ public class CustomReflectableTests: XCTestCase {
         return .init(syntax: tuples.reversed(),
                      expectedDumped: """
                                      ▿ SwiftSyntax.TupleElementListSyntax.Reversed
-                                       ▿ collection: TupleElementListSyntax
-                                         ▿ TupleElementSyntax
+                                       ▿ collection: SwiftSyntax.TupleElementListSyntax
+                                         ▿ SwiftSyntax.TupleElementSyntax
                                            - label: nil
                                            - colon: nil
-                                           ▿ expression: IntegerLiteralExprSyntax
-                                             ▿ digits: TokenSyntax
+                                           ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                             ▿ digits: SwiftSyntax.TokenSyntax
                                                - text: "1"
                                                ▿ leadingTrivia: SwiftSyntax.Trivia
                                                  - pieces: 0 elements
@@ -190,11 +190,11 @@ public class CustomReflectableTests: XCTestCase {
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "1"
                                            - trailingComma: nil
-                                         ▿ TupleElementSyntax
+                                         ▿ SwiftSyntax.TupleElementSyntax
                                            - label: nil
                                            - colon: nil
-                                           ▿ expression: IntegerLiteralExprSyntax
-                                             ▿ digits: TokenSyntax
+                                           ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                             ▿ digits: SwiftSyntax.TokenSyntax
                                                - text: "2"
                                                ▿ leadingTrivia: SwiftSyntax.Trivia
                                                  - pieces: 0 elements

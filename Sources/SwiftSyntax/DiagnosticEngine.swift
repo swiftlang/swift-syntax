@@ -42,9 +42,9 @@ public class DiagnosticEngine {
   ///              a severity and text that will be conveyed when the diagnostic
   ///              is serialized.
   public func diagnose(_ message: Diagnostic.Message,
-                       location: SourceLocation? = nil,
+                       utf8Offset: Int? = nil,
                        actions: ((inout Diagnostic.Builder) -> Void)? = nil) {
-    let diagnostic = Diagnostic(message: message, location: location,
+    let diagnostic = Diagnostic(message: message, utf8Offset: utf8Offset,
                                 actions: actions)
     diagnostics.append(diagnostic)
     for consumer in consumers {

@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public struct ByteSourceRange: Equatable {
+public struct ByteSourceRange: Equatable, Codable {
   public let offset: Int
   public let length: Int
 

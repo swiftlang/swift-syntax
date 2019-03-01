@@ -2,8 +2,8 @@ import XCTest
 import SwiftSyntax
 
 fileprivate func loc(_ file: String = #file, line: Int = #line,
-         column: Int = #line) -> SourceLocation {
-  return SourceLocation(line: line, column: column, offset: 0, file: file)
+         column: Int = #line) -> Int {
+  return 0
 }
 
 /// Adds static constants to Diagnostic.Message.
@@ -42,8 +42,8 @@ public class DiagnosticTestCase: XCTestCase {
     XCTAssertFalse(engine.hasErrors)
 
     engine.diagnose(.cannotConvert(fromType: "Int", toType: "Bool"),
-                    location: startLoc) {
-      $0.note(.checkEqualToZero, location: fixLoc,
+                    utf8Offset: startLoc) {
+      $0.note(.checkEqualToZero, utf8Offset: fixLoc,
               fixIts: [.insert(fixLoc, " != 0")])
     }
 
@@ -77,12 +77,12 @@ public class DiagnosticTestCase: XCTestCase {
         self.engine = engine
       }
       func visit(_ function: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-        let startLoc = function.identifier.startLocation(converter: converter)
-        let endLoc = function.endLocation(converter: converter)
-        engine.diagnose(.badFunction(function.identifier), location: startLoc) {
-          $0.highlight(function.identifier.sourceRange(converter: self.converter))
+        let startLoc = function.identifier.position.utf8Offset
+        let endLoc = function.endPosition.utf8Offset
+        engine.diagnose(.badFunction(function.identifier), utf8Offset: startLoc) {
+          $0.highlight(function.identifier.byteRange)
         }
-        engine.diagnose(.endOfFunction(function.identifier), location: endLoc)
+        engine.diagnose(.endOfFunction(function.identifier), utf8Offset: endLoc)
         return .visitChildren
       }
     }
@@ -95,9 +95,16 @@ public class DiagnosticTestCase: XCTestCase {
     }())
 
      XCTAssertEqual(6, engine.diagnostics.count)
-     let lines = Set(engine.diagnostics.compactMap { $0.location?.line })
+     let file = try! SyntaxParser.parse(url)
+     let converter = SourceLocationConverter(file: url.path, tree: file)
+
+     let lines = Set(engine.diagnostics.compactMap {
+       converter.location(for: AbsolutePosition(utf8Offset: $0.utf8Offset!)).line
+     })
      XCTAssertEqual([1, 3, 5, 7, 9, 11], lines)
-     let columns = Set(engine.diagnostics.compactMap { $0.location?.column })
+     let columns = Set(engine.diagnostics.compactMap {
+       converter.location(for: AbsolutePosition(utf8Offset: $0.utf8Offset!)).column
+     })
      XCTAssertEqual([6, 2], columns)
   }
 }

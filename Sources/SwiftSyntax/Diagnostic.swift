@@ -16,14 +16,14 @@
 /// diagnostic.
 public enum FixIt: Codable {
   /// Remove the characters from the source file over the provided source range.
-  case remove(SourceRange)
+  case remove(ByteSourceRange)
 
   /// Insert, at the provided source location, the provided string.
-  case insert(SourceLocation, String)
+  case insert(Int, String)
 
   /// Replace the characters at the provided source range with the provided
   /// string.
-  case replace(SourceRange, String)
+  case replace(ByteSourceRange, String)
 
   enum CodingKeys: String, CodingKey {
     case type
@@ -37,15 +37,15 @@ public enum FixIt: Codable {
     let type = try container.decode(String.self, forKey: .type)
     switch type {
     case "remove":
-      let range = try container.decode(SourceRange.self, forKey: .range)
+      let range = try container.decode(ByteSourceRange.self, forKey: .range)
       self = .remove(range)
     case "insert":
       let string = try container.decode(String.self, forKey: .string)
-      let loc = try container.decode(SourceLocation.self, forKey: .location)
+      let loc = try container.decode(Int.self, forKey: .location)
       self = .insert(loc, string)
     case "replace":
       let string = try container.decode(String.self, forKey: .string)
-      let range = try container.decode(SourceRange.self, forKey: .range)
+      let range = try container.decode(ByteSourceRange.self, forKey: .range)
       self = .replace(range, string)
     default:
       fatalError("unknown FixIt type \(type)")
@@ -68,10 +68,10 @@ public enum FixIt: Codable {
 
   /// The source range associated with a FixIt. If this is an insertion,
   /// it is a range with the same start and end location.
-  public var range: SourceRange {
+  public var range: ByteSourceRange {
     switch self {
     case .remove(let range), .replace(let range, _): return range
-    case .insert(let loc, _): return SourceRange(start: loc, end: loc)
+    case .insert(let loc, _): return ByteSourceRange(offset: loc, length: loc)
     }
   }
 
@@ -92,28 +92,28 @@ public struct Note: Codable {
   public let message: Diagnostic.Message
 
   /// The source location where the note should point.
-  public let location: SourceLocation?
+  public let utf8Offset: Int?
 
   /// An array of source ranges that should be highlighted.
-  public let highlights: [SourceRange]
+  public let highlights: [ByteSourceRange]
 
   /// An array of FixIts that apply to this note.
   public let fixIts: [FixIt]
 
   /// Constructs a new Note from the constituent parts.
-  internal init(message: Diagnostic.Message, location: SourceLocation?,
-                highlights: [SourceRange], fixIts: [FixIt]) {
+  internal init(message: Diagnostic.Message, utf8Offset: Int?,
+                highlights: [ByteSourceRange], fixIts: [FixIt]) {
     precondition(message.severity == .note,
                  "notes can only have the `note` severity")
     self.message = message
-    self.location = location
+    self.utf8Offset = utf8Offset
     self.highlights = highlights
     self.fixIts = fixIts
   }
 
   /// Converts this Note to a Diagnostic for serialization.
   func asDiagnostic() -> Diagnostic {
-    return Diagnostic(message: message, location: location, notes: [],
+    return Diagnostic(message: message, utf8Offset: utf8Offset, notes: [],
                       highlights: highlights, fixIts: fixIts)
   }
 }
@@ -145,14 +145,14 @@ public struct Diagnostic: Codable {
   /// The diagnostic's message.
   public let message: Message
 
-  /// The location the diagnostic should point.
-  public let location: SourceLocation?
+  /// The offset the diagnostic should point.
+  public let utf8Offset: Int?
 
   /// An array of notes providing more context for this diagnostic.
   public let notes: [Note]
 
   /// An array of source ranges to highlight.
-  public let highlights: [SourceRange]
+  public let highlights: [ByteSourceRange]
 
   /// An array of possible FixIts to apply to this diagnostic.
   public let fixIts: [FixIt]
@@ -167,7 +167,7 @@ public struct Diagnostic: Codable {
     internal var notes = [Note]()
 
     /// An in-flight array of highlighted source ranges.
-    internal var highlights = [SourceRange]()
+    internal var highlights = [ByteSourceRange]()
 
     /// An in-flight array of FixIts.
     internal var fixIts = [FixIt]()
@@ -178,41 +178,41 @@ public struct Diagnostic: Codable {
     /// - parameters:
     ///   - message: The message associated with the note. This must have the
     ///              `.note` severity.
-    ///   - location: The source location to which this note is attached.
+    ///   - utf8Offset: The source location to which this note is attached.
     ///   - highlights: Any source ranges that should be highlighted by this
     ///                 note.
     ///   - fixIts: Any FixIts that should be attached to this note.
     public mutating func note(_ message: Message,
-                              location: SourceLocation? = nil,
-                              highlights: [SourceRange] = [],
+                              utf8Offset: Int? = nil,
+                              highlights: [ByteSourceRange] = [],
                               fixIts: [FixIt] = []) {
-      self.notes.append(Note(message: message, location: location,
+      self.notes.append(Note(message: message, utf8Offset: utf8Offset,
                              highlights: highlights, fixIts: fixIts))
     }
 
     /// Adds the provided source ranges as highlights of this diagnostic.
-    public mutating func highlight(_ ranges: SourceRange...) {
+    public mutating func highlight(_ ranges: ByteSourceRange...) {
       self.highlights += ranges
     }
 
     /// Adds a FixIt to remove the contents of the provided SourceRange.
     /// When applied, this FixIt will delete the characters corresponding to
     /// this range in the original source file.
-    public mutating func fixItRemove(_ sourceRange: SourceRange) {
+    public mutating func fixItRemove(_ sourceRange: ByteSourceRange) {
       fixIts.append(.remove(sourceRange))
     }
 
     /// Adds a FixIt to insert the provided text at the provided SourceLocation
     /// in the file where the location resides.
     public mutating
-    func fixItInsert(_ text: String, at sourceLocation: SourceLocation) {
-      fixIts.append(.insert(sourceLocation, text))
+    func fixItInsert(_ text: String, at utf8Offset: Int) {
+      fixIts.append(.insert(utf8Offset, text))
     }
 
     /// Adds a FixIt to replace the contents of the source file corresponding
     /// to the provided SourceRange with the provided text.
     public mutating
-    func fixItReplace(_ sourceRange: SourceRange, with text: String) {
+    func fixItReplace(_ sourceRange: ByteSourceRange, with text: String) {
       fixIts.append(.replace(sourceRange, text))
     }
   }
@@ -224,14 +224,14 @@ public struct Diagnostic: Codable {
   /// and FixIts to the diagnostic through the Builder's API.
   /// - parameters:
   ///   - message: The diagnostic's message.
-  ///   - location: The location the diagnostic is attached to.
+  ///   - utf8Offset: The location the diagnostic is attached to.
   ///   - actions: A closure that's used to attach notes and highlights to
   ///              diagnostics.
-  init(message: Message, location: SourceLocation?,
+  init(message: Message, utf8Offset: Int?,
        actions: ((inout Builder) -> Void)?) {
     var builder = Builder()
     actions?(&builder)
-    self.init(message: message, location: location, notes: builder.notes,
+    self.init(message: message, utf8Offset: utf8Offset, notes: builder.notes,
               highlights: builder.highlights, fixIts: builder.fixIts)
   }
 
@@ -242,10 +242,10 @@ public struct Diagnostic: Codable {
   ///   - location: The location the diagnostic is attached to.
   ///   - highlights: An array of SourceRanges which will be highlighted when
   ///                 the diagnostic is presented.
-  init(message: Message, location: SourceLocation?, notes: [Note],
-       highlights: [SourceRange], fixIts: [FixIt]) {
+  init(message: Message, utf8Offset: Int?, notes: [Note],
+       highlights: [ByteSourceRange], fixIts: [FixIt]) {
     self.message = message
-    self.location = location
+    self.utf8Offset = utf8Offset
     self.notes = notes
     self.highlights = highlights
     self.fixIts = fixIts

@@ -38,7 +38,7 @@ public class PrintingDiagnosticConsumer: DiagnosticConsumer {
   /// Prints each of the fields in a diagnositic to stderr.
   public func write(_ diagnostic: Diagnostic) {
     if let loc = diagnostic.location {
-      write("\(loc.file):\(loc.line):\(loc.column): ")
+      write("\(loc.file!):\(loc.line!):\(loc.column!): ")
     } else {
       write("<unknown>:0:0: ")
     }

@@ -75,6 +75,11 @@ public final class IncrementalParseTransition {
   ///   1. not be overlapping.
   ///   2. should be in increasing source offset order.
   public static func isEditArrayValid(_ edits: [SourceEdit]) -> Bool {
+    // Not quite sure if we should disallow creating an `IncrementalParseTransition`
+    // object without edits but there doesn't seem to be much benefit if we do,
+    // and there are 'lit' tests that want to test incremental re-parsing without edits.
+    guard !edits.isEmpty else { return true }
+
     for i in 1..<edits.count {
       let prevEdit = edits[i-1]
       let curEdit = edits[i]

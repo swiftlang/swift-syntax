@@ -74,7 +74,7 @@ extension CommandLineArguments {
     let regex = try NSRegularExpression(
       pattern: "([0-9]+):([0-9]+)-([0-9]+):([0-9]+)=(.*)")
     var parsedEdits = [IncrementalEdit]()
-    let editArgs = try self.getRequiredValues("-incremental-edit")
+    let editArgs = try self.getValues("-incremental-edit")
     for edit in editArgs {
       guard let match =
           regex.firstMatch(in: edit,
@@ -300,7 +300,7 @@ func performParseIncremental(args: CommandLineArguments) throws {
   if !expectedReparseRegions.isEmpty {
     try verifyReusedRegions(expectedReparseRegions: expectedReparseRegions,
       reusedRegions: regions,
-      sourceURL: preEditURL)
+      source: postEditText)
   }
 }
 
@@ -318,8 +318,7 @@ enum TestingError: Error, CustomStringConvertible {
 
 func verifyReusedRegions(expectedReparseRegions: [SourceRegion],
       reusedRegions: [ByteSourceRange],
-      sourceURL: URL) throws {
-  let text = try String(contentsOf: sourceURL)
+      source text: String) throws {
   let fileLength = text.utf8.count
 
   // Compute the repared regions by inverting the reused regions
@@ -416,6 +415,6 @@ do {
   exit(0)
 } catch {
   printerr("\(error)")
-  printerr("Run swift-swiftsyntax-test -help for more help.")
+  printerr("Run lit-test-helper -help for more help.")
   exit(1)
 }

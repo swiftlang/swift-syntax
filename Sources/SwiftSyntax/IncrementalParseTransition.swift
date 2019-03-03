@@ -25,33 +25,28 @@ public protocol IncrementalParseReusedNodeDelegate {
   ///   - range: The source region of the currently parsed source.
   ///   - previousNode: The node from the previous tree that is associated with
   ///                   the skipped source region.
-  func parserReusedNode(range: ByteSourceRange, previousNode: Syntax)
+  func parserReusedNode(range: ByteSourceRange, previousNode: SyntaxNode)
 }
 
 /// An implementation of `IncrementalParseReusedNodeDelegate` that just collects
 /// the range and re-used node into an array.
 public final class IncrementalParseReusedNodeCollector:
     IncrementalParseReusedNodeDelegate {
-  public var rangeAndNodes: [(ByteSourceRange, Syntax)] = []
+  public var rangeAndNodes: [(ByteSourceRange, SyntaxNode)] = []
 
   public init() {}
 
-  public func parserReusedNode(range: ByteSourceRange, previousNode: Syntax) {
+  public func parserReusedNode(range: ByteSourceRange, previousNode: SyntaxNode) {
     rangeAndNodes.append((range, previousNode))
   }
 }
 
 /// Keeps track of a previously parsed syntax tree and the source edits that
-/// occurred since it was created and provides a mechanism for the parser to
-/// skip regions of an incrementally updated source that was already parsed
-/// during a previous parse invocation.
+/// occurred since it was created.
 public final class IncrementalParseTransition {
-  // The implementation is based on `SyntaxParsingCache` from the swift
-  // repository.
-
-  private let previousTree: SourceFileSyntax
-  private let edits: [SourceEdit]
-  private let reusedDelegate: IncrementalParseReusedNodeDelegate?
+  fileprivate let previousTree: SourceFileSyntax
+  fileprivate let edits: [SourceEdit]
+  fileprivate let reusedDelegate: IncrementalParseReusedNodeDelegate?
 
   /// - Parameters:
   ///   - previousTree: The previous tree to do lookups on.
@@ -92,6 +87,26 @@ public final class IncrementalParseTransition {
     }
     return true
   }
+}
+
+/// Provides a mechanism for the parser to skip regions of an incrementally
+/// updated source that was already parsed during a previous parse invocation.
+internal struct IncrementalParseLookup {
+  fileprivate let transition: IncrementalParseTransition
+  fileprivate var cursor: SyntaxCursor
+
+  init(transition: IncrementalParseTransition) {
+    self.transition = transition
+    self.cursor = .init(root: transition.previousTree.data.absoluteRaw)
+  }
+
+  fileprivate var edits: [SourceEdit] {
+    return transition.edits
+  }
+
+  fileprivate var reusedDelegate: IncrementalParseReusedNodeDelegate? {
+    return transition.reusedDelegate
+  }
 
   /// Does a lookup to see if the current source `offset` should be associated
   /// with a known `Syntax` node and its region skipped during parsing.
@@ -102,15 +117,15 @@ public final class IncrementalParseTransition {
   /// - Parameters:
   ///   - offset: The byte offset of the source string that is currently parsed.
   ///   - kind: The `SyntaxKind` that the parser expects at this position.
-  /// - Returns: A `Syntax` node from the previous parse invocation,
+  /// - Returns: A `SyntaxNode` node from the previous parse invocation,
   ///            representing the contents of this region, if it is still valid
   ///            to re-use. `nil` otherwise.
-  func lookUp(_ newOffset: Int, kind: SyntaxKind) -> _SyntaxBase? {
+  mutating func lookUp(_ newOffset: Int, kind: SyntaxKind) -> SyntaxNode? {
     guard let prevOffset = translateToPreEditOffset(newOffset) else {
       return nil
     }
     let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
-    let node = lookUpFrom(previousTree, prevPosition: prevPosition, kind: kind)
+    let node = cursorLookup(prevPosition: prevPosition, kind: kind)
     if let delegate = reusedDelegate, let node = node {
       delegate.parserReusedNode(
         range: ByteSourceRange(offset: newOffset, length: node.byteSize),
@@ -119,24 +134,23 @@ public final class IncrementalParseTransition {
     return node
   }
 
-  fileprivate func lookUpFrom(
-    _ node: _SyntaxBase, prevPosition: AbsolutePosition, kind: SyntaxKind
-  ) -> _SyntaxBase? {
-    if nodeCanBeReused(node, prevPosition: prevPosition, kind: kind) {
-      return node
-    }
+  mutating fileprivate func cursorLookup(
+    prevPosition: AbsolutePosition, kind: SyntaxKind
+  ) -> SyntaxNode? {
+    guard !cursor.finished else { return nil }
 
-    for child in node.children {
-      if child.position <= prevPosition && prevPosition < child.endPosition {
-        return lookUpFrom(child, prevPosition: prevPosition, kind: kind)
+    while true {
+      if nodeAtCursorCanBeReused(prevPosition: prevPosition, kind: kind) {
+        return cursor.asSyntaxNode
       }
+      guard cursor.advanceToNextNode(at: prevPosition) else { return nil }
     }
-    return nil
   }
 
-  fileprivate func nodeCanBeReused(
-    _ node: _SyntaxBase, prevPosition: AbsolutePosition, kind: SyntaxKind
+  fileprivate func nodeAtCursorCanBeReused(
+    prevPosition: AbsolutePosition, kind: SyntaxKind
   ) -> Bool {
+    let node = cursor.node
     if node.position != prevPosition {
       return false
     }
@@ -144,21 +158,33 @@ public final class IncrementalParseTransition {
       return false
     }
 
+    // Fast path check: if parser is past all the edits then any matching node
+    // can be re-used.
+    if !edits.isEmpty && edits.last!.range.endOffset < node.position.utf8Offset {
+      return true;
+    }
+
     // Node can also not be reused if an edit has been made in the next token's
     // text, e.g. because `private struct Foo {}` parses as a CodeBlockItem with
     // a StructDecl inside and `private struc Foo {}` parses as two
     // CodeBlockItems one for `private` and one for `struc Foo {}`
-    var nextLeafNodeLength = 0
-    if let nextToken = node.nextToken {
-      assert(nextToken.isPresent)
-      nextLeafNodeLength = nextToken.byteSize - nextToken.trailingTriviaLength.utf8Length
+    var nextLeafNodeLength: SourceLength = .zero
+    if let nextSibling = cursor.nextSibling {
+      // Fast path check: if next sibling is before all the edits then we can
+      // re-use the node.
+      if !edits.isEmpty && edits.first!.range.offset > nextSibling.endPosition.utf8Offset {
+        return true;
+      }
+      if let nextToken = nextSibling.raw.firstPresentToken {
+        nextLeafNodeLength = nextToken.totalLength - nextToken.trailingTriviaLength
+      }
     }
+    let nodeAffectRange = ByteSourceRange(offset: node.position.utf8Offset,
+      length: (node.raw.totalLength + nextLeafNodeLength).utf8Length)
 
     for edit in edits {
       // Check if this node or the trivia of the next node has been edited. If
       // it has, we cannot reuse it.
-      let nodeAffectRange = ByteSourceRange(offset: node.position.utf8Offset,
-        length: node.byteSize + nextLeafNodeLength)
       if edit.range.offset > nodeAffectRange.endOffset {
         // Remaining edits don't affect the node. (Edits are sorted)
         break
@@ -186,5 +212,81 @@ public final class IncrementalParseTransition {
       offset = offset - edit.replacementLength + edit.range.length
     }
     return offset
+  }
+}
+
+/// Functions as an iterator that walks the tree looking for nodes with a
+/// certain position.
+fileprivate struct SyntaxCursor {
+  var parents: [AbsoluteRawSyntax]
+  var node: AbsoluteRawSyntax
+  var finished: Bool
+
+  init(root: AbsoluteRawSyntax) {
+    self.node = root
+    self.parents = []
+    self.finished = false
+  }
+
+  var asSyntaxNode: SyntaxNode {
+    return SyntaxNode(node: node, parents: ArraySlice(parents))
+  }
+
+  /// Returns the next sibling node or the parent's sibling node if this is
+  /// the last child. The cursor state is unmodified.
+  /// - Returns: False if it run out of nodes to walk to.
+  var nextSibling: AbsoluteRawSyntax? {
+    var parents = ArraySlice(self.parents)
+    var node = self.node
+    while !parents.isEmpty {
+      if let sibling = node.nextSibling(parent: parents.last!) {
+        return sibling
+      }
+      node = parents.removeLast()
+    }
+
+    return nil
+  }
+
+  /// Moves to the first child of the current node.
+  /// - Returns: False if the node has no children.
+  mutating func advanceToFirstChild() -> Bool {
+    guard let child = node.firstChild else { return false }
+    parents.append(node)
+    node = child
+    return true
+  }
+
+  /// Moves to the next sibling node or the parent's sibling node if this is
+  /// the last child.
+  /// - Returns: False if it run out of nodes to walk to.
+  mutating func advanceToNextSibling() -> Bool {
+    while !parents.isEmpty {
+      if let sibling = node.nextSibling(parent: parents.last!) {
+        node = sibling
+        return true
+      }
+      node = parents.removeLast()
+    }
+
+    finished = true
+    return false
+  }
+
+  /// Moves to the next node in the tree with the provided `position`.
+  /// The caller should be calling this with `position`s in ascending order, not
+  /// random ones.
+  /// - Returns: True if it moved to a new node at the provided position,
+  ///   false if it moved to a node past the position or there are no more nodes.
+  mutating func advanceToNextNode(at position: AbsolutePosition) -> Bool {
+    repeat {
+      // if the node is fully before the requested position we can skip its children.
+      if node.endPosition > position {
+        if advanceToFirstChild() { continue }
+      }
+      if !advanceToNextSibling() { return false }
+    } while node.position < position
+
+    return node.position == position
   }
 }

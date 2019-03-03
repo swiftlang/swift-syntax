@@ -198,6 +198,24 @@ extension ${node.name}: ${traits_list} {}
 %   end
 % end
 
+extension SyntaxNode {
+  public var isUnknown: Bool { return raw.kind.isUnknown }
+  public var asUnknown: UnknownSyntax? {
+    guard isUnknown else { return nil }
+    return UnknownSyntax(asSyntaxData)
+  }
+% for node in SYNTAX_NODES:
+%   if not node.is_base():
+
+  public var is${node.syntax_kind}: Bool { return raw.kind == .${node.swift_syntax_kind} }
+  public var as${node.syntax_kind}: ${node.name}? {
+    guard is${node.syntax_kind} else { return nil }
+    return ${node.name}(asSyntaxData)
+  }
+%   end
+% end
+}
+
 /// MARK: Convenience methods
 
 extension StructDeclSyntax {

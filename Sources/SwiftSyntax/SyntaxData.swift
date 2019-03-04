@@ -115,6 +115,42 @@ struct AbsoluteRawSyntax {
   let raw: RawSyntax
   let info: AbsoluteSyntaxInfo
 
+  /// The position of the start of this node's leading trivia
+  var position: AbsolutePosition {
+    return AbsolutePosition(utf8Offset: Int(info.offset))
+  }
+
+  /// The end position of this node, including its trivia.
+  var endPosition: AbsolutePosition {
+    return position + raw.totalLength
+  }
+
+  /// Returns first `present` child.
+  var firstChild: AbsoluteRawSyntax? {
+    var curInfo = info.advancedToFirstChild()
+    for i in 0..<raw.numberOfChildren {
+      let childOpt = raw.child(at: i)
+      if let child = childOpt, child.isPresent {
+        return AbsoluteRawSyntax(raw: child, info: curInfo)
+      }
+      curInfo = curInfo.advancedBySibling(childOpt)
+    }
+    return nil
+  }
+
+  /// Returns next `present` sibling.
+  func nextSibling(parent: AbsoluteRawSyntax) -> AbsoluteRawSyntax? {
+    var curInfo = info.advancedBySibling(raw)
+    for i in Int(info.indexInParent+1) ..< parent.raw.numberOfChildren {
+      let siblingOpt = parent.raw.child(at: i)
+      if let sibling = siblingOpt, sibling.isPresent {
+        return AbsoluteRawSyntax(raw: sibling, info: curInfo)
+      }
+      curInfo = curInfo.advancedBySibling(siblingOpt)
+    }
+    return nil
+  }
+
   func replacingSelf(_ newRaw: RawSyntax) -> AbsoluteRawSyntax {
     return .init(raw: newRaw, info: info)
   }
@@ -140,7 +176,7 @@ struct SyntaxData {
 
   /// The position of the start of this node's leading trivia
   var position: AbsolutePosition {
-    return AbsolutePosition(utf8Offset: Int(absoluteRaw.info.offset))
+    return absoluteRaw.position
   }
 
   /// The position of the start of this node's content, skipping its trivia
@@ -155,7 +191,7 @@ struct SyntaxData {
 
   /// The end position of this node, including its trivia.
   var endPosition: AbsolutePosition {
-    return position + raw.totalLength
+    return absoluteRaw.endPosition
   }
 
   /// Creates a `SyntaxData` with the provided raw syntax and parent.

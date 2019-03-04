@@ -997,7 +997,7 @@ extension RawSyntax {
   }
 }
 
-extension RawSyntax: TextOutputStreamable {
+extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// Prints the RawSyntax node, and all of its children, to the provided
   /// stream. This implementation must be source-accurate.
   /// - Parameter stream: The stream on which to output this node.
@@ -1013,6 +1013,13 @@ extension RawSyntax: TextOutputStreamable {
         self.child(at: i)?.write(to: &target)
       }
     }
+  }
+
+  /// A source-accurate description of this node.
+  var description: String {
+    var s = ""
+    self.write(to: &s)
+    return s
   }
 }
 

@@ -122,10 +122,11 @@ public enum SyntaxParser {
     swiftparse_parser_set_node_handler(c_parser, nodeHandler);
 
     if let parseTransition = parseTransition {
+      var parseLookup = IncrementalParseLookup(transition: parseTransition)
       let nodeLookup = {
             (offset: Int, kind: CSyntaxKind) -> CParseLookupResult in
         guard let foundNode =
-            parseTransition.lookUp(offset, kind: .fromRawValue(kind)) else {
+            parseLookup.lookUp(offset, kind: .fromRawValue(kind)) else {
           return CParseLookupResult(length: 0, node: nil)
         }
         let lengthToSkip = foundNode.byteSize

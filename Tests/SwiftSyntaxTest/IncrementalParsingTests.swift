@@ -40,10 +40,14 @@ public class IncrementalParsingTestCase: XCTestCase {
 
     XCTAssertEqual(reusedNodeCollector.rangeAndNodes.count, 1)
     if reusedNodeCollector.rangeAndNodes.count != 1 { return }
-    let rangeAndNode = reusedNodeCollector.rangeAndNodes[0]
-    XCTAssertEqual("\(rangeAndNode.1)", "\nstruct B {}")
+    let (reusedRange, reusedNode) = reusedNodeCollector.rangeAndNodes[0]
+    XCTAssertEqual("\(reusedNode)", "\nstruct B {}")
 
-    XCTAssertEqual(newStructB.byteRange, rangeAndNode.0)
-    XCTAssertEqual(origStructB, rangeAndNode.1 as! CodeBlockItemSyntax)
+    XCTAssertEqual(newStructB.byteRange, reusedRange)
+    XCTAssertEqual(origStructB.uniqueIdentifier, reusedNode.uniqueIdentifier)
+    XCTAssertEqual(origStructB, reusedNode.asSyntax as! CodeBlockItemSyntax)
+    XCTAssertTrue(reusedNode.isCodeBlockItem)
+    XCTAssertEqual(origStructB, reusedNode.asCodeBlockItem!)
+    XCTAssertEqual(origStructB.parent!.uniqueIdentifier, reusedNode.parent!.uniqueIdentifier)
   }
 }

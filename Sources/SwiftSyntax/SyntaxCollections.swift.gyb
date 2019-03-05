@@ -223,6 +223,15 @@ extension ${node.name}: Sequence {
     }
   }
 }
+%   end
+% end
 
+% for node in SYNTAX_NODES:
+%   if node.is_syntax_collection():
+extension ${node.name}: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, unlabeledChildren: self.map{ $0 })
+  }
+}
 %   end
 % end

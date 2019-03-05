@@ -28,6 +28,9 @@ typealias CTokenData = swiftparse_token_data_t
 typealias CLayoutData = swiftparse_layout_data_t
 typealias CParseLookupResult = swiftparse_lookup_result_t
 typealias CClientNode = swiftparse_client_node_t
+typealias CDiagnostic = swiftparser_diagnostic_t
+typealias CFixit = swiftparse_diagnostic_fixit_t
+typealias CRange = swiftparse_range_t
 
 /// A list of possible errors that could be encountered while parsing a
 /// Syntax tree.
@@ -66,7 +69,9 @@ public enum SyntaxParser {
   /// - Throws: `ParserError`
   public static func parse(
     source: String,
-    parseTransition: IncrementalParseTransition? = nil
+    file: String = "",
+    parseTransition: IncrementalParseTransition? = nil,
+    diagConsumer: DiagnosticConsumer? = nil
   ) throws -> SourceFileSyntax {
     guard nodeHashVerifyResult else {
       throw ParserError.parserCompatibilityCheckFailed
@@ -77,7 +82,7 @@ public enum SyntaxParser {
     var utf8Source = source
     utf8Source.makeNativeUTF8IfNeeded()
 
-    let rawSyntax = parseRaw(utf8Source, parseTransition)
+    let rawSyntax = parseRaw(file, utf8Source, parseTransition, diagConsumer)
 
     guard let file = makeSyntax(.forRoot(rawSyntax)) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
@@ -92,19 +97,23 @@ public enum SyntaxParser {
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
-  public static func parse(_ url: URL) throws -> SourceFileSyntax {
+  public static func parse(_ url: URL,
+      diagConsumer: DiagnosticConsumer? = nil) throws -> SourceFileSyntax {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     var fileData = try Data(contentsOf: url)
     fileData.append(0) // null terminate.
     let source = fileData.withUnsafeBytes { (ptr: UnsafePointer<CChar>) in
       return String(cString: ptr)
     }
-    return try parse(source: source)
+    return try parse(source: source, file: url.absoluteString,
+                     diagConsumer: diagConsumer)
   }
 
   private static func parseRaw(
+    _ file: String,
     _ source: String,
-    _ parseTransition: IncrementalParseTransition?
+    _ parseTransition: IncrementalParseTransition?,
+    _ diagConsumer: DiagnosticConsumer?
   ) -> RawSyntax {
     assert(source.isNativeUTF8)
     let c_parser = swiftparse_parser_create()
@@ -135,9 +144,81 @@ public enum SyntaxParser {
       swiftparse_parser_set_node_lookup(c_parser, nodeLookup);
     }
 
+    // Set up diagnostics consumer if requested by the caller.
+    if let diagConsumer = diagConsumer {
+      // If requested, we should set up a source location converter to calculate
+      // line and column.
+      let converter = diagConsumer.calculateLineColumn ?
+        SourceLocationConverter(file: file, source: source) : nil
+      let diagHandler = { (diag: CDiagnostic!) in
+        diagConsumer.handle(Diagnostic(diag: diag, using: converter))
+      }
+      swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
+    }
+
     let c_top = swiftparse_parse_string(c_parser, source)
 
   // Get ownership back from the C parser.
     return RawSyntax.moveFromOpaque(c_top)!
+  }
+}
+
+extension SourceRange {
+  init(_ range: CRange, _ converter: SourceLocationConverter?) {
+    let start = SourceLocation(offset: Int(range.offset), converter: converter)
+    let end = SourceLocation(offset: Int(range.offset + range.length),
+                             converter: converter)
+    self.init(start: start, end: end)
+  }
+}
+
+extension Diagnostic.Message {
+  init(_ diag: CDiagnostic) {
+    let message = String(cString: swiftparse_diagnostic_get_message(diag))
+    switch swiftparse_diagnostic_get_severity(diag) {
+    case SWIFTPARSER_DIAGNOSTIC_SEVERITY_ERROR:
+      self.init(.error, message)
+    case SWIFTPARSER_DIAGNOSTIC_SEVERITY_WARNING:
+      self.init(.warning, message)
+    case SWIFTPARSER_DIAGNOSTIC_SEVERITY_NOTE:
+      self.init(.note, message)
+    default:
+      fatalError("unrecognized diagnostic level")
+    }
+  }
+}
+
+extension FixIt {
+  init(_ cfixit: CFixit, _ converter: SourceLocationConverter?) {
+    let replacement = String(cString: cfixit.text)
+    let range = SourceRange(cfixit.range, converter)
+    if cfixit.range.length == 0 {
+      // Insert
+      self = .insert(SourceLocation(offset: Int(cfixit.range.offset),
+                                    converter: converter), replacement)
+    } else if replacement.isEmpty {
+      // Remove
+      self = .remove(range)
+    } else {
+      // Replace
+      self = .replace(range, replacement)
+    }
+  }
+}
+
+extension Diagnostic {
+  init(diag: CDiagnostic, using converter: SourceLocationConverter?) {
+    // Collect highlighted ranges
+    let hightlights = (0..<swiftparse_diagnostic_get_range_count(diag)).map {
+      return SourceRange(swiftparse_diagnostic_get_range(diag, $0), converter)
+    }
+    // Collect fixits
+    let fixits = (0..<swiftparse_diagnostic_get_fixit_count(diag)).map {
+      return FixIt(swiftparse_diagnostic_get_fixit(diag, $0), converter)
+    }
+    self.init(message: Diagnostic.Message(diag),
+      location: SourceLocation(offset: Int(swiftparse_diagnostic_get_source_loc(diag)),
+                               converter: converter),
+      notes: [], highlights: hightlights, fixIts: fixits)
   }
 }

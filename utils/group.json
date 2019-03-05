@@ -16,6 +16,7 @@
     "SyntaxFactory.swift",
     "SyntaxRewriter.swift",
     "SyntaxClassifier.swift",
+    "SyntaxClassification.swift",
   ],
   "Diagnostic": [
     "DiagnosticConsumer.swift",

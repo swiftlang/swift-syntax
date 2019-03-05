@@ -282,6 +282,55 @@ fileprivate struct TokenData {
     }
   }
 
+  fileprivate func withUnsafeTokenText<Result>(
+    relativeOffset: Int,
+    length: UInt32,
+    extraPtr: DataElementPtr,
+    _ body: (UnsafeTokenText) -> Result
+  ) -> Result {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return body(data.getTokenText(relativeOffset: relativeOffset))
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      return tok.kind.withUnsafeTokenText(body)
+    }
+  }
+
+  fileprivate func withUnsafeLeadingTriviaPiece<Result>(
+    at index: Int,
+    relativeOffset: Int,
+    length: UInt32,
+    extraPtr: DataElementPtr,
+    _ body: (UnsafeTriviaPiece?) -> Result
+  ) -> Result {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return body(data.getLeadingTriviaPiece(at: index, relativeOffset: relativeOffset))
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      guard index < tok.leadingTrivia.count else { return body(nil) }
+      return tok.leadingTrivia[index].withUnsafeTriviaPiece(body)
+    }
+  }
+
+  fileprivate func withUnsafeTrailingTriviaPiece<Result>(
+    at index: Int,
+    relativeOffset: Int,
+    length: UInt32,
+    extraPtr: DataElementPtr,
+    _ body: (UnsafeTriviaPiece?) -> Result
+  ) -> Result {
+    if isParsed {
+      let data = parsedData(length: length, extraPtr: extraPtr)
+      return body(data.getTrailingTriviaPiece(at: index, relativeOffset: relativeOffset))
+    } else {
+      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
+      guard index < tok.trailingTrivia.count else { return body(nil) }
+      return tok.trailingTrivia[index].withUnsafeTriviaPiece(body)
+    }
+  }
+
   /// Prints the RawSyntax token.
   fileprivate func write<Target>(
     to target: inout Target, length: UInt32, extraPtr: DataElementPtr
@@ -366,6 +415,42 @@ fileprivate struct UnsafeParsedTokenData {
       }
     }
     return .init(pieces: newPieces)
+  }
+
+  func getTokenText(relativeOffset: Int) -> UnsafeTokenText {
+    let leadingTriviaLength = relativeOffset
+    let trailingTriviaLength = self.getTrailingTriviaLength()
+    let tokenLength = Int(length) - (leadingTriviaLength + trailingTriviaLength)
+    let customText = fullTextBuffer.isEmpty ? emptyStringBuffer :
+      getTextSlice(start: relativeOffset, length: tokenLength)
+    return .init(kind: .fromRawValue(tokenKind), length: tokenLength, customText: customText)
+  }
+
+  func getLeadingTriviaPiece(
+    at index: Int, relativeOffset: Int
+  ) -> UnsafeTriviaPiece? {
+    return getTriviaPiece(at: index, relativeOffset: relativeOffset,
+      trivia: leadingTriviaBuffer)
+  }
+
+  func getTrailingTriviaPiece(
+    at index: Int, relativeOffset: Int
+  ) -> UnsafeTriviaPiece? {
+    return getTriviaPiece(at: index, relativeOffset: relativeOffset,
+      trivia: trailingTriviaBuffer)
+  }
+
+  private func getTriviaPiece(
+    at index: Int,
+    relativeOffset: Int,
+    trivia: UnsafeBufferPointer<CTriviaPiece>
+  ) -> UnsafeTriviaPiece? {
+    guard index < trivia.count else { return nil }
+    let cpiece = trivia[index]
+    let length = Int(cpiece.length)
+    let customText = fullTextBuffer.isEmpty ? emptyStringBuffer :
+      getTextSlice(start: relativeOffset, length: length)
+    return .init(kind: .fromRawValue(cpiece.kind), length: length, customText: customText)
   }
 
   func write<Target>(
@@ -719,6 +804,47 @@ struct RawSyntaxBase {
     }
   }
 
+  fileprivate func withUnsafeTokenText<Result>(
+    relativeOffset: Int,
+    extraPtr: DataElementPtr,
+    _ body: (UnsafeTokenText?) -> Result
+  ) -> Result {
+    switch data {
+    case .token(let data):
+      return data.withUnsafeTokenText(relativeOffset: relativeOffset,
+        length: byteLength, extraPtr: extraPtr, body)
+    case .layout(_): return body(nil)
+    }
+  }
+
+  fileprivate func withUnsafeLeadingTriviaPiece<Result>(
+    at index: Int,
+    relativeOffset: Int,
+    extraPtr: DataElementPtr,
+    _ body: (UnsafeTriviaPiece?) -> Result
+  ) -> Result {
+    switch data {
+    case .token(let data):
+      return data.withUnsafeLeadingTriviaPiece(at: index, relativeOffset: relativeOffset,
+        length: byteLength, extraPtr: extraPtr, body)
+    case .layout(_): return body(nil)
+    }
+  }
+
+  fileprivate func withUnsafeTrailingTriviaPiece<Result>(
+    at index: Int,
+    relativeOffset: Int,
+    extraPtr: DataElementPtr,
+    _ body: (UnsafeTriviaPiece?) -> Result
+  ) -> Result {
+    switch data {
+    case .token(let data):
+      return data.withUnsafeTrailingTriviaPiece(at: index, relativeOffset: relativeOffset,
+        length: byteLength, extraPtr: extraPtr, body)
+    case .layout(_): return body(nil)
+    }
+  }
+
   /// Prints the RawSyntax token. If self is a layout node it does nothing.
   fileprivate func writeToken<Target>(
     to target: inout Target, extraPtr: DataElementPtr
@@ -906,6 +1032,64 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
   func formTokenTrailingTrivia() -> Trivia? {
     return withUnsafeMutablePointers {
       $0.pointee.formTokenTrailingTrivia(extraPtr: $1)
+    }
+  }
+
+  /// Passes token info to the provided closure as `UnsafeTokenText`.
+  /// - Parameters:
+  ///   - relativeOffset: For efficiency, the caller keeps track of the relative
+  ///     byte offset (from start of leading trivia) of the token text, to avoid
+  ///     calculating it within this function.
+  ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
+  ///     must not escape the closure.
+  /// - Returns: Return value of `body`.
+  func withUnsafeTokenText<Result>(
+    relativeOffset: Int,
+    _ body: (UnsafeTokenText?) -> Result
+  ) -> Result {
+    return withUnsafeMutablePointers {
+      $0.pointee.withUnsafeTokenText(relativeOffset: relativeOffset,
+        extraPtr: $1, body)
+    }
+  }
+
+  /// Passes trivia piece info to the provided closure as `UnsafeTriviaPiece`.
+  /// - Parameters:
+  ///   - at: The index for the trivia piace.
+  ///   - relativeOffset: For efficiency, the caller keeps track of the relative
+  ///     byte offset (from start of leading trivia) of the trivia piece text,
+  ///     to avoid calculating it within this function.
+  ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
+  ///     must not escape the closure.
+  /// - Returns: Return value of `body`.
+  func withUnsafeLeadingTriviaPiece<Result>(
+    at index: Int,
+    relativeOffset: Int,
+    _ body: (UnsafeTriviaPiece?) -> Result
+  ) -> Result {
+    return withUnsafeMutablePointers {
+      $0.pointee.withUnsafeLeadingTriviaPiece(at: index,
+        relativeOffset: relativeOffset, extraPtr: $1, body)
+    }
+  }
+
+  /// Passes trivia piece info to the provided closure as `UnsafeTriviaPiece`.
+  /// - Parameters:
+  ///   - at: The index for the trivia piace.
+  ///   - relativeOffset: For efficiency, the caller keeps track of the relative
+  ///     byte offset (from start of leading trivia) of the trivia piece text,
+  ///     to avoid calculating it within this function.
+  ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
+  ///     must not escape the closure.
+  /// - Returns: Return value of `body`.
+  func withUnsafeTrailingTriviaPiece<Result>(
+    at index: Int,
+    relativeOffset: Int,
+    _ body: (UnsafeTriviaPiece?) -> Result
+  ) -> Result {
+    return withUnsafeMutablePointers {
+      $0.pointee.withUnsafeTrailingTriviaPiece(at: index,
+        relativeOffset: relativeOffset, extraPtr: $1, body)
     }
   }
 
@@ -1119,5 +1303,53 @@ extension RawSyntax {
     }
     return create(kind: kind, leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia, length: length, presence: presence)
+  }
+}
+
+/// Token info with its custom text as `UnsafeBufferPointer`. This is only safe
+/// to use from within the `withUnsafeTokenText` methods.
+internal struct UnsafeTokenText {
+  let kind: RawTokenKind
+  let length: Int
+  let customText: UnsafeBufferPointer<UInt8>
+
+  init(kind: RawTokenKind, length: Int) {
+    self.kind = kind
+    self.length = length
+    self.customText = .init(start: nil, count: 0)
+  }
+
+  init(kind: RawTokenKind, length: Int, customText: UnsafeBufferPointer<UInt8>) {
+    self.kind = kind
+    self.length = length
+    self.customText = customText
+  }
+}
+
+/// Trivia piece info with its custom text as `UnsafeBufferPointer`. This is
+/// only safe to use from within the `withUnsafeLeadingTriviaPiece` and
+/// `withUnsafeTrailingTriviaPiece` methods.
+internal struct UnsafeTriviaPiece {
+  let kind: TriviaPieceKind
+  let length: Int
+  let customText: UnsafeBufferPointer<UInt8>
+
+  init(kind: TriviaPieceKind, length: Int) {
+    self.kind = kind
+    self.length = length
+    self.customText = .init(start: nil, count: 0)
+  }
+
+  init(kind: TriviaPieceKind, length: Int, customText: UnsafeBufferPointer<UInt8>) {
+    self.kind = kind
+    self.length = length
+    self.customText = customText
+  }
+
+  static func fromRawValue(
+    _ piece: CTriviaPiece, textBuffer: UnsafeBufferPointer<UInt8>
+  ) -> UnsafeTriviaPiece {
+    return UnsafeTriviaPiece(kind: .fromRawValue(piece.kind),
+      length: Int(piece.length), customText: textBuffer)
   }
 }

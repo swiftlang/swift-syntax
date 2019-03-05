@@ -194,13 +194,28 @@ struct IncrementalEdit {
   let replacement: String
 }
 
+/// Rewrites a parsed tree with all constructed nodes.
+class TreeReconstructor : SyntaxRewriter {
+  override func visit(_ token: TokenSyntax) -> Syntax {
+    return SyntaxFactory.makeToken(token.tokenKind, presence: token.presence,
+                     leadingTrivia: token.leadingTrivia,
+                     trailingTrivia: token.trailingTrivia)
+  }
+}
+
 func performClassifySyntax(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
 
   let tree = try SyntaxParser.parse(treeURL)
-  let classifications = SyntaxClassifier.classifyTokensInTree(tree)
-  let printer = ClassifiedSyntaxTreePrinter(classifications: classifications)
-  let result = printer.print(tree: tree)
+  let result = ClassifiedSyntaxTreePrinter.print(tree)
+  do {
+    // Sanity check that we get the same result if the tree has constructed nodes.
+    let ctorTree = TreeReconstructor().visit(tree) as! SourceFileSyntax
+    let ctorResult = ClassifiedSyntaxTreePrinter.print(ctorTree)
+    if ctorResult != result {
+      throw TestingError.classificationVerificationFailed(result, ctorResult)
+    }
+  }
 
   if let outURL = args["-out"].map(URL.init(fileURLWithPath:)) {
     try result.write(to: outURL, atomically: false, encoding: .utf8)
@@ -306,12 +321,21 @@ func performParseIncremental(args: CommandLineArguments) throws {
 
 enum TestingError: Error, CustomStringConvertible {
   case reparsedRegionsVerificationFailed(ByteSourceRange)
+  case classificationVerificationFailed(String, String)
 
   public var description: String {
     switch self {
     case .reparsedRegionsVerificationFailed(let range):
       return "unexpectedly reparsed following region: (offset: \(range.offset),"
         + " length:\(range.length))"
+    case .classificationVerificationFailed(let parsed, let constructed):
+      return """
+      parsed vs constructed tree resulted in different classification output
+      --- PARSED:
+      \(parsed)
+      --- CONSTRUCTED:
+      \(constructed)
+      """
     }
   }
 }

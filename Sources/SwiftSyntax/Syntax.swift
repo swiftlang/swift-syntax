@@ -250,6 +250,21 @@ extension _SyntaxBase {
     return TokenSequence(self)
   }
 
+  /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
+  var classifications: SyntaxClassifications {
+    let fullRange = ByteSourceRange(offset: 0, length: byteSize)
+    return SyntaxClassifications(self, in: fullRange)
+  }
+
+  /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
+  /// a relative range.
+  /// - Parameters:
+  ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
+  /// - Returns: Sequence of `SyntaxClassifiedRange`s.
+  func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
+    return SyntaxClassifications(self, in: range)
+  }
+
   /// Returns a value representing the unique identity of the node.
   var uniqueIdentifier: SyntaxIdentifier {
     return data.nodeId
@@ -462,6 +477,20 @@ extension Syntax {
     return base.tokens
   }
 
+  /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
+  public var classifications: SyntaxClassifications {
+    return base.classifications
+  }
+
+  /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
+  /// a relative range.
+  /// - Parameters:
+  ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
+  /// - Returns: Sequence of `SyntaxClassifiedRange`s.
+  public func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
+    return base.classifications(in: range)
+  }
+
   /// Returns a value representing the unique identity of the node.
   public var uniqueIdentifier: SyntaxIdentifier {
     return base.uniqueIdentifier
@@ -499,6 +528,10 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   /// Creates a Syntax node from the provided root and data.
   internal init(_ data: SyntaxData) {
     self.data = data
+  }
+
+  public var presence: SourcePresence {
+    return raw.presence
   }
 
   /// The text of the token as written in the source code.

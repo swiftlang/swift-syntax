@@ -4,6 +4,7 @@ import SwiftSyntaxTest
 XCTMain({ () -> [XCTestCaseEntry] in
   var testCases: [XCTestCaseEntry] = [
     testCase(AbsolutePositionTestCase.allTests),
+    testCase(ClassificationTests.allTests),
     testCase(DiagnosticTestCase.allTests),
     testCase(IncrementalParsingTestCase.allTests),
     testCase(MultithreadingTestCase.allTests),

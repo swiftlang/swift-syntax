@@ -30,14 +30,14 @@ extension SyntaxCollection {
   /// Gets the child at the provided index in this node's present children.
   /// This is not provided by the Syntax API because its performance is O(n).
   /// We add it here in `SyntaxCollection` for testing purposes.
-  func child(at index: Int) -> Syntax? {
+  func child(at index: Int) -> Element? {
     guard index >= 0 && index < self.count else { return nil }
-    var iter = SyntaxChildren(self).makeIterator()
+    var iter = self.makeIterator()
     for _ in 0..<index { _ = iter.next() }
     return iter.next()!
   }
 
-  subscript(_ index: Int) -> Syntax {
+  subscript(_ index: Int) -> Element {
     return child(at: index)!
   }
 }

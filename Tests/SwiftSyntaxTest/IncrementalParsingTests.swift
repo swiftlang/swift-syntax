@@ -32,8 +32,8 @@ public class IncrementalParsingTestCase: XCTestCase {
     let newTree = try! SyntaxParser.parse(source: step.0, parseTransition: transition)
     XCTAssertEqual("\(newTree)", step.0)
 
-    let origStructB = origTree.statements[1] as! CodeBlockItemSyntax
-    let newStructB = newTree.statements[1] as! CodeBlockItemSyntax
+    let origStructB = origTree.statements[1]
+    let newStructB = newTree.statements[1]
     XCTAssertEqual("\(origStructB)", "\nstruct B {}")
     XCTAssertEqual("\(newStructB)", "\nstruct B {}")
     XCTAssertNotEqual(origStructB, newStructB)

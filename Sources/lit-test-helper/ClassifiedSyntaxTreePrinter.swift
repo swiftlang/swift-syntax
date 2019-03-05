@@ -38,89 +38,63 @@ extension SyntaxClassification {
   }
 }
 
-class ClassifiedSyntaxTreePrinter {
-  private let classifications: [(TokenSyntax, SyntaxClassification)]
-  private var currentClassification = SyntaxClassification.none
-  private var skipNextNewline = false
-  private var result = ""
-
-  // MARK: Public interface
-
-  init(classifications: [(TokenSyntax, SyntaxClassification)]) {
-    self.classifications = classifications
-  }
-
-  func print(tree: SourceFileSyntax) -> String {
-    result = ""
-    for (token, classification) in classifications {
-      print(node: token, classification: classification)
+enum ClassifiedSyntaxTreePrinter {
+  static func print(_ tree: Syntax) -> String {
+    var result = ""
+    var previousClassification: SyntaxClassifiedRange? = nil
+    func openTag(_ classify: SyntaxClassifiedRange) {
+      result += "<\(classify.kind.tag)>"
+      previousClassification = classify
     }
-    // Emit the last closing tag
-    recordCurrentClassification(.none)
-    return result
-  }
-
-  // MARK: Implementation
-
-  /// Closes the current tag if it is different from the previous one and opens
-  /// a tag with the specified ID.
-  private func recordCurrentClassification(
-    _ classification: SyntaxClassification
-  ) {
-    if currentClassification != classification {
-      if currentClassification != .none {
-        result += "</" + currentClassification.tag + ">"
-      }
-      if classification != .none {
-        result += "<" + classification.tag + ">"
-      }
+    func closeTag(_ classify: SyntaxClassifiedRange) {
+      result += "</\(classify.kind.tag)>"
+      previousClassification = nil
     }
-    currentClassification = classification
-  }
 
-  private func print(_ piece: TriviaPiece) {
-    let classification: SyntaxClassification
-    switch piece {
-    case .spaces, .tabs, .verticalTabs, .formfeeds:
-      classification = .none
-    case .newlines, .carriageReturns, .carriageReturnLineFeeds:
-      if skipNextNewline {
-        skipNextNewline = false
-        return
-      }
-      classification = .none
-    case .backticks:
-      classification = .none
-    case .lineComment(let text):
+    var sourceText = tree.description
+    let utf8 = sourceText.utf8
+    var curTextPos = utf8.startIndex
+    for classify in tree.classifications {
+      let classifyBegin = utf8.index(utf8.startIndex, offsetBy: classify.range.offset)
+      let classifyEnd = utf8.index(classifyBegin, offsetBy: classify.range.length)
+      let classifiedText = String(utf8[classifyBegin..<classifyEnd])!
+      let unclassifiedText = String(utf8[curTextPos..<classifyBegin])!
+
       // Don't print CHECK lines
-      if text.hasPrefix("// CHECK") {
-        skipNextNewline = true
-        return
+      var skipCheckLine = false
+      if classify.kind == .lineComment && classifiedText.hasPrefix("// CHECK") {
+        skipCheckLine = true
+        if let previousClassify = previousClassification {
+          closeTag(previousClassify)
+        }
+        result += unclassifiedText
+
+      } else {
+        // Try to merge same classification ranges, to make writing tests more convenient.
+        if let previousClassify = previousClassification {
+          if !unclassifiedText.isEmpty || previousClassify.kind != classify.kind {
+            closeTag(previousClassify)
+          }
+        }
+        result += unclassifiedText
+        if previousClassification == nil {
+          openTag(classify)
+        }
+        result += "\(classifiedText)"
       }
-      classification = .lineComment
-    case .blockComment:
-      classification = .blockComment
-    case .docLineComment:
-      classification = .docLineComment
-    case .docBlockComment:
-      classification = .docBlockComment
-    case .garbageText:
-      classification = .none
-    }
-    recordCurrentClassification(classification)
-    piece.write(to: &result)
-  }
 
-  private func print(_ trivia: Trivia) {
-    for piece in trivia {
-      print(piece)
+      curTextPos = classifyEnd
+      if skipCheckLine {
+        curTextPos = utf8.index(after: curTextPos)
+      }
     }
-  }
 
-  private func print(node: TokenSyntax, classification: SyntaxClassification) {
-    print(node.leadingTrivia)
-    recordCurrentClassification(classification)
-    result += node.text
-    print(node.trailingTrivia)
+    if let previousClassify = previousClassification {
+      closeTag(previousClassify)
+    }
+    let unclassifiedText = String(utf8[curTextPos..<utf8.endIndex])!
+    result += unclassifiedText
+
+    return result
   }
 }

@@ -17,6 +17,7 @@ INCR_TRANSFER_ROUNDTRIP_EXEC = \
     WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
 GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
 LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
+GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
 
 ### Generate Xcode project
 
@@ -184,6 +185,11 @@ def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
 
     # To speed up compilation.
     swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
+
+    # To build the group information into the module documentation file
+    swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', '-group-info-path'])
+    swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', GROUP_INFO_PATH])
+
     return swiftpm_call
 
 def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir,

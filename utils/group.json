@@ -1,0 +1,42 @@
+{
+  "SyntaxNodes": [
+    "SyntaxData.swift",
+    "TokenKind.swift",
+    "Syntax.swift",
+    "Trivia.swift",
+    "RawSyntax.swift",
+    "SyntaxKind.swift",
+    "SyntaxNodes.swift",
+    "SyntaxCollections.swift",
+    "SourcePresence.swift",
+    "SyntaxChildren.swift",
+  ],
+  "Utils": [
+    "SyntaxBuilders.swift",
+    "SyntaxFactory.swift",
+    "SyntaxRewriter.swift",
+    "SyntaxClassifier.swift",
+    "SyntaxClassification.swift",
+  ],
+  "Diagnostic": [
+    "DiagnosticConsumer.swift",
+    "JSONDiagnosticConsumer.swift",
+    "PrintingDiagnosticConsumer.swift",
+    "DiagnosticEngine.swift",
+    "Diagnostic.swift",
+    "SyntaxVerifier.swift",
+  ],
+  "Position": [
+    "AbsolutePosition.swift",
+    "Utils.swift",
+    "SourceLocation.swift",
+    "SourceLength.swift",
+  ],
+  "Parse": [
+    "SyntaxParser.swift",
+    "IncrementalParseTransition.swift",
+  ],
+  "Internal": [
+    "AtomicCounter.swift",
+  ]
+}

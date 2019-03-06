@@ -192,8 +192,8 @@ def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
     swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
 
     # To build the group information into the module documentation file
-    swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', '-group-info-path'])
-    swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', GROUP_INFO_PATH])
+    # swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', '-group-info-path'])
+    # swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', GROUP_INFO_PATH])
 
     return swiftpm_call
 

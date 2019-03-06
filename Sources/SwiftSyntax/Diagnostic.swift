@@ -170,14 +170,11 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
 
   public var debugDescription: String {
     var lines: [String] = []
-    if let location = location {
-      lines.append("\(location) \(message.debugDescription)")
-    } else {
-      lines.append("\(message.debugDescription)")
-    }
+    let loc = location == nil ? "" : "\(location!) "
+    lines.append("\(loc)\(message.debugDescription)")
     fixIts.forEach { lines.append("\($0.debugDescription)") }
-    highlights.forEach { lines.append("Hightlight: \($0.debugDescription)") }
-    lines.append(contentsOf: notes.map({$0.asDiagnostic().debugDescription}))
+    highlights.forEach { lines.append("Highlight: \($0.debugDescription)") }
+    lines.append(contentsOf: notes.map({ loc + $0.asDiagnostic().debugDescription}))
     return lines.joined(separator: "\n")
   }
 

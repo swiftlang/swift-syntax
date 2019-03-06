@@ -12,7 +12,7 @@
 
 /// Represent the user-facing part of SourceLocation that can be calculated
 /// on demand.
-struct ComputedLocation: Codable {
+struct ComputedLocation: Codable, CustomDebugStringConvertible {
   /// The line in the file where this location resides. 1-based.
   let line: Int
 
@@ -22,6 +22,11 @@ struct ComputedLocation: Codable {
 
   /// The file in which this location resides.
   let file: String
+
+  var debugDescription: String {
+    // Print file name?
+    return "\(line):\(column)"
+  }
 
   init(line: Int, column: Int, file: String) {
     self.line = line
@@ -38,7 +43,7 @@ struct ComputedLocation: Codable {
 }
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Codable {
+public struct SourceLocation: Codable, CustomDebugStringConvertible {
 
   /// Line and column that can be computed on demand.
   private var compLoc: ComputedLocation?
@@ -62,6 +67,13 @@ public struct SourceLocation: Codable {
     return compLoc?.file
   }
 
+  public var debugDescription: String {
+    guard let compLoc = compLoc else {
+      return "\(offset)"
+    }
+    return compLoc.debugDescription
+  }
+
   public init(line: Int, column: Int, offset: Int, file: String) {
     self.offset = offset
     self.compLoc = ComputedLocation(line: line, column: column, file: file)
@@ -79,12 +91,17 @@ public struct SourceLocation: Codable {
 }
 
 /// Represents a start and end location in a Swift file.
-public struct SourceRange: Codable {
+public struct SourceRange: Codable, CustomDebugStringConvertible {
+
   /// The beginning location in the source range.
   public let start: SourceLocation
 
   /// The beginning location in the source range.
   public let end: SourceLocation
+
+  public var debugDescription: String {
+    return "(\(start.debugDescription),\(end.debugDescription))"
+  }
 
   public init(start: SourceLocation, end: SourceLocation) {
     self.start = start
@@ -109,6 +126,15 @@ public final class SourceLocationConverter {
     self.file = file
     (self.lines, endOfFile) = computeLines(tree: tree)
     assert(tree.byteSize == endOfFile.utf8Offset)
+  }
+
+  /// - Parameters:
+  ///   - file: The file path associated with the syntax tree.
+  ///   - source: The source code to convert positions to line/columns for.
+  public init(file: String, source: String) {
+    self.file = file
+    (self.lines, endOfFile) = computeLines(source)
+    assert(source.lengthOfBytes(using: .utf8) == endOfFile.utf8Offset)
   }
 
   /// Convert a `AbsolutePosition` to a `SourceLocation`. If the position is
@@ -301,6 +327,22 @@ fileprivate func computeLines(
   for token in tree.tokens {
     curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
   }
+  position += curPrefix
+  return (lines, position)
+}
+
+fileprivate func computeLines(_ source: String) ->
+    ([AbsolutePosition], AbsolutePosition) {
+  var lines: [AbsolutePosition] = []
+  // First line starts from the beginning.
+  lines.append(.startOfFile)
+  var position: AbsolutePosition = .startOfFile
+  let addLine = { (lineLength: SourceLength) in
+    position += lineLength
+    lines.append(position)
+  }
+  var curPrefix: SourceLength = .zero
+  curPrefix = source.forEachLineLength(prefix: curPrefix, body: addLine)
   position += curPrefix
   return (lines, position)
 }

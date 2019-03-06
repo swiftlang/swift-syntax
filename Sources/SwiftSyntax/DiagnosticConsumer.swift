@@ -15,10 +15,19 @@
 /// An object that intends to receive notifications when diagnostics are
 /// emitted.
 public protocol DiagnosticConsumer {
+
+  /// Whether the collected diagnostics should calculate line:column pair; true
+  /// by default.
+  var needsLineColumn: Bool { get }
+
   /// Handle the provided diagnostic which has just been registered with the
   /// DiagnosticEngine.
   func handle(_ diagnostic: Diagnostic)
 
   /// Finalize the consumption of diagnostics, flushing to disk if necessary.
   func finalize()
+}
+
+public extension DiagnosticConsumer  {
+  var needsLineColumn: Bool { return true }
 }

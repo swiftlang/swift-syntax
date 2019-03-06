@@ -26,12 +26,24 @@ public class DiagnosticEngine {
 
   public private(set) var diagnostics = [Diagnostic]()
 
+  internal var needsLineColumn: Bool {
+    // Check if any consumer is interested in line and column.
+    return consumers.first { $0.needsLineColumn } != nil
+  }
+
   /// Adds the provided consumer to the consumers list.
   public func addConsumer(_ consumer: DiagnosticConsumer) {
     consumers.append(consumer)
 
     // Start the consumer with all previous diagnostics.
     for diagnostic in diagnostics {
+      consumer.handle(diagnostic)
+    }
+  }
+
+  internal func diagnose(_ diagnostic: Diagnostic) {
+    diagnostics.append(diagnostic)
+    for consumer in consumers {
       consumer.handle(diagnostic)
     }
   }
@@ -44,12 +56,7 @@ public class DiagnosticEngine {
   public func diagnose(_ message: Diagnostic.Message,
                        location: SourceLocation? = nil,
                        actions: ((inout Diagnostic.Builder) -> Void)? = nil) {
-    let diagnostic = Diagnostic(message: message, location: location,
-                                actions: actions)
-    diagnostics.append(diagnostic)
-    for consumer in consumers {
-      consumer.handle(diagnostic)
-    }
+    diagnose(Diagnostic(message: message, location: location, actions: actions))
   }
 
   /// If any of the diagnostics in this engine have the `error` severity.

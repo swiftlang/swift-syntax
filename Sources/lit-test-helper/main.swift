@@ -416,6 +416,34 @@ func printSyntaxTree(args: CommandLineArguments) throws {
   tree.walk(&printer)
 }
 
+func printParserDiags(args: CommandLineArguments) throws {
+  let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
+  class ParserDiagPrinter: DiagnosticConsumer {
+    var counter : (error: Int, warning: Int, note: Int) = (0, 0, 0)
+    var calculateLineColumn: Bool { return true }
+    func finalize() {}
+    func handle(_ diag: Diagnostic) {
+      switch diag.message.severity {
+      case .error:
+        counter.error += 1
+        counter.note += diag.notes.count
+      case .warning:
+        counter.warning += 1
+        counter.note += diag.notes.count
+      case .note:
+        counter.note += 1
+      }
+      print(diag.debugDescription)
+    }
+    deinit {
+      print("\(counter.error) error(s) \(counter.warning) warnings(s) \(counter.note) note(s)")
+    }
+  }
+  let diagEngine = DiagnosticEngine()
+  diagEngine.addConsumer(ParserDiagPrinter())
+  _ = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
+}
+
 do {
   let args = try CommandLineArguments.parse(CommandLine.arguments.dropFirst())
 
@@ -427,6 +455,8 @@ do {
     try performRoundtrip(args: args)
   } else if args.has("-print-tree") {
     try printSyntaxTree(args: args)
+  } else if args.has("-dump-diags") {
+    try printParserDiags(args: args)
   } else if args.has("-help") {
     printHelp()
   } else {

@@ -14,7 +14,8 @@
 
 /// A FixIt represents a change to source code in order to "correct" a
 /// diagnostic.
-public enum FixIt: Codable {
+public enum FixIt: Codable, CustomDebugStringConvertible {
+
   /// Remove the characters from the source file over the provided source range.
   case remove(SourceRange)
 
@@ -30,6 +31,10 @@ public enum FixIt: Codable {
     case range
     case location
     case string
+  }
+
+  public var debugDescription: String {
+    return "Fixit: \(range.debugDescription) Text: \"\(text)\""
   }
 
   public init(from decoder: Decoder) throws {
@@ -119,8 +124,14 @@ public struct Note: Codable {
 }
 
 /// A Diagnostic message that can be emitted regarding some piece of code.
-public struct Diagnostic: Codable {
-  public struct Message: Codable {
+public struct Diagnostic: Codable, CustomDebugStringConvertible {
+
+  public struct Message: Codable, CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+      return "\(severity): \(text)"
+    }
+
     /// The severity of diagnostic. This can be note, error, or warning.
     public let severity: Severity
 
@@ -156,6 +167,16 @@ public struct Diagnostic: Codable {
 
   /// An array of possible FixIts to apply to this diagnostic.
   public let fixIts: [FixIt]
+
+  public var debugDescription: String {
+    var lines: [String] = []
+    let loc = location == nil ? "" : "\(location!) "
+    lines.append("\(loc)\(message.debugDescription)")
+    fixIts.forEach { lines.append("\($0.debugDescription)") }
+    highlights.forEach { lines.append("Highlight: \($0.debugDescription)") }
+    lines.append(contentsOf: notes.map({ loc + $0.asDiagnostic().debugDescription}))
+    return lines.joined(separator: "\n")
+  }
 
   /// A diagnostic builder that exposes mutating operations for notes,
   /// highlights, and FixIts. When a Diagnostic is created, a builder

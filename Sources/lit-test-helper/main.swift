@@ -395,19 +395,24 @@ func printSyntaxTree(args: CommandLineArguments) throws {
 func printParserDiags(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
   class ParserDiagPrinter: DiagnosticConsumer {
-    var counter = [0, 0, 0]
+    var counter : (error: Int, warning: Int, note: Int) = (0, 0, 0)
     var calculateLineColumn: Bool { return true }
     func finalize() {}
     func handle(_ diag: Diagnostic) {
       switch diag.message.severity {
-      case .error: counter[0] += 1
-      case .warning: counter[1] += 1
-      case .note: counter[2] += 1
+      case .error:
+        counter.error += 1
+        counter.note += diag.notes.count
+      case .warning:
+        counter.warning += 1
+        counter.note += diag.notes.count
+      case .note:
+        counter.note += 1
       }
       print(diag.debugDescription)
     }
     deinit {
-      print("\(counter[0]) error(s) \(counter[1]) warnings(s) \(counter[2]) note(s)")
+      print("\(counter.error) error(s) \(counter.warning) warnings(s) \(counter.note) note(s)")
     }
   }
   _ = try SyntaxParser.parse(treeURL, diagConsumer: ParserDiagPrinter())

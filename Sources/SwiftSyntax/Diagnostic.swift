@@ -177,6 +177,7 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
     }
     fixIts.forEach { lines.append("\($0.debugDescription)") }
     highlights.forEach { lines.append("Hightlight: \($0.debugDescription)") }
+    lines.append(contentsOf: notes.map({$0.asDiagnostic().debugDescription}))
     return lines.joined(separator: "\n")
   }
 

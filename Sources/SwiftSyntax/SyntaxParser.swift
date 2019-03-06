@@ -144,6 +144,16 @@ public enum SyntaxParser {
       swiftparse_parser_set_node_lookup(c_parser, nodeLookup);
     }
 
+    var pendingDiag : Diagnostic?
+    var pendingNotes: [Note] = []
+    defer {
+      // Consume the pending diagnostic if  present
+      if let diagConsumer = diagConsumer {
+        if let pendingDiag = pendingDiag {
+          diagConsumer.handle(Diagnostic(pendingDiag, pendingNotes))
+        }
+      }
+    }
     // Set up diagnostics consumer if requested by the caller.
     if let diagConsumer = diagConsumer {
       // If requested, we should set up a source location converter to calculate
@@ -151,7 +161,20 @@ public enum SyntaxParser {
       let converter = diagConsumer.calculateLineColumn ?
         SourceLocationConverter(file: file, source: source) : nil
       let diagHandler = { (diag: CDiagnostic!) in
-        diagConsumer.handle(Diagnostic(diag: diag, using: converter))
+        // If the coming diagnostic is a note, we cache the pending note
+        if swiftparse_diagnostic_get_severity(diag) ==
+            SWIFTPARSER_DIAGNOSTIC_SEVERITY_NOTE {
+          pendingNotes.append(Note(Diagnostic(diag: diag, using: converter)))
+        } else {
+          // Cosume the pending diagnostic
+          if let pendingDiag = pendingDiag {
+            diagConsumer.handle(Diagnostic(pendingDiag, pendingNotes))
+            // Clear pending notes
+            pendingNotes = []
+          }
+          // Cache the new coming diagnostic and wait for further notes.
+          pendingDiag = Diagnostic(diag: diag, using: converter)
+        }
       }
       swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
     }
@@ -206,6 +229,13 @@ extension FixIt {
   }
 }
 
+extension Note {
+  init(_ diag: Diagnostic) {
+    self.init(message: diag.message, location: diag.location,
+              highlights: diag.highlights, fixIts: diag.fixIts)
+  }
+}
+
 extension Diagnostic {
   init(diag: CDiagnostic, using converter: SourceLocationConverter?) {
     // Collect highlighted ranges
@@ -220,5 +250,10 @@ extension Diagnostic {
       location: SourceLocation(offset: Int(swiftparse_diagnostic_get_source_loc(diag)),
                                converter: converter),
       notes: [], highlights: hightlights, fixIts: fixits)
+  }
+
+  init(_ diag: Diagnostic, _ notes: [Note]) {
+    self.init(message: diag.message, location: diag.location, notes: notes,
+              highlights: diag.highlights, fixIts: diag.fixIts)
   }
 }

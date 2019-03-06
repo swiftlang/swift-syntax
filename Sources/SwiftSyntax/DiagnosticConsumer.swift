@@ -18,7 +18,7 @@ public protocol DiagnosticConsumer {
 
   /// Whether the collected diagnostics should calculate line:column pair; true
   /// by default.
-  var calculateLineColumn: Bool { get }
+  var needsLineColumn: Bool { get }
 
   /// Handle the provided diagnostic which has just been registered with the
   /// DiagnosticEngine.
@@ -29,5 +29,5 @@ public protocol DiagnosticConsumer {
 }
 
 public extension DiagnosticConsumer  {
-  var calculateLineColumn: Bool { return true }
+  var needsLineColumn: Bool { return true }
 }

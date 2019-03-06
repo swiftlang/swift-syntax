@@ -415,7 +415,9 @@ func printParserDiags(args: CommandLineArguments) throws {
       print("\(counter.error) error(s) \(counter.warning) warnings(s) \(counter.note) note(s)")
     }
   }
-  _ = try SyntaxParser.parse(treeURL, diagConsumer: ParserDiagPrinter())
+  let diagEngine = DiagnosticEngine()
+  diagEngine.addConsumer(ParserDiagPrinter())
+  _ = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
 }
 
 do {

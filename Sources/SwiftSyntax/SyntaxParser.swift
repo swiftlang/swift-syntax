@@ -71,7 +71,7 @@ public enum SyntaxParser {
     source: String,
     file: String = "",
     parseTransition: IncrementalParseTransition? = nil,
-    diagConsumer: DiagnosticConsumer? = nil
+    diagnosticEngine: DiagnosticEngine? = nil
   ) throws -> SourceFileSyntax {
     guard nodeHashVerifyResult else {
       throw ParserError.parserCompatibilityCheckFailed
@@ -82,7 +82,7 @@ public enum SyntaxParser {
     var utf8Source = source
     utf8Source.makeNativeUTF8IfNeeded()
 
-    let rawSyntax = parseRaw(file, utf8Source, parseTransition, diagConsumer)
+    let rawSyntax = parseRaw(file, utf8Source, parseTransition, diagnosticEngine)
 
     guard let file = makeSyntax(.forRoot(rawSyntax)) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
@@ -98,7 +98,7 @@ public enum SyntaxParser {
   ///            if the parse was successful.
   /// - Throws: `ParserError`
   public static func parse(_ url: URL,
-      diagConsumer: DiagnosticConsumer? = nil) throws -> SourceFileSyntax {
+      diagnosticEngine: DiagnosticEngine? = nil) throws -> SourceFileSyntax {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     var fileData = try Data(contentsOf: url)
     fileData.append(0) // null terminate.
@@ -106,14 +106,14 @@ public enum SyntaxParser {
       return String(cString: ptr)
     }
     return try parse(source: source, file: url.absoluteString,
-                     diagConsumer: diagConsumer)
+                     diagnosticEngine: diagnosticEngine)
   }
 
   private static func parseRaw(
     _ file: String,
     _ source: String,
     _ parseTransition: IncrementalParseTransition?,
-    _ diagConsumer: DiagnosticConsumer?
+    _ diagnosticEngine: DiagnosticEngine?
   ) -> RawSyntax {
     assert(source.isNativeUTF8)
     let c_parser = swiftparse_parser_create()
@@ -148,17 +148,17 @@ public enum SyntaxParser {
     var pendingNotes: [Note] = []
     defer {
       // Consume the pending diagnostic if  present
-      if let diagConsumer = diagConsumer {
+      if let diagnosticEngine = diagnosticEngine {
         if let pendingDiag = pendingDiag {
-          diagConsumer.handle(Diagnostic(pendingDiag, pendingNotes))
+          diagnosticEngine.diagnose(Diagnostic(pendingDiag, pendingNotes))
         }
       }
     }
     // Set up diagnostics consumer if requested by the caller.
-    if let diagConsumer = diagConsumer {
+    if let diagnosticEngine = diagnosticEngine {
       // If requested, we should set up a source location converter to calculate
       // line and column.
-      let converter = diagConsumer.calculateLineColumn ?
+      let converter = diagnosticEngine.needsLineColumn ?
         SourceLocationConverter(file: file, source: source) : nil
       let diagHandler = { (diag: CDiagnostic!) in
         // If the coming diagnostic is a note, we cache the pending note
@@ -168,7 +168,7 @@ public enum SyntaxParser {
         } else {
           // Cosume the pending diagnostic
           if let pendingDiag = pendingDiag {
-            diagConsumer.handle(Diagnostic(pendingDiag, pendingNotes))
+            diagnosticEngine.diagnose(Diagnostic(pendingDiag, pendingNotes))
             // Clear pending notes
             pendingNotes = []
           }
@@ -239,7 +239,7 @@ extension Note {
 extension Diagnostic {
   init(diag: CDiagnostic, using converter: SourceLocationConverter?) {
     // Collect highlighted ranges
-    let hightlights = (0..<swiftparse_diagnostic_get_range_count(diag)).map {
+    let highlights = (0..<swiftparse_diagnostic_get_range_count(diag)).map {
       return SourceRange(swiftparse_diagnostic_get_range(diag, $0), converter)
     }
     // Collect fixits
@@ -249,7 +249,7 @@ extension Diagnostic {
     self.init(message: Diagnostic.Message(diag),
       location: SourceLocation(offset: Int(swiftparse_diagnostic_get_source_loc(diag)),
                                converter: converter),
-      notes: [], highlights: hightlights, fixIts: fixits)
+      notes: [], highlights: highlights, fixIts: fixits)
   }
 
   init(_ diag: Diagnostic, _ notes: [Note]) {

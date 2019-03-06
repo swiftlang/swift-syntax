@@ -190,43 +190,40 @@ def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
 
     # To speed up compilation.
     swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
-
-    # To build the group information into the module documentation file
-    # swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', '-group-info-path'])
-    # swiftpm_call.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', GROUP_INFO_PATH])
-
     return swiftpm_call
 
-def build_swiftsyntax(swift_build_exec, swiftc_exec, build_dir,
-                      parser_header_dir, parser_lib_dir,
-                      build_test_util, release,
-                      verbose, disable_sandbox=False):
-    print('** Building SwiftSyntax **')
+class Builder(object):
+  def __init__(self, swift_build_exec, swiftc_exec, build_dir,
+               parser_header_dir, parser_lib_dir,
+               release, verbose, disable_sandbox=False):
+      self.swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
+                                                 build_dir=build_dir,
+                                                 parser_header_dir=parser_header_dir,
+                                                 parser_lib_dir=parser_lib_dir,
+                                                 release=release)
+      if disable_sandbox:
+          self.swiftpm_call.append('--disable-sandbox')
+      if verbose:
+          self.swiftpm_call.extend(['--verbose'])
+      self.verbose = verbose
+      self._environ = dict(os.environ)
+      self._environ['SWIFT_EXEC'] = swiftc_exec
+      self._environ['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
 
-    swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
-                                          build_dir=build_dir,
-                                          parser_header_dir=parser_header_dir,
-                                          parser_lib_dir=parser_lib_dir,
-                                          release=release)
-    swiftpm_call.extend(['--product', 'SwiftSyntax'])
+  def build(self, product_name, module_group_path=''):
+      print('** Building ' + product_name + ' **')
+      command = list(self.swiftpm_call)
+      command.extend(['--product', product_name])
 
-    if disable_sandbox:
-      swiftpm_call.append('--disable-sandbox')
+      # To build the group information into the module documentation file
+      if module_group_path:
+        command.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', '-group-info-path'])
+        command.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', module_group_path])
 
-    # Only build lit-test-helper if we are planning to run tests
-    if build_test_util:
-        swiftpm_call.extend(['--product', 'lit-test-helper'])
-
-    if verbose:
-        swiftpm_call.extend(['--verbose'])
-    _environ = dict(os.environ)
-    _environ['SWIFT_EXEC'] = swiftc_exec
-    _environ['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
-    check_call(swiftpm_call, env=_environ, verbose=verbose)
+      check_call(command, env=self._environ, verbose=self.verbose)
 
 
 ## Testing
-
 def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
               release, swift_build_exec, filecheck_exec, swiftc_exec, verbose):
     print('** Running SwiftSyntax Tests **')
@@ -541,15 +538,19 @@ section for arguments that need to be specified for this.
       sys.exit(0)
 
     try:
-        build_swiftsyntax(swift_build_exec=args.swift_build_exec,
+        builder = Builder(swift_build_exec=args.swift_build_exec,
                           swiftc_exec=args.swiftc_exec,
                           build_dir=args.build_dir,
                           parser_header_dir=args.syntax_parser_header_dir,
                           parser_lib_dir=args.syntax_parser_lib_dir,
-                          build_test_util=args.test,
                           release=args.release,
                           verbose=args.verbose,
                           disable_sandbox=args.disable_sandbox)
+        builder.build('SwiftSyntax', module_group_path=GROUP_INFO_PATH)
+
+        # Only build lit-test-helper if we are planning to run tests
+        if args.test:
+          builder.build('lit-test-helper')
     except subprocess.CalledProcessError as e:
         printerr('Error: Building SwiftSyntax failed')
         printerr('Executing: %s' % ' '.join(e.cmd))

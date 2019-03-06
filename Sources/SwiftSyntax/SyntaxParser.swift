@@ -64,13 +64,16 @@ public enum SyntaxParser {
   /// - Parameters:
   ///   - source: The source string to parse.
   ///   - parseTransition: Optional mechanism for incremental re-parsing.
+  ///   - filenameForDiagnostics: Optional file name used for SourceLocation.
+  ///   - diagnosticEngine: Optional diagnotic engine to where the parser will
+  ///       emit diagnostics
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
   public static func parse(
     source: String,
-    file: String = "",
     parseTransition: IncrementalParseTransition? = nil,
+    filenameForDiagnostics: String = "",
     diagnosticEngine: DiagnosticEngine? = nil
   ) throws -> SourceFileSyntax {
     guard nodeHashVerifyResult else {
@@ -82,7 +85,8 @@ public enum SyntaxParser {
     var utf8Source = source
     utf8Source.makeNativeUTF8IfNeeded()
 
-    let rawSyntax = parseRaw(file, utf8Source, parseTransition, diagnosticEngine)
+    let rawSyntax = parseRaw(utf8Source, parseTransition, filenameForDiagnostics,
+                             diagnosticEngine)
 
     guard let file = makeSyntax(.forRoot(rawSyntax)) as? SourceFileSyntax else {
       throw ParserError.invalidSyntaxData
@@ -94,6 +98,8 @@ public enum SyntaxParser {
   ///
   /// - Parameters:
   ///   - url: The file URL to parse.
+  ///   - diagnosticEngine: Optional diagnotic engine to where the parser will
+  ///       emit diagnostics
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
@@ -105,14 +111,14 @@ public enum SyntaxParser {
     let source = fileData.withUnsafeBytes { (ptr: UnsafePointer<CChar>) in
       return String(cString: ptr)
     }
-    return try parse(source: source, file: url.absoluteString,
+    return try parse(source: source, filenameForDiagnostics: url.absoluteString,
                      diagnosticEngine: diagnosticEngine)
   }
 
   private static func parseRaw(
-    _ file: String,
     _ source: String,
     _ parseTransition: IncrementalParseTransition?,
+    _ filenameForDiagnostics: String,
     _ diagnosticEngine: DiagnosticEngine?
   ) -> RawSyntax {
     assert(source.isNativeUTF8)
@@ -159,7 +165,7 @@ public enum SyntaxParser {
       // If requested, we should set up a source location converter to calculate
       // line and column.
       let converter = diagnosticEngine.needsLineColumn ?
-        SourceLocationConverter(file: file, source: source) : nil
+        SourceLocationConverter(file: filenameForDiagnostics, source: source) : nil
       let diagHandler = { (diag: CDiagnostic!) in
         // If the coming diagnostic is a note, we cache the pending note
         if swiftparse_diagnostic_get_severity(diag) ==

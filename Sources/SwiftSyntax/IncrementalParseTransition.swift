@@ -161,7 +161,7 @@ internal struct IncrementalParseLookup {
     // Fast path check: if parser is past all the edits then any matching node
     // can be re-used.
     if !edits.isEmpty && edits.last!.range.endOffset < node.position.utf8Offset {
-      return true;
+      return true
     }
 
     // Node can also not be reused if an edit has been made in the next token's
@@ -173,7 +173,7 @@ internal struct IncrementalParseLookup {
       // Fast path check: if next sibling is before all the edits then we can
       // re-use the node.
       if !edits.isEmpty && edits.first!.range.offset > nextSibling.endPosition.utf8Offset {
-        return true;
+        return true
       }
       if let nextToken = nextSibling.raw.firstPresentToken {
         nextLeafNodeLength = nextToken.totalLength - nextToken.trailingTriviaLength

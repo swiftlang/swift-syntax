@@ -52,6 +52,15 @@ public class ClassificationTests: XCTestCase {
       }
       XCTAssertEqual(classif[0].kind, .blockComment)
       XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 14, length: 6))
+
+      do {
+        let singleClassif = initializer.classification(at: 5)
+        XCTAssertEqual(singleClassif, classif[0])
+      }
+      do {
+        let singleClassif = initializer.classification(at: AbsolutePosition(utf8Offset: 19))
+        XCTAssertEqual(singleClassif, classif[0])
+      }
     }
   }
 }

@@ -265,6 +265,27 @@ extension _SyntaxBase {
     return SyntaxClassifications(self, in: range)
   }
 
+  /// The `SyntaxClassifiedRange` for a relative byte offset.
+  /// - Parameters:
+  ///   - at: The relative to the node byte offset.
+  /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
+  ///   at the given offset is unclassified.
+  func classification(at offset: Int) -> SyntaxClassifiedRange? {
+    let classifications = SyntaxClassifications(self, in: ByteSourceRange(offset: offset, length: 1))
+    var iterator = classifications.makeIterator()
+    return iterator.next()
+  }
+
+  /// The `SyntaxClassifiedRange` for an absolute position.
+  /// - Parameters:
+  ///   - at: The absolute position.
+  /// - Returns: The `SyntaxClassifiedRange` for the position or nil if the source text
+  ///   at the given position is unclassified.
+  func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
+    let relativeOffset = position.utf8Offset - self.position.utf8Offset
+    return self.classification(at: relativeOffset)
+  }
+
   /// Returns a value representing the unique identity of the node.
   var uniqueIdentifier: SyntaxIdentifier {
     return data.nodeId
@@ -494,6 +515,24 @@ extension Syntax {
   /// - Returns: Sequence of `SyntaxClassifiedRange`s.
   public func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
     return base.classifications(in: range)
+  }
+
+  /// The `SyntaxClassifiedRange` for a relative byte offset.
+  /// - Parameters:
+  ///   - at: The relative to the node byte offset.
+  /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
+  ///   at the given offset is unclassified.
+  public func classification(at offset: Int) -> SyntaxClassifiedRange? {
+    return base.classification(at: offset)
+  }
+
+  /// The `SyntaxClassifiedRange` for an absolute position.
+  /// - Parameters:
+  ///   - at: The absolute position.
+  /// - Returns: The `SyntaxClassifiedRange` for the position or nil if the source text
+  ///   at the given position is unclassified.
+  public func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
+    return base.classification(at: position)
   }
 
   /// Returns a value representing the unique identity of the node.

@@ -295,7 +295,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
 }
 
 /// Represents a source range that is associated with a syntax classification.
-public struct SyntaxClassifiedRange {
+public struct SyntaxClassifiedRange: Equatable {
   public let kind: SyntaxClassification
   public let range: ByteSourceRange
 }

@@ -55,7 +55,7 @@ extension SyntaxClassification {
   /// - Returns: A pair of classification and whether it is "forced", or nil if
   ///   no classification is attached.
   internal static func classify(
-    parentKind: SyntaxKind, indexInParent: UInt32, childKind: SyntaxKind
+    parentKind: SyntaxKind, indexInParent: Int, childKind: SyntaxKind
   ) -> (SyntaxClassification, Bool)? {
     // Separate checks for token nodes (most common checks) versus checks for layout nodes.
     if childKind == .token {
@@ -83,18 +83,18 @@ extension SyntaxClassification {
 }
 
 extension RawTokenKind {
-  internal var classification: SyntaxClassification? {
+  internal var classification: SyntaxClassification {
     switch (self) {
 % for token in SYNTAX_TOKENS:
     case .${token.swift_kind()}:
-%   if token.classification and token.classification.name != 'None':
+%   if token.classification:
       return .${token.classification.swift_name}
 %   else:
-      return nil
+      return .none
 %   end
 % end
     case .eof:
-      return nil
+      return .none
     }
   }
 }

@@ -10,6 +10,30 @@
 //
 //===----------------------------------------------------------------------===//
 
+extension TokenSyntax {
+  /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
+  public var tokenClassification: SyntaxClassifiedRange {
+    var contextualClassification: (SyntaxClassification, Bool)? = nil
+    var curData = self.data
+    repeat {
+      guard let parent = curData.parent else { break }
+      contextualClassification = SyntaxClassification.classify(parentKind: parent.raw.kind,
+        indexInParent: curData.indexInParent, childKind: raw.kind)
+      curData = parent.data
+    } while contextualClassification == nil
+
+    let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
+    let absoluteOffset = position.utf8Offset + relativeOffset
+    let classifiedRange = raw.withUnsafeTokenText(
+      relativeOffset: relativeOffset
+    ) { (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
+      return tokText!.classify(offset: absoluteOffset,
+        contextualClassification: contextualClassification)
+    }
+    return classifiedRange
+  }
+}
+
 extension UnsafeTriviaPiece {
   func classify(offset: Int) -> SyntaxClassifiedRange {
     let range = ByteSourceRange(offset: offset, length: length)
@@ -72,7 +96,7 @@ fileprivate struct AbsoluteNode {
     self.position = position
     // Check if this node has a classification otherwise inherit it from the parent.
     self.classification = SyntaxClassification.classify(parentKind: parent.raw.kind,
-      indexInParent: position.indexInParent, childKind: raw.kind) ?? parent.classification
+      indexInParent: Int(position.indexInParent), childKind: raw.kind) ?? parent.classification
   }
 
   var offset: Int { return Int(position.offset) }

@@ -4,6 +4,7 @@ import SwiftSyntax
 public class ClassificationTests: XCTestCase {
   public static let allTests = [
     ("testClassification", testClassification),
+    ("testTokenClassification", testTokenClassification),
   ]
 
   public func testClassification() {
@@ -90,6 +91,27 @@ public class ClassificationTests: XCTestCase {
       let classif = tree.classification(at: 11)!
       XCTAssertEqual(classif.kind, .none)
       XCTAssertEqual(classif.range, ByteSourceRange(offset: 11, length: 1))
+    }
+  }
+
+  public func testTokenClassification() {
+    let source = "let x: Int"
+    let tree = try! SyntaxParser.parse(source: source)
+    do {
+      let tokens = Array(tree.tokens)
+      XCTAssertEqual(tokens.count, 4)
+      guard tokens.count == 4 else {
+        return
+      }
+      let classif = tokens.map { $0.tokenClassification }
+      XCTAssertEqual(classif[0].kind, .keyword)
+      XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 0, length: 3))
+      XCTAssertEqual(classif[1].kind, .none)
+      XCTAssertEqual(classif[1].range, ByteSourceRange(offset: 4, length: 1))
+      XCTAssertEqual(classif[2].kind, .none)
+      XCTAssertEqual(classif[2].range, ByteSourceRange(offset: 5, length: 1))
+      XCTAssertEqual(classif[3].kind, .typeIdentifier)
+      XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 7, length: 3))
     }
   }
 }

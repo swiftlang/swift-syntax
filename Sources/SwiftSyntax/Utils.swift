@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 public struct ByteSourceRange: Equatable {
-  public let offset: Int
-  public let length: Int
+  public var offset: Int
+  public var length: Int
 
   public init(offset: Int, length: Int) {
     self.offset = offset

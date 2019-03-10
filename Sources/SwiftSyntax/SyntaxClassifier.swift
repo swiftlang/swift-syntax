@@ -11,14 +11,14 @@
 //===----------------------------------------------------------------------===//
 
 extension UnsafeTriviaPiece {
-  func classify(offset: Int) -> SyntaxClassifiedRange? {
+  func classify(offset: Int) -> SyntaxClassifiedRange {
     let range = ByteSourceRange(offset: offset, length: length)
     switch self.kind {
       case .lineComment: return .init(kind: .lineComment, range: range)
       case .blockComment: return .init(kind: .blockComment, range: range)
       case .docLineComment: return .init(kind: .docLineComment, range: range)
       case .docBlockComment: return .init(kind: .docBlockComment, range: range)
-      default: return nil
+      default: return .init(kind: .none, range: range)
     }
   }
 }
@@ -26,7 +26,7 @@ extension UnsafeTriviaPiece {
 extension UnsafeTokenText {
   func classify(
     offset: Int, contextualClassification: (SyntaxClassification, Bool)?
-  ) -> SyntaxClassifiedRange? {
+  ) -> SyntaxClassifiedRange {
     let range = ByteSourceRange(offset: offset, length: length)
     if let contextualClassify = contextualClassification {
       let (classify, force) = contextualClassify
@@ -34,13 +34,10 @@ extension UnsafeTokenText {
         return .init(kind: classify, range: range)
       }
     }
-    if let contextFreeClassify = contextFreeClassification() {
-      return .init(kind: contextFreeClassify, range: range)
-    }
-    return nil
+    return .init(kind: contextFreeClassification(), range: range)
   }
 
-  fileprivate func contextFreeClassification() -> SyntaxClassification? {
+  fileprivate func contextFreeClassification() -> SyntaxClassification {
     if case .unknown = kind, customText.hasPrefix(.asciiDoubleQuote) {
       return .stringLiteral
     }
@@ -158,7 +155,7 @@ fileprivate struct SyntaxCursor {
       return false
     }
 
-    while !node.raw.isToken {
+    while !node.raw.isToken || node.endOffset <= absRange.offset {
       // if the node is out of the requested range we can skip its children.
       if node.endOffset > absRange.offset {
         if advanceToFirstChild() { continue }
@@ -244,60 +241,64 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
   var relativeOffset: Int { return offset - Int(token.position.offset) }
 
   mutating func next() -> SyntaxClassifiedRange? {
-    var classification: SyntaxClassifiedRange? = nil
-    repeat {
+    while true {
       switch state {
       case .atLeadingTrivia(let index):
-        let classifyAndlengthOpt = token.raw.withUnsafeLeadingTriviaPiece(
+        let classifiedRangeOpt = token.raw.withUnsafeLeadingTriviaPiece(
           at: index, relativeOffset: relativeOffset
-        ) { (trivia: UnsafeTriviaPiece?) -> (SyntaxClassifiedRange?, Int)? in
+        ) { (trivia: UnsafeTriviaPiece?) -> SyntaxClassifiedRange? in
           guard let trivia = trivia else { return nil }
-          return (trivia.classify(offset: offset), trivia.length)
+          return trivia.classify(offset: offset)
         }
-        guard let classifyAndlength = classifyAndlengthOpt else {
+        guard let classifiedRange = classifiedRangeOpt else {
           // Move on to token text.
           state = .atTokenText
           break
         }
         state = .atLeadingTrivia(index+1)
-        offset += classifyAndlength.1
-        classification = classifyAndlength.0
+        offset = classifiedRange.endOffset
+        guard classifiedRange.kind != .none else { break }
+        return classifiedRange
 
       case .atTokenText:
-        let classifyAndlength = token.raw.withUnsafeTokenText(
+        let classifiedRange = token.raw.withUnsafeTokenText(
           relativeOffset: relativeOffset
-        ) { (tokText: UnsafeTokenText?) -> (SyntaxClassifiedRange?, Int) in
-          return (tokText!.classify(offset: offset, contextualClassification: token.classification),
-            tokText!.length)
+        ) { (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
+          return tokText!.classify(offset: offset, contextualClassification: token.classification)
         }
         // Move on to trailing trivia.
         state = .atTrailingTrivia(0)
-        offset += classifyAndlength.1
-        classification = classifyAndlength.0
+        offset = classifiedRange.endOffset
+        guard classifiedRange.kind != .none else { break }
+        return classifiedRange
 
       case .atTrailingTrivia(let index):
-        let classifyAndlengthOpt = token.raw.withUnsafeTrailingTriviaPiece(
+        let classifiedRangeOpt = token.raw.withUnsafeTrailingTriviaPiece(
           at: index, relativeOffset: relativeOffset
-        ) { (trivia: UnsafeTriviaPiece?) -> (SyntaxClassifiedRange?, Int)? in
+        ) { (trivia: UnsafeTriviaPiece?) -> SyntaxClassifiedRange? in
           guard let trivia = trivia else { return nil }
-          return (trivia.classify(offset: offset), trivia.length)
+          return trivia.classify(offset: offset)
         }
-        guard let classifyAndlength = classifyAndlengthOpt else {
+        guard let classifiedRange = classifiedRangeOpt else {
           return nil // Finish iteration.
         }
         state = .atTrailingTrivia(index+1)
-        offset += classifyAndlength.1
-        classification = classifyAndlength.0
+        offset = classifiedRange.endOffset
+        guard classifiedRange.kind != .none else { break }
+        return classifiedRange
       }
-    } while classification == nil
-    return classification
+    }
   }
 }
 
 /// Represents a source range that is associated with a syntax classification.
 public struct SyntaxClassifiedRange: Equatable {
-  public let kind: SyntaxClassification
-  public let range: ByteSourceRange
+  public var kind: SyntaxClassification
+  public var range: ByteSourceRange
+
+  public var offset: Int { return range.offset }
+  public var length: Int { return range.length }
+  public var endOffset: Int { return range.endOffset }
 }
 
 /// Provides a sequence of `SyntaxClassifiedRange`s for a syntax node.
@@ -306,23 +307,83 @@ public struct SyntaxClassifications: Sequence {
     fileprivate let absRange: ByteSourceRange
     fileprivate var tokenIterator: FastTokenSequence.Iterator
     fileprivate var classifyIter: TokenClassificationIterator?
+    fileprivate var pendingClassifiedRange: SyntaxClassifiedRange
+    fileprivate var curOffset: Int
+    fileprivate var curTokenEndOffset: Int
 
     init(root: RawSyntax, offset: Int, in absRange: ByteSourceRange) {
       self.absRange = absRange
       self.tokenIterator = .init(root: root, offset: offset, in: absRange)
+      self.pendingClassifiedRange = .init(kind: .none,
+        range: ByteSourceRange(offset: absRange.offset, length: 0))
+      self.curOffset = absRange.offset
+      self.curTokenEndOffset = curOffset
+
+      guard let classifiedRange = nextActiveClassification() else { return }
+      self.pendingClassifiedRange = classifiedRange
+      self.curOffset = Int(classifyIter!.token.position.offset)
     }
 
+    /// Updates `curOffset` and returns consecutive classified ranges, excluding
+    /// ones that do not intersect with the provided range
     public mutating func next() -> SyntaxClassifiedRange? {
+      while true {
+        guard let classifiedRange = nextClassification() else { return nil }
+        curOffset = classifiedRange.endOffset
+        guard classifiedRange.endOffset > absRange.offset else { continue }
+        guard classifiedRange.offset < absRange.endOffset else { return nil }
+        return classifiedRange
+      }
+    }
+
+    /// Returns consecutive classified ranges, with `none` classifications interspersed
+    /// between non-`none` ones. It also merges consecutive classified ranges of
+    /// the same kind.
+    fileprivate mutating func nextClassification() -> SyntaxClassifiedRange? {
+      func passUnclassified(_ offset: Int, _ length: Int) -> SyntaxClassifiedRange {
+        return SyntaxClassifiedRange(kind: .none,
+          range: ByteSourceRange(offset: offset, length: length))
+      }
+
+      while true {
+        let unclassifedLength = pendingClassifiedRange.offset - curOffset
+        if unclassifedLength > 0 {
+          return passUnclassified(curOffset, unclassifedLength)
+        }
+        guard let classifiedRange = nextActiveClassification() else {
+          if curOffset < pendingClassifiedRange.endOffset {
+            return pendingClassifiedRange
+          }
+          let unclassifedLength = curTokenEndOffset - curOffset
+          if unclassifedLength > 0 {
+            return passUnclassified(curOffset, unclassifedLength)
+          }
+          return nil
+        }
+        // Merge consecutive classified ranges of the same kind.
+        if classifiedRange.kind == pendingClassifiedRange.kind &&
+           classifiedRange.offset == pendingClassifiedRange.endOffset {
+          pendingClassifiedRange.range.length += classifiedRange.length
+          continue
+        }
+        let nextClassifiedRange = pendingClassifiedRange
+        pendingClassifiedRange = classifiedRange
+        return nextClassifiedRange
+      }
+    }
+
+    /// Returns only active (non-`none`) classified ranges. The ranges can be
+    /// non-consecutive.
+    fileprivate mutating func nextActiveClassification() -> SyntaxClassifiedRange? {
       while true {
         if classifyIter != nil {
           if let nextClassify = classifyIter!.next() {
-            guard nextClassify.range.endOffset > absRange.offset else { continue }
-            guard nextClassify.range.offset < absRange.endOffset else { return nil }
             return nextClassify
           }
           classifyIter = nil
         }
         guard let nextToken = tokenIterator.next() else { return nil }
+        curTokenEndOffset = nextToken.endOffset
         classifyIter = TokenClassificationIterator(nextToken)
       }
     }

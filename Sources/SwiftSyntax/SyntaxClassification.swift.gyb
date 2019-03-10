@@ -83,18 +83,18 @@ extension SyntaxClassification {
 }
 
 extension RawTokenKind {
-  internal var classification: SyntaxClassification? {
+  internal var classification: SyntaxClassification {
     switch (self) {
 % for token in SYNTAX_TOKENS:
     case .${token.swift_kind()}:
-%   if token.classification and token.classification.name != 'None':
+%   if token.classification:
       return .${token.classification.swift_name}
 %   else:
-      return nil
+      return .none
 %   end
 % end
     case .eof:
-      return nil
+      return .none
     }
   }
 }

@@ -41,59 +41,29 @@ extension SyntaxClassification {
 enum ClassifiedSyntaxTreePrinter {
   static func print(_ tree: Syntax) -> String {
     var result = ""
-    var previousClassification: SyntaxClassifiedRange? = nil
-    func openTag(_ classify: SyntaxClassifiedRange) {
-      result += "<\(classify.kind.tag)>"
-      previousClassification = classify
-    }
-    func closeTag(_ classify: SyntaxClassifiedRange) {
-      result += "</\(classify.kind.tag)>"
-      previousClassification = nil
-    }
-
     var sourceText = tree.description
     let utf8 = sourceText.utf8
-    var curTextPos = utf8.startIndex
+    var skipCheckLine = false
     for classify in tree.classifications {
-      let classifyBegin = utf8.index(utf8.startIndex, offsetBy: classify.range.offset)
+      var classifyBegin = utf8.index(utf8.startIndex, offsetBy: classify.range.offset)
       let classifyEnd = utf8.index(classifyBegin, offsetBy: classify.range.length)
-      let classifiedText = String(utf8[classifyBegin..<classifyEnd])!
-      let unclassifiedText = String(utf8[curTextPos..<classifyBegin])!
+      if skipCheckLine {
+        skipCheckLine = false
+        classifyBegin = utf8.index(after: classifyBegin)
+      }
+      let text = String(utf8[classifyBegin..<classifyEnd])!
 
       // Don't print CHECK lines
-      var skipCheckLine = false
-      if classify.kind == .lineComment && classifiedText.hasPrefix("// CHECK") {
+      if classify.kind == .lineComment && text.hasPrefix("// CHECK") {
         skipCheckLine = true
-        if let previousClassify = previousClassification {
-          closeTag(previousClassify)
-        }
-        result += unclassifiedText
-
+        continue
+      }
+      if classify.kind == .none {
+        result += text
       } else {
-        // Try to merge same classification ranges, to make writing tests more convenient.
-        if let previousClassify = previousClassification {
-          if !unclassifiedText.isEmpty || previousClassify.kind != classify.kind {
-            closeTag(previousClassify)
-          }
-        }
-        result += unclassifiedText
-        if previousClassification == nil {
-          openTag(classify)
-        }
-        result += "\(classifiedText)"
-      }
-
-      curTextPos = classifyEnd
-      if skipCheckLine {
-        curTextPos = utf8.index(after: curTextPos)
+        result += "<\(classify.kind.tag)>\(text)</\(classify.kind.tag)>"
       }
     }
-
-    if let previousClassify = previousClassification {
-      closeTag(previousClassify)
-    }
-    let unclassifiedText = String(utf8[curTextPos..<utf8.endIndex])!
-    result += unclassifiedText
 
     return result
   }

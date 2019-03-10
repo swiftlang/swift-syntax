@@ -251,6 +251,11 @@ extension _SyntaxBase {
   }
 
   /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
+  ///
+  /// The provided classified ranges are consecutive and cover the full source
+  /// text of the node. The ranges may also span multiple tokens, if multiple
+  /// consecutive tokens would have the same classification then a single classified
+  /// range is provided for all of them.
   var classifications: SyntaxClassifications {
     let fullRange = ByteSourceRange(offset: 0, length: byteSize)
     return SyntaxClassifications(self, in: fullRange)
@@ -258,6 +263,15 @@ extension _SyntaxBase {
 
   /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
   /// a relative range.
+  ///
+  /// The provided classified ranges may extend beyond the provided `range`.
+  /// Active classifications (non-`none`) will extend the range to include the
+  /// full classified range (e.g. from the beginning of the comment block), while
+  /// `none` classified ranges will extend to the beginning or end of the token
+  /// that the `range` touches.
+  /// It is guaranteed that no classified range will be provided that doesn't
+  /// intersect the provided `range`.
+  ///
   /// - Parameters:
   ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
   /// - Returns: Sequence of `SyntaxClassifiedRange`s.
@@ -504,12 +518,26 @@ extension Syntax {
   }
 
   /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
+  ///
+  /// The provided classification ranges are consecutive and cover the full source
+  /// text of the node. The ranges may also span multiple tokens, if multiple
+  /// consecutive tokens would have the same classification then a single classified
+  /// range is provided for all of them.
   public var classifications: SyntaxClassifications {
     return base.classifications
   }
 
   /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
   /// a relative range.
+  ///
+  /// The provided classified ranges may extend beyond the provided `range`.
+  /// Active classifications (non-`none`) will extend the range to include the
+  /// full classified range (e.g. from the beginning of the comment block), while
+  /// `none` classified ranges will extend to the beginning or end of the token
+  /// that the `range` touches.
+  /// It is guaranteed that no classified range will be provided that doesn't
+  /// intersect the provided `range`.
+  ///
   /// - Parameters:
   ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
   /// - Returns: Sequence of `SyntaxClassifiedRange`s.

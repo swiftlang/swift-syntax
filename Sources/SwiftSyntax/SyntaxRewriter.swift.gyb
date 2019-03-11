@@ -95,8 +95,7 @@ open class SyntaxRewriter {
     assert(newLayout.count == node.raw.numberOfChildren)
 
     let newRaw = node.raw.replacingLayout(newLayout)
-    let newData = node.base.data.replacingSelf(newRaw)
-    return makeSyntax(newData)
+    return makeSyntax(.forRoot(newRaw))
   }
 }
 

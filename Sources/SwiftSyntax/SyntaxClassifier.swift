@@ -10,18 +10,24 @@
 //
 //===----------------------------------------------------------------------===//
 
+extension SyntaxData {
+  var contextualClassification: (SyntaxClassification, Bool)? {
+    var contextualClassif: (SyntaxClassification, Bool)? = nil
+    var curData = self
+    repeat {
+      guard let parent = curData.parent else { break }
+      contextualClassif = SyntaxClassification.classify(parentKind: parent.raw.kind,
+        indexInParent: curData.indexInParent, childKind: raw.kind)
+      curData = parent.data
+    } while contextualClassif == nil
+    return contextualClassif
+  }
+}
+
 extension TokenSyntax {
   /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
   public var tokenClassification: SyntaxClassifiedRange {
-    var contextualClassification: (SyntaxClassification, Bool)? = nil
-    var curData = self.data
-    repeat {
-      guard let parent = curData.parent else { break }
-      contextualClassification = SyntaxClassification.classify(parentKind: parent.raw.kind,
-        indexInParent: curData.indexInParent, childKind: raw.kind)
-      curData = parent.data
-    } while contextualClassification == nil
-
+    let contextualClassification = self.data.contextualClassification
     let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
     let classifiedRange = raw.withUnsafeTokenText(
@@ -85,10 +91,14 @@ fileprivate struct AbsoluteNode {
   let classification: (SyntaxClassification, Bool)?
 
   /// Use this constructor for the root node.
-  init(raw: RawSyntax, position: AbsoluteSyntaxPosition) {
+  init(
+    raw: RawSyntax,
+    position: AbsoluteSyntaxPosition,
+    contextualClassification: (SyntaxClassification, Bool)?
+  ) {
     self.raw = raw
     self.position = position
-    self.classification = nil
+    self.classification = contextualClassification
   }
 
   init(raw: RawSyntax, position: AbsoluteSyntaxPosition, parent: AbsoluteNode) {
@@ -137,10 +147,16 @@ fileprivate struct SyntaxCursor {
   let absRange: ByteSourceRange
   var finished: Bool
 
-  init(root: RawSyntax, offset: Int, in absRange: ByteSourceRange) {
+  init(
+    root: RawSyntax,
+    offset: Int,
+    in absRange: ByteSourceRange,
+    contextualClassification: (SyntaxClassification, Bool)?
+  ) {
     self.absRange = absRange
     self.node = AbsoluteNode(raw: root,
-      position: .init(offset: UInt32(truncatingIfNeeded: offset), indexInParent: 0))
+      position: .init(offset: UInt32(truncatingIfNeeded: offset), indexInParent: 0),
+      contextualClassification: contextualClassification)
     self.parents = []
     self.finished = false
   }
@@ -214,8 +230,14 @@ fileprivate struct FastTokenSequence: Sequence {
   struct Iterator: IteratorProtocol {
     var cursor: SyntaxCursor
 
-    init(root: RawSyntax, offset: Int, in absRange: ByteSourceRange) {
-      self.cursor = SyntaxCursor(root: root, offset: offset, in: absRange)
+    init(
+      root: RawSyntax,
+      offset: Int,
+      in absRange: ByteSourceRange,
+      contextualClassification: (SyntaxClassification, Bool)?
+    ) {
+      self.cursor = SyntaxCursor(root: root, offset: offset, in: absRange,
+        contextualClassification: contextualClassification)
       _ = self.cursor.advanceToFirstToken()
     }
 
@@ -231,15 +253,23 @@ fileprivate struct FastTokenSequence: Sequence {
   private let root: RawSyntax
   private let offset: Int
   private let absRange: ByteSourceRange
+  private let contextualClassification: (SyntaxClassification, Bool)?
 
-  init(_ root: RawSyntax, offset: Int, in absRange: ByteSourceRange) {
+  init(
+    _ root: RawSyntax,
+    offset: Int,
+    in absRange: ByteSourceRange,
+    contextualClassification: (SyntaxClassification, Bool)?
+  ) {
     self.root = root
     self.offset = offset
     self.absRange = absRange
+    self.contextualClassification = contextualClassification
   }
 
   func makeIterator() -> Iterator {
-    return .init(root: root, offset: offset, in: absRange)
+    return .init(root: root, offset: offset, in: absRange,
+      contextualClassification: contextualClassification)
   }
 }
 
@@ -335,9 +365,15 @@ public struct SyntaxClassifications: Sequence {
     fileprivate var curOffset: Int
     fileprivate var curTokenEndOffset: Int
 
-    init(root: RawSyntax, offset: Int, in absRange: ByteSourceRange) {
+    init(
+      root: RawSyntax,
+      offset: Int,
+      in absRange: ByteSourceRange,
+      contextualClassification: (SyntaxClassification, Bool)?
+    ) {
       self.absRange = absRange
-      self.tokenIterator = .init(root: root, offset: offset, in: absRange)
+      self.tokenIterator = .init(root: root, offset: offset, in: absRange,
+        contextualClassification: contextualClassification)
       self.pendingClassifiedRange = .init(kind: .none,
         range: ByteSourceRange(offset: absRange.offset, length: 0))
       self.curOffset = absRange.offset
@@ -431,6 +467,7 @@ public struct SyntaxClassifications: Sequence {
     let nodeOffset = node.position.utf8Offset
     let absRange = ByteSourceRange(offset: nodeOffset + relRange.offset,
       length: relRange.length)
-    return .init(root: node.raw, offset: nodeOffset, in: absRange)
+    return .init(root: node.raw, offset: nodeOffset, in: absRange,
+      contextualClassification: node.data.contextualClassification)
   }
 }

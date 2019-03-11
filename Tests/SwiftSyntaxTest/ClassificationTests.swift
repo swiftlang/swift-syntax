@@ -113,5 +113,11 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif[3].kind, .typeIdentifier)
       XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 7, length: 3))
     }
+    do {
+      let tok = tree.lastToken!.previousToken!
+      XCTAssertEqual("\(tok)", "Int")
+      let classif = Array(tok.classifications).first!
+      XCTAssertEqual(classif.kind, .typeIdentifier)
+    }
   }
 }

@@ -291,4 +291,12 @@ struct SyntaxData {
     where CursorType.RawValue == Int {
     return replacingChild(child, at: cursor.rawValue)
   }
+
+  func withLeadingTrivia(_ leadingTrivia: Trivia) -> SyntaxData {
+    return replacingSelf(raw.withLeadingTrivia(leadingTrivia))
+  }
+
+  func withTrailingTrivia(_ trailingTrivia: Trivia) -> SyntaxData {
+    return replacingSelf(raw.withTrailingTrivia(trailingTrivia))
+  }
 }

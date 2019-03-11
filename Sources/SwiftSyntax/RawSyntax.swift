@@ -1099,6 +1099,44 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     }
   }
 
+  func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax {
+    if isToken {
+      return RawSyntax.createAndCalcLength(
+        kind: formTokenKind()!,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: formTrailingTrivia()!,
+        presence: presence)
+    } else {
+      var layout = formLayoutArray()
+      for (index, raw) in layout.enumerated() {
+        if let raw = raw {
+          layout[index] = raw.withLeadingTrivia(leadingTrivia)
+          return replacingLayout(layout)
+        }
+      }
+      return self
+    }
+  }
+
+  func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax {
+    if isToken {
+      return RawSyntax.createAndCalcLength(
+        kind: formTokenKind()!,
+        leadingTrivia: formLeadingTrivia()!,
+        trailingTrivia: trailingTrivia,
+        presence: presence)
+    } else {
+      var layout = formLayoutArray()
+      for (index, raw) in layout.enumerated().reversed() {
+        if let raw = raw {
+          layout[index] = raw.withTrailingTrivia(trailingTrivia)
+          return replacingLayout(layout)
+        }
+      }
+      return self
+    }
+  }
+
   /// Creates a RawSyntax node that's marked missing in the source with the
   /// provided kind and layout.
   /// - Parameters:

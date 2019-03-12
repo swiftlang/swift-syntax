@@ -106,10 +106,9 @@ public enum SyntaxParser {
   public static func parse(_ url: URL,
       diagnosticEngine: DiagnosticEngine? = nil) throws -> SourceFileSyntax {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
-    var fileData = try Data(contentsOf: url)
-    fileData.append(0) // null terminate.
-    let source = fileData.withUnsafeBytes { (ptr: UnsafePointer<CChar>) in
-      return String(cString: ptr)
+    let fileData = try Data(contentsOf: url)
+    let source = fileData.withUnsafeBytes { buf in
+      return String.fromBuffer(buf.bindMemory(to: UInt8.self))
     }
     return try parse(source: source, filenameForDiagnostics: url.absoluteString,
                      diagnosticEngine: diagnosticEngine)

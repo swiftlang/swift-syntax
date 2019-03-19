@@ -404,6 +404,7 @@ struct NodePrinter: SyntaxAnyVisitor {
     print("</\(type(of: node))>", terminator: "")
   }
   func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    print("<\(type(of: token))>", terminator: "")
     print(token, terminator:"")
     return .visitChildren
   }

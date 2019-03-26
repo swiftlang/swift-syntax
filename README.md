@@ -87,6 +87,8 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**Periphery**](https://github.com/peripheryapp/periphery): a tool to detect unused code.
 
+[**BartyCrouch**](https://github.com/Flinesoft/BartyCrouch): a tool to incrementally update strings files to help App localization.
+
 ## Contributing
 
 ### Building SwiftSyntax from `master`

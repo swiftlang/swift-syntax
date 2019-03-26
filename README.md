@@ -33,6 +33,7 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 
 | Swift Release Tag | SwiftSyntax Release Tag  |
 |:-------------------:|:-------------------------:|
+| swift-5.0-RELEASE   | 0.50000.0 |
 | swift-4.2-RELEASE   | 0.40200.0 |
 
 

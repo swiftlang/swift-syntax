@@ -18,10 +18,16 @@ fileprivate class Test: NSObject {
 }
 #endif
 
+enum Animal {
+  case cat
+  case dog
+}
+
 public class ParseFileTestCase: XCTestCase {
 
   public static let allTests = [
-    ("testParseSingleFile", testParseSingleFile)
+    ("testParseSingleFile", testParseSingleFile),
+    ("testEnumCaseStructure", testEnumCaseStructure)
   ]
 
   public func testParseSingleFile() {
@@ -32,5 +38,22 @@ public class ParseFileTestCase: XCTestCase {
       XCTAssertEqual("\(parsed)", fileContents)
       try SyntaxVerifier.verify(parsed)
     }())
+  }
+
+  public func testEnumCaseStructure() {
+    class Visitor: SyntaxVisitor {
+      var cases: [EnumCaseDeclSyntax] = []
+      func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+        cases.append(contentsOf: node.members.members.compactMap {
+          ($0 as MemberDeclListItemSyntax).decl as? EnumCaseDeclSyntax
+        })
+        return .skipChildren
+      }
+    }
+    var v = Visitor()
+    let currentFile = URL(fileURLWithPath: #file)
+    let parsed = try! SyntaxParser.parse(currentFile)
+    parsed.walk(&v)
+    XCTAssertEqual(v.cases.count, 2)
   }
 }

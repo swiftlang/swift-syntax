@@ -91,6 +91,8 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**Muter**](https://github.com/SeanROlszewski/muter): Automated mutation testing for Swift
 
+[**Swift Variable Injector**](https://github.com/LucianoPAlmeida/variable-injector): a tool to replace string literals with environment variables values.
+
 ### Reporting Issues
 
 If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [bugs.swift.org](https://bugs.swift.org) in the [SwiftSyntax component](https://bugs.swift.org/issues/?jql=component%20%3D%20SwiftSyntax).

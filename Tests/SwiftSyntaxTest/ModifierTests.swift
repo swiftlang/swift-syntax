@@ -11,7 +11,7 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
     initializer: nil, accessor: nil, trailingComma: nil)
   return VariableDeclSyntax {
     $0.useLetOrVarKeyword(SyntaxFactory.makeLetKeyword())
-    $0.addPatternBinding(Pattern)
+    $0.addBindingsMember(Pattern)
   }
 }
 

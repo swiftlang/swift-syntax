@@ -127,9 +127,11 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
   }
   }
 %       if child_node and child_node.is_syntax_collection():
-%         child_elt = child_node.collection_element_name
+%         child_elt = child.collection_element_name
 %         child_elt_type = child_node.collection_element_type
-%         child_elt_name = child.name + 'Member'
+%         if not child_elt:
+%           raise Exception("'collection_element_name' should be set for '%s' of '%s'" % (child.name, node.name))
+%         end
 
   /// Adds the provided `${child_elt}` to the node's `${child.swift_name}`
   /// collection.
@@ -137,7 +139,7 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
   ///                  `${child.swift_name}` collection.
   /// - returns: A copy of the receiver with the provided `${child_elt}`
   ///            appended to its `${child.swift_name}` collection.
-  public func add${child_elt_name}(_ element: ${child_elt_type}) -> ${node.name} {
+  public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
     var collection: RawSyntax
     if let col = raw[Cursor.${child.swift_name}] {
       collection = col.appending(element.raw)

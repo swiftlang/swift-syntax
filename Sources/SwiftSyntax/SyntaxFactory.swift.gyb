@@ -206,9 +206,11 @@ public enum SyntaxFactory {
     let segments = makeStringLiteralSegments([segment])
     let openQuote = makeStringQuoteToken(leadingTrivia: leadingTrivia)
     let closeQuote = makeStringQuoteToken(trailingTrivia: trailingTrivia)
-    return makeStringLiteralExpr(openQuote: openQuote,
+    return makeStringLiteralExpr(openDelimiter: nil,
+                                 openQuote: openQuote,
                                  segments: segments,
-                                 closeQuote: closeQuote)
+                                 closeQuote: closeQuote,
+                                 closeDelimiter: nil)
   }
 
   public static func makeVariableExpr(_ text: String,

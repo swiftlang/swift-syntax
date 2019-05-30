@@ -41,7 +41,7 @@ extension SyntaxClassification {
 enum ClassifiedSyntaxTreePrinter {
   static func print(_ tree: Syntax) -> String {
     var result = ""
-    var sourceText = tree.description
+    let sourceText = tree.description
     let utf8 = sourceText.utf8
     var skipCheckLine = false
     for classify in tree.classifications {

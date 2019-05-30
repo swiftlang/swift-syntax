@@ -102,7 +102,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     let call = FunctionCallExprSyntax {
       $0.useCalledExpression(printID)
       $0.useLeftParen(SyntaxFactory.makeLeftParenToken())
-      $0.addArgumentListMember(arg)
+      $0.addArgument(arg)
       $0.useRightParen(SyntaxFactory.makeRightParenToken())
     }
     XCTAssertEqual("\(call)", "print(\"Hello, world!\")")
@@ -133,7 +133,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     let call1 = FunctionCallExprSyntax {
       $0.useCalledExpression(printID)
       $0.useLeftParen(SyntaxFactory.makeLeftParenToken())
-      $0.addArgumentListMember(arg)
+      $0.addArgument(arg)
       $0.useRightParen(SyntaxFactory.makeRightParenToken())
     }
     XCTAssertNotNil(call1.leftParen)
@@ -145,7 +145,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
 
     let call3 = FunctionCallExprSyntax {
       $0.useCalledExpression(printID)
-      $0.addArgumentListMember(arg)
+      $0.addArgument(arg)
     }
     XCTAssertNil(call3.leftParen)
     XCTAssertNil(call3.rightParen)

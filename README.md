@@ -61,7 +61,7 @@ let package = Package(
 
 | Xcode Beta Version | SwiftSyntax Revision  |
 |:-------------------:|:-------------------------:|
-| Xcode 11 beta 1   | xcode-11-beta-1 |
+| Xcode 11 beta 1   | xcode11-beta1 |
 
 
 Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require

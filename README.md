@@ -40,6 +40,34 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 Then, import `SwiftSyntax` in your Swift code.
 
 
+### Declare SwiftPM dependency with Xcode 11 beta releases
+
+Add this entry to the `Package.swift` manifest of your project:
+
+```swift
+// swift-tools-version:4.2
+import PackageDescription
+
+let package = Package(
+  name: "MyTool",
+  dependencies: [
+    .package(url: "https://github.com/apple/swift-syntax.git", .revision("xcode11-beta1")),
+  ],
+  targets: [
+    .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
+  ]
+)
+```
+
+| Xcode Beta Version | SwiftSyntax Revision  |
+|:-------------------:|:-------------------------:|
+| Xcode 11 beta 1   | xcode-11-beta-1 |
+
+
+Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require
+the Swift compiler source because we always push gyb-generated files to a tag.
+
+
 ### Declare SwiftPM dependency with nightly build
 
 1. Download and install the latest Trunk Development (master) [toolchain](https://swift.org/download/#snapshots).

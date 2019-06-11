@@ -248,7 +248,7 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
   ///   - location: The location the diagnostic is attached to.
   ///   - actions: A closure that's used to attach notes and highlights to
   ///              diagnostics.
-  init(message: Message, location: SourceLocation?,
+  public init(message: Message, location: SourceLocation?,
        actions: ((inout Builder) -> Void)?) {
     var builder = Builder()
     actions?(&builder)
@@ -263,7 +263,7 @@ public struct Diagnostic: Codable, CustomDebugStringConvertible {
   ///   - location: The location the diagnostic is attached to.
   ///   - highlights: An array of SourceRanges which will be highlighted when
   ///                 the diagnostic is presented.
-  init(message: Message, location: SourceLocation?, notes: [Note],
+  public init(message: Message, location: SourceLocation?, notes: [Note],
        highlights: [SourceRange], fixIts: [FixIt]) {
     self.message = message
     self.location = location

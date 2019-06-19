@@ -445,6 +445,32 @@ func printParserDiags(args: CommandLineArguments) throws {
   _ = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
 }
 
+func diagnose(args: CommandLineArguments) throws {
+  let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
+  let diagEngine = DiagnosticEngine()
+  diagEngine.addConsumer(PrintingDiagnosticConsumer())
+  let tree = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
+  struct DiagnoseUnknown: SyntaxAnyVisitor {
+    let diagEngine: DiagnosticEngine
+    let converter: SourceLocationConverter
+    init(_ diagEngine: DiagnosticEngine, _ converter: SourceLocationConverter) {
+      self.diagEngine = diagEngine
+      self.converter = converter
+    }
+    func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+      if node.isUnknown {
+        diagEngine.diagnose(Diagnostic.Message(.warning, "unknown syntax exists"),
+                            location: node.startLocation(converter: converter,
+                                                         afterLeadingTrivia: true))
+      }
+      return .visitChildren
+    }
+  }
+  var visitor = DiagnoseUnknown(diagEngine,
+             SourceLocationConverter(file: treeURL.path, tree: tree))
+  tree.walk(&visitor)
+}
+
 do {
   let args = try CommandLineArguments.parse(CommandLine.arguments.dropFirst())
 
@@ -458,6 +484,8 @@ do {
     try printSyntaxTree(args: args)
   } else if args.has("-dump-diags") {
     try printParserDiags(args: args)
+  } else if args.has("-diagnose") {
+    try diagnose(args: args)
   } else if args.has("-help") {
     printHelp()
   } else {

@@ -110,7 +110,7 @@ public enum SyntaxParser {
     let source = fileData.withUnsafeBytes { buf in
       return String.fromBuffer(buf.bindMemory(to: UInt8.self))
     }
-    return try parse(source: source, filenameForDiagnostics: url.absoluteString,
+    return try parse(source: source, filenameForDiagnostics: url.path,
                      diagnosticEngine: diagnosticEngine)
   }
 

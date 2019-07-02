@@ -12,8 +12,8 @@ public class ClassificationTests: XCTestCase {
     let tree = try! SyntaxParser.parse(source: source)
     do {
       let classif = Array(tree.classifications)
-      XCTAssertEqual(classif.count, 7)
-      guard classif.count == 7 else {
+      XCTAssertEqual(classif.count, 8)
+      guard classif.count == 8 else {
         return
       }
       XCTAssertEqual(classif[0].kind, .lineComment)
@@ -23,18 +23,20 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif[2].kind, .keyword)
       XCTAssertEqual(classif[2].range, ByteSourceRange(offset: 9, length: 3))
       XCTAssertEqual(classif[3].kind, .none)
-      XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 12, length: 2))
-      XCTAssertEqual(classif[4].kind, .blockComment)
-      XCTAssertEqual(classif[4].range, ByteSourceRange(offset: 14, length: 6))
-      XCTAssertEqual(classif[5].kind, .none)
-      XCTAssertEqual(classif[5].range, ByteSourceRange(offset: 20, length: 3))
-      XCTAssertEqual(classif[6].kind, .integerLiteral)
-      XCTAssertEqual(classif[6].range, ByteSourceRange(offset: 23, length: 1))
+      XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 12, length: 1))
+      XCTAssertEqual(classif[4].kind, .identifier)
+      XCTAssertEqual(classif[4].range, ByteSourceRange(offset: 13, length: 1))
+      XCTAssertEqual(classif[5].kind, .blockComment)
+      XCTAssertEqual(classif[5].range, ByteSourceRange(offset: 14, length: 6))
+      XCTAssertEqual(classif[6].kind, .none)
+      XCTAssertEqual(classif[6].range, ByteSourceRange(offset: 20, length: 3))
+      XCTAssertEqual(classif[7].kind, .integerLiteral)
+      XCTAssertEqual(classif[7].range, ByteSourceRange(offset: 23, length: 1))
     }
     do {
       let classif = Array(tree.classifications(in: ByteSourceRange(offset: 7, length: 8)))
-      XCTAssertEqual(classif.count, 5)
-      guard classif.count == 5 else {
+      XCTAssertEqual(classif.count, 6)
+      guard classif.count == 6 else {
         return
       }
       XCTAssertEqual(classif[0].kind, .lineComment)
@@ -44,9 +46,11 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif[2].kind, .keyword)
       XCTAssertEqual(classif[2].range, ByteSourceRange(offset: 9, length: 3))
       XCTAssertEqual(classif[3].kind, .none)
-      XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 12, length: 2))
-      XCTAssertEqual(classif[4].kind, .blockComment)
-      XCTAssertEqual(classif[4].range, ByteSourceRange(offset: 14, length: 6))
+      XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 12, length: 1))
+      XCTAssertEqual(classif[4].kind, .identifier)
+      XCTAssertEqual(classif[4].range, ByteSourceRange(offset: 13, length: 1))
+      XCTAssertEqual(classif[5].kind, .blockComment)
+      XCTAssertEqual(classif[5].range, ByteSourceRange(offset: 14, length: 6))
     }
     do {
       let classif = Array(tree.classifications(in: ByteSourceRange(offset: 21, length: 1)))
@@ -106,7 +110,7 @@ public class ClassificationTests: XCTestCase {
       let classif = tokens.map { $0.tokenClassification }
       XCTAssertEqual(classif[0].kind, .keyword)
       XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 0, length: 3))
-      XCTAssertEqual(classif[1].kind, .none)
+      XCTAssertEqual(classif[1].kind, .identifier)
       XCTAssertEqual(classif[1].range, ByteSourceRange(offset: 4, length: 1))
       XCTAssertEqual(classif[2].kind, .none)
       XCTAssertEqual(classif[2].range, ByteSourceRange(offset: 5, length: 1))

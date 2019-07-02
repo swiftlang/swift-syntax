@@ -16,7 +16,7 @@ func foo(n: Float) {}
 ///       - returns: single-line, more spaces
 // CHECK: <doc-comment-line>///       - returns: single-line, more spaces</doc-comment-line>
 
-// CHECK: <kw>protocol</kw> Prot
+// CHECK: <kw>protocol</kw> <id>Prot</id>
 protocol Prot {}
 
 func f(x: Int) -> Int {
@@ -57,7 +57,7 @@ func f(x: Int) -> Int {
 // CHECK: <comment-line>// TTODO: blah.</comment-line>
 // CHECK: <comment-line>// MARK: blah.</comment-line>
 
-// CHECK: <kw>func</kw> test5() -> <type>Int</type> {
+// CHECK: <kw>func</kw> <id>test5</id>() -> <type>Int</type> {
 func test5() -> Int {
   // CHECK: <comment-line>// TODO: something, something.</comment-line>
   // TODO: something, something.
@@ -121,7 +121,7 @@ func foo(x: Int, y: Int) -> Int { return x + y }
 // CHECK: <doc-comment-line>/// - seealso : nope</doc-comment-line>
 // CHECK: <doc-comment-line>/// - seealso nope</doc-comment-line>
 // CHECK: <doc-comment-line>/// - returns: `x + y`</doc-comment-line>
-// CHECK: <kw>func</kw> foo(x: <type>Int</type>, y: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> x + y }
+// CHECK: <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>, <id>y</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>x</id> + <id>y</id> }
 
 
 /// Brief.
@@ -151,7 +151,7 @@ func bar(x: Int, y: Int) -> Int { return x + y }
 // CHECK: <doc-comment-line>/// - NOTE: NOTE2</doc-comment-line>
 // CHECK: <doc-comment-line>///   - note: Not a Note field (not at top level)</doc-comment-line>
 // CHECK: <doc-comment-line>/// - returns: `x + y`</doc-comment-line>
-// CHECK: <kw>func</kw> bar(x: <type>Int</type>, y: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> x + y }
+// CHECK: <kw>func</kw> <id>bar</id>(<id>x</id>: <type>Int</type>, <id>y</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>x</id> + <id>y</id> }
 
 /**
   Does pretty much nothing.
@@ -174,31 +174,31 @@ func baz() {}
 // CHECK:   - $$$: Not a field.
 // CHECK:   Empty field, OK:
 // CHECK: */</doc-comment-block>
-// CHECK: <kw>func</kw> baz() {}
+// CHECK: <kw>func</kw> <id>baz</id>() {}
 
 /***/
 func emptyDocBlockComment() {}
 // CHECK: <doc-comment-block>/***/</doc-comment-block>
-// CHECK: <kw>func</kw> emptyDocBlockComment() {}
+// CHECK: <kw>func</kw> <id>emptyDocBlockComment</id>() {}
 
 /**
 */
 func emptyDocBlockComment2() {}
 // CHECK: <doc-comment-block>/**
 // CHECK: */
-// CHECK: <kw>func</kw> emptyDocBlockComment2() {}
+// CHECK: <kw>func</kw> <id>emptyDocBlockComment2</id>() {}
 
 /**          */
 func emptyDocBlockComment3() {}
 // CHECK: <doc-comment-block>/**          */
-// CHECK: <kw>func</kw> emptyDocBlockComment3() {}
+// CHECK: <kw>func</kw> <id>emptyDocBlockComment3</id>() {}
 
 
 /**/
 func malformedBlockComment(f : () throws -> ()) rethrows {}
 // CHECK: <doc-comment-block>/**/</doc-comment-block>
 
-// CHECK: <kw>func</kw> malformedBlockComment(f : () <kw>throws</kw> -> ()) <kw>rethrows</kw> {}
+// CHECK: <kw>func</kw> <id>malformedBlockComment</id>(<id>f</id> : () <kw>throws</kw> -> ()) <kw>rethrows</kw> {}
 
 //: playground doc comment line
 func playgroundCommentLine(f : () throws -> ()) rethrows {}

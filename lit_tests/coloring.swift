@@ -3,123 +3,123 @@
 enum List<T> {
   case Nil
   // rdar://21927124
-  // CHECK: <attr-builtin>indirect</attr-builtin> <kw>case</kw> Cons(<type>T</type>, <type>List</type>)
+  // CHECK: <attr-builtin>indirect</attr-builtin> <kw>case</kw> <id>Cons</id>(<type>T</type>, <type>List</type>)
   indirect case Cons(T, List)
 }
 
-// CHECK: <kw>struct</kw> S {
+// CHECK: <kw>struct</kw> <id>S</id> {
 struct S {
-  // CHECK: <kw>var</kw> x : <type>Int</type>
+  // CHECK: <kw>var</kw> <id>x</id> : <type>Int</type>
   var x : Int
-  // CHECK: <kw>var</kw> y : <type>Int</type>.<type>Int</type>
+  // CHECK: <kw>var</kw> <id>y</id> : <type>Int</type>.<type>Int</type>
   var y : Int.Int
-  // CHECK: <kw>var</kw> a, b : <type>Int</type>
+  // CHECK: <kw>var</kw> <id>a</id>, <id>b</id> : <type>Int</type>
   var a, b : Int
 }
 
 enum EnumWithDerivedEquatableConformance : Int {
-// CHECK-LABEL: <kw>enum</kw> EnumWithDerivedEquatableConformance : {{(<type>)}}Int{{(</type>)?}} {
+// CHECK-LABEL: <kw>enum</kw> <id>EnumWithDerivedEquatableConformance</id> : {{(<type>)}}Int{{(</type>)?}} {
   case CaseA
-// CHECK-NEXT: <kw>case</kw> CaseA
+// CHECK-NEXT: <kw>case</kw> <id>CaseA</id>
   case CaseB, CaseC
-// CHECK-NEXT: <kw>case</kw> CaseB, CaseC
+// CHECK-NEXT: <kw>case</kw> <id>CaseB</id>, <id>CaseC</id>
   case CaseD = 30, CaseE
-// CHECK-NEXT: <kw>case</kw> CaseD = <int>30</int>, CaseE
+// CHECK-NEXT: <kw>case</kw> <id>CaseD</id> = <int>30</int>, <id>CaseE</id>
 }
 // CHECK-NEXT: }
 
-// CHECK: <kw>class</kw> MyCls {
+// CHECK: <kw>class</kw> <id>MyCls</id> {
 class MyCls {
-    // CHECK: <kw>var</kw> www : <type>Int</type>
+    // CHECK: <kw>var</kw> <id>www</id> : <type>Int</type>
     var www : Int
 
-    // CHECK: <kw>func</kw> foo(x: <type>Int</type>) {}
+    // CHECK: <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>) {}
     func foo(x: Int) {}
-    // CHECK: <kw>var</kw> aaa : <type>Int</type> {
+    // CHECK: <kw>var</kw> <id>aaa</id> : <type>Int</type> {
     var aaa : Int {
       // CHECK: <kw>get</kw> {}
       get {}
       // CHECK: <kw>set</kw> {}
       set {}
     }
-    // CHECK: <kw>var</kw> bbb : <type>Int</type> {
+    // CHECK: <kw>var</kw> <id>bbb</id> : <type>Int</type> {
     var bbb : Int {
       // CHECK: <kw>set</kw> {
       set {
-       // CHECK: <kw>var</kw> tmp : <type>Int</type>
+       // CHECK: <kw>var</kw> <id>tmp</id> : <type>Int</type>
         var tmp : Int
       }
       // CHECK: <kw>get</kw> {
       get {
-       // CHECK: <kw>var</kw> tmp : <type>Int</type>
+       // CHECK: <kw>var</kw> <id>tmp</id> : <type>Int</type>
        var tmp : Int
       }
     }
 
-    // CHECK: <kw>subscript</kw> (i : <type>Int</type>, j : <type>Int</type>) -> <type>Int</type> {
+    // CHECK: <kw>subscript</kw> (<id>i</id> : <type>Int</type>, <id>j</id> : <type>Int</type>) -> <type>Int</type> {
     subscript (i : Int, j : Int) -> Int {
       // CHECK: <kw>get</kw> {
       get {
-        // CHECK: <kw>return</kw> i + j
+        // CHECK: <kw>return</kw> <id>i</id> + <id>j</id>
         return i + j
       }
-      // CHECK: <kw>set</kw>(v) {
+      // CHECK: <kw>set</kw>(<id>v</id>) {
       set(v) {
-        // CHECK: v + i - j
+        // CHECK: <id>v</id> + <id>i</id> - <id>j</id>
         v + i - j
       }
     }
 
-    // CHECK: <kw>func</kw> multi(<kw>_</kw> name: <type>Int</type>, otherpart x: <type>Int</type>) {}
+    // CHECK: <kw>func</kw> <id>multi</id>(<kw>_</kw> <id>name</id>: <type>Int</type>, <id>otherpart</id> <id>x</id>: <type>Int</type>) {}
     func multi(_ name: Int, otherpart x: Int) {}
 }
 
-// CHECK-LABEL: <kw>class</kw> Attributes {
+// CHECK-LABEL: <kw>class</kw> <id>Attributes</id> {
 class Attributes {
-// CHECK: <attr-builtin>@IBOutlet</attr-builtin> <kw>var</kw> v0: <type>Int</type>
+// CHECK: <attr-builtin>@IBOutlet</attr-builtin> <kw>var</kw> <id>v0</id>: <type>Int</type>
   @IBOutlet var v0: Int
 
-// CHECK: <attr-builtin>@IBOutlet</attr-builtin> <attr-builtin>@IBOutlet</attr-builtin> <kw>var</kw> v1: <type>String</type>
+// CHECK: <attr-builtin>@IBOutlet</attr-builtin> <attr-builtin>@IBOutlet</attr-builtin> <kw>var</kw> <id>v1</id>: <type>String</type>
   @IBOutlet @IBOutlet var v1: String
 
-// CHECK: <attr-builtin>@objc</attr-builtin> <attr-builtin>@IBOutlet</attr-builtin> <kw>var</kw> v2: <type>String</type>
+// CHECK: <attr-builtin>@objc</attr-builtin> <attr-builtin>@IBOutlet</attr-builtin> <kw>var</kw> <id>v2</id>: <type>String</type>
   @objc @IBOutlet var v2: String
 
-// CHECK: <attr-builtin>@IBOutlet</attr-builtin> <attr-builtin>@objc</attr-builtin> <kw>var</kw> v3: <type>String</type>
+// CHECK: <attr-builtin>@IBOutlet</attr-builtin> <attr-builtin>@objc</attr-builtin> <kw>var</kw> <id>v3</id>: <type>String</type>
   @IBOutlet @objc var v3: String
 
-// CHECK: <attr-builtin>@available</attr-builtin>(*, unavailable) <kw>func</kw> f1() {}
+// CHECK: <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <kw>func</kw> <id>f1</id>() {}
   @available(*, unavailable) func f1() {}
 
-// CHECK: <attr-builtin>@available</attr-builtin>(*, unavailable) <attr-builtin>@IBAction</attr-builtin> <kw>func</kw> f2() {}
+// CHECK: <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <attr-builtin>@IBAction</attr-builtin> <kw>func</kw> <id>f2</id>() {}
   @available(*, unavailable) @IBAction func f2() {}
 
-// CHECK: <attr-builtin>@IBAction</attr-builtin> <attr-builtin>@available</attr-builtin>(*, unavailable) <kw>func</kw> f3() {}
+// CHECK: <attr-builtin>@IBAction</attr-builtin> <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <kw>func</kw> <id>f3</id>() {}
   @IBAction @available(*, unavailable) func f3() {}
 
-// CHECK: <attr-builtin>mutating</attr-builtin> <kw>func</kw> func_mutating_1() {}
+// CHECK: <attr-builtin>mutating</attr-builtin> <kw>func</kw> <id>func_mutating_1</id>() {}
   mutating func func_mutating_1() {}
 
-// CHECK: <attr-builtin>nonmutating</attr-builtin> <kw>func</kw> func_mutating_2() {}
+// CHECK: <attr-builtin>nonmutating</attr-builtin> <kw>func</kw> <id>func_mutating_2</id>() {}
   nonmutating func func_mutating_2() {}
 }
 
 func stringLikeLiterals() {
-// CHECK: <kw>var</kw> us1: <type>UnicodeScalar</type> = <str>"a"</str>
+// CHECK: <kw>var</kw> <id>us1</id>: <type>UnicodeScalar</type> = <str>"a"</str>
   var us1: UnicodeScalar = "a"
-// CHECK: <kw>var</kw> us2: <type>UnicodeScalar</type> = <str>"ы"</str>
+// CHECK: <kw>var</kw> <id>us2</id>: <type>UnicodeScalar</type> = <str>"ы"</str>
   var us2: UnicodeScalar = "ы"
 
-// CHECK: <kw>var</kw> ch1: <type>Character</type> = <str>"a"</str>
+// CHECK: <kw>var</kw> <id>ch1</id>: <type>Character</type> = <str>"a"</str>
   var ch1: Character = "a"
-// CHECK: <kw>var</kw> ch2: <type>Character</type> = <str>"あ"</str>
+// CHECK: <kw>var</kw> <id>ch2</id>: <type>Character</type> = <str>"あ"</str>
   var ch2: Character = "あ"
 
-// CHECK: <kw>var</kw> s1 = <str>"abc абвгд あいうえお"</str>
+// CHECK: <kw>var</kw> <id>s1</id> = <str>"abc абвгд あいうえお"</str>
   var s1 = "abc абвгд あいうえお"
 }
 
-// CHECK: <kw>var</kw> globComp : <type>Int</type>
+// CHECK: <kw>var</kw> <id>globComp</id> : <type>Int</type>
 var globComp : Int {
   // CHECK: <kw>get</kw> {
   get {
@@ -128,75 +128,75 @@ var globComp : Int {
   }
 }
 
-// CHECK: <kw>func</kw> foo(n: <type>Float</type>) -> <type>Int</type> {
+// CHECK: <kw>func</kw> <id>foo</id>(<id>n</id>: <type>Float</type>) -> <type>Int</type> {
 func foo(n: Float) -> Int {
-    // CHECK: <kw>var</kw> fnComp : <type>Int</type>
+    // CHECK: <kw>var</kw> <id>fnComp</id> : <type>Int</type>
     var fnComp : Int {
       // CHECK: <kw>get</kw> {
       get {
-        // CHECK: <kw>var</kw> a: <type>Int</type>
+        // CHECK: <kw>var</kw> <id>a</id>: <type>Int</type>
         // CHECK: <kw>return</kw> <int>0</int>
         var a: Int
         return 0
       }
     }
-    // CHECK: <kw>var</kw> q = {{(<type>)?}}MyCls{{(</type>)?}}()
+    // CHECK: <kw>var</kw> <id>q</id> = <id>MyCls</id>()
     var q = MyCls()
-    // CHECK: <kw>var</kw> ee = <str>"yoo"</str>;
+    // CHECK: <kw>var</kw> <id>ee</id> = <str>"yoo"</str>;
     var ee = "yoo";
     // CHECK: <kw>return</kw> <int>100009</int>
     return 100009
 }
 
-// CHECK: <kw>protocol</kw> Prot
+// CHECK: <kw>protocol</kw> <id>Prot</id>
 protocol Prot {
-  // CHECK: <kw>typealias</kw> Blarg
+  // CHECK: <kw>typealias</kw> <id>Blarg</id>
   typealias Blarg
-  // CHECK: <kw>func</kw> protMeth(x: <type>Int</type>)
+  // CHECK: <kw>func</kw> <id>protMeth</id>(<id>x</id>: <type>Int</type>)
   func protMeth(x: Int)
-  // CHECK: <kw>var</kw> protocolProperty1: <type>Int</type> { <kw>get</kw> }
+  // CHECK: <kw>var</kw> <id>protocolProperty1</id>: <type>Int</type> { <kw>get</kw> }
   var protocolProperty1: Int { get }
-  // CHECK: <kw>var</kw> protocolProperty2: <type>Int</type> { <kw>get</kw> <kw>set</kw> }
+  // CHECK: <kw>var</kw> <id>protocolProperty2</id>: <type>Int</type> { <kw>get</kw> <kw>set</kw> }
   var protocolProperty2: Int { get set }
 }
 
-// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *-* : FunnyPrecedence{{$}}
+// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *-* : <id>FunnyPrecedence</id>{{$}}
 infix operator *-* : FunnyPrecedence
 
-// CHECK: <kw>precedencegroup</kw> FunnyPrecedence
-// CHECK-NEXT: <kw>associativity</kw>: left{{$}}
-// CHECK-NEXT: <kw>higherThan</kw>: MultiplicationPrecedence
+// CHECK: <kw>precedencegroup</kw> <id>FunnyPrecedence</id>
+// CHECK-NEXT: <kw>associativity</kw>: <id>left</id>{{$}}
+// CHECK-NEXT: <kw>higherThan</kw>: <id>MultiplicationPrecedence</id>
 precedencegroup FunnyPrecedence {
   associativity: left
   higherThan: MultiplicationPrecedence
 }
 
-// CHECK: <kw>func</kw> *-*(l: <type>Int</type>, r: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> l }{{$}}
+// CHECK: <kw>func</kw> *-*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *-*(l: Int, r: Int) -> Int { return l }
 
-// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *-+* : FunnyPrecedence
+// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *-+* : <id>FunnyPrecedence</id>
 infix operator *-+* : FunnyPrecedence
 
-// CHECK: <kw>func</kw> *-+*(l: <type>Int</type>, r: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> l }{{$}}
+// CHECK: <kw>func</kw> *-+*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *-+*(l: Int, r: Int) -> Int { return l }
 
 // CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *--*{{$}}
 infix operator *--*
 
-// CHECK: <kw>func</kw> *--*(l: <type>Int</type>, r: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> l }{{$}}
+// CHECK: <kw>func</kw> *--*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *--*(l: Int, r: Int) -> Int { return l }
 
-// CHECK: <kw>protocol</kw> Prot2 : <type>Prot</type> {}
+// CHECK: <kw>protocol</kw> <id>Prot2</id> : <type>Prot</type> {}
 protocol Prot2 : Prot {}
 
-// CHECK: <kw>class</kw> SubCls : <type>MyCls</type>, <type>Prot</type> {}
+// CHECK: <kw>class</kw> <id>SubCls</id> : <type>MyCls</type>, <type>Prot</type> {}
 class SubCls : MyCls, Prot {}
 
-// CHECK: <kw>func</kw> genFn<T : <type>Prot</type> <kw>where</kw> <type>T</type>.<type>Blarg</type> : <type>Prot2</type>>(<kw>_</kw>: <type>T</type>) -> <type>Int</type> {}{{$}}
+// CHECK: <kw>func</kw> <id>genFn</id><<id>T</id> : <type>Prot</type> <kw>where</kw> <type>T</type>.<type>Blarg</type> : <type>Prot2</type>>(<kw>_</kw>: <type>T</type>) -> <type>Int</type> {}{{$}}
 func genFn<T : Prot where T.Blarg : Prot2>(_: T) -> Int {}
 
 func f(x: Int) -> Int {
-  // CHECK: <str>"This is string </str>\<anchor>(</anchor>genFn({(a:<type>Int</type> -> <type>Int</type>) <kw>in</kw> a})<anchor>)</anchor><str> interpolation"</str>
+  // CHECK: <str>"This is string </str>\<anchor>(</anchor><id>genFn</id>({(<id>a</id>:<type>Int</type> -> <type>Int</type>) <kw>in</kw> <id>a</id>})<anchor>)</anchor><str> interpolation"</str>
   "This is string \(genFn({(a:Int -> Int) in a})) interpolation"
 
   // CHECK: <str>"This is unterminated</str>
@@ -236,37 +236,37 @@ func f(x: Int) -> Int {
   "\(1)\(1)"
 }
 
-// CHECK: <kw>func</kw> bar(x: <type>Int</type>) -> (<type>Int</type>, <type>Float</type>) {
+// CHECK: <kw>func</kw> <id>bar</id>(<id>x</id>: <type>Int</type>) -> (<type>Int</type>, <type>Float</type>) {
 func bar(x: Int) -> (Int, Float) {
-  // CHECK: foo({{(<type>)?}}Float{{(</type>)?}}())
+  // CHECK: <id>foo</id>(<id>Float</id>())
   foo(Float())
 }
 
 class GenC<T1,T2> {}
 
 func test() {
-  // CHECK: {{(<type>)?}}GenC{{(</type>)?}}<<type>Int</type>, <type>Float</type>>()
+  // CHECK: {{(<type>)?}}<id>GenC</id>{{(</type>)?}}<<type>Int</type>, <type>Float</type>>()
   var x = GenC<Int, Float>()
 }
 
-// CHECK: <kw>typealias</kw> MyInt = <type>Int</type>
+// CHECK: <kw>typealias</kw> <id>MyInt</id> = <type>Int</type>
 typealias MyInt = Int
 
 func test2(x: Int) {
-  // CHECK: <str>"</str>\<anchor>(</anchor>x<anchor>)</anchor><str>"</str>
+  // CHECK: <str>"</str>\<anchor>(</anchor><id>x</id><anchor>)</anchor><str>"</str>
   "\(x)"
 }
 
-// CHECK: <kw>class</kw> Observers {
+// CHECK: <kw>class</kw> <id>Observers</id> {
 class Observers {
-  // CHECK: <kw>var</kw> p1 : <type>Int</type> {
+  // CHECK: <kw>var</kw> <id>p1</id> : <type>Int</type> {
   var p1 : Int {
-    // CHECK: <kw>willSet</kw>(newValue) {}
+    // CHECK: <kw>willSet</kw>(<id>newValue</id>) {}
     willSet(newValue) {}
     // CHECK: <kw>didSet</kw> {}
     didSet {}
   }
-  // CHECK: <kw>var</kw> p2 : <type>Int</type> {
+  // CHECK: <kw>var</kw> <id>p2</id> : <type>Int</type> {
   var p2 : Int {
     // CHECK: <kw>didSet</kw> {}
     didSet {}
@@ -275,22 +275,22 @@ class Observers {
   }
 }
 
-// CHECK: <kw>func</kw> test3(o: <type>AnyObject</type>) {
+// CHECK: <kw>func</kw> <id>test3</id>(<id>o</id>: <type>AnyObject</type>) {
 func test3(o: AnyObject) {
-  // CHECK: <kw>_</kw> = o <kw>is</kw> <type>MyCls</type> ? o <kw>as</kw> <type>MyCls</type> : o <kw>as</kw>! <type>MyCls</type> <kw>as</kw> <type>MyCls</type> + <int>1</int>
+  // CHECK: <kw>_</kw> = <id>o</id> <kw>is</kw> <type>MyCls</type> ? <id>o</id> <kw>as</kw> <type>MyCls</type> : <id>o</id> <kw>as</kw>! <type>MyCls</type> <kw>as</kw> <type>MyCls</type> + <int>1</int>
   _ = o is MyCls ? o as MyCls : o as! MyCls as MyCls + 1
 }
 
-// CHECK: <kw>class</kw> MySubClass : <type>MyCls</type> {
+// CHECK: <kw>class</kw> <id>MySubClass</id> : <type>MyCls</type> {
 class MySubClass : MyCls {
-    // CHECK: <attr-builtin>override</attr-builtin> <kw>func</kw> foo(x: <type>Int</type>) {}
+    // CHECK: <attr-builtin>override</attr-builtin> <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>) {}
     override func foo(x: Int) {}
 
-    // CHECK: <attr-builtin>convenience</attr-builtin> <kw>init</kw>(a: <type>Int</type>) {}
+    // CHECK: <attr-builtin>convenience</attr-builtin> <kw>init</kw>(<id>a</id>: <type>Int</type>) {}
     convenience init(a: Int) {}
 }
 
-// CHECK: <kw>var</kw> g1 = { (x: <type>Int</type>) -> <type>Int</type> <kw>in</kw> <kw>return</kw> <int>0</int> }
+// CHECK: <kw>var</kw> <id>g1</id> = { (<id>x</id>: <type>Int</type>) -> <type>Int</type> <kw>in</kw> <kw>return</kw> <int>0</int> }
 var g1 = { (x: Int) -> Int in return 0 }
 
 // CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> ~~ {
@@ -302,22 +302,22 @@ postfix operator ~~* {}
 
 func test_defer() {
   defer {
-    // CHECK: <kw>let</kw> x : <type>Int</type> = <int>0</int>
+    // CHECK: <kw>let</kw> <id>x</id> : <type>Int</type> = <int>0</int>
     let x : Int = 0
   }
 }
 
 func test6<T : Prot>(x: T) {}
-// CHECK: <kw>func</kw> test6<T : <type>Prot</type>>(x: <type>T</type>) {}{{$}}
+// CHECK: <kw>func</kw> <id>test6</id><<id>T</id> : <type>Prot</type>>(<id>x</id>: <type>T</type>) {}{{$}}
 
 // CHECK: <kw>func</kw> <placeholder><#test1#></placeholder> () {}
 func <#test1#> () {}
 
 func funcTakingFor(for internalName: Int) {}
-// CHECK: <kw>func</kw> funcTakingFor(for internalName: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>funcTakingFor</id>(<id>for</id> <id>internalName</id>: <type>Int</type>) {}
 
 func funcTakingIn(in internalName: Int) {}
-// CHECK: <kw>func</kw> funcTakingIn(in internalName: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>funcTakingIn</id>(<id>in</id> <id>internalName</id>: <type>Int</type>) {}
 
 _ = 123
 // CHECK: <int>123</int>
@@ -331,61 +331,61 @@ _ = -3.1e-5
 // CHECK: <float>3.1e-5</float>
 
 "--\"\(x) --"
-// CHECK: <str>"--\"</str>\<anchor>(</anchor>x<anchor>)</anchor><str> --"</str>
+// CHECK: <str>"--\"</str>\<anchor>(</anchor><id>x</id><anchor>)</anchor><str> --"</str>
 
 func keywordAsLabel1(in: Int) {}
-// CHECK: <kw>func</kw> keywordAsLabel1(in: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>keywordAsLabel1</id>(<id>in</id>: <type>Int</type>) {}
 func keywordAsLabel2(for: Int) {}
-// CHECK: <kw>func</kw> keywordAsLabel2(for: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>keywordAsLabel2</id>(<id>for</id>: <type>Int</type>) {}
 func keywordAsLabel3(if: Int, for: Int) {}
-// CHECK: <kw>func</kw> keywordAsLabel3(if: <type>Int</type>, for: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>keywordAsLabel3</id>(<id>if</id>: <type>Int</type>, <id>for</id>: <type>Int</type>) {}
 func keywordAsLabel4(_: Int) {}
-// CHECK: <kw>func</kw> keywordAsLabel4(<kw>_</kw>: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>keywordAsLabel4</id>(<kw>_</kw>: <type>Int</type>) {}
 func keywordAsLabel5(_: Int, for: Int) {}
-// CHECK: <kw>func</kw> keywordAsLabel5(<kw>_</kw>: <type>Int</type>, for: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>keywordAsLabel5</id>(<kw>_</kw>: <type>Int</type>, <id>for</id>: <type>Int</type>) {}
 func keywordAsLabel6(if func: Int) {}
-// CHECK: <kw>func</kw> keywordAsLabel6(if func: <type>Int</type>) {}
+// CHECK: <kw>func</kw> <id>keywordAsLabel6</id>(<id>if</id> <id>func</id>: <type>Int</type>) {}
 
 func foo1() {
-// CHECK: <kw>func</kw> foo1() {
+// CHECK: <kw>func</kw> <id>foo1</id>() {
   keywordAsLabel1(in: 1)
-// CHECK: keywordAsLabel1(in: <int>1</int>)
+// CHECK: <id>keywordAsLabel1</id>(<id>in</id>: <int>1</int>)
   keywordAsLabel2(for: 1)
-// CHECK: keywordAsLabel2(for: <int>1</int>)
+// CHECK: <id>keywordAsLabel2</id>(<id>for</id>: <int>1</int>)
   keywordAsLabel3(if: 1, for: 2)
-// CHECK: keywordAsLabel3(if: <int>1</int>, for: <int>2</int>)
+// CHECK: <id>keywordAsLabel3</id>(<id>if</id>: <int>1</int>, <id>for</id>: <int>2</int>)
   keywordAsLabel5(1, for: 2)
-// CHECK: keywordAsLabel5(<int>1</int>, for: <int>2</int>)
+// CHECK: <id>keywordAsLabel5</id>(<int>1</int>, <id>for</id>: <int>2</int>)
 
   _ = (if: 0, for: 2)
-// CHECK: <kw>_</kw> = (if: <int>0</int>, for: <int>2</int>)
+// CHECK: <kw>_</kw> = (<id>if</id>: <int>0</int>, <id>for</id>: <int>2</int>)
   _ = (_: 0, _: 2)
 // CHECK: <kw>_</kw> = (<kw>_</kw>: <int>0</int>, <kw>_</kw>: <int>2</int>)
 }
 
 func foo2(O1 : Int?, O2: Int?, O3: Int?) {
   guard let _ = O1, var _ = O2, let _ = O3 else { }
-// CHECK:  <kw>guard</kw> <kw>let</kw> <kw>_</kw> = O1, <kw>var</kw> <kw>_</kw> = O2, <kw>let</kw> <kw>_</kw> = O3 <kw>else</kw> { }
+// CHECK:  <kw>guard</kw> <kw>let</kw> <kw>_</kw> = <id>O1</id>, <kw>var</kw> <kw>_</kw> = <id>O2</id>, <kw>let</kw> <kw>_</kw> = <id>O3</id> <kw>else</kw> { }
   if let _ = O1, var _ = O2, let _ = O3 {}
-// CHECK: <kw>if</kw> <kw>let</kw> <kw>_</kw> = O1, <kw>var</kw> <kw>_</kw> = O2, <kw>let</kw> <kw>_</kw> = O3 {}
+// CHECK: <kw>if</kw> <kw>let</kw> <kw>_</kw> = <id>O1</id>, <kw>var</kw> <kw>_</kw> = <id>O2</id>, <kw>let</kw> <kw>_</kw> = <id>O3</id> {}
 }
 
 func keywordInCaseAndLocalArgLabel(_ for: Int, for in: Int, class _: Int) {
-// CHECK:  <kw>func</kw> keywordInCaseAndLocalArgLabel(<kw>_</kw> for: <type>Int</type>, for in: <type>Int</type>, class <kw>_</kw>: <type>Int</type>) {
+// CHECK:  <kw>func</kw> <id>keywordInCaseAndLocalArgLabel</id>(<kw>_</kw> <id>for</id>: <type>Int</type>, <id>for</id> <id>in</id>: <type>Int</type>, <id>class</id> <kw>_</kw>: <type>Int</type>) {
   switch(`for`, `in`) {
   case (let x, let y):
-// CHECK: <kw>case</kw> (<kw>let</kw> x, <kw>let</kw> y):
+// CHECK: <kw>case</kw> (<kw>let</kw> <id>x</id>, <kw>let</kw> <id>y</id>):
     print(x, y)
   }
 }
 
-// CHECK: <kw>class</kw> Ownership {
+// CHECK: <kw>class</kw> <id>Ownership</id> {
 class Ownership {
-  // CHECK: <attr-builtin>weak</attr-builtin> <kw>var</kw> w
+  // CHECK: <attr-builtin>weak</attr-builtin> <kw>var</kw> <id>w</id>
   weak var w
-  // CHECK: <attr-builtin>unowned</attr-builtin> <kw>var</kw> u
+  // CHECK: <attr-builtin>unowned</attr-builtin> <kw>var</kw> <id>u</id>
   unowned var u
-  // CHECK: <attr-builtin>unowned</attr-builtin>(unsafe) <kw>var</kw> uu
+  // CHECK: <attr-builtin>unowned</attr-builtin>(<id>unsafe</id>) <kw>var</kw> <id>uu</id>
   unowned(unsafe) var uu
 }
 // FIXME: CHECK: <kw>let</kw> closure = { [weak x=bindtox, unowned y=bindtoy, unowned(unsafe) z=bindtoz] <kw>in</kw> }
@@ -393,4 +393,4 @@ let closure = { [weak x=bindtox, unowned y=bindtoy, unowned(unsafe) z=bindtoz] i
 
 protocol FakeClassRestrictedProtocol : `class` {}
 // FIXME: rdar://42801404: OLD and NEW should be the same '<type>`class`</type>'.
-// CHECK: <kw>protocol</kw> FakeClassRestrictedProtocol : `<type>class</type>` {}
+// CHECK: <kw>protocol</kw> <id>FakeClassRestrictedProtocol</id> : `<type>class</type>` {}

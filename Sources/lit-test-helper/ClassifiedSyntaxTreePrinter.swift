@@ -18,7 +18,7 @@ extension SyntaxClassification {
     switch self {
     case .none: return ""
     case .keyword: return "kw"
-    case .identifier: return ""
+    case .identifier: return "id"
     case .typeIdentifier: return "type"
     case .dollarIdentifier: return "dollar"
     case .integerLiteral: return "int"

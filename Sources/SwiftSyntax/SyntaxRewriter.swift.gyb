@@ -221,6 +221,35 @@ public extension SyntaxAnyVisitor {
   }
 }
 
+/// A class version of the `SyntaxVisitor` protocol. This is useful if you
+/// intend to have subclasses overriding specific methods of a common base
+/// `SyntaxVisitor` class.
+///
+/// It workarounds the issue of not being able to override the default
+/// implementations of the protocol (see https://bugs.swift.org/browse/SR-103).
+open class SyntaxVisitorBase: SyntaxVisitor {
+  public init() {}
+
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  open func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  open func visitPost(_ node: ${node.name}) {}
+%   end
+% end
+
+  open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  open func visitPost(_ node: TokenSyntax) {}
+
+  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  open func visitPost(_ node: UnknownSyntax) {}
+}
+
 extension _SyntaxBase {
   func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
     guard isPresent else { return }

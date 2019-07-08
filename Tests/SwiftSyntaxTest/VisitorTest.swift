@@ -8,6 +8,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
     ("testRewritingNodeWithEmptyChild", testRewritingNodeWithEmptyChild),
     ("testSyntaxRewriterVisitAny", testSyntaxRewriterVisitAny),
     ("testSyntaxRewriterVisitCollection", testSyntaxRewriterVisitCollection),
+    ("testVisitorClass", testVisitorClass),
   ]
 
   public func testBasic() {
@@ -81,6 +82,24 @@ public class SyntaxVisitorTestCase: XCTestCase {
       var visitor = VisitCollections()
       parsed.walk(&visitor)
       XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
+    }())
+  }
+
+  public func testVisitorClass() {
+    class FuncCounter: SyntaxVisitorBase {
+      var funcCount = 0
+      override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+        funcCount += 1
+        return super.visit(node)
+      }
+    }
+    XCTAssertNoThrow(try {
+      let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
+      var counter = FuncCounter()
+      let hashBefore = parsed.hashValue
+      parsed.walk(&counter)
+      XCTAssertEqual(counter.funcCount, 3)
+      XCTAssertEqual(hashBefore, parsed.hashValue)
     }())
   }
 }

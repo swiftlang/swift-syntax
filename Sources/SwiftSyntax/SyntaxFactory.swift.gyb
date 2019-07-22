@@ -199,9 +199,7 @@ public enum SyntaxFactory {
   public static func makeStringLiteralExpr(_ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {
-    let string = makeStringSegment(text,
-                                   leadingTrivia: leadingTrivia,
-                                   trailingTrivia: trailingTrivia)
+    let string = makeStringSegment(text)
     let segment = makeStringSegment(content: string)
     let segments = makeStringLiteralSegments([segment])
     let openQuote = makeStringQuoteToken(leadingTrivia: leadingTrivia)

@@ -196,6 +196,126 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
 
+  public static func makeNonEqualityOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("!="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeAdditionOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("+"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeSubtractionOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("-"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeMultiplicationOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("*"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeDivisionOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("/"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeRemainderOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("%"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeAdditionAssignmentOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("+="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeSubtractionAssignmentOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("-="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeMultiplicationAssignmentOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("*="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeDivisionAssignmentOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("/="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeRemainderAssignmentOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("%="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeLessThanOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("<"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeGreaterThanOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator(">"),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeLessThanOrEqualToOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator("<="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeGreaterThanOrEqualToOperator(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.spacedBinaryOperator(">="),
+                     presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+
   public static func makeStringLiteralExpr(_ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {

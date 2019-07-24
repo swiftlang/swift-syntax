@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class TokenSyntaxTestCase: XCTestCase {
+public class TokenTests: XCTestCase {
 
   public static let allTests = [
     ("testKeywordKinds", testKeywordKinds),

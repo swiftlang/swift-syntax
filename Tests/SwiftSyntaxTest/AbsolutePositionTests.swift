@@ -8,7 +8,7 @@ fileprivate class FuncRenamer: SyntaxRewriter {
   }
 }
 
-public class AbsolutePositionTestCase: XCTestCase {
+public class AbsolutePositionTests: XCTestCase {
 
   public static let allTests = [
     ("testVisitor", testVisitor),
@@ -106,8 +106,8 @@ public class AbsolutePositionTestCase: XCTestCase {
         $0.useItem(ReturnStmtSyntax {
           $0.useReturnKeyword(
             SyntaxFactory.makeReturnKeyword(
-              leadingTrivia: AbsolutePositionTestCase.leadingTrivia,
-              trailingTrivia: AbsolutePositionTestCase.trailingTrivia))
+              leadingTrivia: AbsolutePositionTests.leadingTrivia,
+              trailingTrivia: AbsolutePositionTests.trailingTrivia))
         })}, count: count)
     return SyntaxFactory.makeSourceFile(
       statements: SyntaxFactory.makeCodeBlockItemList(items),
@@ -129,12 +129,12 @@ public class AbsolutePositionTestCase: XCTestCase {
 
     // Test Node trivia setters and getters
 
-    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.leadingTrivia)
     XCTAssertEqual([], root.trailingTrivia)
 
     var modifiedRoot1 = root.withLeadingTrivia([.spaces(6), .tabs(1)])
     XCTAssertEqual([.spaces(6), .tabs(1)], modifiedRoot1.leadingTrivia)
-    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.leadingTrivia)
     modifiedRoot1.leadingTrivia = [.blockComment("/* this is a comment */")]
     XCTAssertEqual([.blockComment("/* this is a comment */")], modifiedRoot1.leadingTrivia)
 
@@ -146,18 +146,18 @@ public class AbsolutePositionTestCase: XCTestCase {
 
     // Test Collection trivia setters and getters
 
-    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.statements.leadingTrivia)
-    XCTAssertEqual(AbsolutePositionTestCase.trailingTrivia, root.statements.trailingTrivia)
+    XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.statements.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTests.trailingTrivia, root.statements.trailingTrivia)
 
     var modifiedStatements1 = root.withLeadingTrivia([.carriageReturnLineFeeds(3)])
     XCTAssertEqual([.carriageReturnLineFeeds(3)], modifiedStatements1.leadingTrivia)
-    XCTAssertEqual(AbsolutePositionTestCase.leadingTrivia, root.statements.leadingTrivia)
+    XCTAssertEqual(AbsolutePositionTests.leadingTrivia, root.statements.leadingTrivia)
     modifiedStatements1.leadingTrivia = [.garbageText("GARBAGE")]
     XCTAssertEqual([.garbageText("GARBAGE")], modifiedStatements1.leadingTrivia)
 
     var modifiedStatements2 = root.withTrailingTrivia([.formfeeds(1), .carriageReturns(3)])
     XCTAssertEqual([.formfeeds(1), .carriageReturns(3)], modifiedStatements2.trailingTrivia)
-    XCTAssertEqual(AbsolutePositionTestCase.trailingTrivia, root.statements.trailingTrivia)
+    XCTAssertEqual(AbsolutePositionTests.trailingTrivia, root.statements.trailingTrivia)
     modifiedStatements2.trailingTrivia = [.verticalTabs(4)]
     XCTAssertEqual([.verticalTabs(4)], modifiedStatements2.trailingTrivia)
   }

@@ -23,7 +23,7 @@ enum Animal {
   case dog
 }
 
-public class ParseFileTestCase: XCTestCase {
+public class ParseFileTests: XCTestCase {
 
   public static let allTests = [
     ("testParseSingleFile", testParseSingleFile),

@@ -27,7 +27,7 @@ fileprivate extension Diagnostic.Message {
   }
 }
 
-public class DiagnosticTestCase: XCTestCase {
+public class DiagnosticTests: XCTestCase {
 
   public static let allTests = [
     ("testDiagnosticEmission", testDiagnosticEmission),

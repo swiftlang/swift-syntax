@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class SyntaxChildrenAPITestCase: XCTestCase {
+public class SyntaxChildrenTests: XCTestCase {
 
   public static let allTests = [
     ("testIterateWithAllPresent", testIterateWithAllPresent),

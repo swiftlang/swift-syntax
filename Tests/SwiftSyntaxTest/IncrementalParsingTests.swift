@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class IncrementalParsingTestCase: XCTestCase {
+public class IncrementalParsingTests: XCTestCase {
 
   public static let allTests = [
     ("testIncrementalInvalid", testIncrementalInvalid),

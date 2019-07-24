@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class MultithreadingTestCase: XCTestCase {
+public class MultithreadingTests: XCTestCase {
 
   public static let allTests = [
     ("testPathological", testPathological),

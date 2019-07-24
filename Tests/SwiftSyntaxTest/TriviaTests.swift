@@ -1,7 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class TriviaTestCase: XCTestCase {
+public class TriviaTests: XCTestCase {
 
   public static let allTests = [
     ("testTriviaEquatable", testTriviaEquatable),

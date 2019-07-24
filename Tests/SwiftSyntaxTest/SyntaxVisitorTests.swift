@@ -3,14 +3,6 @@ import SwiftSyntax
 
 public class SyntaxVisitorTests: XCTestCase {
 
-  public static let allTests = [
-    ("testBasic", testBasic),
-    ("testRewritingNodeWithEmptyChild", testRewritingNodeWithEmptyChild),
-    ("testSyntaxRewriterVisitAny", testSyntaxRewriterVisitAny),
-    ("testSyntaxRewriterVisitCollection", testSyntaxRewriterVisitCollection),
-    ("testVisitorClass", testVisitorClass),
-  ]
-
   public func testBasic() {
     struct FuncCounter: SyntaxVisitor {
       var funcCount = 0

@@ -3,11 +3,6 @@ import SwiftSyntax
 
 
 public class CustomReflectableTests: XCTestCase {
-  public static let allTests = [
-    ("testDump", testDump),
-    ("testConformanceToCustomReflectable", testConformanceToCustomReflectable),
-  ]
-
 
   public func testDump() {
     struct TestCase {

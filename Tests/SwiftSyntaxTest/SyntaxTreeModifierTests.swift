@@ -17,10 +17,6 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
 
 public class SyntaxTreeModifierTests: XCTestCase {
 
-  public static let allTests = [
-    ("testAccessorAsModifier", testAccessorAsModifier)
-  ]
-
   public func testAccessorAsModifier() {
     var VD = cannedVarDecl()
     XCTAssertEqual("\(VD)", "let a: Int")

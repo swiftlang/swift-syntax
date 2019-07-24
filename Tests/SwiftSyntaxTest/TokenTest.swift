@@ -3,10 +3,6 @@ import SwiftSyntax
 
 public class TokenTests: XCTestCase {
 
-  public static let allTests = [
-    ("testKeywordKinds", testKeywordKinds),
-  ]
-
   public func testKeywordKinds() {
     XCTAssertTrue(TokenKind.operatorKeyword.isKeyword)
     XCTAssertTrue(TokenKind.funcKeyword.isKeyword)

@@ -18,14 +18,6 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
 
 public class SyntaxFactoryTests: XCTestCase {
 
-  public static let allTests = [
-    ("testGenerated", testGenerated),
-    ("testTokenSyntax", testTokenSyntax),
-    ("testFunctionCallSyntaxBuilder", testFunctionCallSyntaxBuilder),
-    ("testWithOptionalChild", testWithOptionalChild),
-    ("testUnknownSyntax", testUnknownSyntax),
-  ]
-
   public func testGenerated() {
 
     let structDecl = cannedStructDecl()

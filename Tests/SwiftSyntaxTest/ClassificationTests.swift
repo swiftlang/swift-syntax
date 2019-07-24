@@ -2,10 +2,6 @@ import XCTest
 import SwiftSyntax
 
 public class ClassificationTests: XCTestCase {
-  public static let allTests = [
-    ("testClassification", testClassification),
-    ("testTokenClassification", testTokenClassification),
-  ]
 
   public func testClassification() {
     let source = "// blah.\nlet x/*yo*/ = 0"

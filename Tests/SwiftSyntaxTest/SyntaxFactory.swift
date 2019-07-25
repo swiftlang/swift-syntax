@@ -16,19 +16,6 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   }
 }
 
-fileprivate func infixOperationExprList(with operatorToken: TokenSyntax) -> ExprListSyntax {
-  let first = IntegerLiteralExprSyntax {
-    $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
-  }
-  let op = BinaryOperatorExprSyntax {
-    $0.useOperatorToken(operatorToken.withTrailingTrivia(.spaces(1)))
-  }
-  let second = IntegerLiteralExprSyntax {
-    $0.useDigits(SyntaxFactory.makeIntegerLiteral("1"))
-  }
-  return SyntaxFactory.makeExprList([first, op, second])
-}
-
 public class SyntaxFactoryAPITestCase: XCTestCase {
 
   public static let allTests = [
@@ -38,21 +25,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     ("testWithOptionalChild", testWithOptionalChild),
     ("testUnknownSyntax", testUnknownSyntax),
     ("testMakeStringLiteralExpr", testMakeStringLiteralExpr),
-    ("testMakeNonEqualityOperator", testMakeNonEqualityOperator),
-    ("testMakeAdditionOperator", testMakeAdditionOperator),
-    ("testMakeSubtractionOperator", testMakeSubtractionOperator),
-    ("testMakeMultiplicationOperator", testMakeMultiplicationOperator),
-    ("testMakeDivisionOperator", testMakeDivisionOperator),
-    ("testMakeRemainderOperator", testMakeRemainderOperator),
-    ("testMakeAdditionAssignmentOperator", testMakeAdditionAssignmentOperator),
-    ("testMakeSubtractionAssignmentOperator", testMakeSubtractionAssignmentOperator),
-    ("testMakeMultiplicationAssignmentOperator", testMakeMultiplicationAssignmentOperator),
-    ("testMakeDivisionAssignmentOperator", testMakeDivisionAssignmentOperator),
-    ("testMakeRemainderAssignmentOperator", testMakeRemainderAssignmentOperator),
-    ("testMakeLessThanOperator", testMakeLessThanOperator),
-    ("testMakeGreaterThanOperator", testMakeGreaterThanOperator),
-    ("testMakeLessThanOrEqualToOperator", testMakeLessThanOrEqualToOperator),
-    ("testMakeGreaterThanOrEqualToOperator", testMakeGreaterThanOrEqualToOperator),
+    ("testMakeBinaryOperator", testMakeBinaryOperator),
   ]
 
   public func testGenerated() {
@@ -202,78 +175,22 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     XCTAssertEqual(expr.description, expected)
   }
     
-  public func testMakeNonEqualityOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeNonEqualityOperator())
-    XCTAssertEqual("\(exprList)", "1 != 1")
-  }
+  public func testMakeBinaryOperator() {
+    let first = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
+    }
+    let second = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1"))
+    }
+    let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
+    operatorNames.forEach { operatorName in
+      let operatorToken = SyntaxFactory.makeBinaryOperator(operatorName, trailingTrivia: .spaces(1))
+      let operatorExpr = BinaryOperatorExprSyntax {
+        $0.useOperatorToken(operatorToken)
+      }
+      let exprList = SyntaxFactory.makeExprList([first, operatorExpr, second])
 
-  public func testMakeAdditionOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeAdditionOperator())
-    XCTAssertEqual("\(exprList)", "1 + 1")
-  }
-
-  public func testMakeSubtractionOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeSubtractionOperator())
-    XCTAssertEqual("\(exprList)", "1 - 1")
-  }
-
-  public func testMakeMultiplicationOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeMultiplicationOperator())
-    XCTAssertEqual("\(exprList)", "1 * 1")
-  }
-
-  public func testMakeDivisionOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeDivisionOperator())
-    XCTAssertEqual("\(exprList)", "1 / 1")
-  }
-
-  public func testMakeRemainderOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeRemainderOperator())
-    XCTAssertEqual("\(exprList)", "1 % 1")
-  }
-
-  public func testMakeAdditionAssignmentOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeAdditionAssignmentOperator())
-    XCTAssertEqual("\(exprList)", "1 += 1")
-  }
-    
-  public func testMakeSubtractionAssignmentOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeSubtractionAssignmentOperator())
-    XCTAssertEqual("\(exprList)", "1 -= 1")
-  }
-
-  public func testMakeMultiplicationAssignmentOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeMultiplicationAssignmentOperator())
-    XCTAssertEqual("\(exprList)", "1 *= 1")
-  }
-
-  public func testMakeDivisionAssignmentOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeDivisionAssignmentOperator())
-    XCTAssertEqual("\(exprList)", "1 /= 1")
-  }
-
-  public func testMakeRemainderAssignmentOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeRemainderAssignmentOperator())
-    XCTAssertEqual("\(exprList)", "1 %= 1")
-  }
-
-  public func testMakeLessThanOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeLessThanOperator())
-    XCTAssertEqual("\(exprList)", "1 < 1")
-  }
-    
-  public func testMakeGreaterThanOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeGreaterThanOperator())
-    XCTAssertEqual("\(exprList)", "1 > 1")
-  }
-
-  public func testMakeLessThanOrEqualToOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeLessThanOrEqualToOperator())
-    XCTAssertEqual("\(exprList)", "1 <= 1")
-  }
-
-  public func testMakeGreaterThanOrEqualToOperator() {
-    let exprList = infixOperationExprList(with: SyntaxFactory.makeGreaterThanOrEqualToOperator())
-    XCTAssertEqual("\(exprList)", "1 >= 1")
+      XCTAssertEqual("\(exprList)", "1 \(operatorName) 1")
+    }
   }
 }

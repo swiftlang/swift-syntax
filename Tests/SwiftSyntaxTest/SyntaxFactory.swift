@@ -37,6 +37,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     ("testFunctionCallSyntaxBuilder", testFunctionCallSyntaxBuilder),
     ("testWithOptionalChild", testWithOptionalChild),
     ("testUnknownSyntax", testUnknownSyntax),
+    ("testMakeStringLiteralExpr", testMakeStringLiteralExpr),
     ("testMakeNonEqualityOperator", testMakeNonEqualityOperator),
     ("testMakeAdditionOperator", testMakeAdditionOperator),
     ("testMakeSubtractionOperator", testMakeSubtractionOperator),
@@ -187,6 +188,18 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     XCTAssertTrue(unknown.isUnknown)
     XCTAssertNoThrow(try SyntaxVerifier.verify(expr))
     XCTAssertThrowsError(try SyntaxVerifier.verify(unknown))
+  }
+
+  public func testMakeStringLiteralExpr() {
+    let expr = SyntaxFactory.makeStringLiteralExpr(
+      "Hello, world!",
+      leadingTrivia: .init(pieces: [.lineComment("// hello"), .newlines(1)])
+    )
+    let expected = """
+// hello
+"Hello, world!"
+"""
+    XCTAssertEqual(expr.description, expected)
   }
     
   public func testMakeNonEqualityOperator() {

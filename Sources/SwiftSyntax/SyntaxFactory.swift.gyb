@@ -188,9 +188,10 @@ public enum SyntaxFactory {
                           trailingTrivia: trailingTrivia)
   }
 
-  public static func makeEqualityOperator(leadingTrivia: Trivia = [],
+  public static func makeBinaryOperator(_ name: String,
+    leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator("=="),
+    return makeToken(.spacedBinaryOperator(name),
                      presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)

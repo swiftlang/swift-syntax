@@ -152,4 +152,35 @@ public class SyntaxFactoryTests: XCTestCase {
     XCTAssertNoThrow(try SyntaxVerifier.verify(expr))
     XCTAssertThrowsError(try SyntaxVerifier.verify(unknown))
   }
+
+  public func testMakeStringLiteralExpr() {
+    let expr = SyntaxFactory.makeStringLiteralExpr(
+      "Hello, world!",
+      leadingTrivia: .init(pieces: [.lineComment("// hello"), .newlines(1)])
+    )
+    let expected = """
+// hello
+"Hello, world!"
+"""
+    XCTAssertEqual(expr.description, expected)
+  }
+    
+  public func testMakeBinaryOperator() {
+    let first = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
+    }
+    let second = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1"))
+    }
+    let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
+    operatorNames.forEach { operatorName in
+      let operatorToken = SyntaxFactory.makeBinaryOperator(operatorName, trailingTrivia: .spaces(1))
+      let operatorExpr = BinaryOperatorExprSyntax {
+        $0.useOperatorToken(operatorToken)
+      }
+      let exprList = SyntaxFactory.makeExprList([first, operatorExpr, second])
+
+      XCTAssertEqual("\(exprList)", "1 \(operatorName) 1")
+    }
+  }
 }

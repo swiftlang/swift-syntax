@@ -188,9 +188,10 @@ public enum SyntaxFactory {
                           trailingTrivia: trailingTrivia)
   }
 
-  public static func makeEqualityOperator(leadingTrivia: Trivia = [],
+  public static func makeBinaryOperator(_ name: String,
+    leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator("=="),
+    return makeToken(.spacedBinaryOperator(name),
                      presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
@@ -199,9 +200,7 @@ public enum SyntaxFactory {
   public static func makeStringLiteralExpr(_ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {
-    let string = makeStringSegment(text,
-                                   leadingTrivia: leadingTrivia,
-                                   trailingTrivia: trailingTrivia)
+    let string = makeStringSegment(text)
     let segment = makeStringSegment(content: string)
     let segments = makeStringLiteralSegments([segment])
     let openQuote = makeStringQuoteToken(leadingTrivia: leadingTrivia)

@@ -168,6 +168,9 @@ def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
         swiftpm_call = ['swift', 'build']
     elif spm_exec == 'swift test':
         swiftpm_call = ['swift', 'test']
+
+        # To discover test files for Linux
+        swiftpm_call.extend(['--enable-test-discovery'])
     else:
         swiftpm_call = [spm_exec]
 
@@ -469,12 +472,12 @@ section for arguments that need to be specified for this.
     testing_group.add_argument('--swift-build-exec', default='swift build',
                                help='''
       Path to the swift-build executable that is used to build SwiftPM projects
-      If not specified the the 'swift build' command will be used.
+      If not specified the 'swift build' command will be used.
       ''')
     testing_group.add_argument('--swift-test-exec', default='swift test',
                                help='''
       Path to the swift-test executable that is used to test SwiftPM projects
-      If not specified the the 'swift test' command will be used.
+      If not specified the 'swift test' command will be used.
       ''')
     testing_group.add_argument('--swiftc-exec', default='swiftc', help='''
       Path to the swift executable. If not specified the swiftc exeuctable

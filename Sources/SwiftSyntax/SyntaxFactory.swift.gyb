@@ -67,16 +67,16 @@ public enum SyntaxFactory {
 %       end
 %     end
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
-      layout: layout, presence: SourcePresence.present)
+    let raw = RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
+      layout: layout, presence: .present)
     let data = SyntaxData.forRoot(raw)
     return ${node.name}(data)
   }
 %   elif node.is_syntax_collection():
   public static func make${node.syntax_kind}(
     _ elements: [${node.collection_element_type}]) -> ${node.name} {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.${node.swift_syntax_kind},
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let raw = RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
+      layout: elements.map { $0.raw }, presence: .present)
     let data = SyntaxData.forRoot(raw)
     return ${node.name}(data)
   }
@@ -84,7 +84,7 @@ public enum SyntaxFactory {
 
 %   if not node.is_base():
   public static func makeBlank${node.syntax_kind}() -> ${node.name} {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .${node.swift_syntax_kind},
+    let data = SyntaxData.forRoot(.create(kind: .${node.swift_syntax_kind},
       layout: [
 %     for child in node.children:
 %       if child.is_optional:

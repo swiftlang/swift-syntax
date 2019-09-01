@@ -71,7 +71,7 @@ public struct ${Builder} {
 %       end
 %     end
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
+    return .forRoot(.createAndCalcLength(kind: .${node.swift_syntax_kind},
       layout: layout, presence: .present))
   }
 }

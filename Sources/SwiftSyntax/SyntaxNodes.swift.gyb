@@ -161,7 +161,7 @@ public struct ${node.name}: ${base_type}, _SyntaxBase, Hashable {
 %       if child.is_optional:
     let raw = newChild?.raw
 %       else:
-    let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
+    let raw: RawSyntax = newChild?.raw ?? ${make_missing_swift_child(child)}
 %       end
     let newData = data.replacingChild(raw, at: Cursor.${child.swift_name})
     return ${node.name}(newData)

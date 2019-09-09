@@ -38,10 +38,10 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
                    }
                    """)
 
-    let forType = SyntaxFactory.makeIdentifier("for",
-                                               leadingTrivia: .backticks(1),
+    let forType = SyntaxFactory.makeIdentifier("`for`",
+                                               leadingTrivia: [],
                                                trailingTrivia: [
-                                                 .backticks(1), .spaces(1)
+                                                 .spaces(1)
                                                ])
     let newBrace = SyntaxFactory.makeRightBraceToken(leadingTrivia: .newlines(2))
 

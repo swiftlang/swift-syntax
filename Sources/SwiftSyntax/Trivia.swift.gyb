@@ -30,6 +30,9 @@ import Foundation
 public enum TriviaPiece {
 % for trivia in TRIVIAS:
     /// ${trivia.comment}
+%   if trivia.deprecated is not None:
+    @available(*, deprecated, message: "${trivia.deprecated}")
+%   end
 %   if trivia.is_collection():
     case ${trivia.lower_name}s(Int)
 %   else:
@@ -101,6 +104,9 @@ public struct Trivia {
   }
 
 % for trivia in TRIVIAS:
+%   if trivia.deprecated is not None:
+    @available(*, deprecated, message: "${trivia.deprecated}")
+%   end
 %   if trivia.is_collection():
 %   joined = ''.join(trivia.swift_characters)
     /// Return a piece of trivia for some number of '${joined}' characters.
@@ -208,6 +214,9 @@ extension TriviaPiece {
 internal enum TriviaPieceKind: CTriviaKind {
 % for trivia in TRIVIAS:
     /// ${trivia.comment}
+%   if trivia.deprecated is not None:
+    @available(*, deprecated, message: "${trivia.deprecated}")
+%   end
 %   if trivia.is_collection():
     case ${trivia.lower_name}s = ${trivia.serialization_code}
 %   else:

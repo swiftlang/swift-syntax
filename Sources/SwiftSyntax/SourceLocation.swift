@@ -406,8 +406,7 @@ fileprivate extension TriviaPiece {
     case let .spaces(count),
          let .tabs(count),
          let .verticalTabs(count),
-         let .formfeeds(count),
-         let .backticks(count):
+         let .formfeeds(count):
       lineLength += SourceLength(utf8Length: count)
     case let .newlines(count),
          let .carriageReturns(count):

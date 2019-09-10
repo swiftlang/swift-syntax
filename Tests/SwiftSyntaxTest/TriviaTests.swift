@@ -42,10 +42,6 @@ public class TriviaTestCase: XCTestCase {
     XCTAssertEqual(TriviaPiece.carriageReturnLineFeeds(3), .carriageReturnLineFeeds(3))
     XCTAssertNotEqual(TriviaPiece.carriageReturnLineFeeds(4), .carriageReturnLineFeeds(2))
 
-    XCTAssertEqual(TriviaPiece.backticks(2), .backticks(2))
-    XCTAssertNotEqual(TriviaPiece.backticks(3), .backticks(4))
-    XCTAssertNotEqual(TriviaPiece.backticks(3), .spaces(3))
-
     XCTAssertEqual(TriviaPiece.lineComment("a"), .lineComment("a"))
     XCTAssertNotEqual(TriviaPiece.lineComment("a"), .lineComment("b"))
     XCTAssertNotEqual(TriviaPiece.lineComment("a"), .blockComment("a"))

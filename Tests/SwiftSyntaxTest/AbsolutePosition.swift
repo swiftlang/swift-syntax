@@ -90,7 +90,6 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   static let leadingTrivia = Trivia(pieces: [
     .newlines(1),
-    .backticks(1),
     .docLineComment("/// some comment"),
     .carriageReturns(1),
   ])
@@ -117,10 +116,10 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testTrivias() {
     let idx = 5
     let root = self.createSourceFile(idx + 1)
-    XCTAssertEqual(4, root.leadingTrivia!.count)
+    XCTAssertEqual(3, root.leadingTrivia!.count)
     XCTAssertEqual(0, root.trailingTrivia!.count)
     let state = root.statements[idx]
-    XCTAssertEqual(4, state.leadingTrivia!.count)
+    XCTAssertEqual(3, state.leadingTrivia!.count)
     XCTAssertEqual(2, state.trailingTrivia!.count)
     XCTAssertEqual(state.byteSize,
       state.leadingTrivia!.byteSize + state.trailingTrivia!.byteSize
@@ -138,8 +137,8 @@ public class AbsolutePositionTestCase: XCTestCase {
     modifiedRoot1.leadingTrivia = [.blockComment("/* this is a comment */")]
     XCTAssertEqual([.blockComment("/* this is a comment */")], modifiedRoot1.leadingTrivia)
 
-    var modifiedRoot2 = root.withTrailingTrivia([.backticks(2)])
-    XCTAssertEqual([.backticks(2)], modifiedRoot2.trailingTrivia)
+    var modifiedRoot2 = root.withTrailingTrivia([.tabs(2)])
+    XCTAssertEqual([.tabs(2)], modifiedRoot2.trailingTrivia)
     XCTAssertEqual([], root.trailingTrivia)
     modifiedRoot2.trailingTrivia = [.carriageReturns(1), .newlines(2)]
     XCTAssertEqual([.carriageReturns(1), .newlines(2)], modifiedRoot2.trailingTrivia)

@@ -31,41 +31,14 @@ let package = Package(
 Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to use (see the following table for mapping details).
 
 
-| Swift Release Tag | SwiftSyntax Release Tag  |
-|:-------------------:|:-------------------------:|
-| swift-5.0-RELEASE   | 0.50000.0 |
-| swift-4.2-RELEASE   | 0.40200.0 |
+| Xcode Release | Swift Release Tag | SwiftSyntax Release Tag  |
+|:-------------------:|:-------------------:|:-------------------------:|
+| Xcode 11.0   | swift-5.1-RELEASE   | 0.50100.0 |
+| Xcode 10.2   | swift-5.0-RELEASE   | 0.50000.0 |
+| Xcode 10.0   | swift-4.2-RELEASE   | 0.40200.0 |
 
 
 Then, import `SwiftSyntax` in your Swift code.
-
-
-### Declare SwiftPM dependency with Xcode 11 beta releases
-
-Add this entry to the `Package.swift` manifest of your project:
-
-```swift
-// swift-tools-version:4.2
-import PackageDescription
-
-let package = Package(
-  name: "MyTool",
-  dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", .revision("xcode11-beta1")),
-  ],
-  targets: [
-    .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
-  ]
-)
-```
-
-| Xcode Beta Version | SwiftSyntax Revision  |
-|:-------------------:|:-------------------------:|
-| Xcode 11 beta 1   | xcode11-beta1 |
-
-
-Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require
-the Swift compiler source because we always push gyb-generated files to a tag.
 
 
 ### Declare SwiftPM dependency with nightly build

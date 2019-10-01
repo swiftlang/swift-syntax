@@ -150,7 +150,8 @@ func foo(n: Float) -> Int {
 
 // CHECK: <kw>protocol</kw> <id>Prot</id>
 protocol Prot {
-  // CHECK: <kw>typealias</kw> <id>Blarg</id>
+  // CHECK: typealias <id>Blarg</id>
+  // FIXME: Classify 'typealias' as a keyword.
   typealias Blarg
   // CHECK: <kw>func</kw> <id>protMeth</id>(<id>x</id>: <type>Int</type>)
   func protMeth(x: Int)

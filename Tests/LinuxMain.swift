@@ -18,6 +18,7 @@ XCTMain({ () -> [XCTestCaseEntry] in
     testCase(SyntaxTreeModifierTests.allTests),
     testCase(TriviaTests.allTests),
     testCase(CustomReflectableTests.allTests),
+    testCase(SyntaxConvenienceMethodsTestCase.allTests)
   ]
   return testCases
 }())

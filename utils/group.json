@@ -10,6 +10,7 @@
     "SyntaxCollections.swift",
     "SourcePresence.swift",
     "SyntaxChildren.swift",
+    "SyntaxConvenienceMethods.swift",
   ],
   "Utils": [
     "SyntaxBuilders.swift",

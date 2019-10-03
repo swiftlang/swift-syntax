@@ -2,6 +2,8 @@
 .build/
 # Ignore generated Xcode projects
 *.xcodeproj
+# Ignore Data Xcode stores when opening the project directly
+/.swiftpm/xcode
 
 # We always build swiftSyntax of master dependencies. Ignore any fixed 
 # dependency versions.

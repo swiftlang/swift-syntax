@@ -263,6 +263,32 @@ extension Syntax {
   }
 }
 
+% for node in SYNTAX_NODES:
+/// Implementation detail of doVisit(_:_:). Do not call directly.
+private func _doVisitImpl${node.name}<Visitor>(
+  _ data: SyntaxData, _ visitor: inout Visitor
+) where Visitor : SyntaxVisitor  {
+%   if node.is_base():
+    let node = Unknown${node.name}(data)
+    let needsChildren = (visitor.visit(node) == .visitChildren)
+    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
+    if needsChildren && data.raw.numberOfChildren > 0 {
+      visitChildren(data, parent: node, &visitor)
+    }
+    visitor.visitPost(node)
+%   else:
+    let node = ${node.name}(data)
+    let needsChildren = (visitor.visit(node) == .visitChildren)
+    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
+    if needsChildren && data.raw.numberOfChildren > 0 {
+      visitChildren(data, parent: node, &visitor)
+    }
+    visitor.visitPost(node)
+%   end
+}
+
+% end
+
 fileprivate func doVisit<Visitor>(
   _ data: SyntaxData, _ visitor: inout Visitor
 ) where Visitor : SyntaxVisitor {
@@ -276,31 +302,19 @@ fileprivate func doVisit<Visitor>(
     visitor.visitPost(node)
   case .unknown:
     let node = UnknownSyntax(data)
-    let needsChildren = visitor.visit(node) == .visitChildren
+    let needsChildren = (visitor.visit(node) == .visitChildren)
     // Avoid casting to `_SyntaxBase` if we don't need to visit children.
     if needsChildren && data.raw.numberOfChildren > 0 {
       visitChildren(data, parent: node, &visitor)
     }
     visitor.visitPost(node)
+  // The implementation of every generated case goes into its own function. This
+  // circumvents an issue where the compiler allocates stack space for every
+  // case statement next to each other in debug builds, causing it to allocate
+  // ~50KB per call to this function. rdar://55929175
 % for node in SYNTAX_NODES:
   case .${node.swift_syntax_kind}:
-%   if node.is_base():
-    let node = Unknown${node.name}(data)
-    let needsChildren = visitor.visit(node) == .visitChildren
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-%   else:
-    let node = ${node.name}(data)
-    let needsChildren = visitor.visit(node) == .visitChildren
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-%   end
+    _doVisitImpl${node.name}(data, &visitor)
 % end
   }
 }

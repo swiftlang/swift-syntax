@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 struct AbsoluteSyntaxPosition {
+  /// The UTF-8 offset of the syntax node in the source file
   let offset: UInt32
   let indexInParent: UInt32
 
@@ -47,6 +48,7 @@ struct AbsoluteSyntaxInfo {
   let position: AbsoluteSyntaxPosition
   let nodeId: SyntaxIdentifier
 
+  /// The UTF-8 offset of the syntax node in the source file
   var offset: UInt32 { return position.offset }
   var indexInParent: UInt32 { return position.indexInParent }
 

@@ -372,7 +372,7 @@ def check_and_sync(file_path, install_path):
     if result != 0:
         fatal_error("install failed with exit status %d" % (result,))
 
-def install(build_dir, dylib_dir, swiftmodule_dir, stdlib_rpath):
+def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
     dylibPath = build_dir + '/libSwiftSyntax.dylib'
     modulePath = build_dir + '/SwiftSyntax.swiftmodule'
     docPath = build_dir + '/SwiftSyntax.swiftdoc'
@@ -383,9 +383,11 @@ def install(build_dir, dylib_dir, swiftmodule_dir, stdlib_rpath):
     check_and_sync(file_path=dylibPath,
                    install_path=dylib_dir+'/'+get_installed_dylib_name())
     # Optionally install .swiftmodule
-    if swiftmodule_dir:
-        check_and_sync(file_path=modulePath,install_path=swiftmodule_dir)
-        check_and_sync(file_path=docPath,install_path=swiftmodule_dir)
+    if swiftmodule_base_name:
+        module_dest = swiftmodule_base_name + '.swiftmodule'
+        doc_dest = swiftmodule_base_name + '.swiftdoc'
+        check_and_sync(file_path=modulePath,install_path=module_dest)
+        check_and_sync(file_path=docPath,install_path=doc_dest)
     return
 
 ### Main
@@ -442,9 +444,14 @@ section for arguments that need to be specified for this.
                              help='''
       The directory to where the .dylib should be installed.
       ''')
-    basic_group.add_argument('--swiftmodule-dir',
+    basic_group.add_argument('--swiftmodule-base-name',
                              help='''
-      The directory to where the .swiftmodule should be installed.
+      The name under which the Swift module should be installed. A .swiftdoc and
+      .swiftmodule file extension will be added to this path and the 
+      corresponding files will be copied there. 
+      Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
+      /path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
+      /path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
       ''')
 
     build_group = parser.add_argument_group('Build')
@@ -516,7 +523,7 @@ section for arguments that need to be specified for this.
             build_dir=args.build_dir + '/debug'
         stdlib_rpath = realpath(os.path.dirname(args.swiftc_exec) + '/../lib/swift/macosx/')
         install(build_dir=build_dir, dylib_dir=args.dylib_dir,
-                swiftmodule_dir=args.swiftmodule_dir,
+                swiftmodule_base_name=args.swiftmodule_base_name,
                 stdlib_rpath=stdlib_rpath)
         sys.exit(0)
 

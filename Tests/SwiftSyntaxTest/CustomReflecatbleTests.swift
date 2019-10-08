@@ -112,19 +112,19 @@ public class CustomReflectableTests: XCTestCase {
                                              leadingTrivia: [],
                                              trailingTrivia: [])
         let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
-        let elements = [SyntaxFactory.makeTupleElement(label: nil,
+        let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
                                                        expression: expr1,
                                                        trailingComma: nil),
-                        SyntaxFactory.makeTupleElement(label: nil,
+                        SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
                                                        expression: expr2,
                                                        trailingComma: nil)]
-        let tuples = SyntaxFactory.makeTupleElementList(elements)
+        let tuples = SyntaxFactory.makeTupleExprElementList(elements)
         return .init(syntax: tuples,
                      expectedDumped: """
-                                     ▿ SwiftSyntax.TupleElementListSyntax
-                                       ▿ SwiftSyntax.TupleElementSyntax
+                                     ▿ SwiftSyntax.TupleExprElementListSyntax
+                                       ▿ SwiftSyntax.TupleExprElementSyntax
                                          - label: nil
                                          - colon: nil
                                          ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
@@ -137,7 +137,7 @@ public class CustomReflectableTests: XCTestCase {
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "1"
                                          - trailingComma: nil
-                                       ▿ SwiftSyntax.TupleElementSyntax
+                                       ▿ SwiftSyntax.TupleExprElementSyntax
                                          - label: nil
                                          - colon: nil
                                          ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
@@ -164,20 +164,20 @@ public class CustomReflectableTests: XCTestCase {
                                              leadingTrivia: [],
                                              trailingTrivia: [])
         let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
-        let elements = [SyntaxFactory.makeTupleElement(label: nil,
+        let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
                                                        expression: expr1,
                                                        trailingComma: nil),
-          SyntaxFactory.makeTupleElement(label: nil,
+          SyntaxFactory.makeTupleExprElement(label: nil,
                                          colon: nil,
                                          expression: expr2,
                                          trailingComma: nil)]
-        let tuples = SyntaxFactory.makeTupleElementList(elements)
+        let tuples = SyntaxFactory.makeTupleExprElementList(elements)
         return .init(syntax: tuples.reversed(),
                      expectedDumped: """
-                                     ▿ SwiftSyntax.TupleElementListSyntax.Reversed
-                                       ▿ collection: SwiftSyntax.TupleElementListSyntax
-                                         ▿ SwiftSyntax.TupleElementSyntax
+                                     ▿ SwiftSyntax.TupleExprElementListSyntax.Reversed
+                                       ▿ collection: SwiftSyntax.TupleExprElementListSyntax
+                                         ▿ SwiftSyntax.TupleExprElementSyntax
                                            - label: nil
                                            - colon: nil
                                            ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
@@ -190,7 +190,7 @@ public class CustomReflectableTests: XCTestCase {
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "1"
                                            - trailingComma: nil
-                                         ▿ SwiftSyntax.TupleElementSyntax
+                                         ▿ SwiftSyntax.TupleExprElementSyntax
                                            - label: nil
                                            - colon: nil
                                            ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax

@@ -98,7 +98,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
   public func testFunctionCallSyntaxBuilder() {
     let string = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
     let printID = SyntaxFactory.makeVariableExpr("print")
-    let arg = FunctionCallArgumentSyntax {
+    let arg = TupleExprElementSyntax {
       $0.useExpression(string)
     }
     let call = FunctionCallExprSyntax {
@@ -109,13 +109,13 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
     }
     XCTAssertEqual("\(call)", "print(\"Hello, world!\")")
 
-    let terminatorArg = FunctionCallArgumentSyntax {
+    let terminatorArg = TupleExprElementSyntax {
       $0.useLabel(SyntaxFactory.makeIdentifier("terminator"))
       $0.useColon(SyntaxFactory.makeColonToken(trailingTrivia: .spaces(1)))
       $0.useExpression(SyntaxFactory.makeStringLiteralExpr(" "))
     }
     let callWithTerminator = call.withArgumentList(
-      SyntaxFactory.makeFunctionCallArgumentList([
+      SyntaxFactory.makeTupleExprElementList([
         arg.withTrailingComma(
           SyntaxFactory.makeCommaToken(trailingTrivia: .spaces(1))),
         terminatorArg
@@ -129,7 +129,7 @@ public class SyntaxFactoryAPITestCase: XCTestCase {
   public func testWithOptionalChild() {
     let string = SyntaxFactory.makeStringLiteralExpr("Hello, world!")
     let printID = SyntaxFactory.makeVariableExpr("print")
-    let arg = FunctionCallArgumentSyntax {
+    let arg = TupleExprElementSyntax {
       $0.useExpression(string)
     }
     let call1 = FunctionCallExprSyntax {

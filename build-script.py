@@ -110,7 +110,11 @@ def generate_gyb_files(verbose, add_source_locations, tar_path):
     # Clear any *.swift files that are relics from the previous run.
     for previous_gyb_gen_file in os.listdir(generated_files_dir):
       if previous_gyb_gen_file.endswith('.swift'):
-        check_call(['rm', previous_gyb_gen_file], cwd=generated_files_dir)
+        gyb_file = os.path.join(swiftsyntax_sources_dir, 
+                                previous_gyb_gen_file + '.gyb')
+        if not os.path.exists(gyb_file):
+          check_call(['rm', previous_gyb_gen_file], cwd=generated_files_dir, 
+                     verbose=verbose)
 
     # Generate the new .swift files in a temporary directory and only copy them
     # to Sources/SwiftSyntax/gyb_generated if they are different than the files

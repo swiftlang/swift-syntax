@@ -39,7 +39,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("closure.swift"))
       let rewriter = ClosureRewriter()
-      let rewritten = rewriter.visit(parsed)
+      let rewritten = rewriter.rewrite(parsed)
       XCTAssertEqual(parsed.description, rewritten.description)
     }())
   }
@@ -62,7 +62,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
       let rewriter = VisitAnyRewriter(transform: { _ in
          return SyntaxFactory.makeIdentifier("")
       })
-      let rewritten = rewriter.visit(parsed)
+      let rewritten = rewriter.rewrite(parsed)
       XCTAssertEqual(rewritten.description, "")
     }())
   }

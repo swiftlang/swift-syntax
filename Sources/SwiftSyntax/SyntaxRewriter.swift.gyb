@@ -27,8 +27,12 @@
 
 open class SyntaxRewriter {
   public init() {}
+
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
+  /// Visit a `${node.name}`. 
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
   open func visit(_ node: ${node.name}) -> ${node.base_type} {
 %   cast = ('as! ' + node.base_type) if node.base_type != 'Syntax' else ''
     return visitChildren(node) ${cast}
@@ -37,8 +41,18 @@ open class SyntaxRewriter {
 %   end
 % end
 
+  /// Visit a `TokenSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
   open func visit(_ token: TokenSyntax) -> Syntax {
     return token
+  }
+  
+  /// Visit a `UnknownSyntax`. 
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node or `nil`.
+  open func visit(_ node: UnknownSyntax) -> Syntax {
+    return visitChildren(node)
   }
 
   /// The function called before visiting the node and its descendents.
@@ -49,7 +63,9 @@ open class SyntaxRewriter {
   /// specialized `visit(_:)` methods. Use this instead of those methods if
   /// you intend to dynamically dispatch rewriting behavior.
   /// - note: If this method returns a non-nil result, the specialized
-  ///         `visit(_:)` methods will not be called for this node.
+  ///         `visit(_:)` methods will not be called for this node and the 
+  ///         visited node will be replaced by the returned node in the 
+  ///         rewritten tree.
   open func visitAny(_ node: Syntax) -> Syntax? {
     return nil
   }
@@ -58,44 +74,130 @@ open class SyntaxRewriter {
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: Syntax) {}
 
+  /// Visit any Syntax node. 
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
   public func visit(_ node: Syntax) -> Syntax {
-    visitPre(node)
-    defer { visitPost(node) }
+    return visit(node.base.data)
+  }
 
-    // If the global visitor returned non-nil, skip specialized dispatch.
-    if let newNode = visitAny(node) {
-      return newNode
-    }
-
-    switch node.raw.kind {
-    case .token: return visit(node as! TokenSyntax)
 % for node in SYNTAX_NODES:
-%   if is_visitable(node):
-    case .${node.swift_syntax_kind}: return visit(node as! ${node.name})
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImpl${node.name}(_ data: SyntaxData) -> Syntax {
+%   if node.is_base():
+      let node = Unknown${node.name}(data)
+      visitPre(node)
+      defer { visitPost(node) }
+      if let newNode = visitAny(node) { return newNode }
+      return visit(node)
+%   else:
+      let node = ${node.name}(data)
+      visitPre(node)
+      defer { visitPost(node) }
+      if let newNode = visitAny(node) { return newNode }
+      return visit(node)
 %   end
+  }
+
 % end
-    default: return visitChildren(node)
+
+  final func visit(_ data: SyntaxData) -> Syntax {
+    // Create the node types directly instead of going through `makeSyntax()`
+    // which has additional cost for casting back and forth from `_SyntaxBase`.
+    switch data.raw.kind {
+    case .token:
+      let node = TokenSyntax(data)
+      visitPre(node)
+      defer { visitPost(node) }
+      if let newNode = visitAny(node) { return newNode }
+      return visit(node)
+    case .unknown:
+      let node = UnknownSyntax(data)
+      visitPre(node)
+      defer { visitPost(node) }
+      if let newNode = visitAny(node) { return newNode }
+      return visit(node)
+    // The implementation of every generated case goes into its own function. This
+    // circumvents an issue where the compiler allocates stack space for every
+    // case statement next to each other in debug builds, causing it to allocate
+    // ~50KB per call to this function. rdar://55929175
+  % for node in SYNTAX_NODES:
+    case .${node.swift_syntax_kind}:
+      return visitImpl${node.name}(data)
+  % end
     }
   }
 
-  func visitChildren(_ nodeS: Syntax) -> Syntax {
-    // Visit all children of this node, returning `nil` if child is not
-    // present. This will ensure that there are always the same number
-    // of children after transforming.
+  final func visitChildren(_ nodeS: Syntax) -> Syntax {
     let node = nodeS.base
-    let newLayout = RawSyntaxChildren(node).map { (n: (RawSyntax?, AbsoluteSyntaxInfo)) -> RawSyntax? in
-      let (raw, info) = n
-      guard let child = raw else { return nil }
+
+    // Walk over all children of this node and rewrite them. Don't store any 
+    // rewritten nodes until the first non-`nil` value is encountered. When this 
+    // happens, retrieve all previous syntax nodes from the parent node to 
+    // initialize the new layout. Once we know that we have to rewrite the 
+    // layout, we need to collect all futher children, regardless of whether 
+    // they are rewritten or not.
+    
+    // newLayout is nil until the first child node is rewritten and rewritten 
+    // nodes are being collected.
+    var newLayout: ContiguousArray<RawSyntax?>?
+
+    for (i, (raw, info)) in RawSyntaxChildren(node).enumerated() {
+      guard let child = raw else {
+        // Node does not exist. If we are collecting rewritten nodes, we need to 
+        // collect this one as well, otherwise we can ignore it.
+        if newLayout != nil {
+          newLayout!.append(nil)
+        }
+        continue
+      }
+
+      // Build the Syntax node to rewrite
       let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
       let data = SyntaxData(absoluteRaw, parent: node)
-      return visit(makeSyntax(data)).raw
+      
+      let rewritten = visit(data)
+      if rewritten.base.data.absoluteRaw.info.nodeId != info.nodeId {
+        // The node was rewritten, let's handle it
+        if newLayout == nil {
+          // We have not yet collected any previous rewritten nodes. Initialize
+          // the new layout with the previous nodes of the parent. This is 
+          // possible, since we know they were not rewritten.
+          
+          // The below implementation is based on Collection.map but directly
+          // reserves enough capacity for the entire layout.
+          newLayout = ContiguousArray<RawSyntax?>()
+          newLayout!.reserveCapacity(node.raw.numberOfChildren)
+          for j in 0..<i {
+            newLayout!.append(node.raw.child(at: j))
+          }
+        }
+        
+        // Now that we know we have a new layout in which we collect rewritten 
+        // nodes, add it.
+        newLayout!.append(rewritten.raw)
+      } else {
+        // The node was not changed by the rewriter. Only store it if a previous
+        // node has been rewritten and we are collecting a rewritten layout.
+        if newLayout != nil {
+          newLayout!.append(raw)
+        }
+      }
     }
 
-    // Sanity check, ensure the new children are the same length.
-    assert(newLayout.count == node.raw.numberOfChildren)
+    if let newLayout = newLayout {
+      // A child node was rewritten. Build the updated node.
+      
+      // Sanity check, ensure the new children are the same length.
+      assert(newLayout.count == node.raw.numberOfChildren)
+      
+      let newRaw = node.raw.replacingLayout(Array(newLayout))
+      return makeSyntax(.forRoot(newRaw))
+    } else {
+      // No child node was rewritten. So no need to change this node as well.
+      return nodeS
+    }
 
-    let newRaw = node.raw.replacingLayout(newLayout)
-    return makeSyntax(.forRoot(newRaw))
   }
 }
 

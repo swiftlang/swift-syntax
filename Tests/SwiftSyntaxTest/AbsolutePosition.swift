@@ -2,7 +2,7 @@ import XCTest
 import SwiftSyntax
 
 fileprivate class FuncRenamer: SyntaxRewriter {
-  override func visit(_ node: FunctionDeclSyntax) ->DeclSyntax {
+  override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
     return (super.visit(node) as! FunctionDeclSyntax).withIdentifier(
       SyntaxFactory.makeIdentifier("anotherName"))
   }

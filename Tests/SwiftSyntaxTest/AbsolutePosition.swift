@@ -3,8 +3,10 @@ import SwiftSyntax
 
 fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-    return (super.visit(node) as! FunctionDeclSyntax).withIdentifier(
+    let rewritten = super.visit(node).as(FunctionDeclSyntax.self)!
+    let modifiedFunctionDecl = rewritten.withIdentifier(
       SyntaxFactory.makeIdentifier("anotherName"))
+    return DeclSyntax(modifiedFunctionDecl)
   }
 }
 
@@ -48,7 +50,7 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testRename() {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
-      let renamed = FuncRenamer().visit(parsed) as! SourceFileSyntax
+      let renamed = FuncRenamer().visit(parsed).as(SourceFileSyntax.self)!
       let renamedSource = renamed.description
       XCTAssertEqual(renamedSource.count, 
         renamed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
@@ -76,9 +78,16 @@ public class AbsolutePositionTestCase: XCTestCase {
     let idx = 2000
     for _ in 0...idx {
       l.append(SyntaxFactory.makeCodeBlockItem(
-        item: SyntaxFactory.makeReturnStmt(
-          returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
-            .withTrailingTrivia(.newlines(1)), expression: nil), semicolon: nil, errorTokens: nil))
+        item: Syntax(
+          SyntaxFactory.makeReturnStmt(
+            returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
+                             .withTrailingTrivia(.newlines(1)),
+            expression: nil
+          )
+        ),
+        semicolon: nil, 
+        errorTokens: nil)
+      )
     }
     let root = SyntaxFactory.makeSourceFile(
       statements: SyntaxFactory.makeCodeBlockItemList(l),
@@ -102,12 +111,13 @@ public class AbsolutePositionTestCase: XCTestCase {
   func createSourceFile(_ count: Int) -> SourceFileSyntax {
     let items : [CodeBlockItemSyntax] =
       [CodeBlockItemSyntax](repeating: CodeBlockItemSyntax {
-        $0.useItem(ReturnStmtSyntax {
+        $0.useItem(Syntax(ReturnStmtSyntax {
           $0.useReturnKeyword(
             SyntaxFactory.makeReturnKeyword(
               leadingTrivia: AbsolutePositionTestCase.leadingTrivia,
               trailingTrivia: AbsolutePositionTestCase.trailingTrivia))
-        })}, count: count)
+        })
+        )}, count: count)
     return SyntaxFactory.makeSourceFile(
       statements: SyntaxFactory.makeCodeBlockItemList(items),
       eofToken: SyntaxFactory.makeToken(.eof, presence: .present))
@@ -168,10 +178,15 @@ public class AbsolutePositionTestCase: XCTestCase {
 
   public func testWithoutSourceFileRoot() {
     let item = SyntaxFactory.makeCodeBlockItem(
-      item: SyntaxFactory.makeReturnStmt(
-        returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
-          .withLeadingTrivia(.newlines(1)).withTrailingTrivia(.newlines(1)),
-          expression: nil), semicolon: nil, errorTokens: nil)
+      item: Syntax(
+        SyntaxFactory.makeReturnStmt(
+          returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
+                           .withLeadingTrivia(.newlines(1))
+                           .withTrailingTrivia(.newlines(1)),
+          expression: nil)
+      ),
+      semicolon: nil,
+      errorTokens: nil)
      XCTAssertEqual(0, item.position.utf8Offset)
      XCTAssertEqual(1, item.positionAfterSkippingLeadingTrivia.utf8Offset)
   }

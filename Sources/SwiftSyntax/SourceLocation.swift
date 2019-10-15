@@ -227,7 +227,13 @@ public final class SourceLocationConverter {
   }
 }
 
-extension _SyntaxBase {
+public extension Syntax {
+  /// The starting location, in the provided file, of this Syntax node.
+  /// - Parameters:
+  ///   - converter: The `SourceLocationConverter` that was previously
+  ///     initialized using the root tree of this node.
+  ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
+  ///                         the node's location. Defaults to `true`.
   func startLocation(
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
@@ -238,6 +244,12 @@ extension _SyntaxBase {
     return converter.location(for: pos)
   }
 
+  /// The ending location, in the provided file, of this Syntax node.
+  /// - Parameters:
+  ///   - converter: The `SourceLocationConverter` that was previously
+  ///     initialized using the root tree of this node.
+  ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
+  ///                          the node's location. Defaults to `false`.
   func endLocation(
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
@@ -251,30 +263,40 @@ extension _SyntaxBase {
     return converter.location(for: pos)
   }
 
+  /// The source range, in the provided file, of this Syntax node.
+  /// - Parameters:
+  ///   - converter: The `SourceLocationConverter` that was previously
+  ///     initialized using the root tree of this node.
+  ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
+  ///                          the node's start location. Defaults to `true`.
+  ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
+  ///                          the node's end location. Defaults to `false`.
   func sourceRange(
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    let start = startLocation(converter: converter, afterLeadingTrivia: afterLeadingTrivia)
-    let end = endLocation(converter: converter, afterTrailingTrivia: afterTrailingTrivia)
+    let start = startLocation(converter: converter, 
+                              afterLeadingTrivia: afterLeadingTrivia)
+    let end = endLocation(converter: converter, 
+                          afterTrailingTrivia: afterTrailingTrivia)
     return SourceRange(start: start, end: end)
   }
 }
 
-extension Syntax {
+public extension SyntaxProtocol {
   /// The starting location, in the provided file, of this Syntax node.
   /// - Parameters:
   ///   - converter: The `SourceLocationConverter` that was previously
   ///     initialized using the root tree of this node.
   ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
   ///                         the node's location. Defaults to `true`.
-  public func startLocation(
+  func startLocation(
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    return base.startLocation(converter: converter,
-      afterLeadingTrivia: afterLeadingTrivia)
+    return _syntaxNode.startLocation(converter: converter, 
+                                    afterLeadingTrivia: afterLeadingTrivia)
   }
 
   /// The ending location, in the provided file, of this Syntax node.
@@ -283,12 +305,12 @@ extension Syntax {
   ///     initialized using the root tree of this node.
   ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
   ///                          the node's location. Defaults to `false`.
-  public func endLocation(
+  func endLocation(
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
   ) -> SourceLocation {
-    return base.endLocation(converter: converter,
-      afterTrailingTrivia: afterTrailingTrivia)
+    return _syntaxNode.endLocation(converter: converter, 
+                                  afterTrailingTrivia: afterTrailingTrivia)
   }
 
   /// The source range, in the provided file, of this Syntax node.
@@ -299,14 +321,14 @@ extension Syntax {
   ///                          the node's start location. Defaults to `true`.
   ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
   ///                          the node's end location. Defaults to `false`.
-  public func sourceRange(
+  func sourceRange(
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    return base.sourceRange(converter: converter,
-      afterLeadingTrivia: afterLeadingTrivia,
-      afterTrailingTrivia: afterTrailingTrivia)
+    return _syntaxNode.sourceRange(converter: converter, 
+                                  afterLeadingTrivia: afterLeadingTrivia,
+                                  afterTrailingTrivia: afterTrailingTrivia)
   }
 }
 

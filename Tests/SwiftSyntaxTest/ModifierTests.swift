@@ -2,9 +2,12 @@ import XCTest
 import SwiftSyntax
 
 fileprivate func cannedVarDecl() -> VariableDeclSyntax {
+  let identifierPattern = SyntaxFactory.makeIdentifierPattern(
+    identifier: SyntaxFactory.makeIdentifier("a")
+                .withLeadingTrivia(.spaces(1))
+  )
   let Pattern = SyntaxFactory.makePatternBinding(
-    pattern: SyntaxFactory.makeIdentifierPattern(
-      identifier: SyntaxFactory.makeIdentifier("a").withLeadingTrivia(.spaces(1))),
+    pattern: PatternSyntax(identifierPattern),
     typeAnnotation: SyntaxFactory.makeTypeAnnotation(
       colon: SyntaxFactory.makeColonToken().withTrailingTrivia(.spaces(1)),
       type: SyntaxFactory.makeTypeIdentifier("Int")),

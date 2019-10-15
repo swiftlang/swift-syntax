@@ -12,11 +12,11 @@ public class SyntaxChildrenAPITestCase: XCTestCase {
   public func testIterateWithAllPresent() {
     let returnStmt = SyntaxFactory.makeReturnStmt(
       returnKeyword: SyntaxFactory.makeReturnKeyword(),
-      expression: SyntaxFactory.makeBlankUnknownExpr())
+      expression: ExprSyntax(SyntaxFactory.makeBlankUnknownExpr()))
 
     var iterator = returnStmt.children.makeIterator()
-    XCTAssertNext(&iterator) { ($0 as? TokenSyntax)?.tokenKind == .returnKeyword }
-    XCTAssertNext(&iterator) { $0 is ExprSyntax }
+    XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
+    XCTAssertNext(&iterator) { $0.is(ExprSyntax.self) }
     XCTAssertNextIsNil(&iterator)
   }
 
@@ -26,7 +26,7 @@ public class SyntaxChildrenAPITestCase: XCTestCase {
       expression: nil)
 
     var iterator = returnStmt.children.makeIterator()
-    XCTAssertNext(&iterator) { ($0 as? TokenSyntax)?.tokenKind == .returnKeyword }
+    XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
     XCTAssertNextIsNil(&iterator)
   }
 

@@ -13,23 +13,61 @@
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
-public protocol Syntax:
-  CustomStringConvertible, CustomDebugStringConvertible, TextOutputStreamable {}
+public struct Syntax: SyntaxProtocol {
+  let data: SyntaxData
 
-internal protocol _SyntaxBase: Syntax {
-  /// The data backing this node.
-  var data: SyntaxData { get }
-}
-
-extension _SyntaxBase {
-  /// Access the raw syntax.
-  var raw: RawSyntax {
-    return data.raw
+  public var _syntaxNode: Syntax {
+    return self
   }
 
+  init(_ data: SyntaxData) {
+    self.data = data
+  }
+
+  /// Create a `Syntax` node from a specialized syntax node.
+  public init<S: SyntaxProtocol>(_ syntax: S) {
+    self = syntax._syntaxNode
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
+  }
+
+  public static func ==(lhs: Syntax, rhs: Syntax) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
+  }
+}
+
+/// Provide common functionality for specialized syntax nodes. Extend this 
+/// protocol to provide common functionality for all syntax nodes.
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SyntaxProtocol: CustomStringConvertible, 
+    CustomDebugStringConvertible, TextOutputStreamable, Hashable {
+
+  /// Retrieve the generic syntax node that is represented by this node.
+  /// Do not retrieve this property directly. Use `Syntax(self)` instead.
+  var _syntaxNode: Syntax { get }
+
+  /// Converts the given `Syntax` node to this type. Returns `nil` if the 
+  /// conversion is not possible.
+  init?(_ syntaxNode: Syntax)
+}
+
+internal extension SyntaxProtocol {
+  var data: SyntaxData {
+    return _syntaxNode.data
+  }
+
+  /// Access the raw syntax assuming the node is a Syntax.
+  var raw: RawSyntax {
+    return _syntaxNode.data.raw
+  }
+}
+
+public extension SyntaxProtocol {
   /// A sequence over the `present` children of this node.
-  var children: SyntaxBaseChildren {
-    return SyntaxBaseChildren(self)
+  var children: SyntaxChildren {
+    return SyntaxChildren(_syntaxNode)
   }
 
   /// Whether or not this node is marked as `present`.
@@ -83,7 +121,7 @@ extension _SyntaxBase {
   }
 
   /// The parent of this syntax node, or `nil` if this node is the root.
-  var parent: _SyntaxBase? {
+  var parent: Syntax? {
     return data.parent
   }
 
@@ -103,8 +141,8 @@ extension _SyntaxBase {
     guard let parent = self.parent else {
       return nil
     }
-    for absoluteRaw in PresentRawSyntaxPreviousSiblings(self) {
-      let child = makeSyntax(SyntaxData(absoluteRaw, parent: parent))
+    for absoluteRaw in PresentRawSyntaxPreviousSiblings(_syntaxNode) {
+      let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
       if let token = child.lastToken {
         return token
       }
@@ -118,8 +156,8 @@ extension _SyntaxBase {
     guard let parent = self.parent else {
       return nil
     }
-    for absoluteRaw in PresentRawSyntaxNextSiblings(self) {
-      let child = makeSyntax(SyntaxData(absoluteRaw, parent: parent))
+    for absoluteRaw in PresentRawSyntaxNextSiblings(_syntaxNode) {
+      let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
       if let token = child.firstToken {
         return token
       }
@@ -130,8 +168,8 @@ extension _SyntaxBase {
   /// Returns the first token node that is part of this syntax node.
   var firstToken: TokenSyntax? {
     if isMissing { return nil }
-    if isToken {
-      return (self as! TokenSyntax)
+    if let token = _syntaxNode.as(TokenSyntax.self) {
+      return token
     }
 
     for child in children {
@@ -145,8 +183,8 @@ extension _SyntaxBase {
   /// Returns the last token node that is part of this syntax node.
   var lastToken: TokenSyntax? {
     if isMissing { return nil }
-    if isToken {
-      return (self as! TokenSyntax)
+    if let token = _syntaxNode.as(TokenSyntax.self) {
+      return token
     }
 
     for child in children.reversed() {
@@ -237,8 +275,8 @@ extension _SyntaxBase {
   }
 
   /// The root of the tree in which this node resides.
-  var root: _SyntaxBase {
-    var this: _SyntaxBase = self
+  var root: Syntax {
+    var this = _syntaxNode
     while let parent = this.parent {
       this = parent
     }
@@ -247,7 +285,7 @@ extension _SyntaxBase {
 
   /// Sequence of tokens that are part of this Syntax node.
   var tokens: TokenSequence {
-    return TokenSequence(self)
+    return TokenSequence(_syntaxNode)
   }
 
   /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
@@ -258,7 +296,7 @@ extension _SyntaxBase {
   /// range is provided for all of them.
   var classifications: SyntaxClassifications {
     let fullRange = ByteSourceRange(offset: 0, length: byteSize)
-    return SyntaxClassifications(self, in: fullRange)
+    return SyntaxClassifications(_syntaxNode, in: fullRange)
   }
 
   /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
@@ -276,7 +314,7 @@ extension _SyntaxBase {
   ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
   /// - Returns: Sequence of `SyntaxClassifiedRange`s.
   func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
-    return SyntaxClassifications(self, in: range)
+    return SyntaxClassifications(_syntaxNode, in: range)
   }
 
   /// The `SyntaxClassifiedRange` for a relative byte offset.
@@ -285,7 +323,7 @@ extension _SyntaxBase {
   /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
   ///   at the given offset is unclassified.
   func classification(at offset: Int) -> SyntaxClassifiedRange? {
-    let classifications = SyntaxClassifications(self, in: ByteSourceRange(offset: offset, length: 1))
+    let classifications = SyntaxClassifications(_syntaxNode, in: ByteSourceRange(offset: offset, length: 1))
     var iterator = classifications.makeIterator()
     return iterator.next()
   }
@@ -306,300 +344,51 @@ extension _SyntaxBase {
   }
 
   /// A source-accurate description of this node.
-  public var description: String {
+  var description: String {
     return data.raw.description
   }
 
   /// Returns a description used by dump.
-  public var debugDescription: String {
+  var debugDescription: String {
     return String(reflecting: type(of: self))
   }
 
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
-  public func write<Target>(to target: inout Target)
+  func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
     data.raw.write(to: &target)
   }
-}
 
-extension Syntax {
-  var base: _SyntaxBase {
-    guard let base = self as? _SyntaxBase else {
-      fatalError("only first-class syntax nodes can conform to Syntax")
-    }
-    return base
+  func hash(into hasher: inout Hasher) {
+    return data.nodeId.hash(into: &hasher)
   }
 
-  /// Access the raw syntax assuming the node is a Syntax.
-  var raw: RawSyntax {
-    return base.raw
-  }
-
-  /// A sequence over the `present` children of this node.
-  public var children: SyntaxChildren {
-    return SyntaxChildren(base)
-  }
-
-  /// Whether or not this node is marked as `present`.
-  public var isPresent: Bool {
-    return base.isPresent
-  }
-
-  /// Whether or not this node is marked as `missing`.
-  public var isMissing: Bool {
-    return base.isMissing
-  }
-
-  /// Whether or not this node is a token one.
-  public var isToken: Bool {
-    return base.isToken
-  }
-
-  /// Whether or not this node represents an Expression.
-  public var isExpr: Bool {
-    return base.isExpr
-  }
-
-  /// Whether or not this node represents an SyntaxCollection.
-  public var isCollection: Bool {
-    return base.isCollection
-  }
-
-  /// Whether or not this node represents a Declaration.
-  public var isDecl: Bool {
-    return base.isDecl
-  }
-
-  /// Whether or not this node represents a Statement.
-  public var isStmt: Bool {
-    return base.isStmt
-  }
-
-  /// Whether or not this node represents a Type.
-  public var isType: Bool {
-    return base.isType
-  }
-
-  /// Whether or not this node represents a Pattern.
-  public var isPattern: Bool {
-    return base.isPattern
-  }
-
-  /// Whether or not this node represents an unknown node.
-  public var isUnknown: Bool {
-    return base.isUnknown
-  }
-
-  /// The parent of this syntax node, or `nil` if this node is the root.
-  public var parent: Syntax? {
-    return base.parent
-  }
-
-  /// The index of this node in the parent's children.
-  public var indexInParent: Int {
-    return base.indexInParent
-  }
-
-  /// Whether or not this node has a parent.
-  public var hasParent: Bool {
-    return base.hasParent
-  }
-
-  /// Recursively walks through the tree to find the token semantically before
-  /// this node.
-  public var previousToken: TokenSyntax? {
-    return base.previousToken
-  }
-
-  /// Recursively walks through the tree to find the next token semantically
-  /// after this node.
-  public var nextToken: TokenSyntax? {
-    return base.nextToken
-  }
-
-  /// Returns the first token node that is part of this syntax node.
-  public var firstToken: TokenSyntax? {
-    return base.firstToken
-  }
-
-  /// Returns the last token node that is part of this syntax node.
-  public var lastToken: TokenSyntax? {
-    return base.lastToken
-  }
-
-  /// The absolute position of the starting point of this node. If the first token
-  /// is with leading trivia, the position points to the start of the leading
-  /// trivia.
-  public var position: AbsolutePosition {
-    return base.position
-  }
-
-  /// The absolute position of the starting point of this node, skipping any
-  /// leading trivia attached to the first token syntax.
-  public var positionAfterSkippingLeadingTrivia: AbsolutePosition {
-    return base.positionAfterSkippingLeadingTrivia
-  }
-
-  /// The end position of this node's content.
-  public var endPositionBeforeTrailingTrivia: AbsolutePosition {
-    return base.endPositionBeforeTrailingTrivia
-  }
-
-  /// The end position of this node, including its trivia
-  public var endPosition: AbsolutePosition {
-    return base.endPosition
-  }
-
-  /// The textual byte length of this node including leading and trailing trivia.
-  public var byteSize: Int {
-    return base.byteSize
-  }
-
-  /// The byte source range of this node including leading and trailing trivia.
-  public var byteRange: ByteSourceRange {
-    return base.byteRange
-  }
-
-  /// The length this node takes up spelled out in the source, excluding its
-  /// leading or trailing trivia.
-  public var contentLength: SourceLength {
-    return base.contentLength
-  }
-
-  /// The leading trivia of this syntax node. Leading trivia is attached to
-  /// the first token syntax contained by this node. Without such token, this
-  /// property will return nil.
-  public var leadingTrivia: Trivia? {
-    return base.leadingTrivia
-  }
-
-  /// The trailing trivia of this syntax node. Trailing trivia is attached to
-  /// the last token syntax contained by this node. Without such token, this
-  /// property will return nil.
-  public var trailingTrivia: Trivia? {
-    return base.trailingTrivia
-  }
-
-  /// The length this node's leading trivia takes up spelled out in source.
-  public var leadingTriviaLength: SourceLength {
-    return base.leadingTriviaLength
-  }
-
-  /// The length this node's trailing trivia takes up spelled out in source.
-  public var trailingTriviaLength: SourceLength {
-    return base.trailingTriviaLength
-  }
-
-  /// The length of this node including all of its trivia.
-  public var totalLength: SourceLength {
-    return base.totalLength
-  }
-
-  /// When isImplicit is true, the syntax node doesn't include any
-  /// underlying tokens, e.g. an empty CodeBlockItemList.
-  public var isImplicit: Bool {
-    return base.isImplicit
-  }
-
-  /// The textual byte length of this node exluding leading and trailing trivia.
-  public var byteSizeAfterTrimmingTrivia: Int {
-    return base.byteSizeAfterTrimmingTrivia
-  }
-
-  /// The root of the tree in which this node resides.
-  public var root: Syntax {
-    return base.root
-  }
-
-  /// Sequence of tokens that are part of this Syntax node.
-  public var tokens: TokenSequence {
-    return base.tokens
-  }
-
-  /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
-  ///
-  /// The provided classification ranges are consecutive and cover the full source
-  /// text of the node. The ranges may also span multiple tokens, if multiple
-  /// consecutive tokens would have the same classification then a single classified
-  /// range is provided for all of them.
-  public var classifications: SyntaxClassifications {
-    return base.classifications
-  }
-
-  /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
-  /// a relative range.
-  ///
-  /// The provided classified ranges may extend beyond the provided `range`.
-  /// Active classifications (non-`none`) will extend the range to include the
-  /// full classified range (e.g. from the beginning of the comment block), while
-  /// `none` classified ranges will extend to the beginning or end of the token
-  /// that the `range` touches.
-  /// It is guaranteed that no classified range will be provided that doesn't
-  /// intersect the provided `range`.
-  ///
-  /// - Parameters:
-  ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
-  /// - Returns: Sequence of `SyntaxClassifiedRange`s.
-  public func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
-    return base.classifications(in: range)
-  }
-
-  /// The `SyntaxClassifiedRange` for a relative byte offset.
-  /// - Parameters:
-  ///   - at: The relative to the node byte offset.
-  /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
-  ///   at the given offset is unclassified.
-  public func classification(at offset: Int) -> SyntaxClassifiedRange? {
-    return base.classification(at: offset)
-  }
-
-  /// The `SyntaxClassifiedRange` for an absolute position.
-  /// - Parameters:
-  ///   - at: The absolute position.
-  /// - Returns: The `SyntaxClassifiedRange` for the position or nil if the source text
-  ///   at the given position is unclassified.
-  public func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
-    return base.classification(at: position)
-  }
-
-  /// Returns a value representing the unique identity of the node.
-  public var uniqueIdentifier: SyntaxIdentifier {
-    return base.uniqueIdentifier
-  }
-
-  /// A source-accurate description of this node.
-  public var description: String {
-    return base.description
-  }
-
-  /// Prints the raw value of this node to the provided stream.
-  /// - Parameter stream: The stream to which to print the raw tree.
-  public func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
-    return base.write(to: &target)
+  static func ==(lhs: Self, rhs: Self) -> Bool {
+    return lhs.data.nodeId == rhs.data.nodeId
   }
 }
 
-/// Determines if two nodes are equal to each other.
-func ==(lhs: _SyntaxBase, rhs: _SyntaxBase) -> Bool {
-  return lhs.data.nodeId == rhs.data.nodeId
-}
-
-/// Determines if two nodes are equal to each other.
-public func ==(lhs: Syntax, rhs: Syntax) -> Bool {
-  return lhs.base.data.nodeId == rhs.base.data.nodeId
-}
 
 /// MARK: - Nodes
 
 /// A Syntax node representing a single token.
-public struct TokenSyntax: _SyntaxBase, Hashable {
-  let data: SyntaxData
+public struct TokenSyntax: SyntaxProtocol {
+  public let _syntaxNode: Syntax
 
-  /// Creates a Syntax node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TokenSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .token else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a Syntax node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .token)
+    self._syntaxNode = Syntax(data)
   }
 
   public var presence: SourcePresence {
@@ -707,14 +496,6 @@ public struct TokenSyntax: _SyntaxBase, Hashable {
   public var totalLength: SourceLength {
     return raw.totalLength
   }
-
-  public static func ==(lhs: TokenSyntax, rhs: TokenSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
 
 extension TokenSyntax: CustomReflectable {
@@ -750,14 +531,10 @@ public struct TokenSequence: Sequence {
     }
   }
 
-  let node: _SyntaxBase
-
-  init(_ node: _SyntaxBase) {
-    self.node = node
-  }
+  let node: Syntax
 
   public init(_ node: Syntax) {
-    self.node = node.base
+    self.node = node
   }
 
   public func makeIterator() -> Iterator {
@@ -797,14 +574,10 @@ public struct ReversedTokenSequence: Sequence {
     }
   }
 
-  let node: _SyntaxBase
-
-  init(_ node: _SyntaxBase) {
-    self.node = node
-  }
+  let node: Syntax
 
   public init(_ node: Syntax) {
-    self.node = node.base
+    self.node = node
   }
 
   public func makeIterator() -> Iterator {
@@ -848,19 +621,10 @@ public struct SyntaxNode {
   /// Converts this node to a `SyntaxData` object.
   ///
   /// This operation results in wrapping all of the node's parents into
-  /// `_SyntaxBase` objects. There's a cost associated with it that should be taken
-  /// into account before used inside performance critical code.
+  /// `SyntaxData` objects. There's a cost associated with it that should be 
+  /// taken into account before used inside performance critical code.
   internal var asSyntaxData: SyntaxData {
-    return SyntaxData(absoluteRaw, parent: parent?.asSyntaxBase)
-  }
-
-  /// Converts this node to a `_SyntaxBase` object.
-  ///
-  /// This operation results in wrapping this node and all of its parents into
-  /// `_SyntaxBase` objects. There's a cost associated with it that should be taken
-  /// into account before used inside performance critical code.
-  internal var asSyntaxBase: _SyntaxBase {
-    return makeSyntax(asSyntaxData)
+    return SyntaxData(absoluteRaw, parent: parent?.asSyntax)
   }
 
   /// Converts this node to a `Syntax` object.
@@ -869,7 +633,7 @@ public struct SyntaxNode {
   /// `Syntax` objects. There's a cost associated with it that should be taken
   /// into account before used inside performance critical code.
   public var asSyntax: Syntax {
-    return asSyntaxBase
+    return Syntax(self.asSyntaxData)
   }
 
   /// The parent of this syntax node, or `nil` if this node is the root.

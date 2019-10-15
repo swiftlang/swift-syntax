@@ -45,7 +45,7 @@ public class IncrementalParsingTestCase: XCTestCase {
 
     XCTAssertEqual(newStructB.byteRange, reusedRange)
     XCTAssertEqual(origStructB.uniqueIdentifier, reusedNode.uniqueIdentifier)
-    XCTAssertEqual(origStructB, reusedNode.asSyntax as! CodeBlockItemSyntax)
+    XCTAssertEqual(origStructB, reusedNode.asCodeBlockItem)
     XCTAssertTrue(reusedNode.isCodeBlockItem)
     XCTAssertEqual(origStructB, reusedNode.asCodeBlockItem!)
     XCTAssertEqual(origStructB.parent!.uniqueIdentifier, reusedNode.parent!.uniqueIdentifier)

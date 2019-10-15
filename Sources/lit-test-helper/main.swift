@@ -197,9 +197,10 @@ struct IncrementalEdit {
 /// Rewrites a parsed tree with all constructed nodes.
 class TreeReconstructor : SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> Syntax {
-    return SyntaxFactory.makeToken(token.tokenKind, presence: token.presence,
-                     leadingTrivia: token.leadingTrivia,
-                     trailingTrivia: token.trailingTrivia)
+    let token = SyntaxFactory.makeToken(token.tokenKind, presence: token.presence,
+                                        leadingTrivia: token.leadingTrivia,
+                                        trailingTrivia: token.trailingTrivia)
+    return Syntax(token)
   }
 }
 
@@ -207,10 +208,11 @@ func performClassifySyntax(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
 
   let tree = try SyntaxParser.parse(treeURL)
-  let result = ClassifiedSyntaxTreePrinter.print(tree)
+  let result = ClassifiedSyntaxTreePrinter.print(Syntax(tree))
   do {
     // Sanity check that we get the same result if the tree has constructed nodes.
-    let ctorTree = TreeReconstructor().visit(tree) as! SourceFileSyntax
+    let ctorTree = TreeReconstructor().visit(tree)
+    assert(ctorTree.is(SourceFileSyntax.self))
     let ctorResult = ClassifiedSyntaxTreePrinter.print(ctorTree)
     if ctorResult != result {
       throw TestingError.classificationVerificationFailed(result, ctorResult)

@@ -160,12 +160,45 @@ struct AbsoluteRawSyntax {
   }
 }
 
+/// Indirect wrapper for a `Syntax` node to avoid cyclic inclusion of the 
+/// `Syntax` struct in `SyntaxData`
+fileprivate class SyntaxBox: CustomStringConvertible, 
+    CustomDebugStringConvertible, TextOutputStreamable {
+  let value: Syntax
+
+  init(_ value: Syntax) {
+    self.value = value
+  }
+
+  // SyntaxBox should be transparent in all descriptions
+
+  /// A source-accurate description of this node.
+  public var description: String {
+    return value.description
+  }
+
+  /// Returns a description used by dump.
+  public var debugDescription: String {
+    return value.debugDescription
+  }
+
+  /// Prints the raw value of this node to the provided stream.
+  /// - Parameter stream: The stream to which to print the raw tree.
+  public func write<Target>(to target: inout Target)
+    where Target: TextOutputStream {
+    return value.write(to: &target)
+  }
+}
+
 /// SyntaxData is the underlying storage for each Syntax node.
 ///
 /// SyntaxData is an implementation detail, and should not be exposed to clients
 /// of SwiftSyntax.
 struct SyntaxData {
-  let parent: _SyntaxBase?
+  private let parentBox: SyntaxBox?
+  var parent: Syntax? {
+    return parentBox?.value
+  }
   let absoluteRaw: AbsoluteRawSyntax
 
   var raw: RawSyntax { return absoluteRaw.raw }
@@ -198,9 +231,9 @@ struct SyntaxData {
   /// - Parameters:
   ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
   ///   - parent: The parent of this node, or `nil` if this node is the root.
-  init(_ absoluteRaw: AbsoluteRawSyntax, parent: _SyntaxBase?) {
+  init(_ absoluteRaw: AbsoluteRawSyntax, parent: Syntax?) {
     self.absoluteRaw = absoluteRaw
-    self.parent = parent
+    self.parentBox = parent.map(SyntaxBox.init)
   }
 
   /// Creates a `SyntaxData` for a root raw node.
@@ -218,7 +251,7 @@ struct SyntaxData {
   /// - Parameter parent: The parent to associate the child with. This is
   ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided index.
-  func child(at index: Int, parent: _SyntaxBase) -> SyntaxData? {
+  func child(at index: Int, parent: Syntax) -> SyntaxData? {
     if !raw.hasChild(at: index) { return nil }
     var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
     for _ in 0..<index { _ = iter.next() }
@@ -237,7 +270,7 @@ struct SyntaxData {
   ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided cursor.
   func child<CursorType: RawRepresentable>(
-    at cursor: CursorType, parent: _SyntaxBase) -> SyntaxData?
+    at cursor: CursorType, parent: Syntax) -> SyntaxData?
     where CursorType.RawValue == Int {
     return child(at: cursor.rawValue, parent: parent)
   }
@@ -253,7 +286,7 @@ struct SyntaxData {
     // recursively up to the root.
     if let parent = parent {
       let parentData = parent.data.replacingChild(newRaw, at: indexInParent)
-      let newParent = makeSyntax(parentData)
+      let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw), parent: newParent)
     } else {
       // Otherwise, we're already the root, so return the new root data.

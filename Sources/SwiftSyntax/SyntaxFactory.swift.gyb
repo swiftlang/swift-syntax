@@ -37,7 +37,7 @@ public enum SyntaxFactory {
     return TokenSyntax(data)
   }
 
-  public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> Syntax {
+  public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> UnknownSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: .unknown,
       layout: tokens.map { $0.raw }, presence: .present)
     let data = SyntaxData.forRoot(raw)
@@ -160,8 +160,9 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = []) -> TypeSyntax {
     let identifier = makeIdentifier(name, leadingTrivia: leadingTrivia, 
                                     trailingTrivia: trailingTrivia)
-    return makeSimpleTypeIdentifier(name: identifier,
-                                    genericArgumentClause: nil)
+    let typeIdentifier = makeSimpleTypeIdentifier(name: identifier,
+                                                  genericArgumentClause: nil)
+    return TypeSyntax(typeIdentifier)
   }
 
   public static func makeAnyTypeIdentifier(leadingTrivia: Trivia = [],
@@ -202,7 +203,7 @@ public enum SyntaxFactory {
     trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {
     let string = makeStringSegment(text)
     let segment = makeStringSegment(content: string)
-    let segments = makeStringLiteralSegments([segment])
+    let segments = makeStringLiteralSegments([Syntax(segment)])
     let openQuote = makeStringQuoteToken(leadingTrivia: leadingTrivia)
     let closeQuote = makeStringQuoteToken(trailingTrivia: trailingTrivia)
     return makeStringLiteralExpr(openDelimiter: nil,

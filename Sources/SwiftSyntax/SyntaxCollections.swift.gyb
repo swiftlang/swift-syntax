@@ -18,7 +18,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: Syntax, Sequence {
+public protocol SyntaxCollection: SyntaxProtocol, Sequence {
   /// The number of elements, `present` or `missing`, in this collection.
   var count: Int { get }
 }
@@ -31,12 +31,22 @@ public protocol SyntaxCollection: Syntax, Sequence {
 /// `${node.collection_element_type}` nodes. ${node.name} behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ${node.name}: _SyntaxBase, Hashable, SyntaxCollection {
-  let data: SyntaxData
+public struct ${node.name}: SyntaxCollection {
+  public let _syntaxNode: Syntax
 
-  /// Creates a Syntax node from the provided root and data.
+  /// Converts the given `Syntax` node to a `${node.name}` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .${node.swift_syntax_kind} else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a Syntax node from the provided root and data. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .${node.swift_syntax_kind})
+    self._syntaxNode = Syntax(data)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -190,43 +200,25 @@ public struct ${node.name}: _SyntaxBase, Hashable, SyntaxCollection {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `${node.name}` nodes are equal to each other.
-  public static func ==(lhs: ${node.name}, rhs: ${node.name}) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
 
 /// Conformance for `${node.name}`` to the Sequence protocol.
 extension ${node.name}: Sequence {
   fileprivate static func nextElement<Iter>(
-    _ iterator: inout Iter, parent: _SyntaxBase
+    _ iterator: inout Iter, parent: Syntax
   ) -> ${node.collection_element_type}? where Iter: AbsoluteRawSyntaxIteratorProtocol {
     guard let absoluteRaw = iterator.next() else { return nil }
     let data = SyntaxData(absoluteRaw, parent: parent)
-%   is_constructable = node.collection_element_type != 'Syntax' and \
-%       not (element_node and element_node.is_base())
-%   if is_constructable:
     return ${node.collection_element_type}(data)
-%   else:
-%     cast = '' if node.collection_element_type == 'Syntax' \
-%         else 'as! ' + node.collection_element_type
-    return (makeSyntax(data) ${cast})
-%   end
   }
 
   public struct Iterator: IteratorProtocol {
-    private let parent: _SyntaxBase
+    private let parent: Syntax
     private var iterator: PresentRawSyntaxChildren.Iterator
 
     public init(collection node: ${node.name}) {
       self.iterator = .init(parent: node.data.absoluteRaw)
-      self.parent = node
+      self.parent = Syntax(node)
     }
 
     public mutating func next() -> ${node.collection_element_type}? {
@@ -245,12 +237,12 @@ extension ${node.name}: Sequence {
 
   public struct Reversed: Sequence {
     public struct Iterator: IteratorProtocol {
-      private let parent: _SyntaxBase
+      private let parent: Syntax
       private var iterator: ReversedPresentRawSyntaxChildren.Iterator
 
       public init(collection node: ${node.name}) {
         self.iterator = .init(parent: node.data.absoluteRaw)
-        self.parent = node
+        self.parent = Syntax(node)
       }
 
       public mutating func next() -> ${node.collection_element_type}? {

@@ -12,18 +12,18 @@ public class SyntaxVisitorTestCase: XCTestCase {
   ]
 
   public func testBasic() {
-    struct FuncCounter: SyntaxVisitor {
+    class FuncCounter: SyntaxVisitor {
       var funcCount = 0
-      mutating func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+      override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
         funcCount += 1
         return .visitChildren
       }
     }
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
-      var counter = FuncCounter()
+      let counter = FuncCounter()
       let hashBefore = parsed.hashValue
-      parsed.walk(&counter)
+      counter.walk(parsed)
       XCTAssertEqual(counter.funcCount, 3)
       XCTAssertEqual(hashBefore, parsed.hashValue)
     }())
@@ -68,10 +68,10 @@ public class SyntaxVisitorTestCase: XCTestCase {
   }
 
   public func testSyntaxRewriterVisitCollection() {
-    struct VisitCollections: SyntaxVisitor {
+    class VisitCollections: SyntaxVisitor {
       var numberOfCodeBlockItems = 0
 
-      mutating func visit(_ items: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+      override func visit(_ items: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
         numberOfCodeBlockItems += items.count
         return .visitChildren
       }
@@ -79,14 +79,14 @@ public class SyntaxVisitorTestCase: XCTestCase {
 
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("nested-blocks.swift"))
-      var visitor = VisitCollections()
-      parsed.walk(&visitor)
+      let visitor = VisitCollections()
+      visitor.walk(parsed)
       XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
     }())
   }
 
   public func testVisitorClass() {
-    class FuncCounter: SyntaxVisitorBase {
+    class FuncCounter: SyntaxVisitor {
       var funcCount = 0
       override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
         funcCount += 1
@@ -95,9 +95,9 @@ public class SyntaxVisitorTestCase: XCTestCase {
     }
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
-      var counter = FuncCounter()
+      let counter = FuncCounter()
       let hashBefore = parsed.hashValue
-      parsed.walk(&counter)
+      counter.walk(parsed)
       XCTAssertEqual(counter.funcCount, 3)
       XCTAssertEqual(hashBefore, parsed.hashValue)
     }())

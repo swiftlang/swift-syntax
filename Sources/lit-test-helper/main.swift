@@ -396,16 +396,16 @@ func performRoundtrip(args: CommandLineArguments) throws {
   }
 }
 
-struct NodePrinter: SyntaxAnyVisitor {
-  func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+class NodePrinter: SyntaxAnyVisitor {
+  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     assert(!node.isUnknown)
     print("<\(type(of: node._asConcreteType))>", terminator: "")
     return .visitChildren
   }
-  func visitAnyPost(_ node: Syntax) {
+  override func visitAnyPost(_ node: Syntax) {
     print("</\(type(of: node._asConcreteType))>", terminator: "")
   }
-  func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+  override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     print("<\(type(of: token))>", terminator: "")
     print(token, terminator:"")
     return .visitChildren
@@ -415,8 +415,8 @@ struct NodePrinter: SyntaxAnyVisitor {
 func printSyntaxTree(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
   let tree = try SyntaxParser.parse(treeURL)
-  var printer = NodePrinter()
-  tree.walk(&printer)
+  let printer = NodePrinter()
+  printer.walk(tree)
 }
 
 func printParserDiags(args: CommandLineArguments) throws {
@@ -452,14 +452,14 @@ func diagnose(args: CommandLineArguments) throws {
   let diagEngine = DiagnosticEngine()
   diagEngine.addConsumer(PrintingDiagnosticConsumer())
   let tree = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
-  struct DiagnoseUnknown: SyntaxAnyVisitor {
+  class DiagnoseUnknown: SyntaxAnyVisitor {
     let diagEngine: DiagnosticEngine
     let converter: SourceLocationConverter
     init(_ diagEngine: DiagnosticEngine, _ converter: SourceLocationConverter) {
       self.diagEngine = diagEngine
       self.converter = converter
     }
-    func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+    override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
       if node.isUnknown {
         diagEngine.diagnose(Diagnostic.Message(.warning, "unknown syntax exists"),
                             location: node.startLocation(converter: converter,
@@ -468,9 +468,9 @@ func diagnose(args: CommandLineArguments) throws {
       return .visitChildren
     }
   }
-  var visitor = DiagnoseUnknown(diagEngine,
+  let visitor = DiagnoseUnknown(diagEngine,
              SourceLocationConverter(file: treeURL.path, tree: tree))
-  tree.walk(&visitor)
+  visitor.walk(tree)
 }
 
 do {

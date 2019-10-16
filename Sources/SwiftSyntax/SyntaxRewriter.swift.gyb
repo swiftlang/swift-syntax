@@ -85,15 +85,17 @@ open class SyntaxRewriter {
   private func visitImpl${node.name}(_ data: SyntaxData) -> Syntax {
 %   if node.is_base():
       let node = Unknown${node.name}(data)
-      visitPre(Syntax(node))
-      defer { visitPost(Syntax(node)) }
-      if let newNode = visitAny(Syntax(node)) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return Syntax(visit(node))
 %   else:
       let node = ${node.name}(data)
-      visitPre(Syntax(node))
-      defer { visitPost(Syntax(node)) }
-      if let newNode = visitAny(Syntax(node)) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
 %     if node.base_type == 'Syntax':
       return visit(node)
 %     else:
@@ -108,15 +110,17 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       let node = TokenSyntax(data)
-      visitPre(Syntax(node))
-      defer { visitPost(Syntax(node)) }
-      if let newNode = visitAny(Syntax(node)) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
     case .unknown:
       let node = UnknownSyntax(data)
-      visitPre(Syntax(node))
-      defer { visitPost(Syntax(node)) }
-      if let newNode = visitAny(Syntax(node)) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
     // The implementation of every generated case goes into its own function. This
     // circumvents an issue where the compiler allocates stack space for every
@@ -142,7 +146,13 @@ open class SyntaxRewriter {
     // nodes are being collected.
     var newLayout: ContiguousArray<RawSyntax?>?
 
-    for (i, (raw, info)) in RawSyntaxChildren(Syntax(node)).enumerated() {
+    let syntaxNode = node._syntaxNode
+    let parentBox = SyntaxBox(syntaxNode)
+
+    // Incrementing i manually is faster than using .enumerated()
+    var childIndex = 0
+    for (raw, info) in RawSyntaxChildren(Syntax(node)) {
+      defer { childIndex += 1 }
       guard let child = raw else {
         // Node does not exist. If we are collecting rewritten nodes, we need to 
         // collect this one as well, otherwise we can ignore it.
@@ -154,7 +164,7 @@ open class SyntaxRewriter {
 
       // Build the Syntax node to rewrite
       let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
-      let data = SyntaxData(absoluteRaw, parent: Syntax(node))
+      let data = SyntaxData(absoluteRaw, parentBox: parentBox)
       
       let rewritten = visit(data)
       if rewritten.data.nodeId != info.nodeId {
@@ -168,7 +178,7 @@ open class SyntaxRewriter {
           // reserves enough capacity for the entire layout.
           newLayout = ContiguousArray<RawSyntax?>()
           newLayout!.reserveCapacity(node.raw.numberOfChildren)
-          for j in 0..<i {
+          for j in 0..<childIndex {
             newLayout!.append(node.raw.child(at: j))
           }
         }

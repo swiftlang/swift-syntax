@@ -162,7 +162,7 @@ struct AbsoluteRawSyntax {
 
 /// Indirect wrapper for a `Syntax` node to avoid cyclic inclusion of the 
 /// `Syntax` struct in `SyntaxData`
-fileprivate class SyntaxBox: CustomStringConvertible, 
+class SyntaxBox: CustomStringConvertible, 
     CustomDebugStringConvertible, TextOutputStreamable {
   let value: Syntax
 
@@ -173,18 +173,18 @@ fileprivate class SyntaxBox: CustomStringConvertible,
   // SyntaxBox should be transparent in all descriptions
 
   /// A source-accurate description of this node.
-  public var description: String {
+  var description: String {
     return value.description
   }
 
   /// Returns a description used by dump.
-  public var debugDescription: String {
+  var debugDescription: String {
     return value.debugDescription
   }
 
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
-  public func write<Target>(to target: inout Target)
+  func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
     return value.write(to: &target)
   }
@@ -234,6 +234,16 @@ struct SyntaxData {
   init(_ absoluteRaw: AbsoluteRawSyntax, parent: Syntax?) {
     self.absoluteRaw = absoluteRaw
     self.parentBox = parent.map(SyntaxBox.init)
+  }
+
+  /// Creates a `SyntaxData` with the provided raw syntax and parent.
+  /// - Parameters:
+  ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
+  ///   - parentBox: The boxed parent of this node, or `nil` if this node is the 
+  ///                root.
+  init(_ absoluteRaw: AbsoluteRawSyntax, parentBox: SyntaxBox?) {
+    self.absoluteRaw = absoluteRaw
+    self.parentBox = parentBox
   }
 
   /// Creates a `SyntaxData` for a root raw node.

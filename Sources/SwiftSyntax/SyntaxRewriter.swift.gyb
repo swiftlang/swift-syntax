@@ -151,7 +151,7 @@ open class SyntaxRewriter {
 
     // Incrementing i manually is faster than using .enumerated()
     var childIndex = 0
-    for (raw, info) in RawSyntaxChildren(Syntax(node)) {
+    for (raw, info) in RawSyntaxChildren(syntaxNode) {
       defer { childIndex += 1 }
       guard let child = raw else {
         // Node does not exist. If we are collecting rewritten nodes, we need to 
@@ -310,26 +310,26 @@ public extension SyntaxAnyVisitor {
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   mutating func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
-    return visitAny(Syntax(node))
+    return visitAny(node._syntaxNode)
   }
   mutating func visitPost(_ node: ${node.name}) {
-    return visitAnyPost(Syntax(node))
+    return visitAnyPost(node._syntaxNode)
   }
 %   end
 % end
 
   mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(Syntax(token))
+    return visitAny(token._syntaxNode)
   }
   mutating func visitPost(_ node: TokenSyntax) {
-    return visitAnyPost(Syntax(node))
+    return visitAnyPost(node._syntaxNode)
   }
 
   mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(Syntax(node))
+    return visitAny(node._syntaxNode)
   }
   mutating func visitPost(_ node: UnknownSyntax) {
-    return visitAnyPost(Syntax(node))
+    return visitAnyPost(node._syntaxNode)
   }
 }
 
@@ -384,16 +384,16 @@ private func _doVisitImpl${node.name}<Visitor>(
     let node = Unknown${node.name}(data)
     let needsChildren = (visitor.visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: Syntax(node), &visitor)
+    if needsChildren && node.raw.numberOfChildren > 0 {
+      visitChildren(node, &visitor)
     }
     visitor.visitPost(node)
 %   else:
     let node = ${node.name}(data)
     let needsChildren = (visitor.visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: Syntax(node), &visitor)
+    if needsChildren && node.raw.numberOfChildren > 0 {
+      visitChildren(node, &visitor)
     }
     visitor.visitPost(node)
 %   end
@@ -414,8 +414,8 @@ fileprivate func doVisit<Visitor>(
     let node = UnknownSyntax(data)
     let needsChildren = (visitor.visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: Syntax(node), &visitor)
+    if needsChildren && node.raw.numberOfChildren > 0 {
+      visitChildren(node, &visitor)
     }
     visitor.visitPost(node)
   // The implementation of every generated case goes into its own function. This
@@ -429,11 +429,13 @@ fileprivate func doVisit<Visitor>(
   }
 }
 
-fileprivate func visitChildren<Visitor>(
-  _ data: SyntaxData, parent: Syntax, _ visitor: inout Visitor
+fileprivate func visitChildren<SyntaxType: SyntaxProtocol, Visitor>(
+  _ syntax: SyntaxType, _ visitor: inout Visitor
 ) where Visitor : SyntaxVisitor {
-  for childRaw in PresentRawSyntaxChildren(data.absoluteRaw) {
-    let childData = SyntaxData(childRaw, parent: parent)
+  let syntaxNode = Syntax(syntax)
+  let parentBox = SyntaxBox(syntaxNode)
+  for childRaw in PresentRawSyntaxChildren(syntaxNode) {
+    let childData = SyntaxData(childRaw, parentBox: parentBox)
     doVisit(childData, &visitor)
   }
 }

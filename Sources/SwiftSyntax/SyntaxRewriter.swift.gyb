@@ -47,7 +47,7 @@ open class SyntaxRewriter {
     return Syntax(token)
   }
   
-  /// Visit a `UnknownSyntax`.
+  /// Visit an `UnknownSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnknownSyntax) -> Syntax {

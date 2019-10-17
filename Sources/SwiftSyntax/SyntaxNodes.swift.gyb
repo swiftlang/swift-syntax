@@ -317,13 +317,28 @@ public extension Syntax {
 % end
     }
   }
+
+  /// Retrieve the concretely typed node that this Syntax node wraps.
+  /// This property is exposed for testing purposes only.
+  var _asConcreteType: Any {
+    switch self.asSyntaxEnum {
+    case .token(let node):
+      return node
+    case .unknown(let node):
+      return node
+% for node in SYNTAX_NODES:
+    case .${node.swift_syntax_kind}(let node):
+      return node
+% end
+    }
+  }
 }
 
 extension Syntax: CustomReflectable {
   /// Reconstructs the real syntax type for this type from the node's kind and 
   /// provides a mirror that reflects this type.
   public var customMirror: Mirror {
-    return Mirror(reflecting: self.asConcreteType)
+    return Mirror(reflecting: self._asConcreteType)
   }
 }
 
@@ -333,7 +348,7 @@ extension ${node.name}: CustomReflectable {
   /// Reconstructs the real syntax type for this type from the node's kind and 
   /// provides a mirror that reflects this type.
   public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self).asConcreteType)
+    return Mirror(reflecting: Syntax(self)._asConcreteType)
   }
 }
 %   elif node.is_syntax_collection():
@@ -344,9 +359,9 @@ extension ${node.name}: CustomReflectable {
     return Mirror(self, children: [
 %     for child in node.children:
 %       if child.is_optional:
-      "${child.swift_name}": ${child.swift_name}.map(Syntax.init)?.asConcreteType as Any,
+      "${child.swift_name}": ${child.swift_name}.map(Syntax.init)?._asConcreteType as Any,
 %       else:
-      "${child.swift_name}": Syntax(${child.swift_name}).asConcreteType,
+      "${child.swift_name}": Syntax(${child.swift_name})._asConcreteType,
 %       end
 %     end
     ])

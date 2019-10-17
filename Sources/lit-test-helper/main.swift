@@ -399,11 +399,11 @@ func performRoundtrip(args: CommandLineArguments) throws {
 struct NodePrinter: SyntaxAnyVisitor {
   func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     assert(!node.isUnknown)
-    print("<\(type(of: node))>", terminator: "")
+    print("<\(type(of: node._asConcreteType))>", terminator: "")
     return .visitChildren
   }
   func visitAnyPost(_ node: Syntax) {
-    print("</\(type(of: node))>", terminator: "")
+    print("</\(type(of: node._asConcreteType))>", terminator: "")
   }
   func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     print("<\(type(of: token))>", terminator: "")

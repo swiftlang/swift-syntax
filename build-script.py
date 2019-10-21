@@ -49,7 +49,7 @@ def escapeCmdArg(arg):
         return arg
 
 
-def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT, 
+def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT,
          verbose=False):
     if verbose:
         print(' '.join([escapeCmdArg(arg) for arg in cmd]))
@@ -78,9 +78,9 @@ def realpath(path):
 def check_gyb_exec():
     if not os.path.exists(GYB_EXEC):
         fatal_error('''
-Error: Could not find gyb. 
+Error: Could not find gyb.
 
-Make sure you have the main swift repo checked out next to the swift-syntax 
+Make sure you have the main swift repo checked out next to the swift-syntax
 repository.
 Refer to README.md for more information.
 ''')
@@ -110,10 +110,10 @@ def generate_gyb_files(verbose, add_source_locations):
     # Clear any *.swift files that are relics from the previous run.
     for previous_gyb_gen_file in os.listdir(generated_files_dir):
       if previous_gyb_gen_file.endswith('.swift'):
-        gyb_file = os.path.join(swiftsyntax_sources_dir, 
+        gyb_file = os.path.join(swiftsyntax_sources_dir,
                                 previous_gyb_gen_file + '.gyb')
         if not os.path.exists(gyb_file):
-          check_call(['rm', previous_gyb_gen_file], cwd=generated_files_dir, 
+          check_call(['rm', previous_gyb_gen_file], cwd=generated_files_dir,
                      verbose=verbose)
 
     # Generate the new .swift files in a temporary directory and only copy them
@@ -140,7 +140,7 @@ def generate_gyb_files(verbose, add_source_locations):
                    line_directive_flags,
                    verbose=verbose)
 
-        # Copy the file if different from the file already present in 
+        # Copy the file if different from the file already present in
         # gyb_generated
         check_call(['rsync'] +
                    ['--checksum'] +
@@ -257,9 +257,9 @@ def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
 def check_lit_exec():
     if not os.path.exists(LIT_EXEC):
         fatal_error('''
-Error: Could not find lit.py. 
+Error: Could not find lit.py.
 
-Make sure you have the llvm repo checked out next to the swift-syntax repo. 
+Make sure you have the llvm repo checked out next to the swift-syntax repo.
 Refer to README.md for more information.
 ''')
 
@@ -267,10 +267,10 @@ Refer to README.md for more information.
 def check_incr_transfer_roundtrip_exec():
     if not os.path.exists(INCR_TRANSFER_ROUNDTRIP_EXEC):
         fatal_error('''
-Error: Could not find incr_transfer_round_trip.py. 
+Error: Could not find incr_transfer_round_trip.py.
 
-Make sure you have the main swift repo checked out next to the swift-syntax 
-repo. 
+Make sure you have the main swift repo checked out next to the swift-syntax
+repo.
 Refer to README.md for more information.
 ''')
 
@@ -305,7 +305,7 @@ def run_lit_tests(swift_build_exec, build_dir, parser_header_dir, parser_lib_dir
 
     lit_call = [LIT_EXEC]
     lit_call.extend([PACKAGE_DIR + '/lit_tests'])
-    
+
     if swiftc_exec:
         lit_call.extend(['--param', 'SWIFTC=' + realpath(swiftc_exec)])
     if filecheck_exec:
@@ -444,8 +444,8 @@ section for arguments that need to be specified for this.
     basic_group.add_argument('--swiftmodule-base-name',
                              help='''
       The name under which the Swift module should be installed. A .swiftdoc and
-      .swiftmodule file extension will be added to this path and the 
-      corresponding files will be copied there. 
+      .swiftmodule file extension will be added to this path and the
+      corresponding files will be copied there.
       Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
@@ -465,7 +465,7 @@ section for arguments that need to be specified for this.
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
-    
+
     testing_group.add_argument('--swift-build-exec', default='swift build',
                                help='''
       Path to the swift-build executable that is used to build SwiftPM projects

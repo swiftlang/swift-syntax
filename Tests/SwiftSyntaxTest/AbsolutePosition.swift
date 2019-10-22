@@ -61,15 +61,15 @@ public class AbsolutePositionTestCase: XCTestCase {
   public func testCurrentFile() {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(URL(fileURLWithPath: #file))
-      struct Visitor: SyntaxVisitor {
-        func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
+      class Visitor: SyntaxVisitor {
+        override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
           XCTAssertEqual(node.positionAfterSkippingLeadingTrivia.utf8Offset,
             node.position.utf8Offset + node.leadingTrivia.byteSize)
           return .skipChildren
         }
       }
-      var visitor = Visitor()
-      parsed.walk(&visitor)
+      let visitor = Visitor()
+      visitor.walk(parsed)
     }())
   }
 

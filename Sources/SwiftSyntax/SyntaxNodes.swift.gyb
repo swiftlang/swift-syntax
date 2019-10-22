@@ -53,7 +53,7 @@ extension Syntax {
 public struct UnknownSyntax: SyntaxProtocol {
   public let _syntaxNode: Syntax
 
-  /// Convert the given `Syntax` node to a `UnknownSyntax` if possible. Return 
+  /// Convert the given `Syntax` node to an `UnknownSyntax` if possible. Return 
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
     guard syntax.raw.kind == .unknown else { return nil }

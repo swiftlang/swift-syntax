@@ -43,17 +43,17 @@ public class ParseFileTestCase: XCTestCase {
   public func testEnumCaseStructure() {
     class Visitor: SyntaxVisitor {
       var cases: [EnumCaseDeclSyntax] = []
-      func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+      override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
         cases.append(contentsOf: node.members.members.compactMap {
           $0.decl.as(EnumCaseDeclSyntax.self)
         })
         return .skipChildren
       }
     }
-    var v = Visitor()
+    let v = Visitor()
     let currentFile = URL(fileURLWithPath: #file)
     let parsed = try! SyntaxParser.parse(currentFile)
-    parsed.walk(&v)
+    v.walk(parsed)
     XCTAssertEqual(v.cases.count, 2)
   }
 }

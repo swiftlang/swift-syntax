@@ -26,26 +26,26 @@ public enum SyntaxVerifierError: Error, CustomStringConvertible {
 }
 
 /// Verifier to check that there are no unknown syntax nodes in the tree.
-public struct SyntaxVerifier: SyntaxAnyVisitor {
+public class SyntaxVerifier: SyntaxAnyVisitor {
 
   var unknownNodes: [Syntax] = []
 
-  public mutating func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+  public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     if node.isUnknown {
       unknownNodes.append(node)
     }
     return .visitChildren
   }
 
-  private mutating func verify(_ node: Syntax) throws {
-    node.walk(&self)
+  private func verify(_ node: Syntax) throws {
+    self.walk(node)
     if let unknownNode = unknownNodes.first {
       throw SyntaxVerifierError.unknownSyntaxFound(node: unknownNode)
     }
   }
 
   public static func verify(_ node: Syntax) throws {
-    var verifier = SyntaxVerifier()
+    let verifier = SyntaxVerifier()
     try verifier.verify(node)
   }
 }

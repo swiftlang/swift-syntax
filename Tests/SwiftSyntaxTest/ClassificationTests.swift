@@ -62,7 +62,7 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif[0].range, ByteSourceRange(offset: 20, length: 3))
     }
     do {
-      let initializer = (tree.statements[0].item as! VariableDeclSyntax).bindings[0].initializer!
+      let initializer = (tree.statements[0].item.as(VariableDeclSyntax.self)!).bindings[0].initializer!
       XCTAssertEqual(initializer.description, "/*yo*/ = 0")
       // Classify with a relative range inside this node.
       let classif = Array(initializer.classifications(in: ByteSourceRange(offset: 5, length: 2)))

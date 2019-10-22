@@ -24,7 +24,7 @@ public protocol DeclBuildable: SyntaxBuildable, DeclListBuildable {
 
 extension DeclBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia) -> Syntax {
-    buildDecl(format: format, leadingTrivia: leadingTrivia)
+    Syntax(buildDecl(format: format, leadingTrivia: leadingTrivia))
   }
 
   public func buildDeclList(format: Format, leadingTrivia: Trivia) -> [DeclSyntax] {
@@ -51,7 +51,7 @@ public struct DeclList: DeclListBuildable {
   }
 
   public func buildSyntaxList(format: Format, leadingTrivia: Trivia) -> [Syntax] {
-    buildDeclList(format: format, leadingTrivia: leadingTrivia)
+    buildDeclList(format: format, leadingTrivia: leadingTrivia).map { Syntax($0) }
   }
 }
 
@@ -74,12 +74,13 @@ public struct Import: DeclBuildable {
     let importToken = Tokens.import.withLeadingTrivia(leadingTrivia)
     let moduleNameToken = SyntaxFactory.makeIdentifier(moduleName)
 
-    return ImportDeclSyntax {
+    let importDecl = ImportDeclSyntax {
       $0.useImportTok(importToken)
       $0.addPathComponent(AccessPathComponentSyntax {
         $0.useName(moduleNameToken)
       })
     }
+    return DeclSyntax(importDecl)
   }
 }
 
@@ -128,10 +129,10 @@ public struct Variable<Mutability: VariableMutability>: DeclBuildable {
       return SyntaxFactory.makeInitializerClause(equal: Tokens.equal, value: expr)
     }
 
-    return VariableDeclSyntax {
+    let variableDecl = VariableDeclSyntax {
       $0.useLetOrVarKeyword(mutabilityKeyword)
       $0.addBinding(PatternBindingSyntax {
-        $0.usePattern(namePattern)
+        $0.usePattern(PatternSyntax(namePattern))
         $0.useTypeAnnotation(typeAnnotation)
 
         if let initClause = initClause {
@@ -139,6 +140,7 @@ public struct Variable<Mutability: VariableMutability>: DeclBuildable {
         }
       })
     }
+    return DeclSyntax(variableDecl)
   }
 }
 
@@ -164,7 +166,7 @@ public struct Struct: DeclBuildable {
       leadingTrivia: .zero
     )
 
-    return StructDeclSyntax {
+    let structDecl = StructDeclSyntax {
       $0.useStructKeyword(structKeyword)
       $0.useIdentifier(SyntaxFactory.makeIdentifier(name))
       $0.useMembers(MemberDeclBlockSyntax {
@@ -180,5 +182,6 @@ public struct Struct: DeclBuildable {
         }
       })
     }
+    return DeclSyntax(structDecl)
   }
 }

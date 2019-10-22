@@ -33,7 +33,7 @@ public class SyntaxVisitorTestCase: XCTestCase {
     class ClosureRewriter: SyntaxRewriter {
       override func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
         // Perform a no-op transform that requires rebuilding the node.
-        return node.withSignature(node.signature)
+        return ExprSyntax(node.withSignature(node.signature))
       }
     }
     XCTAssertNoThrow(try {
@@ -51,8 +51,8 @@ public class SyntaxVisitorTestCase: XCTestCase {
         self.transform = transform
       }
       override func visitAny(_ node: Syntax) -> Syntax? {
-        if let tok = node as? TokenSyntax {
-          return transform(tok)
+        if let tok = node.as(TokenSyntax.self) {
+          return Syntax(transform(tok))
         }
         return nil
       }

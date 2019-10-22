@@ -30,12 +30,11 @@ open class SyntaxRewriter {
 
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
-  /// Visit a `${node.name}`. 
+  /// Visit a `${node.name}`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ${node.name}) -> ${node.base_type} {
-%   cast = ('as! ' + node.base_type) if node.base_type != 'Syntax' else ''
-    return visitChildren(node) ${cast}
+    return ${node.base_type}(visitChildren(node))
   }
 
 %   end
@@ -45,14 +44,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ token: TokenSyntax) -> Syntax {
-    return token
+    return Syntax(token)
   }
   
-  /// Visit a `UnknownSyntax`. 
+  /// Visit a `UnknownSyntax`.
   ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node or `nil`.
+  ///   - Returns: the rewritten node
   open func visit(_ node: UnknownSyntax) -> Syntax {
-    return visitChildren(node)
+    return Syntax(visitChildren(node))
   }
 
   /// The function called before visiting the node and its descendents.
@@ -78,7 +77,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   public func visit(_ node: Syntax) -> Syntax {
-    return visit(node.base.data)
+    return visit(node.data)
   }
 
 % for node in SYNTAX_NODES:
@@ -86,36 +85,42 @@ open class SyntaxRewriter {
   private func visitImpl${node.name}(_ data: SyntaxData) -> Syntax {
 %   if node.is_base():
       let node = Unknown${node.name}(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
 %   else:
       let node = ${node.name}(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+%     if node.base_type == 'Syntax':
       return visit(node)
+%     else:
+      return Syntax(visit(node))
+%     end
 %   end
   }
 
 % end
 
   final func visit(_ data: SyntaxData) -> Syntax {
-    // Create the node types directly instead of going through `makeSyntax()`
-    // which has additional cost for casting back and forth from `_SyntaxBase`.
     switch data.raw.kind {
     case .token:
       let node = TokenSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
     case .unknown:
       let node = UnknownSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
     // The implementation of every generated case goes into its own function. This
     // circumvents an issue where the compiler allocates stack space for every
@@ -128,9 +133,8 @@ open class SyntaxRewriter {
     }
   }
 
-  final func visitChildren(_ nodeS: Syntax) -> Syntax {
-    let node = nodeS.base
-
+  final func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) 
+      -> SyntaxType {
     // Walk over all children of this node and rewrite them. Don't store any 
     // rewritten nodes until the first non-`nil` value is encountered. When this 
     // happens, retrieve all previous syntax nodes from the parent node to 
@@ -142,7 +146,13 @@ open class SyntaxRewriter {
     // nodes are being collected.
     var newLayout: ContiguousArray<RawSyntax?>?
 
-    for (i, (raw, info)) in RawSyntaxChildren(node).enumerated() {
+    let syntaxNode = node._syntaxNode
+    let parentBox = SyntaxBox(syntaxNode)
+
+    // Incrementing i manually is faster than using .enumerated()
+    var childIndex = 0
+    for (raw, info) in RawSyntaxChildren(syntaxNode) {
+      defer { childIndex += 1 }
       guard let child = raw else {
         // Node does not exist. If we are collecting rewritten nodes, we need to 
         // collect this one as well, otherwise we can ignore it.
@@ -154,10 +164,10 @@ open class SyntaxRewriter {
 
       // Build the Syntax node to rewrite
       let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
-      let data = SyntaxData(absoluteRaw, parent: node)
+      let data = SyntaxData(absoluteRaw, parentBox: parentBox)
       
       let rewritten = visit(data)
-      if rewritten.base.data.absoluteRaw.info.nodeId != info.nodeId {
+      if rewritten.data.nodeId != info.nodeId {
         // The node was rewritten, let's handle it
         if newLayout == nil {
           // We have not yet collected any previous rewritten nodes. Initialize
@@ -168,7 +178,7 @@ open class SyntaxRewriter {
           // reserves enough capacity for the entire layout.
           newLayout = ContiguousArray<RawSyntax?>()
           newLayout!.reserveCapacity(node.raw.numberOfChildren)
-          for j in 0..<i {
+          for j in 0..<childIndex {
             newLayout!.append(node.raw.child(at: j))
           }
         }
@@ -192,10 +202,10 @@ open class SyntaxRewriter {
       assert(newLayout.count == node.raw.numberOfChildren)
       
       let newRaw = node.raw.replacingLayout(Array(newLayout))
-      return makeSyntax(.forRoot(newRaw))
+      return SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
     } else {
       // No child node was rewritten. So no need to change this node as well.
-      return nodeS
+      return node
     }
 
   }
@@ -300,26 +310,26 @@ public extension SyntaxAnyVisitor {
 % for node in SYNTAX_NODES:
 %   if is_visitable(node):
   mutating func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+    return visitAny(node._syntaxNode)
   }
   mutating func visitPost(_ node: ${node.name}) {
-    return visitAnyPost(node)
+    return visitAnyPost(node._syntaxNode)
   }
 %   end
 % end
 
   mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(token)
+    return visitAny(token._syntaxNode)
   }
   mutating func visitPost(_ node: TokenSyntax) {
-    return visitAnyPost(node)
+    return visitAnyPost(node._syntaxNode)
   }
 
   mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+    return visitAny(node._syntaxNode)
   }
   mutating func visitPost(_ node: UnknownSyntax) {
-    return visitAnyPost(node)
+    return visitAnyPost(node._syntaxNode)
   }
 }
 
@@ -352,16 +362,16 @@ open class SyntaxVisitorBase: SyntaxVisitor {
   open func visitPost(_ node: UnknownSyntax) {}
 }
 
-extension _SyntaxBase {
+public extension Syntax {
   func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
     guard isPresent else { return }
     return doVisit(data, &visitor)
   }
 }
 
-extension Syntax {
-  public func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
-    return base.walk(&visitor)
+public extension SyntaxProtocol {
+  func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
+    return _syntaxNode.walk(&visitor)
   }
 }
 
@@ -373,17 +383,17 @@ private func _doVisitImpl${node.name}<Visitor>(
 %   if node.is_base():
     let node = Unknown${node.name}(data)
     let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && node.raw.numberOfChildren > 0 {
+      visitChildren(node, &visitor)
     }
     visitor.visitPost(node)
 %   else:
     let node = ${node.name}(data)
     let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && node.raw.numberOfChildren > 0 {
+      visitChildren(node, &visitor)
     }
     visitor.visitPost(node)
 %   end
@@ -394,8 +404,6 @@ private func _doVisitImpl${node.name}<Visitor>(
 fileprivate func doVisit<Visitor>(
   _ data: SyntaxData, _ visitor: inout Visitor
 ) where Visitor : SyntaxVisitor {
-  // Create the node types directly instead of going through `makeSyntax()`
-  // which has additional cost for casting back and forth from `_SyntaxBase`.
   switch data.raw.kind {
   case .token:
     let node = TokenSyntax(data)
@@ -405,9 +413,9 @@ fileprivate func doVisit<Visitor>(
   case .unknown:
     let node = UnknownSyntax(data)
     let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && node.raw.numberOfChildren > 0 {
+      visitChildren(node, &visitor)
     }
     visitor.visitPost(node)
   // The implementation of every generated case goes into its own function. This
@@ -421,11 +429,13 @@ fileprivate func doVisit<Visitor>(
   }
 }
 
-fileprivate func visitChildren<Visitor>(
-  _ data: SyntaxData, parent: _SyntaxBase, _ visitor: inout Visitor
+fileprivate func visitChildren<SyntaxType: SyntaxProtocol, Visitor>(
+  _ syntax: SyntaxType, _ visitor: inout Visitor
 ) where Visitor : SyntaxVisitor {
-  for childRaw in PresentRawSyntaxChildren(data.absoluteRaw) {
-    let childData = SyntaxData(childRaw, parent: parent)
+  let syntaxNode = Syntax(syntax)
+  let parentBox = SyntaxBox(syntaxNode)
+  for childRaw in PresentRawSyntaxChildren(syntaxNode) {
+    let childData = SyntaxData(childRaw, parentBox: parentBox)
     doVisit(childData, &visitor)
   }
 }

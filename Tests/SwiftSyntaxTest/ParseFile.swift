@@ -36,7 +36,7 @@ public class ParseFileTestCase: XCTestCase {
       let fileContents = try String(contentsOf: currentFile)
       let parsed = try SyntaxParser.parse(currentFile)
       XCTAssertEqual("\(parsed)", fileContents)
-      try SyntaxVerifier.verify(parsed)
+      try SyntaxVerifier.verify(Syntax(parsed))
     }())
   }
 
@@ -45,7 +45,7 @@ public class ParseFileTestCase: XCTestCase {
       var cases: [EnumCaseDeclSyntax] = []
       func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
         cases.append(contentsOf: node.members.members.compactMap {
-          ($0 as MemberDeclListItemSyntax).decl as? EnumCaseDeclSyntax
+          $0.decl.as(EnumCaseDeclSyntax.self)
         })
         return .skipChildren
       }

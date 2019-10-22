@@ -4,7 +4,7 @@ import SwiftSyntax
 fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
     let literal = SyntaxFactory.makeIntegerLiteral("\(int)")
     return SyntaxFactory.makeArrayElement(
-        expression: SyntaxFactory.makeIntegerLiteralExpr(digits: literal),
+        expression: ExprSyntax(SyntaxFactory.makeIntegerLiteralExpr(digits: literal)),
         trailingComma: nil)
 }
 

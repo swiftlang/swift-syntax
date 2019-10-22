@@ -224,8 +224,8 @@ fileprivate struct SyntaxCursor {
   }
 }
 
-/// Sequence of tokens of a syntax node. This is more efficient than `TokenSequence`
-/// because it avoids casts to `Syntax`/`_SyntaxBase` protocols.
+/// Sequence of tokens of a syntax node. This is more efficient than 
+/// `TokenSequence` because it avoids casts to `Syntax` protocols.
 fileprivate struct FastTokenSequence: Sequence {
   struct Iterator: IteratorProtocol {
     var cursor: SyntaxCursor
@@ -449,16 +449,11 @@ public struct SyntaxClassifications: Sequence {
     }
   }
 
-  let node: _SyntaxBase
+  let node: Syntax
   let relRange: ByteSourceRange
 
-  init(_ node: _SyntaxBase, in relRange: ByteSourceRange) {
-    self.node = node
-    self.relRange = relRange
-  }
-
   public init(_ node: Syntax, in relRange: ByteSourceRange) {
-    self.node = node.base
+    self.node = node
     self.relRange = relRange
   }
 

@@ -88,7 +88,8 @@ public enum SyntaxParser {
     let rawSyntax = parseRaw(utf8Source, parseTransition, filenameForDiagnostics,
                              diagnosticEngine)
 
-    guard let file = makeSyntax(.forRoot(rawSyntax)) as? SourceFileSyntax else {
+    let base = Syntax(SyntaxData.forRoot(rawSyntax))
+    guard let file = base.as(SourceFileSyntax.self) else {
       throw ParserError.invalidSyntaxData
     }
     return file

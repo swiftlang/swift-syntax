@@ -5,7 +5,6 @@ import SwiftSyntax
 public class CustomReflectableTests: XCTestCase {
   public static let allTests = [
     ("testDump", testDump),
-    ("testConformanceToCustomReflectable", testConformanceToCustomReflectable),
   ]
 
 
@@ -114,11 +113,11 @@ public class CustomReflectableTests: XCTestCase {
         let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
         let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
-                                                       expression: expr1,
+                                                       expression: ExprSyntax(expr1),
                                                        trailingComma: nil),
                         SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
-                                                       expression: expr2,
+                                                       expression: ExprSyntax(expr2),
                                                        trailingComma: nil)]
         let tuples = SyntaxFactory.makeTupleExprElementList(elements)
         return .init(syntax: tuples,
@@ -166,11 +165,11 @@ public class CustomReflectableTests: XCTestCase {
         let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
         let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
-                                                       expression: expr1,
+                                                       expression: ExprSyntax(expr1),
                                                        trailingComma: nil),
           SyntaxFactory.makeTupleExprElement(label: nil,
                                          colon: nil,
-                                         expression: expr2,
+                                         expression: ExprSyntax(expr2),
                                          trailingComma: nil)]
         let tuples = SyntaxFactory.makeTupleExprElementList(elements)
         return .init(syntax: tuples.reversed(),
@@ -212,49 +211,6 @@ public class CustomReflectableTests: XCTestCase {
       let (key: line, value: testCase) = keyAndValue
       let actualDumped = dumped(testCase.syntax)
       XCTAssertEqual(testCase.expectedDumped, actualDumped, line: line)
-    }
-  }
-
-
-  public func testConformanceToCustomReflectable() {
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getInput("near-empty.swift"))
-      XCTAssertEqual(collectSyntaxNotConformedCustomReflectable(from: parsed), [])
-    }())
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getInput("closure.swift"))
-      XCTAssertEqual(collectSyntaxNotConformedCustomReflectable(from: parsed), [])
-    }())
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getInput("nested-blocks.swift"))
-      XCTAssertEqual(collectSyntaxNotConformedCustomReflectable(from: parsed), [])
-    }())
-    XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
-      XCTAssertEqual(collectSyntaxNotConformedCustomReflectable(from: parsed), [])
-    }())
-  }
-
-
-  public func collectSyntaxNotConformedCustomReflectable<S: Any>(from object: S) -> [String] {
-    var paths = [String]()
-    collectSyntaxNotConformedCustomReflectable(from: object, ancestors: ["root"], foundPaths: &paths)
-    return paths
-  }
-
-
-  public func collectSyntaxNotConformedCustomReflectable<S: Any>(from object: S, ancestors: [String], foundPaths: inout [String]) {
-    Mirror(reflecting: object).children.forEach { child in
-      let (label: label, value: value) = child
-
-      var currentPathComponents = ancestors
-      currentPathComponents.append(label ?? "(nil)")
-
-      if let syntax = value as? Syntax, !(syntax is CustomReflectable) {
-        foundPaths.append("\(currentPathComponents.joined(separator: ".")): \(type(of: value as Any))")
-      }
-
-      collectSyntaxNotConformedCustomReflectable(from: value, ancestors: currentPathComponents, foundPaths: &foundPaths)
     }
   }
 

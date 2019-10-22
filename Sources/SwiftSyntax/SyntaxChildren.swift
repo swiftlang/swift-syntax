@@ -45,7 +45,7 @@ struct RawSyntaxChildren: Sequence {
     self.node = absoluteRaw
   }
 
-  init(_ base: _SyntaxBase) {
+  init(_ base: Syntax) {
     self.init(base.data.absoluteRaw)
   }
 
@@ -91,7 +91,7 @@ struct PresentRawSyntaxChildren: Sequence {
     self.node = absoluteRaw
   }
 
-  init(_ base: _SyntaxBase) {
+  init(_ base: Syntax) {
     self.init(base.data.absoluteRaw)
   }
 
@@ -137,7 +137,7 @@ struct ReversedPresentRawSyntaxChildren: Sequence {
     self.node = absoluteRaw
   }
 
-  init(_ base: _SyntaxBase) {
+  init(_ base: Syntax) {
     self.init(base.data.absoluteRaw)
   }
 
@@ -150,9 +150,9 @@ struct ReversedPresentRawSyntaxChildren: Sequence {
 struct PresentRawSyntaxNextSiblings: Sequence {
   typealias Iterator = PresentRawSyntaxChildren.Iterator
 
-  private let node: _SyntaxBase
+  private let node: Syntax
 
-  init(_ node: _SyntaxBase) {
+  init(_ node: Syntax) {
     self.node = node
   }
 
@@ -168,9 +168,9 @@ struct PresentRawSyntaxNextSiblings: Sequence {
 struct PresentRawSyntaxPreviousSiblings: Sequence {
   typealias Iterator = ReversedPresentRawSyntaxChildren.Iterator
 
-  private let node: _SyntaxBase
+  private let node: Syntax
 
-  init(_ node: _SyntaxBase) {
+  init(_ node: Syntax) {
     self.node = node
   }
 
@@ -181,94 +181,28 @@ struct PresentRawSyntaxPreviousSiblings: Sequence {
   }
 }
 
-/// Sequence of present children nodes of the provided `_SyntaxBase` node.
-struct SyntaxBaseChildren: Sequence {
-  struct Iterator: IteratorProtocol {
-    let parent: _SyntaxBase
-    var iterator: PresentRawSyntaxChildren.Iterator
-
-    init(node: _SyntaxBase) {
-      self.iterator = .init(parent: node.data.absoluteRaw)
-      self.parent = node
-    }
-
-    mutating func next() -> _SyntaxBase? {
-      guard let absoluteRaw = iterator.next() else { return nil }
-      let data = SyntaxData(absoluteRaw, parent: self.parent)
-      return makeSyntax(data)
-    }
-  }
-
-  let node: _SyntaxBase
-
-  init(_ node: _SyntaxBase) {
-    self.node = node
-  }
-
-  func makeIterator() -> Iterator {
-    return Iterator(node: node)
-  }
-
-  func reversed() -> ReversedSyntaxBaseChildren {
-    return ReversedSyntaxBaseChildren(node)
-  }
-}
-
-/// Reversed Sequence of `SyntaxBaseChildren`.
-struct ReversedSyntaxBaseChildren: Sequence {
-  struct Iterator: IteratorProtocol {
-    let parent: _SyntaxBase
-    var iterator: ReversedPresentRawSyntaxChildren.Iterator
-
-    init(node: _SyntaxBase) {
-      self.iterator = .init(parent: node.data.absoluteRaw)
-      self.parent = node
-    }
-
-    mutating func next() -> _SyntaxBase? {
-      guard let absoluteRaw = iterator.next() else { return nil }
-      let data = SyntaxData(absoluteRaw, parent: self.parent)
-      return makeSyntax(data)
-    }
-  }
-
-  let node: _SyntaxBase
-
-  init(_ node: _SyntaxBase) {
-    self.node = node
-  }
-
-  func makeIterator() -> Iterator {
-    return Iterator(node: node)
-  }
-
-  func reversed() -> SyntaxBaseChildren {
-    return SyntaxBaseChildren(node)
-  }
-}
-
 /// Sequence of present children nodes of the provided `Syntax` node.
 public struct SyntaxChildren: Sequence {
   public struct Iterator: IteratorProtocol {
-    var iterator: SyntaxBaseChildren.Iterator
+    let parent: Syntax
+    var iterator: PresentRawSyntaxChildren.Iterator
 
-    init(node: _SyntaxBase) {
-      self.iterator = .init(node: node)
+    init(node: Syntax) {
+      self.iterator = .init(parent: node.data.absoluteRaw)
+      self.parent = node
     }
 
     public mutating func next() -> Syntax? {
-      return iterator.next()
+      guard let absoluteRaw = iterator.next() else { return nil }
+      let data = SyntaxData(absoluteRaw, parent: self.parent)
+      return Syntax(data)
     }
   }
 
-  let node: _SyntaxBase
-
-  init(_ node: _SyntaxBase) {
-    self.node = node
-  }
+  let node: Syntax
 
   public init(_ node: Syntax) {
-    self.node = node.base
+    self.node = node
   }
 
   public func makeIterator() -> Iterator {
@@ -283,25 +217,25 @@ public struct SyntaxChildren: Sequence {
 /// Reversed Sequence of `SyntaxChildren`.
 public struct ReversedSyntaxChildren: Sequence {
   public struct Iterator: IteratorProtocol {
-    var iterator: ReversedSyntaxBaseChildren.Iterator
+    let parent: Syntax
+    var iterator: ReversedPresentRawSyntaxChildren.Iterator
 
-    init(node: _SyntaxBase) {
-      self.iterator = .init(node: node)
+    init(node: Syntax) {
+      self.iterator = .init(parent: node.data.absoluteRaw)
+      self.parent = node
     }
 
     public mutating func next() -> Syntax? {
-      return iterator.next()
+      guard let absoluteRaw = iterator.next() else { return nil }
+      let data = SyntaxData(absoluteRaw, parent: self.parent)
+      return Syntax(data)
     }
   }
 
-  let node: _SyntaxBase
-
-  init(_ node: _SyntaxBase) {
-    self.node = node
-  }
+  let node: Syntax
 
   public init(_ node: Syntax) {
-    self.node = node.base
+    self.node = node
   }
 
   public func makeIterator() -> Iterator {

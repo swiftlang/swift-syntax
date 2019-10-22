@@ -67,7 +67,7 @@ public struct SourceFile: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia) -> Syntax {
     let syntaxList = builder.buildSyntaxList(format: format, leadingTrivia: leadingTrivia)
 
-    return SourceFileSyntax {
+    let sourceFile = SourceFileSyntax {
       for (index, syntax) in syntaxList.enumerated() {
         let trivia: Trivia =
           index == syntaxList.startIndex
@@ -79,5 +79,7 @@ public struct SourceFile: SyntaxBuildable {
         }.withLeadingTrivia(trivia))
       }
     }.withLeadingTrivia(leadingTrivia)
+
+    return Syntax(sourceFile)
   }
 }

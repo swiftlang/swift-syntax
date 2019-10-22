@@ -32,7 +32,7 @@ internal enum SyntaxKind: CSyntaxKind {
 % for name, nodes in grouped_nodes.items():
 %   if name not in ["Syntax"]:
   /// Whether the underlying kind is a sub-kind of ${name}Syntax.
-  public var is${name}: Bool {
+  var is${name}: Bool {
     switch self {
 %     for node in nodes:
     case .${node.swift_syntax_kind}: return true
@@ -43,7 +43,7 @@ internal enum SyntaxKind: CSyntaxKind {
 %   end
 % end
 
-  public var isUnknown: Bool {
+  var isUnknown: Bool {
     switch self {
 % for name, nodes in grouped_nodes.items():
 %   if name not in ["Syntax", "SyntaxCollection"]:
@@ -59,25 +59,5 @@ internal enum SyntaxKind: CSyntaxKind {
 extension SyntaxKind {
   static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
     return SyntaxKind(rawValue: rawValue)!
-  }
-}
-
-/// Creates a Syntax node from the provided SyntaxData using the appropriate
-/// Syntax type, as specified by its kind.
-/// - Parameters:
-///   - root: The root of this tree, or `nil` if the new node is the root.
-///   - data: The data for this new node.
-internal func makeSyntax(_ data: SyntaxData) -> _SyntaxBase {
-  switch data.raw.kind {
-  case .token: return TokenSyntax(data)
-  case .unknown: return UnknownSyntax(data)
-% for node in SYNTAX_NODES:
-  case .${node.swift_syntax_kind}:
-%   if node.is_base():
-    return Unknown${node.name}(data)
-%   else:
-    return ${node.name}(data)
-%   end
-% end
   }
 }

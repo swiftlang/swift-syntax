@@ -24,7 +24,7 @@ public protocol ExprBuildable: SyntaxBuildable, ExprListBuildable {
 
 extension ExprBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia) -> Syntax {
-    buildExpr(format: format, leadingTrivia: leadingTrivia)
+    Syntax(buildExpr(format: format, leadingTrivia: leadingTrivia))
   }
 
   public func buildExprList(format: Format, leadingTrivia: Trivia) -> [ExprSyntax] {
@@ -44,9 +44,10 @@ public struct IntegerLiteral: ExprBuildable {
     }
 
     public func buildExpr(format: Format, leadingTrivia: Trivia) -> ExprSyntax {
-        SyntaxFactory.makeIntegerLiteralExpr(
+        let integerLiteral = SyntaxFactory.makeIntegerLiteralExpr(
             digits: SyntaxFactory.makeIntegerLiteral(String(value))
         ).withLeadingTrivia(leadingTrivia)
+        return ExprSyntax(integerLiteral)
     }
 }
 
@@ -66,8 +67,9 @@ public struct StringLiteral: ExprBuildable {
     }
 
     public func buildExpr(format: Format, leadingTrivia: Trivia) -> ExprSyntax {
-        SyntaxFactory.makeStringLiteralExpr(value)
-          .withLeadingTrivia(leadingTrivia)
+        let stringLiteral = SyntaxFactory.makeStringLiteralExpr(value)
+            .withLeadingTrivia(leadingTrivia)
+        return ExprSyntax(stringLiteral)
     }
 }
 

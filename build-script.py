@@ -161,15 +161,10 @@ def get_installed_name():
 def get_installed_dylib_name():
     return 'lib' + get_installed_name() + '.dylib'
 
-def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
-                           parser_lib_dir, release):
-    if spm_exec == 'swift build':
-        swiftpm_call = ['swift', 'build']
-    elif spm_exec == 'swift test':
-        swiftpm_call = ['swift', 'test']
-    else:
-        swiftpm_call = [spm_exec]
+def get_swiftpm_invocation(toolchain, action, build_dir, release):
+    swift_exec = os.path.join(toolchain, 'usr', 'bin', 'swift')
 
+    swiftpm_call = [swift_exec, action]
     swiftpm_call.extend(['--package-path', PACKAGE_DIR])
     if release:
         swiftpm_call.extend(['--configuration', 'release'])
@@ -179,26 +174,16 @@ def get_swiftpm_invocation(spm_exec, build_dir, parser_header_dir,
     # Swift compiler needs to know the module link name.
     swiftpm_call.extend(['-Xswiftc', '-module-link-name', '-Xswiftc', get_installed_name()])
 
-    # To find the syntax parser library.
-    if parser_header_dir:
-        swiftpm_call.extend(['-Xswiftc', '-I', '-Xswiftc', parser_header_dir])
-    if parser_lib_dir:
-        swiftpm_call.extend(['-Xswiftc', '-L', '-Xswiftc', parser_lib_dir])
-        if platform.system() == 'Darwin':
-            swiftpm_call.extend(['-Xlinker', '-rpath', '-Xlinker', parser_lib_dir])
-
     # To speed up compilation.
     swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
     return swiftpm_call
 
 class Builder(object):
-  def __init__(self, swift_build_exec, swiftc_exec, build_dir,
-               parser_header_dir, parser_lib_dir,
-               release, verbose, disable_sandbox=False):
-      self.swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
+  def __init__(self, toolchain, build_dir, release, verbose,
+               disable_sandbox=False):
+      self.swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
+                                                 action='build',
                                                  build_dir=build_dir,
-                                                 parser_header_dir=parser_header_dir,
-                                                 parser_lib_dir=parser_lib_dir,
                                                  release=release)
       if disable_sandbox:
           self.swiftpm_call.append('--disable-sandbox')
@@ -206,7 +191,6 @@ class Builder(object):
           self.swiftpm_call.extend(['--verbose'])
       self.verbose = verbose
       self._environ = dict(os.environ)
-      self._environ['SWIFT_EXEC'] = swiftc_exec
       self._environ['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
 
   def build(self, product_name, module_group_path=''):
@@ -241,31 +225,20 @@ def verify_generated_files(verbose):
     check_call(command)
 
 
-def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
-              release, swift_build_exec, filecheck_exec, swiftc_exec, verbose):
+def run_tests(toolchain, build_dir, release, filecheck_exec, verbose):
     print('** Running SwiftSyntax Tests **')
 
-    optional_swiftc_exec = swiftc_exec
-    if optional_swiftc_exec == 'swift':
-      optional_swiftc_exec = None
-
-    lit_success = run_lit_tests(swift_build_exec=swift_build_exec,
+    lit_success = run_lit_tests(toolchain=toolchain,
                                 build_dir=build_dir,
-                                parser_header_dir=parser_header_dir,
-                                parser_lib_dir=parser_lib_dir,
                                 release=release,
-                                swiftc_exec=optional_swiftc_exec,
                                 filecheck_exec=filecheck_exec,
                                 verbose=verbose)
     if not lit_success:
         return False
 
-    xctest_success = run_xctests(swift_test_exec=swift_test_exec,
+    xctest_success = run_xctests(toolchain=toolchain,
                                  build_dir=build_dir,
-                                 parser_header_dir=parser_header_dir,
-                                 parser_lib_dir=parser_lib_dir,
                                  release=release,
-                                 swiftc_exec=swiftc_exec,
                                  verbose=verbose)
     if not xctest_success:
         return False
@@ -295,12 +268,10 @@ Refer to README.md for more information.
 ''')
 
 
-def find_lit_test_helper_exec(swift_build_exec, parser_header_dir, parser_lib_dir,
-                              build_dir, release):
-    swiftpm_call = get_swiftpm_invocation(spm_exec=swift_build_exec,
+def find_lit_test_helper_exec(toolchain, build_dir, release):
+    swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
+                                          action='build',
                                           build_dir=build_dir,
-                                          parser_header_dir=parser_header_dir,
-                                          parser_lib_dir=parser_lib_dir,
                                           release=release)
     swiftpm_call.extend(['--product', 'lit-test-helper'])
     swiftpm_call.extend(['--show-bin-path'])
@@ -309,25 +280,20 @@ def find_lit_test_helper_exec(swift_build_exec, parser_header_dir, parser_lib_di
     return bin_dir.strip() + '/lit-test-helper'
 
 
-def run_lit_tests(swift_build_exec, build_dir, parser_header_dir, parser_lib_dir,
-                  release, swiftc_exec, filecheck_exec, verbose):
+def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
     print('** Running lit-based tests **')
 
     check_lit_exec()
     check_incr_transfer_roundtrip_exec()
 
     lit_test_helper_exec = \
-        find_lit_test_helper_exec(swift_build_exec=swift_build_exec,
+        find_lit_test_helper_exec(toolchain=toolchain,
                                   build_dir=build_dir,
-                                  parser_header_dir=parser_header_dir,
-                                  parser_lib_dir=parser_lib_dir,
                                   release=release)
 
     lit_call = [LIT_EXEC]
     lit_call.extend([PACKAGE_DIR + '/lit_tests'])
 
-    if swiftc_exec:
-        lit_call.extend(['--param', 'SWIFTC=' + realpath(swiftc_exec)])
     if filecheck_exec:
         lit_call.extend(['--param', 'FILECHECK=' + filecheck_exec])
     if lit_test_helper_exec:
@@ -345,24 +311,17 @@ def run_lit_tests(swift_build_exec, build_dir, parser_header_dir, parser_lib_dir
 
 ## XCTest based tests
 
-def run_xctests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
-                release, swiftc_exec, verbose):
+def run_xctests(toolchain, build_dir, release, verbose):
     print('** Running XCTests **')
-    swiftpm_call = get_swiftpm_invocation(spm_exec=swift_test_exec,
+    swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
+                                          action='test',
                                           build_dir=build_dir,
-                                          parser_header_dir=parser_header_dir,
-                                          parser_lib_dir=parser_lib_dir,
                                           release=release)
 
     if verbose:
         swiftpm_call.extend(['--verbose'])
 
-    subenv = dict(os.environ)
-    if swiftc_exec:
-        # Add the swiftc exec to PATH so that SwiftSyntax finds it
-        subenv['PATH'] = realpath(swiftc_exec + '/..') + ':' + subenv['PATH']
-    subenv['SWIFT_EXEC'] = swiftc_exec
-    return call(swiftpm_call, env=subenv, verbose=verbose) == 0
+    return call(swiftpm_call, verbose=verbose) == 0
 
 def delete_rpath(rpath, binary):
     if platform.system() == 'Darwin':
@@ -470,6 +429,9 @@ section for arguments that need to be specified for this.
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
       ''')
+    basic_group.add_argument('--toolchain', help='''
+      The path to the toolchain that shall be used to build SwiftSyntax.
+      ''')
 
     build_group = parser.add_argument_group('Build')
     build_group.add_argument('--disable-sandbox',
@@ -486,37 +448,6 @@ section for arguments that need to be specified for this.
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
 
-    testing_group.add_argument('--swift-build-exec', default='swift build',
-                               help='''
-      Path to the swift-build executable that is used to build SwiftPM projects
-      If not specified the the 'swift build' command will be used.
-      ''')
-    testing_group.add_argument('--swift-test-exec', default='swift test',
-                               help='''
-      Path to the swift-test executable that is used to test SwiftPM projects
-      If not specified the the 'swift test' command will be used.
-      ''')
-    testing_group.add_argument('--swiftc-exec', default='swiftc', help='''
-      Path to the swift executable. If not specified the swiftc exeuctable
-      will be inferred from PATH.
-      ''')
-    testing_group.add_argument('--syntax-parser-header-dir', default=None,
-                               help='''
-      Path to the header and modulemap for the syntax parser library.
-      If not specified no extra search path will be provided, it will be assumed
-      that the library is in swift's default search paths.
-      ''')
-    testing_group.add_argument('--syntax-parser-lib-dir', default=None,
-                               help='''
-      Path to the syntax parser shared library. If not specified no extra search
-      path will be provided, it will be assumed that the library is in swift's
-      default search paths.
-      ''')
-    testing_group.add_argument('--swift-syntax-test-exec', default=None,
-                               help='''
-      Path to the swift-syntax-test executable that was built from the main
-      Swift repo. If not specified, it will be looked up from PATH.
-      ''')
     testing_group.add_argument('--filecheck-exec', default=None, help='''
       Path to the FileCheck executable that was built as part of the LLVM
       repository. If not specified, it will be looked up from PATH.
@@ -539,7 +470,7 @@ section for arguments that need to be specified for this.
         else:
             # will this ever happen?
             build_dir=args.build_dir + '/debug'
-        stdlib_rpath = realpath(os.path.dirname(args.swiftc_exec) + '/../lib/swift/macosx/')
+        stdlib_rpath = os.path.join(args.toolchain, 'usr', 'lib', 'swift', 'macosx')
         install(build_dir=build_dir, dylib_dir=args.dylib_dir,
                 swiftmodule_base_name=args.swiftmodule_base_name,
                 stdlib_rpath=stdlib_rpath)
@@ -572,14 +503,13 @@ section for arguments that need to be specified for this.
         sys.exit(0)
 
     try:
-        builder = Builder(swift_build_exec=args.swift_build_exec,
-                          swiftc_exec=args.swiftc_exec,
+        builder = Builder(toolchain=args.toolchain,
                           build_dir=args.build_dir,
-                          parser_header_dir=args.syntax_parser_header_dir,
-                          parser_lib_dir=args.syntax_parser_lib_dir,
                           release=args.release,
                           verbose=args.verbose,
                           disable_sandbox=args.disable_sandbox)
+        # TODO: Building with group info does not allow us to reuse the build
+        # for running the tests.
         builder.build('SwiftSyntax', module_group_path=GROUP_INFO_PATH)
 
         # Only build lit-test-helper if we are planning to run tests
@@ -593,14 +523,10 @@ section for arguments that need to be specified for this.
 
     if args.test:
         try:
-            success = run_tests(swift_test_exec=args.swift_test_exec,
+            success = run_tests(toolchain=args.toolchain,
                                 build_dir=realpath(args.build_dir),
-                                parser_header_dir=args.syntax_parser_header_dir,
-                                parser_lib_dir=args.syntax_parser_lib_dir,
                                 release=args.release,
-                                swift_build_exec=args.swift_build_exec,
                                 filecheck_exec=realpath(args.filecheck_exec),
-                                swiftc_exec=args.swiftc_exec,
                                 verbose=args.verbose)
             if not success:
                 # An error message has already been printed by the failing test

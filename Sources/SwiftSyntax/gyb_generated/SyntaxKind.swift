@@ -244,7 +244,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case versionTuple = 162
 
   /// Whether the underlying kind is a sub-kind of DeclSyntax.
-  public var isDecl: Bool {
+  var isDecl: Bool {
     switch self {
     case .unknownDecl: return true
     case .typealiasDecl: return true
@@ -272,7 +272,7 @@ internal enum SyntaxKind: CSyntaxKind {
     }
   }
   /// Whether the underlying kind is a sub-kind of ExprSyntax.
-  public var isExpr: Bool {
+  var isExpr: Bool {
     switch self {
     case .unknownExpr: return true
     case .inOutExpr: return true
@@ -322,7 +322,7 @@ internal enum SyntaxKind: CSyntaxKind {
     }
   }
   /// Whether the underlying kind is a sub-kind of StmtSyntax.
-  public var isStmt: Bool {
+  var isStmt: Bool {
     switch self {
     case .unknownStmt: return true
     case .continueStmt: return true
@@ -346,7 +346,7 @@ internal enum SyntaxKind: CSyntaxKind {
     }
   }
   /// Whether the underlying kind is a sub-kind of SyntaxCollectionSyntax.
-  public var isSyntaxCollection: Bool {
+  var isSyntaxCollection: Bool {
     switch self {
     case .codeBlockItemList: return true
     case .tupleExprElementList: return true
@@ -390,7 +390,7 @@ internal enum SyntaxKind: CSyntaxKind {
     }
   }
   /// Whether the underlying kind is a sub-kind of PatternSyntax.
-  public var isPattern: Bool {
+  var isPattern: Bool {
     switch self {
     case .unknownPattern: return true
     case .enumCasePattern: return true
@@ -406,7 +406,7 @@ internal enum SyntaxKind: CSyntaxKind {
     }
   }
   /// Whether the underlying kind is a sub-kind of TypeSyntax.
-  public var isType: Bool {
+  var isType: Bool {
     switch self {
     case .unknownType: return true
     case .simpleTypeIdentifier: return true
@@ -426,7 +426,7 @@ internal enum SyntaxKind: CSyntaxKind {
     }
   }
 
-  public var isUnknown: Bool {
+  var isUnknown: Bool {
     switch self {
     case .unknownDecl: return true
     case .unknownExpr: return true
@@ -442,469 +442,5 @@ internal enum SyntaxKind: CSyntaxKind {
 extension SyntaxKind {
   static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
     return SyntaxKind(rawValue: rawValue)!
-  }
-}
-
-/// Creates a Syntax node from the provided SyntaxData using the appropriate
-/// Syntax type, as specified by its kind.
-/// - Parameters:
-///   - root: The root of this tree, or `nil` if the new node is the root.
-///   - data: The data for this new node.
-internal func makeSyntax(_ data: SyntaxData) -> _SyntaxBase {
-  switch data.raw.kind {
-  case .token: return TokenSyntax(data)
-  case .unknown: return UnknownSyntax(data)
-  case .decl:
-    return UnknownDeclSyntax(data)
-  case .expr:
-    return UnknownExprSyntax(data)
-  case .stmt:
-    return UnknownStmtSyntax(data)
-  case .type:
-    return UnknownTypeSyntax(data)
-  case .pattern:
-    return UnknownPatternSyntax(data)
-  case .unknownDecl:
-    return UnknownDeclSyntax(data)
-  case .unknownExpr:
-    return UnknownExprSyntax(data)
-  case .unknownStmt:
-    return UnknownStmtSyntax(data)
-  case .unknownType:
-    return UnknownTypeSyntax(data)
-  case .unknownPattern:
-    return UnknownPatternSyntax(data)
-  case .codeBlockItem:
-    return CodeBlockItemSyntax(data)
-  case .codeBlockItemList:
-    return CodeBlockItemListSyntax(data)
-  case .codeBlock:
-    return CodeBlockSyntax(data)
-  case .inOutExpr:
-    return InOutExprSyntax(data)
-  case .poundColumnExpr:
-    return PoundColumnExprSyntax(data)
-  case .tupleExprElementList:
-    return TupleExprElementListSyntax(data)
-  case .arrayElementList:
-    return ArrayElementListSyntax(data)
-  case .dictionaryElementList:
-    return DictionaryElementListSyntax(data)
-  case .stringLiteralSegments:
-    return StringLiteralSegmentsSyntax(data)
-  case .tryExpr:
-    return TryExprSyntax(data)
-  case .declNameArgument:
-    return DeclNameArgumentSyntax(data)
-  case .declNameArgumentList:
-    return DeclNameArgumentListSyntax(data)
-  case .declNameArguments:
-    return DeclNameArgumentsSyntax(data)
-  case .identifierExpr:
-    return IdentifierExprSyntax(data)
-  case .superRefExpr:
-    return SuperRefExprSyntax(data)
-  case .nilLiteralExpr:
-    return NilLiteralExprSyntax(data)
-  case .discardAssignmentExpr:
-    return DiscardAssignmentExprSyntax(data)
-  case .assignmentExpr:
-    return AssignmentExprSyntax(data)
-  case .sequenceExpr:
-    return SequenceExprSyntax(data)
-  case .exprList:
-    return ExprListSyntax(data)
-  case .poundLineExpr:
-    return PoundLineExprSyntax(data)
-  case .poundFileExpr:
-    return PoundFileExprSyntax(data)
-  case .poundFunctionExpr:
-    return PoundFunctionExprSyntax(data)
-  case .poundDsohandleExpr:
-    return PoundDsohandleExprSyntax(data)
-  case .symbolicReferenceExpr:
-    return SymbolicReferenceExprSyntax(data)
-  case .prefixOperatorExpr:
-    return PrefixOperatorExprSyntax(data)
-  case .binaryOperatorExpr:
-    return BinaryOperatorExprSyntax(data)
-  case .arrowExpr:
-    return ArrowExprSyntax(data)
-  case .floatLiteralExpr:
-    return FloatLiteralExprSyntax(data)
-  case .tupleExpr:
-    return TupleExprSyntax(data)
-  case .arrayExpr:
-    return ArrayExprSyntax(data)
-  case .dictionaryExpr:
-    return DictionaryExprSyntax(data)
-  case .tupleExprElement:
-    return TupleExprElementSyntax(data)
-  case .arrayElement:
-    return ArrayElementSyntax(data)
-  case .dictionaryElement:
-    return DictionaryElementSyntax(data)
-  case .integerLiteralExpr:
-    return IntegerLiteralExprSyntax(data)
-  case .booleanLiteralExpr:
-    return BooleanLiteralExprSyntax(data)
-  case .ternaryExpr:
-    return TernaryExprSyntax(data)
-  case .memberAccessExpr:
-    return MemberAccessExprSyntax(data)
-  case .isExpr:
-    return IsExprSyntax(data)
-  case .asExpr:
-    return AsExprSyntax(data)
-  case .typeExpr:
-    return TypeExprSyntax(data)
-  case .closureCaptureItem:
-    return ClosureCaptureItemSyntax(data)
-  case .closureCaptureItemList:
-    return ClosureCaptureItemListSyntax(data)
-  case .closureCaptureSignature:
-    return ClosureCaptureSignatureSyntax(data)
-  case .closureParam:
-    return ClosureParamSyntax(data)
-  case .closureParamList:
-    return ClosureParamListSyntax(data)
-  case .closureSignature:
-    return ClosureSignatureSyntax(data)
-  case .closureExpr:
-    return ClosureExprSyntax(data)
-  case .unresolvedPatternExpr:
-    return UnresolvedPatternExprSyntax(data)
-  case .functionCallExpr:
-    return FunctionCallExprSyntax(data)
-  case .subscriptExpr:
-    return SubscriptExprSyntax(data)
-  case .optionalChainingExpr:
-    return OptionalChainingExprSyntax(data)
-  case .forcedValueExpr:
-    return ForcedValueExprSyntax(data)
-  case .postfixUnaryExpr:
-    return PostfixUnaryExprSyntax(data)
-  case .specializeExpr:
-    return SpecializeExprSyntax(data)
-  case .stringSegment:
-    return StringSegmentSyntax(data)
-  case .expressionSegment:
-    return ExpressionSegmentSyntax(data)
-  case .stringLiteralExpr:
-    return StringLiteralExprSyntax(data)
-  case .keyPathExpr:
-    return KeyPathExprSyntax(data)
-  case .keyPathBaseExpr:
-    return KeyPathBaseExprSyntax(data)
-  case .objcNamePiece:
-    return ObjcNamePieceSyntax(data)
-  case .objcName:
-    return ObjcNameSyntax(data)
-  case .objcKeyPathExpr:
-    return ObjcKeyPathExprSyntax(data)
-  case .objcSelectorExpr:
-    return ObjcSelectorExprSyntax(data)
-  case .editorPlaceholderExpr:
-    return EditorPlaceholderExprSyntax(data)
-  case .objectLiteralExpr:
-    return ObjectLiteralExprSyntax(data)
-  case .typeInitializerClause:
-    return TypeInitializerClauseSyntax(data)
-  case .typealiasDecl:
-    return TypealiasDeclSyntax(data)
-  case .associatedtypeDecl:
-    return AssociatedtypeDeclSyntax(data)
-  case .functionParameterList:
-    return FunctionParameterListSyntax(data)
-  case .parameterClause:
-    return ParameterClauseSyntax(data)
-  case .returnClause:
-    return ReturnClauseSyntax(data)
-  case .functionSignature:
-    return FunctionSignatureSyntax(data)
-  case .ifConfigClause:
-    return IfConfigClauseSyntax(data)
-  case .ifConfigClauseList:
-    return IfConfigClauseListSyntax(data)
-  case .ifConfigDecl:
-    return IfConfigDeclSyntax(data)
-  case .poundErrorDecl:
-    return PoundErrorDeclSyntax(data)
-  case .poundWarningDecl:
-    return PoundWarningDeclSyntax(data)
-  case .poundSourceLocation:
-    return PoundSourceLocationSyntax(data)
-  case .poundSourceLocationArgs:
-    return PoundSourceLocationArgsSyntax(data)
-  case .declModifier:
-    return DeclModifierSyntax(data)
-  case .inheritedType:
-    return InheritedTypeSyntax(data)
-  case .inheritedTypeList:
-    return InheritedTypeListSyntax(data)
-  case .typeInheritanceClause:
-    return TypeInheritanceClauseSyntax(data)
-  case .classDecl:
-    return ClassDeclSyntax(data)
-  case .structDecl:
-    return StructDeclSyntax(data)
-  case .protocolDecl:
-    return ProtocolDeclSyntax(data)
-  case .extensionDecl:
-    return ExtensionDeclSyntax(data)
-  case .memberDeclBlock:
-    return MemberDeclBlockSyntax(data)
-  case .memberDeclList:
-    return MemberDeclListSyntax(data)
-  case .memberDeclListItem:
-    return MemberDeclListItemSyntax(data)
-  case .sourceFile:
-    return SourceFileSyntax(data)
-  case .initializerClause:
-    return InitializerClauseSyntax(data)
-  case .functionParameter:
-    return FunctionParameterSyntax(data)
-  case .modifierList:
-    return ModifierListSyntax(data)
-  case .functionDecl:
-    return FunctionDeclSyntax(data)
-  case .initializerDecl:
-    return InitializerDeclSyntax(data)
-  case .deinitializerDecl:
-    return DeinitializerDeclSyntax(data)
-  case .subscriptDecl:
-    return SubscriptDeclSyntax(data)
-  case .accessLevelModifier:
-    return AccessLevelModifierSyntax(data)
-  case .accessPathComponent:
-    return AccessPathComponentSyntax(data)
-  case .accessPath:
-    return AccessPathSyntax(data)
-  case .importDecl:
-    return ImportDeclSyntax(data)
-  case .accessorParameter:
-    return AccessorParameterSyntax(data)
-  case .accessorDecl:
-    return AccessorDeclSyntax(data)
-  case .accessorList:
-    return AccessorListSyntax(data)
-  case .accessorBlock:
-    return AccessorBlockSyntax(data)
-  case .patternBinding:
-    return PatternBindingSyntax(data)
-  case .patternBindingList:
-    return PatternBindingListSyntax(data)
-  case .variableDecl:
-    return VariableDeclSyntax(data)
-  case .enumCaseElement:
-    return EnumCaseElementSyntax(data)
-  case .enumCaseElementList:
-    return EnumCaseElementListSyntax(data)
-  case .enumCaseDecl:
-    return EnumCaseDeclSyntax(data)
-  case .enumDecl:
-    return EnumDeclSyntax(data)
-  case .operatorDecl:
-    return OperatorDeclSyntax(data)
-  case .identifierList:
-    return IdentifierListSyntax(data)
-  case .operatorPrecedenceAndTypes:
-    return OperatorPrecedenceAndTypesSyntax(data)
-  case .precedenceGroupDecl:
-    return PrecedenceGroupDeclSyntax(data)
-  case .precedenceGroupAttributeList:
-    return PrecedenceGroupAttributeListSyntax(data)
-  case .precedenceGroupRelation:
-    return PrecedenceGroupRelationSyntax(data)
-  case .precedenceGroupNameList:
-    return PrecedenceGroupNameListSyntax(data)
-  case .precedenceGroupNameElement:
-    return PrecedenceGroupNameElementSyntax(data)
-  case .precedenceGroupAssignment:
-    return PrecedenceGroupAssignmentSyntax(data)
-  case .precedenceGroupAssociativity:
-    return PrecedenceGroupAssociativitySyntax(data)
-  case .tokenList:
-    return TokenListSyntax(data)
-  case .nonEmptyTokenList:
-    return NonEmptyTokenListSyntax(data)
-  case .customAttribute:
-    return CustomAttributeSyntax(data)
-  case .attribute:
-    return AttributeSyntax(data)
-  case .attributeList:
-    return AttributeListSyntax(data)
-  case .specializeAttributeSpecList:
-    return SpecializeAttributeSpecListSyntax(data)
-  case .labeledSpecializeEntry:
-    return LabeledSpecializeEntrySyntax(data)
-  case .namedAttributeStringArgument:
-    return NamedAttributeStringArgumentSyntax(data)
-  case .declName:
-    return DeclNameSyntax(data)
-  case .implementsAttributeArguments:
-    return ImplementsAttributeArgumentsSyntax(data)
-  case .objCSelectorPiece:
-    return ObjCSelectorPieceSyntax(data)
-  case .objCSelector:
-    return ObjCSelectorSyntax(data)
-  case .continueStmt:
-    return ContinueStmtSyntax(data)
-  case .whileStmt:
-    return WhileStmtSyntax(data)
-  case .deferStmt:
-    return DeferStmtSyntax(data)
-  case .expressionStmt:
-    return ExpressionStmtSyntax(data)
-  case .switchCaseList:
-    return SwitchCaseListSyntax(data)
-  case .repeatWhileStmt:
-    return RepeatWhileStmtSyntax(data)
-  case .guardStmt:
-    return GuardStmtSyntax(data)
-  case .whereClause:
-    return WhereClauseSyntax(data)
-  case .forInStmt:
-    return ForInStmtSyntax(data)
-  case .switchStmt:
-    return SwitchStmtSyntax(data)
-  case .catchClauseList:
-    return CatchClauseListSyntax(data)
-  case .doStmt:
-    return DoStmtSyntax(data)
-  case .returnStmt:
-    return ReturnStmtSyntax(data)
-  case .yieldStmt:
-    return YieldStmtSyntax(data)
-  case .yieldList:
-    return YieldListSyntax(data)
-  case .fallthroughStmt:
-    return FallthroughStmtSyntax(data)
-  case .breakStmt:
-    return BreakStmtSyntax(data)
-  case .caseItemList:
-    return CaseItemListSyntax(data)
-  case .conditionElement:
-    return ConditionElementSyntax(data)
-  case .availabilityCondition:
-    return AvailabilityConditionSyntax(data)
-  case .matchingPatternCondition:
-    return MatchingPatternConditionSyntax(data)
-  case .optionalBindingCondition:
-    return OptionalBindingConditionSyntax(data)
-  case .conditionElementList:
-    return ConditionElementListSyntax(data)
-  case .declarationStmt:
-    return DeclarationStmtSyntax(data)
-  case .throwStmt:
-    return ThrowStmtSyntax(data)
-  case .ifStmt:
-    return IfStmtSyntax(data)
-  case .elseIfContinuation:
-    return ElseIfContinuationSyntax(data)
-  case .elseBlock:
-    return ElseBlockSyntax(data)
-  case .switchCase:
-    return SwitchCaseSyntax(data)
-  case .switchDefaultLabel:
-    return SwitchDefaultLabelSyntax(data)
-  case .caseItem:
-    return CaseItemSyntax(data)
-  case .switchCaseLabel:
-    return SwitchCaseLabelSyntax(data)
-  case .catchClause:
-    return CatchClauseSyntax(data)
-  case .poundAssertStmt:
-    return PoundAssertStmtSyntax(data)
-  case .genericWhereClause:
-    return GenericWhereClauseSyntax(data)
-  case .genericRequirementList:
-    return GenericRequirementListSyntax(data)
-  case .genericRequirement:
-    return GenericRequirementSyntax(data)
-  case .sameTypeRequirement:
-    return SameTypeRequirementSyntax(data)
-  case .genericParameterList:
-    return GenericParameterListSyntax(data)
-  case .genericParameter:
-    return GenericParameterSyntax(data)
-  case .genericParameterClause:
-    return GenericParameterClauseSyntax(data)
-  case .conformanceRequirement:
-    return ConformanceRequirementSyntax(data)
-  case .simpleTypeIdentifier:
-    return SimpleTypeIdentifierSyntax(data)
-  case .memberTypeIdentifier:
-    return MemberTypeIdentifierSyntax(data)
-  case .classRestrictionType:
-    return ClassRestrictionTypeSyntax(data)
-  case .arrayType:
-    return ArrayTypeSyntax(data)
-  case .dictionaryType:
-    return DictionaryTypeSyntax(data)
-  case .metatypeType:
-    return MetatypeTypeSyntax(data)
-  case .optionalType:
-    return OptionalTypeSyntax(data)
-  case .someType:
-    return SomeTypeSyntax(data)
-  case .implicitlyUnwrappedOptionalType:
-    return ImplicitlyUnwrappedOptionalTypeSyntax(data)
-  case .compositionTypeElement:
-    return CompositionTypeElementSyntax(data)
-  case .compositionTypeElementList:
-    return CompositionTypeElementListSyntax(data)
-  case .compositionType:
-    return CompositionTypeSyntax(data)
-  case .tupleTypeElement:
-    return TupleTypeElementSyntax(data)
-  case .tupleTypeElementList:
-    return TupleTypeElementListSyntax(data)
-  case .tupleType:
-    return TupleTypeSyntax(data)
-  case .functionType:
-    return FunctionTypeSyntax(data)
-  case .attributedType:
-    return AttributedTypeSyntax(data)
-  case .genericArgumentList:
-    return GenericArgumentListSyntax(data)
-  case .genericArgument:
-    return GenericArgumentSyntax(data)
-  case .genericArgumentClause:
-    return GenericArgumentClauseSyntax(data)
-  case .typeAnnotation:
-    return TypeAnnotationSyntax(data)
-  case .enumCasePattern:
-    return EnumCasePatternSyntax(data)
-  case .isTypePattern:
-    return IsTypePatternSyntax(data)
-  case .optionalPattern:
-    return OptionalPatternSyntax(data)
-  case .identifierPattern:
-    return IdentifierPatternSyntax(data)
-  case .asTypePattern:
-    return AsTypePatternSyntax(data)
-  case .tuplePattern:
-    return TuplePatternSyntax(data)
-  case .wildcardPattern:
-    return WildcardPatternSyntax(data)
-  case .tuplePatternElement:
-    return TuplePatternElementSyntax(data)
-  case .expressionPattern:
-    return ExpressionPatternSyntax(data)
-  case .tuplePatternElementList:
-    return TuplePatternElementListSyntax(data)
-  case .valueBindingPattern:
-    return ValueBindingPatternSyntax(data)
-  case .availabilitySpecList:
-    return AvailabilitySpecListSyntax(data)
-  case .availabilityArgument:
-    return AvailabilityArgumentSyntax(data)
-  case .availabilityLabeledArgument:
-    return AvailabilityLabeledArgumentSyntax(data)
-  case .availabilityVersionRestriction:
-    return AvailabilityVersionRestrictionSyntax(data)
-  case .versionTuple:
-    return VersionTupleSyntax(data)
   }
 }

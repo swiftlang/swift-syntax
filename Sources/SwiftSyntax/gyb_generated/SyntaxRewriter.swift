@@ -23,1551 +23,1551 @@
 open class SyntaxRewriter {
   public init() {}
 
-  /// Visit a `UnknownDeclSyntax`. 
+  /// Visit a `UnknownDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnknownDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `UnknownExprSyntax`. 
+  /// Visit a `UnknownExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnknownExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `UnknownStmtSyntax`. 
+  /// Visit a `UnknownStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnknownStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `UnknownTypeSyntax`. 
+  /// Visit a `UnknownTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnknownTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `UnknownPatternSyntax`. 
+  /// Visit a `UnknownPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnknownPatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `CodeBlockItemSyntax`. 
+  /// Visit a `CodeBlockItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CodeBlockItemSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CodeBlockItemListSyntax`. 
+  /// Visit a `CodeBlockItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CodeBlockItemListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CodeBlockSyntax`. 
+  /// Visit a `CodeBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CodeBlockSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `InOutExprSyntax`. 
+  /// Visit a `InOutExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InOutExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundColumnExprSyntax`. 
+  /// Visit a `PoundColumnExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundColumnExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `TupleExprElementListSyntax`. 
+  /// Visit a `TupleExprElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleExprElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ArrayElementListSyntax`. 
+  /// Visit a `ArrayElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrayElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DictionaryElementListSyntax`. 
+  /// Visit a `DictionaryElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DictionaryElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `StringLiteralSegmentsSyntax`. 
+  /// Visit a `StringLiteralSegmentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: StringLiteralSegmentsSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TryExprSyntax`. 
+  /// Visit a `TryExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TryExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `DeclNameArgumentSyntax`. 
+  /// Visit a `DeclNameArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameArgumentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DeclNameArgumentListSyntax`. 
+  /// Visit a `DeclNameArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameArgumentListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DeclNameArgumentsSyntax`. 
+  /// Visit a `DeclNameArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameArgumentsSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `IdentifierExprSyntax`. 
+  /// Visit a `IdentifierExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IdentifierExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `SuperRefExprSyntax`. 
+  /// Visit a `SuperRefExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SuperRefExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `NilLiteralExprSyntax`. 
+  /// Visit a `NilLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: NilLiteralExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `DiscardAssignmentExprSyntax`. 
+  /// Visit a `DiscardAssignmentExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DiscardAssignmentExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `AssignmentExprSyntax`. 
+  /// Visit a `AssignmentExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AssignmentExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `SequenceExprSyntax`. 
+  /// Visit a `SequenceExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SequenceExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ExprListSyntax`. 
+  /// Visit a `ExprListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExprListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PoundLineExprSyntax`. 
+  /// Visit a `PoundLineExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundLineExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundFileExprSyntax`. 
+  /// Visit a `PoundFileExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundFileExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundFunctionExprSyntax`. 
+  /// Visit a `PoundFunctionExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundFunctionExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundDsohandleExprSyntax`. 
+  /// Visit a `PoundDsohandleExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundDsohandleExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `SymbolicReferenceExprSyntax`. 
+  /// Visit a `SymbolicReferenceExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SymbolicReferenceExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PrefixOperatorExprSyntax`. 
+  /// Visit a `PrefixOperatorExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrefixOperatorExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `BinaryOperatorExprSyntax`. 
+  /// Visit a `BinaryOperatorExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: BinaryOperatorExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ArrowExprSyntax`. 
+  /// Visit a `ArrowExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrowExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `FloatLiteralExprSyntax`. 
+  /// Visit a `FloatLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FloatLiteralExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `TupleExprSyntax`. 
+  /// Visit a `TupleExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ArrayExprSyntax`. 
+  /// Visit a `ArrayExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrayExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `DictionaryExprSyntax`. 
+  /// Visit a `DictionaryExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DictionaryExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `TupleExprElementSyntax`. 
+  /// Visit a `TupleExprElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleExprElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ArrayElementSyntax`. 
+  /// Visit a `ArrayElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrayElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DictionaryElementSyntax`. 
+  /// Visit a `DictionaryElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DictionaryElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `IntegerLiteralExprSyntax`. 
+  /// Visit a `IntegerLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IntegerLiteralExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `BooleanLiteralExprSyntax`. 
+  /// Visit a `BooleanLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: BooleanLiteralExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `TernaryExprSyntax`. 
+  /// Visit a `TernaryExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TernaryExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `MemberAccessExprSyntax`. 
+  /// Visit a `MemberAccessExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberAccessExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `IsExprSyntax`. 
+  /// Visit a `IsExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IsExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `AsExprSyntax`. 
+  /// Visit a `AsExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AsExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `TypeExprSyntax`. 
+  /// Visit a `TypeExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureCaptureItemSyntax`. 
+  /// Visit a `ClosureCaptureItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureItemSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureCaptureItemListSyntax`. 
+  /// Visit a `ClosureCaptureItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureItemListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureCaptureSignatureSyntax`. 
+  /// Visit a `ClosureCaptureSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureSignatureSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureParamSyntax`. 
+  /// Visit a `ClosureParamSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureParamSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureParamListSyntax`. 
+  /// Visit a `ClosureParamListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureParamListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureSignatureSyntax`. 
+  /// Visit a `ClosureSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureSignatureSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClosureExprSyntax`. 
+  /// Visit a `ClosureExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `UnresolvedPatternExprSyntax`. 
+  /// Visit a `UnresolvedPatternExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnresolvedPatternExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `FunctionCallExprSyntax`. 
+  /// Visit a `FunctionCallExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionCallExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `SubscriptExprSyntax`. 
+  /// Visit a `SubscriptExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SubscriptExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `OptionalChainingExprSyntax`. 
+  /// Visit a `OptionalChainingExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OptionalChainingExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ForcedValueExprSyntax`. 
+  /// Visit a `ForcedValueExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ForcedValueExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `PostfixUnaryExprSyntax`. 
+  /// Visit a `PostfixUnaryExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PostfixUnaryExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `SpecializeExprSyntax`. 
+  /// Visit a `SpecializeExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SpecializeExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `StringSegmentSyntax`. 
+  /// Visit a `StringSegmentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: StringSegmentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ExpressionSegmentSyntax`. 
+  /// Visit a `ExpressionSegmentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExpressionSegmentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `StringLiteralExprSyntax`. 
+  /// Visit a `StringLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: StringLiteralExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `KeyPathExprSyntax`. 
+  /// Visit a `KeyPathExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `KeyPathBaseExprSyntax`. 
+  /// Visit a `KeyPathBaseExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathBaseExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ObjcNamePieceSyntax`. 
+  /// Visit a `ObjcNamePieceSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjcNamePieceSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ObjcNameSyntax`. 
+  /// Visit a `ObjcNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjcNameSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ObjcKeyPathExprSyntax`. 
+  /// Visit a `ObjcKeyPathExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjcKeyPathExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ObjcSelectorExprSyntax`. 
+  /// Visit a `ObjcSelectorExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjcSelectorExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `EditorPlaceholderExprSyntax`. 
+  /// Visit a `EditorPlaceholderExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EditorPlaceholderExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `ObjectLiteralExprSyntax`. 
+  /// Visit a `ObjectLiteralExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjectLiteralExprSyntax) -> ExprSyntax {
-    return visitChildren(node) as! ExprSyntax
+    return ExprSyntax(visitChildren(node))
   }
 
-  /// Visit a `TypeInitializerClauseSyntax`. 
+  /// Visit a `TypeInitializerClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeInitializerClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TypealiasDeclSyntax`. 
+  /// Visit a `TypealiasDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypealiasDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `AssociatedtypeDeclSyntax`. 
+  /// Visit a `AssociatedtypeDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AssociatedtypeDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `FunctionParameterListSyntax`. 
+  /// Visit a `FunctionParameterListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionParameterListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ParameterClauseSyntax`. 
+  /// Visit a `ParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ParameterClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ReturnClauseSyntax`. 
+  /// Visit a `ReturnClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ReturnClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `FunctionSignatureSyntax`. 
+  /// Visit a `FunctionSignatureSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionSignatureSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `IfConfigClauseSyntax`. 
+  /// Visit a `IfConfigClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IfConfigClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `IfConfigClauseListSyntax`. 
+  /// Visit a `IfConfigClauseListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IfConfigClauseListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `IfConfigDeclSyntax`. 
+  /// Visit a `IfConfigDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IfConfigDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundErrorDeclSyntax`. 
+  /// Visit a `PoundErrorDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundErrorDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundWarningDeclSyntax`. 
+  /// Visit a `PoundWarningDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundWarningDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundSourceLocationSyntax`. 
+  /// Visit a `PoundSourceLocationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundSourceLocationSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `PoundSourceLocationArgsSyntax`. 
+  /// Visit a `PoundSourceLocationArgsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundSourceLocationArgsSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DeclModifierSyntax`. 
+  /// Visit a `DeclModifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclModifierSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `InheritedTypeSyntax`. 
+  /// Visit a `InheritedTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InheritedTypeSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `InheritedTypeListSyntax`. 
+  /// Visit a `InheritedTypeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InheritedTypeListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TypeInheritanceClauseSyntax`. 
+  /// Visit a `TypeInheritanceClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeInheritanceClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ClassDeclSyntax`. 
+  /// Visit a `ClassDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `StructDeclSyntax`. 
+  /// Visit a `StructDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: StructDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `ProtocolDeclSyntax`. 
+  /// Visit a `ProtocolDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `ExtensionDeclSyntax`. 
+  /// Visit a `ExtensionDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `MemberDeclBlockSyntax`. 
+  /// Visit a `MemberDeclBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberDeclBlockSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `MemberDeclListSyntax`. 
+  /// Visit a `MemberDeclListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberDeclListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `MemberDeclListItemSyntax`. 
+  /// Visit a `MemberDeclListItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberDeclListItemSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SourceFileSyntax`. 
+  /// Visit a `SourceFileSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SourceFileSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `InitializerClauseSyntax`. 
+  /// Visit a `InitializerClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InitializerClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `FunctionParameterSyntax`. 
+  /// Visit a `FunctionParameterSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionParameterSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ModifierListSyntax`. 
+  /// Visit a `ModifierListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ModifierListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `FunctionDeclSyntax`. 
+  /// Visit a `FunctionDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `InitializerDeclSyntax`. 
+  /// Visit a `InitializerDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `DeinitializerDeclSyntax`. 
+  /// Visit a `DeinitializerDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeinitializerDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `SubscriptDeclSyntax`. 
+  /// Visit a `SubscriptDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `AccessLevelModifierSyntax`. 
+  /// Visit a `AccessLevelModifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessLevelModifierSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AccessPathComponentSyntax`. 
+  /// Visit a `AccessPathComponentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessPathComponentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AccessPathSyntax`. 
+  /// Visit a `AccessPathSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessPathSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ImportDeclSyntax`. 
+  /// Visit a `ImportDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ImportDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `AccessorParameterSyntax`. 
+  /// Visit a `AccessorParameterSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorParameterSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AccessorDeclSyntax`. 
+  /// Visit a `AccessorDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `AccessorListSyntax`. 
+  /// Visit a `AccessorListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AccessorBlockSyntax`. 
+  /// Visit a `AccessorBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorBlockSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PatternBindingSyntax`. 
+  /// Visit a `PatternBindingSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PatternBindingSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PatternBindingListSyntax`. 
+  /// Visit a `PatternBindingListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PatternBindingListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `VariableDeclSyntax`. 
+  /// Visit a `VariableDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `EnumCaseElementSyntax`. 
+  /// Visit a `EnumCaseElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `EnumCaseElementListSyntax`. 
+  /// Visit a `EnumCaseElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `EnumCaseDeclSyntax`. 
+  /// Visit a `EnumCaseDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `EnumDeclSyntax`. 
+  /// Visit a `EnumDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `OperatorDeclSyntax`. 
+  /// Visit a `OperatorDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OperatorDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `IdentifierListSyntax`. 
+  /// Visit a `IdentifierListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IdentifierListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `OperatorPrecedenceAndTypesSyntax`. 
+  /// Visit a `OperatorPrecedenceAndTypesSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupDeclSyntax`. 
+  /// Visit a `PrecedenceGroupDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupDeclSyntax) -> DeclSyntax {
-    return visitChildren(node) as! DeclSyntax
+    return DeclSyntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupAttributeListSyntax`. 
+  /// Visit a `PrecedenceGroupAttributeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupRelationSyntax`. 
+  /// Visit a `PrecedenceGroupRelationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupRelationSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupNameListSyntax`. 
+  /// Visit a `PrecedenceGroupNameListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupNameListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupNameElementSyntax`. 
+  /// Visit a `PrecedenceGroupNameElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupNameElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupAssignmentSyntax`. 
+  /// Visit a `PrecedenceGroupAssignmentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PrecedenceGroupAssociativitySyntax`. 
+  /// Visit a `PrecedenceGroupAssociativitySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TokenListSyntax`. 
+  /// Visit a `TokenListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TokenListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `NonEmptyTokenListSyntax`. 
+  /// Visit a `NonEmptyTokenListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: NonEmptyTokenListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CustomAttributeSyntax`. 
+  /// Visit a `CustomAttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CustomAttributeSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AttributeSyntax`. 
+  /// Visit a `AttributeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AttributeSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AttributeListSyntax`. 
+  /// Visit a `AttributeListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AttributeListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SpecializeAttributeSpecListSyntax`. 
+  /// Visit a `SpecializeAttributeSpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SpecializeAttributeSpecListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `LabeledSpecializeEntrySyntax`. 
+  /// Visit a `LabeledSpecializeEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: LabeledSpecializeEntrySyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `NamedAttributeStringArgumentSyntax`. 
+  /// Visit a `NamedAttributeStringArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: NamedAttributeStringArgumentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DeclNameSyntax`. 
+  /// Visit a `DeclNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ImplementsAttributeArgumentsSyntax`. 
+  /// Visit a `ImplementsAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ObjCSelectorPieceSyntax`. 
+  /// Visit a `ObjCSelectorPieceSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjCSelectorPieceSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ObjCSelectorSyntax`. 
+  /// Visit a `ObjCSelectorSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjCSelectorSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ContinueStmtSyntax`. 
+  /// Visit a `ContinueStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ContinueStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `WhileStmtSyntax`. 
+  /// Visit a `WhileStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: WhileStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `DeferStmtSyntax`. 
+  /// Visit a `DeferStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeferStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `ExpressionStmtSyntax`. 
+  /// Visit a `ExpressionStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExpressionStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `SwitchCaseListSyntax`. 
+  /// Visit a `SwitchCaseListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `RepeatWhileStmtSyntax`. 
+  /// Visit a `RepeatWhileStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: RepeatWhileStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `GuardStmtSyntax`. 
+  /// Visit a `GuardStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GuardStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `WhereClauseSyntax`. 
+  /// Visit a `WhereClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: WhereClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ForInStmtSyntax`. 
+  /// Visit a `ForInStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ForInStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `SwitchStmtSyntax`. 
+  /// Visit a `SwitchStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `CatchClauseListSyntax`. 
+  /// Visit a `CatchClauseListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchClauseListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DoStmtSyntax`. 
+  /// Visit a `DoStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DoStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `ReturnStmtSyntax`. 
+  /// Visit a `ReturnStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ReturnStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `YieldStmtSyntax`. 
+  /// Visit a `YieldStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `YieldListSyntax`. 
+  /// Visit a `YieldListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `FallthroughStmtSyntax`. 
+  /// Visit a `FallthroughStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FallthroughStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `BreakStmtSyntax`. 
+  /// Visit a `BreakStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: BreakStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `CaseItemListSyntax`. 
+  /// Visit a `CaseItemListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CaseItemListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ConditionElementSyntax`. 
+  /// Visit a `ConditionElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConditionElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AvailabilityConditionSyntax`. 
+  /// Visit a `AvailabilityConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityConditionSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `MatchingPatternConditionSyntax`. 
+  /// Visit a `MatchingPatternConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MatchingPatternConditionSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `OptionalBindingConditionSyntax`. 
+  /// Visit a `OptionalBindingConditionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OptionalBindingConditionSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ConditionElementListSyntax`. 
+  /// Visit a `ConditionElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConditionElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `DeclarationStmtSyntax`. 
+  /// Visit a `DeclarationStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclarationStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `ThrowStmtSyntax`. 
+  /// Visit a `ThrowStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ThrowStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `IfStmtSyntax`. 
+  /// Visit a `IfStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IfStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `ElseIfContinuationSyntax`. 
+  /// Visit a `ElseIfContinuationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ElseIfContinuationSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ElseBlockSyntax`. 
+  /// Visit a `ElseBlockSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ElseBlockSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SwitchCaseSyntax`. 
+  /// Visit a `SwitchCaseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SwitchDefaultLabelSyntax`. 
+  /// Visit a `SwitchDefaultLabelSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchDefaultLabelSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CaseItemSyntax`. 
+  /// Visit a `CaseItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CaseItemSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SwitchCaseLabelSyntax`. 
+  /// Visit a `SwitchCaseLabelSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseLabelSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CatchClauseSyntax`. 
+  /// Visit a `CatchClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `PoundAssertStmtSyntax`. 
+  /// Visit a `PoundAssertStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundAssertStmtSyntax) -> StmtSyntax {
-    return visitChildren(node) as! StmtSyntax
+    return StmtSyntax(visitChildren(node))
   }
 
-  /// Visit a `GenericWhereClauseSyntax`. 
+  /// Visit a `GenericWhereClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericWhereClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericRequirementListSyntax`. 
+  /// Visit a `GenericRequirementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericRequirementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericRequirementSyntax`. 
+  /// Visit a `GenericRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericRequirementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SameTypeRequirementSyntax`. 
+  /// Visit a `SameTypeRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SameTypeRequirementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericParameterListSyntax`. 
+  /// Visit a `GenericParameterListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericParameterListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericParameterSyntax`. 
+  /// Visit a `GenericParameterSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericParameterSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericParameterClauseSyntax`. 
+  /// Visit a `GenericParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericParameterClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ConformanceRequirementSyntax`. 
+  /// Visit a `ConformanceRequirementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConformanceRequirementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `SimpleTypeIdentifierSyntax`. 
+  /// Visit a `SimpleTypeIdentifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SimpleTypeIdentifierSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `MemberTypeIdentifierSyntax`. 
+  /// Visit a `MemberTypeIdentifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberTypeIdentifierSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `ClassRestrictionTypeSyntax`. 
+  /// Visit a `ClassRestrictionTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClassRestrictionTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `ArrayTypeSyntax`. 
+  /// Visit a `ArrayTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrayTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `DictionaryTypeSyntax`. 
+  /// Visit a `DictionaryTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DictionaryTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `MetatypeTypeSyntax`. 
+  /// Visit a `MetatypeTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MetatypeTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `OptionalTypeSyntax`. 
+  /// Visit a `OptionalTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OptionalTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `SomeTypeSyntax`. 
+  /// Visit a `SomeTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SomeTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `ImplicitlyUnwrappedOptionalTypeSyntax`. 
+  /// Visit a `ImplicitlyUnwrappedOptionalTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `CompositionTypeElementSyntax`. 
+  /// Visit a `CompositionTypeElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CompositionTypeElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CompositionTypeElementListSyntax`. 
+  /// Visit a `CompositionTypeElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CompositionTypeElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `CompositionTypeSyntax`. 
+  /// Visit a `CompositionTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CompositionTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `TupleTypeElementSyntax`. 
+  /// Visit a `TupleTypeElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleTypeElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TupleTypeElementListSyntax`. 
+  /// Visit a `TupleTypeElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleTypeElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TupleTypeSyntax`. 
+  /// Visit a `TupleTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `FunctionTypeSyntax`. 
+  /// Visit a `FunctionTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `AttributedTypeSyntax`. 
+  /// Visit a `AttributedTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AttributedTypeSyntax) -> TypeSyntax {
-    return visitChildren(node) as! TypeSyntax
+    return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `GenericArgumentListSyntax`. 
+  /// Visit a `GenericArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericArgumentListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericArgumentSyntax`. 
+  /// Visit a `GenericArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericArgumentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `GenericArgumentClauseSyntax`. 
+  /// Visit a `GenericArgumentClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericArgumentClauseSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `TypeAnnotationSyntax`. 
+  /// Visit a `TypeAnnotationSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeAnnotationSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `EnumCasePatternSyntax`. 
+  /// Visit a `EnumCasePatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCasePatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `IsTypePatternSyntax`. 
+  /// Visit a `IsTypePatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IsTypePatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `OptionalPatternSyntax`. 
+  /// Visit a `OptionalPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OptionalPatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `IdentifierPatternSyntax`. 
+  /// Visit a `IdentifierPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IdentifierPatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `AsTypePatternSyntax`. 
+  /// Visit a `AsTypePatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AsTypePatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `TuplePatternSyntax`. 
+  /// Visit a `TuplePatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TuplePatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `WildcardPatternSyntax`. 
+  /// Visit a `WildcardPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: WildcardPatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `TuplePatternElementSyntax`. 
+  /// Visit a `TuplePatternElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TuplePatternElementSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ExpressionPatternSyntax`. 
+  /// Visit a `ExpressionPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExpressionPatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `TuplePatternElementListSyntax`. 
+  /// Visit a `TuplePatternElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TuplePatternElementListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `ValueBindingPatternSyntax`. 
+  /// Visit a `ValueBindingPatternSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ValueBindingPatternSyntax) -> PatternSyntax {
-    return visitChildren(node) as! PatternSyntax
+    return PatternSyntax(visitChildren(node))
   }
 
-  /// Visit a `AvailabilitySpecListSyntax`. 
+  /// Visit a `AvailabilitySpecListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilitySpecListSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AvailabilityArgumentSyntax`. 
+  /// Visit a `AvailabilityArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityArgumentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AvailabilityLabeledArgumentSyntax`. 
+  /// Visit a `AvailabilityLabeledArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `AvailabilityVersionRestrictionSyntax`. 
+  /// Visit a `AvailabilityVersionRestrictionSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
-  /// Visit a `VersionTupleSyntax`. 
+  /// Visit a `VersionTupleSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: VersionTupleSyntax) -> Syntax {
-    return visitChildren(node) 
+    return Syntax(visitChildren(node))
   }
 
 
@@ -1575,14 +1575,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ token: TokenSyntax) -> Syntax {
-    return token
+    return Syntax(token)
   }
   
-  /// Visit a `UnknownSyntax`. 
+  /// Visit an `UnknownSyntax`.
   ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node or `nil`.
+  ///   - Returns: the rewritten node
   open func visit(_ node: UnknownSyntax) -> Syntax {
-    return visitChildren(node)
+    return Syntax(visitChildren(node))
   }
 
   /// The function called before visiting the node and its descendents.
@@ -1608,2059 +1608,2285 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   public func visit(_ node: Syntax) -> Syntax {
-    return visit(node.base.data)
+    return visit(node.data)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnknownDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnknownExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnknownStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnknownTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnknownPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCodeBlockItemSyntax(_ data: SyntaxData) -> Syntax {
       let node = CodeBlockItemSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCodeBlockItemListSyntax(_ data: SyntaxData) -> Syntax {
       let node = CodeBlockItemListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCodeBlockSyntax(_ data: SyntaxData) -> Syntax {
       let node = CodeBlockSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplInOutExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = InOutExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundColumnExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundColumnExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = TupleExprElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplArrayElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ArrayElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDictionaryElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = DictionaryElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplStringLiteralSegmentsSyntax(_ data: SyntaxData) -> Syntax {
       let node = StringLiteralSegmentsSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTryExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = TryExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclNameArgumentSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclNameArgumentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclNameArgumentListSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclNameArgumentListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclNameArgumentsSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclNameArgumentsSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIdentifierExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = IdentifierExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSuperRefExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = SuperRefExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplNilLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = NilLiteralExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDiscardAssignmentExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = DiscardAssignmentExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAssignmentExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = AssignmentExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSequenceExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = SequenceExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExprListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ExprListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundLineExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundLineExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundFileExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundFileExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundFunctionExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundFunctionExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundDsohandleExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundDsohandleExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSymbolicReferenceExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = SymbolicReferenceExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrefixOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrefixOperatorExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = BinaryOperatorExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplArrowExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ArrowExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = FloatLiteralExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = TupleExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplArrayExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ArrayExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDictionaryExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = DictionaryExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleExprElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = TupleExprElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplArrayElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = ArrayElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDictionaryElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = DictionaryElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = IntegerLiteralExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = BooleanLiteralExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTernaryExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = TernaryExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMemberAccessExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = MemberAccessExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIsExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = IsExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAsExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = AsExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypeExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureCaptureItemSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureCaptureItemSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureCaptureItemListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureCaptureItemListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureCaptureSignatureSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureCaptureSignatureSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureParamSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureParamSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureParamListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureParamListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureSignatureSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureSignatureSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClosureExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClosureExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnresolvedPatternExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnresolvedPatternExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionCallExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSubscriptExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = SubscriptExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOptionalChainingExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = OptionalChainingExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplForcedValueExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ForcedValueExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPostfixUnaryExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PostfixUnaryExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSpecializeExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = SpecializeExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplStringSegmentSyntax(_ data: SyntaxData) -> Syntax {
       let node = StringSegmentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) -> Syntax {
       let node = ExpressionSegmentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplStringLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = StringLiteralExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplKeyPathExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = KeyPathExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplKeyPathBaseExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = KeyPathBaseExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjcNamePieceSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjcNamePieceSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjcNameSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjcNameSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjcKeyPathExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjcKeyPathExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjcSelectorExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjcSelectorExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = EditorPlaceholderExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjectLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjectLiteralExprSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypeInitializerClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypealiasDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypealiasDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAssociatedtypeDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = AssociatedtypeDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionParameterListSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionParameterListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = ParameterClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplReturnClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = ReturnClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionSignatureSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionSignatureSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIfConfigClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = IfConfigClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIfConfigClauseListSyntax(_ data: SyntaxData) -> Syntax {
       let node = IfConfigClauseListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIfConfigDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = IfConfigDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundErrorDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundErrorDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundWarningDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundWarningDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundSourceLocationSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundSourceLocationSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundSourceLocationArgsSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundSourceLocationArgsSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclModifierSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclModifierSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplInheritedTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = InheritedTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplInheritedTypeListSyntax(_ data: SyntaxData) -> Syntax {
       let node = InheritedTypeListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeInheritanceClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypeInheritanceClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClassDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClassDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplStructDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = StructDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplProtocolDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = ProtocolDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExtensionDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = ExtensionDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMemberDeclBlockSyntax(_ data: SyntaxData) -> Syntax {
       let node = MemberDeclBlockSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMemberDeclListSyntax(_ data: SyntaxData) -> Syntax {
       let node = MemberDeclListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMemberDeclListItemSyntax(_ data: SyntaxData) -> Syntax {
       let node = MemberDeclListItemSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSourceFileSyntax(_ data: SyntaxData) -> Syntax {
       let node = SourceFileSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplInitializerClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = InitializerClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionParameterSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionParameterSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplModifierListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ModifierListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplInitializerDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = InitializerDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeinitializerDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSubscriptDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = SubscriptDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessLevelModifierSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessLevelModifierSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessPathComponentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessPathSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessPathSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplImportDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = ImportDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorParameterSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessorParameterSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessorDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorListSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessorListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorBlockSyntax(_ data: SyntaxData) -> Syntax {
       let node = AccessorBlockSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPatternBindingSyntax(_ data: SyntaxData) -> Syntax {
       let node = PatternBindingSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPatternBindingListSyntax(_ data: SyntaxData) -> Syntax {
       let node = PatternBindingListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplVariableDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = VariableDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = EnumCaseElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEnumCaseElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = EnumCaseElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEnumCaseDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = EnumCaseDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEnumDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = EnumDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOperatorDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = OperatorDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIdentifierListSyntax(_ data: SyntaxData) -> Syntax {
       let node = IdentifierListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOperatorPrecedenceAndTypesSyntax(_ data: SyntaxData) -> Syntax {
       let node = OperatorPrecedenceAndTypesSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupDeclSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupAttributeListSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupAttributeListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupRelationSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupRelationSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupNameListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupNameElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupNameElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupAssignmentSyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupAssignmentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPrecedenceGroupAssociativitySyntax(_ data: SyntaxData) -> Syntax {
       let node = PrecedenceGroupAssociativitySyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTokenListSyntax(_ data: SyntaxData) -> Syntax {
       let node = TokenListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplNonEmptyTokenListSyntax(_ data: SyntaxData) -> Syntax {
       let node = NonEmptyTokenListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCustomAttributeSyntax(_ data: SyntaxData) -> Syntax {
       let node = CustomAttributeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAttributeSyntax(_ data: SyntaxData) -> Syntax {
       let node = AttributeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAttributeListSyntax(_ data: SyntaxData) -> Syntax {
       let node = AttributeListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSpecializeAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
       let node = SpecializeAttributeSpecListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) -> Syntax {
       let node = LabeledSpecializeEntrySyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) -> Syntax {
       let node = NamedAttributeStringArgumentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclNameSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclNameSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplImplementsAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
       let node = ImplementsAttributeArgumentsSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjCSelectorPieceSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjCSelectorPieceSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplObjCSelectorSyntax(_ data: SyntaxData) -> Syntax {
       let node = ObjCSelectorSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplContinueStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ContinueStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplWhileStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = WhileStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeferStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExpressionStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ExpressionStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) -> Syntax {
       let node = SwitchCaseListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = RepeatWhileStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGuardStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = GuardStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplWhereClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = WhereClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplForInStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ForInStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = SwitchStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCatchClauseListSyntax(_ data: SyntaxData) -> Syntax {
       let node = CatchClauseListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDoStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = DoStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplReturnStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ReturnStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplYieldStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = YieldStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplYieldListSyntax(_ data: SyntaxData) -> Syntax {
       let node = YieldListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFallthroughStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = FallthroughStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBreakStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = BreakStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCaseItemListSyntax(_ data: SyntaxData) -> Syntax {
       let node = CaseItemListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConditionElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = ConditionElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilityConditionSyntax(_ data: SyntaxData) -> Syntax {
       let node = AvailabilityConditionSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMatchingPatternConditionSyntax(_ data: SyntaxData) -> Syntax {
       let node = MatchingPatternConditionSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOptionalBindingConditionSyntax(_ data: SyntaxData) -> Syntax {
       let node = OptionalBindingConditionSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConditionElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ConditionElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclarationStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclarationStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplThrowStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ThrowStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIfStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = IfStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplElseIfContinuationSyntax(_ data: SyntaxData) -> Syntax {
       let node = ElseIfContinuationSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplElseBlockSyntax(_ data: SyntaxData) -> Syntax {
       let node = ElseBlockSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchCaseSyntax(_ data: SyntaxData) -> Syntax {
       let node = SwitchCaseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) -> Syntax {
       let node = SwitchDefaultLabelSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCaseItemSyntax(_ data: SyntaxData) -> Syntax {
       let node = CaseItemSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) -> Syntax {
       let node = SwitchCaseLabelSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCatchClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = CatchClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundAssertStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundAssertStmtSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericWhereClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericWhereClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericRequirementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericRequirementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericRequirementSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericRequirementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSameTypeRequirementSyntax(_ data: SyntaxData) -> Syntax {
       let node = SameTypeRequirementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericParameterListSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericParameterListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericParameterSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericParameterSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericParameterClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConformanceRequirementSyntax(_ data: SyntaxData) -> Syntax {
       let node = ConformanceRequirementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) -> Syntax {
       let node = SimpleTypeIdentifierSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMemberTypeIdentifierSyntax(_ data: SyntaxData) -> Syntax {
       let node = MemberTypeIdentifierSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClassRestrictionTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClassRestrictionTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplArrayTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = ArrayTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDictionaryTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = DictionaryTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplMetatypeTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = MetatypeTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOptionalTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = OptionalTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSomeTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = SomeTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplImplicitlyUnwrappedOptionalTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCompositionTypeElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = CompositionTypeElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCompositionTypeElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = CompositionTypeElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCompositionTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = CompositionTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = TupleTypeElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleTypeElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = TupleTypeElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = TupleTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAttributedTypeSyntax(_ data: SyntaxData) -> Syntax {
       let node = AttributedTypeSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericArgumentListSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericArgumentListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericArgumentSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericArgumentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericArgumentClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericArgumentClauseSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) -> Syntax {
       let node = TypeAnnotationSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEnumCasePatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = EnumCasePatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIsTypePatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = IsTypePatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplOptionalPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = OptionalPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = IdentifierPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAsTypePatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = AsTypePatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTuplePatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = TuplePatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplWildcardPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = WildcardPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTuplePatternElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = TuplePatternElementSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplExpressionPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = ExpressionPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTuplePatternElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = TuplePatternElementListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplValueBindingPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = ValueBindingPatternSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
-      return visit(node)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilitySpecListSyntax(_ data: SyntaxData) -> Syntax {
       let node = AvailabilitySpecListSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) -> Syntax {
       let node = AvailabilityArgumentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) -> Syntax {
       let node = AvailabilityLabeledArgumentSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilityVersionRestrictionSyntax(_ data: SyntaxData) -> Syntax {
       let node = AvailabilityVersionRestrictionSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplVersionTupleSyntax(_ data: SyntaxData) -> Syntax {
       let node = VersionTupleSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
   }
 
 
-  final func visit(_ data: SyntaxData) -> Syntax {
-    // Create the node types directly instead of going through `makeSyntax()`
-    // which has additional cost for casting back and forth from `_SyntaxBase`.
+  private func visit(_ data: SyntaxData) -> Syntax {
     switch data.raw.kind {
     case .token:
       let node = TokenSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
     case .unknown:
       let node = UnknownSyntax(data)
-      visitPre(node)
-      defer { visitPost(node) }
-      if let newNode = visitAny(node) { return newNode }
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
       return visit(node)
     // The implementation of every generated case goes into its own function. This
     // circumvents an issue where the compiler allocates stack space for every
@@ -4121,9 +4347,9 @@ open class SyntaxRewriter {
     }
   }
 
-  final func visitChildren(_ nodeS: Syntax) -> Syntax {
-    let node = nodeS.base
-
+  private func visitChildren<SyntaxType: SyntaxProtocol>(
+    _ node: SyntaxType
+  ) -> SyntaxType {
     // Walk over all children of this node and rewrite them. Don't store any 
     // rewritten nodes until the first non-`nil` value is encountered. When this 
     // happens, retrieve all previous syntax nodes from the parent node to 
@@ -4135,7 +4361,13 @@ open class SyntaxRewriter {
     // nodes are being collected.
     var newLayout: ContiguousArray<RawSyntax?>?
 
-    for (i, (raw, info)) in RawSyntaxChildren(node).enumerated() {
+    let syntaxNode = node._syntaxNode
+    let parentBox = SyntaxBox(syntaxNode)
+
+    // Incrementing i manually is faster than using .enumerated()
+    var childIndex = 0
+    for (raw, info) in RawSyntaxChildren(syntaxNode) {
+      defer { childIndex += 1 }
       guard let child = raw else {
         // Node does not exist. If we are collecting rewritten nodes, we need to 
         // collect this one as well, otherwise we can ignore it.
@@ -4147,10 +4379,10 @@ open class SyntaxRewriter {
 
       // Build the Syntax node to rewrite
       let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
-      let data = SyntaxData(absoluteRaw, parent: node)
+      let data = SyntaxData(absoluteRaw, parentBox: parentBox)
       
       let rewritten = visit(data)
-      if rewritten.base.data.absoluteRaw.info.nodeId != info.nodeId {
+      if rewritten.data.nodeId != info.nodeId {
         // The node was rewritten, let's handle it
         if newLayout == nil {
           // We have not yet collected any previous rewritten nodes. Initialize
@@ -4161,7 +4393,7 @@ open class SyntaxRewriter {
           // reserves enough capacity for the entire layout.
           newLayout = ContiguousArray<RawSyntax?>()
           newLayout!.reserveCapacity(node.raw.numberOfChildren)
-          for j in 0..<i {
+          for j in 0..<childIndex {
             newLayout!.append(node.raw.child(at: j))
           }
         }
@@ -4185,10 +4417,10 @@ open class SyntaxRewriter {
       assert(newLayout.count == node.raw.numberOfChildren)
       
       let newRaw = node.raw.replacingLayout(Array(newLayout))
-      return makeSyntax(.forRoot(newRaw))
+      return SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
     } else {
       // No child node was rewritten. So no need to change this node as well.
-      return nodeS
+      return node
     }
 
   }
@@ -4205,2703 +4437,5229 @@ public enum SyntaxVisitorContinueKind {
   case skipChildren
 }
 
-public protocol SyntaxVisitor {
+open class SyntaxVisitor {
+  public init() {}
+
+  /// Walk all nodes of the given syntax tree, calling the corresponding `visit` 
+  /// function for every node that is being visited.
+  public func walk<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+    visit(node.data)
+  }
+
   /// Visiting `UnknownDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `UnknownDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnknownDeclSyntax)
+  open func visitPost(_ node: UnknownDeclSyntax) {}
   /// Visiting `UnknownExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `UnknownExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnknownExprSyntax)
+  open func visitPost(_ node: UnknownExprSyntax) {}
   /// Visiting `UnknownStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `UnknownStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnknownStmtSyntax)
+  open func visitPost(_ node: UnknownStmtSyntax) {}
   /// Visiting `UnknownTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `UnknownTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnknownTypeSyntax)
+  open func visitPost(_ node: UnknownTypeSyntax) {}
   /// Visiting `UnknownPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `UnknownPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnknownPatternSyntax)
+  open func visitPost(_ node: UnknownPatternSyntax) {}
   /// Visiting `CodeBlockItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CodeBlockItemSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CodeBlockItemSyntax)
+  open func visitPost(_ node: CodeBlockItemSyntax) {}
   /// Visiting `CodeBlockItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CodeBlockItemListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CodeBlockItemListSyntax)
+  open func visitPost(_ node: CodeBlockItemListSyntax) {}
   /// Visiting `CodeBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CodeBlockSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CodeBlockSyntax)
+  open func visitPost(_ node: CodeBlockSyntax) {}
   /// Visiting `InOutExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `InOutExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: InOutExprSyntax)
+  open func visitPost(_ node: InOutExprSyntax) {}
   /// Visiting `PoundColumnExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundColumnExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundColumnExprSyntax)
+  open func visitPost(_ node: PoundColumnExprSyntax) {}
   /// Visiting `TupleExprElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TupleExprElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TupleExprElementListSyntax)
+  open func visitPost(_ node: TupleExprElementListSyntax) {}
   /// Visiting `ArrayElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ArrayElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ArrayElementListSyntax)
+  open func visitPost(_ node: ArrayElementListSyntax) {}
   /// Visiting `DictionaryElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DictionaryElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DictionaryElementListSyntax)
+  open func visitPost(_ node: DictionaryElementListSyntax) {}
   /// Visiting `StringLiteralSegmentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `StringLiteralSegmentsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: StringLiteralSegmentsSyntax)
+  open func visitPost(_ node: StringLiteralSegmentsSyntax) {}
   /// Visiting `TryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TryExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TryExprSyntax)
+  open func visitPost(_ node: TryExprSyntax) {}
   /// Visiting `DeclNameArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeclNameArgumentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeclNameArgumentSyntax)
+  open func visitPost(_ node: DeclNameArgumentSyntax) {}
   /// Visiting `DeclNameArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeclNameArgumentListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeclNameArgumentListSyntax)
+  open func visitPost(_ node: DeclNameArgumentListSyntax) {}
   /// Visiting `DeclNameArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeclNameArgumentsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeclNameArgumentsSyntax)
+  open func visitPost(_ node: DeclNameArgumentsSyntax) {}
   /// Visiting `IdentifierExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IdentifierExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IdentifierExprSyntax)
+  open func visitPost(_ node: IdentifierExprSyntax) {}
   /// Visiting `SuperRefExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SuperRefExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SuperRefExprSyntax)
+  open func visitPost(_ node: SuperRefExprSyntax) {}
   /// Visiting `NilLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `NilLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: NilLiteralExprSyntax)
+  open func visitPost(_ node: NilLiteralExprSyntax) {}
   /// Visiting `DiscardAssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DiscardAssignmentExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DiscardAssignmentExprSyntax)
+  open func visitPost(_ node: DiscardAssignmentExprSyntax) {}
   /// Visiting `AssignmentExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AssignmentExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AssignmentExprSyntax)
+  open func visitPost(_ node: AssignmentExprSyntax) {}
   /// Visiting `SequenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SequenceExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SequenceExprSyntax)
+  open func visitPost(_ node: SequenceExprSyntax) {}
   /// Visiting `ExprListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ExprListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ExprListSyntax)
+  open func visitPost(_ node: ExprListSyntax) {}
   /// Visiting `PoundLineExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundLineExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundLineExprSyntax)
+  open func visitPost(_ node: PoundLineExprSyntax) {}
   /// Visiting `PoundFileExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundFileExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundFileExprSyntax)
+  open func visitPost(_ node: PoundFileExprSyntax) {}
   /// Visiting `PoundFunctionExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundFunctionExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundFunctionExprSyntax)
+  open func visitPost(_ node: PoundFunctionExprSyntax) {}
   /// Visiting `PoundDsohandleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundDsohandleExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundDsohandleExprSyntax)
+  open func visitPost(_ node: PoundDsohandleExprSyntax) {}
   /// Visiting `SymbolicReferenceExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SymbolicReferenceExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SymbolicReferenceExprSyntax)
+  open func visitPost(_ node: SymbolicReferenceExprSyntax) {}
   /// Visiting `PrefixOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrefixOperatorExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrefixOperatorExprSyntax)
+  open func visitPost(_ node: PrefixOperatorExprSyntax) {}
   /// Visiting `BinaryOperatorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `BinaryOperatorExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: BinaryOperatorExprSyntax)
+  open func visitPost(_ node: BinaryOperatorExprSyntax) {}
   /// Visiting `ArrowExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ArrowExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ArrowExprSyntax)
+  open func visitPost(_ node: ArrowExprSyntax) {}
   /// Visiting `FloatLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FloatLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FloatLiteralExprSyntax)
+  open func visitPost(_ node: FloatLiteralExprSyntax) {}
   /// Visiting `TupleExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TupleExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TupleExprSyntax)
+  open func visitPost(_ node: TupleExprSyntax) {}
   /// Visiting `ArrayExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ArrayExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ArrayExprSyntax)
+  open func visitPost(_ node: ArrayExprSyntax) {}
   /// Visiting `DictionaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DictionaryExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DictionaryExprSyntax)
+  open func visitPost(_ node: DictionaryExprSyntax) {}
   /// Visiting `TupleExprElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TupleExprElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TupleExprElementSyntax)
+  open func visitPost(_ node: TupleExprElementSyntax) {}
   /// Visiting `ArrayElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ArrayElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ArrayElementSyntax)
+  open func visitPost(_ node: ArrayElementSyntax) {}
   /// Visiting `DictionaryElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DictionaryElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DictionaryElementSyntax)
+  open func visitPost(_ node: DictionaryElementSyntax) {}
   /// Visiting `IntegerLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IntegerLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IntegerLiteralExprSyntax)
+  open func visitPost(_ node: IntegerLiteralExprSyntax) {}
   /// Visiting `BooleanLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `BooleanLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: BooleanLiteralExprSyntax)
+  open func visitPost(_ node: BooleanLiteralExprSyntax) {}
   /// Visiting `TernaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TernaryExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TernaryExprSyntax)
+  open func visitPost(_ node: TernaryExprSyntax) {}
   /// Visiting `MemberAccessExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MemberAccessExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MemberAccessExprSyntax)
+  open func visitPost(_ node: MemberAccessExprSyntax) {}
   /// Visiting `IsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IsExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IsExprSyntax)
+  open func visitPost(_ node: IsExprSyntax) {}
   /// Visiting `AsExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AsExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AsExprSyntax)
+  open func visitPost(_ node: AsExprSyntax) {}
   /// Visiting `TypeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TypeExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TypeExprSyntax)
+  open func visitPost(_ node: TypeExprSyntax) {}
   /// Visiting `ClosureCaptureItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureCaptureItemSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureCaptureItemSyntax)
+  open func visitPost(_ node: ClosureCaptureItemSyntax) {}
   /// Visiting `ClosureCaptureItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureCaptureItemListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureCaptureItemListSyntax)
+  open func visitPost(_ node: ClosureCaptureItemListSyntax) {}
   /// Visiting `ClosureCaptureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureCaptureSignatureSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureCaptureSignatureSyntax)
+  open func visitPost(_ node: ClosureCaptureSignatureSyntax) {}
   /// Visiting `ClosureParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureParamSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureParamSyntax)
+  open func visitPost(_ node: ClosureParamSyntax) {}
   /// Visiting `ClosureParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureParamListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureParamListSyntax)
+  open func visitPost(_ node: ClosureParamListSyntax) {}
   /// Visiting `ClosureSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureSignatureSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureSignatureSyntax)
+  open func visitPost(_ node: ClosureSignatureSyntax) {}
   /// Visiting `ClosureExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClosureExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClosureExprSyntax)
+  open func visitPost(_ node: ClosureExprSyntax) {}
   /// Visiting `UnresolvedPatternExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `UnresolvedPatternExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnresolvedPatternExprSyntax)
+  open func visitPost(_ node: UnresolvedPatternExprSyntax) {}
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FunctionCallExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FunctionCallExprSyntax)
+  open func visitPost(_ node: FunctionCallExprSyntax) {}
   /// Visiting `SubscriptExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SubscriptExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SubscriptExprSyntax)
+  open func visitPost(_ node: SubscriptExprSyntax) {}
   /// Visiting `OptionalChainingExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `OptionalChainingExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: OptionalChainingExprSyntax)
+  open func visitPost(_ node: OptionalChainingExprSyntax) {}
   /// Visiting `ForcedValueExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ForcedValueExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ForcedValueExprSyntax)
+  open func visitPost(_ node: ForcedValueExprSyntax) {}
   /// Visiting `PostfixUnaryExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PostfixUnaryExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PostfixUnaryExprSyntax)
+  open func visitPost(_ node: PostfixUnaryExprSyntax) {}
   /// Visiting `SpecializeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SpecializeExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SpecializeExprSyntax)
+  open func visitPost(_ node: SpecializeExprSyntax) {}
   /// Visiting `StringSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `StringSegmentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: StringSegmentSyntax)
+  open func visitPost(_ node: StringSegmentSyntax) {}
   /// Visiting `ExpressionSegmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ExpressionSegmentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ExpressionSegmentSyntax)
+  open func visitPost(_ node: ExpressionSegmentSyntax) {}
   /// Visiting `StringLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `StringLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: StringLiteralExprSyntax)
+  open func visitPost(_ node: StringLiteralExprSyntax) {}
   /// Visiting `KeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `KeyPathExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: KeyPathExprSyntax)
+  open func visitPost(_ node: KeyPathExprSyntax) {}
   /// Visiting `KeyPathBaseExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `KeyPathBaseExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: KeyPathBaseExprSyntax)
+  open func visitPost(_ node: KeyPathBaseExprSyntax) {}
   /// Visiting `ObjcNamePieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjcNamePieceSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjcNamePieceSyntax)
+  open func visitPost(_ node: ObjcNamePieceSyntax) {}
   /// Visiting `ObjcNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjcNameSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjcNameSyntax)
+  open func visitPost(_ node: ObjcNameSyntax) {}
   /// Visiting `ObjcKeyPathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjcKeyPathExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjcKeyPathExprSyntax)
+  open func visitPost(_ node: ObjcKeyPathExprSyntax) {}
   /// Visiting `ObjcSelectorExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjcSelectorExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjcSelectorExprSyntax)
+  open func visitPost(_ node: ObjcSelectorExprSyntax) {}
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `EditorPlaceholderExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: EditorPlaceholderExprSyntax)
+  open func visitPost(_ node: EditorPlaceholderExprSyntax) {}
   /// Visiting `ObjectLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjectLiteralExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjectLiteralExprSyntax)
+  open func visitPost(_ node: ObjectLiteralExprSyntax) {}
   /// Visiting `TypeInitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TypeInitializerClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TypeInitializerClauseSyntax)
+  open func visitPost(_ node: TypeInitializerClauseSyntax) {}
   /// Visiting `TypealiasDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TypealiasDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TypealiasDeclSyntax)
+  open func visitPost(_ node: TypealiasDeclSyntax) {}
   /// Visiting `AssociatedtypeDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AssociatedtypeDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AssociatedtypeDeclSyntax)
+  open func visitPost(_ node: AssociatedtypeDeclSyntax) {}
   /// Visiting `FunctionParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FunctionParameterListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FunctionParameterListSyntax)
+  open func visitPost(_ node: FunctionParameterListSyntax) {}
   /// Visiting `ParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ParameterClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ParameterClauseSyntax)
+  open func visitPost(_ node: ParameterClauseSyntax) {}
   /// Visiting `ReturnClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ReturnClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ReturnClauseSyntax)
+  open func visitPost(_ node: ReturnClauseSyntax) {}
   /// Visiting `FunctionSignatureSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FunctionSignatureSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FunctionSignatureSyntax)
+  open func visitPost(_ node: FunctionSignatureSyntax) {}
   /// Visiting `IfConfigClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IfConfigClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IfConfigClauseSyntax)
+  open func visitPost(_ node: IfConfigClauseSyntax) {}
   /// Visiting `IfConfigClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IfConfigClauseListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IfConfigClauseListSyntax)
+  open func visitPost(_ node: IfConfigClauseListSyntax) {}
   /// Visiting `IfConfigDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IfConfigDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IfConfigDeclSyntax)
+  open func visitPost(_ node: IfConfigDeclSyntax) {}
   /// Visiting `PoundErrorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundErrorDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundErrorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundErrorDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundErrorDeclSyntax)
+  open func visitPost(_ node: PoundErrorDeclSyntax) {}
   /// Visiting `PoundWarningDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundWarningDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundWarningDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundWarningDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundWarningDeclSyntax)
+  open func visitPost(_ node: PoundWarningDeclSyntax) {}
   /// Visiting `PoundSourceLocationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundSourceLocationSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundSourceLocationSyntax)
+  open func visitPost(_ node: PoundSourceLocationSyntax) {}
   /// Visiting `PoundSourceLocationArgsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundSourceLocationArgsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundSourceLocationArgsSyntax)
+  open func visitPost(_ node: PoundSourceLocationArgsSyntax) {}
   /// Visiting `DeclModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeclModifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeclModifierSyntax)
+  open func visitPost(_ node: DeclModifierSyntax) {}
   /// Visiting `InheritedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `InheritedTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: InheritedTypeSyntax)
+  open func visitPost(_ node: InheritedTypeSyntax) {}
   /// Visiting `InheritedTypeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `InheritedTypeListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: InheritedTypeListSyntax)
+  open func visitPost(_ node: InheritedTypeListSyntax) {}
   /// Visiting `TypeInheritanceClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TypeInheritanceClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TypeInheritanceClauseSyntax)
+  open func visitPost(_ node: TypeInheritanceClauseSyntax) {}
   /// Visiting `ClassDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClassDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClassDeclSyntax)
+  open func visitPost(_ node: ClassDeclSyntax) {}
   /// Visiting `StructDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `StructDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: StructDeclSyntax)
+  open func visitPost(_ node: StructDeclSyntax) {}
   /// Visiting `ProtocolDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ProtocolDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ProtocolDeclSyntax)
+  open func visitPost(_ node: ProtocolDeclSyntax) {}
   /// Visiting `ExtensionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ExtensionDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ExtensionDeclSyntax)
+  open func visitPost(_ node: ExtensionDeclSyntax) {}
   /// Visiting `MemberDeclBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MemberDeclBlockSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MemberDeclBlockSyntax)
+  open func visitPost(_ node: MemberDeclBlockSyntax) {}
   /// Visiting `MemberDeclListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MemberDeclListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MemberDeclListSyntax)
+  open func visitPost(_ node: MemberDeclListSyntax) {}
   /// Visiting `MemberDeclListItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MemberDeclListItemSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MemberDeclListItemSyntax)
+  open func visitPost(_ node: MemberDeclListItemSyntax) {}
   /// Visiting `SourceFileSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SourceFileSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SourceFileSyntax)
+  open func visitPost(_ node: SourceFileSyntax) {}
   /// Visiting `InitializerClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `InitializerClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: InitializerClauseSyntax)
+  open func visitPost(_ node: InitializerClauseSyntax) {}
   /// Visiting `FunctionParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FunctionParameterSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FunctionParameterSyntax)
+  open func visitPost(_ node: FunctionParameterSyntax) {}
   /// Visiting `ModifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ModifierListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ModifierListSyntax)
+  open func visitPost(_ node: ModifierListSyntax) {}
   /// Visiting `FunctionDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FunctionDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FunctionDeclSyntax)
+  open func visitPost(_ node: FunctionDeclSyntax) {}
   /// Visiting `InitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `InitializerDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: InitializerDeclSyntax)
+  open func visitPost(_ node: InitializerDeclSyntax) {}
   /// Visiting `DeinitializerDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeinitializerDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeinitializerDeclSyntax)
+  open func visitPost(_ node: DeinitializerDeclSyntax) {}
   /// Visiting `SubscriptDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SubscriptDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SubscriptDeclSyntax)
+  open func visitPost(_ node: SubscriptDeclSyntax) {}
   /// Visiting `AccessLevelModifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessLevelModifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessLevelModifierSyntax)
+  open func visitPost(_ node: AccessLevelModifierSyntax) {}
   /// Visiting `AccessPathComponentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessPathComponentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessPathComponentSyntax)
+  open func visitPost(_ node: AccessPathComponentSyntax) {}
   /// Visiting `AccessPathSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessPathSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessPathSyntax)
+  open func visitPost(_ node: AccessPathSyntax) {}
   /// Visiting `ImportDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ImportDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ImportDeclSyntax)
+  open func visitPost(_ node: ImportDeclSyntax) {}
   /// Visiting `AccessorParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessorParameterSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessorParameterSyntax)
+  open func visitPost(_ node: AccessorParameterSyntax) {}
   /// Visiting `AccessorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessorDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessorDeclSyntax)
+  open func visitPost(_ node: AccessorDeclSyntax) {}
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessorListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessorListSyntax)
+  open func visitPost(_ node: AccessorListSyntax) {}
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AccessorBlockSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AccessorBlockSyntax)
+  open func visitPost(_ node: AccessorBlockSyntax) {}
   /// Visiting `PatternBindingSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PatternBindingSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PatternBindingSyntax)
+  open func visitPost(_ node: PatternBindingSyntax) {}
   /// Visiting `PatternBindingListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PatternBindingListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PatternBindingListSyntax)
+  open func visitPost(_ node: PatternBindingListSyntax) {}
   /// Visiting `VariableDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `VariableDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: VariableDeclSyntax)
+  open func visitPost(_ node: VariableDeclSyntax) {}
   /// Visiting `EnumCaseElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `EnumCaseElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: EnumCaseElementSyntax)
+  open func visitPost(_ node: EnumCaseElementSyntax) {}
   /// Visiting `EnumCaseElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `EnumCaseElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: EnumCaseElementListSyntax)
+  open func visitPost(_ node: EnumCaseElementListSyntax) {}
   /// Visiting `EnumCaseDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `EnumCaseDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: EnumCaseDeclSyntax)
+  open func visitPost(_ node: EnumCaseDeclSyntax) {}
   /// Visiting `EnumDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `EnumDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: EnumDeclSyntax)
+  open func visitPost(_ node: EnumDeclSyntax) {}
   /// Visiting `OperatorDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `OperatorDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: OperatorDeclSyntax)
+  open func visitPost(_ node: OperatorDeclSyntax) {}
   /// Visiting `IdentifierListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IdentifierListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IdentifierListSyntax)
+  open func visitPost(_ node: IdentifierListSyntax) {}
   /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `OperatorPrecedenceAndTypesSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: OperatorPrecedenceAndTypesSyntax)
+  open func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {}
   /// Visiting `PrecedenceGroupDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupDeclSyntax)
+  open func visitPost(_ node: PrecedenceGroupDeclSyntax) {}
   /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupAttributeListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupAttributeListSyntax)
+  open func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {}
   /// Visiting `PrecedenceGroupRelationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupRelationSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupRelationSyntax)
+  open func visitPost(_ node: PrecedenceGroupRelationSyntax) {}
   /// Visiting `PrecedenceGroupNameListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupNameListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupNameListSyntax)
+  open func visitPost(_ node: PrecedenceGroupNameListSyntax) {}
   /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupNameElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupNameElementSyntax)
+  open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {}
   /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupAssignmentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupAssignmentSyntax)
+  open func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {}
   /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PrecedenceGroupAssociativitySyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PrecedenceGroupAssociativitySyntax)
+  open func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {}
   /// Visiting `TokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TokenListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TokenListSyntax)
+  open func visitPost(_ node: TokenListSyntax) {}
   /// Visiting `NonEmptyTokenListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `NonEmptyTokenListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: NonEmptyTokenListSyntax)
+  open func visitPost(_ node: NonEmptyTokenListSyntax) {}
   /// Visiting `CustomAttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CustomAttributeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CustomAttributeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CustomAttributeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CustomAttributeSyntax)
+  open func visitPost(_ node: CustomAttributeSyntax) {}
   /// Visiting `AttributeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AttributeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AttributeSyntax)
+  open func visitPost(_ node: AttributeSyntax) {}
   /// Visiting `AttributeListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AttributeListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AttributeListSyntax)
+  open func visitPost(_ node: AttributeListSyntax) {}
   /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SpecializeAttributeSpecListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SpecializeAttributeSpecListSyntax)
+  open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {}
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `LabeledSpecializeEntrySyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: LabeledSpecializeEntrySyntax)
+  open func visitPost(_ node: LabeledSpecializeEntrySyntax) {}
   /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `NamedAttributeStringArgumentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: NamedAttributeStringArgumentSyntax)
+  open func visitPost(_ node: NamedAttributeStringArgumentSyntax) {}
   /// Visiting `DeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeclNameSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeclNameSyntax)
+  open func visitPost(_ node: DeclNameSyntax) {}
   /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ImplementsAttributeArgumentsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ImplementsAttributeArgumentsSyntax)
+  open func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {}
   /// Visiting `ObjCSelectorPieceSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjCSelectorPieceSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjCSelectorPieceSyntax)
+  open func visitPost(_ node: ObjCSelectorPieceSyntax) {}
   /// Visiting `ObjCSelectorSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ObjCSelectorSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ObjCSelectorSyntax)
+  open func visitPost(_ node: ObjCSelectorSyntax) {}
   /// Visiting `ContinueStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ContinueStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ContinueStmtSyntax)
+  open func visitPost(_ node: ContinueStmtSyntax) {}
   /// Visiting `WhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `WhileStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: WhileStmtSyntax)
+  open func visitPost(_ node: WhileStmtSyntax) {}
   /// Visiting `DeferStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeferStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeferStmtSyntax)
+  open func visitPost(_ node: DeferStmtSyntax) {}
   /// Visiting `ExpressionStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ExpressionStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ExpressionStmtSyntax)
+  open func visitPost(_ node: ExpressionStmtSyntax) {}
   /// Visiting `SwitchCaseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SwitchCaseListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SwitchCaseListSyntax)
+  open func visitPost(_ node: SwitchCaseListSyntax) {}
   /// Visiting `RepeatWhileStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `RepeatWhileStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: RepeatWhileStmtSyntax)
+  open func visitPost(_ node: RepeatWhileStmtSyntax) {}
   /// Visiting `GuardStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GuardStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GuardStmtSyntax)
+  open func visitPost(_ node: GuardStmtSyntax) {}
   /// Visiting `WhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `WhereClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: WhereClauseSyntax)
+  open func visitPost(_ node: WhereClauseSyntax) {}
   /// Visiting `ForInStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ForInStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ForInStmtSyntax)
+  open func visitPost(_ node: ForInStmtSyntax) {}
   /// Visiting `SwitchStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SwitchStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SwitchStmtSyntax)
+  open func visitPost(_ node: SwitchStmtSyntax) {}
   /// Visiting `CatchClauseListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CatchClauseListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CatchClauseListSyntax)
+  open func visitPost(_ node: CatchClauseListSyntax) {}
   /// Visiting `DoStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DoStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DoStmtSyntax)
+  open func visitPost(_ node: DoStmtSyntax) {}
   /// Visiting `ReturnStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ReturnStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ReturnStmtSyntax)
+  open func visitPost(_ node: ReturnStmtSyntax) {}
   /// Visiting `YieldStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `YieldStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: YieldStmtSyntax)
+  open func visitPost(_ node: YieldStmtSyntax) {}
   /// Visiting `YieldListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `YieldListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: YieldListSyntax)
+  open func visitPost(_ node: YieldListSyntax) {}
   /// Visiting `FallthroughStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FallthroughStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FallthroughStmtSyntax)
+  open func visitPost(_ node: FallthroughStmtSyntax) {}
   /// Visiting `BreakStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `BreakStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: BreakStmtSyntax)
+  open func visitPost(_ node: BreakStmtSyntax) {}
   /// Visiting `CaseItemListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CaseItemListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CaseItemListSyntax)
+  open func visitPost(_ node: CaseItemListSyntax) {}
   /// Visiting `ConditionElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ConditionElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ConditionElementSyntax)
+  open func visitPost(_ node: ConditionElementSyntax) {}
   /// Visiting `AvailabilityConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AvailabilityConditionSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AvailabilityConditionSyntax)
+  open func visitPost(_ node: AvailabilityConditionSyntax) {}
   /// Visiting `MatchingPatternConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MatchingPatternConditionSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MatchingPatternConditionSyntax)
+  open func visitPost(_ node: MatchingPatternConditionSyntax) {}
   /// Visiting `OptionalBindingConditionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `OptionalBindingConditionSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: OptionalBindingConditionSyntax)
+  open func visitPost(_ node: OptionalBindingConditionSyntax) {}
   /// Visiting `ConditionElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ConditionElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ConditionElementListSyntax)
+  open func visitPost(_ node: ConditionElementListSyntax) {}
   /// Visiting `DeclarationStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DeclarationStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DeclarationStmtSyntax)
+  open func visitPost(_ node: DeclarationStmtSyntax) {}
   /// Visiting `ThrowStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ThrowStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ThrowStmtSyntax)
+  open func visitPost(_ node: ThrowStmtSyntax) {}
   /// Visiting `IfStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IfStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IfStmtSyntax)
+  open func visitPost(_ node: IfStmtSyntax) {}
   /// Visiting `ElseIfContinuationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ElseIfContinuationSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ElseIfContinuationSyntax)
+  open func visitPost(_ node: ElseIfContinuationSyntax) {}
   /// Visiting `ElseBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ElseBlockSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ElseBlockSyntax)
+  open func visitPost(_ node: ElseBlockSyntax) {}
   /// Visiting `SwitchCaseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SwitchCaseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SwitchCaseSyntax)
+  open func visitPost(_ node: SwitchCaseSyntax) {}
   /// Visiting `SwitchDefaultLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SwitchDefaultLabelSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SwitchDefaultLabelSyntax)
+  open func visitPost(_ node: SwitchDefaultLabelSyntax) {}
   /// Visiting `CaseItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CaseItemSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CaseItemSyntax)
+  open func visitPost(_ node: CaseItemSyntax) {}
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SwitchCaseLabelSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SwitchCaseLabelSyntax)
+  open func visitPost(_ node: SwitchCaseLabelSyntax) {}
   /// Visiting `CatchClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CatchClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CatchClauseSyntax)
+  open func visitPost(_ node: CatchClauseSyntax) {}
   /// Visiting `PoundAssertStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: PoundAssertStmtSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: PoundAssertStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `PoundAssertStmtSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: PoundAssertStmtSyntax)
+  open func visitPost(_ node: PoundAssertStmtSyntax) {}
   /// Visiting `GenericWhereClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericWhereClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericWhereClauseSyntax)
+  open func visitPost(_ node: GenericWhereClauseSyntax) {}
   /// Visiting `GenericRequirementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericRequirementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericRequirementListSyntax)
+  open func visitPost(_ node: GenericRequirementListSyntax) {}
   /// Visiting `GenericRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericRequirementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericRequirementSyntax)
+  open func visitPost(_ node: GenericRequirementSyntax) {}
   /// Visiting `SameTypeRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SameTypeRequirementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SameTypeRequirementSyntax)
+  open func visitPost(_ node: SameTypeRequirementSyntax) {}
   /// Visiting `GenericParameterListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericParameterListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericParameterListSyntax)
+  open func visitPost(_ node: GenericParameterListSyntax) {}
   /// Visiting `GenericParameterSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericParameterSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericParameterSyntax)
+  open func visitPost(_ node: GenericParameterSyntax) {}
   /// Visiting `GenericParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericParameterClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericParameterClauseSyntax)
+  open func visitPost(_ node: GenericParameterClauseSyntax) {}
   /// Visiting `ConformanceRequirementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ConformanceRequirementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ConformanceRequirementSyntax)
+  open func visitPost(_ node: ConformanceRequirementSyntax) {}
   /// Visiting `SimpleTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SimpleTypeIdentifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SimpleTypeIdentifierSyntax)
+  open func visitPost(_ node: SimpleTypeIdentifierSyntax) {}
   /// Visiting `MemberTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MemberTypeIdentifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MemberTypeIdentifierSyntax)
+  open func visitPost(_ node: MemberTypeIdentifierSyntax) {}
   /// Visiting `ClassRestrictionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ClassRestrictionTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ClassRestrictionTypeSyntax)
+  open func visitPost(_ node: ClassRestrictionTypeSyntax) {}
   /// Visiting `ArrayTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ArrayTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ArrayTypeSyntax)
+  open func visitPost(_ node: ArrayTypeSyntax) {}
   /// Visiting `DictionaryTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `DictionaryTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: DictionaryTypeSyntax)
+  open func visitPost(_ node: DictionaryTypeSyntax) {}
   /// Visiting `MetatypeTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `MetatypeTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: MetatypeTypeSyntax)
+  open func visitPost(_ node: MetatypeTypeSyntax) {}
   /// Visiting `OptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `OptionalTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: OptionalTypeSyntax)
+  open func visitPost(_ node: OptionalTypeSyntax) {}
   /// Visiting `SomeTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `SomeTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: SomeTypeSyntax)
+  open func visitPost(_ node: SomeTypeSyntax) {}
   /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ImplicitlyUnwrappedOptionalTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax)
+  open func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {}
   /// Visiting `CompositionTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CompositionTypeElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CompositionTypeElementSyntax)
+  open func visitPost(_ node: CompositionTypeElementSyntax) {}
   /// Visiting `CompositionTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CompositionTypeElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CompositionTypeElementListSyntax)
+  open func visitPost(_ node: CompositionTypeElementListSyntax) {}
   /// Visiting `CompositionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `CompositionTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: CompositionTypeSyntax)
+  open func visitPost(_ node: CompositionTypeSyntax) {}
   /// Visiting `TupleTypeElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TupleTypeElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TupleTypeElementSyntax)
+  open func visitPost(_ node: TupleTypeElementSyntax) {}
   /// Visiting `TupleTypeElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TupleTypeElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TupleTypeElementListSyntax)
+  open func visitPost(_ node: TupleTypeElementListSyntax) {}
   /// Visiting `TupleTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TupleTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TupleTypeSyntax)
+  open func visitPost(_ node: TupleTypeSyntax) {}
   /// Visiting `FunctionTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `FunctionTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: FunctionTypeSyntax)
+  open func visitPost(_ node: FunctionTypeSyntax) {}
   /// Visiting `AttributedTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AttributedTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AttributedTypeSyntax)
+  open func visitPost(_ node: AttributedTypeSyntax) {}
   /// Visiting `GenericArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericArgumentListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericArgumentListSyntax)
+  open func visitPost(_ node: GenericArgumentListSyntax) {}
   /// Visiting `GenericArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericArgumentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericArgumentSyntax)
+  open func visitPost(_ node: GenericArgumentSyntax) {}
   /// Visiting `GenericArgumentClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `GenericArgumentClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: GenericArgumentClauseSyntax)
+  open func visitPost(_ node: GenericArgumentClauseSyntax) {}
   /// Visiting `TypeAnnotationSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TypeAnnotationSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TypeAnnotationSyntax)
+  open func visitPost(_ node: TypeAnnotationSyntax) {}
   /// Visiting `EnumCasePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `EnumCasePatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: EnumCasePatternSyntax)
+  open func visitPost(_ node: EnumCasePatternSyntax) {}
   /// Visiting `IsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IsTypePatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IsTypePatternSyntax)
+  open func visitPost(_ node: IsTypePatternSyntax) {}
   /// Visiting `OptionalPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `OptionalPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: OptionalPatternSyntax)
+  open func visitPost(_ node: OptionalPatternSyntax) {}
   /// Visiting `IdentifierPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `IdentifierPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: IdentifierPatternSyntax)
+  open func visitPost(_ node: IdentifierPatternSyntax) {}
   /// Visiting `AsTypePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AsTypePatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AsTypePatternSyntax)
+  open func visitPost(_ node: AsTypePatternSyntax) {}
   /// Visiting `TuplePatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TuplePatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TuplePatternSyntax)
+  open func visitPost(_ node: TuplePatternSyntax) {}
   /// Visiting `WildcardPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `WildcardPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: WildcardPatternSyntax)
+  open func visitPost(_ node: WildcardPatternSyntax) {}
   /// Visiting `TuplePatternElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TuplePatternElementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TuplePatternElementSyntax)
+  open func visitPost(_ node: TuplePatternElementSyntax) {}
   /// Visiting `ExpressionPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ExpressionPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ExpressionPatternSyntax)
+  open func visitPost(_ node: ExpressionPatternSyntax) {}
   /// Visiting `TuplePatternElementListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `TuplePatternElementListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TuplePatternElementListSyntax)
+  open func visitPost(_ node: TuplePatternElementListSyntax) {}
   /// Visiting `ValueBindingPatternSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `ValueBindingPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: ValueBindingPatternSyntax)
+  open func visitPost(_ node: ValueBindingPatternSyntax) {}
   /// Visiting `AvailabilitySpecListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AvailabilitySpecListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AvailabilitySpecListSyntax)
+  open func visitPost(_ node: AvailabilitySpecListSyntax) {}
   /// Visiting `AvailabilityArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AvailabilityArgumentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AvailabilityArgumentSyntax)
+  open func visitPost(_ node: AvailabilityArgumentSyntax) {}
   /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AvailabilityLabeledArgumentSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AvailabilityLabeledArgumentSyntax)
+  open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {}
   /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `AvailabilityVersionRestrictionSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: AvailabilityVersionRestrictionSyntax)
+  open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {}
   /// Visiting `VersionTupleSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting `VersionTupleSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: VersionTupleSyntax)
+  open func visitPost(_ node: VersionTupleSyntax) {}
 
   /// Visiting `TokenSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting the node and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: TokenSyntax)
+  open func visitPost(_ node: TokenSyntax) {}
 
   /// Visiting `UnknownSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind
+  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
   /// The function called after visiting the node and its descendents.
   ///   - node: the node we just finished visiting.
-  mutating func visitPost(_ node: UnknownSyntax)
-}
+  open func visitPost(_ node: UnknownSyntax) {}
 
-public extension SyntaxVisitor {
-  mutating func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclSyntax(_ data: SyntaxData) {
+      let node = UnknownDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
   }
-  mutating func visitPost(_ node: UnknownDeclSyntax) {}
-  mutating func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: UnknownExprSyntax) {}
-  mutating func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: UnknownStmtSyntax) {}
-  mutating func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: UnknownTypeSyntax) {}
-  mutating func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: UnknownPatternSyntax) {}
-  mutating func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CodeBlockItemSyntax) {}
-  mutating func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CodeBlockItemListSyntax) {}
-  mutating func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CodeBlockSyntax) {}
-  mutating func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: InOutExprSyntax) {}
-  mutating func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundColumnExprSyntax) {}
-  mutating func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TupleExprElementListSyntax) {}
-  mutating func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ArrayElementListSyntax) {}
-  mutating func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DictionaryElementListSyntax) {}
-  mutating func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: StringLiteralSegmentsSyntax) {}
-  mutating func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TryExprSyntax) {}
-  mutating func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeclNameArgumentSyntax) {}
-  mutating func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeclNameArgumentListSyntax) {}
-  mutating func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeclNameArgumentsSyntax) {}
-  mutating func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IdentifierExprSyntax) {}
-  mutating func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SuperRefExprSyntax) {}
-  mutating func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: NilLiteralExprSyntax) {}
-  mutating func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DiscardAssignmentExprSyntax) {}
-  mutating func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AssignmentExprSyntax) {}
-  mutating func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SequenceExprSyntax) {}
-  mutating func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ExprListSyntax) {}
-  mutating func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundLineExprSyntax) {}
-  mutating func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundFileExprSyntax) {}
-  mutating func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundFunctionExprSyntax) {}
-  mutating func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundDsohandleExprSyntax) {}
-  mutating func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SymbolicReferenceExprSyntax) {}
-  mutating func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrefixOperatorExprSyntax) {}
-  mutating func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: BinaryOperatorExprSyntax) {}
-  mutating func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ArrowExprSyntax) {}
-  mutating func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FloatLiteralExprSyntax) {}
-  mutating func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TupleExprSyntax) {}
-  mutating func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ArrayExprSyntax) {}
-  mutating func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DictionaryExprSyntax) {}
-  mutating func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TupleExprElementSyntax) {}
-  mutating func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ArrayElementSyntax) {}
-  mutating func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DictionaryElementSyntax) {}
-  mutating func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IntegerLiteralExprSyntax) {}
-  mutating func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: BooleanLiteralExprSyntax) {}
-  mutating func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TernaryExprSyntax) {}
-  mutating func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MemberAccessExprSyntax) {}
-  mutating func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IsExprSyntax) {}
-  mutating func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AsExprSyntax) {}
-  mutating func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TypeExprSyntax) {}
-  mutating func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureCaptureItemSyntax) {}
-  mutating func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureCaptureItemListSyntax) {}
-  mutating func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureCaptureSignatureSyntax) {}
-  mutating func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureParamSyntax) {}
-  mutating func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureParamListSyntax) {}
-  mutating func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureSignatureSyntax) {}
-  mutating func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClosureExprSyntax) {}
-  mutating func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: UnresolvedPatternExprSyntax) {}
-  mutating func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FunctionCallExprSyntax) {}
-  mutating func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SubscriptExprSyntax) {}
-  mutating func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: OptionalChainingExprSyntax) {}
-  mutating func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ForcedValueExprSyntax) {}
-  mutating func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PostfixUnaryExprSyntax) {}
-  mutating func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SpecializeExprSyntax) {}
-  mutating func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: StringSegmentSyntax) {}
-  mutating func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ExpressionSegmentSyntax) {}
-  mutating func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: StringLiteralExprSyntax) {}
-  mutating func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: KeyPathExprSyntax) {}
-  mutating func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: KeyPathBaseExprSyntax) {}
-  mutating func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjcNamePieceSyntax) {}
-  mutating func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjcNameSyntax) {}
-  mutating func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjcKeyPathExprSyntax) {}
-  mutating func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjcSelectorExprSyntax) {}
-  mutating func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: EditorPlaceholderExprSyntax) {}
-  mutating func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjectLiteralExprSyntax) {}
-  mutating func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TypeInitializerClauseSyntax) {}
-  mutating func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TypealiasDeclSyntax) {}
-  mutating func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AssociatedtypeDeclSyntax) {}
-  mutating func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FunctionParameterListSyntax) {}
-  mutating func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ParameterClauseSyntax) {}
-  mutating func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ReturnClauseSyntax) {}
-  mutating func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FunctionSignatureSyntax) {}
-  mutating func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IfConfigClauseSyntax) {}
-  mutating func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IfConfigClauseListSyntax) {}
-  mutating func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IfConfigDeclSyntax) {}
-  mutating func visit(_ node: PoundErrorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundErrorDeclSyntax) {}
-  mutating func visit(_ node: PoundWarningDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundWarningDeclSyntax) {}
-  mutating func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundSourceLocationSyntax) {}
-  mutating func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundSourceLocationArgsSyntax) {}
-  mutating func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeclModifierSyntax) {}
-  mutating func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: InheritedTypeSyntax) {}
-  mutating func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: InheritedTypeListSyntax) {}
-  mutating func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TypeInheritanceClauseSyntax) {}
-  mutating func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClassDeclSyntax) {}
-  mutating func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: StructDeclSyntax) {}
-  mutating func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ProtocolDeclSyntax) {}
-  mutating func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ExtensionDeclSyntax) {}
-  mutating func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MemberDeclBlockSyntax) {}
-  mutating func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MemberDeclListSyntax) {}
-  mutating func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MemberDeclListItemSyntax) {}
-  mutating func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SourceFileSyntax) {}
-  mutating func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: InitializerClauseSyntax) {}
-  mutating func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FunctionParameterSyntax) {}
-  mutating func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ModifierListSyntax) {}
-  mutating func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FunctionDeclSyntax) {}
-  mutating func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: InitializerDeclSyntax) {}
-  mutating func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeinitializerDeclSyntax) {}
-  mutating func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SubscriptDeclSyntax) {}
-  mutating func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessLevelModifierSyntax) {}
-  mutating func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessPathComponentSyntax) {}
-  mutating func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessPathSyntax) {}
-  mutating func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ImportDeclSyntax) {}
-  mutating func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessorParameterSyntax) {}
-  mutating func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessorDeclSyntax) {}
-  mutating func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessorListSyntax) {}
-  mutating func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AccessorBlockSyntax) {}
-  mutating func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PatternBindingSyntax) {}
-  mutating func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PatternBindingListSyntax) {}
-  mutating func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: VariableDeclSyntax) {}
-  mutating func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: EnumCaseElementSyntax) {}
-  mutating func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: EnumCaseElementListSyntax) {}
-  mutating func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: EnumCaseDeclSyntax) {}
-  mutating func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: EnumDeclSyntax) {}
-  mutating func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: OperatorDeclSyntax) {}
-  mutating func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IdentifierListSyntax) {}
-  mutating func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupDeclSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupRelationSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupNameListSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupNameElementSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {}
-  mutating func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {}
-  mutating func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TokenListSyntax) {}
-  mutating func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: NonEmptyTokenListSyntax) {}
-  mutating func visit(_ node: CustomAttributeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CustomAttributeSyntax) {}
-  mutating func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AttributeSyntax) {}
-  mutating func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AttributeListSyntax) {}
-  mutating func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SpecializeAttributeSpecListSyntax) {}
-  mutating func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: LabeledSpecializeEntrySyntax) {}
-  mutating func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: NamedAttributeStringArgumentSyntax) {}
-  mutating func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeclNameSyntax) {}
-  mutating func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {}
-  mutating func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjCSelectorPieceSyntax) {}
-  mutating func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ObjCSelectorSyntax) {}
-  mutating func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ContinueStmtSyntax) {}
-  mutating func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: WhileStmtSyntax) {}
-  mutating func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeferStmtSyntax) {}
-  mutating func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ExpressionStmtSyntax) {}
-  mutating func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SwitchCaseListSyntax) {}
-  mutating func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: RepeatWhileStmtSyntax) {}
-  mutating func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GuardStmtSyntax) {}
-  mutating func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: WhereClauseSyntax) {}
-  mutating func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ForInStmtSyntax) {}
-  mutating func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SwitchStmtSyntax) {}
-  mutating func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CatchClauseListSyntax) {}
-  mutating func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DoStmtSyntax) {}
-  mutating func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ReturnStmtSyntax) {}
-  mutating func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: YieldStmtSyntax) {}
-  mutating func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: YieldListSyntax) {}
-  mutating func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FallthroughStmtSyntax) {}
-  mutating func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: BreakStmtSyntax) {}
-  mutating func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CaseItemListSyntax) {}
-  mutating func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ConditionElementSyntax) {}
-  mutating func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AvailabilityConditionSyntax) {}
-  mutating func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MatchingPatternConditionSyntax) {}
-  mutating func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: OptionalBindingConditionSyntax) {}
-  mutating func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ConditionElementListSyntax) {}
-  mutating func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DeclarationStmtSyntax) {}
-  mutating func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ThrowStmtSyntax) {}
-  mutating func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IfStmtSyntax) {}
-  mutating func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ElseIfContinuationSyntax) {}
-  mutating func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ElseBlockSyntax) {}
-  mutating func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SwitchCaseSyntax) {}
-  mutating func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SwitchDefaultLabelSyntax) {}
-  mutating func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CaseItemSyntax) {}
-  mutating func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SwitchCaseLabelSyntax) {}
-  mutating func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CatchClauseSyntax) {}
-  mutating func visit(_ node: PoundAssertStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: PoundAssertStmtSyntax) {}
-  mutating func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericWhereClauseSyntax) {}
-  mutating func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericRequirementListSyntax) {}
-  mutating func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericRequirementSyntax) {}
-  mutating func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SameTypeRequirementSyntax) {}
-  mutating func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericParameterListSyntax) {}
-  mutating func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericParameterSyntax) {}
-  mutating func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericParameterClauseSyntax) {}
-  mutating func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ConformanceRequirementSyntax) {}
-  mutating func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SimpleTypeIdentifierSyntax) {}
-  mutating func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MemberTypeIdentifierSyntax) {}
-  mutating func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ClassRestrictionTypeSyntax) {}
-  mutating func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ArrayTypeSyntax) {}
-  mutating func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: DictionaryTypeSyntax) {}
-  mutating func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: MetatypeTypeSyntax) {}
-  mutating func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: OptionalTypeSyntax) {}
-  mutating func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: SomeTypeSyntax) {}
-  mutating func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {}
-  mutating func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CompositionTypeElementSyntax) {}
-  mutating func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CompositionTypeElementListSyntax) {}
-  mutating func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: CompositionTypeSyntax) {}
-  mutating func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TupleTypeElementSyntax) {}
-  mutating func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TupleTypeElementListSyntax) {}
-  mutating func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TupleTypeSyntax) {}
-  mutating func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: FunctionTypeSyntax) {}
-  mutating func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AttributedTypeSyntax) {}
-  mutating func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericArgumentListSyntax) {}
-  mutating func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericArgumentSyntax) {}
-  mutating func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: GenericArgumentClauseSyntax) {}
-  mutating func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TypeAnnotationSyntax) {}
-  mutating func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: EnumCasePatternSyntax) {}
-  mutating func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IsTypePatternSyntax) {}
-  mutating func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: OptionalPatternSyntax) {}
-  mutating func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: IdentifierPatternSyntax) {}
-  mutating func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AsTypePatternSyntax) {}
-  mutating func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TuplePatternSyntax) {}
-  mutating func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: WildcardPatternSyntax) {}
-  mutating func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TuplePatternElementSyntax) {}
-  mutating func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ExpressionPatternSyntax) {}
-  mutating func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: TuplePatternElementListSyntax) {}
-  mutating func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: ValueBindingPatternSyntax) {}
-  mutating func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AvailabilitySpecListSyntax) {}
-  mutating func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AvailabilityArgumentSyntax) {}
-  mutating func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {}
-  mutating func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {}
-  mutating func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  mutating func visitPost(_ node: VersionTupleSyntax) {}
 
-  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExprSyntax(_ data: SyntaxData) {
+      let node = UnknownExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
   }
-  mutating func visitPost(_ node: TokenSyntax) {}
 
-  mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplStmtSyntax(_ data: SyntaxData) {
+      let node = UnknownStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
   }
-  mutating func visitPost(_ node: UnknownSyntax) {}
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypeSyntax(_ data: SyntaxData) {
+      let node = UnknownTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPatternSyntax(_ data: SyntaxData) {
+      let node = UnknownPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnknownDeclSyntax(_ data: SyntaxData) {
+      let node = UnknownDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnknownExprSyntax(_ data: SyntaxData) {
+      let node = UnknownExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnknownStmtSyntax(_ data: SyntaxData) {
+      let node = UnknownStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnknownTypeSyntax(_ data: SyntaxData) {
+      let node = UnknownTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnknownPatternSyntax(_ data: SyntaxData) {
+      let node = UnknownPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCodeBlockItemSyntax(_ data: SyntaxData) {
+      let node = CodeBlockItemSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCodeBlockItemListSyntax(_ data: SyntaxData) {
+      let node = CodeBlockItemListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCodeBlockSyntax(_ data: SyntaxData) {
+      let node = CodeBlockSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInOutExprSyntax(_ data: SyntaxData) {
+      let node = InOutExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundColumnExprSyntax(_ data: SyntaxData) {
+      let node = PoundColumnExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) {
+      let node = TupleExprElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplArrayElementListSyntax(_ data: SyntaxData) {
+      let node = ArrayElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDictionaryElementListSyntax(_ data: SyntaxData) {
+      let node = DictionaryElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplStringLiteralSegmentsSyntax(_ data: SyntaxData) {
+      let node = StringLiteralSegmentsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTryExprSyntax(_ data: SyntaxData) {
+      let node = TryExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclNameArgumentSyntax(_ data: SyntaxData) {
+      let node = DeclNameArgumentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclNameArgumentListSyntax(_ data: SyntaxData) {
+      let node = DeclNameArgumentListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclNameArgumentsSyntax(_ data: SyntaxData) {
+      let node = DeclNameArgumentsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIdentifierExprSyntax(_ data: SyntaxData) {
+      let node = IdentifierExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSuperRefExprSyntax(_ data: SyntaxData) {
+      let node = SuperRefExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplNilLiteralExprSyntax(_ data: SyntaxData) {
+      let node = NilLiteralExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDiscardAssignmentExprSyntax(_ data: SyntaxData) {
+      let node = DiscardAssignmentExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAssignmentExprSyntax(_ data: SyntaxData) {
+      let node = AssignmentExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSequenceExprSyntax(_ data: SyntaxData) {
+      let node = SequenceExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExprListSyntax(_ data: SyntaxData) {
+      let node = ExprListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundLineExprSyntax(_ data: SyntaxData) {
+      let node = PoundLineExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundFileExprSyntax(_ data: SyntaxData) {
+      let node = PoundFileExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundFunctionExprSyntax(_ data: SyntaxData) {
+      let node = PoundFunctionExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundDsohandleExprSyntax(_ data: SyntaxData) {
+      let node = PoundDsohandleExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSymbolicReferenceExprSyntax(_ data: SyntaxData) {
+      let node = SymbolicReferenceExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrefixOperatorExprSyntax(_ data: SyntaxData) {
+      let node = PrefixOperatorExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) {
+      let node = BinaryOperatorExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplArrowExprSyntax(_ data: SyntaxData) {
+      let node = ArrowExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
+      let node = FloatLiteralExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTupleExprSyntax(_ data: SyntaxData) {
+      let node = TupleExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplArrayExprSyntax(_ data: SyntaxData) {
+      let node = ArrayExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDictionaryExprSyntax(_ data: SyntaxData) {
+      let node = DictionaryExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTupleExprElementSyntax(_ data: SyntaxData) {
+      let node = TupleExprElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplArrayElementSyntax(_ data: SyntaxData) {
+      let node = ArrayElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDictionaryElementSyntax(_ data: SyntaxData) {
+      let node = DictionaryElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) {
+      let node = IntegerLiteralExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) {
+      let node = BooleanLiteralExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTernaryExprSyntax(_ data: SyntaxData) {
+      let node = TernaryExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMemberAccessExprSyntax(_ data: SyntaxData) {
+      let node = MemberAccessExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIsExprSyntax(_ data: SyntaxData) {
+      let node = IsExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAsExprSyntax(_ data: SyntaxData) {
+      let node = AsExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypeExprSyntax(_ data: SyntaxData) {
+      let node = TypeExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureCaptureItemSyntax(_ data: SyntaxData) {
+      let node = ClosureCaptureItemSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureCaptureItemListSyntax(_ data: SyntaxData) {
+      let node = ClosureCaptureItemListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureCaptureSignatureSyntax(_ data: SyntaxData) {
+      let node = ClosureCaptureSignatureSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureParamSyntax(_ data: SyntaxData) {
+      let node = ClosureParamSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureParamListSyntax(_ data: SyntaxData) {
+      let node = ClosureParamListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureSignatureSyntax(_ data: SyntaxData) {
+      let node = ClosureSignatureSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureExprSyntax(_ data: SyntaxData) {
+      let node = ClosureExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplUnresolvedPatternExprSyntax(_ data: SyntaxData) {
+      let node = UnresolvedPatternExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) {
+      let node = FunctionCallExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSubscriptExprSyntax(_ data: SyntaxData) {
+      let node = SubscriptExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOptionalChainingExprSyntax(_ data: SyntaxData) {
+      let node = OptionalChainingExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplForcedValueExprSyntax(_ data: SyntaxData) {
+      let node = ForcedValueExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPostfixUnaryExprSyntax(_ data: SyntaxData) {
+      let node = PostfixUnaryExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSpecializeExprSyntax(_ data: SyntaxData) {
+      let node = SpecializeExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplStringSegmentSyntax(_ data: SyntaxData) {
+      let node = StringSegmentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) {
+      let node = ExpressionSegmentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplStringLiteralExprSyntax(_ data: SyntaxData) {
+      let node = StringLiteralExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathExprSyntax(_ data: SyntaxData) {
+      let node = KeyPathExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplKeyPathBaseExprSyntax(_ data: SyntaxData) {
+      let node = KeyPathBaseExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjcNamePieceSyntax(_ data: SyntaxData) {
+      let node = ObjcNamePieceSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjcNameSyntax(_ data: SyntaxData) {
+      let node = ObjcNameSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjcKeyPathExprSyntax(_ data: SyntaxData) {
+      let node = ObjcKeyPathExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjcSelectorExprSyntax(_ data: SyntaxData) {
+      let node = ObjcSelectorExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) {
+      let node = EditorPlaceholderExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjectLiteralExprSyntax(_ data: SyntaxData) {
+      let node = ObjectLiteralExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) {
+      let node = TypeInitializerClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypealiasDeclSyntax(_ data: SyntaxData) {
+      let node = TypealiasDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAssociatedtypeDeclSyntax(_ data: SyntaxData) {
+      let node = AssociatedtypeDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionParameterListSyntax(_ data: SyntaxData) {
+      let node = FunctionParameterListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
+      let node = ParameterClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplReturnClauseSyntax(_ data: SyntaxData) {
+      let node = ReturnClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionSignatureSyntax(_ data: SyntaxData) {
+      let node = FunctionSignatureSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIfConfigClauseSyntax(_ data: SyntaxData) {
+      let node = IfConfigClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIfConfigClauseListSyntax(_ data: SyntaxData) {
+      let node = IfConfigClauseListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIfConfigDeclSyntax(_ data: SyntaxData) {
+      let node = IfConfigDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundErrorDeclSyntax(_ data: SyntaxData) {
+      let node = PoundErrorDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundWarningDeclSyntax(_ data: SyntaxData) {
+      let node = PoundWarningDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundSourceLocationSyntax(_ data: SyntaxData) {
+      let node = PoundSourceLocationSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundSourceLocationArgsSyntax(_ data: SyntaxData) {
+      let node = PoundSourceLocationArgsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclModifierSyntax(_ data: SyntaxData) {
+      let node = DeclModifierSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInheritedTypeSyntax(_ data: SyntaxData) {
+      let node = InheritedTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInheritedTypeListSyntax(_ data: SyntaxData) {
+      let node = InheritedTypeListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypeInheritanceClauseSyntax(_ data: SyntaxData) {
+      let node = TypeInheritanceClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClassDeclSyntax(_ data: SyntaxData) {
+      let node = ClassDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplStructDeclSyntax(_ data: SyntaxData) {
+      let node = StructDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplProtocolDeclSyntax(_ data: SyntaxData) {
+      let node = ProtocolDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExtensionDeclSyntax(_ data: SyntaxData) {
+      let node = ExtensionDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMemberDeclBlockSyntax(_ data: SyntaxData) {
+      let node = MemberDeclBlockSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMemberDeclListSyntax(_ data: SyntaxData) {
+      let node = MemberDeclListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMemberDeclListItemSyntax(_ data: SyntaxData) {
+      let node = MemberDeclListItemSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSourceFileSyntax(_ data: SyntaxData) {
+      let node = SourceFileSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInitializerClauseSyntax(_ data: SyntaxData) {
+      let node = InitializerClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionParameterSyntax(_ data: SyntaxData) {
+      let node = FunctionParameterSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplModifierListSyntax(_ data: SyntaxData) {
+      let node = ModifierListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionDeclSyntax(_ data: SyntaxData) {
+      let node = FunctionDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInitializerDeclSyntax(_ data: SyntaxData) {
+      let node = InitializerDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) {
+      let node = DeinitializerDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSubscriptDeclSyntax(_ data: SyntaxData) {
+      let node = SubscriptDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessLevelModifierSyntax(_ data: SyntaxData) {
+      let node = AccessLevelModifierSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessPathComponentSyntax(_ data: SyntaxData) {
+      let node = AccessPathComponentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessPathSyntax(_ data: SyntaxData) {
+      let node = AccessPathSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplImportDeclSyntax(_ data: SyntaxData) {
+      let node = ImportDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessorParameterSyntax(_ data: SyntaxData) {
+      let node = AccessorParameterSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessorDeclSyntax(_ data: SyntaxData) {
+      let node = AccessorDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessorListSyntax(_ data: SyntaxData) {
+      let node = AccessorListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessorBlockSyntax(_ data: SyntaxData) {
+      let node = AccessorBlockSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPatternBindingSyntax(_ data: SyntaxData) {
+      let node = PatternBindingSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPatternBindingListSyntax(_ data: SyntaxData) {
+      let node = PatternBindingListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplVariableDeclSyntax(_ data: SyntaxData) {
+      let node = VariableDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) {
+      let node = EnumCaseElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCaseElementListSyntax(_ data: SyntaxData) {
+      let node = EnumCaseElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCaseDeclSyntax(_ data: SyntaxData) {
+      let node = EnumCaseDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumDeclSyntax(_ data: SyntaxData) {
+      let node = EnumDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOperatorDeclSyntax(_ data: SyntaxData) {
+      let node = OperatorDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIdentifierListSyntax(_ data: SyntaxData) {
+      let node = IdentifierListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOperatorPrecedenceAndTypesSyntax(_ data: SyntaxData) {
+      let node = OperatorPrecedenceAndTypesSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupDeclSyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupAttributeListSyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupAttributeListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupRelationSyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupRelationSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupNameListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupNameElementSyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupNameElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupAssignmentSyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupAssignmentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrecedenceGroupAssociativitySyntax(_ data: SyntaxData) {
+      let node = PrecedenceGroupAssociativitySyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTokenListSyntax(_ data: SyntaxData) {
+      let node = TokenListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplNonEmptyTokenListSyntax(_ data: SyntaxData) {
+      let node = NonEmptyTokenListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCustomAttributeSyntax(_ data: SyntaxData) {
+      let node = CustomAttributeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAttributeSyntax(_ data: SyntaxData) {
+      let node = AttributeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAttributeListSyntax(_ data: SyntaxData) {
+      let node = AttributeListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSpecializeAttributeSpecListSyntax(_ data: SyntaxData) {
+      let node = SpecializeAttributeSpecListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) {
+      let node = LabeledSpecializeEntrySyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) {
+      let node = NamedAttributeStringArgumentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclNameSyntax(_ data: SyntaxData) {
+      let node = DeclNameSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplImplementsAttributeArgumentsSyntax(_ data: SyntaxData) {
+      let node = ImplementsAttributeArgumentsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjCSelectorPieceSyntax(_ data: SyntaxData) {
+      let node = ObjCSelectorPieceSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplObjCSelectorSyntax(_ data: SyntaxData) {
+      let node = ObjCSelectorSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplContinueStmtSyntax(_ data: SyntaxData) {
+      let node = ContinueStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplWhileStmtSyntax(_ data: SyntaxData) {
+      let node = WhileStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeferStmtSyntax(_ data: SyntaxData) {
+      let node = DeferStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) {
+      let node = ExpressionStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) {
+      let node = SwitchCaseListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) {
+      let node = RepeatWhileStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGuardStmtSyntax(_ data: SyntaxData) {
+      let node = GuardStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplWhereClauseSyntax(_ data: SyntaxData) {
+      let node = WhereClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplForInStmtSyntax(_ data: SyntaxData) {
+      let node = ForInStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchStmtSyntax(_ data: SyntaxData) {
+      let node = SwitchStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCatchClauseListSyntax(_ data: SyntaxData) {
+      let node = CatchClauseListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDoStmtSyntax(_ data: SyntaxData) {
+      let node = DoStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplReturnStmtSyntax(_ data: SyntaxData) {
+      let node = ReturnStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldStmtSyntax(_ data: SyntaxData) {
+      let node = YieldStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldListSyntax(_ data: SyntaxData) {
+      let node = YieldListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFallthroughStmtSyntax(_ data: SyntaxData) {
+      let node = FallthroughStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplBreakStmtSyntax(_ data: SyntaxData) {
+      let node = BreakStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCaseItemListSyntax(_ data: SyntaxData) {
+      let node = CaseItemListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplConditionElementSyntax(_ data: SyntaxData) {
+      let node = ConditionElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityConditionSyntax(_ data: SyntaxData) {
+      let node = AvailabilityConditionSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMatchingPatternConditionSyntax(_ data: SyntaxData) {
+      let node = MatchingPatternConditionSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOptionalBindingConditionSyntax(_ data: SyntaxData) {
+      let node = OptionalBindingConditionSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplConditionElementListSyntax(_ data: SyntaxData) {
+      let node = ConditionElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclarationStmtSyntax(_ data: SyntaxData) {
+      let node = DeclarationStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplThrowStmtSyntax(_ data: SyntaxData) {
+      let node = ThrowStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIfStmtSyntax(_ data: SyntaxData) {
+      let node = IfStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplElseIfContinuationSyntax(_ data: SyntaxData) {
+      let node = ElseIfContinuationSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplElseBlockSyntax(_ data: SyntaxData) {
+      let node = ElseBlockSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) {
+      let node = SwitchCaseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) {
+      let node = SwitchDefaultLabelSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCaseItemSyntax(_ data: SyntaxData) {
+      let node = CaseItemSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) {
+      let node = SwitchCaseLabelSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCatchClauseSyntax(_ data: SyntaxData) {
+      let node = CatchClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundAssertStmtSyntax(_ data: SyntaxData) {
+      let node = PoundAssertStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericWhereClauseSyntax(_ data: SyntaxData) {
+      let node = GenericWhereClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericRequirementListSyntax(_ data: SyntaxData) {
+      let node = GenericRequirementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericRequirementSyntax(_ data: SyntaxData) {
+      let node = GenericRequirementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSameTypeRequirementSyntax(_ data: SyntaxData) {
+      let node = SameTypeRequirementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericParameterListSyntax(_ data: SyntaxData) {
+      let node = GenericParameterListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericParameterSyntax(_ data: SyntaxData) {
+      let node = GenericParameterSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) {
+      let node = GenericParameterClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplConformanceRequirementSyntax(_ data: SyntaxData) {
+      let node = ConformanceRequirementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) {
+      let node = SimpleTypeIdentifierSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMemberTypeIdentifierSyntax(_ data: SyntaxData) {
+      let node = MemberTypeIdentifierSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClassRestrictionTypeSyntax(_ data: SyntaxData) {
+      let node = ClassRestrictionTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplArrayTypeSyntax(_ data: SyntaxData) {
+      let node = ArrayTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDictionaryTypeSyntax(_ data: SyntaxData) {
+      let node = DictionaryTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMetatypeTypeSyntax(_ data: SyntaxData) {
+      let node = MetatypeTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOptionalTypeSyntax(_ data: SyntaxData) {
+      let node = OptionalTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSomeTypeSyntax(_ data: SyntaxData) {
+      let node = SomeTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplImplicitlyUnwrappedOptionalTypeSyntax(_ data: SyntaxData) {
+      let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCompositionTypeElementSyntax(_ data: SyntaxData) {
+      let node = CompositionTypeElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCompositionTypeElementListSyntax(_ data: SyntaxData) {
+      let node = CompositionTypeElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCompositionTypeSyntax(_ data: SyntaxData) {
+      let node = CompositionTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) {
+      let node = TupleTypeElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTupleTypeElementListSyntax(_ data: SyntaxData) {
+      let node = TupleTypeElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTupleTypeSyntax(_ data: SyntaxData) {
+      let node = TupleTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionTypeSyntax(_ data: SyntaxData) {
+      let node = FunctionTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAttributedTypeSyntax(_ data: SyntaxData) {
+      let node = AttributedTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericArgumentListSyntax(_ data: SyntaxData) {
+      let node = GenericArgumentListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericArgumentSyntax(_ data: SyntaxData) {
+      let node = GenericArgumentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericArgumentClauseSyntax(_ data: SyntaxData) {
+      let node = GenericArgumentClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) {
+      let node = TypeAnnotationSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplEnumCasePatternSyntax(_ data: SyntaxData) {
+      let node = EnumCasePatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIsTypePatternSyntax(_ data: SyntaxData) {
+      let node = IsTypePatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplOptionalPatternSyntax(_ data: SyntaxData) {
+      let node = OptionalPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) {
+      let node = IdentifierPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAsTypePatternSyntax(_ data: SyntaxData) {
+      let node = AsTypePatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTuplePatternSyntax(_ data: SyntaxData) {
+      let node = TuplePatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplWildcardPatternSyntax(_ data: SyntaxData) {
+      let node = WildcardPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTuplePatternElementSyntax(_ data: SyntaxData) {
+      let node = TuplePatternElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplExpressionPatternSyntax(_ data: SyntaxData) {
+      let node = ExpressionPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTuplePatternElementListSyntax(_ data: SyntaxData) {
+      let node = TuplePatternElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplValueBindingPatternSyntax(_ data: SyntaxData) {
+      let node = ValueBindingPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilitySpecListSyntax(_ data: SyntaxData) {
+      let node = AvailabilitySpecListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) {
+      let node = AvailabilityArgumentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) {
+      let node = AvailabilityLabeledArgumentSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityVersionRestrictionSyntax(_ data: SyntaxData) {
+      let node = AvailabilityVersionRestrictionSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplVersionTupleSyntax(_ data: SyntaxData) {
+      let node = VersionTupleSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+
+  private func visit(_ data: SyntaxData) {
+    switch data.raw.kind {
+    case .token:
+      let node = TokenSyntax(data)
+      _ = visit(node)
+      // No children to visit.
+      visitPost(node)
+    case .unknown:
+      let node = UnknownSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+    // The implementation of every generated case goes into its own function. This
+    // circumvents an issue where the compiler allocates stack space for every
+    // case statement next to each other in debug builds, causing it to allocate
+    // ~50KB per call to this function. rdar://55929175
+    case .decl:
+      visitImplDeclSyntax(data)
+    case .expr:
+      visitImplExprSyntax(data)
+    case .stmt:
+      visitImplStmtSyntax(data)
+    case .type:
+      visitImplTypeSyntax(data)
+    case .pattern:
+      visitImplPatternSyntax(data)
+    case .unknownDecl:
+      visitImplUnknownDeclSyntax(data)
+    case .unknownExpr:
+      visitImplUnknownExprSyntax(data)
+    case .unknownStmt:
+      visitImplUnknownStmtSyntax(data)
+    case .unknownType:
+      visitImplUnknownTypeSyntax(data)
+    case .unknownPattern:
+      visitImplUnknownPatternSyntax(data)
+    case .codeBlockItem:
+      visitImplCodeBlockItemSyntax(data)
+    case .codeBlockItemList:
+      visitImplCodeBlockItemListSyntax(data)
+    case .codeBlock:
+      visitImplCodeBlockSyntax(data)
+    case .inOutExpr:
+      visitImplInOutExprSyntax(data)
+    case .poundColumnExpr:
+      visitImplPoundColumnExprSyntax(data)
+    case .tupleExprElementList:
+      visitImplTupleExprElementListSyntax(data)
+    case .arrayElementList:
+      visitImplArrayElementListSyntax(data)
+    case .dictionaryElementList:
+      visitImplDictionaryElementListSyntax(data)
+    case .stringLiteralSegments:
+      visitImplStringLiteralSegmentsSyntax(data)
+    case .tryExpr:
+      visitImplTryExprSyntax(data)
+    case .declNameArgument:
+      visitImplDeclNameArgumentSyntax(data)
+    case .declNameArgumentList:
+      visitImplDeclNameArgumentListSyntax(data)
+    case .declNameArguments:
+      visitImplDeclNameArgumentsSyntax(data)
+    case .identifierExpr:
+      visitImplIdentifierExprSyntax(data)
+    case .superRefExpr:
+      visitImplSuperRefExprSyntax(data)
+    case .nilLiteralExpr:
+      visitImplNilLiteralExprSyntax(data)
+    case .discardAssignmentExpr:
+      visitImplDiscardAssignmentExprSyntax(data)
+    case .assignmentExpr:
+      visitImplAssignmentExprSyntax(data)
+    case .sequenceExpr:
+      visitImplSequenceExprSyntax(data)
+    case .exprList:
+      visitImplExprListSyntax(data)
+    case .poundLineExpr:
+      visitImplPoundLineExprSyntax(data)
+    case .poundFileExpr:
+      visitImplPoundFileExprSyntax(data)
+    case .poundFunctionExpr:
+      visitImplPoundFunctionExprSyntax(data)
+    case .poundDsohandleExpr:
+      visitImplPoundDsohandleExprSyntax(data)
+    case .symbolicReferenceExpr:
+      visitImplSymbolicReferenceExprSyntax(data)
+    case .prefixOperatorExpr:
+      visitImplPrefixOperatorExprSyntax(data)
+    case .binaryOperatorExpr:
+      visitImplBinaryOperatorExprSyntax(data)
+    case .arrowExpr:
+      visitImplArrowExprSyntax(data)
+    case .floatLiteralExpr:
+      visitImplFloatLiteralExprSyntax(data)
+    case .tupleExpr:
+      visitImplTupleExprSyntax(data)
+    case .arrayExpr:
+      visitImplArrayExprSyntax(data)
+    case .dictionaryExpr:
+      visitImplDictionaryExprSyntax(data)
+    case .tupleExprElement:
+      visitImplTupleExprElementSyntax(data)
+    case .arrayElement:
+      visitImplArrayElementSyntax(data)
+    case .dictionaryElement:
+      visitImplDictionaryElementSyntax(data)
+    case .integerLiteralExpr:
+      visitImplIntegerLiteralExprSyntax(data)
+    case .booleanLiteralExpr:
+      visitImplBooleanLiteralExprSyntax(data)
+    case .ternaryExpr:
+      visitImplTernaryExprSyntax(data)
+    case .memberAccessExpr:
+      visitImplMemberAccessExprSyntax(data)
+    case .isExpr:
+      visitImplIsExprSyntax(data)
+    case .asExpr:
+      visitImplAsExprSyntax(data)
+    case .typeExpr:
+      visitImplTypeExprSyntax(data)
+    case .closureCaptureItem:
+      visitImplClosureCaptureItemSyntax(data)
+    case .closureCaptureItemList:
+      visitImplClosureCaptureItemListSyntax(data)
+    case .closureCaptureSignature:
+      visitImplClosureCaptureSignatureSyntax(data)
+    case .closureParam:
+      visitImplClosureParamSyntax(data)
+    case .closureParamList:
+      visitImplClosureParamListSyntax(data)
+    case .closureSignature:
+      visitImplClosureSignatureSyntax(data)
+    case .closureExpr:
+      visitImplClosureExprSyntax(data)
+    case .unresolvedPatternExpr:
+      visitImplUnresolvedPatternExprSyntax(data)
+    case .functionCallExpr:
+      visitImplFunctionCallExprSyntax(data)
+    case .subscriptExpr:
+      visitImplSubscriptExprSyntax(data)
+    case .optionalChainingExpr:
+      visitImplOptionalChainingExprSyntax(data)
+    case .forcedValueExpr:
+      visitImplForcedValueExprSyntax(data)
+    case .postfixUnaryExpr:
+      visitImplPostfixUnaryExprSyntax(data)
+    case .specializeExpr:
+      visitImplSpecializeExprSyntax(data)
+    case .stringSegment:
+      visitImplStringSegmentSyntax(data)
+    case .expressionSegment:
+      visitImplExpressionSegmentSyntax(data)
+    case .stringLiteralExpr:
+      visitImplStringLiteralExprSyntax(data)
+    case .keyPathExpr:
+      visitImplKeyPathExprSyntax(data)
+    case .keyPathBaseExpr:
+      visitImplKeyPathBaseExprSyntax(data)
+    case .objcNamePiece:
+      visitImplObjcNamePieceSyntax(data)
+    case .objcName:
+      visitImplObjcNameSyntax(data)
+    case .objcKeyPathExpr:
+      visitImplObjcKeyPathExprSyntax(data)
+    case .objcSelectorExpr:
+      visitImplObjcSelectorExprSyntax(data)
+    case .editorPlaceholderExpr:
+      visitImplEditorPlaceholderExprSyntax(data)
+    case .objectLiteralExpr:
+      visitImplObjectLiteralExprSyntax(data)
+    case .typeInitializerClause:
+      visitImplTypeInitializerClauseSyntax(data)
+    case .typealiasDecl:
+      visitImplTypealiasDeclSyntax(data)
+    case .associatedtypeDecl:
+      visitImplAssociatedtypeDeclSyntax(data)
+    case .functionParameterList:
+      visitImplFunctionParameterListSyntax(data)
+    case .parameterClause:
+      visitImplParameterClauseSyntax(data)
+    case .returnClause:
+      visitImplReturnClauseSyntax(data)
+    case .functionSignature:
+      visitImplFunctionSignatureSyntax(data)
+    case .ifConfigClause:
+      visitImplIfConfigClauseSyntax(data)
+    case .ifConfigClauseList:
+      visitImplIfConfigClauseListSyntax(data)
+    case .ifConfigDecl:
+      visitImplIfConfigDeclSyntax(data)
+    case .poundErrorDecl:
+      visitImplPoundErrorDeclSyntax(data)
+    case .poundWarningDecl:
+      visitImplPoundWarningDeclSyntax(data)
+    case .poundSourceLocation:
+      visitImplPoundSourceLocationSyntax(data)
+    case .poundSourceLocationArgs:
+      visitImplPoundSourceLocationArgsSyntax(data)
+    case .declModifier:
+      visitImplDeclModifierSyntax(data)
+    case .inheritedType:
+      visitImplInheritedTypeSyntax(data)
+    case .inheritedTypeList:
+      visitImplInheritedTypeListSyntax(data)
+    case .typeInheritanceClause:
+      visitImplTypeInheritanceClauseSyntax(data)
+    case .classDecl:
+      visitImplClassDeclSyntax(data)
+    case .structDecl:
+      visitImplStructDeclSyntax(data)
+    case .protocolDecl:
+      visitImplProtocolDeclSyntax(data)
+    case .extensionDecl:
+      visitImplExtensionDeclSyntax(data)
+    case .memberDeclBlock:
+      visitImplMemberDeclBlockSyntax(data)
+    case .memberDeclList:
+      visitImplMemberDeclListSyntax(data)
+    case .memberDeclListItem:
+      visitImplMemberDeclListItemSyntax(data)
+    case .sourceFile:
+      visitImplSourceFileSyntax(data)
+    case .initializerClause:
+      visitImplInitializerClauseSyntax(data)
+    case .functionParameter:
+      visitImplFunctionParameterSyntax(data)
+    case .modifierList:
+      visitImplModifierListSyntax(data)
+    case .functionDecl:
+      visitImplFunctionDeclSyntax(data)
+    case .initializerDecl:
+      visitImplInitializerDeclSyntax(data)
+    case .deinitializerDecl:
+      visitImplDeinitializerDeclSyntax(data)
+    case .subscriptDecl:
+      visitImplSubscriptDeclSyntax(data)
+    case .accessLevelModifier:
+      visitImplAccessLevelModifierSyntax(data)
+    case .accessPathComponent:
+      visitImplAccessPathComponentSyntax(data)
+    case .accessPath:
+      visitImplAccessPathSyntax(data)
+    case .importDecl:
+      visitImplImportDeclSyntax(data)
+    case .accessorParameter:
+      visitImplAccessorParameterSyntax(data)
+    case .accessorDecl:
+      visitImplAccessorDeclSyntax(data)
+    case .accessorList:
+      visitImplAccessorListSyntax(data)
+    case .accessorBlock:
+      visitImplAccessorBlockSyntax(data)
+    case .patternBinding:
+      visitImplPatternBindingSyntax(data)
+    case .patternBindingList:
+      visitImplPatternBindingListSyntax(data)
+    case .variableDecl:
+      visitImplVariableDeclSyntax(data)
+    case .enumCaseElement:
+      visitImplEnumCaseElementSyntax(data)
+    case .enumCaseElementList:
+      visitImplEnumCaseElementListSyntax(data)
+    case .enumCaseDecl:
+      visitImplEnumCaseDeclSyntax(data)
+    case .enumDecl:
+      visitImplEnumDeclSyntax(data)
+    case .operatorDecl:
+      visitImplOperatorDeclSyntax(data)
+    case .identifierList:
+      visitImplIdentifierListSyntax(data)
+    case .operatorPrecedenceAndTypes:
+      visitImplOperatorPrecedenceAndTypesSyntax(data)
+    case .precedenceGroupDecl:
+      visitImplPrecedenceGroupDeclSyntax(data)
+    case .precedenceGroupAttributeList:
+      visitImplPrecedenceGroupAttributeListSyntax(data)
+    case .precedenceGroupRelation:
+      visitImplPrecedenceGroupRelationSyntax(data)
+    case .precedenceGroupNameList:
+      visitImplPrecedenceGroupNameListSyntax(data)
+    case .precedenceGroupNameElement:
+      visitImplPrecedenceGroupNameElementSyntax(data)
+    case .precedenceGroupAssignment:
+      visitImplPrecedenceGroupAssignmentSyntax(data)
+    case .precedenceGroupAssociativity:
+      visitImplPrecedenceGroupAssociativitySyntax(data)
+    case .tokenList:
+      visitImplTokenListSyntax(data)
+    case .nonEmptyTokenList:
+      visitImplNonEmptyTokenListSyntax(data)
+    case .customAttribute:
+      visitImplCustomAttributeSyntax(data)
+    case .attribute:
+      visitImplAttributeSyntax(data)
+    case .attributeList:
+      visitImplAttributeListSyntax(data)
+    case .specializeAttributeSpecList:
+      visitImplSpecializeAttributeSpecListSyntax(data)
+    case .labeledSpecializeEntry:
+      visitImplLabeledSpecializeEntrySyntax(data)
+    case .namedAttributeStringArgument:
+      visitImplNamedAttributeStringArgumentSyntax(data)
+    case .declName:
+      visitImplDeclNameSyntax(data)
+    case .implementsAttributeArguments:
+      visitImplImplementsAttributeArgumentsSyntax(data)
+    case .objCSelectorPiece:
+      visitImplObjCSelectorPieceSyntax(data)
+    case .objCSelector:
+      visitImplObjCSelectorSyntax(data)
+    case .continueStmt:
+      visitImplContinueStmtSyntax(data)
+    case .whileStmt:
+      visitImplWhileStmtSyntax(data)
+    case .deferStmt:
+      visitImplDeferStmtSyntax(data)
+    case .expressionStmt:
+      visitImplExpressionStmtSyntax(data)
+    case .switchCaseList:
+      visitImplSwitchCaseListSyntax(data)
+    case .repeatWhileStmt:
+      visitImplRepeatWhileStmtSyntax(data)
+    case .guardStmt:
+      visitImplGuardStmtSyntax(data)
+    case .whereClause:
+      visitImplWhereClauseSyntax(data)
+    case .forInStmt:
+      visitImplForInStmtSyntax(data)
+    case .switchStmt:
+      visitImplSwitchStmtSyntax(data)
+    case .catchClauseList:
+      visitImplCatchClauseListSyntax(data)
+    case .doStmt:
+      visitImplDoStmtSyntax(data)
+    case .returnStmt:
+      visitImplReturnStmtSyntax(data)
+    case .yieldStmt:
+      visitImplYieldStmtSyntax(data)
+    case .yieldList:
+      visitImplYieldListSyntax(data)
+    case .fallthroughStmt:
+      visitImplFallthroughStmtSyntax(data)
+    case .breakStmt:
+      visitImplBreakStmtSyntax(data)
+    case .caseItemList:
+      visitImplCaseItemListSyntax(data)
+    case .conditionElement:
+      visitImplConditionElementSyntax(data)
+    case .availabilityCondition:
+      visitImplAvailabilityConditionSyntax(data)
+    case .matchingPatternCondition:
+      visitImplMatchingPatternConditionSyntax(data)
+    case .optionalBindingCondition:
+      visitImplOptionalBindingConditionSyntax(data)
+    case .conditionElementList:
+      visitImplConditionElementListSyntax(data)
+    case .declarationStmt:
+      visitImplDeclarationStmtSyntax(data)
+    case .throwStmt:
+      visitImplThrowStmtSyntax(data)
+    case .ifStmt:
+      visitImplIfStmtSyntax(data)
+    case .elseIfContinuation:
+      visitImplElseIfContinuationSyntax(data)
+    case .elseBlock:
+      visitImplElseBlockSyntax(data)
+    case .switchCase:
+      visitImplSwitchCaseSyntax(data)
+    case .switchDefaultLabel:
+      visitImplSwitchDefaultLabelSyntax(data)
+    case .caseItem:
+      visitImplCaseItemSyntax(data)
+    case .switchCaseLabel:
+      visitImplSwitchCaseLabelSyntax(data)
+    case .catchClause:
+      visitImplCatchClauseSyntax(data)
+    case .poundAssertStmt:
+      visitImplPoundAssertStmtSyntax(data)
+    case .genericWhereClause:
+      visitImplGenericWhereClauseSyntax(data)
+    case .genericRequirementList:
+      visitImplGenericRequirementListSyntax(data)
+    case .genericRequirement:
+      visitImplGenericRequirementSyntax(data)
+    case .sameTypeRequirement:
+      visitImplSameTypeRequirementSyntax(data)
+    case .genericParameterList:
+      visitImplGenericParameterListSyntax(data)
+    case .genericParameter:
+      visitImplGenericParameterSyntax(data)
+    case .genericParameterClause:
+      visitImplGenericParameterClauseSyntax(data)
+    case .conformanceRequirement:
+      visitImplConformanceRequirementSyntax(data)
+    case .simpleTypeIdentifier:
+      visitImplSimpleTypeIdentifierSyntax(data)
+    case .memberTypeIdentifier:
+      visitImplMemberTypeIdentifierSyntax(data)
+    case .classRestrictionType:
+      visitImplClassRestrictionTypeSyntax(data)
+    case .arrayType:
+      visitImplArrayTypeSyntax(data)
+    case .dictionaryType:
+      visitImplDictionaryTypeSyntax(data)
+    case .metatypeType:
+      visitImplMetatypeTypeSyntax(data)
+    case .optionalType:
+      visitImplOptionalTypeSyntax(data)
+    case .someType:
+      visitImplSomeTypeSyntax(data)
+    case .implicitlyUnwrappedOptionalType:
+      visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
+    case .compositionTypeElement:
+      visitImplCompositionTypeElementSyntax(data)
+    case .compositionTypeElementList:
+      visitImplCompositionTypeElementListSyntax(data)
+    case .compositionType:
+      visitImplCompositionTypeSyntax(data)
+    case .tupleTypeElement:
+      visitImplTupleTypeElementSyntax(data)
+    case .tupleTypeElementList:
+      visitImplTupleTypeElementListSyntax(data)
+    case .tupleType:
+      visitImplTupleTypeSyntax(data)
+    case .functionType:
+      visitImplFunctionTypeSyntax(data)
+    case .attributedType:
+      visitImplAttributedTypeSyntax(data)
+    case .genericArgumentList:
+      visitImplGenericArgumentListSyntax(data)
+    case .genericArgument:
+      visitImplGenericArgumentSyntax(data)
+    case .genericArgumentClause:
+      visitImplGenericArgumentClauseSyntax(data)
+    case .typeAnnotation:
+      visitImplTypeAnnotationSyntax(data)
+    case .enumCasePattern:
+      visitImplEnumCasePatternSyntax(data)
+    case .isTypePattern:
+      visitImplIsTypePatternSyntax(data)
+    case .optionalPattern:
+      visitImplOptionalPatternSyntax(data)
+    case .identifierPattern:
+      visitImplIdentifierPatternSyntax(data)
+    case .asTypePattern:
+      visitImplAsTypePatternSyntax(data)
+    case .tuplePattern:
+      visitImplTuplePatternSyntax(data)
+    case .wildcardPattern:
+      visitImplWildcardPatternSyntax(data)
+    case .tuplePatternElement:
+      visitImplTuplePatternElementSyntax(data)
+    case .expressionPattern:
+      visitImplExpressionPatternSyntax(data)
+    case .tuplePatternElementList:
+      visitImplTuplePatternElementListSyntax(data)
+    case .valueBindingPattern:
+      visitImplValueBindingPatternSyntax(data)
+    case .availabilitySpecList:
+      visitImplAvailabilitySpecListSyntax(data)
+    case .availabilityArgument:
+      visitImplAvailabilityArgumentSyntax(data)
+    case .availabilityLabeledArgument:
+      visitImplAvailabilityLabeledArgumentSyntax(data)
+    case .availabilityVersionRestriction:
+      visitImplAvailabilityVersionRestrictionSyntax(data)
+    case .versionTuple:
+      visitImplVersionTupleSyntax(data)
+    }
+  }
+
+  private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+    let syntaxNode = Syntax(node)
+    let parentBox = SyntaxBox(syntaxNode)
+    for childRaw in PresentRawSyntaxChildren(syntaxNode) {
+      let childData = SyntaxData(childRaw, parentBox: parentBox)
+      visit(childData)
+    }
+  }
 }
 
 /// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
 ///
-/// This is a separate protocol because this kind of visitation is slower than
-/// the type-specific visitation of `SyntaxVisitor`. Use `SyntaxAnyVisitor` if
-/// the `visitAny(_)` function would be useful to have, otherwise use
-/// `SyntaxVisitor`.
+/// This subclass of `SyntaxVisitor` is slower than the type-specific visitation 
+/// of `SyntaxVisitor`. Use `SyntaxAnyVisitor` if the `visitAny(_)` function 
+/// would be useful to have, otherwise inherit from `SyntaxVisitor`.
 ///
-/// This works by introducing default implementations of the type-specific
-/// visit function that delegate to `visitAny(_)`. A conformant type that
-/// provides a custom type-specific visit function, should also call
-/// `visitAny(_)` in its implementation, if calling `visitAny` is needed:
+/// This works by overriding the type-specific visit function that delegate to 
+/// `visitAny(_)`. A subclass that provides a custom type-specific visit 
+/// function, should also call `visitAny(_)` in its implementation, if calling 
+/// `visitAny` is needed:
 ///
 ///     struct MyVisitor: SyntaxAnyVisitor {
 ///       func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
@@ -6914,5696 +9672,1582 @@ public extension SyntaxVisitor {
 ///         visitAny(token)
 ///       }
 ///
-public protocol SyntaxAnyVisitor: SyntaxVisitor {
-  mutating func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind
-  mutating func visitAnyPost(_ node: Syntax)
-}
+open class SyntaxAnyVisitor: SyntaxVisitor {
+  /// Visiting `UnknownSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
 
-public extension SyntaxAnyVisitor {
-  mutating func visitAnyPost(_ node: Syntax) {}
+  /// The function called after visiting the node and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitAnyPost(_ node: Syntax) {}
 
-  mutating func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: UnknownDeclSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: UnknownExprSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: UnknownStmtSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: UnknownTypeSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: UnknownPatternSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: CodeBlockItemSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: CodeBlockItemListSyntax) {
-    return visitAnyPost(node)
-  }
-  mutating func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
-  }
-  mutating func visitPost(_ node: CodeBlockSyntax) {
-    return visitAnyPost(node)
+  // MARK: Override type specific visit methods
+
+  override open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(token._syntaxNode)
   }
-  mutating func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TokenSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: InOutExprSyntax) {
-    return visitAnyPost(node)
+
+  override open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnknownSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundColumnExprSyntax) {
-    return visitAnyPost(node)
+  
+  override open func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnknownDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TupleExprElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnknownExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ArrayElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnknownStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DictionaryElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnknownTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: StringLiteralSegmentsSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnknownPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TryExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CodeBlockItemSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeclNameArgumentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CodeBlockItemListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeclNameArgumentListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CodeBlockSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeclNameArgumentsSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: InOutExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IdentifierExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundColumnExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SuperRefExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TupleExprElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: NilLiteralExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ArrayElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DiscardAssignmentExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DictionaryElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AssignmentExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: StringLiteralSegmentsSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SequenceExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TryExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ExprListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeclNameArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundLineExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeclNameArgumentListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundFileExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeclNameArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundFunctionExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IdentifierExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundDsohandleExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SuperRefExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SymbolicReferenceExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: NilLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrefixOperatorExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DiscardAssignmentExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: BinaryOperatorExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AssignmentExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ArrowExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SequenceExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FloatLiteralExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ExprListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TupleExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundLineExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ArrayExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundFileExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DictionaryExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundFunctionExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TupleExprElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundDsohandleExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ArrayElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SymbolicReferenceExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DictionaryElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrefixOperatorExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IntegerLiteralExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: BinaryOperatorExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: BooleanLiteralExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ArrowExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TernaryExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FloatLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MemberAccessExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TupleExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IsExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ArrayExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AsExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DictionaryExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TypeExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TupleExprElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureCaptureItemSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ArrayElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureCaptureItemListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DictionaryElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureCaptureSignatureSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IntegerLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureParamSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: BooleanLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureParamListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TernaryExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureSignatureSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MemberAccessExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClosureExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IsExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: UnresolvedPatternExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AsExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FunctionCallExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TypeExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SubscriptExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureCaptureItemSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: OptionalChainingExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureCaptureItemListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ForcedValueExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureCaptureSignatureSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PostfixUnaryExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureParamSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SpecializeExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureParamListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: StringSegmentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureSignatureSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ExpressionSegmentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClosureExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: StringLiteralExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: UnresolvedPatternExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: KeyPathExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FunctionCallExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: KeyPathBaseExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SubscriptExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjcNamePieceSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: OptionalChainingExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjcNameSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ForcedValueExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjcKeyPathExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PostfixUnaryExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjcSelectorExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SpecializeExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: EditorPlaceholderExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: StringSegmentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjectLiteralExprSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ExpressionSegmentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TypeInitializerClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: StringLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TypealiasDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: KeyPathExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AssociatedtypeDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: KeyPathBaseExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FunctionParameterListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjcNamePieceSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ParameterClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjcNameSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ReturnClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjcKeyPathExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FunctionSignatureSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjcSelectorExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IfConfigClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: EditorPlaceholderExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IfConfigClauseListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjectLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IfConfigDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundErrorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TypeInitializerClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundErrorDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundWarningDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TypealiasDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundWarningDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AssociatedtypeDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundSourceLocationSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FunctionParameterListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundSourceLocationArgsSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ParameterClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeclModifierSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ReturnClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: InheritedTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FunctionSignatureSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: InheritedTypeListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IfConfigClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TypeInheritanceClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IfConfigClauseListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClassDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IfConfigDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: StructDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundErrorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundErrorDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ProtocolDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundWarningDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundWarningDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ExtensionDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundSourceLocationSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MemberDeclBlockSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundSourceLocationArgsSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MemberDeclListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeclModifierSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MemberDeclListItemSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: InheritedTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SourceFileSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: InheritedTypeListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: InitializerClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TypeInheritanceClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FunctionParameterSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClassDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ModifierListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: StructDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FunctionDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ProtocolDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: InitializerDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ExtensionDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeinitializerDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MemberDeclBlockSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SubscriptDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MemberDeclListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessLevelModifierSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MemberDeclListItemSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessPathComponentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SourceFileSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessPathSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: InitializerClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ImportDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FunctionParameterSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessorParameterSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ModifierListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessorDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FunctionDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessorListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: InitializerDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AccessorBlockSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeinitializerDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PatternBindingSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SubscriptDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PatternBindingListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessLevelModifierSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: VariableDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessPathComponentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: EnumCaseElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessPathSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: EnumCaseElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ImportDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: EnumCaseDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessorParameterSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: EnumDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessorDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: OperatorDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessorListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IdentifierListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AccessorBlockSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PatternBindingSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupDeclSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PatternBindingListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: VariableDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupRelationSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: EnumCaseElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupNameListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: EnumCaseElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupNameElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: EnumCaseDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: EnumDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: OperatorDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TokenListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IdentifierListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: NonEmptyTokenListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CustomAttributeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CustomAttributeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AttributeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AttributeListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupRelationSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupNameListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: LabeledSpecializeEntrySyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: NamedAttributeStringArgumentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeclNameSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TokenListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjCSelectorPieceSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: NonEmptyTokenListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ObjCSelectorSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CustomAttributeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CustomAttributeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ContinueStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AttributeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: WhileStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AttributeListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeferStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ExpressionStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: LabeledSpecializeEntrySyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SwitchCaseListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: NamedAttributeStringArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: RepeatWhileStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeclNameSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GuardStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: WhereClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjCSelectorPieceSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ForInStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ObjCSelectorSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SwitchStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ContinueStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CatchClauseListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: WhileStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DoStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeferStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ReturnStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ExpressionStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: YieldStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SwitchCaseListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: YieldListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: RepeatWhileStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FallthroughStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GuardStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: BreakStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: WhereClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CaseItemListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ForInStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ConditionElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SwitchStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AvailabilityConditionSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CatchClauseListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MatchingPatternConditionSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DoStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: OptionalBindingConditionSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ReturnStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ConditionElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: YieldStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DeclarationStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: YieldListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ThrowStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FallthroughStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IfStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: BreakStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ElseIfContinuationSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CaseItemListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ElseBlockSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ConditionElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SwitchCaseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AvailabilityConditionSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SwitchDefaultLabelSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MatchingPatternConditionSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CaseItemSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: OptionalBindingConditionSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SwitchCaseLabelSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ConditionElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CatchClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: PoundAssertStmtSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DeclarationStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: PoundAssertStmtSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ThrowStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericWhereClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IfStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericRequirementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ElseIfContinuationSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericRequirementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ElseBlockSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SameTypeRequirementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SwitchCaseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericParameterListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SwitchDefaultLabelSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericParameterSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CaseItemSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericParameterClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SwitchCaseLabelSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ConformanceRequirementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CatchClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SimpleTypeIdentifierSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: PoundAssertStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: PoundAssertStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MemberTypeIdentifierSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericWhereClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ClassRestrictionTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericRequirementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ArrayTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericRequirementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: DictionaryTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SameTypeRequirementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: MetatypeTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericParameterListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: OptionalTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericParameterSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: SomeTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericParameterClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ConformanceRequirementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CompositionTypeElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CompositionTypeElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MemberTypeIdentifierSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: CompositionTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ClassRestrictionTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TupleTypeElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ArrayTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TupleTypeElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: DictionaryTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TupleTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: MetatypeTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: FunctionTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: OptionalTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AttributedTypeSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: SomeTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericArgumentListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericArgumentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CompositionTypeElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: GenericArgumentClauseSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CompositionTypeElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TypeAnnotationSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: CompositionTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: EnumCasePatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TupleTypeElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IsTypePatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TupleTypeElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: OptionalPatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TupleTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: IdentifierPatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: FunctionTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AsTypePatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AttributedTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TuplePatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericArgumentListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: WildcardPatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TuplePatternElementSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: GenericArgumentClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ExpressionPatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TypeAnnotationSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TuplePatternElementListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: EnumCasePatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: ValueBindingPatternSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IsTypePatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AvailabilitySpecListSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: OptionalPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AvailabilityArgumentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: IdentifierPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: AsTypePatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  mutating func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+
+  override open func visitPost(_ node: TuplePatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: VersionTupleSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
 
-  mutating func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(token)
+  override open func visitPost(_ node: WildcardPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: TokenSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
 
-  mutating func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node)
+  override open func visitPost(_ node: TuplePatternElementSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  mutating func visitPost(_ node: UnknownSyntax) {
-    return visitAnyPost(node)
+  override open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-}
 
-/// A class version of the `SyntaxVisitor` protocol. This is useful if you
-/// intend to have subclasses overriding specific methods of a common base
-/// `SyntaxVisitor` class.
-///
-/// It workarounds the issue of not being able to override the default
-/// implementations of the protocol (see https://bugs.swift.org/browse/SR-103).
-open class SyntaxVisitorBase: SyntaxVisitor {
-  public init() {}
-
-  open func visit(_ node: UnknownDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: UnknownDeclSyntax) {}
-  open func visit(_ node: UnknownExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visitPost(_ node: ExpressionPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: UnknownExprSyntax) {}
-  open func visit(_ node: UnknownStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: UnknownStmtSyntax) {}
-  open func visit(_ node: UnknownTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: TuplePatternElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: UnknownTypeSyntax) {}
-  open func visit(_ node: UnknownPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: UnknownPatternSyntax) {}
-  open func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: ValueBindingPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: CodeBlockItemSyntax) {}
-  open func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: CodeBlockItemListSyntax) {}
-  open func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: AvailabilitySpecListSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: CodeBlockSyntax) {}
-  open func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: InOutExprSyntax) {}
-  open func visit(_ node: PoundColumnExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: AvailabilityArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: PoundColumnExprSyntax) {}
-  open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: TupleExprElementListSyntax) {}
-  open func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: ArrayElementListSyntax) {}
-  open func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: DictionaryElementListSyntax) {}
-  open func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: StringLiteralSegmentsSyntax) {}
-  open func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+  override open func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
   }
-  open func visitPost(_ node: TryExprSyntax) {}
-  open func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
+
+  override open func visitPost(_ node: VersionTupleSyntax) {
+    visitAnyPost(node._syntaxNode)
   }
-  open func visitPost(_ node: DeclNameArgumentSyntax) {}
-  open func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeclNameArgumentListSyntax) {}
-  open func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeclNameArgumentsSyntax) {}
-  open func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IdentifierExprSyntax) {}
-  open func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SuperRefExprSyntax) {}
-  open func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: NilLiteralExprSyntax) {}
-  open func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DiscardAssignmentExprSyntax) {}
-  open func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AssignmentExprSyntax) {}
-  open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SequenceExprSyntax) {}
-  open func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ExprListSyntax) {}
-  open func visit(_ node: PoundLineExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundLineExprSyntax) {}
-  open func visit(_ node: PoundFileExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundFileExprSyntax) {}
-  open func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundFunctionExprSyntax) {}
-  open func visit(_ node: PoundDsohandleExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundDsohandleExprSyntax) {}
-  open func visit(_ node: SymbolicReferenceExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SymbolicReferenceExprSyntax) {}
-  open func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrefixOperatorExprSyntax) {}
-  open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: BinaryOperatorExprSyntax) {}
-  open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ArrowExprSyntax) {}
-  open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FloatLiteralExprSyntax) {}
-  open func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TupleExprSyntax) {}
-  open func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ArrayExprSyntax) {}
-  open func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DictionaryExprSyntax) {}
-  open func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TupleExprElementSyntax) {}
-  open func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ArrayElementSyntax) {}
-  open func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DictionaryElementSyntax) {}
-  open func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IntegerLiteralExprSyntax) {}
-  open func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: BooleanLiteralExprSyntax) {}
-  open func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TernaryExprSyntax) {}
-  open func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MemberAccessExprSyntax) {}
-  open func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IsExprSyntax) {}
-  open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AsExprSyntax) {}
-  open func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TypeExprSyntax) {}
-  open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureCaptureItemSyntax) {}
-  open func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureCaptureItemListSyntax) {}
-  open func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureCaptureSignatureSyntax) {}
-  open func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureParamSyntax) {}
-  open func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureParamListSyntax) {}
-  open func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureSignatureSyntax) {}
-  open func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClosureExprSyntax) {}
-  open func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: UnresolvedPatternExprSyntax) {}
-  open func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FunctionCallExprSyntax) {}
-  open func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SubscriptExprSyntax) {}
-  open func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: OptionalChainingExprSyntax) {}
-  open func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ForcedValueExprSyntax) {}
-  open func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PostfixUnaryExprSyntax) {}
-  open func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SpecializeExprSyntax) {}
-  open func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: StringSegmentSyntax) {}
-  open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ExpressionSegmentSyntax) {}
-  open func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: StringLiteralExprSyntax) {}
-  open func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: KeyPathExprSyntax) {}
-  open func visit(_ node: KeyPathBaseExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: KeyPathBaseExprSyntax) {}
-  open func visit(_ node: ObjcNamePieceSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjcNamePieceSyntax) {}
-  open func visit(_ node: ObjcNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjcNameSyntax) {}
-  open func visit(_ node: ObjcKeyPathExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjcKeyPathExprSyntax) {}
-  open func visit(_ node: ObjcSelectorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjcSelectorExprSyntax) {}
-  open func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: EditorPlaceholderExprSyntax) {}
-  open func visit(_ node: ObjectLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjectLiteralExprSyntax) {}
-  open func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TypeInitializerClauseSyntax) {}
-  open func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TypealiasDeclSyntax) {}
-  open func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AssociatedtypeDeclSyntax) {}
-  open func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FunctionParameterListSyntax) {}
-  open func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ParameterClauseSyntax) {}
-  open func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ReturnClauseSyntax) {}
-  open func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FunctionSignatureSyntax) {}
-  open func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IfConfigClauseSyntax) {}
-  open func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IfConfigClauseListSyntax) {}
-  open func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IfConfigDeclSyntax) {}
-  open func visit(_ node: PoundErrorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundErrorDeclSyntax) {}
-  open func visit(_ node: PoundWarningDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundWarningDeclSyntax) {}
-  open func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundSourceLocationSyntax) {}
-  open func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundSourceLocationArgsSyntax) {}
-  open func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeclModifierSyntax) {}
-  open func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: InheritedTypeSyntax) {}
-  open func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: InheritedTypeListSyntax) {}
-  open func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TypeInheritanceClauseSyntax) {}
-  open func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClassDeclSyntax) {}
-  open func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: StructDeclSyntax) {}
-  open func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ProtocolDeclSyntax) {}
-  open func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ExtensionDeclSyntax) {}
-  open func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MemberDeclBlockSyntax) {}
-  open func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MemberDeclListSyntax) {}
-  open func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MemberDeclListItemSyntax) {}
-  open func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SourceFileSyntax) {}
-  open func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: InitializerClauseSyntax) {}
-  open func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FunctionParameterSyntax) {}
-  open func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ModifierListSyntax) {}
-  open func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FunctionDeclSyntax) {}
-  open func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: InitializerDeclSyntax) {}
-  open func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeinitializerDeclSyntax) {}
-  open func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SubscriptDeclSyntax) {}
-  open func visit(_ node: AccessLevelModifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessLevelModifierSyntax) {}
-  open func visit(_ node: AccessPathComponentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessPathComponentSyntax) {}
-  open func visit(_ node: AccessPathSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessPathSyntax) {}
-  open func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ImportDeclSyntax) {}
-  open func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessorParameterSyntax) {}
-  open func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessorDeclSyntax) {}
-  open func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessorListSyntax) {}
-  open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AccessorBlockSyntax) {}
-  open func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PatternBindingSyntax) {}
-  open func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PatternBindingListSyntax) {}
-  open func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: VariableDeclSyntax) {}
-  open func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: EnumCaseElementSyntax) {}
-  open func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: EnumCaseElementListSyntax) {}
-  open func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: EnumCaseDeclSyntax) {}
-  open func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: EnumDeclSyntax) {}
-  open func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: OperatorDeclSyntax) {}
-  open func visit(_ node: IdentifierListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IdentifierListSyntax) {}
-  open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {}
-  open func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupDeclSyntax) {}
-  open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {}
-  open func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupRelationSyntax) {}
-  open func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupNameListSyntax) {}
-  open func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {}
-  open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {}
-  open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {}
-  open func visit(_ node: TokenListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TokenListSyntax) {}
-  open func visit(_ node: NonEmptyTokenListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: NonEmptyTokenListSyntax) {}
-  open func visit(_ node: CustomAttributeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CustomAttributeSyntax) {}
-  open func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AttributeSyntax) {}
-  open func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AttributeListSyntax) {}
-  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {}
-  open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: LabeledSpecializeEntrySyntax) {}
-  open func visit(_ node: NamedAttributeStringArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: NamedAttributeStringArgumentSyntax) {}
-  open func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeclNameSyntax) {}
-  open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {}
-  open func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjCSelectorPieceSyntax) {}
-  open func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ObjCSelectorSyntax) {}
-  open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ContinueStmtSyntax) {}
-  open func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: WhileStmtSyntax) {}
-  open func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeferStmtSyntax) {}
-  open func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ExpressionStmtSyntax) {}
-  open func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SwitchCaseListSyntax) {}
-  open func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: RepeatWhileStmtSyntax) {}
-  open func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GuardStmtSyntax) {}
-  open func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: WhereClauseSyntax) {}
-  open func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ForInStmtSyntax) {}
-  open func visit(_ node: SwitchStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SwitchStmtSyntax) {}
-  open func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CatchClauseListSyntax) {}
-  open func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DoStmtSyntax) {}
-  open func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ReturnStmtSyntax) {}
-  open func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: YieldStmtSyntax) {}
-  open func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: YieldListSyntax) {}
-  open func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FallthroughStmtSyntax) {}
-  open func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: BreakStmtSyntax) {}
-  open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CaseItemListSyntax) {}
-  open func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ConditionElementSyntax) {}
-  open func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AvailabilityConditionSyntax) {}
-  open func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MatchingPatternConditionSyntax) {}
-  open func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: OptionalBindingConditionSyntax) {}
-  open func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ConditionElementListSyntax) {}
-  open func visit(_ node: DeclarationStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DeclarationStmtSyntax) {}
-  open func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ThrowStmtSyntax) {}
-  open func visit(_ node: IfStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IfStmtSyntax) {}
-  open func visit(_ node: ElseIfContinuationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ElseIfContinuationSyntax) {}
-  open func visit(_ node: ElseBlockSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ElseBlockSyntax) {}
-  open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SwitchCaseSyntax) {}
-  open func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SwitchDefaultLabelSyntax) {}
-  open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CaseItemSyntax) {}
-  open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SwitchCaseLabelSyntax) {}
-  open func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CatchClauseSyntax) {}
-  open func visit(_ node: PoundAssertStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: PoundAssertStmtSyntax) {}
-  open func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericWhereClauseSyntax) {}
-  open func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericRequirementListSyntax) {}
-  open func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericRequirementSyntax) {}
-  open func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SameTypeRequirementSyntax) {}
-  open func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericParameterListSyntax) {}
-  open func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericParameterSyntax) {}
-  open func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericParameterClauseSyntax) {}
-  open func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ConformanceRequirementSyntax) {}
-  open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SimpleTypeIdentifierSyntax) {}
-  open func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MemberTypeIdentifierSyntax) {}
-  open func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ClassRestrictionTypeSyntax) {}
-  open func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ArrayTypeSyntax) {}
-  open func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: DictionaryTypeSyntax) {}
-  open func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: MetatypeTypeSyntax) {}
-  open func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: OptionalTypeSyntax) {}
-  open func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: SomeTypeSyntax) {}
-  open func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {}
-  open func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CompositionTypeElementSyntax) {}
-  open func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CompositionTypeElementListSyntax) {}
-  open func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: CompositionTypeSyntax) {}
-  open func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TupleTypeElementSyntax) {}
-  open func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TupleTypeElementListSyntax) {}
-  open func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TupleTypeSyntax) {}
-  open func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: FunctionTypeSyntax) {}
-  open func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AttributedTypeSyntax) {}
-  open func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericArgumentListSyntax) {}
-  open func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericArgumentSyntax) {}
-  open func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: GenericArgumentClauseSyntax) {}
-  open func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TypeAnnotationSyntax) {}
-  open func visit(_ node: EnumCasePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: EnumCasePatternSyntax) {}
-  open func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IsTypePatternSyntax) {}
-  open func visit(_ node: OptionalPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: OptionalPatternSyntax) {}
-  open func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: IdentifierPatternSyntax) {}
-  open func visit(_ node: AsTypePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AsTypePatternSyntax) {}
-  open func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TuplePatternSyntax) {}
-  open func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: WildcardPatternSyntax) {}
-  open func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TuplePatternElementSyntax) {}
-  open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ExpressionPatternSyntax) {}
-  open func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TuplePatternElementListSyntax) {}
-  open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: ValueBindingPatternSyntax) {}
-  open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AvailabilitySpecListSyntax) {}
-  open func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AvailabilityArgumentSyntax) {}
-  open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {}
-  open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {}
-  open func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: VersionTupleSyntax) {}
-
-  open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: TokenSyntax) {}
 
-  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  open func visitPost(_ node: UnknownSyntax) {}
-}
-
-extension _SyntaxBase {
-  func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
-    guard isPresent else { return }
-    return doVisit(data, &visitor)
-  }
-}
-
-extension Syntax {
-  public func walk<Visitor>(_ visitor: inout Visitor) where Visitor : SyntaxVisitor {
-    return base.walk(&visitor)
-  }
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplUnknownDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplUnknownExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplUnknownStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplUnknownTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplUnknownPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnknownPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCodeBlockItemSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CodeBlockItemSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCodeBlockItemListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CodeBlockItemListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCodeBlockSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CodeBlockSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplInOutExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = InOutExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundColumnExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundColumnExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTupleExprElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TupleExprElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplArrayElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ArrayElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDictionaryElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DictionaryElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplStringLiteralSegmentsSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = StringLiteralSegmentsSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTryExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TryExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclNameArgumentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeclNameArgumentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclNameArgumentListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeclNameArgumentListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclNameArgumentsSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeclNameArgumentsSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIdentifierExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IdentifierExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSuperRefExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SuperRefExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplNilLiteralExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = NilLiteralExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDiscardAssignmentExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DiscardAssignmentExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAssignmentExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AssignmentExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSequenceExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SequenceExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplExprListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ExprListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundLineExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundLineExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundFileExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundFileExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundFunctionExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundFunctionExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundDsohandleExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundDsohandleExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSymbolicReferenceExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SymbolicReferenceExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrefixOperatorExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrefixOperatorExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplBinaryOperatorExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = BinaryOperatorExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplArrowExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ArrowExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFloatLiteralExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FloatLiteralExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTupleExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TupleExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplArrayExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ArrayExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDictionaryExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DictionaryExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTupleExprElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TupleExprElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplArrayElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ArrayElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDictionaryElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DictionaryElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIntegerLiteralExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IntegerLiteralExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplBooleanLiteralExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = BooleanLiteralExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTernaryExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TernaryExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMemberAccessExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MemberAccessExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIsExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IsExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAsExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AsExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTypeExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TypeExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureCaptureItemSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureCaptureItemSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureCaptureItemListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureCaptureItemListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureCaptureSignatureSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureCaptureSignatureSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureParamSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureParamSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureParamListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureParamListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureSignatureSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureSignatureSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClosureExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClosureExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplUnresolvedPatternExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = UnresolvedPatternExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFunctionCallExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FunctionCallExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSubscriptExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SubscriptExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplOptionalChainingExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = OptionalChainingExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplForcedValueExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ForcedValueExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPostfixUnaryExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PostfixUnaryExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSpecializeExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SpecializeExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplStringSegmentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = StringSegmentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplExpressionSegmentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ExpressionSegmentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplStringLiteralExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = StringLiteralExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplKeyPathExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = KeyPathExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplKeyPathBaseExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = KeyPathBaseExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjcNamePieceSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjcNamePieceSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjcNameSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjcNameSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjcKeyPathExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjcKeyPathExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjcSelectorExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjcSelectorExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplEditorPlaceholderExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = EditorPlaceholderExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjectLiteralExprSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjectLiteralExprSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTypeInitializerClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TypeInitializerClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTypealiasDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TypealiasDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAssociatedtypeDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AssociatedtypeDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFunctionParameterListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FunctionParameterListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplParameterClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ParameterClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplReturnClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ReturnClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFunctionSignatureSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FunctionSignatureSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIfConfigClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IfConfigClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIfConfigClauseListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IfConfigClauseListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIfConfigDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IfConfigDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundErrorDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundErrorDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundWarningDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundWarningDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundSourceLocationSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundSourceLocationSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundSourceLocationArgsSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundSourceLocationArgsSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclModifierSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeclModifierSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplInheritedTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = InheritedTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplInheritedTypeListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = InheritedTypeListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTypeInheritanceClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TypeInheritanceClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClassDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClassDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplStructDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = StructDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplProtocolDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ProtocolDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplExtensionDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ExtensionDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMemberDeclBlockSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MemberDeclBlockSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMemberDeclListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MemberDeclListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMemberDeclListItemSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MemberDeclListItemSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSourceFileSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SourceFileSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplInitializerClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = InitializerClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFunctionParameterSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FunctionParameterSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplModifierListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ModifierListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFunctionDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FunctionDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplInitializerDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = InitializerDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeinitializerDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeinitializerDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSubscriptDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SubscriptDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessLevelModifierSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessLevelModifierSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessPathComponentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessPathComponentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessPathSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessPathSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplImportDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ImportDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessorParameterSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessorParameterSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessorDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessorDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessorListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessorListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAccessorBlockSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AccessorBlockSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPatternBindingSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PatternBindingSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPatternBindingListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PatternBindingListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplVariableDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = VariableDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplEnumCaseElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = EnumCaseElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplEnumCaseElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = EnumCaseElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplEnumCaseDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = EnumCaseDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplEnumDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = EnumDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplOperatorDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = OperatorDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIdentifierListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IdentifierListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplOperatorPrecedenceAndTypesSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = OperatorPrecedenceAndTypesSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupDeclSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupDeclSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupAttributeListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupAttributeListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupRelationSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupRelationSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupNameListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupNameListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupNameElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupNameElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupAssignmentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupAssignmentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPrecedenceGroupAssociativitySyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PrecedenceGroupAssociativitySyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTokenListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TokenListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplNonEmptyTokenListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = NonEmptyTokenListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCustomAttributeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CustomAttributeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAttributeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AttributeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAttributeListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AttributeListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSpecializeAttributeSpecListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SpecializeAttributeSpecListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplLabeledSpecializeEntrySyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = LabeledSpecializeEntrySyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplNamedAttributeStringArgumentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = NamedAttributeStringArgumentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclNameSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeclNameSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplImplementsAttributeArgumentsSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ImplementsAttributeArgumentsSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjCSelectorPieceSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjCSelectorPieceSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplObjCSelectorSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ObjCSelectorSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplContinueStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ContinueStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplWhileStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = WhileStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeferStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeferStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplExpressionStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ExpressionStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSwitchCaseListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SwitchCaseListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplRepeatWhileStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = RepeatWhileStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGuardStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GuardStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplWhereClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = WhereClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplForInStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ForInStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSwitchStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SwitchStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCatchClauseListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CatchClauseListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDoStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DoStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplReturnStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ReturnStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplYieldStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = YieldStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplYieldListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = YieldListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFallthroughStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FallthroughStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplBreakStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = BreakStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCaseItemListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CaseItemListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplConditionElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ConditionElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAvailabilityConditionSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AvailabilityConditionSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMatchingPatternConditionSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MatchingPatternConditionSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplOptionalBindingConditionSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = OptionalBindingConditionSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplConditionElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ConditionElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDeclarationStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DeclarationStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplThrowStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ThrowStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIfStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IfStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplElseIfContinuationSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ElseIfContinuationSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplElseBlockSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ElseBlockSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSwitchCaseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SwitchCaseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSwitchDefaultLabelSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SwitchDefaultLabelSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCaseItemSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CaseItemSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSwitchCaseLabelSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SwitchCaseLabelSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCatchClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CatchClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplPoundAssertStmtSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = PoundAssertStmtSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericWhereClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericWhereClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericRequirementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericRequirementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericRequirementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericRequirementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSameTypeRequirementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SameTypeRequirementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericParameterListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericParameterListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericParameterSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericParameterSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericParameterClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericParameterClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplConformanceRequirementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ConformanceRequirementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSimpleTypeIdentifierSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SimpleTypeIdentifierSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMemberTypeIdentifierSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MemberTypeIdentifierSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplClassRestrictionTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ClassRestrictionTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplArrayTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ArrayTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplDictionaryTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = DictionaryTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplMetatypeTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = MetatypeTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplOptionalTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = OptionalTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplSomeTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = SomeTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplImplicitlyUnwrappedOptionalTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCompositionTypeElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CompositionTypeElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCompositionTypeElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CompositionTypeElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplCompositionTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = CompositionTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTupleTypeElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TupleTypeElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTupleTypeElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TupleTypeElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTupleTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TupleTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplFunctionTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = FunctionTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAttributedTypeSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AttributedTypeSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericArgumentListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericArgumentListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericArgumentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericArgumentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplGenericArgumentClauseSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = GenericArgumentClauseSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTypeAnnotationSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TypeAnnotationSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplEnumCasePatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = EnumCasePatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIsTypePatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IsTypePatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplOptionalPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = OptionalPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplIdentifierPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = IdentifierPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAsTypePatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AsTypePatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTuplePatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TuplePatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplWildcardPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = WildcardPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTuplePatternElementSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TuplePatternElementSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplExpressionPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ExpressionPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplTuplePatternElementListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = TuplePatternElementListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplValueBindingPatternSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = ValueBindingPatternSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAvailabilitySpecListSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AvailabilitySpecListSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAvailabilityArgumentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AvailabilityArgumentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAvailabilityLabeledArgumentSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AvailabilityLabeledArgumentSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplAvailabilityVersionRestrictionSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = AvailabilityVersionRestrictionSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-/// Implementation detail of doVisit(_:_:). Do not call directly.
-private func _doVisitImplVersionTupleSyntax<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor  {
-    let node = VersionTupleSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-}
-
-
-fileprivate func doVisit<Visitor>(
-  _ data: SyntaxData, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor {
-  // Create the node types directly instead of going through `makeSyntax()`
-  // which has additional cost for casting back and forth from `_SyntaxBase`.
-  switch data.raw.kind {
-  case .token:
-    let node = TokenSyntax(data)
-    _ = visitor.visit(node)
-    // No children to visit.
-    visitor.visitPost(node)
-  case .unknown:
-    let node = UnknownSyntax(data)
-    let needsChildren = (visitor.visit(node) == .visitChildren)
-    // Avoid casting to `_SyntaxBase` if we don't need to visit children.
-    if needsChildren && data.raw.numberOfChildren > 0 {
-      visitChildren(data, parent: node, &visitor)
-    }
-    visitor.visitPost(node)
-  // The implementation of every generated case goes into its own function. This
-  // circumvents an issue where the compiler allocates stack space for every
-  // case statement next to each other in debug builds, causing it to allocate
-  // ~50KB per call to this function. rdar://55929175
-  case .decl:
-    _doVisitImplDeclSyntax(data, &visitor)
-  case .expr:
-    _doVisitImplExprSyntax(data, &visitor)
-  case .stmt:
-    _doVisitImplStmtSyntax(data, &visitor)
-  case .type:
-    _doVisitImplTypeSyntax(data, &visitor)
-  case .pattern:
-    _doVisitImplPatternSyntax(data, &visitor)
-  case .unknownDecl:
-    _doVisitImplUnknownDeclSyntax(data, &visitor)
-  case .unknownExpr:
-    _doVisitImplUnknownExprSyntax(data, &visitor)
-  case .unknownStmt:
-    _doVisitImplUnknownStmtSyntax(data, &visitor)
-  case .unknownType:
-    _doVisitImplUnknownTypeSyntax(data, &visitor)
-  case .unknownPattern:
-    _doVisitImplUnknownPatternSyntax(data, &visitor)
-  case .codeBlockItem:
-    _doVisitImplCodeBlockItemSyntax(data, &visitor)
-  case .codeBlockItemList:
-    _doVisitImplCodeBlockItemListSyntax(data, &visitor)
-  case .codeBlock:
-    _doVisitImplCodeBlockSyntax(data, &visitor)
-  case .inOutExpr:
-    _doVisitImplInOutExprSyntax(data, &visitor)
-  case .poundColumnExpr:
-    _doVisitImplPoundColumnExprSyntax(data, &visitor)
-  case .tupleExprElementList:
-    _doVisitImplTupleExprElementListSyntax(data, &visitor)
-  case .arrayElementList:
-    _doVisitImplArrayElementListSyntax(data, &visitor)
-  case .dictionaryElementList:
-    _doVisitImplDictionaryElementListSyntax(data, &visitor)
-  case .stringLiteralSegments:
-    _doVisitImplStringLiteralSegmentsSyntax(data, &visitor)
-  case .tryExpr:
-    _doVisitImplTryExprSyntax(data, &visitor)
-  case .declNameArgument:
-    _doVisitImplDeclNameArgumentSyntax(data, &visitor)
-  case .declNameArgumentList:
-    _doVisitImplDeclNameArgumentListSyntax(data, &visitor)
-  case .declNameArguments:
-    _doVisitImplDeclNameArgumentsSyntax(data, &visitor)
-  case .identifierExpr:
-    _doVisitImplIdentifierExprSyntax(data, &visitor)
-  case .superRefExpr:
-    _doVisitImplSuperRefExprSyntax(data, &visitor)
-  case .nilLiteralExpr:
-    _doVisitImplNilLiteralExprSyntax(data, &visitor)
-  case .discardAssignmentExpr:
-    _doVisitImplDiscardAssignmentExprSyntax(data, &visitor)
-  case .assignmentExpr:
-    _doVisitImplAssignmentExprSyntax(data, &visitor)
-  case .sequenceExpr:
-    _doVisitImplSequenceExprSyntax(data, &visitor)
-  case .exprList:
-    _doVisitImplExprListSyntax(data, &visitor)
-  case .poundLineExpr:
-    _doVisitImplPoundLineExprSyntax(data, &visitor)
-  case .poundFileExpr:
-    _doVisitImplPoundFileExprSyntax(data, &visitor)
-  case .poundFunctionExpr:
-    _doVisitImplPoundFunctionExprSyntax(data, &visitor)
-  case .poundDsohandleExpr:
-    _doVisitImplPoundDsohandleExprSyntax(data, &visitor)
-  case .symbolicReferenceExpr:
-    _doVisitImplSymbolicReferenceExprSyntax(data, &visitor)
-  case .prefixOperatorExpr:
-    _doVisitImplPrefixOperatorExprSyntax(data, &visitor)
-  case .binaryOperatorExpr:
-    _doVisitImplBinaryOperatorExprSyntax(data, &visitor)
-  case .arrowExpr:
-    _doVisitImplArrowExprSyntax(data, &visitor)
-  case .floatLiteralExpr:
-    _doVisitImplFloatLiteralExprSyntax(data, &visitor)
-  case .tupleExpr:
-    _doVisitImplTupleExprSyntax(data, &visitor)
-  case .arrayExpr:
-    _doVisitImplArrayExprSyntax(data, &visitor)
-  case .dictionaryExpr:
-    _doVisitImplDictionaryExprSyntax(data, &visitor)
-  case .tupleExprElement:
-    _doVisitImplTupleExprElementSyntax(data, &visitor)
-  case .arrayElement:
-    _doVisitImplArrayElementSyntax(data, &visitor)
-  case .dictionaryElement:
-    _doVisitImplDictionaryElementSyntax(data, &visitor)
-  case .integerLiteralExpr:
-    _doVisitImplIntegerLiteralExprSyntax(data, &visitor)
-  case .booleanLiteralExpr:
-    _doVisitImplBooleanLiteralExprSyntax(data, &visitor)
-  case .ternaryExpr:
-    _doVisitImplTernaryExprSyntax(data, &visitor)
-  case .memberAccessExpr:
-    _doVisitImplMemberAccessExprSyntax(data, &visitor)
-  case .isExpr:
-    _doVisitImplIsExprSyntax(data, &visitor)
-  case .asExpr:
-    _doVisitImplAsExprSyntax(data, &visitor)
-  case .typeExpr:
-    _doVisitImplTypeExprSyntax(data, &visitor)
-  case .closureCaptureItem:
-    _doVisitImplClosureCaptureItemSyntax(data, &visitor)
-  case .closureCaptureItemList:
-    _doVisitImplClosureCaptureItemListSyntax(data, &visitor)
-  case .closureCaptureSignature:
-    _doVisitImplClosureCaptureSignatureSyntax(data, &visitor)
-  case .closureParam:
-    _doVisitImplClosureParamSyntax(data, &visitor)
-  case .closureParamList:
-    _doVisitImplClosureParamListSyntax(data, &visitor)
-  case .closureSignature:
-    _doVisitImplClosureSignatureSyntax(data, &visitor)
-  case .closureExpr:
-    _doVisitImplClosureExprSyntax(data, &visitor)
-  case .unresolvedPatternExpr:
-    _doVisitImplUnresolvedPatternExprSyntax(data, &visitor)
-  case .functionCallExpr:
-    _doVisitImplFunctionCallExprSyntax(data, &visitor)
-  case .subscriptExpr:
-    _doVisitImplSubscriptExprSyntax(data, &visitor)
-  case .optionalChainingExpr:
-    _doVisitImplOptionalChainingExprSyntax(data, &visitor)
-  case .forcedValueExpr:
-    _doVisitImplForcedValueExprSyntax(data, &visitor)
-  case .postfixUnaryExpr:
-    _doVisitImplPostfixUnaryExprSyntax(data, &visitor)
-  case .specializeExpr:
-    _doVisitImplSpecializeExprSyntax(data, &visitor)
-  case .stringSegment:
-    _doVisitImplStringSegmentSyntax(data, &visitor)
-  case .expressionSegment:
-    _doVisitImplExpressionSegmentSyntax(data, &visitor)
-  case .stringLiteralExpr:
-    _doVisitImplStringLiteralExprSyntax(data, &visitor)
-  case .keyPathExpr:
-    _doVisitImplKeyPathExprSyntax(data, &visitor)
-  case .keyPathBaseExpr:
-    _doVisitImplKeyPathBaseExprSyntax(data, &visitor)
-  case .objcNamePiece:
-    _doVisitImplObjcNamePieceSyntax(data, &visitor)
-  case .objcName:
-    _doVisitImplObjcNameSyntax(data, &visitor)
-  case .objcKeyPathExpr:
-    _doVisitImplObjcKeyPathExprSyntax(data, &visitor)
-  case .objcSelectorExpr:
-    _doVisitImplObjcSelectorExprSyntax(data, &visitor)
-  case .editorPlaceholderExpr:
-    _doVisitImplEditorPlaceholderExprSyntax(data, &visitor)
-  case .objectLiteralExpr:
-    _doVisitImplObjectLiteralExprSyntax(data, &visitor)
-  case .typeInitializerClause:
-    _doVisitImplTypeInitializerClauseSyntax(data, &visitor)
-  case .typealiasDecl:
-    _doVisitImplTypealiasDeclSyntax(data, &visitor)
-  case .associatedtypeDecl:
-    _doVisitImplAssociatedtypeDeclSyntax(data, &visitor)
-  case .functionParameterList:
-    _doVisitImplFunctionParameterListSyntax(data, &visitor)
-  case .parameterClause:
-    _doVisitImplParameterClauseSyntax(data, &visitor)
-  case .returnClause:
-    _doVisitImplReturnClauseSyntax(data, &visitor)
-  case .functionSignature:
-    _doVisitImplFunctionSignatureSyntax(data, &visitor)
-  case .ifConfigClause:
-    _doVisitImplIfConfigClauseSyntax(data, &visitor)
-  case .ifConfigClauseList:
-    _doVisitImplIfConfigClauseListSyntax(data, &visitor)
-  case .ifConfigDecl:
-    _doVisitImplIfConfigDeclSyntax(data, &visitor)
-  case .poundErrorDecl:
-    _doVisitImplPoundErrorDeclSyntax(data, &visitor)
-  case .poundWarningDecl:
-    _doVisitImplPoundWarningDeclSyntax(data, &visitor)
-  case .poundSourceLocation:
-    _doVisitImplPoundSourceLocationSyntax(data, &visitor)
-  case .poundSourceLocationArgs:
-    _doVisitImplPoundSourceLocationArgsSyntax(data, &visitor)
-  case .declModifier:
-    _doVisitImplDeclModifierSyntax(data, &visitor)
-  case .inheritedType:
-    _doVisitImplInheritedTypeSyntax(data, &visitor)
-  case .inheritedTypeList:
-    _doVisitImplInheritedTypeListSyntax(data, &visitor)
-  case .typeInheritanceClause:
-    _doVisitImplTypeInheritanceClauseSyntax(data, &visitor)
-  case .classDecl:
-    _doVisitImplClassDeclSyntax(data, &visitor)
-  case .structDecl:
-    _doVisitImplStructDeclSyntax(data, &visitor)
-  case .protocolDecl:
-    _doVisitImplProtocolDeclSyntax(data, &visitor)
-  case .extensionDecl:
-    _doVisitImplExtensionDeclSyntax(data, &visitor)
-  case .memberDeclBlock:
-    _doVisitImplMemberDeclBlockSyntax(data, &visitor)
-  case .memberDeclList:
-    _doVisitImplMemberDeclListSyntax(data, &visitor)
-  case .memberDeclListItem:
-    _doVisitImplMemberDeclListItemSyntax(data, &visitor)
-  case .sourceFile:
-    _doVisitImplSourceFileSyntax(data, &visitor)
-  case .initializerClause:
-    _doVisitImplInitializerClauseSyntax(data, &visitor)
-  case .functionParameter:
-    _doVisitImplFunctionParameterSyntax(data, &visitor)
-  case .modifierList:
-    _doVisitImplModifierListSyntax(data, &visitor)
-  case .functionDecl:
-    _doVisitImplFunctionDeclSyntax(data, &visitor)
-  case .initializerDecl:
-    _doVisitImplInitializerDeclSyntax(data, &visitor)
-  case .deinitializerDecl:
-    _doVisitImplDeinitializerDeclSyntax(data, &visitor)
-  case .subscriptDecl:
-    _doVisitImplSubscriptDeclSyntax(data, &visitor)
-  case .accessLevelModifier:
-    _doVisitImplAccessLevelModifierSyntax(data, &visitor)
-  case .accessPathComponent:
-    _doVisitImplAccessPathComponentSyntax(data, &visitor)
-  case .accessPath:
-    _doVisitImplAccessPathSyntax(data, &visitor)
-  case .importDecl:
-    _doVisitImplImportDeclSyntax(data, &visitor)
-  case .accessorParameter:
-    _doVisitImplAccessorParameterSyntax(data, &visitor)
-  case .accessorDecl:
-    _doVisitImplAccessorDeclSyntax(data, &visitor)
-  case .accessorList:
-    _doVisitImplAccessorListSyntax(data, &visitor)
-  case .accessorBlock:
-    _doVisitImplAccessorBlockSyntax(data, &visitor)
-  case .patternBinding:
-    _doVisitImplPatternBindingSyntax(data, &visitor)
-  case .patternBindingList:
-    _doVisitImplPatternBindingListSyntax(data, &visitor)
-  case .variableDecl:
-    _doVisitImplVariableDeclSyntax(data, &visitor)
-  case .enumCaseElement:
-    _doVisitImplEnumCaseElementSyntax(data, &visitor)
-  case .enumCaseElementList:
-    _doVisitImplEnumCaseElementListSyntax(data, &visitor)
-  case .enumCaseDecl:
-    _doVisitImplEnumCaseDeclSyntax(data, &visitor)
-  case .enumDecl:
-    _doVisitImplEnumDeclSyntax(data, &visitor)
-  case .operatorDecl:
-    _doVisitImplOperatorDeclSyntax(data, &visitor)
-  case .identifierList:
-    _doVisitImplIdentifierListSyntax(data, &visitor)
-  case .operatorPrecedenceAndTypes:
-    _doVisitImplOperatorPrecedenceAndTypesSyntax(data, &visitor)
-  case .precedenceGroupDecl:
-    _doVisitImplPrecedenceGroupDeclSyntax(data, &visitor)
-  case .precedenceGroupAttributeList:
-    _doVisitImplPrecedenceGroupAttributeListSyntax(data, &visitor)
-  case .precedenceGroupRelation:
-    _doVisitImplPrecedenceGroupRelationSyntax(data, &visitor)
-  case .precedenceGroupNameList:
-    _doVisitImplPrecedenceGroupNameListSyntax(data, &visitor)
-  case .precedenceGroupNameElement:
-    _doVisitImplPrecedenceGroupNameElementSyntax(data, &visitor)
-  case .precedenceGroupAssignment:
-    _doVisitImplPrecedenceGroupAssignmentSyntax(data, &visitor)
-  case .precedenceGroupAssociativity:
-    _doVisitImplPrecedenceGroupAssociativitySyntax(data, &visitor)
-  case .tokenList:
-    _doVisitImplTokenListSyntax(data, &visitor)
-  case .nonEmptyTokenList:
-    _doVisitImplNonEmptyTokenListSyntax(data, &visitor)
-  case .customAttribute:
-    _doVisitImplCustomAttributeSyntax(data, &visitor)
-  case .attribute:
-    _doVisitImplAttributeSyntax(data, &visitor)
-  case .attributeList:
-    _doVisitImplAttributeListSyntax(data, &visitor)
-  case .specializeAttributeSpecList:
-    _doVisitImplSpecializeAttributeSpecListSyntax(data, &visitor)
-  case .labeledSpecializeEntry:
-    _doVisitImplLabeledSpecializeEntrySyntax(data, &visitor)
-  case .namedAttributeStringArgument:
-    _doVisitImplNamedAttributeStringArgumentSyntax(data, &visitor)
-  case .declName:
-    _doVisitImplDeclNameSyntax(data, &visitor)
-  case .implementsAttributeArguments:
-    _doVisitImplImplementsAttributeArgumentsSyntax(data, &visitor)
-  case .objCSelectorPiece:
-    _doVisitImplObjCSelectorPieceSyntax(data, &visitor)
-  case .objCSelector:
-    _doVisitImplObjCSelectorSyntax(data, &visitor)
-  case .continueStmt:
-    _doVisitImplContinueStmtSyntax(data, &visitor)
-  case .whileStmt:
-    _doVisitImplWhileStmtSyntax(data, &visitor)
-  case .deferStmt:
-    _doVisitImplDeferStmtSyntax(data, &visitor)
-  case .expressionStmt:
-    _doVisitImplExpressionStmtSyntax(data, &visitor)
-  case .switchCaseList:
-    _doVisitImplSwitchCaseListSyntax(data, &visitor)
-  case .repeatWhileStmt:
-    _doVisitImplRepeatWhileStmtSyntax(data, &visitor)
-  case .guardStmt:
-    _doVisitImplGuardStmtSyntax(data, &visitor)
-  case .whereClause:
-    _doVisitImplWhereClauseSyntax(data, &visitor)
-  case .forInStmt:
-    _doVisitImplForInStmtSyntax(data, &visitor)
-  case .switchStmt:
-    _doVisitImplSwitchStmtSyntax(data, &visitor)
-  case .catchClauseList:
-    _doVisitImplCatchClauseListSyntax(data, &visitor)
-  case .doStmt:
-    _doVisitImplDoStmtSyntax(data, &visitor)
-  case .returnStmt:
-    _doVisitImplReturnStmtSyntax(data, &visitor)
-  case .yieldStmt:
-    _doVisitImplYieldStmtSyntax(data, &visitor)
-  case .yieldList:
-    _doVisitImplYieldListSyntax(data, &visitor)
-  case .fallthroughStmt:
-    _doVisitImplFallthroughStmtSyntax(data, &visitor)
-  case .breakStmt:
-    _doVisitImplBreakStmtSyntax(data, &visitor)
-  case .caseItemList:
-    _doVisitImplCaseItemListSyntax(data, &visitor)
-  case .conditionElement:
-    _doVisitImplConditionElementSyntax(data, &visitor)
-  case .availabilityCondition:
-    _doVisitImplAvailabilityConditionSyntax(data, &visitor)
-  case .matchingPatternCondition:
-    _doVisitImplMatchingPatternConditionSyntax(data, &visitor)
-  case .optionalBindingCondition:
-    _doVisitImplOptionalBindingConditionSyntax(data, &visitor)
-  case .conditionElementList:
-    _doVisitImplConditionElementListSyntax(data, &visitor)
-  case .declarationStmt:
-    _doVisitImplDeclarationStmtSyntax(data, &visitor)
-  case .throwStmt:
-    _doVisitImplThrowStmtSyntax(data, &visitor)
-  case .ifStmt:
-    _doVisitImplIfStmtSyntax(data, &visitor)
-  case .elseIfContinuation:
-    _doVisitImplElseIfContinuationSyntax(data, &visitor)
-  case .elseBlock:
-    _doVisitImplElseBlockSyntax(data, &visitor)
-  case .switchCase:
-    _doVisitImplSwitchCaseSyntax(data, &visitor)
-  case .switchDefaultLabel:
-    _doVisitImplSwitchDefaultLabelSyntax(data, &visitor)
-  case .caseItem:
-    _doVisitImplCaseItemSyntax(data, &visitor)
-  case .switchCaseLabel:
-    _doVisitImplSwitchCaseLabelSyntax(data, &visitor)
-  case .catchClause:
-    _doVisitImplCatchClauseSyntax(data, &visitor)
-  case .poundAssertStmt:
-    _doVisitImplPoundAssertStmtSyntax(data, &visitor)
-  case .genericWhereClause:
-    _doVisitImplGenericWhereClauseSyntax(data, &visitor)
-  case .genericRequirementList:
-    _doVisitImplGenericRequirementListSyntax(data, &visitor)
-  case .genericRequirement:
-    _doVisitImplGenericRequirementSyntax(data, &visitor)
-  case .sameTypeRequirement:
-    _doVisitImplSameTypeRequirementSyntax(data, &visitor)
-  case .genericParameterList:
-    _doVisitImplGenericParameterListSyntax(data, &visitor)
-  case .genericParameter:
-    _doVisitImplGenericParameterSyntax(data, &visitor)
-  case .genericParameterClause:
-    _doVisitImplGenericParameterClauseSyntax(data, &visitor)
-  case .conformanceRequirement:
-    _doVisitImplConformanceRequirementSyntax(data, &visitor)
-  case .simpleTypeIdentifier:
-    _doVisitImplSimpleTypeIdentifierSyntax(data, &visitor)
-  case .memberTypeIdentifier:
-    _doVisitImplMemberTypeIdentifierSyntax(data, &visitor)
-  case .classRestrictionType:
-    _doVisitImplClassRestrictionTypeSyntax(data, &visitor)
-  case .arrayType:
-    _doVisitImplArrayTypeSyntax(data, &visitor)
-  case .dictionaryType:
-    _doVisitImplDictionaryTypeSyntax(data, &visitor)
-  case .metatypeType:
-    _doVisitImplMetatypeTypeSyntax(data, &visitor)
-  case .optionalType:
-    _doVisitImplOptionalTypeSyntax(data, &visitor)
-  case .someType:
-    _doVisitImplSomeTypeSyntax(data, &visitor)
-  case .implicitlyUnwrappedOptionalType:
-    _doVisitImplImplicitlyUnwrappedOptionalTypeSyntax(data, &visitor)
-  case .compositionTypeElement:
-    _doVisitImplCompositionTypeElementSyntax(data, &visitor)
-  case .compositionTypeElementList:
-    _doVisitImplCompositionTypeElementListSyntax(data, &visitor)
-  case .compositionType:
-    _doVisitImplCompositionTypeSyntax(data, &visitor)
-  case .tupleTypeElement:
-    _doVisitImplTupleTypeElementSyntax(data, &visitor)
-  case .tupleTypeElementList:
-    _doVisitImplTupleTypeElementListSyntax(data, &visitor)
-  case .tupleType:
-    _doVisitImplTupleTypeSyntax(data, &visitor)
-  case .functionType:
-    _doVisitImplFunctionTypeSyntax(data, &visitor)
-  case .attributedType:
-    _doVisitImplAttributedTypeSyntax(data, &visitor)
-  case .genericArgumentList:
-    _doVisitImplGenericArgumentListSyntax(data, &visitor)
-  case .genericArgument:
-    _doVisitImplGenericArgumentSyntax(data, &visitor)
-  case .genericArgumentClause:
-    _doVisitImplGenericArgumentClauseSyntax(data, &visitor)
-  case .typeAnnotation:
-    _doVisitImplTypeAnnotationSyntax(data, &visitor)
-  case .enumCasePattern:
-    _doVisitImplEnumCasePatternSyntax(data, &visitor)
-  case .isTypePattern:
-    _doVisitImplIsTypePatternSyntax(data, &visitor)
-  case .optionalPattern:
-    _doVisitImplOptionalPatternSyntax(data, &visitor)
-  case .identifierPattern:
-    _doVisitImplIdentifierPatternSyntax(data, &visitor)
-  case .asTypePattern:
-    _doVisitImplAsTypePatternSyntax(data, &visitor)
-  case .tuplePattern:
-    _doVisitImplTuplePatternSyntax(data, &visitor)
-  case .wildcardPattern:
-    _doVisitImplWildcardPatternSyntax(data, &visitor)
-  case .tuplePatternElement:
-    _doVisitImplTuplePatternElementSyntax(data, &visitor)
-  case .expressionPattern:
-    _doVisitImplExpressionPatternSyntax(data, &visitor)
-  case .tuplePatternElementList:
-    _doVisitImplTuplePatternElementListSyntax(data, &visitor)
-  case .valueBindingPattern:
-    _doVisitImplValueBindingPatternSyntax(data, &visitor)
-  case .availabilitySpecList:
-    _doVisitImplAvailabilitySpecListSyntax(data, &visitor)
-  case .availabilityArgument:
-    _doVisitImplAvailabilityArgumentSyntax(data, &visitor)
-  case .availabilityLabeledArgument:
-    _doVisitImplAvailabilityLabeledArgumentSyntax(data, &visitor)
-  case .availabilityVersionRestriction:
-    _doVisitImplAvailabilityVersionRestrictionSyntax(data, &visitor)
-  case .versionTuple:
-    _doVisitImplVersionTupleSyntax(data, &visitor)
-  }
-}
-
-fileprivate func visitChildren<Visitor>(
-  _ data: SyntaxData, parent: _SyntaxBase, _ visitor: inout Visitor
-) where Visitor : SyntaxVisitor {
-  for childRaw in PresentRawSyntaxChildren(data.absoluteRaw) {
-    let childData = SyntaxData(childRaw, parent: parent)
-    doVisit(childData, &visitor)
-  }
 }

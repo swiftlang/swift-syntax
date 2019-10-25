@@ -49,7 +49,7 @@ def escapeCmdArg(arg):
         return arg
 
 
-def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT, 
+def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT,
          verbose=False):
     if verbose:
         print(' '.join([escapeCmdArg(arg) for arg in cmd]))
@@ -78,9 +78,9 @@ def realpath(path):
 def check_gyb_exec():
     if not os.path.exists(GYB_EXEC):
         fatal_error('''
-Error: Could not find gyb. 
+Error: Could not find gyb.
 
-Make sure you have the main swift repo checked out next to the swift-syntax 
+Make sure you have the main swift repo checked out next to the swift-syntax
 repository.
 Refer to README.md for more information.
 ''')
@@ -92,7 +92,7 @@ def check_rsync():
             fatal_error('Error: Could not find rsync.')
 
 
-def generate_gyb_files(verbose, add_source_locations, tar_path):
+def generate_gyb_files(verbose, add_source_locations, destination=None):
     print('** Generating gyb Files **')
 
     check_gyb_exec()
@@ -100,20 +100,22 @@ def generate_gyb_files(verbose, add_source_locations, tar_path):
 
     swiftsyntax_sources_dir = PACKAGE_DIR + '/Sources/SwiftSyntax'
     temp_files_dir = tempfile.gettempdir()
-    generated_files_dir = swiftsyntax_sources_dir + '/gyb_generated'
+
+    if destination is None:
+        destination = swiftsyntax_sources_dir + '/gyb_generated'
 
     if not os.path.exists(temp_files_dir):
         os.makedirs(temp_files_dir)
-    if not os.path.exists(generated_files_dir):
-        os.makedirs(generated_files_dir)
+    if not os.path.exists(destination):
+        os.makedirs(destination)
 
     # Clear any *.swift files that are relics from the previous run.
-    for previous_gyb_gen_file in os.listdir(generated_files_dir):
+    for previous_gyb_gen_file in os.listdir(destination):
       if previous_gyb_gen_file.endswith('.swift'):
-        gyb_file = os.path.join(swiftsyntax_sources_dir, 
+        gyb_file = os.path.join(swiftsyntax_sources_dir,
                                 previous_gyb_gen_file + '.gyb')
         if not os.path.exists(gyb_file):
-          check_call(['rm', previous_gyb_gen_file], cwd=generated_files_dir, 
+          check_call(['rm', previous_gyb_gen_file], cwd=destination,
                      verbose=verbose)
 
     # Generate the new .swift files in a temporary directory and only copy them
@@ -140,23 +142,16 @@ def generate_gyb_files(verbose, add_source_locations, tar_path):
                    line_directive_flags,
                    verbose=verbose)
 
-        # Copy the file if different from the file already present in 
+        # Copy the file if different from the file already present in
         # gyb_generated
         check_call(['rsync'] +
                    ['--checksum'] +
                    [temp_files_dir + '/' + output_file_name] +
-                   [generated_files_dir + '/' + output_file_name],
+                   [destination + '/' + output_file_name],
                    verbose=verbose)
 
     print('Done Generating gyb Files')
-    if not tar_path:
-      return
-    tar_command = ['tar', '-c', '-z', '-f', tar_path]
-    for degybed_file in os.listdir(generated_files_dir):
-        if not degybed_file.endswith('.swift'):
-            continue
-        tar_command.append(degybed_file)
-    check_call(tar_command, cwd=generated_files_dir)
+
 
 ## Building swiftSyntax
 
@@ -228,6 +223,24 @@ class Builder(object):
 
 
 ## Testing
+def verify_generated_files(verbose):
+    user_generated_dir = os.path.join(PACKAGE_DIR, 'Sources', 'SwiftSyntax',
+                                      'gyb_generated')
+    self_generated_dir = tempfile.mkdtemp()
+    generate_gyb_files(verbose=verbose,
+                       add_source_locations=False,
+                       destination=self_generated_dir)
+
+    command = [
+        'diff', '-r',
+        '-x', '.*', # Exclude dot files like .DS_Store
+        '--context=0',
+        self_generated_dir,
+        user_generated_dir,
+    ]
+    check_call(command)
+
+
 def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
               release, swift_build_exec, filecheck_exec, swiftc_exec, verbose):
     print('** Running SwiftSyntax Tests **')
@@ -264,9 +277,9 @@ def run_tests(swift_test_exec, build_dir, parser_header_dir, parser_lib_dir,
 def check_lit_exec():
     if not os.path.exists(LIT_EXEC):
         fatal_error('''
-Error: Could not find lit.py. 
+Error: Could not find lit.py.
 
-Make sure you have the llvm repo checked out next to the swift-syntax repo. 
+Make sure you have the llvm repo checked out next to the swift-syntax repo.
 Refer to README.md for more information.
 ''')
 
@@ -274,10 +287,10 @@ Refer to README.md for more information.
 def check_incr_transfer_roundtrip_exec():
     if not os.path.exists(INCR_TRANSFER_ROUNDTRIP_EXEC):
         fatal_error('''
-Error: Could not find incr_transfer_round_trip.py. 
+Error: Could not find incr_transfer_round_trip.py.
 
-Make sure you have the main swift repo checked out next to the swift-syntax 
-repo. 
+Make sure you have the main swift repo checked out next to the swift-syntax
+repo.
 Refer to README.md for more information.
 ''')
 
@@ -312,7 +325,7 @@ def run_lit_tests(swift_build_exec, build_dir, parser_header_dir, parser_lib_dir
 
     lit_call = [LIT_EXEC]
     lit_call.extend([PACKAGE_DIR + '/lit_tests'])
-    
+
     if swiftc_exec:
         lit_call.extend(['--param', 'SWIFTC=' + realpath(swiftc_exec)])
     if filecheck_exec:
@@ -451,8 +464,8 @@ section for arguments that need to be specified for this.
     basic_group.add_argument('--swiftmodule-base-name',
                              help='''
       The name under which the Swift module should be installed. A .swiftdoc and
-      .swiftmodule file extension will be added to this path and the 
-      corresponding files will be copied there. 
+      .swiftmodule file extension will be added to this path and the
+      corresponding files will be copied there.
       Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
@@ -469,14 +482,10 @@ section for arguments that need to be specified for this.
                              help='The script only generates swift files from gyb '
                                   'and skips the rest of the build')
 
-    build_group.add_argument('--degyb-tar-path',
-                             help='The path to where we should tar the gyb-generated'
-                                  'files')
-
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
-    
+
     testing_group.add_argument('--swift-build-exec', default='swift build',
                                help='''
       Path to the swift-build executable that is used to build SwiftPM projects
@@ -512,6 +521,11 @@ section for arguments that need to be specified for this.
       Path to the FileCheck executable that was built as part of the LLVM
       repository. If not specified, it will be looked up from PATH.
       ''')
+    testing_group.add_argument('--verify-generated-files', action='store_true',
+                               help='''
+      Instead of generating files using gyb, verify that the files which
+      already exist match the ones that would be generated by this script.
+      ''')
 
     args = parser.parse_args(sys.argv[1:])
 
@@ -532,21 +546,30 @@ section for arguments that need to be specified for this.
         sys.exit(0)
 
     try:
-        generate_gyb_files(verbose=args.verbose,
-                           add_source_locations=args.add_source_locations,
-                           tar_path=args.degyb_tar_path)
+        if not args.verify_generated_files:
+            generate_gyb_files(verbose=args.verbose,
+                               add_source_locations=args.add_source_locations)
         # Skip the rest of the build if we should perform degyb only
         if args.degyb_only:
             sys.exit(0)
     except subprocess.CalledProcessError as e:
-        printerr('Error: Generating .gyb files failed')
+        printerr('FAIL: Generating .gyb files failed')
         printerr('Executing: %s' % ' '.join(e.cmd))
         printerr(e.output)
         sys.exit(1)
 
+    if args.verify_generated_files:
+        try:
+            success = verify_generated_files(verbose=args.verbose)
+        except subprocess.CalledProcessError as e:
+            printerr('FAIL: Gyb-generated files committed to repository do '
+                     'not match generated ones. Please re-generate the '
+                     'gyb-files and recommit them.')
+            sys.exit(1)
+
     if args.generate_xcodeproj:
-      xcode_gen(config=args.xcconfig_path)
-      sys.exit(0)
+        xcode_gen(config=args.xcconfig_path)
+        sys.exit(0)
 
     try:
         builder = Builder(swift_build_exec=args.swift_build_exec,
@@ -563,7 +586,7 @@ section for arguments that need to be specified for this.
         if args.test:
           builder.build('lit-test-helper')
     except subprocess.CalledProcessError as e:
-        printerr('Error: Building SwiftSyntax failed')
+        printerr('FAIL: Building SwiftSyntax failed')
         printerr('Executing: %s' % ' '.join(e.cmd))
         printerr(e.output)
         sys.exit(1)
@@ -586,7 +609,7 @@ section for arguments that need to be specified for this.
             else:
                 print('** All tests passed **')
         except subprocess.CalledProcessError as e:
-            printerr('Error: Running tests failed')
+            printerr('FAIL: Running tests failed')
             printerr('Executing: %s' % ' '.join(e.cmd))
             printerr(e.output)
             sys.exit(1)

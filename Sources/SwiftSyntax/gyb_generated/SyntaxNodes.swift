@@ -15,23 +15,34 @@
 import _InternalSwiftSyntaxParser
 
 
+/// Provide all the cusotmised casting functions for Syntax nodes
+extension Syntax {
+  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(self)
+  }
+}
+
 /// A wrapper around a raw Syntax layout.
-public struct UnknownSyntax: _SyntaxBase, Hashable {
-  let data: SyntaxData
+public struct UnknownSyntax: SyntaxProtocol {
+  public let _syntaxNode: Syntax
 
-  /// Creates an `UnknownSyntax` node from the provided root and data.
+  /// Convert the given `Syntax` node to an `UnknownSyntax` if possible. Return 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unknown else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates an `UnknownSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
-  }
-
-  /// Determines if two `UnknownSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnknownSyntax, rhs: UnknownSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
+    assert(data.raw.kind == .unknown)
+    self._syntaxNode = Syntax(data)
   }
 }
 
@@ -41,24 +52,289 @@ extension UnknownSyntax: CustomReflectable {
   }
 }
 
-public protocol DeclSyntax: Syntax {}
+/// Protocol to which all `DeclSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 
-public protocol ExprSyntax: Syntax {}
+public struct DeclSyntax: DeclSyntaxProtocol {
+  public let _syntaxNode: Syntax
 
-public protocol StmtSyntax: Syntax {}
+  public init<S: DeclSyntaxProtocol>(_ syntax: S) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
 
-public protocol TypeSyntax: Syntax {}
+  /// Converts the given `Syntax` node to a `DeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    switch syntax.raw.kind {
+    case .unknownDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl:
+      self._syntaxNode = syntax
+    default:
+      return nil
+    }
+  }
 
-public protocol PatternSyntax: Syntax {}
-
-
-public struct UnknownDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
-
-  let data: SyntaxData
-
-  /// Creates a `UnknownDeclSyntax` node from the provided root and data.
+  /// Creates a `DeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    // Assert that the kind of the given data matches in debug builds.
+#if DEBUG
+    switch data.raw.kind {
+    case .unknownDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl:
+      break
+    default:
+      fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
+    }
+#endif
+
+    self._syntaxNode = Syntax(data)
+  }
+
+  public func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(_syntaxNode)
+  }
+}
+
+/// Protocol to which all `ExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ExprSyntaxProtocol: SyntaxProtocol {}
+
+public struct ExprSyntax: ExprSyntaxProtocol {
+  public let _syntaxNode: Syntax
+
+  public init<S: ExprSyntaxProtocol>(_ syntax: S) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Converts the given `Syntax` node to a `ExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    switch syntax.raw.kind {
+    case .unknownExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .ternaryExpr, .memberAccessExpr, .isExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .keyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .editorPlaceholderExpr, .objectLiteralExpr:
+      self._syntaxNode = syntax
+    default:
+      return nil
+    }
+  }
+
+  /// Creates a `ExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    // Assert that the kind of the given data matches in debug builds.
+#if DEBUG
+    switch data.raw.kind {
+    case .unknownExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .ternaryExpr, .memberAccessExpr, .isExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .keyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .editorPlaceholderExpr, .objectLiteralExpr:
+      break
+    default:
+      fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
+    }
+#endif
+
+    self._syntaxNode = Syntax(data)
+  }
+
+  public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(_syntaxNode)
+  }
+}
+
+/// Protocol to which all `StmtSyntax` nodes conform. Extension point to add
+/// common methods to all `StmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol StmtSyntaxProtocol: SyntaxProtocol {}
+
+public struct StmtSyntax: StmtSyntaxProtocol {
+  public let _syntaxNode: Syntax
+
+  public init<S: StmtSyntaxProtocol>(_ syntax: S) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Converts the given `Syntax` node to a `StmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    switch syntax.raw.kind {
+    case .unknownStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
+      self._syntaxNode = syntax
+    default:
+      return nil
+    }
+  }
+
+  /// Creates a `StmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    // Assert that the kind of the given data matches in debug builds.
+#if DEBUG
+    switch data.raw.kind {
+    case .unknownStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
+      break
+    default:
+      fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
+    }
+#endif
+
+    self._syntaxNode = Syntax(data)
+  }
+
+  public func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(_syntaxNode)
+  }
+}
+
+/// Protocol to which all `TypeSyntax` nodes conform. Extension point to add
+/// common methods to all `TypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TypeSyntaxProtocol: SyntaxProtocol {}
+
+public struct TypeSyntax: TypeSyntaxProtocol {
+  public let _syntaxNode: Syntax
+
+  public init<S: TypeSyntaxProtocol>(_ syntax: S) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Converts the given `Syntax` node to a `TypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    switch syntax.raw.kind {
+    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .someType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
+      self._syntaxNode = syntax
+    default:
+      return nil
+    }
+  }
+
+  /// Creates a `TypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    // Assert that the kind of the given data matches in debug builds.
+#if DEBUG
+    switch data.raw.kind {
+    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .someType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
+      break
+    default:
+      fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
+    }
+#endif
+
+    self._syntaxNode = Syntax(data)
+  }
+
+  public func `is`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(_syntaxNode)
+  }
+}
+
+/// Protocol to which all `PatternSyntax` nodes conform. Extension point to add
+/// common methods to all `PatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PatternSyntaxProtocol: SyntaxProtocol {}
+
+public struct PatternSyntax: PatternSyntaxProtocol {
+  public let _syntaxNode: Syntax
+
+  public init<S: PatternSyntaxProtocol>(_ syntax: S) {
+    // We know this cast is going to succeed. Go through init(_: SyntaxData)
+    // to do a sanity check and verify the kind matches in debug builds and get
+    // maximum performance in release builds.
+    self.init(syntax._syntaxNode.data)
+  }
+
+  /// Converts the given `Syntax` node to a `PatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    switch syntax.raw.kind {
+    case .unknownPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
+      self._syntaxNode = syntax
+    default:
+      return nil
+    }
+  }
+
+  /// Creates a `PatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    // Assert that the kind of the given data matches in debug builds.
+#if DEBUG
+    switch data.raw.kind {
+    case .unknownPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
+      break
+    default:
+      fatalError("Unable to create PatternSyntax from \(data.raw.kind)")
+    }
+#endif
+
+    self._syntaxNode = Syntax(data)
+  }
+
+  public func `is`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(_syntaxNode)
+  }
+}
+
+/// Protocol to which all `UnknownDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `UnknownDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol UnknownDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
+
+public struct UnknownDeclSyntax: DeclSyntaxProtocol {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnknownDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unknownDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnknownDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .unknownDecl)
+    self._syntaxNode = Syntax(data)
   }
 
 
@@ -108,25 +384,30 @@ public struct UnknownDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `UnknownDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnknownDeclSyntax, rhs: UnknownDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `UnknownExprSyntax` nodes conform. Extension point to add
+/// common methods to all `UnknownExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol UnknownExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct UnknownExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
 
-  let data: SyntaxData
+public struct UnknownExprSyntax: ExprSyntaxProtocol {
 
-  /// Creates a `UnknownExprSyntax` node from the provided root and data.
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnknownExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unknownExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnknownExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .unknownExpr)
+    self._syntaxNode = Syntax(data)
   }
 
 
@@ -176,25 +457,30 @@ public struct UnknownExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `UnknownExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnknownExprSyntax, rhs: UnknownExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `UnknownStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `UnknownStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol UnknownStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct UnknownStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
 
-  let data: SyntaxData
+public struct UnknownStmtSyntax: StmtSyntaxProtocol {
 
-  /// Creates a `UnknownStmtSyntax` node from the provided root and data.
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnknownStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unknownStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnknownStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .unknownStmt)
+    self._syntaxNode = Syntax(data)
   }
 
 
@@ -244,25 +530,30 @@ public struct UnknownStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `UnknownStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnknownStmtSyntax, rhs: UnknownStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `UnknownTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `UnknownTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol UnknownTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct UnknownTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
 
-  let data: SyntaxData
+public struct UnknownTypeSyntax: TypeSyntaxProtocol {
 
-  /// Creates a `UnknownTypeSyntax` node from the provided root and data.
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnknownTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unknownType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnknownTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .unknownType)
+    self._syntaxNode = Syntax(data)
   }
 
 
@@ -312,25 +603,30 @@ public struct UnknownTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `UnknownTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnknownTypeSyntax, rhs: UnknownTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `UnknownPatternSyntax` nodes conform. Extension point to add
+/// common methods to all `UnknownPatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol UnknownPatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct UnknownPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
 
-  let data: SyntaxData
+public struct UnknownPatternSyntax: PatternSyntaxProtocol {
 
-  /// Creates a `UnknownPatternSyntax` node from the provided root and data.
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnknownPatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unknownPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnknownPatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .unknownPattern)
+    self._syntaxNode = Syntax(data)
   }
 
 
@@ -380,45 +676,51 @@ public struct UnknownPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `UnknownPatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnknownPatternSyntax, rhs: UnknownPatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CodeBlockItemSyntax` nodes conform. Extension point to add
+/// common methods to all `CodeBlockItemSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CodeBlockItemSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A CodeBlockItem is any Syntax node that appears on its own line inside
 /// a CodeBlock.
 /// 
-public struct CodeBlockItemSyntax: Syntax, _SyntaxBase, Hashable {
+public struct CodeBlockItemSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case item
     case semicolon
     case errorTokens
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CodeBlockItemSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CodeBlockItemSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .codeBlockItem else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CodeBlockItemSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .codeBlockItem)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The underlying node inside the code block.
   public var item: Syntax {
-  get {
-    let child = data.child(at: Cursor.item, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withItem(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.item, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withItem(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `item` replaced.
@@ -434,14 +736,15 @@ public struct CodeBlockItemSyntax: Syntax, _SyntaxBase, Hashable {
   /// If present, the trailing semicolon at the end of the item.
   /// 
   public var semicolon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.semicolon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSemicolon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.semicolon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSemicolon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `semicolon` replaced.
@@ -454,14 +757,15 @@ public struct CodeBlockItemSyntax: Syntax, _SyntaxBase, Hashable {
     return CodeBlockItemSyntax(newData)
   }
   public var errorTokens: Syntax? {
-  get {
-    let child = data.child(at: Cursor.errorTokens, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withErrorTokens(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.errorTokens, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withErrorTokens(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `errorTokens` replaced.
@@ -520,40 +824,51 @@ public struct CodeBlockItemSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CodeBlockItemSyntax` nodes are equal to each other.
-  public static func ==(lhs: CodeBlockItemSyntax, rhs: CodeBlockItemSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CodeBlockItemListSyntax` nodes conform. Extension point to add
+/// common methods to all `CodeBlockItemListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CodeBlockItemListSyntaxProtocol: SyntaxProtocol {}
 
-public struct CodeBlockSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `CodeBlockSyntax` nodes conform. Extension point to add
+/// common methods to all `CodeBlockSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CodeBlockSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct CodeBlockSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftBrace
     case statements
     case rightBrace
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CodeBlockSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CodeBlockSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .codeBlock else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CodeBlockSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .codeBlock)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBrace` replaced.
@@ -566,13 +881,14 @@ public struct CodeBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return CodeBlockSyntax(newData)
   }
   public var statements: CodeBlockItemListSyntax {
-  get {
-    let child = data.child(at: Cursor.statements, parent: self)
-    return CodeBlockItemListSyntax(child!)
-  }
-  set(value) {
-    self = withStatements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.statements, 
+                                 parent: Syntax(self))
+      return CodeBlockItemListSyntax(childData!)
+    }
+    set(value) {
+      self = withStatements(value)
+    }
   }
 
   /// Adds the provided `Statement` to the node's `statements`
@@ -604,13 +920,14 @@ public struct CodeBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return CodeBlockSyntax(newData)
   }
   public var rightBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBrace` replaced.
@@ -669,39 +986,45 @@ public struct CodeBlockSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CodeBlockSyntax` nodes are equal to each other.
-  public static func ==(lhs: CodeBlockSyntax, rhs: CodeBlockSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `InOutExprSyntax` nodes conform. Extension point to add
+/// common methods to all `InOutExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol InOutExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct InOutExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct InOutExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case ampersand
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `InOutExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `InOutExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .inOutExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `InOutExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .inOutExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var ampersand: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.ampersand, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAmpersand(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.ampersand, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAmpersand(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `ampersand` replaced.
@@ -714,13 +1037,14 @@ public struct InOutExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return InOutExprSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -779,38 +1103,44 @@ public struct InOutExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `InOutExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: InOutExprSyntax, rhs: InOutExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundColumnExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundColumnExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundColumnExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct PoundColumnExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct PoundColumnExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case poundColumn
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundColumnExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundColumnExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundColumnExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundColumnExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundColumnExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundColumn: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundColumn, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundColumn(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundColumn, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundColumn(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundColumn` replaced.
@@ -869,40 +1199,66 @@ public struct PoundColumnExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundColumnExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundColumnExprSyntax, rhs: PoundColumnExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TupleExprElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `TupleExprElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TupleExprElementListSyntaxProtocol: SyntaxProtocol {}
 
-public struct TryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ArrayElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `ArrayElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ArrayElementListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `DictionaryElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `DictionaryElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DictionaryElementListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `StringLiteralSegmentsSyntax` nodes conform. Extension point to add
+/// common methods to all `StringLiteralSegmentsSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol StringLiteralSegmentsSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `TryExprSyntax` nodes conform. Extension point to add
+/// common methods to all `TryExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TryExprSyntaxProtocol: ExprSyntaxProtocol {}
+
+
+public struct TryExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case tryKeyword
     case questionOrExclamationMark
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TryExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TryExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tryExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TryExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tryExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var tryKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.tryKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTryKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.tryKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTryKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `tryKeyword` replaced.
@@ -915,14 +1271,15 @@ public struct TryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TryExprSyntax(newData)
   }
   public var questionOrExclamationMark: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.questionOrExclamationMark, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withQuestionOrExclamationMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.questionOrExclamationMark, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionOrExclamationMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `questionOrExclamationMark` replaced.
@@ -935,13 +1292,14 @@ public struct TryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TryExprSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -1000,39 +1358,45 @@ public struct TryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TryExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: TryExprSyntax, rhs: TryExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DeclNameArgumentSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclNameArgumentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclNameArgumentSyntaxProtocol: SyntaxProtocol {}
 
-public struct DeclNameArgumentSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct DeclNameArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case colon
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeclNameArgumentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeclNameArgumentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .declNameArgument else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeclNameArgumentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .declNameArgument)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -1045,13 +1409,14 @@ public struct DeclNameArgumentSyntax: Syntax, _SyntaxBase, Hashable {
     return DeclNameArgumentSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -1110,40 +1475,51 @@ public struct DeclNameArgumentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeclNameArgumentSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeclNameArgumentSyntax, rhs: DeclNameArgumentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DeclNameArgumentListSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclNameArgumentListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclNameArgumentListSyntaxProtocol: SyntaxProtocol {}
 
-public struct DeclNameArgumentsSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `DeclNameArgumentsSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclNameArgumentsSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclNameArgumentsSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct DeclNameArgumentsSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case arguments
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeclNameArgumentsSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeclNameArgumentsSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .declNameArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeclNameArgumentsSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .declNameArguments)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -1156,13 +1532,14 @@ public struct DeclNameArgumentsSyntax: Syntax, _SyntaxBase, Hashable {
     return DeclNameArgumentsSyntax(newData)
   }
   public var arguments: DeclNameArgumentListSyntax {
-  get {
-    let child = data.child(at: Cursor.arguments, parent: self)
-    return DeclNameArgumentListSyntax(child!)
-  }
-  set(value) {
-    self = withArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arguments, 
+                                 parent: Syntax(self))
+      return DeclNameArgumentListSyntax(childData!)
+    }
+    set(value) {
+      self = withArguments(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `arguments`
@@ -1194,13 +1571,14 @@ public struct DeclNameArgumentsSyntax: Syntax, _SyntaxBase, Hashable {
     return DeclNameArgumentsSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -1259,39 +1637,45 @@ public struct DeclNameArgumentsSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeclNameArgumentsSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeclNameArgumentsSyntax, rhs: DeclNameArgumentsSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IdentifierExprSyntax` nodes conform. Extension point to add
+/// common methods to all `IdentifierExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IdentifierExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct IdentifierExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct IdentifierExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case identifier
     case declNameArguments
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IdentifierExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IdentifierExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .identifierExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IdentifierExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .identifierExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -1304,14 +1688,15 @@ public struct IdentifierExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return IdentifierExprSyntax(newData)
   }
   public var declNameArguments: DeclNameArgumentsSyntax? {
-  get {
-    let child = data.child(at: Cursor.declNameArguments, parent: self)
-    if child == nil { return nil }
-    return DeclNameArgumentsSyntax(child!)
-  }
-  set(value) {
-    self = withDeclNameArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declNameArguments, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclNameArguments(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declNameArguments` replaced.
@@ -1370,38 +1755,44 @@ public struct IdentifierExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IdentifierExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: IdentifierExprSyntax, rhs: IdentifierExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SuperRefExprSyntax` nodes conform. Extension point to add
+/// common methods to all `SuperRefExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SuperRefExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct SuperRefExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct SuperRefExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case superKeyword
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SuperRefExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SuperRefExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .superRefExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SuperRefExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .superRefExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var superKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.superKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSuperKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.superKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSuperKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `superKeyword` replaced.
@@ -1460,38 +1851,44 @@ public struct SuperRefExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SuperRefExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: SuperRefExprSyntax, rhs: SuperRefExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `NilLiteralExprSyntax` nodes conform. Extension point to add
+/// common methods to all `NilLiteralExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol NilLiteralExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct NilLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct NilLiteralExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case nilKeyword
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `NilLiteralExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `NilLiteralExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .nilLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `NilLiteralExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .nilLiteralExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var nilKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.nilKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withNilKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.nilKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withNilKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `nilKeyword` replaced.
@@ -1550,38 +1947,44 @@ public struct NilLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `NilLiteralExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: NilLiteralExprSyntax, rhs: NilLiteralExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DiscardAssignmentExprSyntax` nodes conform. Extension point to add
+/// common methods to all `DiscardAssignmentExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DiscardAssignmentExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct DiscardAssignmentExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case wildcard
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DiscardAssignmentExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DiscardAssignmentExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .discardAssignmentExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DiscardAssignmentExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .discardAssignmentExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var wildcard: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.wildcard, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withWildcard(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.wildcard, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWildcard(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `wildcard` replaced.
@@ -1640,38 +2043,44 @@ public struct DiscardAssignmentExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DiscardAssignmentExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: DiscardAssignmentExprSyntax, rhs: DiscardAssignmentExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AssignmentExprSyntax` nodes conform. Extension point to add
+/// common methods to all `AssignmentExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AssignmentExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct AssignmentExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct AssignmentExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case assignToken
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AssignmentExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AssignmentExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .assignmentExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AssignmentExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .assignmentExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var assignToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.assignToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAssignToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.assignToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAssignToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `assignToken` replaced.
@@ -1730,38 +2139,44 @@ public struct AssignmentExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AssignmentExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: AssignmentExprSyntax, rhs: AssignmentExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SequenceExprSyntax` nodes conform. Extension point to add
+/// common methods to all `SequenceExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SequenceExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct SequenceExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct SequenceExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case elements
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SequenceExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SequenceExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .sequenceExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SequenceExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .sequenceExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var elements: ExprListSyntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return ExprListSyntax(child!)
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return ExprListSyntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elements`
@@ -1839,38 +2254,49 @@ public struct SequenceExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SequenceExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: SequenceExprSyntax, rhs: SequenceExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ExprListSyntax` nodes conform. Extension point to add
+/// common methods to all `ExprListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ExprListSyntaxProtocol: SyntaxProtocol {}
 
-public struct PoundLineExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `PoundLineExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundLineExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundLineExprSyntaxProtocol: ExprSyntaxProtocol {}
+
+
+public struct PoundLineExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case poundLine
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundLineExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundLineExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundLineExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundLineExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundLineExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundLine: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundLine, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundLine(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundLine, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundLine(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundLine` replaced.
@@ -1929,38 +2355,44 @@ public struct PoundLineExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundLineExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundLineExprSyntax, rhs: PoundLineExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundFileExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundFileExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundFileExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct PoundFileExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct PoundFileExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case poundFile
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundFileExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundFileExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundFileExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundFileExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundFileExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundFile: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundFile, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundFile(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundFile, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundFile(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundFile` replaced.
@@ -2019,38 +2451,44 @@ public struct PoundFileExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundFileExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundFileExprSyntax, rhs: PoundFileExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundFunctionExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundFunctionExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundFunctionExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct PoundFunctionExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct PoundFunctionExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case poundFunction
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundFunctionExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundFunctionExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundFunctionExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundFunctionExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundFunctionExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundFunction: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundFunction, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundFunction(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundFunction, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundFunction(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundFunction` replaced.
@@ -2109,38 +2547,44 @@ public struct PoundFunctionExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundFunctionExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundFunctionExprSyntax, rhs: PoundFunctionExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundDsohandleExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundDsohandleExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundDsohandleExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct PoundDsohandleExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case poundDsohandle
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundDsohandleExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundDsohandleExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundDsohandleExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundDsohandleExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundDsohandleExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundDsohandle: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundDsohandle, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundDsohandle(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundDsohandle, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundDsohandle(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundDsohandle` replaced.
@@ -2199,39 +2643,45 @@ public struct PoundDsohandleExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundDsohandleExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundDsohandleExprSyntax, rhs: PoundDsohandleExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SymbolicReferenceExprSyntax` nodes conform. Extension point to add
+/// common methods to all `SymbolicReferenceExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SymbolicReferenceExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct SymbolicReferenceExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case identifier
     case genericArgumentClause
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SymbolicReferenceExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SymbolicReferenceExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .symbolicReferenceExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SymbolicReferenceExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .symbolicReferenceExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -2244,14 +2694,15 @@ public struct SymbolicReferenceExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return SymbolicReferenceExprSyntax(newData)
   }
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericArgumentClause, parent: self)
-    if child == nil { return nil }
-    return GenericArgumentClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericArgumentClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericArgumentClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericArgumentClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericArgumentClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
@@ -2310,40 +2761,46 @@ public struct SymbolicReferenceExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SymbolicReferenceExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: SymbolicReferenceExprSyntax, rhs: SymbolicReferenceExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PrefixOperatorExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PrefixOperatorExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrefixOperatorExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct PrefixOperatorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case operatorToken
     case postfixExpression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PrefixOperatorExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PrefixOperatorExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .prefixOperatorExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrefixOperatorExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .prefixOperatorExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var operatorToken: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.operatorToken, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOperatorToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.operatorToken, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOperatorToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `operatorToken` replaced.
@@ -2356,13 +2813,14 @@ public struct PrefixOperatorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return PrefixOperatorExprSyntax(newData)
   }
   public var postfixExpression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.postfixExpression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withPostfixExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.postfixExpression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withPostfixExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `postfixExpression` replaced.
@@ -2421,38 +2879,44 @@ public struct PrefixOperatorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PrefixOperatorExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PrefixOperatorExprSyntax, rhs: PrefixOperatorExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `BinaryOperatorExprSyntax` nodes conform. Extension point to add
+/// common methods to all `BinaryOperatorExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol BinaryOperatorExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct BinaryOperatorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case operatorToken
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `BinaryOperatorExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `BinaryOperatorExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .binaryOperatorExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `BinaryOperatorExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .binaryOperatorExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var operatorToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.operatorToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOperatorToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.operatorToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOperatorToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `operatorToken` replaced.
@@ -2511,40 +2975,46 @@ public struct BinaryOperatorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `BinaryOperatorExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: BinaryOperatorExprSyntax, rhs: BinaryOperatorExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ArrowExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ArrowExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ArrowExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct ArrowExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct ArrowExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case throwsToken
     case arrowToken
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ArrowExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ArrowExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .arrowExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ArrowExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .arrowExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var throwsToken: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.throwsToken, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withThrowsToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.throwsToken, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowsToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `throwsToken` replaced.
@@ -2557,13 +3027,14 @@ public struct ArrowExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ArrowExprSyntax(newData)
   }
   public var arrowToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.arrowToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withArrowToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arrowToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withArrowToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `arrowToken` replaced.
@@ -2622,38 +3093,44 @@ public struct ArrowExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ArrowExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ArrowExprSyntax, rhs: ArrowExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FloatLiteralExprSyntax` nodes conform. Extension point to add
+/// common methods to all `FloatLiteralExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FloatLiteralExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct FloatLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct FloatLiteralExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case floatingDigits
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FloatLiteralExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FloatLiteralExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .floatLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FloatLiteralExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .floatLiteralExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var floatingDigits: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.floatingDigits, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFloatingDigits(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.floatingDigits, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFloatingDigits(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `floatingDigits` replaced.
@@ -2712,40 +3189,46 @@ public struct FloatLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FloatLiteralExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: FloatLiteralExprSyntax, rhs: FloatLiteralExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TupleExprSyntax` nodes conform. Extension point to add
+/// common methods to all `TupleExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TupleExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct TupleExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct TupleExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case elementList
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TupleExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TupleExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tupleExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TupleExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tupleExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -2758,13 +3241,14 @@ public struct TupleExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TupleExprSyntax(newData)
   }
   public var elementList: TupleExprElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.elementList, parent: self)
-    return TupleExprElementListSyntax(child!)
-  }
-  set(value) {
-    self = withElementList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elementList, 
+                                 parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withElementList(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elementList`
@@ -2796,13 +3280,14 @@ public struct TupleExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TupleExprSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -2861,40 +3346,46 @@ public struct TupleExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TupleExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: TupleExprSyntax, rhs: TupleExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ArrayExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ArrayExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ArrayExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct ArrayExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct ArrayExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case leftSquare
     case elements
     case rightSquare
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ArrayExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ArrayExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .arrayExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ArrayExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .arrayExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftSquare: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftSquare, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftSquare(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftSquare, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftSquare(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftSquare` replaced.
@@ -2907,13 +3398,14 @@ public struct ArrayExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ArrayExprSyntax(newData)
   }
   public var elements: ArrayElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return ArrayElementListSyntax(child!)
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return ArrayElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elements`
@@ -2945,13 +3437,14 @@ public struct ArrayExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ArrayExprSyntax(newData)
   }
   public var rightSquare: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightSquare, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightSquare(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightSquare, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightSquare(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightSquare` replaced.
@@ -3010,40 +3503,46 @@ public struct ArrayExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ArrayExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ArrayExprSyntax, rhs: ArrayExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DictionaryExprSyntax` nodes conform. Extension point to add
+/// common methods to all `DictionaryExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DictionaryExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct DictionaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct DictionaryExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case leftSquare
     case content
     case rightSquare
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DictionaryExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DictionaryExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .dictionaryExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DictionaryExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .dictionaryExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftSquare: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftSquare, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftSquare(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftSquare, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftSquare(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftSquare` replaced.
@@ -3056,13 +3555,14 @@ public struct DictionaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return DictionaryExprSyntax(newData)
   }
   public var content: Syntax {
-  get {
-    let child = data.child(at: Cursor.content, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withContent(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.content, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withContent(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `content` replaced.
@@ -3075,13 +3575,14 @@ public struct DictionaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return DictionaryExprSyntax(newData)
   }
   public var rightSquare: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightSquare, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightSquare(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightSquare, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightSquare(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightSquare` replaced.
@@ -3140,19 +3641,14 @@ public struct DictionaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DictionaryExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: DictionaryExprSyntax, rhs: DictionaryExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TupleExprElementSyntax` nodes conform. Extension point to add
+/// common methods to all `TupleExprElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TupleExprElementSyntaxProtocol: SyntaxProtocol {}
 
-public struct TupleExprElementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct TupleExprElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case label
     case colon
@@ -3160,22 +3656,33 @@ public struct TupleExprElementSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TupleExprElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TupleExprElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tupleExprElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TupleExprElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tupleExprElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var label: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.label, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.label, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `label` replaced.
@@ -3188,14 +3695,15 @@ public struct TupleExprElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleExprElementSyntax(newData)
   }
   public var colon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -3208,13 +3716,14 @@ public struct TupleExprElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleExprElementSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -3227,14 +3736,15 @@ public struct TupleExprElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleExprElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -3293,39 +3803,45 @@ public struct TupleExprElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TupleExprElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: TupleExprElementSyntax, rhs: TupleExprElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ArrayElementSyntax` nodes conform. Extension point to add
+/// common methods to all `ArrayElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ArrayElementSyntaxProtocol: SyntaxProtocol {}
 
-public struct ArrayElementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ArrayElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case expression
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ArrayElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ArrayElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .arrayElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ArrayElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .arrayElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -3338,14 +3854,15 @@ public struct ArrayElementSyntax: Syntax, _SyntaxBase, Hashable {
     return ArrayElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -3404,19 +3921,14 @@ public struct ArrayElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ArrayElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: ArrayElementSyntax, rhs: ArrayElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DictionaryElementSyntax` nodes conform. Extension point to add
+/// common methods to all `DictionaryElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DictionaryElementSyntaxProtocol: SyntaxProtocol {}
 
-public struct DictionaryElementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct DictionaryElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case keyExpression
     case colon
@@ -3424,21 +3936,32 @@ public struct DictionaryElementSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DictionaryElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DictionaryElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .dictionaryElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DictionaryElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .dictionaryElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var keyExpression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.keyExpression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withKeyExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.keyExpression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withKeyExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `keyExpression` replaced.
@@ -3451,13 +3974,14 @@ public struct DictionaryElementSyntax: Syntax, _SyntaxBase, Hashable {
     return DictionaryElementSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -3470,13 +3994,14 @@ public struct DictionaryElementSyntax: Syntax, _SyntaxBase, Hashable {
     return DictionaryElementSyntax(newData)
   }
   public var valueExpression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.valueExpression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withValueExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.valueExpression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withValueExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `valueExpression` replaced.
@@ -3489,14 +4014,15 @@ public struct DictionaryElementSyntax: Syntax, _SyntaxBase, Hashable {
     return DictionaryElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -3555,38 +4081,44 @@ public struct DictionaryElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DictionaryElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: DictionaryElementSyntax, rhs: DictionaryElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IntegerLiteralExprSyntax` nodes conform. Extension point to add
+/// common methods to all `IntegerLiteralExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IntegerLiteralExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct IntegerLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case digits
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IntegerLiteralExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IntegerLiteralExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .integerLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IntegerLiteralExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .integerLiteralExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var digits: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.digits, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDigits(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.digits, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDigits(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `digits` replaced.
@@ -3645,38 +4177,44 @@ public struct IntegerLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IntegerLiteralExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: IntegerLiteralExprSyntax, rhs: IntegerLiteralExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `BooleanLiteralExprSyntax` nodes conform. Extension point to add
+/// common methods to all `BooleanLiteralExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol BooleanLiteralExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct BooleanLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case booleanLiteral
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `BooleanLiteralExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `BooleanLiteralExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .booleanLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `BooleanLiteralExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .booleanLiteralExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var booleanLiteral: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.booleanLiteral, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withBooleanLiteral(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.booleanLiteral, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withBooleanLiteral(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `booleanLiteral` replaced.
@@ -3735,19 +4273,14 @@ public struct BooleanLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `BooleanLiteralExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: BooleanLiteralExprSyntax, rhs: BooleanLiteralExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TernaryExprSyntax` nodes conform. Extension point to add
+/// common methods to all `TernaryExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TernaryExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct TernaryExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case conditionExpression
     case questionMark
@@ -3756,21 +4289,32 @@ public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case secondChoice
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TernaryExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TernaryExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .ternaryExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TernaryExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .ternaryExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var conditionExpression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.conditionExpression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withConditionExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.conditionExpression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withConditionExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `conditionExpression` replaced.
@@ -3783,13 +4327,14 @@ public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TernaryExprSyntax(newData)
   }
   public var questionMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.questionMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withQuestionMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.questionMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `questionMark` replaced.
@@ -3802,13 +4347,14 @@ public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TernaryExprSyntax(newData)
   }
   public var firstChoice: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.firstChoice, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withFirstChoice(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.firstChoice, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withFirstChoice(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `firstChoice` replaced.
@@ -3821,13 +4367,14 @@ public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TernaryExprSyntax(newData)
   }
   public var colonMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colonMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColonMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colonMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColonMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colonMark` replaced.
@@ -3840,13 +4387,14 @@ public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return TernaryExprSyntax(newData)
   }
   public var secondChoice: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.secondChoice, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withSecondChoice(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.secondChoice, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withSecondChoice(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `secondChoice` replaced.
@@ -3905,19 +4453,14 @@ public struct TernaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TernaryExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: TernaryExprSyntax, rhs: TernaryExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `MemberAccessExprSyntax` nodes conform. Extension point to add
+/// common methods to all `MemberAccessExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MemberAccessExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct MemberAccessExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct MemberAccessExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case base
     case dot
@@ -3925,22 +4468,33 @@ public struct MemberAccessExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case declNameArguments
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `MemberAccessExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `MemberAccessExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .memberAccessExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MemberAccessExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .memberAccessExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var base: ExprSyntax? {
-  get {
-    let child = data.child(at: Cursor.base, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? ExprSyntax
-  }
-  set(value) {
-    self = withBase(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.base, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withBase(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `base` replaced.
@@ -3953,13 +4507,14 @@ public struct MemberAccessExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return MemberAccessExprSyntax(newData)
   }
   public var dot: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.dot, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDot(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.dot, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDot(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `dot` replaced.
@@ -3972,13 +4527,14 @@ public struct MemberAccessExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return MemberAccessExprSyntax(newData)
   }
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -3991,14 +4547,15 @@ public struct MemberAccessExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return MemberAccessExprSyntax(newData)
   }
   public var declNameArguments: DeclNameArgumentsSyntax? {
-  get {
-    let child = data.child(at: Cursor.declNameArguments, parent: self)
-    if child == nil { return nil }
-    return DeclNameArgumentsSyntax(child!)
-  }
-  set(value) {
-    self = withDeclNameArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declNameArguments, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclNameArguments(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declNameArguments` replaced.
@@ -4057,39 +4614,45 @@ public struct MemberAccessExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `MemberAccessExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: MemberAccessExprSyntax, rhs: MemberAccessExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IsExprSyntax` nodes conform. Extension point to add
+/// common methods to all `IsExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IsExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct IsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct IsExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case isTok
     case typeName
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IsExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IsExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .isExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IsExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .isExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var isTok: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.isTok, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIsTok(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.isTok, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIsTok(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `isTok` replaced.
@@ -4102,13 +4665,14 @@ public struct IsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return IsExprSyntax(newData)
   }
   public var typeName: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.typeName, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withTypeName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeName, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeName` replaced.
@@ -4167,40 +4731,46 @@ public struct IsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IsExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: IsExprSyntax, rhs: IsExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AsExprSyntax` nodes conform. Extension point to add
+/// common methods to all `AsExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AsExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct AsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct AsExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case asTok
     case questionOrExclamationMark
     case typeName
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AsExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AsExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .asExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AsExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .asExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var asTok: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.asTok, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAsTok(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.asTok, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsTok(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `asTok` replaced.
@@ -4213,14 +4783,15 @@ public struct AsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return AsExprSyntax(newData)
   }
   public var questionOrExclamationMark: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.questionOrExclamationMark, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withQuestionOrExclamationMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.questionOrExclamationMark, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionOrExclamationMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `questionOrExclamationMark` replaced.
@@ -4233,13 +4804,14 @@ public struct AsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return AsExprSyntax(newData)
   }
   public var typeName: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.typeName, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withTypeName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeName, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeName` replaced.
@@ -4298,38 +4870,44 @@ public struct AsExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AsExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: AsExprSyntax, rhs: AsExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TypeExprSyntax` nodes conform. Extension point to add
+/// common methods to all `TypeExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TypeExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct TypeExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct TypeExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case type
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TypeExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TypeExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .typeExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TypeExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .typeExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var type: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -4388,19 +4966,14 @@ public struct TypeExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TypeExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: TypeExprSyntax, rhs: TypeExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClosureCaptureItemSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureCaptureItemSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureCaptureItemSyntaxProtocol: SyntaxProtocol {}
 
-public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ClosureCaptureItemSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case specifier
     case name
@@ -4409,22 +4982,33 @@ public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClosureCaptureItemSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClosureCaptureItemSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .closureCaptureItem else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClosureCaptureItemSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .closureCaptureItem)
+    self._syntaxNode = Syntax(data)
   }
 
   public var specifier: TokenListSyntax? {
-  get {
-    let child = data.child(at: Cursor.specifier, parent: self)
-    if child == nil { return nil }
-    return TokenListSyntax(child!)
-  }
-  set(value) {
-    self = withSpecifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.specifier, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenListSyntax(childData!)
+    }
+    set(value) {
+      self = withSpecifier(value)
+    }
   }
 
   /// Adds the provided `SpecifierToken` to the node's `specifier`
@@ -4456,14 +5040,15 @@ public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureCaptureItemSyntax(newData)
   }
   public var name: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -4476,14 +5061,15 @@ public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureCaptureItemSyntax(newData)
   }
   public var assignToken: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.assignToken, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAssignToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.assignToken, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAssignToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `assignToken` replaced.
@@ -4496,13 +5082,14 @@ public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureCaptureItemSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -4515,14 +5102,15 @@ public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureCaptureItemSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -4581,40 +5169,51 @@ public struct ClosureCaptureItemSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClosureCaptureItemSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClosureCaptureItemSyntax, rhs: ClosureCaptureItemSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClosureCaptureItemListSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureCaptureItemListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureCaptureItemListSyntaxProtocol: SyntaxProtocol {}
 
-public struct ClosureCaptureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ClosureCaptureSignatureSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureCaptureSignatureSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureCaptureSignatureSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct ClosureCaptureSignatureSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftSquare
     case items
     case rightSquare
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClosureCaptureSignatureSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClosureCaptureSignatureSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .closureCaptureSignature else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClosureCaptureSignatureSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .closureCaptureSignature)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftSquare: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftSquare, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftSquare(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftSquare, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftSquare(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftSquare` replaced.
@@ -4627,14 +5226,15 @@ public struct ClosureCaptureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureCaptureSignatureSyntax(newData)
   }
   public var items: ClosureCaptureItemListSyntax? {
-  get {
-    let child = data.child(at: Cursor.items, parent: self)
-    if child == nil { return nil }
-    return ClosureCaptureItemListSyntax(child!)
-  }
-  set(value) {
-    self = withItems(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.items, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ClosureCaptureItemListSyntax(childData!)
+    }
+    set(value) {
+      self = withItems(value)
+    }
   }
 
   /// Adds the provided `Item` to the node's `items`
@@ -4666,13 +5266,14 @@ public struct ClosureCaptureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureCaptureSignatureSyntax(newData)
   }
   public var rightSquare: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightSquare, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightSquare(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightSquare, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightSquare(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightSquare` replaced.
@@ -4731,39 +5332,45 @@ public struct ClosureCaptureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClosureCaptureSignatureSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClosureCaptureSignatureSyntax, rhs: ClosureCaptureSignatureSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClosureParamSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureParamSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureParamSyntaxProtocol: SyntaxProtocol {}
 
-public struct ClosureParamSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ClosureParamSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClosureParamSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClosureParamSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .closureParam else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClosureParamSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .closureParam)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -4776,14 +5383,15 @@ public struct ClosureParamSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureParamSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -4842,19 +5450,19 @@ public struct ClosureParamSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClosureParamSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClosureParamSyntax, rhs: ClosureParamSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClosureParamListSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureParamListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureParamListSyntaxProtocol: SyntaxProtocol {}
 
-public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ClosureSignatureSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureSignatureSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureSignatureSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct ClosureSignatureSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case capture
     case input
@@ -4863,22 +5471,33 @@ public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     case inTok
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClosureSignatureSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClosureSignatureSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .closureSignature else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClosureSignatureSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .closureSignature)
+    self._syntaxNode = Syntax(data)
   }
 
   public var capture: ClosureCaptureSignatureSyntax? {
-  get {
-    let child = data.child(at: Cursor.capture, parent: self)
-    if child == nil { return nil }
-    return ClosureCaptureSignatureSyntax(child!)
-  }
-  set(value) {
-    self = withCapture(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.capture, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ClosureCaptureSignatureSyntax(childData!)
+    }
+    set(value) {
+      self = withCapture(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `capture` replaced.
@@ -4891,14 +5510,15 @@ public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureSignatureSyntax(newData)
   }
   public var input: Syntax? {
-  get {
-    let child = data.child(at: Cursor.input, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withInput(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.input, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withInput(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `input` replaced.
@@ -4911,14 +5531,15 @@ public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureSignatureSyntax(newData)
   }
   public var throwsTok: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.throwsTok, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withThrowsTok(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.throwsTok, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowsTok(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `throwsTok` replaced.
@@ -4931,14 +5552,15 @@ public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureSignatureSyntax(newData)
   }
   public var output: ReturnClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.output, parent: self)
-    if child == nil { return nil }
-    return ReturnClauseSyntax(child!)
-  }
-  set(value) {
-    self = withOutput(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.output, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ReturnClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withOutput(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `output` replaced.
@@ -4951,13 +5573,14 @@ public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return ClosureSignatureSyntax(newData)
   }
   public var inTok: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.inTok, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withInTok(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inTok, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withInTok(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inTok` replaced.
@@ -5016,19 +5639,14 @@ public struct ClosureSignatureSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClosureSignatureSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClosureSignatureSyntax, rhs: ClosureSignatureSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClosureExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ClosureExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClosureExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct ClosureExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct ClosureExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case leftBrace
     case signature
@@ -5036,21 +5654,32 @@ public struct ClosureExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case rightBrace
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClosureExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClosureExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .closureExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClosureExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .closureExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBrace` replaced.
@@ -5063,14 +5692,15 @@ public struct ClosureExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ClosureExprSyntax(newData)
   }
   public var signature: ClosureSignatureSyntax? {
-  get {
-    let child = data.child(at: Cursor.signature, parent: self)
-    if child == nil { return nil }
-    return ClosureSignatureSyntax(child!)
-  }
-  set(value) {
-    self = withSignature(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.signature, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ClosureSignatureSyntax(childData!)
+    }
+    set(value) {
+      self = withSignature(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `signature` replaced.
@@ -5083,13 +5713,14 @@ public struct ClosureExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ClosureExprSyntax(newData)
   }
   public var statements: CodeBlockItemListSyntax {
-  get {
-    let child = data.child(at: Cursor.statements, parent: self)
-    return CodeBlockItemListSyntax(child!)
-  }
-  set(value) {
-    self = withStatements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.statements, 
+                                 parent: Syntax(self))
+      return CodeBlockItemListSyntax(childData!)
+    }
+    set(value) {
+      self = withStatements(value)
+    }
   }
 
   /// Adds the provided `Statement` to the node's `statements`
@@ -5121,13 +5752,14 @@ public struct ClosureExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ClosureExprSyntax(newData)
   }
   public var rightBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBrace` replaced.
@@ -5186,38 +5818,44 @@ public struct ClosureExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClosureExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClosureExprSyntax, rhs: ClosureExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `UnresolvedPatternExprSyntax` nodes conform. Extension point to add
+/// common methods to all `UnresolvedPatternExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol UnresolvedPatternExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct UnresolvedPatternExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case pattern
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `UnresolvedPatternExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `UnresolvedPatternExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unresolvedPatternExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnresolvedPatternExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .unresolvedPatternExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -5276,19 +5914,14 @@ public struct UnresolvedPatternExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `UnresolvedPatternExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: UnresolvedPatternExprSyntax, rhs: UnresolvedPatternExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FunctionCallExprSyntax` nodes conform. Extension point to add
+/// common methods to all `FunctionCallExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FunctionCallExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct FunctionCallExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case calledExpression
     case leftParen
@@ -5297,21 +5930,32 @@ public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case trailingClosure
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FunctionCallExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FunctionCallExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .functionCallExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FunctionCallExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .functionCallExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var calledExpression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.calledExpression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withCalledExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.calledExpression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withCalledExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `calledExpression` replaced.
@@ -5324,14 +5968,15 @@ public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return FunctionCallExprSyntax(newData)
   }
   public var leftParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -5344,13 +5989,14 @@ public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return FunctionCallExprSyntax(newData)
   }
   public var argumentList: TupleExprElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.argumentList, parent: self)
-    return TupleExprElementListSyntax(child!)
-  }
-  set(value) {
-    self = withArgumentList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.argumentList, 
+                                 parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArgumentList(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `argumentList`
@@ -5382,14 +6028,15 @@ public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return FunctionCallExprSyntax(newData)
   }
   public var rightParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -5402,14 +6049,15 @@ public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return FunctionCallExprSyntax(newData)
   }
   public var trailingClosure: ClosureExprSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingClosure, parent: self)
-    if child == nil { return nil }
-    return ClosureExprSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingClosure(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingClosure, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ClosureExprSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingClosure(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingClosure` replaced.
@@ -5468,19 +6116,14 @@ public struct FunctionCallExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FunctionCallExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: FunctionCallExprSyntax, rhs: FunctionCallExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SubscriptExprSyntax` nodes conform. Extension point to add
+/// common methods to all `SubscriptExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SubscriptExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct SubscriptExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case calledExpression
     case leftBracket
@@ -5489,21 +6132,32 @@ public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case trailingClosure
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SubscriptExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SubscriptExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .subscriptExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SubscriptExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .subscriptExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var calledExpression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.calledExpression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withCalledExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.calledExpression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withCalledExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `calledExpression` replaced.
@@ -5516,13 +6170,14 @@ public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return SubscriptExprSyntax(newData)
   }
   public var leftBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBracket` replaced.
@@ -5535,13 +6190,14 @@ public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return SubscriptExprSyntax(newData)
   }
   public var argumentList: TupleExprElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.argumentList, parent: self)
-    return TupleExprElementListSyntax(child!)
-  }
-  set(value) {
-    self = withArgumentList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.argumentList, 
+                                 parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArgumentList(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `argumentList`
@@ -5573,13 +6229,14 @@ public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return SubscriptExprSyntax(newData)
   }
   public var rightBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBracket` replaced.
@@ -5592,14 +6249,15 @@ public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return SubscriptExprSyntax(newData)
   }
   public var trailingClosure: ClosureExprSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingClosure, parent: self)
-    if child == nil { return nil }
-    return ClosureExprSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingClosure(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingClosure, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ClosureExprSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingClosure(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingClosure` replaced.
@@ -5658,39 +6316,45 @@ public struct SubscriptExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SubscriptExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: SubscriptExprSyntax, rhs: SubscriptExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `OptionalChainingExprSyntax` nodes conform. Extension point to add
+/// common methods to all `OptionalChainingExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol OptionalChainingExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct OptionalChainingExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct OptionalChainingExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case expression
     case questionMark
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `OptionalChainingExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `OptionalChainingExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .optionalChainingExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OptionalChainingExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .optionalChainingExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -5703,13 +6367,14 @@ public struct OptionalChainingExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return OptionalChainingExprSyntax(newData)
   }
   public var questionMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.questionMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withQuestionMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.questionMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `questionMark` replaced.
@@ -5768,39 +6433,45 @@ public struct OptionalChainingExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `OptionalChainingExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: OptionalChainingExprSyntax, rhs: OptionalChainingExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ForcedValueExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ForcedValueExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ForcedValueExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct ForcedValueExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct ForcedValueExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case expression
     case exclamationMark
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ForcedValueExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ForcedValueExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .forcedValueExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ForcedValueExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .forcedValueExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -5813,13 +6484,14 @@ public struct ForcedValueExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ForcedValueExprSyntax(newData)
   }
   public var exclamationMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.exclamationMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withExclamationMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.exclamationMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withExclamationMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `exclamationMark` replaced.
@@ -5878,39 +6550,45 @@ public struct ForcedValueExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ForcedValueExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ForcedValueExprSyntax, rhs: ForcedValueExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PostfixUnaryExprSyntax` nodes conform. Extension point to add
+/// common methods to all `PostfixUnaryExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PostfixUnaryExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct PostfixUnaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case expression
     case operatorToken
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PostfixUnaryExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PostfixUnaryExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .postfixUnaryExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PostfixUnaryExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .postfixUnaryExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -5923,13 +6601,14 @@ public struct PostfixUnaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return PostfixUnaryExprSyntax(newData)
   }
   public var operatorToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.operatorToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOperatorToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.operatorToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOperatorToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `operatorToken` replaced.
@@ -5988,39 +6667,45 @@ public struct PostfixUnaryExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PostfixUnaryExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: PostfixUnaryExprSyntax, rhs: PostfixUnaryExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SpecializeExprSyntax` nodes conform. Extension point to add
+/// common methods to all `SpecializeExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SpecializeExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct SpecializeExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct SpecializeExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case expression
     case genericArgumentClause
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SpecializeExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SpecializeExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .specializeExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SpecializeExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .specializeExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -6033,13 +6718,14 @@ public struct SpecializeExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return SpecializeExprSyntax(newData)
   }
   public var genericArgumentClause: GenericArgumentClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.genericArgumentClause, parent: self)
-    return GenericArgumentClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericArgumentClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericArgumentClause, 
+                                 parent: Syntax(self))
+      return GenericArgumentClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericArgumentClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
@@ -6098,38 +6784,44 @@ public struct SpecializeExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SpecializeExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: SpecializeExprSyntax, rhs: SpecializeExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `StringSegmentSyntax` nodes conform. Extension point to add
+/// common methods to all `StringSegmentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol StringSegmentSyntaxProtocol: SyntaxProtocol {}
 
-public struct StringSegmentSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct StringSegmentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case content
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `StringSegmentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `StringSegmentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .stringSegment else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `StringSegmentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .stringSegment)
+    self._syntaxNode = Syntax(data)
   }
 
   public var content: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.content, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withContent(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.content, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withContent(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `content` replaced.
@@ -6188,19 +6880,14 @@ public struct StringSegmentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `StringSegmentSyntax` nodes are equal to each other.
-  public static func ==(lhs: StringSegmentSyntax, rhs: StringSegmentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ExpressionSegmentSyntax` nodes conform. Extension point to add
+/// common methods to all `ExpressionSegmentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ExpressionSegmentSyntaxProtocol: SyntaxProtocol {}
 
-public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ExpressionSegmentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case backslash
     case delimiter
@@ -6209,21 +6896,32 @@ public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ExpressionSegmentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ExpressionSegmentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .expressionSegment else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ExpressionSegmentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .expressionSegment)
+    self._syntaxNode = Syntax(data)
   }
 
   public var backslash: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.backslash, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withBackslash(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.backslash, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withBackslash(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `backslash` replaced.
@@ -6236,14 +6934,15 @@ public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
     return ExpressionSegmentSyntax(newData)
   }
   public var delimiter: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.delimiter, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDelimiter(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.delimiter, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDelimiter(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `delimiter` replaced.
@@ -6256,13 +6955,14 @@ public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
     return ExpressionSegmentSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -6275,13 +6975,14 @@ public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
     return ExpressionSegmentSyntax(newData)
   }
   public var expressions: TupleExprElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.expressions, parent: self)
-    return TupleExprElementListSyntax(child!)
-  }
-  set(value) {
-    self = withExpressions(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expressions, 
+                                 parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withExpressions(value)
+    }
   }
 
   /// Adds the provided `Expression` to the node's `expressions`
@@ -6313,13 +7014,14 @@ public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
     return ExpressionSegmentSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -6378,19 +7080,14 @@ public struct ExpressionSegmentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ExpressionSegmentSyntax` nodes are equal to each other.
-  public static func ==(lhs: ExpressionSegmentSyntax, rhs: ExpressionSegmentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `StringLiteralExprSyntax` nodes conform. Extension point to add
+/// common methods to all `StringLiteralExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol StringLiteralExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct StringLiteralExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case openDelimiter
     case openQuote
@@ -6399,22 +7096,33 @@ public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case closeDelimiter
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `StringLiteralExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `StringLiteralExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .stringLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `StringLiteralExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .stringLiteralExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var openDelimiter: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.openDelimiter, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOpenDelimiter(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.openDelimiter, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOpenDelimiter(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `openDelimiter` replaced.
@@ -6427,13 +7135,14 @@ public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return StringLiteralExprSyntax(newData)
   }
   public var openQuote: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.openQuote, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOpenQuote(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.openQuote, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOpenQuote(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `openQuote` replaced.
@@ -6446,13 +7155,14 @@ public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return StringLiteralExprSyntax(newData)
   }
   public var segments: StringLiteralSegmentsSyntax {
-  get {
-    let child = data.child(at: Cursor.segments, parent: self)
-    return StringLiteralSegmentsSyntax(child!)
-  }
-  set(value) {
-    self = withSegments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.segments, 
+                                 parent: Syntax(self))
+      return StringLiteralSegmentsSyntax(childData!)
+    }
+    set(value) {
+      self = withSegments(value)
+    }
   }
 
   /// Adds the provided `Segment` to the node's `segments`
@@ -6484,13 +7194,14 @@ public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return StringLiteralExprSyntax(newData)
   }
   public var closeQuote: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.closeQuote, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCloseQuote(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.closeQuote, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCloseQuote(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `closeQuote` replaced.
@@ -6503,14 +7214,15 @@ public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return StringLiteralExprSyntax(newData)
   }
   public var closeDelimiter: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.closeDelimiter, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCloseDelimiter(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.closeDelimiter, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCloseDelimiter(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `closeDelimiter` replaced.
@@ -6569,40 +7281,46 @@ public struct StringLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `StringLiteralExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: StringLiteralExprSyntax, rhs: StringLiteralExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `KeyPathExprSyntax` nodes conform. Extension point to add
+/// common methods to all `KeyPathExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol KeyPathExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct KeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct KeyPathExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case backslash
     case rootExpr
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `KeyPathExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `KeyPathExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .keyPathExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `KeyPathExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .keyPathExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var backslash: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.backslash, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withBackslash(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.backslash, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withBackslash(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `backslash` replaced.
@@ -6615,14 +7333,15 @@ public struct KeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return KeyPathExprSyntax(newData)
   }
   public var rootExpr: ExprSyntax? {
-  get {
-    let child = data.child(at: Cursor.rootExpr, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? ExprSyntax
-  }
-  set(value) {
-    self = withRootExpr(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rootExpr, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withRootExpr(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rootExpr` replaced.
@@ -6635,13 +7354,14 @@ public struct KeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return KeyPathExprSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -6700,38 +7420,44 @@ public struct KeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `KeyPathExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: KeyPathExprSyntax, rhs: KeyPathExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `KeyPathBaseExprSyntax` nodes conform. Extension point to add
+/// common methods to all `KeyPathBaseExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol KeyPathBaseExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct KeyPathBaseExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case period
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `KeyPathBaseExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `KeyPathBaseExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .keyPathBaseExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `KeyPathBaseExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .keyPathBaseExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var period: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.period, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPeriod(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.period, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `period` replaced.
@@ -6790,39 +7516,45 @@ public struct KeyPathBaseExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `KeyPathBaseExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: KeyPathBaseExprSyntax, rhs: KeyPathBaseExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ObjcNamePieceSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjcNamePieceSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjcNamePieceSyntaxProtocol: SyntaxProtocol {}
 
-public struct ObjcNamePieceSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ObjcNamePieceSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case dot
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ObjcNamePieceSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ObjcNamePieceSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .objcNamePiece else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ObjcNamePieceSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .objcNamePiece)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -6835,14 +7567,15 @@ public struct ObjcNamePieceSyntax: Syntax, _SyntaxBase, Hashable {
     return ObjcNamePieceSyntax(newData)
   }
   public var dot: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.dot, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDot(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.dot, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDot(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `dot` replaced.
@@ -6901,19 +7634,19 @@ public struct ObjcNamePieceSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ObjcNamePieceSyntax` nodes are equal to each other.
-  public static func ==(lhs: ObjcNamePieceSyntax, rhs: ObjcNamePieceSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ObjcNameSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjcNameSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjcNameSyntaxProtocol: SyntaxProtocol {}
 
-public struct ObjcKeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ObjcKeyPathExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjcKeyPathExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjcKeyPathExprSyntaxProtocol: ExprSyntaxProtocol {}
+
+
+public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case keyPath
     case leftParen
@@ -6921,21 +7654,32 @@ public struct ObjcKeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ObjcKeyPathExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ObjcKeyPathExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .objcKeyPathExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ObjcKeyPathExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .objcKeyPathExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var keyPath: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.keyPath, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withKeyPath(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.keyPath, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withKeyPath(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `keyPath` replaced.
@@ -6948,13 +7692,14 @@ public struct ObjcKeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcKeyPathExprSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -6967,13 +7712,14 @@ public struct ObjcKeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcKeyPathExprSyntax(newData)
   }
   public var name: ObjcNameSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return ObjcNameSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return ObjcNameSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Adds the provided `NamePiece` to the node's `name`
@@ -7005,13 +7751,14 @@ public struct ObjcKeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcKeyPathExprSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -7070,19 +7817,14 @@ public struct ObjcKeyPathExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ObjcKeyPathExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ObjcKeyPathExprSyntax, rhs: ObjcKeyPathExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ObjcSelectorExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjcSelectorExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjcSelectorExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case poundSelector
     case leftParen
@@ -7092,21 +7834,32 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ObjcSelectorExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ObjcSelectorExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .objcSelectorExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ObjcSelectorExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .objcSelectorExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundSelector: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundSelector, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundSelector(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundSelector, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundSelector(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundSelector` replaced.
@@ -7119,13 +7872,14 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcSelectorExprSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -7138,14 +7892,15 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcSelectorExprSyntax(newData)
   }
   public var kind: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.kind, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withKind(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.kind, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withKind(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `kind` replaced.
@@ -7158,14 +7913,15 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcSelectorExprSyntax(newData)
   }
   public var colon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -7178,13 +7934,14 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcSelectorExprSyntax(newData)
   }
   public var name: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -7197,13 +7954,14 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjcSelectorExprSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -7262,38 +8020,44 @@ public struct ObjcSelectorExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ObjcSelectorExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ObjcSelectorExprSyntax, rhs: ObjcSelectorExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `EditorPlaceholderExprSyntax` nodes conform. Extension point to add
+/// common methods to all `EditorPlaceholderExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol EditorPlaceholderExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct EditorPlaceholderExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case identifier
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `EditorPlaceholderExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `EditorPlaceholderExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .editorPlaceholderExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `EditorPlaceholderExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .editorPlaceholderExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -7352,19 +8116,14 @@ public struct EditorPlaceholderExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `EditorPlaceholderExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: EditorPlaceholderExprSyntax, rhs: EditorPlaceholderExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ObjectLiteralExprSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjectLiteralExprSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjectLiteralExprSyntaxProtocol: ExprSyntaxProtocol {}
 
-public struct ObjectLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
+
+public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol {
   enum Cursor: Int {
     case identifier
     case leftParen
@@ -7372,21 +8131,32 @@ public struct ObjectLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ObjectLiteralExprSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ObjectLiteralExprSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .objectLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ObjectLiteralExprSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .objectLiteralExpr)
+    self._syntaxNode = Syntax(data)
   }
 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -7399,13 +8169,14 @@ public struct ObjectLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjectLiteralExprSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -7418,13 +8189,14 @@ public struct ObjectLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjectLiteralExprSyntax(newData)
   }
   public var arguments: TupleExprElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.arguments, parent: self)
-    return TupleExprElementListSyntax(child!)
-  }
-  set(value) {
-    self = withArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arguments, 
+                                 parent: Syntax(self))
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArguments(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `arguments`
@@ -7456,13 +8228,14 @@ public struct ObjectLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
     return ObjectLiteralExprSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -7521,39 +8294,45 @@ public struct ObjectLiteralExprSyntax: ExprSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ObjectLiteralExprSyntax` nodes are equal to each other.
-  public static func ==(lhs: ObjectLiteralExprSyntax, rhs: ObjectLiteralExprSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TypeInitializerClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `TypeInitializerClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TypeInitializerClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct TypeInitializerClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct TypeInitializerClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case equal
     case value
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TypeInitializerClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TypeInitializerClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .typeInitializerClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TypeInitializerClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .typeInitializerClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var equal: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.equal, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEqual(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.equal, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEqual(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `equal` replaced.
@@ -7566,13 +8345,14 @@ public struct TypeInitializerClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return TypeInitializerClauseSyntax(newData)
   }
   public var value: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.value, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.value, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `value` replaced.
@@ -7631,19 +8411,14 @@ public struct TypeInitializerClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TypeInitializerClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: TypeInitializerClauseSyntax, rhs: TypeInitializerClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TypealiasDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `TypealiasDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TypealiasDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct TypealiasDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -7654,22 +8429,33 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case genericWhereClause
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TypealiasDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TypealiasDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .typealiasDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TypealiasDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .typealiasDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -7701,14 +8487,15 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return TypealiasDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -7740,13 +8527,14 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return TypealiasDeclSyntax(newData)
   }
   public var typealiasKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.typealiasKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTypealiasKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typealiasKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTypealiasKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typealiasKeyword` replaced.
@@ -7759,13 +8547,14 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return TypealiasDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -7778,14 +8567,15 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return TypealiasDeclSyntax(newData)
   }
   public var genericParameterClause: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameterClause, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
@@ -7798,14 +8588,15 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return TypealiasDeclSyntax(newData)
   }
   public var initializer: TypeInitializerClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.initializer, parent: self)
-    if child == nil { return nil }
-    return TypeInitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInitializer(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initializer, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initializer` replaced.
@@ -7818,14 +8609,15 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return TypealiasDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -7884,19 +8676,14 @@ public struct TypealiasDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TypealiasDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: TypealiasDeclSyntax, rhs: TypealiasDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AssociatedtypeDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `AssociatedtypeDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AssociatedtypeDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -7907,22 +8694,33 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case genericWhereClause
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AssociatedtypeDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AssociatedtypeDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .associatedtypeDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AssociatedtypeDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .associatedtypeDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -7954,14 +8752,15 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AssociatedtypeDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -7993,13 +8792,14 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AssociatedtypeDeclSyntax(newData)
   }
   public var associatedtypeKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.associatedtypeKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAssociatedtypeKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.associatedtypeKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAssociatedtypeKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `associatedtypeKeyword` replaced.
@@ -8012,13 +8812,14 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AssociatedtypeDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -8031,14 +8832,15 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AssociatedtypeDeclSyntax(newData)
   }
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritanceClause, parent: self)
-    if child == nil { return nil }
-    return TypeInheritanceClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInheritanceClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritanceClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInheritanceClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritanceClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
@@ -8051,14 +8853,15 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AssociatedtypeDeclSyntax(newData)
   }
   public var initializer: TypeInitializerClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.initializer, parent: self)
-    if child == nil { return nil }
-    return TypeInitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInitializer(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initializer, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initializer` replaced.
@@ -8071,14 +8874,15 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AssociatedtypeDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -8137,40 +8941,51 @@ public struct AssociatedtypeDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AssociatedtypeDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: AssociatedtypeDeclSyntax, rhs: AssociatedtypeDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FunctionParameterListSyntax` nodes conform. Extension point to add
+/// common methods to all `FunctionParameterListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FunctionParameterListSyntaxProtocol: SyntaxProtocol {}
 
-public struct ParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ParameterClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `ParameterClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ParameterClauseSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct ParameterClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case parameterList
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ParameterClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ParameterClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .parameterClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ParameterClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .parameterClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -8183,13 +8998,14 @@ public struct ParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return ParameterClauseSyntax(newData)
   }
   public var parameterList: FunctionParameterListSyntax {
-  get {
-    let child = data.child(at: Cursor.parameterList, parent: self)
-    return FunctionParameterListSyntax(child!)
-  }
-  set(value) {
-    self = withParameterList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.parameterList, 
+                                 parent: Syntax(self))
+      return FunctionParameterListSyntax(childData!)
+    }
+    set(value) {
+      self = withParameterList(value)
+    }
   }
 
   /// Adds the provided `Parameter` to the node's `parameterList`
@@ -8221,13 +9037,14 @@ public struct ParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return ParameterClauseSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -8286,39 +9103,45 @@ public struct ParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ParameterClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: ParameterClauseSyntax, rhs: ParameterClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ReturnClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `ReturnClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ReturnClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct ReturnClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ReturnClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case arrow
     case returnType
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ReturnClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ReturnClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .returnClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ReturnClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .returnClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var arrow: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.arrow, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withArrow(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arrow, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withArrow(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `arrow` replaced.
@@ -8331,13 +9154,14 @@ public struct ReturnClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return ReturnClauseSyntax(newData)
   }
   public var returnType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.returnType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withReturnType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.returnType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withReturnType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `returnType` replaced.
@@ -8396,40 +9220,46 @@ public struct ReturnClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ReturnClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: ReturnClauseSyntax, rhs: ReturnClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FunctionSignatureSyntax` nodes conform. Extension point to add
+/// common methods to all `FunctionSignatureSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FunctionSignatureSyntaxProtocol: SyntaxProtocol {}
 
-public struct FunctionSignatureSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct FunctionSignatureSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case input
     case throwsOrRethrowsKeyword
     case output
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FunctionSignatureSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FunctionSignatureSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .functionSignature else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FunctionSignatureSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .functionSignature)
+    self._syntaxNode = Syntax(data)
   }
 
   public var input: ParameterClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.input, parent: self)
-    return ParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInput(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.input, 
+                                 parent: Syntax(self))
+      return ParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInput(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `input` replaced.
@@ -8442,14 +9272,15 @@ public struct FunctionSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionSignatureSyntax(newData)
   }
   public var throwsOrRethrowsKeyword: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.throwsOrRethrowsKeyword, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withThrowsOrRethrowsKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.throwsOrRethrowsKeyword, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowsOrRethrowsKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `throwsOrRethrowsKeyword` replaced.
@@ -8462,14 +9293,15 @@ public struct FunctionSignatureSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionSignatureSyntax(newData)
   }
   public var output: ReturnClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.output, parent: self)
-    if child == nil { return nil }
-    return ReturnClauseSyntax(child!)
-  }
-  set(value) {
-    self = withOutput(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.output, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ReturnClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withOutput(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `output` replaced.
@@ -8528,40 +9360,46 @@ public struct FunctionSignatureSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FunctionSignatureSyntax` nodes are equal to each other.
-  public static func ==(lhs: FunctionSignatureSyntax, rhs: FunctionSignatureSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IfConfigClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `IfConfigClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IfConfigClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct IfConfigClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct IfConfigClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case poundKeyword
     case condition
     case elements
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IfConfigClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IfConfigClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .ifConfigClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IfConfigClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .ifConfigClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundKeyword` replaced.
@@ -8574,14 +9412,15 @@ public struct IfConfigClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return IfConfigClauseSyntax(newData)
   }
   public var condition: ExprSyntax? {
-  get {
-    let child = data.child(at: Cursor.condition, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? ExprSyntax
-  }
-  set(value) {
-    self = withCondition(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.condition, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withCondition(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `condition` replaced.
@@ -8594,13 +9433,14 @@ public struct IfConfigClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return IfConfigClauseSyntax(newData)
   }
   public var elements: Syntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `elements` replaced.
@@ -8659,39 +9499,50 @@ public struct IfConfigClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IfConfigClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: IfConfigClauseSyntax, rhs: IfConfigClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IfConfigClauseListSyntax` nodes conform. Extension point to add
+/// common methods to all `IfConfigClauseListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IfConfigClauseListSyntaxProtocol: SyntaxProtocol {}
 
-public struct IfConfigDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `IfConfigDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `IfConfigDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IfConfigDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
+
+public struct IfConfigDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case clauses
     case poundEndif
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IfConfigDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IfConfigDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .ifConfigDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IfConfigDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .ifConfigDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var clauses: IfConfigClauseListSyntax {
-  get {
-    let child = data.child(at: Cursor.clauses, parent: self)
-    return IfConfigClauseListSyntax(child!)
-  }
-  set(value) {
-    self = withClauses(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.clauses, 
+                                 parent: Syntax(self))
+      return IfConfigClauseListSyntax(childData!)
+    }
+    set(value) {
+      self = withClauses(value)
+    }
   }
 
   /// Adds the provided `Clause` to the node's `clauses`
@@ -8723,13 +9574,14 @@ public struct IfConfigDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return IfConfigDeclSyntax(newData)
   }
   public var poundEndif: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundEndif, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundEndif(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundEndif, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundEndif(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundEndif` replaced.
@@ -8788,19 +9640,14 @@ public struct IfConfigDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IfConfigDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: IfConfigDeclSyntax, rhs: IfConfigDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundErrorDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundErrorDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundErrorDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct PoundErrorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct PoundErrorDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case poundError
     case leftParen
@@ -8808,21 +9655,32 @@ public struct PoundErrorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundErrorDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundErrorDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundErrorDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundErrorDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundErrorDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundError: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundError, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundError(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundError, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundError(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundError` replaced.
@@ -8835,13 +9693,14 @@ public struct PoundErrorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundErrorDeclSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -8854,13 +9713,14 @@ public struct PoundErrorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundErrorDeclSyntax(newData)
   }
   public var message: StringLiteralExprSyntax {
-  get {
-    let child = data.child(at: Cursor.message, parent: self)
-    return StringLiteralExprSyntax(child!)
-  }
-  set(value) {
-    self = withMessage(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.message, 
+                                 parent: Syntax(self))
+      return StringLiteralExprSyntax(childData!)
+    }
+    set(value) {
+      self = withMessage(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `message` replaced.
@@ -8873,13 +9733,14 @@ public struct PoundErrorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundErrorDeclSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -8938,19 +9799,14 @@ public struct PoundErrorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundErrorDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundErrorDeclSyntax, rhs: PoundErrorDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundWarningDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundWarningDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundWarningDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct PoundWarningDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct PoundWarningDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case poundWarning
     case leftParen
@@ -8958,21 +9814,32 @@ public struct PoundWarningDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundWarningDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundWarningDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundWarningDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundWarningDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundWarningDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundWarning: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundWarning, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundWarning(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundWarning, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundWarning(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundWarning` replaced.
@@ -8985,13 +9852,14 @@ public struct PoundWarningDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundWarningDeclSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -9004,13 +9872,14 @@ public struct PoundWarningDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundWarningDeclSyntax(newData)
   }
   public var message: StringLiteralExprSyntax {
-  get {
-    let child = data.child(at: Cursor.message, parent: self)
-    return StringLiteralExprSyntax(child!)
-  }
-  set(value) {
-    self = withMessage(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.message, 
+                                 parent: Syntax(self))
+      return StringLiteralExprSyntax(childData!)
+    }
+    set(value) {
+      self = withMessage(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `message` replaced.
@@ -9023,13 +9892,14 @@ public struct PoundWarningDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundWarningDeclSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -9088,19 +9958,14 @@ public struct PoundWarningDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundWarningDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundWarningDeclSyntax, rhs: PoundWarningDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundSourceLocationSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundSourceLocationSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundSourceLocationSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct PoundSourceLocationSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct PoundSourceLocationSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case poundSourceLocation
     case leftParen
@@ -9108,21 +9973,32 @@ public struct PoundSourceLocationSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundSourceLocationSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundSourceLocationSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundSourceLocation else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundSourceLocationSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundSourceLocation)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundSourceLocation: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundSourceLocation, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundSourceLocation(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundSourceLocation, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundSourceLocation(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundSourceLocation` replaced.
@@ -9135,13 +10011,14 @@ public struct PoundSourceLocationSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundSourceLocationSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -9154,14 +10031,15 @@ public struct PoundSourceLocationSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundSourceLocationSyntax(newData)
   }
   public var args: PoundSourceLocationArgsSyntax? {
-  get {
-    let child = data.child(at: Cursor.args, parent: self)
-    if child == nil { return nil }
-    return PoundSourceLocationArgsSyntax(child!)
-  }
-  set(value) {
-    self = withArgs(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.args, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return PoundSourceLocationArgsSyntax(childData!)
+    }
+    set(value) {
+      self = withArgs(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `args` replaced.
@@ -9174,13 +10052,14 @@ public struct PoundSourceLocationSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PoundSourceLocationSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -9239,19 +10118,14 @@ public struct PoundSourceLocationSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundSourceLocationSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundSourceLocationSyntax, rhs: PoundSourceLocationSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundSourceLocationArgsSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundSourceLocationArgsSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundSourceLocationArgsSyntaxProtocol: SyntaxProtocol {}
 
-public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct PoundSourceLocationArgsSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case fileArgLabel
     case fileArgColon
@@ -9262,21 +10136,32 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     case lineNumber
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundSourceLocationArgsSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundSourceLocationArgsSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundSourceLocationArgs else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundSourceLocationArgsSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundSourceLocationArgs)
+    self._syntaxNode = Syntax(data)
   }
 
   public var fileArgLabel: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.fileArgLabel, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFileArgLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.fileArgLabel, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFileArgLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `fileArgLabel` replaced.
@@ -9289,13 +10174,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
   public var fileArgColon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.fileArgColon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFileArgColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.fileArgColon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFileArgColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `fileArgColon` replaced.
@@ -9308,13 +10194,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
   public var fileName: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.fileName, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFileName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.fileName, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFileName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `fileName` replaced.
@@ -9327,13 +10214,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
   public var comma: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.comma, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.comma, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `comma` replaced.
@@ -9346,13 +10234,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
   public var lineArgLabel: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.lineArgLabel, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLineArgLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.lineArgLabel, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLineArgLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `lineArgLabel` replaced.
@@ -9365,13 +10254,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
   public var lineArgColon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.lineArgColon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLineArgColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.lineArgColon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLineArgColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `lineArgColon` replaced.
@@ -9384,13 +10274,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
     return PoundSourceLocationArgsSyntax(newData)
   }
   public var lineNumber: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.lineNumber, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLineNumber(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.lineNumber, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLineNumber(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `lineNumber` replaced.
@@ -9449,19 +10340,14 @@ public struct PoundSourceLocationArgsSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundSourceLocationArgsSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundSourceLocationArgsSyntax, rhs: PoundSourceLocationArgsSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DeclModifierSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclModifierSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclModifierSyntaxProtocol: SyntaxProtocol {}
 
-public struct DeclModifierSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct DeclModifierSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case detailLeftParen
@@ -9469,21 +10355,32 @@ public struct DeclModifierSyntax: Syntax, _SyntaxBase, Hashable {
     case detailRightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeclModifierSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeclModifierSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .declModifier else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeclModifierSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .declModifier)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -9496,14 +10393,15 @@ public struct DeclModifierSyntax: Syntax, _SyntaxBase, Hashable {
     return DeclModifierSyntax(newData)
   }
   public var detailLeftParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.detailLeftParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDetailLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.detailLeftParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDetailLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `detailLeftParen` replaced.
@@ -9516,14 +10414,15 @@ public struct DeclModifierSyntax: Syntax, _SyntaxBase, Hashable {
     return DeclModifierSyntax(newData)
   }
   public var detail: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.detail, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDetail(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.detail, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDetail(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `detail` replaced.
@@ -9536,14 +10435,15 @@ public struct DeclModifierSyntax: Syntax, _SyntaxBase, Hashable {
     return DeclModifierSyntax(newData)
   }
   public var detailRightParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.detailRightParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDetailRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.detailRightParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDetailRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `detailRightParen` replaced.
@@ -9602,39 +10502,45 @@ public struct DeclModifierSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeclModifierSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeclModifierSyntax, rhs: DeclModifierSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `InheritedTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `InheritedTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol InheritedTypeSyntaxProtocol: SyntaxProtocol {}
 
-public struct InheritedTypeSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct InheritedTypeSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case typeName
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `InheritedTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `InheritedTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .inheritedType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `InheritedTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .inheritedType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var typeName: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.typeName, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withTypeName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeName, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeName` replaced.
@@ -9647,14 +10553,15 @@ public struct InheritedTypeSyntax: Syntax, _SyntaxBase, Hashable {
     return InheritedTypeSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -9713,39 +10620,50 @@ public struct InheritedTypeSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `InheritedTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: InheritedTypeSyntax, rhs: InheritedTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `InheritedTypeListSyntax` nodes conform. Extension point to add
+/// common methods to all `InheritedTypeListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol InheritedTypeListSyntaxProtocol: SyntaxProtocol {}
 
-public struct TypeInheritanceClauseSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `TypeInheritanceClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `TypeInheritanceClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TypeInheritanceClauseSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct TypeInheritanceClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case colon
     case inheritedTypeCollection
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TypeInheritanceClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TypeInheritanceClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .typeInheritanceClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TypeInheritanceClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .typeInheritanceClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -9758,13 +10676,14 @@ public struct TypeInheritanceClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return TypeInheritanceClauseSyntax(newData)
   }
   public var inheritedTypeCollection: InheritedTypeListSyntax {
-  get {
-    let child = data.child(at: Cursor.inheritedTypeCollection, parent: self)
-    return InheritedTypeListSyntax(child!)
-  }
-  set(value) {
-    self = withInheritedTypeCollection(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritedTypeCollection, 
+                                 parent: Syntax(self))
+      return InheritedTypeListSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritedTypeCollection(value)
+    }
   }
 
   /// Adds the provided `InheritedType` to the node's `inheritedTypeCollection`
@@ -9842,19 +10761,14 @@ public struct TypeInheritanceClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TypeInheritanceClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: TypeInheritanceClauseSyntax, rhs: TypeInheritanceClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClassDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `ClassDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClassDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct ClassDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -9866,22 +10780,33 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case members
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClassDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClassDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .classDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClassDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .classDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -9913,14 +10838,15 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -9952,13 +10878,14 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var classKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.classKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withClassKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.classKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withClassKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `classKeyword` replaced.
@@ -9971,13 +10898,14 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -9990,14 +10918,15 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var genericParameterClause: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameterClause, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
@@ -10010,14 +10939,15 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritanceClause, parent: self)
-    if child == nil { return nil }
-    return TypeInheritanceClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInheritanceClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritanceClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInheritanceClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritanceClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
@@ -10030,14 +10960,15 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -10050,13 +10981,14 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ClassDeclSyntax(newData)
   }
   public var members: MemberDeclBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.members, parent: self)
-    return MemberDeclBlockSyntax(child!)
-  }
-  set(value) {
-    self = withMembers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.members, 
+                                 parent: Syntax(self))
+      return MemberDeclBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withMembers(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `members` replaced.
@@ -10115,19 +11047,14 @@ public struct ClassDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClassDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClassDeclSyntax, rhs: ClassDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `StructDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `StructDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol StructDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct StructDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -10139,22 +11066,33 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case members
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `StructDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `StructDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .structDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `StructDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .structDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -10186,14 +11124,15 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -10225,13 +11164,14 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var structKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.structKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withStructKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.structKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withStructKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `structKeyword` replaced.
@@ -10244,13 +11184,14 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -10263,14 +11204,15 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var genericParameterClause: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameterClause, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
@@ -10283,14 +11225,15 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritanceClause, parent: self)
-    if child == nil { return nil }
-    return TypeInheritanceClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInheritanceClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritanceClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInheritanceClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritanceClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
@@ -10303,14 +11246,15 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -10323,13 +11267,14 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return StructDeclSyntax(newData)
   }
   public var members: MemberDeclBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.members, parent: self)
-    return MemberDeclBlockSyntax(child!)
-  }
-  set(value) {
-    self = withMembers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.members, 
+                                 parent: Syntax(self))
+      return MemberDeclBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withMembers(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `members` replaced.
@@ -10388,19 +11333,14 @@ public struct StructDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `StructDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: StructDeclSyntax, rhs: StructDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ProtocolDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `ProtocolDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ProtocolDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct ProtocolDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -10411,22 +11351,33 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case members
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ProtocolDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ProtocolDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .protocolDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ProtocolDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .protocolDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -10458,14 +11409,15 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ProtocolDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -10497,13 +11449,14 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ProtocolDeclSyntax(newData)
   }
   public var protocolKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.protocolKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withProtocolKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.protocolKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withProtocolKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `protocolKeyword` replaced.
@@ -10516,13 +11469,14 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ProtocolDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -10535,14 +11489,15 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ProtocolDeclSyntax(newData)
   }
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritanceClause, parent: self)
-    if child == nil { return nil }
-    return TypeInheritanceClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInheritanceClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritanceClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInheritanceClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritanceClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
@@ -10555,14 +11510,15 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ProtocolDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -10575,13 +11531,14 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ProtocolDeclSyntax(newData)
   }
   public var members: MemberDeclBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.members, parent: self)
-    return MemberDeclBlockSyntax(child!)
-  }
-  set(value) {
-    self = withMembers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.members, 
+                                 parent: Syntax(self))
+      return MemberDeclBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withMembers(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `members` replaced.
@@ -10640,19 +11597,14 @@ public struct ProtocolDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ProtocolDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: ProtocolDeclSyntax, rhs: ProtocolDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ExtensionDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `ExtensionDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ExtensionDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct ExtensionDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -10663,22 +11615,33 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case members
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ExtensionDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ExtensionDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .extensionDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ExtensionDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .extensionDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -10710,14 +11673,15 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ExtensionDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -10749,13 +11713,14 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ExtensionDeclSyntax(newData)
   }
   public var extensionKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.extensionKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withExtensionKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.extensionKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withExtensionKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `extensionKeyword` replaced.
@@ -10768,13 +11733,14 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ExtensionDeclSyntax(newData)
   }
   public var extendedType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.extendedType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withExtendedType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.extendedType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withExtendedType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `extendedType` replaced.
@@ -10787,14 +11753,15 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ExtensionDeclSyntax(newData)
   }
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritanceClause, parent: self)
-    if child == nil { return nil }
-    return TypeInheritanceClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInheritanceClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritanceClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInheritanceClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritanceClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
@@ -10807,14 +11774,15 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ExtensionDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -10827,13 +11795,14 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ExtensionDeclSyntax(newData)
   }
   public var members: MemberDeclBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.members, parent: self)
-    return MemberDeclBlockSyntax(child!)
-  }
-  set(value) {
-    self = withMembers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.members, 
+                                 parent: Syntax(self))
+      return MemberDeclBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withMembers(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `members` replaced.
@@ -10892,40 +11861,46 @@ public struct ExtensionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ExtensionDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: ExtensionDeclSyntax, rhs: ExtensionDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `MemberDeclBlockSyntax` nodes conform. Extension point to add
+/// common methods to all `MemberDeclBlockSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MemberDeclBlockSyntaxProtocol: SyntaxProtocol {}
 
-public struct MemberDeclBlockSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct MemberDeclBlockSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftBrace
     case members
     case rightBrace
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `MemberDeclBlockSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `MemberDeclBlockSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .memberDeclBlock else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MemberDeclBlockSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .memberDeclBlock)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBrace` replaced.
@@ -10938,13 +11913,14 @@ public struct MemberDeclBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return MemberDeclBlockSyntax(newData)
   }
   public var members: MemberDeclListSyntax {
-  get {
-    let child = data.child(at: Cursor.members, parent: self)
-    return MemberDeclListSyntax(child!)
-  }
-  set(value) {
-    self = withMembers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.members, 
+                                 parent: Syntax(self))
+      return MemberDeclListSyntax(childData!)
+    }
+    set(value) {
+      self = withMembers(value)
+    }
   }
 
   /// Adds the provided `Member` to the node's `members`
@@ -10976,13 +11952,14 @@ public struct MemberDeclBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return MemberDeclBlockSyntax(newData)
   }
   public var rightBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBrace` replaced.
@@ -11041,43 +12018,54 @@ public struct MemberDeclBlockSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `MemberDeclBlockSyntax` nodes are equal to each other.
-  public static func ==(lhs: MemberDeclBlockSyntax, rhs: MemberDeclBlockSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `MemberDeclListSyntax` nodes conform. Extension point to add
+/// common methods to all `MemberDeclListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MemberDeclListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `MemberDeclListItemSyntax` nodes conform. Extension point to add
+/// common methods to all `MemberDeclListItemSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MemberDeclListItemSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A member declaration of a type consisting of a declaration and an          optional semicolon;
 /// 
-public struct MemberDeclListItemSyntax: Syntax, _SyntaxBase, Hashable {
+public struct MemberDeclListItemSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case decl
     case semicolon
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `MemberDeclListItemSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `MemberDeclListItemSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .memberDeclListItem else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MemberDeclListItemSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .memberDeclListItem)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The declaration of the type member.
   public var decl: DeclSyntax {
-  get {
-    let child = data.child(at: Cursor.decl, parent: self)
-    return makeSyntax(child!) as! DeclSyntax
-  }
-  set(value) {
-    self = withDecl(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.decl, 
+                                 parent: Syntax(self))
+      return DeclSyntax(childData!)
+    }
+    set(value) {
+      self = withDecl(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `decl` replaced.
@@ -11091,14 +12079,15 @@ public struct MemberDeclListItemSyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// An optional trailing semicolon.
   public var semicolon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.semicolon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSemicolon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.semicolon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSemicolon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `semicolon` replaced.
@@ -11157,39 +12146,45 @@ public struct MemberDeclListItemSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `MemberDeclListItemSyntax` nodes are equal to each other.
-  public static func ==(lhs: MemberDeclListItemSyntax, rhs: MemberDeclListItemSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SourceFileSyntax` nodes conform. Extension point to add
+/// common methods to all `SourceFileSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SourceFileSyntaxProtocol: SyntaxProtocol {}
 
-public struct SourceFileSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct SourceFileSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case statements
     case eofToken
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SourceFileSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SourceFileSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .sourceFile else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SourceFileSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .sourceFile)
+    self._syntaxNode = Syntax(data)
   }
 
   public var statements: CodeBlockItemListSyntax {
-  get {
-    let child = data.child(at: Cursor.statements, parent: self)
-    return CodeBlockItemListSyntax(child!)
-  }
-  set(value) {
-    self = withStatements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.statements, 
+                                 parent: Syntax(self))
+      return CodeBlockItemListSyntax(childData!)
+    }
+    set(value) {
+      self = withStatements(value)
+    }
   }
 
   /// Adds the provided `Statement` to the node's `statements`
@@ -11221,13 +12216,14 @@ public struct SourceFileSyntax: Syntax, _SyntaxBase, Hashable {
     return SourceFileSyntax(newData)
   }
   public var eofToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.eofToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEOFToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.eofToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEOFToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `eofToken` replaced.
@@ -11286,39 +12282,45 @@ public struct SourceFileSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SourceFileSyntax` nodes are equal to each other.
-  public static func ==(lhs: SourceFileSyntax, rhs: SourceFileSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `InitializerClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `InitializerClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol InitializerClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct InitializerClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct InitializerClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case equal
     case value
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `InitializerClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `InitializerClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .initializerClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `InitializerClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .initializerClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var equal: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.equal, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEqual(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.equal, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEqual(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `equal` replaced.
@@ -11331,13 +12333,14 @@ public struct InitializerClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return InitializerClauseSyntax(newData)
   }
   public var value: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.value, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.value, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `value` replaced.
@@ -11396,19 +12399,14 @@ public struct InitializerClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `InitializerClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: InitializerClauseSyntax, rhs: InitializerClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FunctionParameterSyntax` nodes conform. Extension point to add
+/// common methods to all `FunctionParameterSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FunctionParameterSyntaxProtocol: SyntaxProtocol {}
 
-public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct FunctionParameterSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case firstName
@@ -11420,22 +12418,33 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FunctionParameterSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FunctionParameterSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .functionParameter else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FunctionParameterSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .functionParameter)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -11467,14 +12476,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var firstName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.firstName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFirstName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.firstName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFirstName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `firstName` replaced.
@@ -11487,14 +12497,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var secondName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.secondName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSecondName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.secondName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSecondName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `secondName` replaced.
@@ -11507,14 +12518,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var colon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -11527,14 +12539,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var type: TypeSyntax? {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -11547,14 +12560,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var ellipsis: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.ellipsis, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEllipsis(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.ellipsis, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEllipsis(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `ellipsis` replaced.
@@ -11567,14 +12581,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var defaultArgument: InitializerClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.defaultArgument, parent: self)
-    if child == nil { return nil }
-    return InitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withDefaultArgument(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.defaultArgument, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return InitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withDefaultArgument(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `defaultArgument` replaced.
@@ -11587,14 +12602,15 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return FunctionParameterSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -11653,19 +12669,19 @@ public struct FunctionParameterSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FunctionParameterSyntax` nodes are equal to each other.
-  public static func ==(lhs: FunctionParameterSyntax, rhs: FunctionParameterSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ModifierListSyntax` nodes conform. Extension point to add
+/// common methods to all `ModifierListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ModifierListSyntaxProtocol: SyntaxProtocol {}
 
-public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `FunctionDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `FunctionDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FunctionDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
+
+public struct FunctionDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -11677,22 +12693,33 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FunctionDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FunctionDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .functionDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FunctionDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .functionDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -11724,14 +12751,15 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -11763,13 +12791,14 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var funcKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.funcKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFuncKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.funcKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFuncKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `funcKeyword` replaced.
@@ -11782,13 +12811,14 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -11801,14 +12831,15 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var genericParameterClause: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameterClause, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
@@ -11821,13 +12852,14 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var signature: FunctionSignatureSyntax {
-  get {
-    let child = data.child(at: Cursor.signature, parent: self)
-    return FunctionSignatureSyntax(child!)
-  }
-  set(value) {
-    self = withSignature(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.signature, 
+                                 parent: Syntax(self))
+      return FunctionSignatureSyntax(childData!)
+    }
+    set(value) {
+      self = withSignature(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `signature` replaced.
@@ -11840,14 +12872,15 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -11860,14 +12893,15 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return FunctionDeclSyntax(newData)
   }
   public var body: CodeBlockSyntax? {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    if child == nil { return nil }
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -11926,19 +12960,14 @@ public struct FunctionDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FunctionDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: FunctionDeclSyntax, rhs: FunctionDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `InitializerDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `InitializerDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol InitializerDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct InitializerDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -11951,22 +12980,33 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `InitializerDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `InitializerDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .initializerDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `InitializerDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .initializerDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -11998,14 +13038,15 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -12037,13 +13078,14 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var initKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.initKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withInitKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withInitKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initKeyword` replaced.
@@ -12056,14 +13098,15 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var optionalMark: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.optionalMark, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOptionalMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.optionalMark, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOptionalMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `optionalMark` replaced.
@@ -12076,14 +13119,15 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var genericParameterClause: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameterClause, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
@@ -12096,13 +13140,14 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var parameters: ParameterClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.parameters, parent: self)
-    return ParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withParameters(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.parameters, 
+                                 parent: Syntax(self))
+      return ParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withParameters(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `parameters` replaced.
@@ -12115,14 +13160,15 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var throwsOrRethrowsKeyword: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.throwsOrRethrowsKeyword, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withThrowsOrRethrowsKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.throwsOrRethrowsKeyword, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowsOrRethrowsKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `throwsOrRethrowsKeyword` replaced.
@@ -12135,14 +13181,15 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -12155,14 +13202,15 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return InitializerDeclSyntax(newData)
   }
   public var body: CodeBlockSyntax? {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    if child == nil { return nil }
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -12221,19 +13269,14 @@ public struct InitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `InitializerDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: InitializerDeclSyntax, rhs: InitializerDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DeinitializerDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `DeinitializerDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeinitializerDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct DeinitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct DeinitializerDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -12241,22 +13284,33 @@ public struct DeinitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeinitializerDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeinitializerDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .deinitializerDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeinitializerDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .deinitializerDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -12288,14 +13342,15 @@ public struct DeinitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return DeinitializerDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -12327,13 +13382,14 @@ public struct DeinitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return DeinitializerDeclSyntax(newData)
   }
   public var deinitKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.deinitKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDeinitKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.deinitKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDeinitKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `deinitKeyword` replaced.
@@ -12346,13 +13402,14 @@ public struct DeinitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return DeinitializerDeclSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -12411,19 +13468,14 @@ public struct DeinitializerDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeinitializerDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeinitializerDeclSyntax, rhs: DeinitializerDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SubscriptDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `SubscriptDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SubscriptDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct SubscriptDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -12435,22 +13487,33 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case accessor
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SubscriptDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SubscriptDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .subscriptDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SubscriptDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .subscriptDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -12482,14 +13545,15 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -12521,13 +13585,14 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var subscriptKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.subscriptKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSubscriptKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.subscriptKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSubscriptKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `subscriptKeyword` replaced.
@@ -12540,14 +13605,15 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var genericParameterClause: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameterClause, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameterClause` replaced.
@@ -12560,13 +13626,14 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var indices: ParameterClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.indices, parent: self)
-    return ParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withIndices(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.indices, 
+                                 parent: Syntax(self))
+      return ParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withIndices(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `indices` replaced.
@@ -12579,13 +13646,14 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var result: ReturnClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.result, parent: self)
-    return ReturnClauseSyntax(child!)
-  }
-  set(value) {
-    self = withResult(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.result, 
+                                 parent: Syntax(self))
+      return ReturnClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withResult(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `result` replaced.
@@ -12598,14 +13666,15 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -12618,14 +13687,15 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return SubscriptDeclSyntax(newData)
   }
   public var accessor: Syntax? {
-  get {
-    let child = data.child(at: Cursor.accessor, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withAccessor(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.accessor, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withAccessor(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `accessor` replaced.
@@ -12684,19 +13754,14 @@ public struct SubscriptDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SubscriptDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: SubscriptDeclSyntax, rhs: SubscriptDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AccessLevelModifierSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessLevelModifierSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessLevelModifierSyntaxProtocol: SyntaxProtocol {}
 
-public struct AccessLevelModifierSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct AccessLevelModifierSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case leftParen
@@ -12704,21 +13769,32 @@ public struct AccessLevelModifierSyntax: Syntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AccessLevelModifierSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AccessLevelModifierSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .accessLevelModifier else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AccessLevelModifierSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .accessLevelModifier)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -12731,14 +13807,15 @@ public struct AccessLevelModifierSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessLevelModifierSyntax(newData)
   }
   public var leftParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -12751,14 +13828,15 @@ public struct AccessLevelModifierSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessLevelModifierSyntax(newData)
   }
   public var modifier: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifier, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withModifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifier, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withModifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `modifier` replaced.
@@ -12771,14 +13849,15 @@ public struct AccessLevelModifierSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessLevelModifierSyntax(newData)
   }
   public var rightParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -12837,39 +13916,45 @@ public struct AccessLevelModifierSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AccessLevelModifierSyntax` nodes are equal to each other.
-  public static func ==(lhs: AccessLevelModifierSyntax, rhs: AccessLevelModifierSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AccessPathComponentSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessPathComponentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessPathComponentSyntaxProtocol: SyntaxProtocol {}
 
-public struct AccessPathComponentSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct AccessPathComponentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case trailingDot
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AccessPathComponentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AccessPathComponentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .accessPathComponent else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AccessPathComponentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .accessPathComponent)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -12882,14 +13967,15 @@ public struct AccessPathComponentSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessPathComponentSyntax(newData)
   }
   public var trailingDot: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingDot, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingDot(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingDot, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingDot(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingDot` replaced.
@@ -12948,19 +14034,19 @@ public struct AccessPathComponentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AccessPathComponentSyntax` nodes are equal to each other.
-  public static func ==(lhs: AccessPathComponentSyntax, rhs: AccessPathComponentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AccessPathSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessPathSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessPathSyntaxProtocol: SyntaxProtocol {}
 
-public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ImportDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `ImportDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ImportDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
+
+public struct ImportDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -12969,22 +14055,33 @@ public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case path
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ImportDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ImportDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .importDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ImportDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .importDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -13016,14 +14113,15 @@ public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ImportDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -13055,13 +14153,14 @@ public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ImportDeclSyntax(newData)
   }
   public var importTok: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.importTok, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withImportTok(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.importTok, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withImportTok(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `importTok` replaced.
@@ -13074,14 +14173,15 @@ public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ImportDeclSyntax(newData)
   }
   public var importKind: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.importKind, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withImportKind(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.importKind, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withImportKind(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `importKind` replaced.
@@ -13094,13 +14194,14 @@ public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return ImportDeclSyntax(newData)
   }
   public var path: AccessPathSyntax {
-  get {
-    let child = data.child(at: Cursor.path, parent: self)
-    return AccessPathSyntax(child!)
-  }
-  set(value) {
-    self = withPath(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.path, 
+                                 parent: Syntax(self))
+      return AccessPathSyntax(childData!)
+    }
+    set(value) {
+      self = withPath(value)
+    }
   }
 
   /// Adds the provided `PathComponent` to the node's `path`
@@ -13178,40 +14279,46 @@ public struct ImportDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ImportDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: ImportDeclSyntax, rhs: ImportDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AccessorParameterSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessorParameterSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessorParameterSyntaxProtocol: SyntaxProtocol {}
 
-public struct AccessorParameterSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct AccessorParameterSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case name
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AccessorParameterSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AccessorParameterSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .accessorParameter else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AccessorParameterSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .accessorParameter)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -13224,13 +14331,14 @@ public struct AccessorParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessorParameterSyntax(newData)
   }
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -13243,13 +14351,14 @@ public struct AccessorParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessorParameterSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -13308,19 +14417,14 @@ public struct AccessorParameterSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AccessorParameterSyntax` nodes are equal to each other.
-  public static func ==(lhs: AccessorParameterSyntax, rhs: AccessorParameterSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AccessorDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessorDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessorDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
-public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+
+public struct AccessorDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifier
@@ -13329,22 +14433,33 @@ public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AccessorDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AccessorDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .accessorDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AccessorDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .accessorDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -13376,14 +14491,15 @@ public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AccessorDeclSyntax(newData)
   }
   public var modifier: DeclModifierSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifier, parent: self)
-    if child == nil { return nil }
-    return DeclModifierSyntax(child!)
-  }
-  set(value) {
-    self = withModifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifier, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclModifierSyntax(childData!)
+    }
+    set(value) {
+      self = withModifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `modifier` replaced.
@@ -13396,13 +14512,14 @@ public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AccessorDeclSyntax(newData)
   }
   public var accessorKind: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.accessorKind, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAccessorKind(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.accessorKind, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAccessorKind(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `accessorKind` replaced.
@@ -13415,14 +14532,15 @@ public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AccessorDeclSyntax(newData)
   }
   public var parameter: AccessorParameterSyntax? {
-  get {
-    let child = data.child(at: Cursor.parameter, parent: self)
-    if child == nil { return nil }
-    return AccessorParameterSyntax(child!)
-  }
-  set(value) {
-    self = withParameter(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.parameter, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AccessorParameterSyntax(childData!)
+    }
+    set(value) {
+      self = withParameter(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `parameter` replaced.
@@ -13435,14 +14553,15 @@ public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return AccessorDeclSyntax(newData)
   }
   public var body: CodeBlockSyntax? {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    if child == nil { return nil }
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -13501,40 +14620,51 @@ public struct AccessorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AccessorDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: AccessorDeclSyntax, rhs: AccessorDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AccessorListSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessorListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessorListSyntaxProtocol: SyntaxProtocol {}
 
-public struct AccessorBlockSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `AccessorBlockSyntax` nodes conform. Extension point to add
+/// common methods to all `AccessorBlockSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AccessorBlockSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct AccessorBlockSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftBrace
     case accessors
     case rightBrace
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AccessorBlockSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AccessorBlockSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .accessorBlock else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AccessorBlockSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .accessorBlock)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBrace` replaced.
@@ -13547,13 +14677,14 @@ public struct AccessorBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessorBlockSyntax(newData)
   }
   public var accessors: AccessorListSyntax {
-  get {
-    let child = data.child(at: Cursor.accessors, parent: self)
-    return AccessorListSyntax(child!)
-  }
-  set(value) {
-    self = withAccessors(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.accessors, 
+                                 parent: Syntax(self))
+      return AccessorListSyntax(childData!)
+    }
+    set(value) {
+      self = withAccessors(value)
+    }
   }
 
   /// Adds the provided `Accessor` to the node's `accessors`
@@ -13585,13 +14716,14 @@ public struct AccessorBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return AccessorBlockSyntax(newData)
   }
   public var rightBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBrace` replaced.
@@ -13650,19 +14782,14 @@ public struct AccessorBlockSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AccessorBlockSyntax` nodes are equal to each other.
-  public static func ==(lhs: AccessorBlockSyntax, rhs: AccessorBlockSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PatternBindingSyntax` nodes conform. Extension point to add
+/// common methods to all `PatternBindingSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PatternBindingSyntaxProtocol: SyntaxProtocol {}
 
-public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct PatternBindingSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case pattern
     case typeAnnotation
@@ -13671,21 +14798,32 @@ public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PatternBindingSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PatternBindingSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .patternBinding else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PatternBindingSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .patternBinding)
+    self._syntaxNode = Syntax(data)
   }
 
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -13698,14 +14836,15 @@ public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
     return PatternBindingSyntax(newData)
   }
   public var typeAnnotation: TypeAnnotationSyntax? {
-  get {
-    let child = data.child(at: Cursor.typeAnnotation, parent: self)
-    if child == nil { return nil }
-    return TypeAnnotationSyntax(child!)
-  }
-  set(value) {
-    self = withTypeAnnotation(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeAnnotation, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeAnnotationSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeAnnotation(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeAnnotation` replaced.
@@ -13718,14 +14857,15 @@ public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
     return PatternBindingSyntax(newData)
   }
   public var initializer: InitializerClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.initializer, parent: self)
-    if child == nil { return nil }
-    return InitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInitializer(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initializer, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return InitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initializer` replaced.
@@ -13738,14 +14878,15 @@ public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
     return PatternBindingSyntax(newData)
   }
   public var accessor: Syntax? {
-  get {
-    let child = data.child(at: Cursor.accessor, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withAccessor(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.accessor, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withAccessor(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `accessor` replaced.
@@ -13758,14 +14899,15 @@ public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
     return PatternBindingSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -13824,19 +14966,19 @@ public struct PatternBindingSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PatternBindingSyntax` nodes are equal to each other.
-  public static func ==(lhs: PatternBindingSyntax, rhs: PatternBindingSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PatternBindingListSyntax` nodes conform. Extension point to add
+/// common methods to all `PatternBindingListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PatternBindingListSyntaxProtocol: SyntaxProtocol {}
 
-public struct VariableDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `VariableDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `VariableDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol VariableDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
+
+public struct VariableDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -13844,22 +14986,33 @@ public struct VariableDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case bindings
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `VariableDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `VariableDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .variableDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `VariableDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .variableDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -13891,14 +15044,15 @@ public struct VariableDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return VariableDeclSyntax(newData)
   }
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -13930,13 +15084,14 @@ public struct VariableDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return VariableDeclSyntax(newData)
   }
   public var letOrVarKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.letOrVarKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLetOrVarKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.letOrVarKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLetOrVarKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `letOrVarKeyword` replaced.
@@ -13949,13 +15104,14 @@ public struct VariableDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return VariableDeclSyntax(newData)
   }
   public var bindings: PatternBindingListSyntax {
-  get {
-    let child = data.child(at: Cursor.bindings, parent: self)
-    return PatternBindingListSyntax(child!)
-  }
-  set(value) {
-    self = withBindings(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.bindings, 
+                                 parent: Syntax(self))
+      return PatternBindingListSyntax(childData!)
+    }
+    set(value) {
+      self = withBindings(value)
+    }
   }
 
   /// Adds the provided `Binding` to the node's `bindings`
@@ -14033,22 +15189,17 @@ public struct VariableDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `VariableDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: VariableDeclSyntax, rhs: VariableDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `EnumCaseElementSyntax` nodes conform. Extension point to add
+/// common methods to all `EnumCaseElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol EnumCaseElementSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// An element of an enum case, containing the name of the case and,          optionally, either associated values or an assignment to a raw value.
 /// 
-public struct EnumCaseElementSyntax: Syntax, _SyntaxBase, Hashable {
+public struct EnumCaseElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case identifier
     case associatedValue
@@ -14056,22 +15207,33 @@ public struct EnumCaseElementSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `EnumCaseElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `EnumCaseElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .enumCaseElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `EnumCaseElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .enumCaseElement)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The name of this case.
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -14085,14 +15247,15 @@ public struct EnumCaseElementSyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The set of associated values of the case.
   public var associatedValue: ParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.associatedValue, parent: self)
-    if child == nil { return nil }
-    return ParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withAssociatedValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.associatedValue, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withAssociatedValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `associatedValue` replaced.
@@ -14108,14 +15271,15 @@ public struct EnumCaseElementSyntax: Syntax, _SyntaxBase, Hashable {
   /// The raw value of this enum element, if present.
   /// 
   public var rawValue: InitializerClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.rawValue, parent: self)
-    if child == nil { return nil }
-    return InitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withRawValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rawValue, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return InitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withRawValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rawValue` replaced.
@@ -14131,14 +15295,15 @@ public struct EnumCaseElementSyntax: Syntax, _SyntaxBase, Hashable {
   /// The trailing comma of this element, if the case has                    multiple elements.
   /// 
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -14197,23 +15362,23 @@ public struct EnumCaseElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `EnumCaseElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: EnumCaseElementSyntax, rhs: EnumCaseElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `EnumCaseElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `EnumCaseElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol EnumCaseElementListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `EnumCaseDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `EnumCaseDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol EnumCaseDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
 
 /// 
 /// A `case` declaration of a Swift `enum`. It can have 1 or more          `EnumCaseElement`s inside, each declaring a different case of the
 /// enum.
 /// 
-public struct EnumCaseDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+public struct EnumCaseDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -14221,25 +15386,36 @@ public struct EnumCaseDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case elements
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `EnumCaseDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `EnumCaseDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .enumCaseDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `EnumCaseDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .enumCaseDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The attributes applied to the case declaration.
   /// 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -14274,14 +15450,15 @@ public struct EnumCaseDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The declaration modifiers applied to the case declaration.
   /// 
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -14314,13 +15491,14 @@ public struct EnumCaseDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   }
   /// The `case` keyword for this case.
   public var caseKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.caseKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCaseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.caseKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCaseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
@@ -14334,13 +15512,14 @@ public struct EnumCaseDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   }
   /// The elements this case declares.
   public var elements: EnumCaseElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return EnumCaseElementListSyntax(child!)
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return EnumCaseElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elements`
@@ -14418,20 +15597,15 @@ public struct EnumCaseDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `EnumCaseDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: EnumCaseDeclSyntax, rhs: EnumCaseDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `EnumDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `EnumDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol EnumDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
 
 /// A Swift `enum` declaration.
-public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+public struct EnumDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -14443,25 +15617,36 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case members
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `EnumDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `EnumDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .enumDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `EnumDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .enumDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The attributes applied to the enum declaration.
   /// 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -14496,14 +15681,15 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The declaration modifiers applied to the enum declaration.
   /// 
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -14538,13 +15724,14 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The `enum` keyword for this declaration.
   /// 
   public var enumKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.enumKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEnumKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.enumKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEnumKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `enumKeyword` replaced.
@@ -14560,13 +15747,14 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The name of this enum.
   /// 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -14582,14 +15770,15 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The generic parameters, if any, for this enum.
   /// 
   public var genericParameters: GenericParameterClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericParameters, parent: self)
-    if child == nil { return nil }
-    return GenericParameterClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameters(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameters, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericParameterClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameters(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericParameters` replaced.
@@ -14605,14 +15794,15 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The inheritance clause describing conformances or raw                    values for this enum.
   /// 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritanceClause, parent: self)
-    if child == nil { return nil }
-    return TypeInheritanceClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInheritanceClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritanceClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInheritanceClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritanceClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritanceClause` replaced.
@@ -14628,14 +15818,15 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The `where` clause that applies to the generic parameters of                    this enum.
   /// 
   public var genericWhereClause: GenericWhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericWhereClause, parent: self)
-    if child == nil { return nil }
-    return GenericWhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericWhereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericWhereClause` replaced.
@@ -14651,13 +15842,14 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The cases and other members of this enum.
   /// 
   public var members: MemberDeclBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.members, parent: self)
-    return MemberDeclBlockSyntax(child!)
-  }
-  set(value) {
-    self = withMembers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.members, 
+                                 parent: Syntax(self))
+      return MemberDeclBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withMembers(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `members` replaced.
@@ -14716,20 +15908,15 @@ public struct EnumDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `EnumDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: EnumDeclSyntax, rhs: EnumDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `OperatorDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `OperatorDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol OperatorDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
 
 /// A Swift `operator` declaration.
-public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+public struct OperatorDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -14738,25 +15925,36 @@ public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case operatorPrecedenceAndTypes
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `OperatorDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `OperatorDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .operatorDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OperatorDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .operatorDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The attributes applied to the 'operator' declaration.
   /// 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -14792,14 +15990,15 @@ public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// declaration.
   /// 
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -14831,13 +16030,14 @@ public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return OperatorDeclSyntax(newData)
   }
   public var operatorKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.operatorKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withOperatorKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.operatorKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOperatorKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `operatorKeyword` replaced.
@@ -14850,13 +16050,14 @@ public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return OperatorDeclSyntax(newData)
   }
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -14872,14 +16073,15 @@ public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// Optionally specify a precedence group and designated types.
   /// 
   public var operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? {
-  get {
-    let child = data.child(at: Cursor.operatorPrecedenceAndTypes, parent: self)
-    if child == nil { return nil }
-    return OperatorPrecedenceAndTypesSyntax(child!)
-  }
-  set(value) {
-    self = withOperatorPrecedenceAndTypes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.operatorPrecedenceAndTypes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return OperatorPrecedenceAndTypesSyntax(childData!)
+    }
+    set(value) {
+      self = withOperatorPrecedenceAndTypes(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `operatorPrecedenceAndTypes` replaced.
@@ -14938,42 +16140,53 @@ public struct OperatorDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `OperatorDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: OperatorDeclSyntax, rhs: OperatorDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IdentifierListSyntax` nodes conform. Extension point to add
+/// common methods to all `IdentifierListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IdentifierListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `OperatorPrecedenceAndTypesSyntax` nodes conform. Extension point to add
+/// common methods to all `OperatorPrecedenceAndTypesSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol OperatorPrecedenceAndTypesSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
 /// 
-public struct OperatorPrecedenceAndTypesSyntax: Syntax, _SyntaxBase, Hashable {
+public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case colon
     case precedenceGroupAndDesignatedTypes
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `OperatorPrecedenceAndTypesSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `OperatorPrecedenceAndTypesSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .operatorPrecedenceAndTypes else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OperatorPrecedenceAndTypesSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .operatorPrecedenceAndTypes)
+    self._syntaxNode = Syntax(data)
   }
 
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -14989,13 +16202,14 @@ public struct OperatorPrecedenceAndTypesSyntax: Syntax, _SyntaxBase, Hashable {
   /// The precedence group and designated types for this operator
   /// 
   public var precedenceGroupAndDesignatedTypes: IdentifierListSyntax {
-  get {
-    let child = data.child(at: Cursor.precedenceGroupAndDesignatedTypes, parent: self)
-    return IdentifierListSyntax(child!)
-  }
-  set(value) {
-    self = withPrecedenceGroupAndDesignatedTypes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.precedenceGroupAndDesignatedTypes, 
+                                 parent: Syntax(self))
+      return IdentifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withPrecedenceGroupAndDesignatedTypes(value)
+    }
   }
 
   /// Adds the provided `PrecedenceGroupAndDesignatedType` to the node's `precedenceGroupAndDesignatedTypes`
@@ -15073,20 +16287,15 @@ public struct OperatorPrecedenceAndTypesSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `OperatorPrecedenceAndTypesSyntax` nodes are equal to each other.
-  public static func ==(lhs: OperatorPrecedenceAndTypesSyntax, rhs: OperatorPrecedenceAndTypesSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PrecedenceGroupDeclSyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupDeclSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupDeclSyntaxProtocol: DeclSyntaxProtocol {}
+
 
 /// A Swift `precedencegroup` declaration.
-public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
+public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -15097,25 +16306,36 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     case rightBrace
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PrecedenceGroupDeclSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PrecedenceGroupDeclSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .precedenceGroupDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrecedenceGroupDeclSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .precedenceGroupDecl)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The attributes applied to the 'precedencegroup' declaration.
   /// 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -15151,14 +16371,15 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// declaration.
   /// 
   public var modifiers: ModifierListSyntax? {
-  get {
-    let child = data.child(at: Cursor.modifiers, parent: self)
-    if child == nil { return nil }
-    return ModifierListSyntax(child!)
-  }
-  set(value) {
-    self = withModifiers(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.modifiers, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ModifierListSyntax(childData!)
+    }
+    set(value) {
+      self = withModifiers(value)
+    }
   }
 
   /// Adds the provided `Modifier` to the node's `modifiers`
@@ -15190,13 +16411,14 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
   public var precedencegroupKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.precedencegroupKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPrecedencegroupKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.precedencegroupKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPrecedencegroupKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `precedencegroupKeyword` replaced.
@@ -15212,13 +16434,14 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The name of this precedence group.
   /// 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -15231,13 +16454,14 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
   public var leftBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBrace` replaced.
@@ -15253,13 +16477,14 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
   /// The characteristics of this precedence group.
   /// 
   public var groupAttributes: PrecedenceGroupAttributeListSyntax {
-  get {
-    let child = data.child(at: Cursor.groupAttributes, parent: self)
-    return PrecedenceGroupAttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withGroupAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.groupAttributes, 
+                                 parent: Syntax(self))
+      return PrecedenceGroupAttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withGroupAttributes(value)
+    }
   }
 
   /// Adds the provided `GroupAttribute` to the node's `groupAttributes`
@@ -15291,13 +16516,14 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
     return PrecedenceGroupDeclSyntax(newData)
   }
   public var rightBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBrace` replaced.
@@ -15356,47 +16582,58 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PrecedenceGroupDeclSyntax` nodes are equal to each other.
-  public static func ==(lhs: PrecedenceGroupDeclSyntax, rhs: PrecedenceGroupDeclSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PrecedenceGroupAttributeListSyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupAttributeListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupAttributeListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `PrecedenceGroupRelationSyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupRelationSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupRelationSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// Specify the new precedence group's relation to existing precedence
 /// groups.
 /// 
-public struct PrecedenceGroupRelationSyntax: Syntax, _SyntaxBase, Hashable {
+public struct PrecedenceGroupRelationSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case higherThanOrLowerThan
     case colon
     case otherNames
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PrecedenceGroupRelationSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PrecedenceGroupRelationSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .precedenceGroupRelation else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrecedenceGroupRelationSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .precedenceGroupRelation)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The relation to specified other precedence groups.
   /// 
   public var higherThanOrLowerThan: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.higherThanOrLowerThan, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withHigherThanOrLowerThan(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.higherThanOrLowerThan, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withHigherThanOrLowerThan(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `higherThanOrLowerThan` replaced.
@@ -15409,13 +16646,14 @@ public struct PrecedenceGroupRelationSyntax: Syntax, _SyntaxBase, Hashable {
     return PrecedenceGroupRelationSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -15432,13 +16670,14 @@ public struct PrecedenceGroupRelationSyntax: Syntax, _SyntaxBase, Hashable {
   /// group relates.
   /// 
   public var otherNames: PrecedenceGroupNameListSyntax {
-  get {
-    let child = data.child(at: Cursor.otherNames, parent: self)
-    return PrecedenceGroupNameListSyntax(child!)
-  }
-  set(value) {
-    self = withOtherNames(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.otherNames, 
+                                 parent: Syntax(self))
+      return PrecedenceGroupNameListSyntax(childData!)
+    }
+    set(value) {
+      self = withOtherNames(value)
+    }
   }
 
   /// Adds the provided `OtherName` to the node's `otherNames`
@@ -15516,39 +16755,50 @@ public struct PrecedenceGroupRelationSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PrecedenceGroupRelationSyntax` nodes are equal to each other.
-  public static func ==(lhs: PrecedenceGroupRelationSyntax, rhs: PrecedenceGroupRelationSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PrecedenceGroupNameListSyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupNameListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupNameListSyntaxProtocol: SyntaxProtocol {}
 
-public struct PrecedenceGroupNameElementSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `PrecedenceGroupNameElementSyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupNameElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupNameElementSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PrecedenceGroupNameElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PrecedenceGroupNameElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .precedenceGroupNameElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrecedenceGroupNameElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .precedenceGroupNameElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -15561,14 +16811,15 @@ public struct PrecedenceGroupNameElementSyntax: Syntax, _SyntaxBase, Hashable {
     return PrecedenceGroupNameElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -15627,44 +16878,50 @@ public struct PrecedenceGroupNameElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PrecedenceGroupNameElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: PrecedenceGroupNameElementSyntax, rhs: PrecedenceGroupNameElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PrecedenceGroupAssignmentSyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupAssignmentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupAssignmentSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// Specifies the precedence of an operator when used in an operation
 /// that includes optional chaining.
 /// 
-public struct PrecedenceGroupAssignmentSyntax: Syntax, _SyntaxBase, Hashable {
+public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case assignmentKeyword
     case colon
     case flag
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PrecedenceGroupAssignmentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PrecedenceGroupAssignmentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .precedenceGroupAssignment else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrecedenceGroupAssignmentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .precedenceGroupAssignment)
+    self._syntaxNode = Syntax(data)
   }
 
   public var assignmentKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.assignmentKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAssignmentKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.assignmentKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAssignmentKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `assignmentKeyword` replaced.
@@ -15677,13 +16934,14 @@ public struct PrecedenceGroupAssignmentSyntax: Syntax, _SyntaxBase, Hashable {
     return PrecedenceGroupAssignmentSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -15703,13 +16961,14 @@ public struct PrecedenceGroupAssignmentSyntax: Syntax, _SyntaxBase, Hashable {
   /// chaining rules as operators that don't perform assignment.
   /// 
   public var flag: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.flag, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFlag(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.flag, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFlag(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `flag` replaced.
@@ -15768,44 +17027,50 @@ public struct PrecedenceGroupAssignmentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PrecedenceGroupAssignmentSyntax` nodes are equal to each other.
-  public static func ==(lhs: PrecedenceGroupAssignmentSyntax, rhs: PrecedenceGroupAssignmentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PrecedenceGroupAssociativitySyntax` nodes conform. Extension point to add
+/// common methods to all `PrecedenceGroupAssociativitySyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PrecedenceGroupAssociativitySyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// Specifies how a sequence of operators with the same precedence level
 /// are grouped together in the absence of grouping parentheses.
 /// 
-public struct PrecedenceGroupAssociativitySyntax: Syntax, _SyntaxBase, Hashable {
+public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol {
   enum Cursor: Int {
     case associativityKeyword
     case colon
     case value
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PrecedenceGroupAssociativitySyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PrecedenceGroupAssociativitySyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .precedenceGroupAssociativity else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrecedenceGroupAssociativitySyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .precedenceGroupAssociativity)
+    self._syntaxNode = Syntax(data)
   }
 
   public var associativityKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.associativityKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAssociativityKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.associativityKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAssociativityKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `associativityKeyword` replaced.
@@ -15818,13 +17083,14 @@ public struct PrecedenceGroupAssociativitySyntax: Syntax, _SyntaxBase, Hashable 
     return PrecedenceGroupAssociativitySyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -15843,13 +17109,14 @@ public struct PrecedenceGroupAssociativitySyntax: Syntax, _SyntaxBase, Hashable 
   /// don't associate at all
   /// 
   public var value: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.value, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.value, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `value` replaced.
@@ -15908,22 +17175,27 @@ public struct PrecedenceGroupAssociativitySyntax: Syntax, _SyntaxBase, Hashable 
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PrecedenceGroupAssociativitySyntax` nodes are equal to each other.
-  public static func ==(lhs: PrecedenceGroupAssociativitySyntax, rhs: PrecedenceGroupAssociativitySyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TokenListSyntax` nodes conform. Extension point to add
+/// common methods to all `TokenListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TokenListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `NonEmptyTokenListSyntax` nodes conform. Extension point to add
+/// common methods to all `NonEmptyTokenListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol NonEmptyTokenListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `CustomAttributeSyntax` nodes conform. Extension point to add
+/// common methods to all `CustomAttributeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CustomAttributeSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A custom `@` attribute.
 /// 
-public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
+public struct CustomAttributeSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case atSignToken
     case attributeName
@@ -15932,22 +17204,33 @@ public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CustomAttributeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CustomAttributeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .customAttribute else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CustomAttributeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .customAttribute)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The `@` sign.
   public var atSignToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.atSignToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAtSignToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.atSignToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAtSignToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `atSignToken` replaced.
@@ -15961,13 +17244,14 @@ public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The name of the attribute.
   public var attributeName: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.attributeName, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withAttributeName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributeName, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributeName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `attributeName` replaced.
@@ -15980,14 +17264,15 @@ public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
     return CustomAttributeSyntax(newData)
   }
   public var leftParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -16000,14 +17285,15 @@ public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
     return CustomAttributeSyntax(newData)
   }
   public var argumentList: TupleExprElementListSyntax? {
-  get {
-    let child = data.child(at: Cursor.argumentList, parent: self)
-    if child == nil { return nil }
-    return TupleExprElementListSyntax(child!)
-  }
-  set(value) {
-    self = withArgumentList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.argumentList, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TupleExprElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArgumentList(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `argumentList`
@@ -16039,14 +17325,15 @@ public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
     return CustomAttributeSyntax(newData)
   }
   public var rightParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -16105,22 +17392,17 @@ public struct CustomAttributeSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CustomAttributeSyntax` nodes are equal to each other.
-  public static func ==(lhs: CustomAttributeSyntax, rhs: CustomAttributeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AttributeSyntax` nodes conform. Extension point to add
+/// common methods to all `AttributeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AttributeSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// An `@` attribute.
 /// 
-public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
+public struct AttributeSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case atSignToken
     case attributeName
@@ -16130,22 +17412,33 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
     case tokenList
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AttributeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AttributeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .attribute else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AttributeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .attribute)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The `@` sign.
   public var atSignToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.atSignToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAtSignToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.atSignToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAtSignToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `atSignToken` replaced.
@@ -16159,13 +17452,14 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The name of the attribute.
   public var attributeName: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.attributeName, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAttributeName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributeName, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributeName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `attributeName` replaced.
@@ -16181,14 +17475,15 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
   /// If the attribute takes arguments, the opening parenthesis.
   /// 
   public var leftParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -16204,14 +17499,15 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
   /// The arguments of the attribute. In case the attribute                     takes multiple arguments, they are gather in the                    appropriate takes first.
   /// 
   public var argument: Syntax? {
-  get {
-    let child = data.child(at: Cursor.argument, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withArgument(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.argument, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withArgument(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `argument` replaced.
@@ -16227,14 +17523,15 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
   /// If the attribute takes arguments, the closing parenthesis.
   /// 
   public var rightParen: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -16247,14 +17544,15 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
     return AttributeSyntax(newData)
   }
   public var tokenList: TokenListSyntax? {
-  get {
-    let child = data.child(at: Cursor.tokenList, parent: self)
-    if child == nil { return nil }
-    return TokenListSyntax(child!)
-  }
-  set(value) {
-    self = withTokenList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.tokenList, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenListSyntax(childData!)
+    }
+    set(value) {
+      self = withTokenList(value)
+    }
   }
 
   /// Adds the provided `Token` to the node's `tokenList`
@@ -16332,22 +17630,27 @@ public struct AttributeSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AttributeSyntax` nodes are equal to each other.
-  public static func ==(lhs: AttributeSyntax, rhs: AttributeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AttributeListSyntax` nodes conform. Extension point to add
+/// common methods to all `AttributeListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AttributeListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `SpecializeAttributeSpecListSyntax` nodes conform. Extension point to add
+/// common methods to all `SpecializeAttributeSpecListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SpecializeAttributeSpecListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `LabeledSpecializeEntrySyntax` nodes conform. Extension point to add
+/// common methods to all `LabeledSpecializeEntrySyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol LabeledSpecializeEntrySyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A labeled argument for the `@_specialize` attribute like          `exported: true`
 /// 
-public struct LabeledSpecializeEntrySyntax: Syntax, _SyntaxBase, Hashable {
+public struct LabeledSpecializeEntrySyntax: SyntaxProtocol {
   enum Cursor: Int {
     case label
     case colon
@@ -16355,22 +17658,33 @@ public struct LabeledSpecializeEntrySyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `LabeledSpecializeEntrySyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `LabeledSpecializeEntrySyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .labeledSpecializeEntry else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `LabeledSpecializeEntrySyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .labeledSpecializeEntry)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The label of the argument
   public var label: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.label, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.label, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `label` replaced.
@@ -16384,13 +17698,14 @@ public struct LabeledSpecializeEntrySyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The colon separating the label and the value
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -16404,13 +17719,14 @@ public struct LabeledSpecializeEntrySyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The value for this argument
   public var value: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.value, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.value, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `value` replaced.
@@ -16426,14 +17742,15 @@ public struct LabeledSpecializeEntrySyntax: Syntax, _SyntaxBase, Hashable {
   /// A trailing comma if this argument is followed by another one
   /// 
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -16492,44 +17809,50 @@ public struct LabeledSpecializeEntrySyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `LabeledSpecializeEntrySyntax` nodes are equal to each other.
-  public static func ==(lhs: LabeledSpecializeEntrySyntax, rhs: LabeledSpecializeEntrySyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `NamedAttributeStringArgumentSyntax` nodes conform. Extension point to add
+/// common methods to all `NamedAttributeStringArgumentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol NamedAttributeStringArgumentSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// The argument for the `@_dynamic_replacement` or `@_private`          attribute of the form `for: "function()"` or `sourceFile:          "Src.swift"`
 /// 
-public struct NamedAttributeStringArgumentSyntax: Syntax, _SyntaxBase, Hashable {
+public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case nameTok
     case colon
     case stringOrDeclname
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `NamedAttributeStringArgumentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `NamedAttributeStringArgumentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .namedAttributeStringArgument else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `NamedAttributeStringArgumentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .namedAttributeStringArgument)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The label of the argument
   public var nameTok: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.nameTok, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withNameTok(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.nameTok, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withNameTok(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `nameTok` replaced.
@@ -16543,13 +17866,14 @@ public struct NamedAttributeStringArgumentSyntax: Syntax, _SyntaxBase, Hashable 
   }
   /// The colon separating the label and the value
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -16562,13 +17886,14 @@ public struct NamedAttributeStringArgumentSyntax: Syntax, _SyntaxBase, Hashable 
     return NamedAttributeStringArgumentSyntax(newData)
   }
   public var stringOrDeclname: Syntax {
-  get {
-    let child = data.child(at: Cursor.stringOrDeclname, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withStringOrDeclname(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.stringOrDeclname, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withStringOrDeclname(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `stringOrDeclname` replaced.
@@ -16627,42 +17952,48 @@ public struct NamedAttributeStringArgumentSyntax: Syntax, _SyntaxBase, Hashable 
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `NamedAttributeStringArgumentSyntax` nodes are equal to each other.
-  public static func ==(lhs: NamedAttributeStringArgumentSyntax, rhs: NamedAttributeStringArgumentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DeclNameSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclNameSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclNameSyntaxProtocol: SyntaxProtocol {}
 
-public struct DeclNameSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct DeclNameSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case declBaseName
     case declNameArguments
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeclNameSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeclNameSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .declName else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeclNameSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .declName)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The base name of the protocol's requirement.
   /// 
   public var declBaseName: Syntax {
-  get {
-    let child = data.child(at: Cursor.declBaseName, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withDeclBaseName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declBaseName, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withDeclBaseName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declBaseName` replaced.
@@ -16678,14 +18009,15 @@ public struct DeclNameSyntax: Syntax, _SyntaxBase, Hashable {
   /// The argument labels of the protocol's requirement if it                is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
-  get {
-    let child = data.child(at: Cursor.declNameArguments, parent: self)
-    if child == nil { return nil }
-    return DeclNameArgumentsSyntax(child!)
-  }
-  set(value) {
-    self = withDeclNameArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declNameArguments, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclNameArguments(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declNameArguments` replaced.
@@ -16744,22 +18076,17 @@ public struct DeclNameSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeclNameSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeclNameSyntax, rhs: DeclNameSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ImplementsAttributeArgumentsSyntax` nodes conform. Extension point to add
+/// common methods to all `ImplementsAttributeArgumentsSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ImplementsAttributeArgumentsSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// The arguments for the `@_implements` attribute of the form          `Type, methodName(arg1Label:arg2Label:)`
 /// 
-public struct ImplementsAttributeArgumentsSyntax: Syntax, _SyntaxBase, Hashable {
+public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case type
     case comma
@@ -16767,24 +18094,35 @@ public struct ImplementsAttributeArgumentsSyntax: Syntax, _SyntaxBase, Hashable 
     case declNameArguments
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ImplementsAttributeArgumentsSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ImplementsAttributeArgumentsSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .implementsAttributeArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ImplementsAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .implementsAttributeArguments)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The type for which the method with this attribute                    implements a requirement.
   /// 
   public var type: SimpleTypeIdentifierSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return SimpleTypeIdentifierSyntax(child!)
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return SimpleTypeIdentifierSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -16800,13 +18138,14 @@ public struct ImplementsAttributeArgumentsSyntax: Syntax, _SyntaxBase, Hashable 
   /// The comma separating the type and method name
   /// 
   public var comma: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.comma, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.comma, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `comma` replaced.
@@ -16822,13 +18161,14 @@ public struct ImplementsAttributeArgumentsSyntax: Syntax, _SyntaxBase, Hashable 
   /// The base name of the protocol's requirement.
   /// 
   public var declBaseName: Syntax {
-  get {
-    let child = data.child(at: Cursor.declBaseName, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withDeclBaseName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declBaseName, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withDeclBaseName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declBaseName` replaced.
@@ -16844,14 +18184,15 @@ public struct ImplementsAttributeArgumentsSyntax: Syntax, _SyntaxBase, Hashable 
   /// The argument labels of the protocol's requirement if it                    is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
-  get {
-    let child = data.child(at: Cursor.declNameArguments, parent: self)
-    if child == nil { return nil }
-    return DeclNameArgumentsSyntax(child!)
-  }
-  set(value) {
-    self = withDeclNameArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declNameArguments, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclNameArguments(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declNameArguments` replaced.
@@ -16910,43 +18251,49 @@ public struct ImplementsAttributeArgumentsSyntax: Syntax, _SyntaxBase, Hashable 
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ImplementsAttributeArgumentsSyntax` nodes are equal to each other.
-  public static func ==(lhs: ImplementsAttributeArgumentsSyntax, rhs: ImplementsAttributeArgumentsSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ObjCSelectorPieceSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjCSelectorPieceSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjCSelectorPieceSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A piece of an Objective-C selector. Either consisiting of just an          identifier for a nullary selector, an identifier and a colon for a          labeled argument or just a colon for an unlabeled argument
 /// 
-public struct ObjCSelectorPieceSyntax: Syntax, _SyntaxBase, Hashable {
+public struct ObjCSelectorPieceSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case name
     case colon
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ObjCSelectorPieceSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ObjCSelectorPieceSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .objCSelectorPiece else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ObjCSelectorPieceSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .objCSelectorPiece)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -16959,14 +18306,15 @@ public struct ObjCSelectorPieceSyntax: Syntax, _SyntaxBase, Hashable {
     return ObjCSelectorPieceSyntax(newData)
   }
   public var colon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -17025,39 +18373,50 @@ public struct ObjCSelectorPieceSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ObjCSelectorPieceSyntax` nodes are equal to each other.
-  public static func ==(lhs: ObjCSelectorPieceSyntax, rhs: ObjCSelectorPieceSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ObjCSelectorSyntax` nodes conform. Extension point to add
+/// common methods to all `ObjCSelectorSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ObjCSelectorSyntaxProtocol: SyntaxProtocol {}
 
-public struct ContinueStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ContinueStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `ContinueStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ContinueStmtSyntaxProtocol: StmtSyntaxProtocol {}
+
+
+public struct ContinueStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case continueKeyword
     case label
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ContinueStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ContinueStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .continueStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ContinueStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .continueStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var continueKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.continueKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withContinueKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.continueKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withContinueKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `continueKeyword` replaced.
@@ -17070,14 +18429,15 @@ public struct ContinueStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ContinueStmtSyntax(newData)
   }
   public var label: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.label, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.label, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `label` replaced.
@@ -17136,19 +18496,14 @@ public struct ContinueStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ContinueStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: ContinueStmtSyntax, rhs: ContinueStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `WhileStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `WhileStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol WhileStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct WhileStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -17157,22 +18512,33 @@ public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `WhileStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `WhileStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .whileStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `WhileStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .whileStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -17185,14 +18551,15 @@ public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return WhileStmtSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -17205,13 +18572,14 @@ public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return WhileStmtSyntax(newData)
   }
   public var whileKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.whileKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withWhileKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whileKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWhileKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whileKeyword` replaced.
@@ -17224,13 +18592,14 @@ public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return WhileStmtSyntax(newData)
   }
   public var conditions: ConditionElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.conditions, parent: self)
-    return ConditionElementListSyntax(child!)
-  }
-  set(value) {
-    self = withConditions(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.conditions, 
+                                 parent: Syntax(self))
+      return ConditionElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withConditions(value)
+    }
   }
 
   /// Adds the provided `Condition` to the node's `conditions`
@@ -17262,13 +18631,14 @@ public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return WhileStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -17327,39 +18697,45 @@ public struct WhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `WhileStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: WhileStmtSyntax, rhs: WhileStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DeferStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `DeferStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeferStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct DeferStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct DeferStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case deferKeyword
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeferStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeferStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .deferStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeferStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .deferStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var deferKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.deferKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDeferKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.deferKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDeferKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `deferKeyword` replaced.
@@ -17372,13 +18748,14 @@ public struct DeferStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return DeferStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -17437,38 +18814,44 @@ public struct DeferStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeferStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeferStmtSyntax, rhs: DeferStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ExpressionStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `ExpressionStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ExpressionStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct ExpressionStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct ExpressionStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ExpressionStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ExpressionStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .expressionStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ExpressionStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .expressionStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -17527,19 +18910,19 @@ public struct ExpressionStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ExpressionStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: ExpressionStmtSyntax, rhs: ExpressionStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SwitchCaseListSyntax` nodes conform. Extension point to add
+/// common methods to all `SwitchCaseListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SwitchCaseListSyntaxProtocol: SyntaxProtocol {}
 
-public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `RepeatWhileStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `RepeatWhileStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol RepeatWhileStmtSyntaxProtocol: StmtSyntaxProtocol {}
+
+
+public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -17549,22 +18932,33 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case condition
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `RepeatWhileStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `RepeatWhileStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .repeatWhileStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `RepeatWhileStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .repeatWhileStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -17577,14 +18971,15 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return RepeatWhileStmtSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -17597,13 +18992,14 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return RepeatWhileStmtSyntax(newData)
   }
   public var repeatKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.repeatKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRepeatKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.repeatKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRepeatKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `repeatKeyword` replaced.
@@ -17616,13 +19012,14 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return RepeatWhileStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -17635,13 +19032,14 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return RepeatWhileStmtSyntax(newData)
   }
   public var whileKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.whileKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withWhileKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whileKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWhileKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whileKeyword` replaced.
@@ -17654,13 +19052,14 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return RepeatWhileStmtSyntax(newData)
   }
   public var condition: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.condition, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withCondition(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.condition, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withCondition(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `condition` replaced.
@@ -17719,19 +19118,14 @@ public struct RepeatWhileStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `RepeatWhileStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: RepeatWhileStmtSyntax, rhs: RepeatWhileStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GuardStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `GuardStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GuardStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct GuardStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct GuardStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case guardKeyword
     case conditions
@@ -17739,21 +19133,32 @@ public struct GuardStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GuardStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GuardStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .guardStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GuardStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .guardStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var guardKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.guardKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withGuardKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.guardKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withGuardKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `guardKeyword` replaced.
@@ -17766,13 +19171,14 @@ public struct GuardStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return GuardStmtSyntax(newData)
   }
   public var conditions: ConditionElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.conditions, parent: self)
-    return ConditionElementListSyntax(child!)
-  }
-  set(value) {
-    self = withConditions(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.conditions, 
+                                 parent: Syntax(self))
+      return ConditionElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withConditions(value)
+    }
   }
 
   /// Adds the provided `Condition` to the node's `conditions`
@@ -17804,13 +19210,14 @@ public struct GuardStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return GuardStmtSyntax(newData)
   }
   public var elseKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.elseKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withElseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elseKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withElseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `elseKeyword` replaced.
@@ -17823,13 +19230,14 @@ public struct GuardStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return GuardStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -17888,39 +19296,45 @@ public struct GuardStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GuardStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: GuardStmtSyntax, rhs: GuardStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `WhereClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `WhereClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol WhereClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct WhereClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct WhereClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case whereKeyword
     case guardResult
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `WhereClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `WhereClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .whereClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `WhereClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .whereClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var whereKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.whereKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withWhereKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whereKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whereKeyword` replaced.
@@ -17933,13 +19347,14 @@ public struct WhereClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return WhereClauseSyntax(newData)
   }
   public var guardResult: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.guardResult, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withGuardResult(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.guardResult, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withGuardResult(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `guardResult` replaced.
@@ -17998,19 +19413,14 @@ public struct WhereClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `WhereClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: WhereClauseSyntax, rhs: WhereClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ForInStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `ForInStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ForInStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct ForInStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -18024,22 +19434,33 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ForInStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ForInStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .forInStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ForInStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .forInStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -18052,14 +19473,15 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -18072,13 +19494,14 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var forKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.forKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withForKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.forKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withForKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `forKeyword` replaced.
@@ -18091,14 +19514,15 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var caseKeyword: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.caseKeyword, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCaseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.caseKeyword, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCaseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
@@ -18111,13 +19535,14 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -18130,14 +19555,15 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var typeAnnotation: TypeAnnotationSyntax? {
-  get {
-    let child = data.child(at: Cursor.typeAnnotation, parent: self)
-    if child == nil { return nil }
-    return TypeAnnotationSyntax(child!)
-  }
-  set(value) {
-    self = withTypeAnnotation(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeAnnotation, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeAnnotationSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeAnnotation(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeAnnotation` replaced.
@@ -18150,13 +19576,14 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var inKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.inKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withInKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withInKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inKeyword` replaced.
@@ -18169,13 +19596,14 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var sequenceExpr: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.sequenceExpr, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withSequenceExpr(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.sequenceExpr, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withSequenceExpr(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `sequenceExpr` replaced.
@@ -18188,14 +19616,15 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var whereClause: WhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.whereClause, parent: self)
-    if child == nil { return nil }
-    return WhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return WhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whereClause` replaced.
@@ -18208,13 +19637,14 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ForInStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -18273,19 +19703,14 @@ public struct ForInStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ForInStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: ForInStmtSyntax, rhs: ForInStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SwitchStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `SwitchStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SwitchStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct SwitchStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -18296,22 +19721,33 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case rightBrace
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SwitchStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SwitchStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .switchStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SwitchStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .switchStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -18324,14 +19760,15 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return SwitchStmtSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -18344,13 +19781,14 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return SwitchStmtSyntax(newData)
   }
   public var switchKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.switchKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSwitchKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.switchKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSwitchKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `switchKeyword` replaced.
@@ -18363,13 +19801,14 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return SwitchStmtSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -18382,13 +19821,14 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return SwitchStmtSyntax(newData)
   }
   public var leftBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftBrace` replaced.
@@ -18401,13 +19841,14 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return SwitchStmtSyntax(newData)
   }
   public var cases: SwitchCaseListSyntax {
-  get {
-    let child = data.child(at: Cursor.cases, parent: self)
-    return SwitchCaseListSyntax(child!)
-  }
-  set(value) {
-    self = withCases(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.cases, 
+                                 parent: Syntax(self))
+      return SwitchCaseListSyntax(childData!)
+    }
+    set(value) {
+      self = withCases(value)
+    }
   }
 
   /// Adds the provided `Case` to the node's `cases`
@@ -18439,13 +19880,14 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return SwitchStmtSyntax(newData)
   }
   public var rightBrace: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightBrace, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightBrace(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightBrace, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightBrace(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightBrace` replaced.
@@ -18504,19 +19946,19 @@ public struct SwitchStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SwitchStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: SwitchStmtSyntax, rhs: SwitchStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CatchClauseListSyntax` nodes conform. Extension point to add
+/// common methods to all `CatchClauseListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CatchClauseListSyntaxProtocol: SyntaxProtocol {}
 
-public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `DoStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `DoStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DoStmtSyntaxProtocol: StmtSyntaxProtocol {}
+
+
+public struct DoStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -18525,22 +19967,33 @@ public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case catchClauses
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DoStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DoStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .doStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DoStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .doStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -18553,14 +20006,15 @@ public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return DoStmtSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -18573,13 +20027,14 @@ public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return DoStmtSyntax(newData)
   }
   public var doKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.doKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDoKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.doKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDoKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `doKeyword` replaced.
@@ -18592,13 +20047,14 @@ public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return DoStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -18611,14 +20067,15 @@ public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return DoStmtSyntax(newData)
   }
   public var catchClauses: CatchClauseListSyntax? {
-  get {
-    let child = data.child(at: Cursor.catchClauses, parent: self)
-    if child == nil { return nil }
-    return CatchClauseListSyntax(child!)
-  }
-  set(value) {
-    self = withCatchClauses(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.catchClauses, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return CatchClauseListSyntax(childData!)
+    }
+    set(value) {
+      self = withCatchClauses(value)
+    }
   }
 
   /// Adds the provided `CatchClause` to the node's `catchClauses`
@@ -18696,39 +20153,45 @@ public struct DoStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DoStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: DoStmtSyntax, rhs: DoStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ReturnStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `ReturnStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ReturnStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct ReturnStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct ReturnStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case returnKeyword
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ReturnStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ReturnStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .returnStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ReturnStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .returnStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var returnKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.returnKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withReturnKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.returnKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withReturnKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `returnKeyword` replaced.
@@ -18741,14 +20204,15 @@ public struct ReturnStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ReturnStmtSyntax(newData)
   }
   public var expression: ExprSyntax? {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -18807,39 +20271,45 @@ public struct ReturnStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ReturnStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: ReturnStmtSyntax, rhs: ReturnStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `YieldStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `YieldStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol YieldStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct YieldStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct YieldStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case yieldKeyword
     case yields
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `YieldStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `YieldStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .yieldStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `YieldStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .yieldStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var yieldKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.yieldKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withYieldKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.yieldKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withYieldKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `yieldKeyword` replaced.
@@ -18852,13 +20322,14 @@ public struct YieldStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return YieldStmtSyntax(newData)
   }
   public var yields: Syntax {
-  get {
-    let child = data.child(at: Cursor.yields, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withYields(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.yields, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withYields(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `yields` replaced.
@@ -18917,19 +20388,14 @@ public struct YieldStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `YieldStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: YieldStmtSyntax, rhs: YieldStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `YieldListSyntax` nodes conform. Extension point to add
+/// common methods to all `YieldListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol YieldListSyntaxProtocol: SyntaxProtocol {}
 
-public struct YieldListSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct YieldListSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case elementList
@@ -18937,21 +20403,32 @@ public struct YieldListSyntax: Syntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `YieldListSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `YieldListSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .yieldList else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `YieldListSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .yieldList)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -18964,13 +20441,14 @@ public struct YieldListSyntax: Syntax, _SyntaxBase, Hashable {
     return YieldListSyntax(newData)
   }
   public var elementList: ExprListSyntax {
-  get {
-    let child = data.child(at: Cursor.elementList, parent: self)
-    return ExprListSyntax(child!)
-  }
-  set(value) {
-    self = withElementList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elementList, 
+                                 parent: Syntax(self))
+      return ExprListSyntax(childData!)
+    }
+    set(value) {
+      self = withElementList(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elementList`
@@ -19002,14 +20480,15 @@ public struct YieldListSyntax: Syntax, _SyntaxBase, Hashable {
     return YieldListSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -19022,13 +20501,14 @@ public struct YieldListSyntax: Syntax, _SyntaxBase, Hashable {
     return YieldListSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -19087,38 +20567,44 @@ public struct YieldListSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `YieldListSyntax` nodes are equal to each other.
-  public static func ==(lhs: YieldListSyntax, rhs: YieldListSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FallthroughStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `FallthroughStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FallthroughStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct FallthroughStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct FallthroughStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case fallthroughKeyword
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FallthroughStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FallthroughStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .fallthroughStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FallthroughStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .fallthroughStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var fallthroughKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.fallthroughKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withFallthroughKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.fallthroughKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withFallthroughKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `fallthroughKeyword` replaced.
@@ -19177,39 +20663,45 @@ public struct FallthroughStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FallthroughStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: FallthroughStmtSyntax, rhs: FallthroughStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `BreakStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `BreakStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol BreakStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct BreakStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct BreakStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case breakKeyword
     case label
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `BreakStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `BreakStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .breakStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `BreakStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .breakStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var breakKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.breakKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withBreakKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.breakKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withBreakKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `breakKeyword` replaced.
@@ -19222,14 +20714,15 @@ public struct BreakStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return BreakStmtSyntax(newData)
   }
   public var label: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.label, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.label, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `label` replaced.
@@ -19288,39 +20781,50 @@ public struct BreakStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `BreakStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: BreakStmtSyntax, rhs: BreakStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CaseItemListSyntax` nodes conform. Extension point to add
+/// common methods to all `CaseItemListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CaseItemListSyntaxProtocol: SyntaxProtocol {}
 
-public struct ConditionElementSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ConditionElementSyntax` nodes conform. Extension point to add
+/// common methods to all `ConditionElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ConditionElementSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct ConditionElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case condition
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ConditionElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ConditionElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .conditionElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ConditionElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .conditionElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var condition: Syntax {
-  get {
-    let child = data.child(at: Cursor.condition, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withCondition(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.condition, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withCondition(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `condition` replaced.
@@ -19333,14 +20837,15 @@ public struct ConditionElementSyntax: Syntax, _SyntaxBase, Hashable {
     return ConditionElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -19399,19 +20904,14 @@ public struct ConditionElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ConditionElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: ConditionElementSyntax, rhs: ConditionElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AvailabilityConditionSyntax` nodes conform. Extension point to add
+/// common methods to all `AvailabilityConditionSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AvailabilityConditionSyntaxProtocol: SyntaxProtocol {}
 
-public struct AvailabilityConditionSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct AvailabilityConditionSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case poundAvailableKeyword
     case leftParen
@@ -19419,21 +20919,32 @@ public struct AvailabilityConditionSyntax: Syntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AvailabilityConditionSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AvailabilityConditionSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .availabilityCondition else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AvailabilityConditionSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .availabilityCondition)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundAvailableKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundAvailableKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundAvailableKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundAvailableKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundAvailableKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundAvailableKeyword` replaced.
@@ -19446,13 +20957,14 @@ public struct AvailabilityConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return AvailabilityConditionSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -19465,13 +20977,14 @@ public struct AvailabilityConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return AvailabilityConditionSyntax(newData)
   }
   public var availabilitySpec: AvailabilitySpecListSyntax {
-  get {
-    let child = data.child(at: Cursor.availabilitySpec, parent: self)
-    return AvailabilitySpecListSyntax(child!)
-  }
-  set(value) {
-    self = withAvailabilitySpec(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.availabilitySpec, 
+                                 parent: Syntax(self))
+      return AvailabilitySpecListSyntax(childData!)
+    }
+    set(value) {
+      self = withAvailabilitySpec(value)
+    }
   }
 
   /// Adds the provided `AvailabilityArgument` to the node's `availabilitySpec`
@@ -19503,13 +21016,14 @@ public struct AvailabilityConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return AvailabilityConditionSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -19568,19 +21082,14 @@ public struct AvailabilityConditionSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AvailabilityConditionSyntax` nodes are equal to each other.
-  public static func ==(lhs: AvailabilityConditionSyntax, rhs: AvailabilityConditionSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `MatchingPatternConditionSyntax` nodes conform. Extension point to add
+/// common methods to all `MatchingPatternConditionSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MatchingPatternConditionSyntaxProtocol: SyntaxProtocol {}
 
-public struct MatchingPatternConditionSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct MatchingPatternConditionSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case caseKeyword
     case pattern
@@ -19588,21 +21097,32 @@ public struct MatchingPatternConditionSyntax: Syntax, _SyntaxBase, Hashable {
     case initializer
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `MatchingPatternConditionSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `MatchingPatternConditionSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .matchingPatternCondition else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MatchingPatternConditionSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .matchingPatternCondition)
+    self._syntaxNode = Syntax(data)
   }
 
   public var caseKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.caseKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCaseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.caseKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCaseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
@@ -19615,13 +21135,14 @@ public struct MatchingPatternConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return MatchingPatternConditionSyntax(newData)
   }
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -19634,14 +21155,15 @@ public struct MatchingPatternConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return MatchingPatternConditionSyntax(newData)
   }
   public var typeAnnotation: TypeAnnotationSyntax? {
-  get {
-    let child = data.child(at: Cursor.typeAnnotation, parent: self)
-    if child == nil { return nil }
-    return TypeAnnotationSyntax(child!)
-  }
-  set(value) {
-    self = withTypeAnnotation(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeAnnotation, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeAnnotationSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeAnnotation(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeAnnotation` replaced.
@@ -19654,13 +21176,14 @@ public struct MatchingPatternConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return MatchingPatternConditionSyntax(newData)
   }
   public var initializer: InitializerClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.initializer, parent: self)
-    return InitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInitializer(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initializer, 
+                                 parent: Syntax(self))
+      return InitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initializer` replaced.
@@ -19719,19 +21242,14 @@ public struct MatchingPatternConditionSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `MatchingPatternConditionSyntax` nodes are equal to each other.
-  public static func ==(lhs: MatchingPatternConditionSyntax, rhs: MatchingPatternConditionSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `OptionalBindingConditionSyntax` nodes conform. Extension point to add
+/// common methods to all `OptionalBindingConditionSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol OptionalBindingConditionSyntaxProtocol: SyntaxProtocol {}
 
-public struct OptionalBindingConditionSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct OptionalBindingConditionSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case letOrVarKeyword
     case pattern
@@ -19739,21 +21257,32 @@ public struct OptionalBindingConditionSyntax: Syntax, _SyntaxBase, Hashable {
     case initializer
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `OptionalBindingConditionSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `OptionalBindingConditionSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .optionalBindingCondition else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OptionalBindingConditionSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .optionalBindingCondition)
+    self._syntaxNode = Syntax(data)
   }
 
   public var letOrVarKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.letOrVarKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLetOrVarKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.letOrVarKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLetOrVarKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `letOrVarKeyword` replaced.
@@ -19766,13 +21295,14 @@ public struct OptionalBindingConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return OptionalBindingConditionSyntax(newData)
   }
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -19785,14 +21315,15 @@ public struct OptionalBindingConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return OptionalBindingConditionSyntax(newData)
   }
   public var typeAnnotation: TypeAnnotationSyntax? {
-  get {
-    let child = data.child(at: Cursor.typeAnnotation, parent: self)
-    if child == nil { return nil }
-    return TypeAnnotationSyntax(child!)
-  }
-  set(value) {
-    self = withTypeAnnotation(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeAnnotation, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeAnnotationSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeAnnotation(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeAnnotation` replaced.
@@ -19805,13 +21336,14 @@ public struct OptionalBindingConditionSyntax: Syntax, _SyntaxBase, Hashable {
     return OptionalBindingConditionSyntax(newData)
   }
   public var initializer: InitializerClauseSyntax {
-  get {
-    let child = data.child(at: Cursor.initializer, parent: self)
-    return InitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInitializer(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initializer, 
+                                 parent: Syntax(self))
+      return InitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initializer` replaced.
@@ -19870,38 +21402,49 @@ public struct OptionalBindingConditionSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `OptionalBindingConditionSyntax` nodes are equal to each other.
-  public static func ==(lhs: OptionalBindingConditionSyntax, rhs: OptionalBindingConditionSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ConditionElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `ConditionElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ConditionElementListSyntaxProtocol: SyntaxProtocol {}
 
-public struct DeclarationStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `DeclarationStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `DeclarationStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DeclarationStmtSyntaxProtocol: StmtSyntaxProtocol {}
+
+
+public struct DeclarationStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case declaration
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DeclarationStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DeclarationStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .declarationStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeclarationStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .declarationStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var declaration: DeclSyntax {
-  get {
-    let child = data.child(at: Cursor.declaration, parent: self)
-    return makeSyntax(child!) as! DeclSyntax
-  }
-  set(value) {
-    self = withDeclaration(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.declaration, 
+                                 parent: Syntax(self))
+      return DeclSyntax(childData!)
+    }
+    set(value) {
+      self = withDeclaration(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `declaration` replaced.
@@ -19960,39 +21503,45 @@ public struct DeclarationStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DeclarationStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: DeclarationStmtSyntax, rhs: DeclarationStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ThrowStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `ThrowStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ThrowStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct ThrowStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct ThrowStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case throwKeyword
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ThrowStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ThrowStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .throwStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ThrowStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .throwStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var throwKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.throwKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withThrowKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.throwKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `throwKeyword` replaced.
@@ -20005,13 +21554,14 @@ public struct ThrowStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return ThrowStmtSyntax(newData)
   }
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -20070,19 +21620,14 @@ public struct ThrowStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ThrowStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: ThrowStmtSyntax, rhs: ThrowStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IfStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `IfStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IfStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct IfStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -20093,22 +21638,33 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case elseBody
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IfStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IfStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .ifStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IfStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .ifStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -20121,14 +21677,15 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return IfStmtSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -20141,13 +21698,14 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return IfStmtSyntax(newData)
   }
   public var ifKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.ifKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIfKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.ifKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIfKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `ifKeyword` replaced.
@@ -20160,13 +21718,14 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return IfStmtSyntax(newData)
   }
   public var conditions: ConditionElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.conditions, parent: self)
-    return ConditionElementListSyntax(child!)
-  }
-  set(value) {
-    self = withConditions(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.conditions, 
+                                 parent: Syntax(self))
+      return ConditionElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withConditions(value)
+    }
   }
 
   /// Adds the provided `Condition` to the node's `conditions`
@@ -20198,13 +21757,14 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return IfStmtSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -20217,14 +21777,15 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return IfStmtSyntax(newData)
   }
   public var elseKeyword: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.elseKeyword, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withElseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elseKeyword, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withElseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `elseKeyword` replaced.
@@ -20237,14 +21798,15 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return IfStmtSyntax(newData)
   }
   public var elseBody: Syntax? {
-  get {
-    let child = data.child(at: Cursor.elseBody, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withElseBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elseBody, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withElseBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `elseBody` replaced.
@@ -20303,38 +21865,44 @@ public struct IfStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IfStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: IfStmtSyntax, rhs: IfStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ElseIfContinuationSyntax` nodes conform. Extension point to add
+/// common methods to all `ElseIfContinuationSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ElseIfContinuationSyntaxProtocol: SyntaxProtocol {}
 
-public struct ElseIfContinuationSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ElseIfContinuationSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case ifStatement
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ElseIfContinuationSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ElseIfContinuationSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .elseIfContinuation else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ElseIfContinuationSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .elseIfContinuation)
+    self._syntaxNode = Syntax(data)
   }
 
   public var ifStatement: IfStmtSyntax {
-  get {
-    let child = data.child(at: Cursor.ifStatement, parent: self)
-    return IfStmtSyntax(child!)
-  }
-  set(value) {
-    self = withIfStatement(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.ifStatement, 
+                                 parent: Syntax(self))
+      return IfStmtSyntax(childData!)
+    }
+    set(value) {
+      self = withIfStatement(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `ifStatement` replaced.
@@ -20393,39 +21961,45 @@ public struct ElseIfContinuationSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ElseIfContinuationSyntax` nodes are equal to each other.
-  public static func ==(lhs: ElseIfContinuationSyntax, rhs: ElseIfContinuationSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ElseBlockSyntax` nodes conform. Extension point to add
+/// common methods to all `ElseBlockSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ElseBlockSyntaxProtocol: SyntaxProtocol {}
 
-public struct ElseBlockSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ElseBlockSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case elseKeyword
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ElseBlockSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ElseBlockSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .elseBlock else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ElseBlockSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .elseBlock)
+    self._syntaxNode = Syntax(data)
   }
 
   public var elseKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.elseKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withElseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elseKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withElseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `elseKeyword` replaced.
@@ -20438,13 +22012,14 @@ public struct ElseBlockSyntax: Syntax, _SyntaxBase, Hashable {
     return ElseBlockSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -20503,41 +22078,47 @@ public struct ElseBlockSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ElseBlockSyntax` nodes are equal to each other.
-  public static func ==(lhs: ElseBlockSyntax, rhs: ElseBlockSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SwitchCaseSyntax` nodes conform. Extension point to add
+/// common methods to all `SwitchCaseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SwitchCaseSyntaxProtocol: SyntaxProtocol {}
 
-public struct SwitchCaseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct SwitchCaseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case unknownAttr
     case label
     case statements
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SwitchCaseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SwitchCaseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .switchCase else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SwitchCaseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .switchCase)
+    self._syntaxNode = Syntax(data)
   }
 
   public var unknownAttr: AttributeSyntax? {
-  get {
-    let child = data.child(at: Cursor.unknownAttr, parent: self)
-    if child == nil { return nil }
-    return AttributeSyntax(child!)
-  }
-  set(value) {
-    self = withUnknownAttr(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.unknownAttr, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeSyntax(childData!)
+    }
+    set(value) {
+      self = withUnknownAttr(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `unknownAttr` replaced.
@@ -20550,13 +22131,14 @@ public struct SwitchCaseSyntax: Syntax, _SyntaxBase, Hashable {
     return SwitchCaseSyntax(newData)
   }
   public var label: Syntax {
-  get {
-    let child = data.child(at: Cursor.label, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.label, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `label` replaced.
@@ -20569,13 +22151,14 @@ public struct SwitchCaseSyntax: Syntax, _SyntaxBase, Hashable {
     return SwitchCaseSyntax(newData)
   }
   public var statements: CodeBlockItemListSyntax {
-  get {
-    let child = data.child(at: Cursor.statements, parent: self)
-    return CodeBlockItemListSyntax(child!)
-  }
-  set(value) {
-    self = withStatements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.statements, 
+                                 parent: Syntax(self))
+      return CodeBlockItemListSyntax(childData!)
+    }
+    set(value) {
+      self = withStatements(value)
+    }
   }
 
   /// Adds the provided `Statement` to the node's `statements`
@@ -20653,39 +22236,45 @@ public struct SwitchCaseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SwitchCaseSyntax` nodes are equal to each other.
-  public static func ==(lhs: SwitchCaseSyntax, rhs: SwitchCaseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SwitchDefaultLabelSyntax` nodes conform. Extension point to add
+/// common methods to all `SwitchDefaultLabelSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SwitchDefaultLabelSyntaxProtocol: SyntaxProtocol {}
 
-public struct SwitchDefaultLabelSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct SwitchDefaultLabelSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case defaultKeyword
     case colon
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SwitchDefaultLabelSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SwitchDefaultLabelSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .switchDefaultLabel else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SwitchDefaultLabelSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .switchDefaultLabel)
+    self._syntaxNode = Syntax(data)
   }
 
   public var defaultKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.defaultKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withDefaultKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.defaultKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDefaultKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `defaultKeyword` replaced.
@@ -20698,13 +22287,14 @@ public struct SwitchDefaultLabelSyntax: Syntax, _SyntaxBase, Hashable {
     return SwitchDefaultLabelSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -20763,40 +22353,46 @@ public struct SwitchDefaultLabelSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SwitchDefaultLabelSyntax` nodes are equal to each other.
-  public static func ==(lhs: SwitchDefaultLabelSyntax, rhs: SwitchDefaultLabelSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CaseItemSyntax` nodes conform. Extension point to add
+/// common methods to all `CaseItemSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CaseItemSyntaxProtocol: SyntaxProtocol {}
 
-public struct CaseItemSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct CaseItemSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case pattern
     case whereClause
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CaseItemSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CaseItemSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .caseItem else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CaseItemSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .caseItem)
+    self._syntaxNode = Syntax(data)
   }
 
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -20809,14 +22405,15 @@ public struct CaseItemSyntax: Syntax, _SyntaxBase, Hashable {
     return CaseItemSyntax(newData)
   }
   public var whereClause: WhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.whereClause, parent: self)
-    if child == nil { return nil }
-    return WhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return WhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whereClause` replaced.
@@ -20829,14 +22426,15 @@ public struct CaseItemSyntax: Syntax, _SyntaxBase, Hashable {
     return CaseItemSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -20895,40 +22493,46 @@ public struct CaseItemSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CaseItemSyntax` nodes are equal to each other.
-  public static func ==(lhs: CaseItemSyntax, rhs: CaseItemSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SwitchCaseLabelSyntax` nodes conform. Extension point to add
+/// common methods to all `SwitchCaseLabelSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SwitchCaseLabelSyntaxProtocol: SyntaxProtocol {}
 
-public struct SwitchCaseLabelSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct SwitchCaseLabelSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case caseKeyword
     case caseItems
     case colon
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SwitchCaseLabelSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SwitchCaseLabelSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .switchCaseLabel else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SwitchCaseLabelSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .switchCaseLabel)
+    self._syntaxNode = Syntax(data)
   }
 
   public var caseKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.caseKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCaseKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.caseKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCaseKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `caseKeyword` replaced.
@@ -20941,13 +22545,14 @@ public struct SwitchCaseLabelSyntax: Syntax, _SyntaxBase, Hashable {
     return SwitchCaseLabelSyntax(newData)
   }
   public var caseItems: CaseItemListSyntax {
-  get {
-    let child = data.child(at: Cursor.caseItems, parent: self)
-    return CaseItemListSyntax(child!)
-  }
-  set(value) {
-    self = withCaseItems(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.caseItems, 
+                                 parent: Syntax(self))
+      return CaseItemListSyntax(childData!)
+    }
+    set(value) {
+      self = withCaseItems(value)
+    }
   }
 
   /// Adds the provided `CaseItem` to the node's `caseItems`
@@ -20979,13 +22584,14 @@ public struct SwitchCaseLabelSyntax: Syntax, _SyntaxBase, Hashable {
     return SwitchCaseLabelSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -21044,19 +22650,14 @@ public struct SwitchCaseLabelSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SwitchCaseLabelSyntax` nodes are equal to each other.
-  public static func ==(lhs: SwitchCaseLabelSyntax, rhs: SwitchCaseLabelSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CatchClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `CatchClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CatchClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct CatchClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct CatchClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case catchKeyword
     case pattern
@@ -21064,21 +22665,32 @@ public struct CatchClauseSyntax: Syntax, _SyntaxBase, Hashable {
     case body
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CatchClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CatchClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .catchClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CatchClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .catchClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var catchKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.catchKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCatchKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.catchKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCatchKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `catchKeyword` replaced.
@@ -21091,14 +22703,15 @@ public struct CatchClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return CatchClauseSyntax(newData)
   }
   public var pattern: PatternSyntax? {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -21111,14 +22724,15 @@ public struct CatchClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return CatchClauseSyntax(newData)
   }
   public var whereClause: WhereClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.whereClause, parent: self)
-    if child == nil { return nil }
-    return WhereClauseSyntax(child!)
-  }
-  set(value) {
-    self = withWhereClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whereClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return WhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whereClause` replaced.
@@ -21131,13 +22745,14 @@ public struct CatchClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return CatchClauseSyntax(newData)
   }
   public var body: CodeBlockSyntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return CodeBlockSyntax(child!)
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return CodeBlockSyntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -21196,19 +22811,14 @@ public struct CatchClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CatchClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: CatchClauseSyntax, rhs: CatchClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `PoundAssertStmtSyntax` nodes conform. Extension point to add
+/// common methods to all `PoundAssertStmtSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol PoundAssertStmtSyntaxProtocol: StmtSyntaxProtocol {}
 
-public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
+
+public struct PoundAssertStmtSyntax: StmtSyntaxProtocol {
   enum Cursor: Int {
     case poundAssert
     case leftParen
@@ -21218,21 +22828,32 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `PoundAssertStmtSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `PoundAssertStmtSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundAssertStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundAssertStmtSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .poundAssertStmt)
+    self._syntaxNode = Syntax(data)
   }
 
   public var poundAssert: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.poundAssert, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPoundAssert(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.poundAssert, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundAssert(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `poundAssert` replaced.
@@ -21245,13 +22866,14 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return PoundAssertStmtSyntax(newData)
   }
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -21265,13 +22887,14 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
   }
   /// The assertion condition.
   public var condition: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.condition, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withCondition(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.condition, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withCondition(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `condition` replaced.
@@ -21285,14 +22908,15 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
   }
   /// The comma after the assertion condition.
   public var comma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.comma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.comma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `comma` replaced.
@@ -21306,14 +22930,15 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
   }
   /// The assertion message.
   public var message: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.message, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withMessage(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.message, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withMessage(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `message` replaced.
@@ -21326,13 +22951,14 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
     return PoundAssertStmtSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -21391,39 +23017,45 @@ public struct PoundAssertStmtSyntax: StmtSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `PoundAssertStmtSyntax` nodes are equal to each other.
-  public static func ==(lhs: PoundAssertStmtSyntax, rhs: PoundAssertStmtSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GenericWhereClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericWhereClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericWhereClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct GenericWhereClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct GenericWhereClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case whereKeyword
     case requirementList
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GenericWhereClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GenericWhereClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .genericWhereClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GenericWhereClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .genericWhereClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var whereKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.whereKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withWhereKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.whereKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `whereKeyword` replaced.
@@ -21436,13 +23068,14 @@ public struct GenericWhereClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericWhereClauseSyntax(newData)
   }
   public var requirementList: GenericRequirementListSyntax {
-  get {
-    let child = data.child(at: Cursor.requirementList, parent: self)
-    return GenericRequirementListSyntax(child!)
-  }
-  set(value) {
-    self = withRequirementList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.requirementList, 
+                                 parent: Syntax(self))
+      return GenericRequirementListSyntax(childData!)
+    }
+    set(value) {
+      self = withRequirementList(value)
+    }
   }
 
   /// Adds the provided `Requirement` to the node's `requirementList`
@@ -21520,39 +23153,50 @@ public struct GenericWhereClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GenericWhereClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: GenericWhereClauseSyntax, rhs: GenericWhereClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GenericRequirementListSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericRequirementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericRequirementListSyntaxProtocol: SyntaxProtocol {}
 
-public struct GenericRequirementSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `GenericRequirementSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericRequirementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericRequirementSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct GenericRequirementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case body
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GenericRequirementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GenericRequirementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .genericRequirement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GenericRequirementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .genericRequirement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var body: Syntax {
-  get {
-    let child = data.child(at: Cursor.body, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withBody(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.body, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withBody(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `body` replaced.
@@ -21565,14 +23209,15 @@ public struct GenericRequirementSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericRequirementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -21631,40 +23276,46 @@ public struct GenericRequirementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GenericRequirementSyntax` nodes are equal to each other.
-  public static func ==(lhs: GenericRequirementSyntax, rhs: GenericRequirementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SameTypeRequirementSyntax` nodes conform. Extension point to add
+/// common methods to all `SameTypeRequirementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SameTypeRequirementSyntaxProtocol: SyntaxProtocol {}
 
-public struct SameTypeRequirementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct SameTypeRequirementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftTypeIdentifier
     case equalityToken
     case rightTypeIdentifier
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SameTypeRequirementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SameTypeRequirementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .sameTypeRequirement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SameTypeRequirementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .sameTypeRequirement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftTypeIdentifier: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.leftTypeIdentifier, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withLeftTypeIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftTypeIdentifier, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftTypeIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftTypeIdentifier` replaced.
@@ -21677,13 +23328,14 @@ public struct SameTypeRequirementSyntax: Syntax, _SyntaxBase, Hashable {
     return SameTypeRequirementSyntax(newData)
   }
   public var equalityToken: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.equalityToken, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEqualityToken(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.equalityToken, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEqualityToken(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `equalityToken` replaced.
@@ -21696,13 +23348,14 @@ public struct SameTypeRequirementSyntax: Syntax, _SyntaxBase, Hashable {
     return SameTypeRequirementSyntax(newData)
   }
   public var rightTypeIdentifier: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.rightTypeIdentifier, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withRightTypeIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightTypeIdentifier, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withRightTypeIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightTypeIdentifier` replaced.
@@ -21761,19 +23414,19 @@ public struct SameTypeRequirementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SameTypeRequirementSyntax` nodes are equal to each other.
-  public static func ==(lhs: SameTypeRequirementSyntax, rhs: SameTypeRequirementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GenericParameterListSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericParameterListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericParameterListSyntaxProtocol: SyntaxProtocol {}
 
-public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `GenericParameterSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericParameterSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericParameterSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct GenericParameterSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case attributes
     case name
@@ -21782,22 +23435,33 @@ public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GenericParameterSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GenericParameterSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .genericParameter else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GenericParameterSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .genericParameter)
+    self._syntaxNode = Syntax(data)
   }
 
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -21829,13 +23493,14 @@ public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericParameterSyntax(newData)
   }
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -21848,14 +23513,15 @@ public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericParameterSyntax(newData)
   }
   public var colon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -21868,14 +23534,15 @@ public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericParameterSyntax(newData)
   }
   public var inheritedType: TypeSyntax? {
-  get {
-    let child = data.child(at: Cursor.inheritedType, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? TypeSyntax
-  }
-  set(value) {
-    self = withInheritedType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inheritedType, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritedType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inheritedType` replaced.
@@ -21888,14 +23555,15 @@ public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericParameterSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -21954,40 +23622,46 @@ public struct GenericParameterSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GenericParameterSyntax` nodes are equal to each other.
-  public static func ==(lhs: GenericParameterSyntax, rhs: GenericParameterSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GenericParameterClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericParameterClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericParameterClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct GenericParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct GenericParameterClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftAngleBracket
     case genericParameterList
     case rightAngleBracket
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GenericParameterClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GenericParameterClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .genericParameterClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GenericParameterClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .genericParameterClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftAngleBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftAngleBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftAngleBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftAngleBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftAngleBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftAngleBracket` replaced.
@@ -22000,13 +23674,14 @@ public struct GenericParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericParameterClauseSyntax(newData)
   }
   public var genericParameterList: GenericParameterListSyntax {
-  get {
-    let child = data.child(at: Cursor.genericParameterList, parent: self)
-    return GenericParameterListSyntax(child!)
-  }
-  set(value) {
-    self = withGenericParameterList(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericParameterList, 
+                                 parent: Syntax(self))
+      return GenericParameterListSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericParameterList(value)
+    }
   }
 
   /// Adds the provided `GenericParameter` to the node's `genericParameterList`
@@ -22038,13 +23713,14 @@ public struct GenericParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericParameterClauseSyntax(newData)
   }
   public var rightAngleBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightAngleBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightAngleBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightAngleBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightAngleBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightAngleBracket` replaced.
@@ -22103,40 +23779,46 @@ public struct GenericParameterClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GenericParameterClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: GenericParameterClauseSyntax, rhs: GenericParameterClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ConformanceRequirementSyntax` nodes conform. Extension point to add
+/// common methods to all `ConformanceRequirementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ConformanceRequirementSyntaxProtocol: SyntaxProtocol {}
 
-public struct ConformanceRequirementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct ConformanceRequirementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftTypeIdentifier
     case colon
     case rightTypeIdentifier
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ConformanceRequirementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ConformanceRequirementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .conformanceRequirement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ConformanceRequirementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .conformanceRequirement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftTypeIdentifier: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.leftTypeIdentifier, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withLeftTypeIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftTypeIdentifier, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftTypeIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftTypeIdentifier` replaced.
@@ -22149,13 +23831,14 @@ public struct ConformanceRequirementSyntax: Syntax, _SyntaxBase, Hashable {
     return ConformanceRequirementSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -22168,13 +23851,14 @@ public struct ConformanceRequirementSyntax: Syntax, _SyntaxBase, Hashable {
     return ConformanceRequirementSyntax(newData)
   }
   public var rightTypeIdentifier: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.rightTypeIdentifier, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withRightTypeIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightTypeIdentifier, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withRightTypeIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightTypeIdentifier` replaced.
@@ -22233,39 +23917,45 @@ public struct ConformanceRequirementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ConformanceRequirementSyntax` nodes are equal to each other.
-  public static func ==(lhs: ConformanceRequirementSyntax, rhs: ConformanceRequirementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SimpleTypeIdentifierSyntax` nodes conform. Extension point to add
+/// common methods to all `SimpleTypeIdentifierSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SimpleTypeIdentifierSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct SimpleTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case name
     case genericArgumentClause
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SimpleTypeIdentifierSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SimpleTypeIdentifierSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .simpleTypeIdentifier else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SimpleTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .simpleTypeIdentifier)
+    self._syntaxNode = Syntax(data)
   }
 
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -22278,14 +23968,15 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return SimpleTypeIdentifierSyntax(newData)
   }
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericArgumentClause, parent: self)
-    if child == nil { return nil }
-    return GenericArgumentClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericArgumentClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericArgumentClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericArgumentClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericArgumentClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
@@ -22344,19 +24035,14 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SimpleTypeIdentifierSyntax` nodes are equal to each other.
-  public static func ==(lhs: SimpleTypeIdentifierSyntax, rhs: SimpleTypeIdentifierSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `MemberTypeIdentifierSyntax` nodes conform. Extension point to add
+/// common methods to all `MemberTypeIdentifierSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MemberTypeIdentifierSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct MemberTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case baseType
     case period
@@ -22364,21 +24050,32 @@ public struct MemberTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
     case genericArgumentClause
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `MemberTypeIdentifierSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `MemberTypeIdentifierSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .memberTypeIdentifier else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MemberTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .memberTypeIdentifier)
+    self._syntaxNode = Syntax(data)
   }
 
   public var baseType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.baseType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withBaseType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.baseType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withBaseType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `baseType` replaced.
@@ -22391,13 +24088,14 @@ public struct MemberTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return MemberTypeIdentifierSyntax(newData)
   }
   public var period: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.period, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPeriod(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.period, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `period` replaced.
@@ -22410,13 +24108,14 @@ public struct MemberTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return MemberTypeIdentifierSyntax(newData)
   }
   public var name: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -22429,14 +24128,15 @@ public struct MemberTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return MemberTypeIdentifierSyntax(newData)
   }
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.genericArgumentClause, parent: self)
-    if child == nil { return nil }
-    return GenericArgumentClauseSyntax(child!)
-  }
-  set(value) {
-    self = withGenericArgumentClause(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.genericArgumentClause, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericArgumentClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withGenericArgumentClause(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
@@ -22495,38 +24195,44 @@ public struct MemberTypeIdentifierSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `MemberTypeIdentifierSyntax` nodes are equal to each other.
-  public static func ==(lhs: MemberTypeIdentifierSyntax, rhs: MemberTypeIdentifierSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ClassRestrictionTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `ClassRestrictionTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ClassRestrictionTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct ClassRestrictionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case classKeyword
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ClassRestrictionTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ClassRestrictionTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .classRestrictionType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ClassRestrictionTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .classRestrictionType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var classKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.classKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withClassKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.classKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withClassKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `classKeyword` replaced.
@@ -22585,40 +24291,46 @@ public struct ClassRestrictionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ClassRestrictionTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: ClassRestrictionTypeSyntax, rhs: ClassRestrictionTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ArrayTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `ArrayTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ArrayTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct ArrayTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct ArrayTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case leftSquareBracket
     case elementType
     case rightSquareBracket
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ArrayTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ArrayTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .arrayType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ArrayTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .arrayType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftSquareBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftSquareBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftSquareBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftSquareBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftSquareBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftSquareBracket` replaced.
@@ -22631,13 +24343,14 @@ public struct ArrayTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return ArrayTypeSyntax(newData)
   }
   public var elementType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.elementType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withElementType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elementType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withElementType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `elementType` replaced.
@@ -22650,13 +24363,14 @@ public struct ArrayTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return ArrayTypeSyntax(newData)
   }
   public var rightSquareBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightSquareBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightSquareBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightSquareBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightSquareBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightSquareBracket` replaced.
@@ -22715,19 +24429,14 @@ public struct ArrayTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ArrayTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: ArrayTypeSyntax, rhs: ArrayTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `DictionaryTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `DictionaryTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol DictionaryTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct DictionaryTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case leftSquareBracket
     case keyType
@@ -22736,21 +24445,32 @@ public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     case rightSquareBracket
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `DictionaryTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `DictionaryTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .dictionaryType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DictionaryTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .dictionaryType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftSquareBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftSquareBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftSquareBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftSquareBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftSquareBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftSquareBracket` replaced.
@@ -22763,13 +24483,14 @@ public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return DictionaryTypeSyntax(newData)
   }
   public var keyType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.keyType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withKeyType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.keyType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withKeyType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `keyType` replaced.
@@ -22782,13 +24503,14 @@ public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return DictionaryTypeSyntax(newData)
   }
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -22801,13 +24523,14 @@ public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return DictionaryTypeSyntax(newData)
   }
   public var valueType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.valueType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withValueType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.valueType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withValueType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `valueType` replaced.
@@ -22820,13 +24543,14 @@ public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return DictionaryTypeSyntax(newData)
   }
   public var rightSquareBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightSquareBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightSquareBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightSquareBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightSquareBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightSquareBracket` replaced.
@@ -22885,40 +24609,46 @@ public struct DictionaryTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `DictionaryTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: DictionaryTypeSyntax, rhs: DictionaryTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `MetatypeTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `MetatypeTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol MetatypeTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct MetatypeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct MetatypeTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case baseType
     case period
     case typeOrProtocol
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `MetatypeTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `MetatypeTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .metatypeType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MetatypeTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .metatypeType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var baseType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.baseType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withBaseType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.baseType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withBaseType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `baseType` replaced.
@@ -22931,13 +24661,14 @@ public struct MetatypeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return MetatypeTypeSyntax(newData)
   }
   public var period: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.period, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPeriod(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.period, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `period` replaced.
@@ -22950,13 +24681,14 @@ public struct MetatypeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return MetatypeTypeSyntax(newData)
   }
   public var typeOrProtocol: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.typeOrProtocol, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTypeOrProtocol(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeOrProtocol, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeOrProtocol(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeOrProtocol` replaced.
@@ -23015,39 +24747,45 @@ public struct MetatypeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `MetatypeTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: MetatypeTypeSyntax, rhs: MetatypeTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `OptionalTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `OptionalTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol OptionalTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct OptionalTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct OptionalTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case wrappedType
     case questionMark
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `OptionalTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `OptionalTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .optionalType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OptionalTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .optionalType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var wrappedType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.wrappedType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withWrappedType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.wrappedType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withWrappedType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `wrappedType` replaced.
@@ -23060,13 +24798,14 @@ public struct OptionalTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return OptionalTypeSyntax(newData)
   }
   public var questionMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.questionMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withQuestionMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.questionMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `questionMark` replaced.
@@ -23125,39 +24864,45 @@ public struct OptionalTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `OptionalTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: OptionalTypeSyntax, rhs: OptionalTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `SomeTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `SomeTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol SomeTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct SomeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct SomeTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case someSpecifier
     case baseType
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `SomeTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `SomeTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .someType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `SomeTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .someType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var someSpecifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.someSpecifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSomeSpecifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.someSpecifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSomeSpecifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `someSpecifier` replaced.
@@ -23170,13 +24915,14 @@ public struct SomeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return SomeTypeSyntax(newData)
   }
   public var baseType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.baseType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withBaseType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.baseType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withBaseType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `baseType` replaced.
@@ -23235,39 +24981,45 @@ public struct SomeTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `SomeTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: SomeTypeSyntax, rhs: SomeTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ImplicitlyUnwrappedOptionalTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `ImplicitlyUnwrappedOptionalTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ImplicitlyUnwrappedOptionalTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case wrappedType
     case exclamationMark
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ImplicitlyUnwrappedOptionalTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ImplicitlyUnwrappedOptionalTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .implicitlyUnwrappedOptionalType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ImplicitlyUnwrappedOptionalTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .implicitlyUnwrappedOptionalType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var wrappedType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.wrappedType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withWrappedType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.wrappedType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withWrappedType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `wrappedType` replaced.
@@ -23280,13 +25032,14 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntax, _SyntaxBase, Ha
     return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
   public var exclamationMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.exclamationMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withExclamationMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.exclamationMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withExclamationMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `exclamationMark` replaced.
@@ -23345,39 +25098,45 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntax, _SyntaxBase, Ha
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ImplicitlyUnwrappedOptionalTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: ImplicitlyUnwrappedOptionalTypeSyntax, rhs: ImplicitlyUnwrappedOptionalTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CompositionTypeElementSyntax` nodes conform. Extension point to add
+/// common methods to all `CompositionTypeElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CompositionTypeElementSyntaxProtocol: SyntaxProtocol {}
 
-public struct CompositionTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct CompositionTypeElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case type
     case ampersand
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CompositionTypeElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CompositionTypeElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .compositionTypeElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CompositionTypeElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .compositionTypeElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var type: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -23390,14 +25149,15 @@ public struct CompositionTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return CompositionTypeElementSyntax(newData)
   }
   public var ampersand: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.ampersand, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAmpersand(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.ampersand, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAmpersand(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `ampersand` replaced.
@@ -23456,38 +25216,49 @@ public struct CompositionTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CompositionTypeElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: CompositionTypeElementSyntax, rhs: CompositionTypeElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `CompositionTypeElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `CompositionTypeElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CompositionTypeElementListSyntaxProtocol: SyntaxProtocol {}
 
-public struct CompositionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `CompositionTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `CompositionTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol CompositionTypeSyntaxProtocol: TypeSyntaxProtocol {}
+
+
+public struct CompositionTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case elements
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `CompositionTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `CompositionTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .compositionType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CompositionTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .compositionType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var elements: CompositionTypeElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return CompositionTypeElementListSyntax(child!)
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return CompositionTypeElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elements`
@@ -23565,19 +25336,14 @@ public struct CompositionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `CompositionTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: CompositionTypeSyntax, rhs: CompositionTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TupleTypeElementSyntax` nodes conform. Extension point to add
+/// common methods to all `TupleTypeElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TupleTypeElementSyntaxProtocol: SyntaxProtocol {}
 
-public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct TupleTypeElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case inOut
     case name
@@ -23589,22 +25355,33 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TupleTypeElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TupleTypeElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tupleTypeElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TupleTypeElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tupleTypeElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var inOut: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.inOut, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withInOut(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.inOut, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withInOut(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `inOut` replaced.
@@ -23617,14 +25394,15 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var name: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.name, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.name, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `name` replaced.
@@ -23637,14 +25415,15 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var secondName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.secondName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSecondName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.secondName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSecondName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `secondName` replaced.
@@ -23657,14 +25436,15 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var colon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -23677,13 +25457,14 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var type: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -23696,14 +25477,15 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var ellipsis: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.ellipsis, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withEllipsis(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.ellipsis, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withEllipsis(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `ellipsis` replaced.
@@ -23716,14 +25498,15 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var initializer: InitializerClauseSyntax? {
-  get {
-    let child = data.child(at: Cursor.initializer, parent: self)
-    if child == nil { return nil }
-    return InitializerClauseSyntax(child!)
-  }
-  set(value) {
-    self = withInitializer(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.initializer, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return InitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `initializer` replaced.
@@ -23736,14 +25519,15 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TupleTypeElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -23802,40 +25586,51 @@ public struct TupleTypeElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TupleTypeElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: TupleTypeElementSyntax, rhs: TupleTypeElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TupleTypeElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `TupleTypeElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TupleTypeElementListSyntaxProtocol: SyntaxProtocol {}
 
-public struct TupleTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `TupleTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `TupleTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TupleTypeSyntaxProtocol: TypeSyntaxProtocol {}
+
+
+public struct TupleTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case elements
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TupleTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TupleTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tupleType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TupleTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tupleType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -23848,13 +25643,14 @@ public struct TupleTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return TupleTypeSyntax(newData)
   }
   public var elements: TupleTypeElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return TupleTypeElementListSyntax(child!)
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return TupleTypeElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elements`
@@ -23886,13 +25682,14 @@ public struct TupleTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return TupleTypeSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -23951,19 +25748,14 @@ public struct TupleTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TupleTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: TupleTypeSyntax, rhs: TupleTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `FunctionTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `FunctionTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol FunctionTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct FunctionTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case arguments
@@ -23973,21 +25765,32 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     case returnType
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `FunctionTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `FunctionTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .functionType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FunctionTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .functionType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -24000,13 +25803,14 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return FunctionTypeSyntax(newData)
   }
   public var arguments: TupleTypeElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.arguments, parent: self)
-    return TupleTypeElementListSyntax(child!)
-  }
-  set(value) {
-    self = withArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arguments, 
+                                 parent: Syntax(self))
+      return TupleTypeElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withArguments(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `arguments`
@@ -24038,13 +25842,14 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return FunctionTypeSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -24057,14 +25862,15 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return FunctionTypeSyntax(newData)
   }
   public var throwsOrRethrowsKeyword: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.throwsOrRethrowsKeyword, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withThrowsOrRethrowsKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.throwsOrRethrowsKeyword, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowsOrRethrowsKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `throwsOrRethrowsKeyword` replaced.
@@ -24077,13 +25883,14 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return FunctionTypeSyntax(newData)
   }
   public var arrow: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.arrow, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withArrow(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arrow, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withArrow(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `arrow` replaced.
@@ -24096,13 +25903,14 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return FunctionTypeSyntax(newData)
   }
   public var returnType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.returnType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withReturnType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.returnType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withReturnType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `returnType` replaced.
@@ -24161,41 +25969,47 @@ public struct FunctionTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `FunctionTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: FunctionTypeSyntax, rhs: FunctionTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AttributedTypeSyntax` nodes conform. Extension point to add
+/// common methods to all `AttributedTypeSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AttributedTypeSyntaxProtocol: TypeSyntaxProtocol {}
 
-public struct AttributedTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
+
+public struct AttributedTypeSyntax: TypeSyntaxProtocol {
   enum Cursor: Int {
     case specifier
     case attributes
     case baseType
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AttributedTypeSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AttributedTypeSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .attributedType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AttributedTypeSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .attributedType)
+    self._syntaxNode = Syntax(data)
   }
 
   public var specifier: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.specifier, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withSpecifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.specifier, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSpecifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `specifier` replaced.
@@ -24208,14 +26022,15 @@ public struct AttributedTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return AttributedTypeSyntax(newData)
   }
   public var attributes: AttributeListSyntax? {
-  get {
-    let child = data.child(at: Cursor.attributes, parent: self)
-    if child == nil { return nil }
-    return AttributeListSyntax(child!)
-  }
-  set(value) {
-    self = withAttributes(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.attributes, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
   }
 
   /// Adds the provided `Attribute` to the node's `attributes`
@@ -24247,13 +26062,14 @@ public struct AttributedTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
     return AttributedTypeSyntax(newData)
   }
   public var baseType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.baseType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withBaseType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.baseType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withBaseType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `baseType` replaced.
@@ -24312,39 +26128,50 @@ public struct AttributedTypeSyntax: TypeSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AttributedTypeSyntax` nodes are equal to each other.
-  public static func ==(lhs: AttributedTypeSyntax, rhs: AttributedTypeSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GenericArgumentListSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericArgumentListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericArgumentListSyntaxProtocol: SyntaxProtocol {}
 
-public struct GenericArgumentSyntax: Syntax, _SyntaxBase, Hashable {
+/// Protocol to which all `GenericArgumentSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericArgumentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericArgumentSyntaxProtocol: SyntaxProtocol {}
+
+
+public struct GenericArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case argumentType
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GenericArgumentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GenericArgumentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .genericArgument else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GenericArgumentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .genericArgument)
+    self._syntaxNode = Syntax(data)
   }
 
   public var argumentType: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.argumentType, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withArgumentType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.argumentType, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withArgumentType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `argumentType` replaced.
@@ -24357,14 +26184,15 @@ public struct GenericArgumentSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericArgumentSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -24423,40 +26251,46 @@ public struct GenericArgumentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GenericArgumentSyntax` nodes are equal to each other.
-  public static func ==(lhs: GenericArgumentSyntax, rhs: GenericArgumentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `GenericArgumentClauseSyntax` nodes conform. Extension point to add
+/// common methods to all `GenericArgumentClauseSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol GenericArgumentClauseSyntaxProtocol: SyntaxProtocol {}
 
-public struct GenericArgumentClauseSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct GenericArgumentClauseSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case leftAngleBracket
     case arguments
     case rightAngleBracket
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `GenericArgumentClauseSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `GenericArgumentClauseSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .genericArgumentClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `GenericArgumentClauseSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .genericArgumentClause)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftAngleBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftAngleBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftAngleBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftAngleBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftAngleBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftAngleBracket` replaced.
@@ -24469,13 +26303,14 @@ public struct GenericArgumentClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericArgumentClauseSyntax(newData)
   }
   public var arguments: GenericArgumentListSyntax {
-  get {
-    let child = data.child(at: Cursor.arguments, parent: self)
-    return GenericArgumentListSyntax(child!)
-  }
-  set(value) {
-    self = withArguments(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.arguments, 
+                                 parent: Syntax(self))
+      return GenericArgumentListSyntax(childData!)
+    }
+    set(value) {
+      self = withArguments(value)
+    }
   }
 
   /// Adds the provided `Argument` to the node's `arguments`
@@ -24507,13 +26342,14 @@ public struct GenericArgumentClauseSyntax: Syntax, _SyntaxBase, Hashable {
     return GenericArgumentClauseSyntax(newData)
   }
   public var rightAngleBracket: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightAngleBracket, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightAngleBracket(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightAngleBracket, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightAngleBracket(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightAngleBracket` replaced.
@@ -24572,39 +26408,45 @@ public struct GenericArgumentClauseSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `GenericArgumentClauseSyntax` nodes are equal to each other.
-  public static func ==(lhs: GenericArgumentClauseSyntax, rhs: GenericArgumentClauseSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TypeAnnotationSyntax` nodes conform. Extension point to add
+/// common methods to all `TypeAnnotationSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TypeAnnotationSyntaxProtocol: SyntaxProtocol {}
 
-public struct TypeAnnotationSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct TypeAnnotationSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case colon
     case type
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TypeAnnotationSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TypeAnnotationSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .typeAnnotation else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TypeAnnotationSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .typeAnnotation)
+    self._syntaxNode = Syntax(data)
   }
 
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -24617,13 +26459,14 @@ public struct TypeAnnotationSyntax: Syntax, _SyntaxBase, Hashable {
     return TypeAnnotationSyntax(newData)
   }
   public var type: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -24682,19 +26525,14 @@ public struct TypeAnnotationSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TypeAnnotationSyntax` nodes are equal to each other.
-  public static func ==(lhs: TypeAnnotationSyntax, rhs: TypeAnnotationSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `EnumCasePatternSyntax` nodes conform. Extension point to add
+/// common methods to all `EnumCasePatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol EnumCasePatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct EnumCasePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct EnumCasePatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case type
     case period
@@ -24702,22 +26540,33 @@ public struct EnumCasePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     case associatedTuple
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `EnumCasePatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `EnumCasePatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .enumCasePattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `EnumCasePatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .enumCasePattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var type: TypeSyntax? {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    if child == nil { return nil }
-    return makeSyntax(child!) as? TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -24730,13 +26579,14 @@ public struct EnumCasePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return EnumCasePatternSyntax(newData)
   }
   public var period: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.period, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPeriod(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.period, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `period` replaced.
@@ -24749,13 +26599,14 @@ public struct EnumCasePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return EnumCasePatternSyntax(newData)
   }
   public var caseName: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.caseName, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withCaseName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.caseName, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withCaseName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `caseName` replaced.
@@ -24768,14 +26619,15 @@ public struct EnumCasePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return EnumCasePatternSyntax(newData)
   }
   public var associatedTuple: TuplePatternSyntax? {
-  get {
-    let child = data.child(at: Cursor.associatedTuple, parent: self)
-    if child == nil { return nil }
-    return TuplePatternSyntax(child!)
-  }
-  set(value) {
-    self = withAssociatedTuple(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.associatedTuple, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TuplePatternSyntax(childData!)
+    }
+    set(value) {
+      self = withAssociatedTuple(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `associatedTuple` replaced.
@@ -24834,39 +26686,45 @@ public struct EnumCasePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `EnumCasePatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: EnumCasePatternSyntax, rhs: EnumCasePatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IsTypePatternSyntax` nodes conform. Extension point to add
+/// common methods to all `IsTypePatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IsTypePatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct IsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct IsTypePatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case isKeyword
     case type
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IsTypePatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IsTypePatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .isTypePattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IsTypePatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .isTypePattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var isKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.isKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIsKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.isKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIsKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `isKeyword` replaced.
@@ -24879,13 +26737,14 @@ public struct IsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return IsTypePatternSyntax(newData)
   }
   public var type: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -24944,39 +26803,45 @@ public struct IsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IsTypePatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: IsTypePatternSyntax, rhs: IsTypePatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `OptionalPatternSyntax` nodes conform. Extension point to add
+/// common methods to all `OptionalPatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol OptionalPatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct OptionalPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct OptionalPatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case subPattern
     case questionMark
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `OptionalPatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `OptionalPatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .optionalPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `OptionalPatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .optionalPattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var subPattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.subPattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withSubPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.subPattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withSubPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `subPattern` replaced.
@@ -24989,13 +26854,14 @@ public struct OptionalPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return OptionalPatternSyntax(newData)
   }
   public var questionMark: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.questionMark, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withQuestionMark(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.questionMark, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withQuestionMark(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `questionMark` replaced.
@@ -25054,38 +26920,44 @@ public struct OptionalPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `OptionalPatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: OptionalPatternSyntax, rhs: OptionalPatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `IdentifierPatternSyntax` nodes conform. Extension point to add
+/// common methods to all `IdentifierPatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol IdentifierPatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct IdentifierPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct IdentifierPatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case identifier
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `IdentifierPatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `IdentifierPatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .identifierPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `IdentifierPatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .identifierPattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var identifier: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.identifier, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withIdentifier(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.identifier, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withIdentifier(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `identifier` replaced.
@@ -25144,40 +27016,46 @@ public struct IdentifierPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `IdentifierPatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: IdentifierPatternSyntax, rhs: IdentifierPatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AsTypePatternSyntax` nodes conform. Extension point to add
+/// common methods to all `AsTypePatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AsTypePatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct AsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct AsTypePatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case pattern
     case asKeyword
     case type
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AsTypePatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AsTypePatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .asTypePattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AsTypePatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .asTypePattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -25190,13 +27068,14 @@ public struct AsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return AsTypePatternSyntax(newData)
   }
   public var asKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.asKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withAsKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.asKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `asKeyword` replaced.
@@ -25209,13 +27088,14 @@ public struct AsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return AsTypePatternSyntax(newData)
   }
   public var type: TypeSyntax {
-  get {
-    let child = data.child(at: Cursor.type, parent: self)
-    return makeSyntax(child!) as! TypeSyntax
-  }
-  set(value) {
-    self = withType(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.type, 
+                                 parent: Syntax(self))
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withType(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `type` replaced.
@@ -25274,40 +27154,46 @@ public struct AsTypePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AsTypePatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: AsTypePatternSyntax, rhs: AsTypePatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TuplePatternSyntax` nodes conform. Extension point to add
+/// common methods to all `TuplePatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TuplePatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct TuplePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct TuplePatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case leftParen
     case elements
     case rightParen
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TuplePatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TuplePatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tuplePattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TuplePatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tuplePattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var leftParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.leftParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLeftParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.leftParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `leftParen` replaced.
@@ -25320,13 +27206,14 @@ public struct TuplePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return TuplePatternSyntax(newData)
   }
   public var elements: TuplePatternElementListSyntax {
-  get {
-    let child = data.child(at: Cursor.elements, parent: self)
-    return TuplePatternElementListSyntax(child!)
-  }
-  set(value) {
-    self = withElements(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.elements, 
+                                 parent: Syntax(self))
+      return TuplePatternElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withElements(value)
+    }
   }
 
   /// Adds the provided `Element` to the node's `elements`
@@ -25358,13 +27245,14 @@ public struct TuplePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return TuplePatternSyntax(newData)
   }
   public var rightParen: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.rightParen, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withRightParen(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.rightParen, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `rightParen` replaced.
@@ -25423,39 +27311,45 @@ public struct TuplePatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TuplePatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: TuplePatternSyntax, rhs: TuplePatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `WildcardPatternSyntax` nodes conform. Extension point to add
+/// common methods to all `WildcardPatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol WildcardPatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct WildcardPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct WildcardPatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case wildcard
     case typeAnnotation
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `WildcardPatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `WildcardPatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .wildcardPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `WildcardPatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .wildcardPattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var wildcard: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.wildcard, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withWildcard(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.wildcard, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWildcard(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `wildcard` replaced.
@@ -25468,14 +27362,15 @@ public struct WildcardPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return WildcardPatternSyntax(newData)
   }
   public var typeAnnotation: TypeAnnotationSyntax? {
-  get {
-    let child = data.child(at: Cursor.typeAnnotation, parent: self)
-    if child == nil { return nil }
-    return TypeAnnotationSyntax(child!)
-  }
-  set(value) {
-    self = withTypeAnnotation(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.typeAnnotation, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeAnnotationSyntax(childData!)
+    }
+    set(value) {
+      self = withTypeAnnotation(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `typeAnnotation` replaced.
@@ -25534,19 +27429,14 @@ public struct WildcardPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `WildcardPatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: WildcardPatternSyntax, rhs: WildcardPatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TuplePatternElementSyntax` nodes conform. Extension point to add
+/// common methods to all `TuplePatternElementSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TuplePatternElementSyntaxProtocol: SyntaxProtocol {}
 
-public struct TuplePatternElementSyntax: Syntax, _SyntaxBase, Hashable {
+
+public struct TuplePatternElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -25554,22 +27444,33 @@ public struct TuplePatternElementSyntax: Syntax, _SyntaxBase, Hashable {
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `TuplePatternElementSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `TuplePatternElementSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .tuplePatternElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TuplePatternElementSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .tuplePatternElement)
+    self._syntaxNode = Syntax(data)
   }
 
   public var labelName: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelName, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelName(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelName, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelName(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelName` replaced.
@@ -25582,14 +27483,15 @@ public struct TuplePatternElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TuplePatternElementSyntax(newData)
   }
   public var labelColon: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.labelColon, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabelColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.labelColon, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabelColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `labelColon` replaced.
@@ -25602,13 +27504,14 @@ public struct TuplePatternElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TuplePatternElementSyntax(newData)
   }
   public var pattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.pattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withPattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.pattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `pattern` replaced.
@@ -25621,14 +27524,15 @@ public struct TuplePatternElementSyntax: Syntax, _SyntaxBase, Hashable {
     return TuplePatternElementSyntax(newData)
   }
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -25687,38 +27591,44 @@ public struct TuplePatternElementSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `TuplePatternElementSyntax` nodes are equal to each other.
-  public static func ==(lhs: TuplePatternElementSyntax, rhs: TuplePatternElementSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `ExpressionPatternSyntax` nodes conform. Extension point to add
+/// common methods to all `ExpressionPatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ExpressionPatternSyntaxProtocol: PatternSyntaxProtocol {}
 
-public struct ExpressionPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+
+public struct ExpressionPatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case expression
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ExpressionPatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ExpressionPatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .expressionPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ExpressionPatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .expressionPattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var expression: ExprSyntax {
-  get {
-    let child = data.child(at: Cursor.expression, parent: self)
-    return makeSyntax(child!) as! ExprSyntax
-  }
-  set(value) {
-    self = withExpression(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.expression, 
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `expression` replaced.
@@ -25777,39 +27687,50 @@ public struct ExpressionPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ExpressionPatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: ExpressionPatternSyntax, rhs: ExpressionPatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `TuplePatternElementListSyntax` nodes conform. Extension point to add
+/// common methods to all `TuplePatternElementListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol TuplePatternElementListSyntaxProtocol: SyntaxProtocol {}
 
-public struct ValueBindingPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
+/// Protocol to which all `ValueBindingPatternSyntax` nodes conform. Extension point to add
+/// common methods to all `ValueBindingPatternSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol ValueBindingPatternSyntaxProtocol: PatternSyntaxProtocol {}
+
+
+public struct ValueBindingPatternSyntax: PatternSyntaxProtocol {
   enum Cursor: Int {
     case letOrVarKeyword
     case valuePattern
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `ValueBindingPatternSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `ValueBindingPatternSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .valueBindingPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `ValueBindingPatternSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .valueBindingPattern)
+    self._syntaxNode = Syntax(data)
   }
 
   public var letOrVarKeyword: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.letOrVarKeyword, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLetOrVarKeyword(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.letOrVarKeyword, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLetOrVarKeyword(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `letOrVarKeyword` replaced.
@@ -25822,13 +27743,14 @@ public struct ValueBindingPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
     return ValueBindingPatternSyntax(newData)
   }
   public var valuePattern: PatternSyntax {
-  get {
-    let child = data.child(at: Cursor.valuePattern, parent: self)
-    return makeSyntax(child!) as! PatternSyntax
-  }
-  set(value) {
-    self = withValuePattern(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.valuePattern, 
+                                 parent: Syntax(self))
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withValuePattern(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `valuePattern` replaced.
@@ -25887,43 +27809,54 @@ public struct ValueBindingPatternSyntax: PatternSyntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `ValueBindingPatternSyntax` nodes are equal to each other.
-  public static func ==(lhs: ValueBindingPatternSyntax, rhs: ValueBindingPatternSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AvailabilitySpecListSyntax` nodes conform. Extension point to add
+/// common methods to all `AvailabilitySpecListSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AvailabilitySpecListSyntaxProtocol: SyntaxProtocol {}
+
+/// Protocol to which all `AvailabilityArgumentSyntax` nodes conform. Extension point to add
+/// common methods to all `AvailabilityArgumentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AvailabilityArgumentSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A single argument to an `@available` argument like `*`, `iOS 10.1`,          or `message: "This has been deprecated"`.
 /// 
-public struct AvailabilityArgumentSyntax: Syntax, _SyntaxBase, Hashable {
+public struct AvailabilityArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case entry
     case trailingComma
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AvailabilityArgumentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AvailabilityArgumentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .availabilityArgument else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AvailabilityArgumentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .availabilityArgument)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The actual argument
   public var entry: Syntax {
-  get {
-    let child = data.child(at: Cursor.entry, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withEntry(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.entry, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withEntry(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `entry` replaced.
@@ -25939,14 +27872,15 @@ public struct AvailabilityArgumentSyntax: Syntax, _SyntaxBase, Hashable {
   /// A trailing comma if the argument is followed by another                    argument
   /// 
   public var trailingComma: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.trailingComma, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withTrailingComma(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.trailingComma, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `trailingComma` replaced.
@@ -26005,44 +27939,50 @@ public struct AvailabilityArgumentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AvailabilityArgumentSyntax` nodes are equal to each other.
-  public static func ==(lhs: AvailabilityArgumentSyntax, rhs: AvailabilityArgumentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AvailabilityLabeledArgumentSyntax` nodes conform. Extension point to add
+/// common methods to all `AvailabilityLabeledArgumentSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AvailabilityLabeledArgumentSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A argument to an `@available` attribute that consists of a label and          a value, e.g. `message: "This has been deprecated"`.
 /// 
-public struct AvailabilityLabeledArgumentSyntax: Syntax, _SyntaxBase, Hashable {
+public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case label
     case colon
     case value
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AvailabilityLabeledArgumentSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AvailabilityLabeledArgumentSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .availabilityLabeledArgument else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AvailabilityLabeledArgumentSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .availabilityLabeledArgument)
+    self._syntaxNode = Syntax(data)
   }
 
   /// The label of the argument
   public var label: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.label, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withLabel(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.label, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `label` replaced.
@@ -26056,13 +27996,14 @@ public struct AvailabilityLabeledArgumentSyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The colon separating label and value
   public var colon: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.colon, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withColon(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.colon, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `colon` replaced.
@@ -26076,13 +28017,14 @@ public struct AvailabilityLabeledArgumentSyntax: Syntax, _SyntaxBase, Hashable {
   }
   /// The value of this labeled argument
   public var value: Syntax {
-  get {
-    let child = data.child(at: Cursor.value, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withValue(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.value, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withValue(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `value` replaced.
@@ -26141,45 +28083,51 @@ public struct AvailabilityLabeledArgumentSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AvailabilityLabeledArgumentSyntax` nodes are equal to each other.
-  public static func ==(lhs: AvailabilityLabeledArgumentSyntax, rhs: AvailabilityLabeledArgumentSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `AvailabilityVersionRestrictionSyntax` nodes conform. Extension point to add
+/// common methods to all `AvailabilityVersionRestrictionSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol AvailabilityVersionRestrictionSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// An argument to `@available` that restricts the availability on a          certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 /// 
-public struct AvailabilityVersionRestrictionSyntax: Syntax, _SyntaxBase, Hashable {
+public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case platform
     case version
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `AvailabilityVersionRestrictionSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `AvailabilityVersionRestrictionSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .availabilityVersionRestriction else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AvailabilityVersionRestrictionSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .availabilityVersionRestriction)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// The name of the OS on which the availability should be                    restricted or 'swift' if the availability should be                    restricted based on a Swift version.
   /// 
   public var platform: TokenSyntax {
-  get {
-    let child = data.child(at: Cursor.platform, parent: self)
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPlatform(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.platform, 
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPlatform(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `platform` replaced.
@@ -26192,13 +28140,14 @@ public struct AvailabilityVersionRestrictionSyntax: Syntax, _SyntaxBase, Hashabl
     return AvailabilityVersionRestrictionSyntax(newData)
   }
   public var version: VersionTupleSyntax {
-  get {
-    let child = data.child(at: Cursor.version, parent: self)
-    return VersionTupleSyntax(child!)
-  }
-  set(value) {
-    self = withVersion(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.version, 
+                                 parent: Syntax(self))
+      return VersionTupleSyntax(childData!)
+    }
+    set(value) {
+      self = withVersion(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `version` replaced.
@@ -26257,46 +28206,52 @@ public struct AvailabilityVersionRestrictionSyntax: Syntax, _SyntaxBase, Hashabl
       self = withTrailingTrivia(newValue ?? [])
     }
   }
-
-  /// Determines if two `AvailabilityVersionRestrictionSyntax` nodes are equal to each other.
-  public static func ==(lhs: AvailabilityVersionRestrictionSyntax, rhs: AvailabilityVersionRestrictionSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
 }
+/// Protocol to which all `VersionTupleSyntax` nodes conform. Extension point to add
+/// common methods to all `VersionTupleSyntax` nodes. 
+/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+public protocol VersionTupleSyntaxProtocol: SyntaxProtocol {}
+
 
 /// 
 /// A version number of the form major.minor.patch in which the minor          and patch part may be ommited.
 /// 
-public struct VersionTupleSyntax: Syntax, _SyntaxBase, Hashable {
+public struct VersionTupleSyntax: SyntaxProtocol {
   enum Cursor: Int {
     case majorMinor
     case patchPeriod
     case patchVersion
   }
 
-  let data: SyntaxData
+  public let _syntaxNode: Syntax
 
-  /// Creates a `VersionTupleSyntax` node from the provided root and data.
+  /// Converts the given `Syntax` node to a `VersionTupleSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .versionTuple else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `VersionTupleSyntax` node from the given `SyntaxData`. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
   internal init(_ data: SyntaxData) {
-    self.data = data
+    assert(data.raw.kind == .versionTuple)
+    self._syntaxNode = Syntax(data)
   }
 
   /// 
   /// In case the version consists only of the major version, an                    integer literal that specifies the major version. In case                    the version consists of major and minor version number, a                    floating literal in which the decimal part is interpreted                    as the minor version.
   /// 
   public var majorMinor: Syntax {
-  get {
-    let child = data.child(at: Cursor.majorMinor, parent: self)
-    return makeSyntax(child!) 
-  }
-  set(value) {
-    self = withMajorMinor(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.majorMinor, 
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withMajorMinor(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `majorMinor` replaced.
@@ -26312,14 +28267,15 @@ public struct VersionTupleSyntax: Syntax, _SyntaxBase, Hashable {
   /// If the version contains a patch number, the period                    separating the minor from the patch number.
   /// 
   public var patchPeriod: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.patchPeriod, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPatchPeriod(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.patchPeriod, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPatchPeriod(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `patchPeriod` replaced.
@@ -26335,14 +28291,15 @@ public struct VersionTupleSyntax: Syntax, _SyntaxBase, Hashable {
   /// The patch version if specified.
   /// 
   public var patchVersion: TokenSyntax? {
-  get {
-    let child = data.child(at: Cursor.patchVersion, parent: self)
-    if child == nil { return nil }
-    return TokenSyntax(child!)
-  }
-  set(value) {
-    self = withPatchVersion(value)
-  }
+    get {
+      let childData = data.child(at: Cursor.patchVersion, 
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPatchVersion(value)
+    }
   }
 
   /// Returns a copy of the receiver with its `patchVersion` replaced.
@@ -26401,18 +28358,1210 @@ public struct VersionTupleSyntax: Syntax, _SyntaxBase, Hashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+}
 
-  /// Determines if two `VersionTupleSyntax` nodes are equal to each other.
-  public static func ==(lhs: VersionTupleSyntax, rhs: VersionTupleSyntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
+/// Enum to exhaustively switch over all different syntax nodes.
+public enum SyntaxEnum {
+  case unknown(UnknownSyntax)
+  case token(TokenSyntax)
+  case decl(UnknownDeclSyntax)
+  case expr(UnknownExprSyntax)
+  case stmt(UnknownStmtSyntax)
+  case type(UnknownTypeSyntax)
+  case pattern(UnknownPatternSyntax)
+  case unknownDecl(UnknownDeclSyntax)
+  case unknownExpr(UnknownExprSyntax)
+  case unknownStmt(UnknownStmtSyntax)
+  case unknownType(UnknownTypeSyntax)
+  case unknownPattern(UnknownPatternSyntax)
+  case codeBlockItem(CodeBlockItemSyntax)
+  case codeBlockItemList(CodeBlockItemListSyntax)
+  case codeBlock(CodeBlockSyntax)
+  case inOutExpr(InOutExprSyntax)
+  case poundColumnExpr(PoundColumnExprSyntax)
+  case tupleExprElementList(TupleExprElementListSyntax)
+  case arrayElementList(ArrayElementListSyntax)
+  case dictionaryElementList(DictionaryElementListSyntax)
+  case stringLiteralSegments(StringLiteralSegmentsSyntax)
+  case tryExpr(TryExprSyntax)
+  case declNameArgument(DeclNameArgumentSyntax)
+  case declNameArgumentList(DeclNameArgumentListSyntax)
+  case declNameArguments(DeclNameArgumentsSyntax)
+  case identifierExpr(IdentifierExprSyntax)
+  case superRefExpr(SuperRefExprSyntax)
+  case nilLiteralExpr(NilLiteralExprSyntax)
+  case discardAssignmentExpr(DiscardAssignmentExprSyntax)
+  case assignmentExpr(AssignmentExprSyntax)
+  case sequenceExpr(SequenceExprSyntax)
+  case exprList(ExprListSyntax)
+  case poundLineExpr(PoundLineExprSyntax)
+  case poundFileExpr(PoundFileExprSyntax)
+  case poundFunctionExpr(PoundFunctionExprSyntax)
+  case poundDsohandleExpr(PoundDsohandleExprSyntax)
+  case symbolicReferenceExpr(SymbolicReferenceExprSyntax)
+  case prefixOperatorExpr(PrefixOperatorExprSyntax)
+  case binaryOperatorExpr(BinaryOperatorExprSyntax)
+  case arrowExpr(ArrowExprSyntax)
+  case floatLiteralExpr(FloatLiteralExprSyntax)
+  case tupleExpr(TupleExprSyntax)
+  case arrayExpr(ArrayExprSyntax)
+  case dictionaryExpr(DictionaryExprSyntax)
+  case tupleExprElement(TupleExprElementSyntax)
+  case arrayElement(ArrayElementSyntax)
+  case dictionaryElement(DictionaryElementSyntax)
+  case integerLiteralExpr(IntegerLiteralExprSyntax)
+  case booleanLiteralExpr(BooleanLiteralExprSyntax)
+  case ternaryExpr(TernaryExprSyntax)
+  case memberAccessExpr(MemberAccessExprSyntax)
+  case isExpr(IsExprSyntax)
+  case asExpr(AsExprSyntax)
+  case typeExpr(TypeExprSyntax)
+  case closureCaptureItem(ClosureCaptureItemSyntax)
+  case closureCaptureItemList(ClosureCaptureItemListSyntax)
+  case closureCaptureSignature(ClosureCaptureSignatureSyntax)
+  case closureParam(ClosureParamSyntax)
+  case closureParamList(ClosureParamListSyntax)
+  case closureSignature(ClosureSignatureSyntax)
+  case closureExpr(ClosureExprSyntax)
+  case unresolvedPatternExpr(UnresolvedPatternExprSyntax)
+  case functionCallExpr(FunctionCallExprSyntax)
+  case subscriptExpr(SubscriptExprSyntax)
+  case optionalChainingExpr(OptionalChainingExprSyntax)
+  case forcedValueExpr(ForcedValueExprSyntax)
+  case postfixUnaryExpr(PostfixUnaryExprSyntax)
+  case specializeExpr(SpecializeExprSyntax)
+  case stringSegment(StringSegmentSyntax)
+  case expressionSegment(ExpressionSegmentSyntax)
+  case stringLiteralExpr(StringLiteralExprSyntax)
+  case keyPathExpr(KeyPathExprSyntax)
+  case keyPathBaseExpr(KeyPathBaseExprSyntax)
+  case objcNamePiece(ObjcNamePieceSyntax)
+  case objcName(ObjcNameSyntax)
+  case objcKeyPathExpr(ObjcKeyPathExprSyntax)
+  case objcSelectorExpr(ObjcSelectorExprSyntax)
+  case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
+  case objectLiteralExpr(ObjectLiteralExprSyntax)
+  case typeInitializerClause(TypeInitializerClauseSyntax)
+  case typealiasDecl(TypealiasDeclSyntax)
+  case associatedtypeDecl(AssociatedtypeDeclSyntax)
+  case functionParameterList(FunctionParameterListSyntax)
+  case parameterClause(ParameterClauseSyntax)
+  case returnClause(ReturnClauseSyntax)
+  case functionSignature(FunctionSignatureSyntax)
+  case ifConfigClause(IfConfigClauseSyntax)
+  case ifConfigClauseList(IfConfigClauseListSyntax)
+  case ifConfigDecl(IfConfigDeclSyntax)
+  case poundErrorDecl(PoundErrorDeclSyntax)
+  case poundWarningDecl(PoundWarningDeclSyntax)
+  case poundSourceLocation(PoundSourceLocationSyntax)
+  case poundSourceLocationArgs(PoundSourceLocationArgsSyntax)
+  case declModifier(DeclModifierSyntax)
+  case inheritedType(InheritedTypeSyntax)
+  case inheritedTypeList(InheritedTypeListSyntax)
+  case typeInheritanceClause(TypeInheritanceClauseSyntax)
+  case classDecl(ClassDeclSyntax)
+  case structDecl(StructDeclSyntax)
+  case protocolDecl(ProtocolDeclSyntax)
+  case extensionDecl(ExtensionDeclSyntax)
+  case memberDeclBlock(MemberDeclBlockSyntax)
+  case memberDeclList(MemberDeclListSyntax)
+  case memberDeclListItem(MemberDeclListItemSyntax)
+  case sourceFile(SourceFileSyntax)
+  case initializerClause(InitializerClauseSyntax)
+  case functionParameter(FunctionParameterSyntax)
+  case modifierList(ModifierListSyntax)
+  case functionDecl(FunctionDeclSyntax)
+  case initializerDecl(InitializerDeclSyntax)
+  case deinitializerDecl(DeinitializerDeclSyntax)
+  case subscriptDecl(SubscriptDeclSyntax)
+  case accessLevelModifier(AccessLevelModifierSyntax)
+  case accessPathComponent(AccessPathComponentSyntax)
+  case accessPath(AccessPathSyntax)
+  case importDecl(ImportDeclSyntax)
+  case accessorParameter(AccessorParameterSyntax)
+  case accessorDecl(AccessorDeclSyntax)
+  case accessorList(AccessorListSyntax)
+  case accessorBlock(AccessorBlockSyntax)
+  case patternBinding(PatternBindingSyntax)
+  case patternBindingList(PatternBindingListSyntax)
+  case variableDecl(VariableDeclSyntax)
+  case enumCaseElement(EnumCaseElementSyntax)
+  case enumCaseElementList(EnumCaseElementListSyntax)
+  case enumCaseDecl(EnumCaseDeclSyntax)
+  case enumDecl(EnumDeclSyntax)
+  case operatorDecl(OperatorDeclSyntax)
+  case identifierList(IdentifierListSyntax)
+  case operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax)
+  case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
+  case precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax)
+  case precedenceGroupRelation(PrecedenceGroupRelationSyntax)
+  case precedenceGroupNameList(PrecedenceGroupNameListSyntax)
+  case precedenceGroupNameElement(PrecedenceGroupNameElementSyntax)
+  case precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax)
+  case precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax)
+  case tokenList(TokenListSyntax)
+  case nonEmptyTokenList(NonEmptyTokenListSyntax)
+  case customAttribute(CustomAttributeSyntax)
+  case attribute(AttributeSyntax)
+  case attributeList(AttributeListSyntax)
+  case specializeAttributeSpecList(SpecializeAttributeSpecListSyntax)
+  case labeledSpecializeEntry(LabeledSpecializeEntrySyntax)
+  case namedAttributeStringArgument(NamedAttributeStringArgumentSyntax)
+  case declName(DeclNameSyntax)
+  case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
+  case objCSelectorPiece(ObjCSelectorPieceSyntax)
+  case objCSelector(ObjCSelectorSyntax)
+  case continueStmt(ContinueStmtSyntax)
+  case whileStmt(WhileStmtSyntax)
+  case deferStmt(DeferStmtSyntax)
+  case expressionStmt(ExpressionStmtSyntax)
+  case switchCaseList(SwitchCaseListSyntax)
+  case repeatWhileStmt(RepeatWhileStmtSyntax)
+  case guardStmt(GuardStmtSyntax)
+  case whereClause(WhereClauseSyntax)
+  case forInStmt(ForInStmtSyntax)
+  case switchStmt(SwitchStmtSyntax)
+  case catchClauseList(CatchClauseListSyntax)
+  case doStmt(DoStmtSyntax)
+  case returnStmt(ReturnStmtSyntax)
+  case yieldStmt(YieldStmtSyntax)
+  case yieldList(YieldListSyntax)
+  case fallthroughStmt(FallthroughStmtSyntax)
+  case breakStmt(BreakStmtSyntax)
+  case caseItemList(CaseItemListSyntax)
+  case conditionElement(ConditionElementSyntax)
+  case availabilityCondition(AvailabilityConditionSyntax)
+  case matchingPatternCondition(MatchingPatternConditionSyntax)
+  case optionalBindingCondition(OptionalBindingConditionSyntax)
+  case conditionElementList(ConditionElementListSyntax)
+  case declarationStmt(DeclarationStmtSyntax)
+  case throwStmt(ThrowStmtSyntax)
+  case ifStmt(IfStmtSyntax)
+  case elseIfContinuation(ElseIfContinuationSyntax)
+  case elseBlock(ElseBlockSyntax)
+  case switchCase(SwitchCaseSyntax)
+  case switchDefaultLabel(SwitchDefaultLabelSyntax)
+  case caseItem(CaseItemSyntax)
+  case switchCaseLabel(SwitchCaseLabelSyntax)
+  case catchClause(CatchClauseSyntax)
+  case poundAssertStmt(PoundAssertStmtSyntax)
+  case genericWhereClause(GenericWhereClauseSyntax)
+  case genericRequirementList(GenericRequirementListSyntax)
+  case genericRequirement(GenericRequirementSyntax)
+  case sameTypeRequirement(SameTypeRequirementSyntax)
+  case genericParameterList(GenericParameterListSyntax)
+  case genericParameter(GenericParameterSyntax)
+  case genericParameterClause(GenericParameterClauseSyntax)
+  case conformanceRequirement(ConformanceRequirementSyntax)
+  case simpleTypeIdentifier(SimpleTypeIdentifierSyntax)
+  case memberTypeIdentifier(MemberTypeIdentifierSyntax)
+  case classRestrictionType(ClassRestrictionTypeSyntax)
+  case arrayType(ArrayTypeSyntax)
+  case dictionaryType(DictionaryTypeSyntax)
+  case metatypeType(MetatypeTypeSyntax)
+  case optionalType(OptionalTypeSyntax)
+  case someType(SomeTypeSyntax)
+  case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
+  case compositionTypeElement(CompositionTypeElementSyntax)
+  case compositionTypeElementList(CompositionTypeElementListSyntax)
+  case compositionType(CompositionTypeSyntax)
+  case tupleTypeElement(TupleTypeElementSyntax)
+  case tupleTypeElementList(TupleTypeElementListSyntax)
+  case tupleType(TupleTypeSyntax)
+  case functionType(FunctionTypeSyntax)
+  case attributedType(AttributedTypeSyntax)
+  case genericArgumentList(GenericArgumentListSyntax)
+  case genericArgument(GenericArgumentSyntax)
+  case genericArgumentClause(GenericArgumentClauseSyntax)
+  case typeAnnotation(TypeAnnotationSyntax)
+  case enumCasePattern(EnumCasePatternSyntax)
+  case isTypePattern(IsTypePatternSyntax)
+  case optionalPattern(OptionalPatternSyntax)
+  case identifierPattern(IdentifierPatternSyntax)
+  case asTypePattern(AsTypePatternSyntax)
+  case tuplePattern(TuplePatternSyntax)
+  case wildcardPattern(WildcardPatternSyntax)
+  case tuplePatternElement(TuplePatternElementSyntax)
+  case expressionPattern(ExpressionPatternSyntax)
+  case tuplePatternElementList(TuplePatternElementListSyntax)
+  case valueBindingPattern(ValueBindingPatternSyntax)
+  case availabilitySpecList(AvailabilitySpecListSyntax)
+  case availabilityArgument(AvailabilityArgumentSyntax)
+  case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
+  case availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax)
+  case versionTuple(VersionTupleSyntax)
+}
+
+public extension Syntax {
+  /// Get an enum that can be used to exhaustively switch over all syntax nodes.
+  var asSyntaxEnum: SyntaxEnum {
+    switch raw.kind {
+    case .token:
+      return .token(TokenSyntax(self)!)
+    case .unknown:
+      return .unknown(UnknownSyntax(self)!)
+    case .decl:
+      return .decl(UnknownDeclSyntax(self)!)
+    case .expr:
+      return .expr(UnknownExprSyntax(self)!)
+    case .stmt:
+      return .stmt(UnknownStmtSyntax(self)!)
+    case .type:
+      return .type(UnknownTypeSyntax(self)!)
+    case .pattern:
+      return .pattern(UnknownPatternSyntax(self)!)
+    case .unknownDecl:
+      return .unknownDecl(UnknownDeclSyntax(self)!)
+    case .unknownExpr:
+      return .unknownExpr(UnknownExprSyntax(self)!)
+    case .unknownStmt:
+      return .unknownStmt(UnknownStmtSyntax(self)!)
+    case .unknownType:
+      return .unknownType(UnknownTypeSyntax(self)!)
+    case .unknownPattern:
+      return .unknownPattern(UnknownPatternSyntax(self)!)
+    case .codeBlockItem:
+      return .codeBlockItem(CodeBlockItemSyntax(self)!)
+    case .codeBlockItemList:
+      return .codeBlockItemList(CodeBlockItemListSyntax(self)!)
+    case .codeBlock:
+      return .codeBlock(CodeBlockSyntax(self)!)
+    case .inOutExpr:
+      return .inOutExpr(InOutExprSyntax(self)!)
+    case .poundColumnExpr:
+      return .poundColumnExpr(PoundColumnExprSyntax(self)!)
+    case .tupleExprElementList:
+      return .tupleExprElementList(TupleExprElementListSyntax(self)!)
+    case .arrayElementList:
+      return .arrayElementList(ArrayElementListSyntax(self)!)
+    case .dictionaryElementList:
+      return .dictionaryElementList(DictionaryElementListSyntax(self)!)
+    case .stringLiteralSegments:
+      return .stringLiteralSegments(StringLiteralSegmentsSyntax(self)!)
+    case .tryExpr:
+      return .tryExpr(TryExprSyntax(self)!)
+    case .declNameArgument:
+      return .declNameArgument(DeclNameArgumentSyntax(self)!)
+    case .declNameArgumentList:
+      return .declNameArgumentList(DeclNameArgumentListSyntax(self)!)
+    case .declNameArguments:
+      return .declNameArguments(DeclNameArgumentsSyntax(self)!)
+    case .identifierExpr:
+      return .identifierExpr(IdentifierExprSyntax(self)!)
+    case .superRefExpr:
+      return .superRefExpr(SuperRefExprSyntax(self)!)
+    case .nilLiteralExpr:
+      return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
+    case .discardAssignmentExpr:
+      return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
+    case .assignmentExpr:
+      return .assignmentExpr(AssignmentExprSyntax(self)!)
+    case .sequenceExpr:
+      return .sequenceExpr(SequenceExprSyntax(self)!)
+    case .exprList:
+      return .exprList(ExprListSyntax(self)!)
+    case .poundLineExpr:
+      return .poundLineExpr(PoundLineExprSyntax(self)!)
+    case .poundFileExpr:
+      return .poundFileExpr(PoundFileExprSyntax(self)!)
+    case .poundFunctionExpr:
+      return .poundFunctionExpr(PoundFunctionExprSyntax(self)!)
+    case .poundDsohandleExpr:
+      return .poundDsohandleExpr(PoundDsohandleExprSyntax(self)!)
+    case .symbolicReferenceExpr:
+      return .symbolicReferenceExpr(SymbolicReferenceExprSyntax(self)!)
+    case .prefixOperatorExpr:
+      return .prefixOperatorExpr(PrefixOperatorExprSyntax(self)!)
+    case .binaryOperatorExpr:
+      return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
+    case .arrowExpr:
+      return .arrowExpr(ArrowExprSyntax(self)!)
+    case .floatLiteralExpr:
+      return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
+    case .tupleExpr:
+      return .tupleExpr(TupleExprSyntax(self)!)
+    case .arrayExpr:
+      return .arrayExpr(ArrayExprSyntax(self)!)
+    case .dictionaryExpr:
+      return .dictionaryExpr(DictionaryExprSyntax(self)!)
+    case .tupleExprElement:
+      return .tupleExprElement(TupleExprElementSyntax(self)!)
+    case .arrayElement:
+      return .arrayElement(ArrayElementSyntax(self)!)
+    case .dictionaryElement:
+      return .dictionaryElement(DictionaryElementSyntax(self)!)
+    case .integerLiteralExpr:
+      return .integerLiteralExpr(IntegerLiteralExprSyntax(self)!)
+    case .booleanLiteralExpr:
+      return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
+    case .ternaryExpr:
+      return .ternaryExpr(TernaryExprSyntax(self)!)
+    case .memberAccessExpr:
+      return .memberAccessExpr(MemberAccessExprSyntax(self)!)
+    case .isExpr:
+      return .isExpr(IsExprSyntax(self)!)
+    case .asExpr:
+      return .asExpr(AsExprSyntax(self)!)
+    case .typeExpr:
+      return .typeExpr(TypeExprSyntax(self)!)
+    case .closureCaptureItem:
+      return .closureCaptureItem(ClosureCaptureItemSyntax(self)!)
+    case .closureCaptureItemList:
+      return .closureCaptureItemList(ClosureCaptureItemListSyntax(self)!)
+    case .closureCaptureSignature:
+      return .closureCaptureSignature(ClosureCaptureSignatureSyntax(self)!)
+    case .closureParam:
+      return .closureParam(ClosureParamSyntax(self)!)
+    case .closureParamList:
+      return .closureParamList(ClosureParamListSyntax(self)!)
+    case .closureSignature:
+      return .closureSignature(ClosureSignatureSyntax(self)!)
+    case .closureExpr:
+      return .closureExpr(ClosureExprSyntax(self)!)
+    case .unresolvedPatternExpr:
+      return .unresolvedPatternExpr(UnresolvedPatternExprSyntax(self)!)
+    case .functionCallExpr:
+      return .functionCallExpr(FunctionCallExprSyntax(self)!)
+    case .subscriptExpr:
+      return .subscriptExpr(SubscriptExprSyntax(self)!)
+    case .optionalChainingExpr:
+      return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
+    case .forcedValueExpr:
+      return .forcedValueExpr(ForcedValueExprSyntax(self)!)
+    case .postfixUnaryExpr:
+      return .postfixUnaryExpr(PostfixUnaryExprSyntax(self)!)
+    case .specializeExpr:
+      return .specializeExpr(SpecializeExprSyntax(self)!)
+    case .stringSegment:
+      return .stringSegment(StringSegmentSyntax(self)!)
+    case .expressionSegment:
+      return .expressionSegment(ExpressionSegmentSyntax(self)!)
+    case .stringLiteralExpr:
+      return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
+    case .keyPathExpr:
+      return .keyPathExpr(KeyPathExprSyntax(self)!)
+    case .keyPathBaseExpr:
+      return .keyPathBaseExpr(KeyPathBaseExprSyntax(self)!)
+    case .objcNamePiece:
+      return .objcNamePiece(ObjcNamePieceSyntax(self)!)
+    case .objcName:
+      return .objcName(ObjcNameSyntax(self)!)
+    case .objcKeyPathExpr:
+      return .objcKeyPathExpr(ObjcKeyPathExprSyntax(self)!)
+    case .objcSelectorExpr:
+      return .objcSelectorExpr(ObjcSelectorExprSyntax(self)!)
+    case .editorPlaceholderExpr:
+      return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
+    case .objectLiteralExpr:
+      return .objectLiteralExpr(ObjectLiteralExprSyntax(self)!)
+    case .typeInitializerClause:
+      return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
+    case .typealiasDecl:
+      return .typealiasDecl(TypealiasDeclSyntax(self)!)
+    case .associatedtypeDecl:
+      return .associatedtypeDecl(AssociatedtypeDeclSyntax(self)!)
+    case .functionParameterList:
+      return .functionParameterList(FunctionParameterListSyntax(self)!)
+    case .parameterClause:
+      return .parameterClause(ParameterClauseSyntax(self)!)
+    case .returnClause:
+      return .returnClause(ReturnClauseSyntax(self)!)
+    case .functionSignature:
+      return .functionSignature(FunctionSignatureSyntax(self)!)
+    case .ifConfigClause:
+      return .ifConfigClause(IfConfigClauseSyntax(self)!)
+    case .ifConfigClauseList:
+      return .ifConfigClauseList(IfConfigClauseListSyntax(self)!)
+    case .ifConfigDecl:
+      return .ifConfigDecl(IfConfigDeclSyntax(self)!)
+    case .poundErrorDecl:
+      return .poundErrorDecl(PoundErrorDeclSyntax(self)!)
+    case .poundWarningDecl:
+      return .poundWarningDecl(PoundWarningDeclSyntax(self)!)
+    case .poundSourceLocation:
+      return .poundSourceLocation(PoundSourceLocationSyntax(self)!)
+    case .poundSourceLocationArgs:
+      return .poundSourceLocationArgs(PoundSourceLocationArgsSyntax(self)!)
+    case .declModifier:
+      return .declModifier(DeclModifierSyntax(self)!)
+    case .inheritedType:
+      return .inheritedType(InheritedTypeSyntax(self)!)
+    case .inheritedTypeList:
+      return .inheritedTypeList(InheritedTypeListSyntax(self)!)
+    case .typeInheritanceClause:
+      return .typeInheritanceClause(TypeInheritanceClauseSyntax(self)!)
+    case .classDecl:
+      return .classDecl(ClassDeclSyntax(self)!)
+    case .structDecl:
+      return .structDecl(StructDeclSyntax(self)!)
+    case .protocolDecl:
+      return .protocolDecl(ProtocolDeclSyntax(self)!)
+    case .extensionDecl:
+      return .extensionDecl(ExtensionDeclSyntax(self)!)
+    case .memberDeclBlock:
+      return .memberDeclBlock(MemberDeclBlockSyntax(self)!)
+    case .memberDeclList:
+      return .memberDeclList(MemberDeclListSyntax(self)!)
+    case .memberDeclListItem:
+      return .memberDeclListItem(MemberDeclListItemSyntax(self)!)
+    case .sourceFile:
+      return .sourceFile(SourceFileSyntax(self)!)
+    case .initializerClause:
+      return .initializerClause(InitializerClauseSyntax(self)!)
+    case .functionParameter:
+      return .functionParameter(FunctionParameterSyntax(self)!)
+    case .modifierList:
+      return .modifierList(ModifierListSyntax(self)!)
+    case .functionDecl:
+      return .functionDecl(FunctionDeclSyntax(self)!)
+    case .initializerDecl:
+      return .initializerDecl(InitializerDeclSyntax(self)!)
+    case .deinitializerDecl:
+      return .deinitializerDecl(DeinitializerDeclSyntax(self)!)
+    case .subscriptDecl:
+      return .subscriptDecl(SubscriptDeclSyntax(self)!)
+    case .accessLevelModifier:
+      return .accessLevelModifier(AccessLevelModifierSyntax(self)!)
+    case .accessPathComponent:
+      return .accessPathComponent(AccessPathComponentSyntax(self)!)
+    case .accessPath:
+      return .accessPath(AccessPathSyntax(self)!)
+    case .importDecl:
+      return .importDecl(ImportDeclSyntax(self)!)
+    case .accessorParameter:
+      return .accessorParameter(AccessorParameterSyntax(self)!)
+    case .accessorDecl:
+      return .accessorDecl(AccessorDeclSyntax(self)!)
+    case .accessorList:
+      return .accessorList(AccessorListSyntax(self)!)
+    case .accessorBlock:
+      return .accessorBlock(AccessorBlockSyntax(self)!)
+    case .patternBinding:
+      return .patternBinding(PatternBindingSyntax(self)!)
+    case .patternBindingList:
+      return .patternBindingList(PatternBindingListSyntax(self)!)
+    case .variableDecl:
+      return .variableDecl(VariableDeclSyntax(self)!)
+    case .enumCaseElement:
+      return .enumCaseElement(EnumCaseElementSyntax(self)!)
+    case .enumCaseElementList:
+      return .enumCaseElementList(EnumCaseElementListSyntax(self)!)
+    case .enumCaseDecl:
+      return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
+    case .enumDecl:
+      return .enumDecl(EnumDeclSyntax(self)!)
+    case .operatorDecl:
+      return .operatorDecl(OperatorDeclSyntax(self)!)
+    case .identifierList:
+      return .identifierList(IdentifierListSyntax(self)!)
+    case .operatorPrecedenceAndTypes:
+      return .operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax(self)!)
+    case .precedenceGroupDecl:
+      return .precedenceGroupDecl(PrecedenceGroupDeclSyntax(self)!)
+    case .precedenceGroupAttributeList:
+      return .precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax(self)!)
+    case .precedenceGroupRelation:
+      return .precedenceGroupRelation(PrecedenceGroupRelationSyntax(self)!)
+    case .precedenceGroupNameList:
+      return .precedenceGroupNameList(PrecedenceGroupNameListSyntax(self)!)
+    case .precedenceGroupNameElement:
+      return .precedenceGroupNameElement(PrecedenceGroupNameElementSyntax(self)!)
+    case .precedenceGroupAssignment:
+      return .precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax(self)!)
+    case .precedenceGroupAssociativity:
+      return .precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax(self)!)
+    case .tokenList:
+      return .tokenList(TokenListSyntax(self)!)
+    case .nonEmptyTokenList:
+      return .nonEmptyTokenList(NonEmptyTokenListSyntax(self)!)
+    case .customAttribute:
+      return .customAttribute(CustomAttributeSyntax(self)!)
+    case .attribute:
+      return .attribute(AttributeSyntax(self)!)
+    case .attributeList:
+      return .attributeList(AttributeListSyntax(self)!)
+    case .specializeAttributeSpecList:
+      return .specializeAttributeSpecList(SpecializeAttributeSpecListSyntax(self)!)
+    case .labeledSpecializeEntry:
+      return .labeledSpecializeEntry(LabeledSpecializeEntrySyntax(self)!)
+    case .namedAttributeStringArgument:
+      return .namedAttributeStringArgument(NamedAttributeStringArgumentSyntax(self)!)
+    case .declName:
+      return .declName(DeclNameSyntax(self)!)
+    case .implementsAttributeArguments:
+      return .implementsAttributeArguments(ImplementsAttributeArgumentsSyntax(self)!)
+    case .objCSelectorPiece:
+      return .objCSelectorPiece(ObjCSelectorPieceSyntax(self)!)
+    case .objCSelector:
+      return .objCSelector(ObjCSelectorSyntax(self)!)
+    case .continueStmt:
+      return .continueStmt(ContinueStmtSyntax(self)!)
+    case .whileStmt:
+      return .whileStmt(WhileStmtSyntax(self)!)
+    case .deferStmt:
+      return .deferStmt(DeferStmtSyntax(self)!)
+    case .expressionStmt:
+      return .expressionStmt(ExpressionStmtSyntax(self)!)
+    case .switchCaseList:
+      return .switchCaseList(SwitchCaseListSyntax(self)!)
+    case .repeatWhileStmt:
+      return .repeatWhileStmt(RepeatWhileStmtSyntax(self)!)
+    case .guardStmt:
+      return .guardStmt(GuardStmtSyntax(self)!)
+    case .whereClause:
+      return .whereClause(WhereClauseSyntax(self)!)
+    case .forInStmt:
+      return .forInStmt(ForInStmtSyntax(self)!)
+    case .switchStmt:
+      return .switchStmt(SwitchStmtSyntax(self)!)
+    case .catchClauseList:
+      return .catchClauseList(CatchClauseListSyntax(self)!)
+    case .doStmt:
+      return .doStmt(DoStmtSyntax(self)!)
+    case .returnStmt:
+      return .returnStmt(ReturnStmtSyntax(self)!)
+    case .yieldStmt:
+      return .yieldStmt(YieldStmtSyntax(self)!)
+    case .yieldList:
+      return .yieldList(YieldListSyntax(self)!)
+    case .fallthroughStmt:
+      return .fallthroughStmt(FallthroughStmtSyntax(self)!)
+    case .breakStmt:
+      return .breakStmt(BreakStmtSyntax(self)!)
+    case .caseItemList:
+      return .caseItemList(CaseItemListSyntax(self)!)
+    case .conditionElement:
+      return .conditionElement(ConditionElementSyntax(self)!)
+    case .availabilityCondition:
+      return .availabilityCondition(AvailabilityConditionSyntax(self)!)
+    case .matchingPatternCondition:
+      return .matchingPatternCondition(MatchingPatternConditionSyntax(self)!)
+    case .optionalBindingCondition:
+      return .optionalBindingCondition(OptionalBindingConditionSyntax(self)!)
+    case .conditionElementList:
+      return .conditionElementList(ConditionElementListSyntax(self)!)
+    case .declarationStmt:
+      return .declarationStmt(DeclarationStmtSyntax(self)!)
+    case .throwStmt:
+      return .throwStmt(ThrowStmtSyntax(self)!)
+    case .ifStmt:
+      return .ifStmt(IfStmtSyntax(self)!)
+    case .elseIfContinuation:
+      return .elseIfContinuation(ElseIfContinuationSyntax(self)!)
+    case .elseBlock:
+      return .elseBlock(ElseBlockSyntax(self)!)
+    case .switchCase:
+      return .switchCase(SwitchCaseSyntax(self)!)
+    case .switchDefaultLabel:
+      return .switchDefaultLabel(SwitchDefaultLabelSyntax(self)!)
+    case .caseItem:
+      return .caseItem(CaseItemSyntax(self)!)
+    case .switchCaseLabel:
+      return .switchCaseLabel(SwitchCaseLabelSyntax(self)!)
+    case .catchClause:
+      return .catchClause(CatchClauseSyntax(self)!)
+    case .poundAssertStmt:
+      return .poundAssertStmt(PoundAssertStmtSyntax(self)!)
+    case .genericWhereClause:
+      return .genericWhereClause(GenericWhereClauseSyntax(self)!)
+    case .genericRequirementList:
+      return .genericRequirementList(GenericRequirementListSyntax(self)!)
+    case .genericRequirement:
+      return .genericRequirement(GenericRequirementSyntax(self)!)
+    case .sameTypeRequirement:
+      return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
+    case .genericParameterList:
+      return .genericParameterList(GenericParameterListSyntax(self)!)
+    case .genericParameter:
+      return .genericParameter(GenericParameterSyntax(self)!)
+    case .genericParameterClause:
+      return .genericParameterClause(GenericParameterClauseSyntax(self)!)
+    case .conformanceRequirement:
+      return .conformanceRequirement(ConformanceRequirementSyntax(self)!)
+    case .simpleTypeIdentifier:
+      return .simpleTypeIdentifier(SimpleTypeIdentifierSyntax(self)!)
+    case .memberTypeIdentifier:
+      return .memberTypeIdentifier(MemberTypeIdentifierSyntax(self)!)
+    case .classRestrictionType:
+      return .classRestrictionType(ClassRestrictionTypeSyntax(self)!)
+    case .arrayType:
+      return .arrayType(ArrayTypeSyntax(self)!)
+    case .dictionaryType:
+      return .dictionaryType(DictionaryTypeSyntax(self)!)
+    case .metatypeType:
+      return .metatypeType(MetatypeTypeSyntax(self)!)
+    case .optionalType:
+      return .optionalType(OptionalTypeSyntax(self)!)
+    case .someType:
+      return .someType(SomeTypeSyntax(self)!)
+    case .implicitlyUnwrappedOptionalType:
+      return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
+    case .compositionTypeElement:
+      return .compositionTypeElement(CompositionTypeElementSyntax(self)!)
+    case .compositionTypeElementList:
+      return .compositionTypeElementList(CompositionTypeElementListSyntax(self)!)
+    case .compositionType:
+      return .compositionType(CompositionTypeSyntax(self)!)
+    case .tupleTypeElement:
+      return .tupleTypeElement(TupleTypeElementSyntax(self)!)
+    case .tupleTypeElementList:
+      return .tupleTypeElementList(TupleTypeElementListSyntax(self)!)
+    case .tupleType:
+      return .tupleType(TupleTypeSyntax(self)!)
+    case .functionType:
+      return .functionType(FunctionTypeSyntax(self)!)
+    case .attributedType:
+      return .attributedType(AttributedTypeSyntax(self)!)
+    case .genericArgumentList:
+      return .genericArgumentList(GenericArgumentListSyntax(self)!)
+    case .genericArgument:
+      return .genericArgument(GenericArgumentSyntax(self)!)
+    case .genericArgumentClause:
+      return .genericArgumentClause(GenericArgumentClauseSyntax(self)!)
+    case .typeAnnotation:
+      return .typeAnnotation(TypeAnnotationSyntax(self)!)
+    case .enumCasePattern:
+      return .enumCasePattern(EnumCasePatternSyntax(self)!)
+    case .isTypePattern:
+      return .isTypePattern(IsTypePatternSyntax(self)!)
+    case .optionalPattern:
+      return .optionalPattern(OptionalPatternSyntax(self)!)
+    case .identifierPattern:
+      return .identifierPattern(IdentifierPatternSyntax(self)!)
+    case .asTypePattern:
+      return .asTypePattern(AsTypePatternSyntax(self)!)
+    case .tuplePattern:
+      return .tuplePattern(TuplePatternSyntax(self)!)
+    case .wildcardPattern:
+      return .wildcardPattern(WildcardPatternSyntax(self)!)
+    case .tuplePatternElement:
+      return .tuplePatternElement(TuplePatternElementSyntax(self)!)
+    case .expressionPattern:
+      return .expressionPattern(ExpressionPatternSyntax(self)!)
+    case .tuplePatternElementList:
+      return .tuplePatternElementList(TuplePatternElementListSyntax(self)!)
+    case .valueBindingPattern:
+      return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
+    case .availabilitySpecList:
+      return .availabilitySpecList(AvailabilitySpecListSyntax(self)!)
+    case .availabilityArgument:
+      return .availabilityArgument(AvailabilityArgumentSyntax(self)!)
+    case .availabilityLabeledArgument:
+      return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
+    case .availabilityVersionRestriction:
+      return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
+    case .versionTuple:
+      return .versionTuple(VersionTupleSyntax(self)!)
+    }
   }
 
-  /// Feed the essential parts of this node to the supplied hasher.
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
+  /// Retrieve the concretely typed node that this Syntax node wraps.
+  /// This property is exposed for testing purposes only.
+  var _asConcreteType: Any {
+    switch self.asSyntaxEnum {
+    case .token(let node):
+      return node
+    case .unknown(let node):
+      return node
+    case .decl(let node):
+      return node
+    case .expr(let node):
+      return node
+    case .stmt(let node):
+      return node
+    case .type(let node):
+      return node
+    case .pattern(let node):
+      return node
+    case .unknownDecl(let node):
+      return node
+    case .unknownExpr(let node):
+      return node
+    case .unknownStmt(let node):
+      return node
+    case .unknownType(let node):
+      return node
+    case .unknownPattern(let node):
+      return node
+    case .codeBlockItem(let node):
+      return node
+    case .codeBlockItemList(let node):
+      return node
+    case .codeBlock(let node):
+      return node
+    case .inOutExpr(let node):
+      return node
+    case .poundColumnExpr(let node):
+      return node
+    case .tupleExprElementList(let node):
+      return node
+    case .arrayElementList(let node):
+      return node
+    case .dictionaryElementList(let node):
+      return node
+    case .stringLiteralSegments(let node):
+      return node
+    case .tryExpr(let node):
+      return node
+    case .declNameArgument(let node):
+      return node
+    case .declNameArgumentList(let node):
+      return node
+    case .declNameArguments(let node):
+      return node
+    case .identifierExpr(let node):
+      return node
+    case .superRefExpr(let node):
+      return node
+    case .nilLiteralExpr(let node):
+      return node
+    case .discardAssignmentExpr(let node):
+      return node
+    case .assignmentExpr(let node):
+      return node
+    case .sequenceExpr(let node):
+      return node
+    case .exprList(let node):
+      return node
+    case .poundLineExpr(let node):
+      return node
+    case .poundFileExpr(let node):
+      return node
+    case .poundFunctionExpr(let node):
+      return node
+    case .poundDsohandleExpr(let node):
+      return node
+    case .symbolicReferenceExpr(let node):
+      return node
+    case .prefixOperatorExpr(let node):
+      return node
+    case .binaryOperatorExpr(let node):
+      return node
+    case .arrowExpr(let node):
+      return node
+    case .floatLiteralExpr(let node):
+      return node
+    case .tupleExpr(let node):
+      return node
+    case .arrayExpr(let node):
+      return node
+    case .dictionaryExpr(let node):
+      return node
+    case .tupleExprElement(let node):
+      return node
+    case .arrayElement(let node):
+      return node
+    case .dictionaryElement(let node):
+      return node
+    case .integerLiteralExpr(let node):
+      return node
+    case .booleanLiteralExpr(let node):
+      return node
+    case .ternaryExpr(let node):
+      return node
+    case .memberAccessExpr(let node):
+      return node
+    case .isExpr(let node):
+      return node
+    case .asExpr(let node):
+      return node
+    case .typeExpr(let node):
+      return node
+    case .closureCaptureItem(let node):
+      return node
+    case .closureCaptureItemList(let node):
+      return node
+    case .closureCaptureSignature(let node):
+      return node
+    case .closureParam(let node):
+      return node
+    case .closureParamList(let node):
+      return node
+    case .closureSignature(let node):
+      return node
+    case .closureExpr(let node):
+      return node
+    case .unresolvedPatternExpr(let node):
+      return node
+    case .functionCallExpr(let node):
+      return node
+    case .subscriptExpr(let node):
+      return node
+    case .optionalChainingExpr(let node):
+      return node
+    case .forcedValueExpr(let node):
+      return node
+    case .postfixUnaryExpr(let node):
+      return node
+    case .specializeExpr(let node):
+      return node
+    case .stringSegment(let node):
+      return node
+    case .expressionSegment(let node):
+      return node
+    case .stringLiteralExpr(let node):
+      return node
+    case .keyPathExpr(let node):
+      return node
+    case .keyPathBaseExpr(let node):
+      return node
+    case .objcNamePiece(let node):
+      return node
+    case .objcName(let node):
+      return node
+    case .objcKeyPathExpr(let node):
+      return node
+    case .objcSelectorExpr(let node):
+      return node
+    case .editorPlaceholderExpr(let node):
+      return node
+    case .objectLiteralExpr(let node):
+      return node
+    case .typeInitializerClause(let node):
+      return node
+    case .typealiasDecl(let node):
+      return node
+    case .associatedtypeDecl(let node):
+      return node
+    case .functionParameterList(let node):
+      return node
+    case .parameterClause(let node):
+      return node
+    case .returnClause(let node):
+      return node
+    case .functionSignature(let node):
+      return node
+    case .ifConfigClause(let node):
+      return node
+    case .ifConfigClauseList(let node):
+      return node
+    case .ifConfigDecl(let node):
+      return node
+    case .poundErrorDecl(let node):
+      return node
+    case .poundWarningDecl(let node):
+      return node
+    case .poundSourceLocation(let node):
+      return node
+    case .poundSourceLocationArgs(let node):
+      return node
+    case .declModifier(let node):
+      return node
+    case .inheritedType(let node):
+      return node
+    case .inheritedTypeList(let node):
+      return node
+    case .typeInheritanceClause(let node):
+      return node
+    case .classDecl(let node):
+      return node
+    case .structDecl(let node):
+      return node
+    case .protocolDecl(let node):
+      return node
+    case .extensionDecl(let node):
+      return node
+    case .memberDeclBlock(let node):
+      return node
+    case .memberDeclList(let node):
+      return node
+    case .memberDeclListItem(let node):
+      return node
+    case .sourceFile(let node):
+      return node
+    case .initializerClause(let node):
+      return node
+    case .functionParameter(let node):
+      return node
+    case .modifierList(let node):
+      return node
+    case .functionDecl(let node):
+      return node
+    case .initializerDecl(let node):
+      return node
+    case .deinitializerDecl(let node):
+      return node
+    case .subscriptDecl(let node):
+      return node
+    case .accessLevelModifier(let node):
+      return node
+    case .accessPathComponent(let node):
+      return node
+    case .accessPath(let node):
+      return node
+    case .importDecl(let node):
+      return node
+    case .accessorParameter(let node):
+      return node
+    case .accessorDecl(let node):
+      return node
+    case .accessorList(let node):
+      return node
+    case .accessorBlock(let node):
+      return node
+    case .patternBinding(let node):
+      return node
+    case .patternBindingList(let node):
+      return node
+    case .variableDecl(let node):
+      return node
+    case .enumCaseElement(let node):
+      return node
+    case .enumCaseElementList(let node):
+      return node
+    case .enumCaseDecl(let node):
+      return node
+    case .enumDecl(let node):
+      return node
+    case .operatorDecl(let node):
+      return node
+    case .identifierList(let node):
+      return node
+    case .operatorPrecedenceAndTypes(let node):
+      return node
+    case .precedenceGroupDecl(let node):
+      return node
+    case .precedenceGroupAttributeList(let node):
+      return node
+    case .precedenceGroupRelation(let node):
+      return node
+    case .precedenceGroupNameList(let node):
+      return node
+    case .precedenceGroupNameElement(let node):
+      return node
+    case .precedenceGroupAssignment(let node):
+      return node
+    case .precedenceGroupAssociativity(let node):
+      return node
+    case .tokenList(let node):
+      return node
+    case .nonEmptyTokenList(let node):
+      return node
+    case .customAttribute(let node):
+      return node
+    case .attribute(let node):
+      return node
+    case .attributeList(let node):
+      return node
+    case .specializeAttributeSpecList(let node):
+      return node
+    case .labeledSpecializeEntry(let node):
+      return node
+    case .namedAttributeStringArgument(let node):
+      return node
+    case .declName(let node):
+      return node
+    case .implementsAttributeArguments(let node):
+      return node
+    case .objCSelectorPiece(let node):
+      return node
+    case .objCSelector(let node):
+      return node
+    case .continueStmt(let node):
+      return node
+    case .whileStmt(let node):
+      return node
+    case .deferStmt(let node):
+      return node
+    case .expressionStmt(let node):
+      return node
+    case .switchCaseList(let node):
+      return node
+    case .repeatWhileStmt(let node):
+      return node
+    case .guardStmt(let node):
+      return node
+    case .whereClause(let node):
+      return node
+    case .forInStmt(let node):
+      return node
+    case .switchStmt(let node):
+      return node
+    case .catchClauseList(let node):
+      return node
+    case .doStmt(let node):
+      return node
+    case .returnStmt(let node):
+      return node
+    case .yieldStmt(let node):
+      return node
+    case .yieldList(let node):
+      return node
+    case .fallthroughStmt(let node):
+      return node
+    case .breakStmt(let node):
+      return node
+    case .caseItemList(let node):
+      return node
+    case .conditionElement(let node):
+      return node
+    case .availabilityCondition(let node):
+      return node
+    case .matchingPatternCondition(let node):
+      return node
+    case .optionalBindingCondition(let node):
+      return node
+    case .conditionElementList(let node):
+      return node
+    case .declarationStmt(let node):
+      return node
+    case .throwStmt(let node):
+      return node
+    case .ifStmt(let node):
+      return node
+    case .elseIfContinuation(let node):
+      return node
+    case .elseBlock(let node):
+      return node
+    case .switchCase(let node):
+      return node
+    case .switchDefaultLabel(let node):
+      return node
+    case .caseItem(let node):
+      return node
+    case .switchCaseLabel(let node):
+      return node
+    case .catchClause(let node):
+      return node
+    case .poundAssertStmt(let node):
+      return node
+    case .genericWhereClause(let node):
+      return node
+    case .genericRequirementList(let node):
+      return node
+    case .genericRequirement(let node):
+      return node
+    case .sameTypeRequirement(let node):
+      return node
+    case .genericParameterList(let node):
+      return node
+    case .genericParameter(let node):
+      return node
+    case .genericParameterClause(let node):
+      return node
+    case .conformanceRequirement(let node):
+      return node
+    case .simpleTypeIdentifier(let node):
+      return node
+    case .memberTypeIdentifier(let node):
+      return node
+    case .classRestrictionType(let node):
+      return node
+    case .arrayType(let node):
+      return node
+    case .dictionaryType(let node):
+      return node
+    case .metatypeType(let node):
+      return node
+    case .optionalType(let node):
+      return node
+    case .someType(let node):
+      return node
+    case .implicitlyUnwrappedOptionalType(let node):
+      return node
+    case .compositionTypeElement(let node):
+      return node
+    case .compositionTypeElementList(let node):
+      return node
+    case .compositionType(let node):
+      return node
+    case .tupleTypeElement(let node):
+      return node
+    case .tupleTypeElementList(let node):
+      return node
+    case .tupleType(let node):
+      return node
+    case .functionType(let node):
+      return node
+    case .attributedType(let node):
+      return node
+    case .genericArgumentList(let node):
+      return node
+    case .genericArgument(let node):
+      return node
+    case .genericArgumentClause(let node):
+      return node
+    case .typeAnnotation(let node):
+      return node
+    case .enumCasePattern(let node):
+      return node
+    case .isTypePattern(let node):
+      return node
+    case .optionalPattern(let node):
+      return node
+    case .identifierPattern(let node):
+      return node
+    case .asTypePattern(let node):
+      return node
+    case .tuplePattern(let node):
+      return node
+    case .wildcardPattern(let node):
+      return node
+    case .tuplePatternElement(let node):
+      return node
+    case .expressionPattern(let node):
+      return node
+    case .tuplePatternElementList(let node):
+      return node
+    case .valueBindingPattern(let node):
+      return node
+    case .availabilitySpecList(let node):
+      return node
+    case .availabilityArgument(let node):
+      return node
+    case .availabilityLabeledArgument(let node):
+      return node
+    case .availabilityVersionRestriction(let node):
+      return node
+    case .versionTuple(let node):
+      return node
+    }
   }
 }
 
+extension Syntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and 
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: self._asConcreteType)
+  }
+}
+
+extension DeclSyntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and 
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: Syntax(self)._asConcreteType)
+  }
+}
+extension ExprSyntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and 
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: Syntax(self)._asConcreteType)
+  }
+}
+extension StmtSyntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and 
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: Syntax(self)._asConcreteType)
+  }
+}
+extension TypeSyntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and 
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: Syntax(self)._asConcreteType)
+  }
+}
+extension PatternSyntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and 
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: Syntax(self)._asConcreteType)
+  }
+}
 extension UnknownDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
@@ -26446,1654 +29595,1654 @@ extension UnknownPatternSyntax: CustomReflectable {
 extension CodeBlockItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "item": item as Any,
-      "semicolon": semicolon as Any,
-      "errorTokens": errorTokens as Any,
+      "item": Syntax(item)._asConcreteType,
+      "semicolon": semicolon.map(Syntax.init)?._asConcreteType as Any,
+      "errorTokens": errorTokens.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension CodeBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": leftBrace as Any,
-      "statements": statements as Any,
-      "rightBrace": rightBrace as Any,
+      "leftBrace": Syntax(leftBrace)._asConcreteType,
+      "statements": Syntax(statements)._asConcreteType,
+      "rightBrace": Syntax(rightBrace)._asConcreteType,
     ])
   }
 }
 extension InOutExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "ampersand": ampersand as Any,
-      "expression": expression as Any,
+      "ampersand": Syntax(ampersand)._asConcreteType,
+      "expression": Syntax(expression)._asConcreteType,
     ])
   }
 }
 extension PoundColumnExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundColumn": poundColumn as Any,
+      "poundColumn": Syntax(poundColumn)._asConcreteType,
     ])
   }
 }
 extension TryExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "tryKeyword": tryKeyword as Any,
-      "questionOrExclamationMark": questionOrExclamationMark as Any,
-      "expression": expression as Any,
+      "tryKeyword": Syntax(tryKeyword)._asConcreteType,
+      "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?._asConcreteType as Any,
+      "expression": Syntax(expression)._asConcreteType,
     ])
   }
 }
 extension DeclNameArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "colon": colon as Any,
+      "name": Syntax(name)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
     ])
   }
 }
 extension DeclNameArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "arguments": arguments as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "arguments": Syntax(arguments)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension IdentifierExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": identifier as Any,
-      "declNameArguments": declNameArguments as Any,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "declNameArguments": declNameArguments.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension SuperRefExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "superKeyword": superKeyword as Any,
+      "superKeyword": Syntax(superKeyword)._asConcreteType,
     ])
   }
 }
 extension NilLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "nilKeyword": nilKeyword as Any,
+      "nilKeyword": Syntax(nilKeyword)._asConcreteType,
     ])
   }
 }
 extension DiscardAssignmentExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wildcard": wildcard as Any,
+      "wildcard": Syntax(wildcard)._asConcreteType,
     ])
   }
 }
 extension AssignmentExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "assignToken": assignToken as Any,
+      "assignToken": Syntax(assignToken)._asConcreteType,
     ])
   }
 }
 extension SequenceExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "elements": elements as Any,
+      "elements": Syntax(elements)._asConcreteType,
     ])
   }
 }
 extension PoundLineExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundLine": poundLine as Any,
+      "poundLine": Syntax(poundLine)._asConcreteType,
     ])
   }
 }
 extension PoundFileExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundFile": poundFile as Any,
+      "poundFile": Syntax(poundFile)._asConcreteType,
     ])
   }
 }
 extension PoundFunctionExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundFunction": poundFunction as Any,
+      "poundFunction": Syntax(poundFunction)._asConcreteType,
     ])
   }
 }
 extension PoundDsohandleExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundDsohandle": poundDsohandle as Any,
+      "poundDsohandle": Syntax(poundDsohandle)._asConcreteType,
     ])
   }
 }
 extension SymbolicReferenceExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": identifier as Any,
-      "genericArgumentClause": genericArgumentClause as Any,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension PrefixOperatorExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "operatorToken": operatorToken as Any,
-      "postfixExpression": postfixExpression as Any,
+      "operatorToken": operatorToken.map(Syntax.init)?._asConcreteType as Any,
+      "postfixExpression": Syntax(postfixExpression)._asConcreteType,
     ])
   }
 }
 extension BinaryOperatorExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "operatorToken": operatorToken as Any,
+      "operatorToken": Syntax(operatorToken)._asConcreteType,
     ])
   }
 }
 extension ArrowExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "throwsToken": throwsToken as Any,
-      "arrowToken": arrowToken as Any,
+      "throwsToken": throwsToken.map(Syntax.init)?._asConcreteType as Any,
+      "arrowToken": Syntax(arrowToken)._asConcreteType,
     ])
   }
 }
 extension FloatLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "floatingDigits": floatingDigits as Any,
+      "floatingDigits": Syntax(floatingDigits)._asConcreteType,
     ])
   }
 }
 extension TupleExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "elementList": elementList as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "elementList": Syntax(elementList)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension ArrayExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquare": leftSquare as Any,
-      "elements": elements as Any,
-      "rightSquare": rightSquare as Any,
+      "leftSquare": Syntax(leftSquare)._asConcreteType,
+      "elements": Syntax(elements)._asConcreteType,
+      "rightSquare": Syntax(rightSquare)._asConcreteType,
     ])
   }
 }
 extension DictionaryExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquare": leftSquare as Any,
-      "content": content as Any,
-      "rightSquare": rightSquare as Any,
+      "leftSquare": Syntax(leftSquare)._asConcreteType,
+      "content": Syntax(content)._asConcreteType,
+      "rightSquare": Syntax(rightSquare)._asConcreteType,
     ])
   }
 }
 extension TupleExprElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "label": label as Any,
-      "colon": colon as Any,
-      "expression": expression as Any,
-      "trailingComma": trailingComma as Any,
+      "label": label.map(Syntax.init)?._asConcreteType as Any,
+      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ArrayElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
-      "trailingComma": trailingComma as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension DictionaryElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "keyExpression": keyExpression as Any,
-      "colon": colon as Any,
-      "valueExpression": valueExpression as Any,
-      "trailingComma": trailingComma as Any,
+      "keyExpression": Syntax(keyExpression)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "valueExpression": Syntax(valueExpression)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension IntegerLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "digits": digits as Any,
+      "digits": Syntax(digits)._asConcreteType,
     ])
   }
 }
 extension BooleanLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "booleanLiteral": booleanLiteral as Any,
+      "booleanLiteral": Syntax(booleanLiteral)._asConcreteType,
     ])
   }
 }
 extension TernaryExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "conditionExpression": conditionExpression as Any,
-      "questionMark": questionMark as Any,
-      "firstChoice": firstChoice as Any,
-      "colonMark": colonMark as Any,
-      "secondChoice": secondChoice as Any,
+      "conditionExpression": Syntax(conditionExpression)._asConcreteType,
+      "questionMark": Syntax(questionMark)._asConcreteType,
+      "firstChoice": Syntax(firstChoice)._asConcreteType,
+      "colonMark": Syntax(colonMark)._asConcreteType,
+      "secondChoice": Syntax(secondChoice)._asConcreteType,
     ])
   }
 }
 extension MemberAccessExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "base": base as Any,
-      "dot": dot as Any,
-      "name": name as Any,
-      "declNameArguments": declNameArguments as Any,
+      "base": base.map(Syntax.init)?._asConcreteType as Any,
+      "dot": Syntax(dot)._asConcreteType,
+      "name": Syntax(name)._asConcreteType,
+      "declNameArguments": declNameArguments.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension IsExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "isTok": isTok as Any,
-      "typeName": typeName as Any,
+      "isTok": Syntax(isTok)._asConcreteType,
+      "typeName": Syntax(typeName)._asConcreteType,
     ])
   }
 }
 extension AsExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "asTok": asTok as Any,
-      "questionOrExclamationMark": questionOrExclamationMark as Any,
-      "typeName": typeName as Any,
+      "asTok": Syntax(asTok)._asConcreteType,
+      "questionOrExclamationMark": questionOrExclamationMark.map(Syntax.init)?._asConcreteType as Any,
+      "typeName": Syntax(typeName)._asConcreteType,
     ])
   }
 }
 extension TypeExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": type as Any,
+      "type": Syntax(type)._asConcreteType,
     ])
   }
 }
 extension ClosureCaptureItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "specifier": specifier as Any,
-      "name": name as Any,
-      "assignToken": assignToken as Any,
-      "expression": expression as Any,
-      "trailingComma": trailingComma as Any,
+      "specifier": specifier.map(Syntax.init)?._asConcreteType as Any,
+      "name": name.map(Syntax.init)?._asConcreteType as Any,
+      "assignToken": assignToken.map(Syntax.init)?._asConcreteType as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ClosureCaptureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquare": leftSquare as Any,
-      "items": items as Any,
-      "rightSquare": rightSquare as Any,
+      "leftSquare": Syntax(leftSquare)._asConcreteType,
+      "items": items.map(Syntax.init)?._asConcreteType as Any,
+      "rightSquare": Syntax(rightSquare)._asConcreteType,
     ])
   }
 }
 extension ClosureParamSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "trailingComma": trailingComma as Any,
+      "name": Syntax(name)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ClosureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "capture": capture as Any,
-      "input": input as Any,
-      "throwsTok": throwsTok as Any,
-      "output": output as Any,
-      "inTok": inTok as Any,
+      "capture": capture.map(Syntax.init)?._asConcreteType as Any,
+      "input": input.map(Syntax.init)?._asConcreteType as Any,
+      "throwsTok": throwsTok.map(Syntax.init)?._asConcreteType as Any,
+      "output": output.map(Syntax.init)?._asConcreteType as Any,
+      "inTok": Syntax(inTok)._asConcreteType,
     ])
   }
 }
 extension ClosureExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": leftBrace as Any,
-      "signature": signature as Any,
-      "statements": statements as Any,
-      "rightBrace": rightBrace as Any,
+      "leftBrace": Syntax(leftBrace)._asConcreteType,
+      "signature": signature.map(Syntax.init)?._asConcreteType as Any,
+      "statements": Syntax(statements)._asConcreteType,
+      "rightBrace": Syntax(rightBrace)._asConcreteType,
     ])
   }
 }
 extension UnresolvedPatternExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": pattern as Any,
+      "pattern": Syntax(pattern)._asConcreteType,
     ])
   }
 }
 extension FunctionCallExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "calledExpression": calledExpression as Any,
-      "leftParen": leftParen as Any,
-      "argumentList": argumentList as Any,
-      "rightParen": rightParen as Any,
-      "trailingClosure": trailingClosure as Any,
+      "calledExpression": Syntax(calledExpression)._asConcreteType,
+      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
+      "argumentList": Syntax(argumentList)._asConcreteType,
+      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
+      "trailingClosure": trailingClosure.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension SubscriptExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "calledExpression": calledExpression as Any,
-      "leftBracket": leftBracket as Any,
-      "argumentList": argumentList as Any,
-      "rightBracket": rightBracket as Any,
-      "trailingClosure": trailingClosure as Any,
+      "calledExpression": Syntax(calledExpression)._asConcreteType,
+      "leftBracket": Syntax(leftBracket)._asConcreteType,
+      "argumentList": Syntax(argumentList)._asConcreteType,
+      "rightBracket": Syntax(rightBracket)._asConcreteType,
+      "trailingClosure": trailingClosure.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension OptionalChainingExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
-      "questionMark": questionMark as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "questionMark": Syntax(questionMark)._asConcreteType,
     ])
   }
 }
 extension ForcedValueExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
-      "exclamationMark": exclamationMark as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "exclamationMark": Syntax(exclamationMark)._asConcreteType,
     ])
   }
 }
 extension PostfixUnaryExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
-      "operatorToken": operatorToken as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "operatorToken": Syntax(operatorToken)._asConcreteType,
     ])
   }
 }
 extension SpecializeExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
-      "genericArgumentClause": genericArgumentClause as Any,
+      "expression": Syntax(expression)._asConcreteType,
+      "genericArgumentClause": Syntax(genericArgumentClause)._asConcreteType,
     ])
   }
 }
 extension StringSegmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "content": content as Any,
+      "content": Syntax(content)._asConcreteType,
     ])
   }
 }
 extension ExpressionSegmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "backslash": backslash as Any,
-      "delimiter": delimiter as Any,
-      "leftParen": leftParen as Any,
-      "expressions": expressions as Any,
-      "rightParen": rightParen as Any,
+      "backslash": Syntax(backslash)._asConcreteType,
+      "delimiter": delimiter.map(Syntax.init)?._asConcreteType as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "expressions": Syntax(expressions)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension StringLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "openDelimiter": openDelimiter as Any,
-      "openQuote": openQuote as Any,
-      "segments": segments as Any,
-      "closeQuote": closeQuote as Any,
-      "closeDelimiter": closeDelimiter as Any,
+      "openDelimiter": openDelimiter.map(Syntax.init)?._asConcreteType as Any,
+      "openQuote": Syntax(openQuote)._asConcreteType,
+      "segments": Syntax(segments)._asConcreteType,
+      "closeQuote": Syntax(closeQuote)._asConcreteType,
+      "closeDelimiter": closeDelimiter.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension KeyPathExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "backslash": backslash as Any,
-      "rootExpr": rootExpr as Any,
-      "expression": expression as Any,
+      "backslash": Syntax(backslash)._asConcreteType,
+      "rootExpr": rootExpr.map(Syntax.init)?._asConcreteType as Any,
+      "expression": Syntax(expression)._asConcreteType,
     ])
   }
 }
 extension KeyPathBaseExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "period": period as Any,
+      "period": Syntax(period)._asConcreteType,
     ])
   }
 }
 extension ObjcNamePieceSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "dot": dot as Any,
+      "name": Syntax(name)._asConcreteType,
+      "dot": dot.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ObjcKeyPathExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "keyPath": keyPath as Any,
-      "leftParen": leftParen as Any,
-      "name": name as Any,
-      "rightParen": rightParen as Any,
+      "keyPath": Syntax(keyPath)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "name": Syntax(name)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension ObjcSelectorExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundSelector": poundSelector as Any,
-      "leftParen": leftParen as Any,
-      "kind": kind as Any,
-      "colon": colon as Any,
-      "name": name as Any,
-      "rightParen": rightParen as Any,
+      "poundSelector": Syntax(poundSelector)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "kind": kind.map(Syntax.init)?._asConcreteType as Any,
+      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension EditorPlaceholderExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": identifier as Any,
+      "identifier": Syntax(identifier)._asConcreteType,
     ])
   }
 }
 extension ObjectLiteralExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": identifier as Any,
-      "leftParen": leftParen as Any,
-      "arguments": arguments as Any,
-      "rightParen": rightParen as Any,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "arguments": Syntax(arguments)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension TypeInitializerClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "equal": equal as Any,
-      "value": value as Any,
+      "equal": Syntax(equal)._asConcreteType,
+      "value": Syntax(value)._asConcreteType,
     ])
   }
 }
 extension TypealiasDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "typealiasKeyword": typealiasKeyword as Any,
-      "identifier": identifier as Any,
-      "genericParameterClause": genericParameterClause as Any,
-      "initializer": initializer as Any,
-      "genericWhereClause": genericWhereClause as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "typealiasKeyword": Syntax(typealiasKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?._asConcreteType as Any,
+      "initializer": initializer.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AssociatedtypeDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "associatedtypeKeyword": associatedtypeKeyword as Any,
-      "identifier": identifier as Any,
-      "inheritanceClause": inheritanceClause as Any,
-      "initializer": initializer as Any,
-      "genericWhereClause": genericWhereClause as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "associatedtypeKeyword": Syntax(associatedtypeKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?._asConcreteType as Any,
+      "initializer": initializer.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ParameterClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "parameterList": parameterList as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "parameterList": Syntax(parameterList)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension ReturnClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "arrow": arrow as Any,
-      "returnType": returnType as Any,
+      "arrow": Syntax(arrow)._asConcreteType,
+      "returnType": Syntax(returnType)._asConcreteType,
     ])
   }
 }
 extension FunctionSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "input": input as Any,
-      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword as Any,
-      "output": output as Any,
+      "input": Syntax(input)._asConcreteType,
+      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?._asConcreteType as Any,
+      "output": output.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension IfConfigClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundKeyword": poundKeyword as Any,
-      "condition": condition as Any,
-      "elements": elements as Any,
+      "poundKeyword": Syntax(poundKeyword)._asConcreteType,
+      "condition": condition.map(Syntax.init)?._asConcreteType as Any,
+      "elements": Syntax(elements)._asConcreteType,
     ])
   }
 }
 extension IfConfigDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "clauses": clauses as Any,
-      "poundEndif": poundEndif as Any,
+      "clauses": Syntax(clauses)._asConcreteType,
+      "poundEndif": Syntax(poundEndif)._asConcreteType,
     ])
   }
 }
 extension PoundErrorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundError": poundError as Any,
-      "leftParen": leftParen as Any,
-      "message": message as Any,
-      "rightParen": rightParen as Any,
+      "poundError": Syntax(poundError)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "message": Syntax(message)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension PoundWarningDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundWarning": poundWarning as Any,
-      "leftParen": leftParen as Any,
-      "message": message as Any,
-      "rightParen": rightParen as Any,
+      "poundWarning": Syntax(poundWarning)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "message": Syntax(message)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension PoundSourceLocationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundSourceLocation": poundSourceLocation as Any,
-      "leftParen": leftParen as Any,
-      "args": args as Any,
-      "rightParen": rightParen as Any,
+      "poundSourceLocation": Syntax(poundSourceLocation)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "args": args.map(Syntax.init)?._asConcreteType as Any,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension PoundSourceLocationArgsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "fileArgLabel": fileArgLabel as Any,
-      "fileArgColon": fileArgColon as Any,
-      "fileName": fileName as Any,
-      "comma": comma as Any,
-      "lineArgLabel": lineArgLabel as Any,
-      "lineArgColon": lineArgColon as Any,
-      "lineNumber": lineNumber as Any,
+      "fileArgLabel": Syntax(fileArgLabel)._asConcreteType,
+      "fileArgColon": Syntax(fileArgColon)._asConcreteType,
+      "fileName": Syntax(fileName)._asConcreteType,
+      "comma": Syntax(comma)._asConcreteType,
+      "lineArgLabel": Syntax(lineArgLabel)._asConcreteType,
+      "lineArgColon": Syntax(lineArgColon)._asConcreteType,
+      "lineNumber": Syntax(lineNumber)._asConcreteType,
     ])
   }
 }
 extension DeclModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "detailLeftParen": detailLeftParen as Any,
-      "detail": detail as Any,
-      "detailRightParen": detailRightParen as Any,
+      "name": Syntax(name)._asConcreteType,
+      "detailLeftParen": detailLeftParen.map(Syntax.init)?._asConcreteType as Any,
+      "detail": detail.map(Syntax.init)?._asConcreteType as Any,
+      "detailRightParen": detailRightParen.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension InheritedTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "typeName": typeName as Any,
-      "trailingComma": trailingComma as Any,
+      "typeName": Syntax(typeName)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension TypeInheritanceClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "colon": colon as Any,
-      "inheritedTypeCollection": inheritedTypeCollection as Any,
+      "colon": Syntax(colon)._asConcreteType,
+      "inheritedTypeCollection": Syntax(inheritedTypeCollection)._asConcreteType,
     ])
   }
 }
 extension ClassDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "classKeyword": classKeyword as Any,
-      "identifier": identifier as Any,
-      "genericParameterClause": genericParameterClause as Any,
-      "inheritanceClause": inheritanceClause as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "members": members as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "classKeyword": Syntax(classKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?._asConcreteType as Any,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "members": Syntax(members)._asConcreteType,
     ])
   }
 }
 extension StructDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "structKeyword": structKeyword as Any,
-      "identifier": identifier as Any,
-      "genericParameterClause": genericParameterClause as Any,
-      "inheritanceClause": inheritanceClause as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "members": members as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "structKeyword": Syntax(structKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?._asConcreteType as Any,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "members": Syntax(members)._asConcreteType,
     ])
   }
 }
 extension ProtocolDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "protocolKeyword": protocolKeyword as Any,
-      "identifier": identifier as Any,
-      "inheritanceClause": inheritanceClause as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "members": members as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "protocolKeyword": Syntax(protocolKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "members": Syntax(members)._asConcreteType,
     ])
   }
 }
 extension ExtensionDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "extensionKeyword": extensionKeyword as Any,
-      "extendedType": extendedType as Any,
-      "inheritanceClause": inheritanceClause as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "members": members as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "extensionKeyword": Syntax(extensionKeyword)._asConcreteType,
+      "extendedType": Syntax(extendedType)._asConcreteType,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "members": Syntax(members)._asConcreteType,
     ])
   }
 }
 extension MemberDeclBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": leftBrace as Any,
-      "members": members as Any,
-      "rightBrace": rightBrace as Any,
+      "leftBrace": Syntax(leftBrace)._asConcreteType,
+      "members": Syntax(members)._asConcreteType,
+      "rightBrace": Syntax(rightBrace)._asConcreteType,
     ])
   }
 }
 extension MemberDeclListItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "decl": decl as Any,
-      "semicolon": semicolon as Any,
+      "decl": Syntax(decl)._asConcreteType,
+      "semicolon": semicolon.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension SourceFileSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "statements": statements as Any,
-      "eofToken": eofToken as Any,
+      "statements": Syntax(statements)._asConcreteType,
+      "eofToken": Syntax(eofToken)._asConcreteType,
     ])
   }
 }
 extension InitializerClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "equal": equal as Any,
-      "value": value as Any,
+      "equal": Syntax(equal)._asConcreteType,
+      "value": Syntax(value)._asConcreteType,
     ])
   }
 }
 extension FunctionParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "firstName": firstName as Any,
-      "secondName": secondName as Any,
-      "colon": colon as Any,
-      "type": type as Any,
-      "ellipsis": ellipsis as Any,
-      "defaultArgument": defaultArgument as Any,
-      "trailingComma": trailingComma as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "firstName": firstName.map(Syntax.init)?._asConcreteType as Any,
+      "secondName": secondName.map(Syntax.init)?._asConcreteType as Any,
+      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
+      "type": type.map(Syntax.init)?._asConcreteType as Any,
+      "ellipsis": ellipsis.map(Syntax.init)?._asConcreteType as Any,
+      "defaultArgument": defaultArgument.map(Syntax.init)?._asConcreteType as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension FunctionDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "funcKeyword": funcKeyword as Any,
-      "identifier": identifier as Any,
-      "genericParameterClause": genericParameterClause as Any,
-      "signature": signature as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "body": body as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "funcKeyword": Syntax(funcKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?._asConcreteType as Any,
+      "signature": Syntax(signature)._asConcreteType,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "body": body.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension InitializerDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "initKeyword": initKeyword as Any,
-      "optionalMark": optionalMark as Any,
-      "genericParameterClause": genericParameterClause as Any,
-      "parameters": parameters as Any,
-      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "body": body as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "initKeyword": Syntax(initKeyword)._asConcreteType,
+      "optionalMark": optionalMark.map(Syntax.init)?._asConcreteType as Any,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?._asConcreteType as Any,
+      "parameters": Syntax(parameters)._asConcreteType,
+      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "body": body.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension DeinitializerDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "deinitKeyword": deinitKeyword as Any,
-      "body": body as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "deinitKeyword": Syntax(deinitKeyword)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension SubscriptDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "subscriptKeyword": subscriptKeyword as Any,
-      "genericParameterClause": genericParameterClause as Any,
-      "indices": indices as Any,
-      "result": result as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "accessor": accessor as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "subscriptKeyword": Syntax(subscriptKeyword)._asConcreteType,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?._asConcreteType as Any,
+      "indices": Syntax(indices)._asConcreteType,
+      "result": Syntax(result)._asConcreteType,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "accessor": accessor.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AccessLevelModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "leftParen": leftParen as Any,
-      "modifier": modifier as Any,
-      "rightParen": rightParen as Any,
+      "name": Syntax(name)._asConcreteType,
+      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
+      "modifier": modifier.map(Syntax.init)?._asConcreteType as Any,
+      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AccessPathComponentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "trailingDot": trailingDot as Any,
+      "name": Syntax(name)._asConcreteType,
+      "trailingDot": trailingDot.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ImportDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "importTok": importTok as Any,
-      "importKind": importKind as Any,
-      "path": path as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "importTok": Syntax(importTok)._asConcreteType,
+      "importKind": importKind.map(Syntax.init)?._asConcreteType as Any,
+      "path": Syntax(path)._asConcreteType,
     ])
   }
 }
 extension AccessorParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "name": name as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "name": Syntax(name)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension AccessorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifier": modifier as Any,
-      "accessorKind": accessorKind as Any,
-      "parameter": parameter as Any,
-      "body": body as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifier": modifier.map(Syntax.init)?._asConcreteType as Any,
+      "accessorKind": Syntax(accessorKind)._asConcreteType,
+      "parameter": parameter.map(Syntax.init)?._asConcreteType as Any,
+      "body": body.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AccessorBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": leftBrace as Any,
-      "accessors": accessors as Any,
-      "rightBrace": rightBrace as Any,
+      "leftBrace": Syntax(leftBrace)._asConcreteType,
+      "accessors": Syntax(accessors)._asConcreteType,
+      "rightBrace": Syntax(rightBrace)._asConcreteType,
     ])
   }
 }
 extension PatternBindingSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": pattern as Any,
-      "typeAnnotation": typeAnnotation as Any,
-      "initializer": initializer as Any,
-      "accessor": accessor as Any,
-      "trailingComma": trailingComma as Any,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
+      "initializer": initializer.map(Syntax.init)?._asConcreteType as Any,
+      "accessor": accessor.map(Syntax.init)?._asConcreteType as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension VariableDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "letOrVarKeyword": letOrVarKeyword as Any,
-      "bindings": bindings as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "letOrVarKeyword": Syntax(letOrVarKeyword)._asConcreteType,
+      "bindings": Syntax(bindings)._asConcreteType,
     ])
   }
 }
 extension EnumCaseElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": identifier as Any,
-      "associatedValue": associatedValue as Any,
-      "rawValue": rawValue as Any,
-      "trailingComma": trailingComma as Any,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "associatedValue": associatedValue.map(Syntax.init)?._asConcreteType as Any,
+      "rawValue": rawValue.map(Syntax.init)?._asConcreteType as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension EnumCaseDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "caseKeyword": caseKeyword as Any,
-      "elements": elements as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "caseKeyword": Syntax(caseKeyword)._asConcreteType,
+      "elements": Syntax(elements)._asConcreteType,
     ])
   }
 }
 extension EnumDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "enumKeyword": enumKeyword as Any,
-      "identifier": identifier as Any,
-      "genericParameters": genericParameters as Any,
-      "inheritanceClause": inheritanceClause as Any,
-      "genericWhereClause": genericWhereClause as Any,
-      "members": members as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "enumKeyword": Syntax(enumKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "genericParameters": genericParameters.map(Syntax.init)?._asConcreteType as Any,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?._asConcreteType as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?._asConcreteType as Any,
+      "members": Syntax(members)._asConcreteType,
     ])
   }
 }
 extension OperatorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "operatorKeyword": operatorKeyword as Any,
-      "identifier": identifier as Any,
-      "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "operatorKeyword": Syntax(operatorKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension OperatorPrecedenceAndTypesSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "colon": colon as Any,
-      "precedenceGroupAndDesignatedTypes": precedenceGroupAndDesignatedTypes as Any,
+      "colon": Syntax(colon)._asConcreteType,
+      "precedenceGroupAndDesignatedTypes": Syntax(precedenceGroupAndDesignatedTypes)._asConcreteType,
     ])
   }
 }
 extension PrecedenceGroupDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "modifiers": modifiers as Any,
-      "precedencegroupKeyword": precedencegroupKeyword as Any,
-      "identifier": identifier as Any,
-      "leftBrace": leftBrace as Any,
-      "groupAttributes": groupAttributes as Any,
-      "rightBrace": rightBrace as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "modifiers": modifiers.map(Syntax.init)?._asConcreteType as Any,
+      "precedencegroupKeyword": Syntax(precedencegroupKeyword)._asConcreteType,
+      "identifier": Syntax(identifier)._asConcreteType,
+      "leftBrace": Syntax(leftBrace)._asConcreteType,
+      "groupAttributes": Syntax(groupAttributes)._asConcreteType,
+      "rightBrace": Syntax(rightBrace)._asConcreteType,
     ])
   }
 }
 extension PrecedenceGroupRelationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "higherThanOrLowerThan": higherThanOrLowerThan as Any,
-      "colon": colon as Any,
-      "otherNames": otherNames as Any,
+      "higherThanOrLowerThan": Syntax(higherThanOrLowerThan)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "otherNames": Syntax(otherNames)._asConcreteType,
     ])
   }
 }
 extension PrecedenceGroupNameElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "trailingComma": trailingComma as Any,
+      "name": Syntax(name)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension PrecedenceGroupAssignmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "assignmentKeyword": assignmentKeyword as Any,
-      "colon": colon as Any,
-      "flag": flag as Any,
+      "assignmentKeyword": Syntax(assignmentKeyword)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "flag": Syntax(flag)._asConcreteType,
     ])
   }
 }
 extension PrecedenceGroupAssociativitySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "associativityKeyword": associativityKeyword as Any,
-      "colon": colon as Any,
-      "value": value as Any,
+      "associativityKeyword": Syntax(associativityKeyword)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "value": Syntax(value)._asConcreteType,
     ])
   }
 }
 extension CustomAttributeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "atSignToken": atSignToken as Any,
-      "attributeName": attributeName as Any,
-      "leftParen": leftParen as Any,
-      "argumentList": argumentList as Any,
-      "rightParen": rightParen as Any,
+      "atSignToken": Syntax(atSignToken)._asConcreteType,
+      "attributeName": Syntax(attributeName)._asConcreteType,
+      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
+      "argumentList": argumentList.map(Syntax.init)?._asConcreteType as Any,
+      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AttributeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "atSignToken": atSignToken as Any,
-      "attributeName": attributeName as Any,
-      "leftParen": leftParen as Any,
-      "argument": argument as Any,
-      "rightParen": rightParen as Any,
-      "tokenList": tokenList as Any,
+      "atSignToken": Syntax(atSignToken)._asConcreteType,
+      "attributeName": Syntax(attributeName)._asConcreteType,
+      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
+      "argument": argument.map(Syntax.init)?._asConcreteType as Any,
+      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
+      "tokenList": tokenList.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension LabeledSpecializeEntrySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "label": label as Any,
-      "colon": colon as Any,
-      "value": value as Any,
-      "trailingComma": trailingComma as Any,
+      "label": Syntax(label)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "value": Syntax(value)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension NamedAttributeStringArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "nameTok": nameTok as Any,
-      "colon": colon as Any,
-      "stringOrDeclname": stringOrDeclname as Any,
+      "nameTok": Syntax(nameTok)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "stringOrDeclname": Syntax(stringOrDeclname)._asConcreteType,
     ])
   }
 }
 extension DeclNameSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "declBaseName": declBaseName as Any,
-      "declNameArguments": declNameArguments as Any,
+      "declBaseName": Syntax(declBaseName)._asConcreteType,
+      "declNameArguments": declNameArguments.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": type as Any,
-      "comma": comma as Any,
-      "declBaseName": declBaseName as Any,
-      "declNameArguments": declNameArguments as Any,
+      "type": Syntax(type)._asConcreteType,
+      "comma": Syntax(comma)._asConcreteType,
+      "declBaseName": Syntax(declBaseName)._asConcreteType,
+      "declNameArguments": declNameArguments.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ObjCSelectorPieceSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "colon": colon as Any,
+      "name": name.map(Syntax.init)?._asConcreteType as Any,
+      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ContinueStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "continueKeyword": continueKeyword as Any,
-      "label": label as Any,
+      "continueKeyword": Syntax(continueKeyword)._asConcreteType,
+      "label": label.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension WhileStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "whileKeyword": whileKeyword as Any,
-      "conditions": conditions as Any,
-      "body": body as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "whileKeyword": Syntax(whileKeyword)._asConcreteType,
+      "conditions": Syntax(conditions)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension DeferStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "deferKeyword": deferKeyword as Any,
-      "body": body as Any,
+      "deferKeyword": Syntax(deferKeyword)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension ExpressionStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
+      "expression": Syntax(expression)._asConcreteType,
     ])
   }
 }
 extension RepeatWhileStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "repeatKeyword": repeatKeyword as Any,
-      "body": body as Any,
-      "whileKeyword": whileKeyword as Any,
-      "condition": condition as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "repeatKeyword": Syntax(repeatKeyword)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
+      "whileKeyword": Syntax(whileKeyword)._asConcreteType,
+      "condition": Syntax(condition)._asConcreteType,
     ])
   }
 }
 extension GuardStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "guardKeyword": guardKeyword as Any,
-      "conditions": conditions as Any,
-      "elseKeyword": elseKeyword as Any,
-      "body": body as Any,
+      "guardKeyword": Syntax(guardKeyword)._asConcreteType,
+      "conditions": Syntax(conditions)._asConcreteType,
+      "elseKeyword": Syntax(elseKeyword)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension WhereClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "whereKeyword": whereKeyword as Any,
-      "guardResult": guardResult as Any,
+      "whereKeyword": Syntax(whereKeyword)._asConcreteType,
+      "guardResult": Syntax(guardResult)._asConcreteType,
     ])
   }
 }
 extension ForInStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "forKeyword": forKeyword as Any,
-      "caseKeyword": caseKeyword as Any,
-      "pattern": pattern as Any,
-      "typeAnnotation": typeAnnotation as Any,
-      "inKeyword": inKeyword as Any,
-      "sequenceExpr": sequenceExpr as Any,
-      "whereClause": whereClause as Any,
-      "body": body as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "forKeyword": Syntax(forKeyword)._asConcreteType,
+      "caseKeyword": caseKeyword.map(Syntax.init)?._asConcreteType as Any,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
+      "inKeyword": Syntax(inKeyword)._asConcreteType,
+      "sequenceExpr": Syntax(sequenceExpr)._asConcreteType,
+      "whereClause": whereClause.map(Syntax.init)?._asConcreteType as Any,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension SwitchStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "switchKeyword": switchKeyword as Any,
-      "expression": expression as Any,
-      "leftBrace": leftBrace as Any,
-      "cases": cases as Any,
-      "rightBrace": rightBrace as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "switchKeyword": Syntax(switchKeyword)._asConcreteType,
+      "expression": Syntax(expression)._asConcreteType,
+      "leftBrace": Syntax(leftBrace)._asConcreteType,
+      "cases": Syntax(cases)._asConcreteType,
+      "rightBrace": Syntax(rightBrace)._asConcreteType,
     ])
   }
 }
 extension DoStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "doKeyword": doKeyword as Any,
-      "body": body as Any,
-      "catchClauses": catchClauses as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "doKeyword": Syntax(doKeyword)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
+      "catchClauses": catchClauses.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ReturnStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "returnKeyword": returnKeyword as Any,
-      "expression": expression as Any,
+      "returnKeyword": Syntax(returnKeyword)._asConcreteType,
+      "expression": expression.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension YieldStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "yieldKeyword": yieldKeyword as Any,
-      "yields": yields as Any,
+      "yieldKeyword": Syntax(yieldKeyword)._asConcreteType,
+      "yields": Syntax(yields)._asConcreteType,
     ])
   }
 }
 extension YieldListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "elementList": elementList as Any,
-      "trailingComma": trailingComma as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "elementList": Syntax(elementList)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension FallthroughStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "fallthroughKeyword": fallthroughKeyword as Any,
+      "fallthroughKeyword": Syntax(fallthroughKeyword)._asConcreteType,
     ])
   }
 }
 extension BreakStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "breakKeyword": breakKeyword as Any,
-      "label": label as Any,
+      "breakKeyword": Syntax(breakKeyword)._asConcreteType,
+      "label": label.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ConditionElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "condition": condition as Any,
-      "trailingComma": trailingComma as Any,
+      "condition": Syntax(condition)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AvailabilityConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundAvailableKeyword": poundAvailableKeyword as Any,
-      "leftParen": leftParen as Any,
-      "availabilitySpec": availabilitySpec as Any,
-      "rightParen": rightParen as Any,
+      "poundAvailableKeyword": Syntax(poundAvailableKeyword)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "availabilitySpec": Syntax(availabilitySpec)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension MatchingPatternConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "caseKeyword": caseKeyword as Any,
-      "pattern": pattern as Any,
-      "typeAnnotation": typeAnnotation as Any,
-      "initializer": initializer as Any,
+      "caseKeyword": Syntax(caseKeyword)._asConcreteType,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
+      "initializer": Syntax(initializer)._asConcreteType,
     ])
   }
 }
 extension OptionalBindingConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "letOrVarKeyword": letOrVarKeyword as Any,
-      "pattern": pattern as Any,
-      "typeAnnotation": typeAnnotation as Any,
-      "initializer": initializer as Any,
+      "letOrVarKeyword": Syntax(letOrVarKeyword)._asConcreteType,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
+      "initializer": Syntax(initializer)._asConcreteType,
     ])
   }
 }
 extension DeclarationStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "declaration": declaration as Any,
+      "declaration": Syntax(declaration)._asConcreteType,
     ])
   }
 }
 extension ThrowStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "throwKeyword": throwKeyword as Any,
-      "expression": expression as Any,
+      "throwKeyword": Syntax(throwKeyword)._asConcreteType,
+      "expression": Syntax(expression)._asConcreteType,
     ])
   }
 }
 extension IfStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "ifKeyword": ifKeyword as Any,
-      "conditions": conditions as Any,
-      "body": body as Any,
-      "elseKeyword": elseKeyword as Any,
-      "elseBody": elseBody as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "ifKeyword": Syntax(ifKeyword)._asConcreteType,
+      "conditions": Syntax(conditions)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
+      "elseKeyword": elseKeyword.map(Syntax.init)?._asConcreteType as Any,
+      "elseBody": elseBody.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ElseIfContinuationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "ifStatement": ifStatement as Any,
+      "ifStatement": Syntax(ifStatement)._asConcreteType,
     ])
   }
 }
 extension ElseBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "elseKeyword": elseKeyword as Any,
-      "body": body as Any,
+      "elseKeyword": Syntax(elseKeyword)._asConcreteType,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension SwitchCaseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unknownAttr": unknownAttr as Any,
-      "label": label as Any,
-      "statements": statements as Any,
+      "unknownAttr": unknownAttr.map(Syntax.init)?._asConcreteType as Any,
+      "label": Syntax(label)._asConcreteType,
+      "statements": Syntax(statements)._asConcreteType,
     ])
   }
 }
 extension SwitchDefaultLabelSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "defaultKeyword": defaultKeyword as Any,
-      "colon": colon as Any,
+      "defaultKeyword": Syntax(defaultKeyword)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
     ])
   }
 }
 extension CaseItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": pattern as Any,
-      "whereClause": whereClause as Any,
-      "trailingComma": trailingComma as Any,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "whereClause": whereClause.map(Syntax.init)?._asConcreteType as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension SwitchCaseLabelSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "caseKeyword": caseKeyword as Any,
-      "caseItems": caseItems as Any,
-      "colon": colon as Any,
+      "caseKeyword": Syntax(caseKeyword)._asConcreteType,
+      "caseItems": Syntax(caseItems)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
     ])
   }
 }
 extension CatchClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "catchKeyword": catchKeyword as Any,
-      "pattern": pattern as Any,
-      "whereClause": whereClause as Any,
-      "body": body as Any,
+      "catchKeyword": Syntax(catchKeyword)._asConcreteType,
+      "pattern": pattern.map(Syntax.init)?._asConcreteType as Any,
+      "whereClause": whereClause.map(Syntax.init)?._asConcreteType as Any,
+      "body": Syntax(body)._asConcreteType,
     ])
   }
 }
 extension PoundAssertStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundAssert": poundAssert as Any,
-      "leftParen": leftParen as Any,
-      "condition": condition as Any,
-      "comma": comma as Any,
-      "message": message as Any,
-      "rightParen": rightParen as Any,
+      "poundAssert": Syntax(poundAssert)._asConcreteType,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "condition": Syntax(condition)._asConcreteType,
+      "comma": comma.map(Syntax.init)?._asConcreteType as Any,
+      "message": message.map(Syntax.init)?._asConcreteType as Any,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension GenericWhereClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "whereKeyword": whereKeyword as Any,
-      "requirementList": requirementList as Any,
+      "whereKeyword": Syntax(whereKeyword)._asConcreteType,
+      "requirementList": Syntax(requirementList)._asConcreteType,
     ])
   }
 }
 extension GenericRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "body": body as Any,
-      "trailingComma": trailingComma as Any,
+      "body": Syntax(body)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension SameTypeRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftTypeIdentifier": leftTypeIdentifier as Any,
-      "equalityToken": equalityToken as Any,
-      "rightTypeIdentifier": rightTypeIdentifier as Any,
+      "leftTypeIdentifier": Syntax(leftTypeIdentifier)._asConcreteType,
+      "equalityToken": Syntax(equalityToken)._asConcreteType,
+      "rightTypeIdentifier": Syntax(rightTypeIdentifier)._asConcreteType,
     ])
   }
 }
 extension GenericParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes as Any,
-      "name": name as Any,
-      "colon": colon as Any,
-      "inheritedType": inheritedType as Any,
-      "trailingComma": trailingComma as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name)._asConcreteType,
+      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
+      "inheritedType": inheritedType.map(Syntax.init)?._asConcreteType as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension GenericParameterClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftAngleBracket": leftAngleBracket as Any,
-      "genericParameterList": genericParameterList as Any,
-      "rightAngleBracket": rightAngleBracket as Any,
+      "leftAngleBracket": Syntax(leftAngleBracket)._asConcreteType,
+      "genericParameterList": Syntax(genericParameterList)._asConcreteType,
+      "rightAngleBracket": Syntax(rightAngleBracket)._asConcreteType,
     ])
   }
 }
 extension ConformanceRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftTypeIdentifier": leftTypeIdentifier as Any,
-      "colon": colon as Any,
-      "rightTypeIdentifier": rightTypeIdentifier as Any,
+      "leftTypeIdentifier": Syntax(leftTypeIdentifier)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "rightTypeIdentifier": Syntax(rightTypeIdentifier)._asConcreteType,
     ])
   }
 }
 extension SimpleTypeIdentifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name as Any,
-      "genericArgumentClause": genericArgumentClause as Any,
+      "name": Syntax(name)._asConcreteType,
+      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension MemberTypeIdentifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "baseType": baseType as Any,
-      "period": period as Any,
-      "name": name as Any,
-      "genericArgumentClause": genericArgumentClause as Any,
+      "baseType": Syntax(baseType)._asConcreteType,
+      "period": Syntax(period)._asConcreteType,
+      "name": Syntax(name)._asConcreteType,
+      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ClassRestrictionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "classKeyword": classKeyword as Any,
+      "classKeyword": Syntax(classKeyword)._asConcreteType,
     ])
   }
 }
 extension ArrayTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquareBracket": leftSquareBracket as Any,
-      "elementType": elementType as Any,
-      "rightSquareBracket": rightSquareBracket as Any,
+      "leftSquareBracket": Syntax(leftSquareBracket)._asConcreteType,
+      "elementType": Syntax(elementType)._asConcreteType,
+      "rightSquareBracket": Syntax(rightSquareBracket)._asConcreteType,
     ])
   }
 }
 extension DictionaryTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquareBracket": leftSquareBracket as Any,
-      "keyType": keyType as Any,
-      "colon": colon as Any,
-      "valueType": valueType as Any,
-      "rightSquareBracket": rightSquareBracket as Any,
+      "leftSquareBracket": Syntax(leftSquareBracket)._asConcreteType,
+      "keyType": Syntax(keyType)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "valueType": Syntax(valueType)._asConcreteType,
+      "rightSquareBracket": Syntax(rightSquareBracket)._asConcreteType,
     ])
   }
 }
 extension MetatypeTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "baseType": baseType as Any,
-      "period": period as Any,
-      "typeOrProtocol": typeOrProtocol as Any,
+      "baseType": Syntax(baseType)._asConcreteType,
+      "period": Syntax(period)._asConcreteType,
+      "typeOrProtocol": Syntax(typeOrProtocol)._asConcreteType,
     ])
   }
 }
 extension OptionalTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wrappedType": wrappedType as Any,
-      "questionMark": questionMark as Any,
+      "wrappedType": Syntax(wrappedType)._asConcreteType,
+      "questionMark": Syntax(questionMark)._asConcreteType,
     ])
   }
 }
 extension SomeTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "someSpecifier": someSpecifier as Any,
-      "baseType": baseType as Any,
+      "someSpecifier": Syntax(someSpecifier)._asConcreteType,
+      "baseType": Syntax(baseType)._asConcreteType,
     ])
   }
 }
 extension ImplicitlyUnwrappedOptionalTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wrappedType": wrappedType as Any,
-      "exclamationMark": exclamationMark as Any,
+      "wrappedType": Syntax(wrappedType)._asConcreteType,
+      "exclamationMark": Syntax(exclamationMark)._asConcreteType,
     ])
   }
 }
 extension CompositionTypeElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": type as Any,
-      "ampersand": ampersand as Any,
+      "type": Syntax(type)._asConcreteType,
+      "ampersand": ampersand.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension CompositionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "elements": elements as Any,
+      "elements": Syntax(elements)._asConcreteType,
     ])
   }
 }
 extension TupleTypeElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "inOut": inOut as Any,
-      "name": name as Any,
-      "secondName": secondName as Any,
-      "colon": colon as Any,
-      "type": type as Any,
-      "ellipsis": ellipsis as Any,
-      "initializer": initializer as Any,
-      "trailingComma": trailingComma as Any,
+      "inOut": inOut.map(Syntax.init)?._asConcreteType as Any,
+      "name": name.map(Syntax.init)?._asConcreteType as Any,
+      "secondName": secondName.map(Syntax.init)?._asConcreteType as Any,
+      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
+      "type": Syntax(type)._asConcreteType,
+      "ellipsis": ellipsis.map(Syntax.init)?._asConcreteType as Any,
+      "initializer": initializer.map(Syntax.init)?._asConcreteType as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension TupleTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "elements": elements as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "elements": Syntax(elements)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension FunctionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "arguments": arguments as Any,
-      "rightParen": rightParen as Any,
-      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword as Any,
-      "arrow": arrow as Any,
-      "returnType": returnType as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "arguments": Syntax(arguments)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
+      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?._asConcreteType as Any,
+      "arrow": Syntax(arrow)._asConcreteType,
+      "returnType": Syntax(returnType)._asConcreteType,
     ])
   }
 }
 extension AttributedTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "specifier": specifier as Any,
-      "attributes": attributes as Any,
-      "baseType": baseType as Any,
+      "specifier": specifier.map(Syntax.init)?._asConcreteType as Any,
+      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
+      "baseType": Syntax(baseType)._asConcreteType,
     ])
   }
 }
 extension GenericArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "argumentType": argumentType as Any,
-      "trailingComma": trailingComma as Any,
+      "argumentType": Syntax(argumentType)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension GenericArgumentClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftAngleBracket": leftAngleBracket as Any,
-      "arguments": arguments as Any,
-      "rightAngleBracket": rightAngleBracket as Any,
+      "leftAngleBracket": Syntax(leftAngleBracket)._asConcreteType,
+      "arguments": Syntax(arguments)._asConcreteType,
+      "rightAngleBracket": Syntax(rightAngleBracket)._asConcreteType,
     ])
   }
 }
 extension TypeAnnotationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "colon": colon as Any,
-      "type": type as Any,
+      "colon": Syntax(colon)._asConcreteType,
+      "type": Syntax(type)._asConcreteType,
     ])
   }
 }
 extension EnumCasePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": type as Any,
-      "period": period as Any,
-      "caseName": caseName as Any,
-      "associatedTuple": associatedTuple as Any,
+      "type": type.map(Syntax.init)?._asConcreteType as Any,
+      "period": Syntax(period)._asConcreteType,
+      "caseName": Syntax(caseName)._asConcreteType,
+      "associatedTuple": associatedTuple.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension IsTypePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "isKeyword": isKeyword as Any,
-      "type": type as Any,
+      "isKeyword": Syntax(isKeyword)._asConcreteType,
+      "type": Syntax(type)._asConcreteType,
     ])
   }
 }
 extension OptionalPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "subPattern": subPattern as Any,
-      "questionMark": questionMark as Any,
+      "subPattern": Syntax(subPattern)._asConcreteType,
+      "questionMark": Syntax(questionMark)._asConcreteType,
     ])
   }
 }
 extension IdentifierPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": identifier as Any,
+      "identifier": Syntax(identifier)._asConcreteType,
     ])
   }
 }
 extension AsTypePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": pattern as Any,
-      "asKeyword": asKeyword as Any,
-      "type": type as Any,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "asKeyword": Syntax(asKeyword)._asConcreteType,
+      "type": Syntax(type)._asConcreteType,
     ])
   }
 }
 extension TuplePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": leftParen as Any,
-      "elements": elements as Any,
-      "rightParen": rightParen as Any,
+      "leftParen": Syntax(leftParen)._asConcreteType,
+      "elements": Syntax(elements)._asConcreteType,
+      "rightParen": Syntax(rightParen)._asConcreteType,
     ])
   }
 }
 extension WildcardPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wildcard": wildcard as Any,
-      "typeAnnotation": typeAnnotation as Any,
+      "wildcard": Syntax(wildcard)._asConcreteType,
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension TuplePatternElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName as Any,
-      "labelColon": labelColon as Any,
-      "pattern": pattern as Any,
-      "trailingComma": trailingComma as Any,
+      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
+      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
+      "pattern": Syntax(pattern)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension ExpressionPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": expression as Any,
+      "expression": Syntax(expression)._asConcreteType,
     ])
   }
 }
 extension ValueBindingPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "letOrVarKeyword": letOrVarKeyword as Any,
-      "valuePattern": valuePattern as Any,
+      "letOrVarKeyword": Syntax(letOrVarKeyword)._asConcreteType,
+      "valuePattern": Syntax(valuePattern)._asConcreteType,
     ])
   }
 }
 extension AvailabilityArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "entry": entry as Any,
-      "trailingComma": trailingComma as Any,
+      "entry": Syntax(entry)._asConcreteType,
+      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 extension AvailabilityLabeledArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "label": label as Any,
-      "colon": colon as Any,
-      "value": value as Any,
+      "label": Syntax(label)._asConcreteType,
+      "colon": Syntax(colon)._asConcreteType,
+      "value": Syntax(value)._asConcreteType,
     ])
   }
 }
 extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "platform": platform as Any,
-      "version": version as Any,
+      "platform": Syntax(platform)._asConcreteType,
+      "version": Syntax(version)._asConcreteType,
     ])
   }
 }
 extension VersionTupleSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "majorMinor": majorMinor as Any,
-      "patchPeriod": patchPeriod as Any,
-      "patchVersion": patchVersion as Any,
+      "majorMinor": Syntax(majorMinor)._asConcreteType,
+      "patchPeriod": patchPeriod.map(Syntax.init)?._asConcreteType as Any,
+      "patchVersion": patchVersion.map(Syntax.init)?._asConcreteType as Any,
     ])
   }
 }
 
-public protocol DeclGroupSyntax: Syntax {
+public protocol DeclGroupSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? { get }
   func withAttributes(_ newChild: AttributeListSyntax?) -> Self
   var modifiers: ModifierListSyntax? { get }
@@ -28101,37 +31250,37 @@ public protocol DeclGroupSyntax: Syntax {
   var members: MemberDeclBlockSyntax { get }
   func withMembers(_ newChild: MemberDeclBlockSyntax?) -> Self
 }
-public protocol BracedSyntax: Syntax {
+public protocol BracedSyntax: SyntaxProtocol {
   var leftBrace: TokenSyntax { get }
   func withLeftBrace(_ newChild: TokenSyntax?) -> Self
   var rightBrace: TokenSyntax { get }
   func withRightBrace(_ newChild: TokenSyntax?) -> Self
 }
-public protocol IdentifiedDeclSyntax: Syntax {
+public protocol IdentifiedDeclSyntax: SyntaxProtocol {
   var identifier: TokenSyntax { get }
   func withIdentifier(_ newChild: TokenSyntax?) -> Self
 }
-public protocol WithCodeBlockSyntax: Syntax {
+public protocol WithCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax { get }
   func withBody(_ newChild: CodeBlockSyntax?) -> Self
 }
-public protocol ParenthesizedSyntax: Syntax {
+public protocol ParenthesizedSyntax: SyntaxProtocol {
   var leftParen: TokenSyntax { get }
   func withLeftParen(_ newChild: TokenSyntax?) -> Self
   var rightParen: TokenSyntax { get }
   func withRightParen(_ newChild: TokenSyntax?) -> Self
 }
-public protocol WithTrailingCommaSyntax: Syntax {
+public protocol WithTrailingCommaSyntax: SyntaxProtocol {
   var trailingComma: TokenSyntax? { get }
   func withTrailingComma(_ newChild: TokenSyntax?) -> Self
 }
-public protocol LabeledSyntax: Syntax {
+public protocol LabeledSyntax: SyntaxProtocol {
   var labelName: TokenSyntax? { get }
   func withLabelName(_ newChild: TokenSyntax?) -> Self
   var labelColon: TokenSyntax? { get }
   func withLabelColon(_ newChild: TokenSyntax?) -> Self
 }
-public protocol WithStatementsSyntax: Syntax {
+public protocol WithStatementsSyntax: SyntaxProtocol {
   var statements: CodeBlockItemListSyntax { get }
   func withStatements(_ newChild: CodeBlockItemListSyntax?) -> Self
 }

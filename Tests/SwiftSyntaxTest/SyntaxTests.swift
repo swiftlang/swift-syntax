@@ -57,12 +57,12 @@ public class SyntaxAPITestCase: XCTestCase {
     let tokset = Set(toks+rtoks)
     XCTAssertEqual(tokset.count, 6)
 
-    XCTAssertEqual(toks[0].uniqueIdentifier, rtoks[5].uniqueIdentifier)
-    XCTAssertEqual(toks[1].uniqueIdentifier, rtoks[4].uniqueIdentifier)
-    XCTAssertEqual(toks[2].uniqueIdentifier, rtoks[3].uniqueIdentifier)
-    XCTAssertEqual(toks[3].uniqueIdentifier, rtoks[2].uniqueIdentifier)
-    XCTAssertEqual(toks[4].uniqueIdentifier, rtoks[1].uniqueIdentifier)
-    XCTAssertEqual(toks[5].uniqueIdentifier, rtoks[0].uniqueIdentifier)
+    XCTAssertEqual(toks[0].id, rtoks[5].id)
+    XCTAssertEqual(toks[1].id, rtoks[4].id)
+    XCTAssertEqual(toks[2].id, rtoks[3].id)
+    XCTAssertEqual(toks[3].id, rtoks[2].id)
+    XCTAssertEqual(toks[4].id, rtoks[1].id)
+    XCTAssertEqual(toks[5].id, rtoks[0].id)
   }
 
   public func testPositions() {

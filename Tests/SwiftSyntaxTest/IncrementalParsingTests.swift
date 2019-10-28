@@ -44,10 +44,10 @@ public class IncrementalParsingTestCase: XCTestCase {
     XCTAssertEqual("\(reusedNode)", "\nstruct B {}")
 
     XCTAssertEqual(newStructB.byteRange, reusedRange)
-    XCTAssertEqual(origStructB.uniqueIdentifier, reusedNode.uniqueIdentifier)
+    XCTAssertEqual(origStructB.id, reusedNode.id)
     XCTAssertEqual(origStructB, reusedNode.asCodeBlockItem)
     XCTAssertTrue(reusedNode.isCodeBlockItem)
     XCTAssertEqual(origStructB, reusedNode.asCodeBlockItem!)
-    XCTAssertEqual(origStructB.parent!.uniqueIdentifier, reusedNode.parent!.uniqueIdentifier)
+    XCTAssertEqual(origStructB.parent!.id, reusedNode.parent!.id)
   }
 }

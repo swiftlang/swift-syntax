@@ -1,0 +1,175 @@
+%{
+  # -*- mode: Swift -*-
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Traits import TRAITS
+  NODE_MAP = create_node_map()
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===------------ SyntaxNodes.swift - Syntax Node definitions -------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+%{
+"""
+This gyb-file generates the syntax nodes for SwiftSyntax. To keep the generated
+files at a managable file size, it is to be invoked multiple times with the
+global variable EMIT_KIND set to a base kind listed in
+gyb_syntax_support/kinds.py:SYNTAX_BASE_KINDES. It then only emits those syntax
+nodes whose base kind are that specified kind.
+"""
+}%
+
+% for node in SYNTAX_NODES:
+%   base_type = node.base_type
+%   if node.is_base():
+%     # Handled in SyntaxNodesBase.swift.gyb
+%     pass
+%   elif node.collection_element:
+%     # Handled in SyntaxCollections.swift.gyb
+%     pass
+%   elif node.base_kind != EMIT_KIND:
+%     pass
+%   else:
+%     # We are actually handling this node now
+// MARK: - ${node.name}
+
+%     for line in dedented_lines(node.description):
+/// ${line}
+%     end
+public struct ${node.name}: ${base_type}Protocol {
+%     # ======
+%     # Cursor
+%     # ======
+%
+%     if node.children:
+  enum Cursor: Int {
+%       for child in node.children:
+    case ${child.swift_name}
+%       end
+  }
+%     end
+
+%     # ==============
+%     # Initialization
+%     # ==============
+%
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `${node.name}` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .${node.swift_syntax_kind} else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `${node.name}` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .${node.swift_syntax_kind})
+    self._syntaxNode = Syntax(data)
+  }
+%     for child in node.children:
+%       child_node = NODE_MAP.get(child.syntax_kind)
+%
+%       # ===================
+%       # Children properties
+%       # ===================
+%
+%       ret_type = child.type_name
+%       if child.is_optional:
+%         ret_type += '?'
+%       end
+
+%       for line in dedented_lines(child.description):
+  /// ${line}
+%       end
+  public var ${child.swift_name}: ${ret_type} {
+    get {
+      let childData = data.child(at: Cursor.${child.swift_name},
+                                 parent: Syntax(self))
+%       if child.is_optional:
+      if childData == nil { return nil }
+%       end
+      return ${child.type_name}(childData!)
+    }
+    set(value) {
+      self = with${child.name}(value)
+    }
+  }
+%
+%       # ===============
+%       # Adding children
+%       # ===============
+%       if child_node and child_node.is_syntax_collection():
+%         child_elt = child.collection_element_name
+%         child_elt_type = child_node.collection_element_type
+%         if not child_elt:
+%           raise Exception("'collection_element_name' should be set for '%s' of '%s'" % (child.name, node.name))
+%         end
+
+  /// Adds the provided `${child_elt}` to the node's `${child.swift_name}`
+  /// collection.
+  /// - param element: The new `${child_elt}` to add to the node's
+  ///                  `${child.swift_name}` collection.
+  /// - returns: A copy of the receiver with the provided `${child_elt}`
+  ///            appended to its `${child.swift_name}` collection.
+  public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
+    var collection: RawSyntax
+    if let col = raw[Cursor.${child.swift_name}] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.${child_node.swift_syntax_kind},
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.${child.swift_name})
+    return ${node.name}(newData)
+  }
+%       end
+
+%       # ===================
+%       # Replacing children
+%       # ===================
+  /// Returns a copy of the receiver with its `${child.swift_name}` replaced.
+  /// - param newChild: The new `${child.swift_name}` to replace the node's
+  ///                   current `${child.swift_name}`, if present.
+  public func with${child.name}(
+    _ newChild: ${child.type_name}?) -> ${node.name} {
+%       if child.is_optional:
+    let raw = newChild?.raw
+%       else:
+    let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
+%       end
+    let newData = data.replacingChild(raw, at: Cursor.${child.swift_name})
+    return ${node.name}(newData)
+  }
+%     end
+}
+
+extension ${node.name}: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+%     for child in node.children:
+%       if child.is_optional:
+      "${child.swift_name}": ${child.swift_name}.map(Syntax.init)?._asConcreteType as Any,
+%       else:
+      "${child.swift_name}": Syntax(${child.swift_name})._asConcreteType,
+%       end
+%     end
+    ])
+  }
+}
+
+%   end
+% end

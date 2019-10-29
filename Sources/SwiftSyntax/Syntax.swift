@@ -38,17 +38,36 @@ public struct Syntax: SyntaxProtocol {
   }
 }
 
-/// Provide common functionality for specialized syntax nodes. Extend this 
+// Casting functions to specialized syntax nodes.
+extension Syntax {
+  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(self)
+  }
+}
+
+extension Syntax: CustomReflectable {
+  /// Reconstructs the real syntax type for this type from the node's kind and
+  /// provides a mirror that reflects this type.
+  public var customMirror: Mirror {
+    return Mirror(reflecting: self._asConcreteType)
+  }
+}
+
+/// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol SyntaxProtocol: CustomStringConvertible, 
+public protocol SyntaxProtocol: CustomStringConvertible,
     CustomDebugStringConvertible, TextOutputStreamable, Hashable {
 
   /// Retrieve the generic syntax node that is represented by this node.
   /// Do not retrieve this property directly. Use `Syntax(self)` instead.
   var _syntaxNode: Syntax { get }
 
-  /// Converts the given `Syntax` node to this type. Returns `nil` if the 
+  /// Converts the given `Syntax` node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
 }
@@ -238,14 +257,24 @@ public extension SyntaxProtocol {
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
   var leadingTrivia: Trivia? {
-    return raw.formLeadingTrivia()
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
   }
 
   /// The trailing trivia of this syntax node. Trailing trivia is attached to
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
   var trailingTrivia: Trivia? {
-    return raw.formTrailingTrivia()
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
   }
 
   /// The length this node's leading trivia takes up spelled out in source.
@@ -256,6 +285,33 @@ public extension SyntaxProtocol {
   /// The length this node's trailing trivia takes up spelled out in source.
   var trailingTriviaLength: SourceLength {
     return raw.trailingTriviaLength
+  }
+
+  /// Returns a new syntax node with its leading trivia replaced
+  /// by the provided trivia.
+  func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
+    return Self(Syntax(data.withLeadingTrivia(leadingTrivia)))!
+  }
+
+  /// Returns a new syntax node with its trailing trivia replaced
+  /// by the provided trivia.
+  func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
+    return Self(Syntax(data.withTrailingTrivia(trailingTrivia)))!
+  }
+
+  /// Returns a new `${node.name}` with its leading trivia removed.
+  func withoutLeadingTrivia() -> Self {
+    return withLeadingTrivia([])
+  }
+
+  /// Returns a new `${node.name}` with its trailing trivia removed.
+  func withoutTrailingTrivia() -> Self {
+    return withTrailingTrivia([])
+  }
+
+  /// Returns a new `${node.name}` with all trivia removed.
+  func withoutTrivia() -> Self {
+    return withoutLeadingTrivia().withoutTrailingTrivia()
   }
 
   /// The length of this node including all of its trivia.
@@ -366,146 +422,6 @@ public extension SyntaxProtocol {
 
   static func ==(lhs: Self, rhs: Self) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId
-  }
-}
-
-
-/// MARK: - Nodes
-
-/// A Syntax node representing a single token.
-public struct TokenSyntax: SyntaxProtocol {
-  public let _syntaxNode: Syntax
-
-  /// Converts the given `Syntax` node to a `TokenSyntax` if possible. Returns 
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .token else { return nil }
-    self._syntaxNode = syntax
-  }
-
-  /// Creates a Syntax node from the given `SyntaxData`. This assumes 
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .token)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var presence: SourcePresence {
-    return raw.presence
-  }
-
-  /// The text of the token as written in the source code.
-  public var text: String {
-    return tokenKind.text
-  }
-
-  /// Returns a new TokenSyntax with its kind replaced
-  /// by the provided token kind.
-  public func withKind(_ tokenKind: TokenKind) -> TokenSyntax {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    let newRaw = RawSyntax.createAndCalcLength(kind: tokenKind,
-      leadingTrivia: raw.formLeadingTrivia()!, trailingTrivia: raw.formTrailingTrivia()!,
-      presence: raw.presence)
-    let newData = data.replacingSelf(newRaw)
-    return TokenSyntax(newData)
-  }
-
-  /// Returns a new TokenSyntax with its leading trivia replaced
-  /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> TokenSyntax {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return TokenSyntax(data.withLeadingTrivia(leadingTrivia))
-  }
-
-  /// Returns a new TokenSyntax with its trailing trivia replaced
-  /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> TokenSyntax {
-    guard raw.kind == .token else {
-      fatalError("TokenSyntax must have token as its raw")
-    }
-    return TokenSyntax(data.withTrailingTrivia(trailingTrivia))
-  }
-
-  /// Returns a new TokenSyntax with its leading trivia removed.
-  public func withoutLeadingTrivia() -> TokenSyntax {
-    return withLeadingTrivia([])
-  }
-
-  /// Returns a new TokenSyntax with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> TokenSyntax {
-    return withTrailingTrivia([])
-  }
-
-  /// Returns a new TokenSyntax with all trivia removed.
-  public func withoutTrivia() -> TokenSyntax {
-    return withoutLeadingTrivia().withoutTrailingTrivia()
-  }
-
-  /// The leading trivia (spaces, newlines, etc.) associated with this token.
-  public var leadingTrivia: Trivia {
-    get {
-      return raw.formTokenLeadingTrivia()!
-    }
-    set {
-      self = withLeadingTrivia(newValue)
-    }
-  }
-
-  /// The trailing trivia (spaces, newlines, etc.) associated with this token.
-  public var trailingTrivia: Trivia {
-    get {
-      return raw.formTokenTrailingTrivia()!
-    }
-    set {
-      self = withTrailingTrivia(newValue)
-    }
-  }
-
-  /// The kind of token this node represents.
-  public var tokenKind: TokenKind {
-    get {
-      return raw.formTokenKind()!
-    }
-    set {
-      self = withKind(newValue)
-    }
-  }
-
-  /// The length this node takes up spelled out in the source, excluding its
-  /// leading or trailing trivia.
-  public var contentLength: SourceLength {
-    return raw.tokenContentLength
-  }
-
-  /// The length this node's leading trivia takes up spelled out in source.
-  public var leadingTriviaLength: SourceLength {
-    return raw.tokenLeadingTriviaLength
-  }
-
-  /// The length this node's trailing trivia takes up spelled out in source.
-  public var trailingTriviaLength: SourceLength {
-    return raw.tokenTrailingTriviaLength
-  }
-
-  /// The length of this node including all of its trivia.
-  public var totalLength: SourceLength {
-    return raw.totalLength
-  }
-}
-
-extension TokenSyntax: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, children: [
-      "text": text,
-      "leadingTrivia": leadingTrivia,
-      "trailingTrivia": trailingTrivia,
-      "tokenKind": tokenKind,
-    ])
   }
 }
 
@@ -621,7 +537,7 @@ public struct SyntaxNode {
   /// Converts this node to a `SyntaxData` object.
   ///
   /// This operation results in wrapping all of the node's parents into
-  /// `SyntaxData` objects. There's a cost associated with it that should be 
+  /// `SyntaxData` objects. There's a cost associated with it that should be
   /// taken into account before used inside performance critical code.
   internal var asSyntaxData: SyntaxData {
     return SyntaxData(absoluteRaw, parent: parent?.asSyntax)

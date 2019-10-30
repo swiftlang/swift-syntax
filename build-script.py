@@ -87,7 +87,7 @@ Refer to README.md for more information.
 
 
 def check_rsync():
-    with open(os.devnull, 'w')  as DEVNULL:
+    with open(os.devnull, 'w') as DEVNULL:
         if call(['rsync', '--version'], stdout=DEVNULL) != 0:
             fatal_error('Error: Could not find rsync.')
 
@@ -155,11 +155,8 @@ def generate_gyb_files(verbose, add_source_locations, destination=None):
 
 ## Building swiftSyntax
 
-def get_installed_name():
-    return 'SwiftSyntax'
-
 def get_installed_dylib_name():
-    return 'lib' + get_installed_name() + '.dylib'
+    return 'libSwiftSyntax.dylib'
 
 def get_swiftpm_invocation(toolchain, action, build_dir, release):
     swift_exec = os.path.join(toolchain, 'usr', 'bin', 'swift')
@@ -171,11 +168,6 @@ def get_swiftpm_invocation(toolchain, action, build_dir, release):
     if build_dir:
         swiftpm_call.extend(['--build-path', build_dir])
 
-    # Swift compiler needs to know the module link name.
-    swiftpm_call.extend(['-Xswiftc', '-module-link-name', '-Xswiftc', get_installed_name()])
-
-    # To speed up compilation.
-    swiftpm_call.extend(['-Xswiftc', '-enforce-exclusivity=unchecked'])
     return swiftpm_call
 
 class Builder(object):
@@ -190,20 +182,15 @@ class Builder(object):
       if verbose:
           self.swiftpm_call.extend(['--verbose'])
       self.verbose = verbose
-      self._environ = dict(os.environ)
-      self._environ['SWIFT_SYNTAX_BUILD_SCRIPT'] = ''
 
   def build(self, product_name, module_group_path=''):
       print('** Building ' + product_name + ' **')
       command = list(self.swiftpm_call)
       command.extend(['--product', product_name])
 
-      # To build the group information into the module documentation file
-      if module_group_path:
-        command.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', '-group-info-path'])
-        command.extend(['-Xswiftc', '-Xfrontend', '-Xswiftc', module_group_path])
-
-      check_call(command, env=self._environ, verbose=self.verbose)
+      env = dict(os.environ)
+      env['SWIFT_SYNTAX_CI_ENVIRONMENT'] = '1'
+      check_call(command, env=env, verbose=self.verbose)
 
 
 ## Testing
@@ -321,7 +308,9 @@ def run_xctests(toolchain, build_dir, release, verbose):
     if verbose:
         swiftpm_call.extend(['--verbose'])
 
-    return call(swiftpm_call, verbose=verbose) == 0
+    env = dict(os.environ)
+    env['SWIFT_SYNTAX_CI_ENVIRONMENT'] = '1'
+    return call(swiftpm_call, env=env, verbose=verbose) == 0
 
 def delete_rpath(rpath, binary):
     if platform.system() == 'Darwin':
@@ -508,8 +497,6 @@ section for arguments that need to be specified for this.
                           release=args.release,
                           verbose=args.verbose,
                           disable_sandbox=args.disable_sandbox)
-        # TODO: Building with group info does not allow us to reuse the build
-        # for running the tests.
         builder.build('SwiftSyntax', module_group_path=GROUP_INFO_PATH)
 
         # Only build lit-test-helper if we are planning to run tests

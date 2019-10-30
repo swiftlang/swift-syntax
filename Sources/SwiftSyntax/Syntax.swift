@@ -339,7 +339,7 @@ public extension SyntaxProtocol {
   }
 
   /// Returns a value representing the unique identity of the node.
-  var uniqueIdentifier: SyntaxIdentifier {
+  var id: SyntaxIdentifier {
     return data.nodeId
   }
 
@@ -600,7 +600,7 @@ extension ReversedTokenSequence: CustomReflectable {
 /// This is a more efficient representation than `Syntax` because it avoids casts
 /// to `Syntax` for representing the parent hierarchy.
 /// It provides generic information, like the node's position, range, and
-/// `uniqueIdentifier`, while still allowing getting the associated `Syntax`
+/// a unique `id`, while still allowing getting the associated `Syntax`
 /// object if necessary.
 ///
 /// `SyntaxParser` uses `SyntaxNode` to efficiently report which syntax nodes
@@ -668,7 +668,7 @@ public struct SyntaxNode {
   }
 
   /// Returns a value representing the unique identity of the node.
-  public var uniqueIdentifier: SyntaxIdentifier {
+  public var id: SyntaxIdentifier {
     return absoluteRaw.info.nodeId
   }
 }

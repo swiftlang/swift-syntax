@@ -158,7 +158,8 @@ def generate_gyb_files(verbose, add_source_locations, destination=None):
 def get_installed_dylib_name():
     return 'libSwiftSyntax.dylib'
 
-def get_swiftpm_invocation(toolchain, action, build_dir, release):
+def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file,
+                           release):
     swift_exec = os.path.join(toolchain, 'usr', 'bin', 'swift')
 
     swiftpm_call = [swift_exec, action]
@@ -167,15 +168,18 @@ def get_swiftpm_invocation(toolchain, action, build_dir, release):
         swiftpm_call.extend(['--configuration', 'release'])
     if build_dir:
         swiftpm_call.extend(['--build-path', build_dir])
+    if multiroot_data_file:
+        swiftpm_call.extend(['--multiroot-data-file', multiroot_data_file])
 
     return swiftpm_call
 
 class Builder(object):
-  def __init__(self, toolchain, build_dir, release, verbose,
-               disable_sandbox=False):
+  def __init__(self, toolchain, build_dir, multiroot_data_file, release,
+               verbose, disable_sandbox=False):
       self.swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
                                                  action='build',
                                                  build_dir=build_dir,
+                                                 multiroot_data_file=multiroot_data_file,
                                                  release=release)
       if disable_sandbox:
           self.swiftpm_call.append('--disable-sandbox')
@@ -189,7 +193,9 @@ class Builder(object):
       command.extend(['--product', product_name])
 
       env = dict(os.environ)
-      env['SWIFT_SYNTAX_CI_ENVIRONMENT'] = '1'
+      env['SWIFT_BUILD_SCRIPT_ENVIRONMENT'] = '1'
+      # Tell other projects in the unified build to use local dependencies
+      env['SWIFTCI_USE_LOCAL_DEPS'] = '1'
       check_call(command, env=env, verbose=self.verbose)
 
 
@@ -212,7 +218,8 @@ def verify_generated_files(verbose):
     check_call(command)
 
 
-def run_tests(toolchain, build_dir, release, filecheck_exec, verbose):
+def run_tests(toolchain, build_dir, multiroot_data_file, release,
+              filecheck_exec, verbose):
     print('** Running SwiftSyntax Tests **')
 
     lit_success = run_lit_tests(toolchain=toolchain,
@@ -225,6 +232,7 @@ def run_tests(toolchain, build_dir, release, filecheck_exec, verbose):
 
     xctest_success = run_xctests(toolchain=toolchain,
                                  build_dir=build_dir,
+                                 multiroot_data_file=multiroot_data_file,
                                  release=release,
                                  verbose=verbose)
     if not xctest_success:
@@ -259,6 +267,7 @@ def find_lit_test_helper_exec(toolchain, build_dir, release):
     swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
                                           action='build',
                                           build_dir=build_dir,
+                                          multiroot_data_file=None,
                                           release=release)
     swiftpm_call.extend(['--product', 'lit-test-helper'])
     swiftpm_call.extend(['--show-bin-path'])
@@ -298,18 +307,23 @@ def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
 
 ## XCTest based tests
 
-def run_xctests(toolchain, build_dir, release, verbose):
+def run_xctests(toolchain, build_dir, multiroot_data_file, release, verbose):
     print('** Running XCTests **')
     swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
                                           action='test',
                                           build_dir=build_dir,
+                                          multiroot_data_file=multiroot_data_file,
                                           release=release)
 
     if verbose:
         swiftpm_call.extend(['--verbose'])
 
+    swiftpm_call.extend(['--test-product', 'SwiftSyntaxPackageTests'])
+
     env = dict(os.environ)
-    env['SWIFT_SYNTAX_CI_ENVIRONMENT'] = '1'
+    env['SWIFT_BUILD_SCRIPT_ENVIRONMENT'] = '1'
+    # Tell other projects in the unified build to use local dependencies
+    env['SWIFTCI_USE_LOCAL_DEPS'] = '1'
     return call(swiftpm_call, env=env, verbose=verbose) == 0
 
 def delete_rpath(rpath, binary):
@@ -433,6 +447,11 @@ section for arguments that need to be specified for this.
                              help='The script only generates swift files from gyb '
                                   'and skips the rest of the build')
 
+    build_group.add_argument('--multiroot-data-file',
+                             help='Path to an Xcode workspace to create a '
+                                  'unified build of SwiftSyntax with other '
+                                  'projects.')
+
     testing_group = parser.add_argument_group('Testing')
     testing_group.add_argument('-t', '--test', action='store_true',
                                help='Run tests')
@@ -494,6 +513,7 @@ section for arguments that need to be specified for this.
     try:
         builder = Builder(toolchain=args.toolchain,
                           build_dir=args.build_dir,
+                          multiroot_data_file=args.multiroot_data_file,
                           release=args.release,
                           verbose=args.verbose,
                           disable_sandbox=args.disable_sandbox)
@@ -512,6 +532,7 @@ section for arguments that need to be specified for this.
         try:
             success = run_tests(toolchain=args.toolchain,
                                 build_dir=realpath(args.build_dir),
+                                multiroot_data_file=args.multiroot_data_file,
                                 release=args.release,
                                 filecheck_exec=realpath(args.filecheck_exec),
                                 verbose=args.verbose)

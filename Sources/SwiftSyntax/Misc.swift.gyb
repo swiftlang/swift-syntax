@@ -43,7 +43,7 @@ public extension Syntax {
   /// Retrieve the concretely typed node that this Syntax node wraps.
   /// This property is exposed for testing purposes only.
   var _asConcreteType: Any {
-    switch self.asSyntaxEnum {
+    switch self.as(SyntaxEnum.self) {
     case .token(let node):
       return node
     case .unknown(let node):

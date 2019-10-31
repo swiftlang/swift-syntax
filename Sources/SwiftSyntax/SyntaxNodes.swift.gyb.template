@@ -46,7 +46,7 @@ nodes whose base kind are that specified kind.
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
-public struct ${node.name}: ${base_type}Protocol {
+public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %     # ======
 %     # Cursor
 %     # ======

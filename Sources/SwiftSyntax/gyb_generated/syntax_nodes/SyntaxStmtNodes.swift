@@ -15,7 +15,7 @@
 
 // MARK: - UnknownStmtSyntax
 
-public struct UnknownStmtSyntax: StmtSyntaxProtocol {
+public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
@@ -44,7 +44,7 @@ extension UnknownStmtSyntax: CustomReflectable {
 
 // MARK: - ContinueStmtSyntax
 
-public struct ContinueStmtSyntax: StmtSyntaxProtocol {
+public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case continueKeyword
     case label
@@ -122,7 +122,7 @@ extension ContinueStmtSyntax: CustomReflectable {
 
 // MARK: - WhileStmtSyntax
 
-public struct WhileStmtSyntax: StmtSyntaxProtocol {
+public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -289,7 +289,7 @@ extension WhileStmtSyntax: CustomReflectable {
 
 // MARK: - DeferStmtSyntax
 
-public struct DeferStmtSyntax: StmtSyntaxProtocol {
+public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case deferKeyword
     case body
@@ -366,7 +366,7 @@ extension DeferStmtSyntax: CustomReflectable {
 
 // MARK: - ExpressionStmtSyntax
 
-public struct ExpressionStmtSyntax: StmtSyntaxProtocol {
+public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
   }
@@ -420,7 +420,7 @@ extension ExpressionStmtSyntax: CustomReflectable {
 
 // MARK: - RepeatWhileStmtSyntax
 
-public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol {
+public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -591,7 +591,7 @@ extension RepeatWhileStmtSyntax: CustomReflectable {
 
 // MARK: - GuardStmtSyntax
 
-public struct GuardStmtSyntax: StmtSyntaxProtocol {
+public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case guardKeyword
     case conditions
@@ -733,7 +733,7 @@ extension GuardStmtSyntax: CustomReflectable {
 
 // MARK: - ForInStmtSyntax
 
-public struct ForInStmtSyntax: StmtSyntaxProtocol {
+public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -999,7 +999,7 @@ extension ForInStmtSyntax: CustomReflectable {
 
 // MARK: - SwitchStmtSyntax
 
-public struct SwitchStmtSyntax: StmtSyntaxProtocol {
+public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -1212,7 +1212,7 @@ extension SwitchStmtSyntax: CustomReflectable {
 
 // MARK: - DoStmtSyntax
 
-public struct DoStmtSyntax: StmtSyntaxProtocol {
+public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -1380,7 +1380,7 @@ extension DoStmtSyntax: CustomReflectable {
 
 // MARK: - ReturnStmtSyntax
 
-public struct ReturnStmtSyntax: StmtSyntaxProtocol {
+public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case returnKeyword
     case expression
@@ -1458,7 +1458,7 @@ extension ReturnStmtSyntax: CustomReflectable {
 
 // MARK: - YieldStmtSyntax
 
-public struct YieldStmtSyntax: StmtSyntaxProtocol {
+public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case yieldKeyword
     case yields
@@ -1535,7 +1535,7 @@ extension YieldStmtSyntax: CustomReflectable {
 
 // MARK: - FallthroughStmtSyntax
 
-public struct FallthroughStmtSyntax: StmtSyntaxProtocol {
+public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case fallthroughKeyword
   }
@@ -1589,7 +1589,7 @@ extension FallthroughStmtSyntax: CustomReflectable {
 
 // MARK: - BreakStmtSyntax
 
-public struct BreakStmtSyntax: StmtSyntaxProtocol {
+public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case breakKeyword
     case label
@@ -1667,7 +1667,7 @@ extension BreakStmtSyntax: CustomReflectable {
 
 // MARK: - DeclarationStmtSyntax
 
-public struct DeclarationStmtSyntax: StmtSyntaxProtocol {
+public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case declaration
   }
@@ -1721,7 +1721,7 @@ extension DeclarationStmtSyntax: CustomReflectable {
 
 // MARK: - ThrowStmtSyntax
 
-public struct ThrowStmtSyntax: StmtSyntaxProtocol {
+public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case throwKeyword
     case expression
@@ -1798,7 +1798,7 @@ extension ThrowStmtSyntax: CustomReflectable {
 
 // MARK: - IfStmtSyntax
 
-public struct IfStmtSyntax: StmtSyntaxProtocol {
+public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -2013,7 +2013,7 @@ extension IfStmtSyntax: CustomReflectable {
 
 // MARK: - PoundAssertStmtSyntax
 
-public struct PoundAssertStmtSyntax: StmtSyntaxProtocol {
+public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundAssert
     case leftParen

@@ -15,7 +15,7 @@
 
 // MARK: - UnknownDeclSyntax
 
-public struct UnknownDeclSyntax: DeclSyntaxProtocol {
+public struct UnknownDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
@@ -44,7 +44,7 @@ extension UnknownDeclSyntax: CustomReflectable {
 
 // MARK: - TypealiasDeclSyntax
 
-public struct TypealiasDeclSyntax: DeclSyntaxProtocol {
+public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -279,7 +279,7 @@ extension TypealiasDeclSyntax: CustomReflectable {
 
 // MARK: - AssociatedtypeDeclSyntax
 
-public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol {
+public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -514,7 +514,7 @@ extension AssociatedtypeDeclSyntax: CustomReflectable {
 
 // MARK: - IfConfigDeclSyntax
 
-public struct IfConfigDeclSyntax: DeclSyntaxProtocol {
+public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case clauses
     case poundEndif
@@ -610,7 +610,7 @@ extension IfConfigDeclSyntax: CustomReflectable {
 
 // MARK: - PoundErrorDeclSyntax
 
-public struct PoundErrorDeclSyntax: DeclSyntaxProtocol {
+public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundError
     case leftParen
@@ -733,7 +733,7 @@ extension PoundErrorDeclSyntax: CustomReflectable {
 
 // MARK: - PoundWarningDeclSyntax
 
-public struct PoundWarningDeclSyntax: DeclSyntaxProtocol {
+public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundWarning
     case leftParen
@@ -856,7 +856,7 @@ extension PoundWarningDeclSyntax: CustomReflectable {
 
 // MARK: - PoundSourceLocationSyntax
 
-public struct PoundSourceLocationSyntax: DeclSyntaxProtocol {
+public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundSourceLocation
     case leftParen
@@ -980,7 +980,7 @@ extension PoundSourceLocationSyntax: CustomReflectable {
 
 // MARK: - ClassDeclSyntax
 
-public struct ClassDeclSyntax: DeclSyntaxProtocol {
+public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -1238,7 +1238,7 @@ extension ClassDeclSyntax: CustomReflectable {
 
 // MARK: - StructDeclSyntax
 
-public struct StructDeclSyntax: DeclSyntaxProtocol {
+public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -1496,7 +1496,7 @@ extension StructDeclSyntax: CustomReflectable {
 
 // MARK: - ProtocolDeclSyntax
 
-public struct ProtocolDeclSyntax: DeclSyntaxProtocol {
+public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -1730,7 +1730,7 @@ extension ProtocolDeclSyntax: CustomReflectable {
 
 // MARK: - ExtensionDeclSyntax
 
-public struct ExtensionDeclSyntax: DeclSyntaxProtocol {
+public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -1964,7 +1964,7 @@ extension ExtensionDeclSyntax: CustomReflectable {
 
 // MARK: - FunctionDeclSyntax
 
-public struct FunctionDeclSyntax: DeclSyntaxProtocol {
+public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -2222,7 +2222,7 @@ extension FunctionDeclSyntax: CustomReflectable {
 
 // MARK: - InitializerDeclSyntax
 
-public struct InitializerDeclSyntax: DeclSyntaxProtocol {
+public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -2505,7 +2505,7 @@ extension InitializerDeclSyntax: CustomReflectable {
 
 // MARK: - DeinitializerDeclSyntax
 
-public struct DeinitializerDeclSyntax: DeclSyntaxProtocol {
+public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -2668,7 +2668,7 @@ extension DeinitializerDeclSyntax: CustomReflectable {
 
 // MARK: - SubscriptDeclSyntax
 
-public struct SubscriptDeclSyntax: DeclSyntaxProtocol {
+public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -2926,7 +2926,7 @@ extension SubscriptDeclSyntax: CustomReflectable {
 
 // MARK: - ImportDeclSyntax
 
-public struct ImportDeclSyntax: DeclSyntaxProtocol {
+public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -3132,7 +3132,7 @@ extension ImportDeclSyntax: CustomReflectable {
 
 // MARK: - AccessorDeclSyntax
 
-public struct AccessorDeclSyntax: DeclSyntaxProtocol {
+public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifier
@@ -3301,7 +3301,7 @@ extension AccessorDeclSyntax: CustomReflectable {
 
 // MARK: - VariableDeclSyntax
 
-public struct VariableDeclSyntax: DeclSyntaxProtocol {
+public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -3484,11 +3484,10 @@ extension VariableDeclSyntax: CustomReflectable {
 // MARK: - EnumCaseDeclSyntax
 
 /// 
-/// A `case` declaration of a Swift `enum`. It can have 1 or more
-/// `EnumCaseElement`s inside, each declaring a different case of the
+/// A `case` declaration of a Swift `enum`. It can have 1 or more          `EnumCaseElement`s inside, each declaring a different case of the
 /// enum.
 /// 
-public struct EnumCaseDeclSyntax: DeclSyntaxProtocol {
+public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -3679,7 +3678,7 @@ extension EnumCaseDeclSyntax: CustomReflectable {
 // MARK: - EnumDeclSyntax
 
 /// A Swift `enum` declaration.
-public struct EnumDeclSyntax: DeclSyntaxProtocol {
+public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -3870,8 +3869,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol {
   }
 
   /// 
-  /// The inheritance clause describing conformances or raw
-  /// values for this enum.
+  /// The inheritance clause describing conformances or raw                    values for this enum.
   /// 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
@@ -3896,8 +3894,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol {
   }
 
   /// 
-  /// The `where` clause that applies to the generic parameters of
-  /// this enum.
+  /// The `where` clause that applies to the generic parameters of                    this enum.
   /// 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
@@ -3964,7 +3961,7 @@ extension EnumDeclSyntax: CustomReflectable {
 // MARK: - OperatorDeclSyntax
 
 /// A Swift `operator` declaration.
-public struct OperatorDeclSyntax: DeclSyntaxProtocol {
+public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
@@ -4162,7 +4159,7 @@ extension OperatorDeclSyntax: CustomReflectable {
 // MARK: - PrecedenceGroupDeclSyntax
 
 /// A Swift `precedencegroup` declaration.
-public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol {
+public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers

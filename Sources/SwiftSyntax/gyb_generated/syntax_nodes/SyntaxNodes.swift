@@ -19,7 +19,7 @@
 /// A CodeBlockItem is any Syntax node that appears on its own line inside
 /// a CodeBlock.
 /// 
-public struct CodeBlockItemSyntax: SyntaxProtocol {
+public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case item
     case semicolon
@@ -125,7 +125,7 @@ extension CodeBlockItemSyntax: CustomReflectable {
 
 // MARK: - CodeBlockSyntax
 
-public struct CodeBlockSyntax: SyntaxProtocol {
+public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftBrace
     case statements
@@ -244,7 +244,7 @@ extension CodeBlockSyntax: CustomReflectable {
 
 // MARK: - DeclNameArgumentSyntax
 
-public struct DeclNameArgumentSyntax: SyntaxProtocol {
+public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case colon
@@ -321,7 +321,7 @@ extension DeclNameArgumentSyntax: CustomReflectable {
 
 // MARK: - DeclNameArgumentsSyntax
 
-public struct DeclNameArgumentsSyntax: SyntaxProtocol {
+public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case arguments
@@ -440,7 +440,7 @@ extension DeclNameArgumentsSyntax: CustomReflectable {
 
 // MARK: - TupleExprElementSyntax
 
-public struct TupleExprElementSyntax: SyntaxProtocol {
+public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case label
     case colon
@@ -566,7 +566,7 @@ extension TupleExprElementSyntax: CustomReflectable {
 
 // MARK: - ArrayElementSyntax
 
-public struct ArrayElementSyntax: SyntaxProtocol {
+public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
     case trailingComma
@@ -644,7 +644,7 @@ extension ArrayElementSyntax: CustomReflectable {
 
 // MARK: - DictionaryElementSyntax
 
-public struct DictionaryElementSyntax: SyntaxProtocol {
+public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case keyExpression
     case colon
@@ -768,7 +768,7 @@ extension DictionaryElementSyntax: CustomReflectable {
 
 // MARK: - ClosureCaptureItemSyntax
 
-public struct ClosureCaptureItemSyntax: SyntaxProtocol {
+public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case specifier
     case name
@@ -937,7 +937,7 @@ extension ClosureCaptureItemSyntax: CustomReflectable {
 
 // MARK: - ClosureCaptureSignatureSyntax
 
-public struct ClosureCaptureSignatureSyntax: SyntaxProtocol {
+public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquare
     case items
@@ -1057,7 +1057,7 @@ extension ClosureCaptureSignatureSyntax: CustomReflectable {
 
 // MARK: - ClosureParamSyntax
 
-public struct ClosureParamSyntax: SyntaxProtocol {
+public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case trailingComma
@@ -1135,7 +1135,7 @@ extension ClosureParamSyntax: CustomReflectable {
 
 // MARK: - ClosureSignatureSyntax
 
-public struct ClosureSignatureSyntax: SyntaxProtocol {
+public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case capture
     case input
@@ -1285,7 +1285,7 @@ extension ClosureSignatureSyntax: CustomReflectable {
 
 // MARK: - StringSegmentSyntax
 
-public struct StringSegmentSyntax: SyntaxProtocol {
+public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case content
   }
@@ -1339,7 +1339,7 @@ extension StringSegmentSyntax: CustomReflectable {
 
 // MARK: - ExpressionSegmentSyntax
 
-public struct ExpressionSegmentSyntax: SyntaxProtocol {
+public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case backslash
     case delimiter
@@ -1505,7 +1505,7 @@ extension ExpressionSegmentSyntax: CustomReflectable {
 
 // MARK: - ObjcNamePieceSyntax
 
-public struct ObjcNamePieceSyntax: SyntaxProtocol {
+public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case dot
@@ -1583,7 +1583,7 @@ extension ObjcNamePieceSyntax: CustomReflectable {
 
 // MARK: - TypeInitializerClauseSyntax
 
-public struct TypeInitializerClauseSyntax: SyntaxProtocol {
+public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case equal
     case value
@@ -1660,7 +1660,7 @@ extension TypeInitializerClauseSyntax: CustomReflectable {
 
 // MARK: - ParameterClauseSyntax
 
-public struct ParameterClauseSyntax: SyntaxProtocol {
+public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case parameterList
@@ -1779,7 +1779,7 @@ extension ParameterClauseSyntax: CustomReflectable {
 
 // MARK: - ReturnClauseSyntax
 
-public struct ReturnClauseSyntax: SyntaxProtocol {
+public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case arrow
     case returnType
@@ -1856,7 +1856,7 @@ extension ReturnClauseSyntax: CustomReflectable {
 
 // MARK: - FunctionSignatureSyntax
 
-public struct FunctionSignatureSyntax: SyntaxProtocol {
+public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case input
     case throwsOrRethrowsKeyword
@@ -1958,7 +1958,7 @@ extension FunctionSignatureSyntax: CustomReflectable {
 
 // MARK: - IfConfigClauseSyntax
 
-public struct IfConfigClauseSyntax: SyntaxProtocol {
+public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundKeyword
     case condition
@@ -2059,7 +2059,7 @@ extension IfConfigClauseSyntax: CustomReflectable {
 
 // MARK: - PoundSourceLocationArgsSyntax
 
-public struct PoundSourceLocationArgsSyntax: SyntaxProtocol {
+public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case fileArgLabel
     case fileArgColon
@@ -2251,7 +2251,7 @@ extension PoundSourceLocationArgsSyntax: CustomReflectable {
 
 // MARK: - DeclModifierSyntax
 
-public struct DeclModifierSyntax: SyntaxProtocol {
+public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case detailLeftParen
@@ -2377,7 +2377,7 @@ extension DeclModifierSyntax: CustomReflectable {
 
 // MARK: - InheritedTypeSyntax
 
-public struct InheritedTypeSyntax: SyntaxProtocol {
+public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case typeName
     case trailingComma
@@ -2455,7 +2455,7 @@ extension InheritedTypeSyntax: CustomReflectable {
 
 // MARK: - TypeInheritanceClauseSyntax
 
-public struct TypeInheritanceClauseSyntax: SyntaxProtocol {
+public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case colon
     case inheritedTypeCollection
@@ -2551,7 +2551,7 @@ extension TypeInheritanceClauseSyntax: CustomReflectable {
 
 // MARK: - MemberDeclBlockSyntax
 
-public struct MemberDeclBlockSyntax: SyntaxProtocol {
+public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftBrace
     case members
@@ -2671,10 +2671,9 @@ extension MemberDeclBlockSyntax: CustomReflectable {
 // MARK: - MemberDeclListItemSyntax
 
 /// 
-/// A member declaration of a type consisting of a declaration and an
-/// optional semicolon;
+/// A member declaration of a type consisting of a declaration and an          optional semicolon;
 /// 
-public struct MemberDeclListItemSyntax: SyntaxProtocol {
+public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case decl
     case semicolon
@@ -2754,7 +2753,7 @@ extension MemberDeclListItemSyntax: CustomReflectable {
 
 // MARK: - SourceFileSyntax
 
-public struct SourceFileSyntax: SyntaxProtocol {
+public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case statements
     case eofToken
@@ -2850,7 +2849,7 @@ extension SourceFileSyntax: CustomReflectable {
 
 // MARK: - InitializerClauseSyntax
 
-public struct InitializerClauseSyntax: SyntaxProtocol {
+public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case equal
     case value
@@ -2927,7 +2926,7 @@ extension InitializerClauseSyntax: CustomReflectable {
 
 // MARK: - FunctionParameterSyntax
 
-public struct FunctionParameterSyntax: SyntaxProtocol {
+public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case firstName
@@ -3169,7 +3168,7 @@ extension FunctionParameterSyntax: CustomReflectable {
 
 // MARK: - AccessLevelModifierSyntax
 
-public struct AccessLevelModifierSyntax: SyntaxProtocol {
+public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case leftParen
@@ -3295,7 +3294,7 @@ extension AccessLevelModifierSyntax: CustomReflectable {
 
 // MARK: - AccessPathComponentSyntax
 
-public struct AccessPathComponentSyntax: SyntaxProtocol {
+public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case trailingDot
@@ -3373,7 +3372,7 @@ extension AccessPathComponentSyntax: CustomReflectable {
 
 // MARK: - AccessorParameterSyntax
 
-public struct AccessorParameterSyntax: SyntaxProtocol {
+public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case name
@@ -3473,7 +3472,7 @@ extension AccessorParameterSyntax: CustomReflectable {
 
 // MARK: - AccessorBlockSyntax
 
-public struct AccessorBlockSyntax: SyntaxProtocol {
+public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftBrace
     case accessors
@@ -3592,7 +3591,7 @@ extension AccessorBlockSyntax: CustomReflectable {
 
 // MARK: - PatternBindingSyntax
 
-public struct PatternBindingSyntax: SyntaxProtocol {
+public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case pattern
     case typeAnnotation
@@ -3743,10 +3742,9 @@ extension PatternBindingSyntax: CustomReflectable {
 // MARK: - EnumCaseElementSyntax
 
 /// 
-/// An element of an enum case, containing the name of the case and,
-/// optionally, either associated values or an assignment to a raw value.
+/// An element of an enum case, containing the name of the case and,          optionally, either associated values or an assignment to a raw value.
 /// 
-public struct EnumCaseElementSyntax: SyntaxProtocol {
+public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case identifier
     case associatedValue
@@ -3842,8 +3840,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The trailing comma of this element, if the case has
-  /// multiple elements.
+  /// The trailing comma of this element, if the case has                    multiple elements.
   /// 
   public var trailingComma: TokenSyntax? {
     get {
@@ -3884,7 +3881,7 @@ extension EnumCaseElementSyntax: CustomReflectable {
 /// 
 /// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
 /// 
-public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol {
+public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case colon
     case precedenceGroupAndDesignatedTypes
@@ -3987,7 +3984,7 @@ extension OperatorPrecedenceAndTypesSyntax: CustomReflectable {
 /// Specify the new precedence group's relation to existing precedence
 /// groups.
 /// 
-public struct PrecedenceGroupRelationSyntax: SyntaxProtocol {
+public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case higherThanOrLowerThan
     case colon
@@ -4113,7 +4110,7 @@ extension PrecedenceGroupRelationSyntax: CustomReflectable {
 
 // MARK: - PrecedenceGroupNameElementSyntax
 
-public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol {
+public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case trailingComma
@@ -4195,7 +4192,7 @@ extension PrecedenceGroupNameElementSyntax: CustomReflectable {
 /// Specifies the precedence of an operator when used in an operation
 /// that includes optional chaining.
 /// 
-public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol {
+public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case assignmentKeyword
     case colon
@@ -4306,7 +4303,7 @@ extension PrecedenceGroupAssignmentSyntax: CustomReflectable {
 /// Specifies how a sequence of operators with the same precedence level
 /// are grouped together in the absence of grouping parentheses.
 /// 
-public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol {
+public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case associativityKeyword
     case colon
@@ -4415,7 +4412,7 @@ extension PrecedenceGroupAssociativitySyntax: CustomReflectable {
 /// 
 /// A custom `@` attribute.
 /// 
-public struct CustomAttributeSyntax: SyntaxProtocol {
+public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case atSignToken
     case attributeName
@@ -4588,7 +4585,7 @@ extension CustomAttributeSyntax: CustomReflectable {
 /// 
 /// An `@` attribute.
 /// 
-public struct AttributeSyntax: SyntaxProtocol {
+public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case atSignToken
     case attributeName
@@ -4685,9 +4682,7 @@ public struct AttributeSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The arguments of the attribute. In case the attribute
-  /// takes multiple arguments, they are gather in the
-  /// appropriate takes first.
+  /// The arguments of the attribute. In case the attribute                     takes multiple arguments, they are gather in the                    appropriate takes first.
   /// 
   public var argument: Syntax? {
     get {
@@ -4794,10 +4789,9 @@ extension AttributeSyntax: CustomReflectable {
 // MARK: - LabeledSpecializeEntrySyntax
 
 /// 
-/// A labeled argument for the `@_specialize` attribute like
-/// `exported: true`
+/// A labeled argument for the `@_specialize` attribute like          `exported: true`
 /// 
-public struct LabeledSpecializeEntrySyntax: SyntaxProtocol {
+public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case label
     case colon
@@ -4928,11 +4922,9 @@ extension LabeledSpecializeEntrySyntax: CustomReflectable {
 // MARK: - NamedAttributeStringArgumentSyntax
 
 /// 
-/// The argument for the `@_dynamic_replacement` or `@_private`
-/// attribute of the form `for: "function()"` or `sourceFile:
-/// "Src.swift"`
+/// The argument for the `@_dynamic_replacement` or `@_private`          attribute of the form `for: "function()"` or `sourceFile:          "Src.swift"`
 /// 
-public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol {
+public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case nameTok
     case colon
@@ -5034,7 +5026,7 @@ extension NamedAttributeStringArgumentSyntax: CustomReflectable {
 
 // MARK: - DeclNameSyntax
 
-public struct DeclNameSyntax: SyntaxProtocol {
+public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case declBaseName
     case declNameArguments
@@ -5082,8 +5074,7 @@ public struct DeclNameSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The argument labels of the protocol's requirement if it
-  /// is a function requirement.
+  /// The argument labels of the protocol's requirement if it                is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
@@ -5120,10 +5111,9 @@ extension DeclNameSyntax: CustomReflectable {
 // MARK: - ImplementsAttributeArgumentsSyntax
 
 /// 
-/// The arguments for the `@_implements` attribute of the form
-/// `Type, methodName(arg1Label:arg2Label:)`
+/// The arguments for the `@_implements` attribute of the form          `Type, methodName(arg1Label:arg2Label:)`
 /// 
-public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
+public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case type
     case comma
@@ -5149,8 +5139,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The type for which the method with this attribute
-  /// implements a requirement.
+  /// The type for which the method with this attribute                    implements a requirement.
   /// 
   public var type: SimpleTypeIdentifierSyntax {
     get {
@@ -5222,8 +5211,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The argument labels of the protocol's requirement if it
-  /// is a function requirement.
+  /// The argument labels of the protocol's requirement if it                    is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
@@ -5262,11 +5250,9 @@ extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
 // MARK: - ObjCSelectorPieceSyntax
 
 /// 
-/// A piece of an Objective-C selector. Either consisiting of just an
-/// identifier for a nullary selector, an identifier and a colon for a
-/// labeled argument or just a colon for an unlabeled argument
+/// A piece of an Objective-C selector. Either consisiting of just an          identifier for a nullary selector, an identifier and a colon for a          labeled argument or just a colon for an unlabeled argument
 /// 
-public struct ObjCSelectorPieceSyntax: SyntaxProtocol {
+public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case colon
@@ -5345,7 +5331,7 @@ extension ObjCSelectorPieceSyntax: CustomReflectable {
 
 // MARK: - WhereClauseSyntax
 
-public struct WhereClauseSyntax: SyntaxProtocol {
+public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case whereKeyword
     case guardResult
@@ -5422,7 +5408,7 @@ extension WhereClauseSyntax: CustomReflectable {
 
 // MARK: - YieldListSyntax
 
-public struct YieldListSyntax: SyntaxProtocol {
+public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case elementList
@@ -5565,7 +5551,7 @@ extension YieldListSyntax: CustomReflectable {
 
 // MARK: - ConditionElementSyntax
 
-public struct ConditionElementSyntax: SyntaxProtocol {
+public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case condition
     case trailingComma
@@ -5643,7 +5629,7 @@ extension ConditionElementSyntax: CustomReflectable {
 
 // MARK: - AvailabilityConditionSyntax
 
-public struct AvailabilityConditionSyntax: SyntaxProtocol {
+public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundAvailableKeyword
     case leftParen
@@ -5785,7 +5771,7 @@ extension AvailabilityConditionSyntax: CustomReflectable {
 
 // MARK: - MatchingPatternConditionSyntax
 
-public struct MatchingPatternConditionSyntax: SyntaxProtocol {
+public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case caseKeyword
     case pattern
@@ -5909,7 +5895,7 @@ extension MatchingPatternConditionSyntax: CustomReflectable {
 
 // MARK: - OptionalBindingConditionSyntax
 
-public struct OptionalBindingConditionSyntax: SyntaxProtocol {
+public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case letOrVarKeyword
     case pattern
@@ -6033,7 +6019,7 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
 
 // MARK: - ElseIfContinuationSyntax
 
-public struct ElseIfContinuationSyntax: SyntaxProtocol {
+public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case ifStatement
   }
@@ -6087,7 +6073,7 @@ extension ElseIfContinuationSyntax: CustomReflectable {
 
 // MARK: - ElseBlockSyntax
 
-public struct ElseBlockSyntax: SyntaxProtocol {
+public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case elseKeyword
     case body
@@ -6164,7 +6150,7 @@ extension ElseBlockSyntax: CustomReflectable {
 
 // MARK: - SwitchCaseSyntax
 
-public struct SwitchCaseSyntax: SyntaxProtocol {
+public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case unknownAttr
     case label
@@ -6284,7 +6270,7 @@ extension SwitchCaseSyntax: CustomReflectable {
 
 // MARK: - SwitchDefaultLabelSyntax
 
-public struct SwitchDefaultLabelSyntax: SyntaxProtocol {
+public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case defaultKeyword
     case colon
@@ -6361,7 +6347,7 @@ extension SwitchDefaultLabelSyntax: CustomReflectable {
 
 // MARK: - CaseItemSyntax
 
-public struct CaseItemSyntax: SyntaxProtocol {
+public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case pattern
     case whereClause
@@ -6463,7 +6449,7 @@ extension CaseItemSyntax: CustomReflectable {
 
 // MARK: - SwitchCaseLabelSyntax
 
-public struct SwitchCaseLabelSyntax: SyntaxProtocol {
+public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case caseKeyword
     case caseItems
@@ -6582,7 +6568,7 @@ extension SwitchCaseLabelSyntax: CustomReflectable {
 
 // MARK: - CatchClauseSyntax
 
-public struct CatchClauseSyntax: SyntaxProtocol {
+public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case catchKeyword
     case pattern
@@ -6707,7 +6693,7 @@ extension CatchClauseSyntax: CustomReflectable {
 
 // MARK: - GenericWhereClauseSyntax
 
-public struct GenericWhereClauseSyntax: SyntaxProtocol {
+public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case whereKeyword
     case requirementList
@@ -6803,7 +6789,7 @@ extension GenericWhereClauseSyntax: CustomReflectable {
 
 // MARK: - GenericRequirementSyntax
 
-public struct GenericRequirementSyntax: SyntaxProtocol {
+public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case body
     case trailingComma
@@ -6881,7 +6867,7 @@ extension GenericRequirementSyntax: CustomReflectable {
 
 // MARK: - SameTypeRequirementSyntax
 
-public struct SameTypeRequirementSyntax: SyntaxProtocol {
+public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftTypeIdentifier
     case equalityToken
@@ -6981,7 +6967,7 @@ extension SameTypeRequirementSyntax: CustomReflectable {
 
 // MARK: - GenericParameterSyntax
 
-public struct GenericParameterSyntax: SyntaxProtocol {
+public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case name
@@ -7150,7 +7136,7 @@ extension GenericParameterSyntax: CustomReflectable {
 
 // MARK: - GenericParameterClauseSyntax
 
-public struct GenericParameterClauseSyntax: SyntaxProtocol {
+public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftAngleBracket
     case genericParameterList
@@ -7269,7 +7255,7 @@ extension GenericParameterClauseSyntax: CustomReflectable {
 
 // MARK: - ConformanceRequirementSyntax
 
-public struct ConformanceRequirementSyntax: SyntaxProtocol {
+public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftTypeIdentifier
     case colon
@@ -7369,7 +7355,7 @@ extension ConformanceRequirementSyntax: CustomReflectable {
 
 // MARK: - CompositionTypeElementSyntax
 
-public struct CompositionTypeElementSyntax: SyntaxProtocol {
+public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case type
     case ampersand
@@ -7447,7 +7433,7 @@ extension CompositionTypeElementSyntax: CustomReflectable {
 
 // MARK: - TupleTypeElementSyntax
 
-public struct TupleTypeElementSyntax: SyntaxProtocol {
+public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case inOut
     case name
@@ -7669,7 +7655,7 @@ extension TupleTypeElementSyntax: CustomReflectable {
 
 // MARK: - GenericArgumentSyntax
 
-public struct GenericArgumentSyntax: SyntaxProtocol {
+public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case argumentType
     case trailingComma
@@ -7747,7 +7733,7 @@ extension GenericArgumentSyntax: CustomReflectable {
 
 // MARK: - GenericArgumentClauseSyntax
 
-public struct GenericArgumentClauseSyntax: SyntaxProtocol {
+public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftAngleBracket
     case arguments
@@ -7866,7 +7852,7 @@ extension GenericArgumentClauseSyntax: CustomReflectable {
 
 // MARK: - TypeAnnotationSyntax
 
-public struct TypeAnnotationSyntax: SyntaxProtocol {
+public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case colon
     case type
@@ -7943,7 +7929,7 @@ extension TypeAnnotationSyntax: CustomReflectable {
 
 // MARK: - TuplePatternElementSyntax
 
-public struct TuplePatternElementSyntax: SyntaxProtocol {
+public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case labelName
     case labelColon
@@ -8070,10 +8056,9 @@ extension TuplePatternElementSyntax: CustomReflectable {
 // MARK: - AvailabilityArgumentSyntax
 
 /// 
-/// A single argument to an `@available` argument like `*`, `iOS 10.1`,
-/// or `message: "This has been deprecated"`.
+/// A single argument to an `@available` argument like `*`, `iOS 10.1`,          or `message: "This has been deprecated"`.
 /// 
-public struct AvailabilityArgumentSyntax: SyntaxProtocol {
+public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case entry
     case trailingComma
@@ -8119,8 +8104,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// A trailing comma if the argument is followed by another
-  /// argument
+  /// A trailing comma if the argument is followed by another                    argument
   /// 
   public var trailingComma: TokenSyntax? {
     get {
@@ -8157,10 +8141,9 @@ extension AvailabilityArgumentSyntax: CustomReflectable {
 // MARK: - AvailabilityLabeledArgumentSyntax
 
 /// 
-/// A argument to an `@available` attribute that consists of a label and
-/// a value, e.g. `message: "This has been deprecated"`.
+/// A argument to an `@available` attribute that consists of a label and          a value, e.g. `message: "This has been deprecated"`.
 /// 
-public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol {
+public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case label
     case colon
@@ -8264,10 +8247,9 @@ extension AvailabilityLabeledArgumentSyntax: CustomReflectable {
 // MARK: - AvailabilityVersionRestrictionSyntax
 
 /// 
-/// An argument to `@available` that restricts the availability on a
-/// certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
+/// An argument to `@available` that restricts the availability on a          certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 /// 
-public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol {
+public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case platform
     case version
@@ -8291,9 +8273,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The name of the OS on which the availability should be
-  /// restricted or 'swift' if the availability should be
-  /// restricted based on a Swift version.
+  /// The name of the OS on which the availability should be                    restricted or 'swift' if the availability should be                    restricted based on a Swift version.
   /// 
   public var platform: TokenSyntax {
     get {
@@ -8350,10 +8330,9 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
 // MARK: - VersionTupleSyntax
 
 /// 
-/// A version number of the form major.minor.patch in which the minor
-/// and patch part may be ommited.
+/// A version number of the form major.minor.patch in which the minor          and patch part may be ommited.
 /// 
-public struct VersionTupleSyntax: SyntaxProtocol {
+public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case majorMinor
     case patchPeriod
@@ -8378,11 +8357,7 @@ public struct VersionTupleSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// In case the version consists only of the major version, an
-  /// integer literal that specifies the major version. In case
-  /// the version consists of major and minor version number, a
-  /// floating literal in which the decimal part is interpreted
-  /// as the minor version.
+  /// In case the version consists only of the major version, an                    integer literal that specifies the major version. In case                    the version consists of major and minor version number, a                    floating literal in which the decimal part is interpreted                    as the minor version.
   /// 
   public var majorMinor: Syntax {
     get {
@@ -8406,8 +8381,7 @@ public struct VersionTupleSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// If the version contains a patch number, the period
-  /// separating the minor from the patch number.
+  /// If the version contains a patch number, the period                    separating the minor from the patch number.
   /// 
   public var patchPeriod: TokenSyntax? {
     get {

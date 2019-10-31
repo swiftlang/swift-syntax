@@ -32,7 +32,7 @@ public protocol ${node.name}Protocol: ${base_type}Protocol {}
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
-public struct ${node.name}: ${node.name}Protocol {
+public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init<S: ${node.name}Protocol>(_ syntax: S) {

@@ -15,7 +15,7 @@
 
 // MARK: - UnknownExprSyntax
 
-public struct UnknownExprSyntax: ExprSyntaxProtocol {
+public struct UnknownExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
@@ -44,7 +44,7 @@ extension UnknownExprSyntax: CustomReflectable {
 
 // MARK: - InOutExprSyntax
 
-public struct InOutExprSyntax: ExprSyntaxProtocol {
+public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case ampersand
     case expression
@@ -121,7 +121,7 @@ extension InOutExprSyntax: CustomReflectable {
 
 // MARK: - PoundColumnExprSyntax
 
-public struct PoundColumnExprSyntax: ExprSyntaxProtocol {
+public struct PoundColumnExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundColumn
   }
@@ -175,7 +175,7 @@ extension PoundColumnExprSyntax: CustomReflectable {
 
 // MARK: - TryExprSyntax
 
-public struct TryExprSyntax: ExprSyntaxProtocol {
+public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case tryKeyword
     case questionOrExclamationMark
@@ -276,7 +276,7 @@ extension TryExprSyntax: CustomReflectable {
 
 // MARK: - IdentifierExprSyntax
 
-public struct IdentifierExprSyntax: ExprSyntaxProtocol {
+public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case identifier
     case declNameArguments
@@ -354,7 +354,7 @@ extension IdentifierExprSyntax: CustomReflectable {
 
 // MARK: - SuperRefExprSyntax
 
-public struct SuperRefExprSyntax: ExprSyntaxProtocol {
+public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case superKeyword
   }
@@ -408,7 +408,7 @@ extension SuperRefExprSyntax: CustomReflectable {
 
 // MARK: - NilLiteralExprSyntax
 
-public struct NilLiteralExprSyntax: ExprSyntaxProtocol {
+public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case nilKeyword
   }
@@ -462,7 +462,7 @@ extension NilLiteralExprSyntax: CustomReflectable {
 
 // MARK: - DiscardAssignmentExprSyntax
 
-public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol {
+public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case wildcard
   }
@@ -516,7 +516,7 @@ extension DiscardAssignmentExprSyntax: CustomReflectable {
 
 // MARK: - AssignmentExprSyntax
 
-public struct AssignmentExprSyntax: ExprSyntaxProtocol {
+public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case assignToken
   }
@@ -570,7 +570,7 @@ extension AssignmentExprSyntax: CustomReflectable {
 
 // MARK: - SequenceExprSyntax
 
-public struct SequenceExprSyntax: ExprSyntaxProtocol {
+public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case elements
   }
@@ -643,7 +643,7 @@ extension SequenceExprSyntax: CustomReflectable {
 
 // MARK: - PoundLineExprSyntax
 
-public struct PoundLineExprSyntax: ExprSyntaxProtocol {
+public struct PoundLineExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundLine
   }
@@ -697,7 +697,7 @@ extension PoundLineExprSyntax: CustomReflectable {
 
 // MARK: - PoundFileExprSyntax
 
-public struct PoundFileExprSyntax: ExprSyntaxProtocol {
+public struct PoundFileExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundFile
   }
@@ -751,7 +751,7 @@ extension PoundFileExprSyntax: CustomReflectable {
 
 // MARK: - PoundFunctionExprSyntax
 
-public struct PoundFunctionExprSyntax: ExprSyntaxProtocol {
+public struct PoundFunctionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundFunction
   }
@@ -805,7 +805,7 @@ extension PoundFunctionExprSyntax: CustomReflectable {
 
 // MARK: - PoundDsohandleExprSyntax
 
-public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol {
+public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundDsohandle
   }
@@ -859,7 +859,7 @@ extension PoundDsohandleExprSyntax: CustomReflectable {
 
 // MARK: - SymbolicReferenceExprSyntax
 
-public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol {
+public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case identifier
     case genericArgumentClause
@@ -937,7 +937,7 @@ extension SymbolicReferenceExprSyntax: CustomReflectable {
 
 // MARK: - PrefixOperatorExprSyntax
 
-public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol {
+public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case operatorToken
     case postfixExpression
@@ -1015,7 +1015,7 @@ extension PrefixOperatorExprSyntax: CustomReflectable {
 
 // MARK: - BinaryOperatorExprSyntax
 
-public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol {
+public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case operatorToken
   }
@@ -1069,7 +1069,7 @@ extension BinaryOperatorExprSyntax: CustomReflectable {
 
 // MARK: - ArrowExprSyntax
 
-public struct ArrowExprSyntax: ExprSyntaxProtocol {
+public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case throwsToken
     case arrowToken
@@ -1147,7 +1147,7 @@ extension ArrowExprSyntax: CustomReflectable {
 
 // MARK: - FloatLiteralExprSyntax
 
-public struct FloatLiteralExprSyntax: ExprSyntaxProtocol {
+public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case floatingDigits
   }
@@ -1201,7 +1201,7 @@ extension FloatLiteralExprSyntax: CustomReflectable {
 
 // MARK: - TupleExprSyntax
 
-public struct TupleExprSyntax: ExprSyntaxProtocol {
+public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case elementList
@@ -1320,7 +1320,7 @@ extension TupleExprSyntax: CustomReflectable {
 
 // MARK: - ArrayExprSyntax
 
-public struct ArrayExprSyntax: ExprSyntaxProtocol {
+public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquare
     case elements
@@ -1439,7 +1439,7 @@ extension ArrayExprSyntax: CustomReflectable {
 
 // MARK: - DictionaryExprSyntax
 
-public struct DictionaryExprSyntax: ExprSyntaxProtocol {
+public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquare
     case content
@@ -1539,7 +1539,7 @@ extension DictionaryExprSyntax: CustomReflectable {
 
 // MARK: - IntegerLiteralExprSyntax
 
-public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol {
+public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case digits
   }
@@ -1593,7 +1593,7 @@ extension IntegerLiteralExprSyntax: CustomReflectable {
 
 // MARK: - BooleanLiteralExprSyntax
 
-public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol {
+public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case booleanLiteral
   }
@@ -1647,7 +1647,7 @@ extension BooleanLiteralExprSyntax: CustomReflectable {
 
 // MARK: - TernaryExprSyntax
 
-public struct TernaryExprSyntax: ExprSyntaxProtocol {
+public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case conditionExpression
     case questionMark
@@ -1793,7 +1793,7 @@ extension TernaryExprSyntax: CustomReflectable {
 
 // MARK: - MemberAccessExprSyntax
 
-public struct MemberAccessExprSyntax: ExprSyntaxProtocol {
+public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case base
     case dot
@@ -1918,7 +1918,7 @@ extension MemberAccessExprSyntax: CustomReflectable {
 
 // MARK: - IsExprSyntax
 
-public struct IsExprSyntax: ExprSyntaxProtocol {
+public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case isTok
     case typeName
@@ -1995,7 +1995,7 @@ extension IsExprSyntax: CustomReflectable {
 
 // MARK: - AsExprSyntax
 
-public struct AsExprSyntax: ExprSyntaxProtocol {
+public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case asTok
     case questionOrExclamationMark
@@ -2096,7 +2096,7 @@ extension AsExprSyntax: CustomReflectable {
 
 // MARK: - TypeExprSyntax
 
-public struct TypeExprSyntax: ExprSyntaxProtocol {
+public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case type
   }
@@ -2150,7 +2150,7 @@ extension TypeExprSyntax: CustomReflectable {
 
 // MARK: - ClosureExprSyntax
 
-public struct ClosureExprSyntax: ExprSyntaxProtocol {
+public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftBrace
     case signature
@@ -2293,7 +2293,7 @@ extension ClosureExprSyntax: CustomReflectable {
 
 // MARK: - UnresolvedPatternExprSyntax
 
-public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol {
+public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case pattern
   }
@@ -2347,7 +2347,7 @@ extension UnresolvedPatternExprSyntax: CustomReflectable {
 
 // MARK: - FunctionCallExprSyntax
 
-public struct FunctionCallExprSyntax: ExprSyntaxProtocol {
+public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case calledExpression
     case leftParen
@@ -2515,7 +2515,7 @@ extension FunctionCallExprSyntax: CustomReflectable {
 
 // MARK: - SubscriptExprSyntax
 
-public struct SubscriptExprSyntax: ExprSyntaxProtocol {
+public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case calledExpression
     case leftBracket
@@ -2681,7 +2681,7 @@ extension SubscriptExprSyntax: CustomReflectable {
 
 // MARK: - OptionalChainingExprSyntax
 
-public struct OptionalChainingExprSyntax: ExprSyntaxProtocol {
+public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
     case questionMark
@@ -2758,7 +2758,7 @@ extension OptionalChainingExprSyntax: CustomReflectable {
 
 // MARK: - ForcedValueExprSyntax
 
-public struct ForcedValueExprSyntax: ExprSyntaxProtocol {
+public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
     case exclamationMark
@@ -2835,7 +2835,7 @@ extension ForcedValueExprSyntax: CustomReflectable {
 
 // MARK: - PostfixUnaryExprSyntax
 
-public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol {
+public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
     case operatorToken
@@ -2912,7 +2912,7 @@ extension PostfixUnaryExprSyntax: CustomReflectable {
 
 // MARK: - SpecializeExprSyntax
 
-public struct SpecializeExprSyntax: ExprSyntaxProtocol {
+public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
     case genericArgumentClause
@@ -2989,7 +2989,7 @@ extension SpecializeExprSyntax: CustomReflectable {
 
 // MARK: - StringLiteralExprSyntax
 
-public struct StringLiteralExprSyntax: ExprSyntaxProtocol {
+public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case openDelimiter
     case openQuote
@@ -3156,7 +3156,7 @@ extension StringLiteralExprSyntax: CustomReflectable {
 
 // MARK: - KeyPathExprSyntax
 
-public struct KeyPathExprSyntax: ExprSyntaxProtocol {
+public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case backslash
     case rootExpr
@@ -3257,7 +3257,7 @@ extension KeyPathExprSyntax: CustomReflectable {
 
 // MARK: - KeyPathBaseExprSyntax
 
-public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol {
+public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case period
   }
@@ -3311,7 +3311,7 @@ extension KeyPathBaseExprSyntax: CustomReflectable {
 
 // MARK: - ObjcKeyPathExprSyntax
 
-public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol {
+public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case keyPath
     case leftParen
@@ -3453,7 +3453,7 @@ extension ObjcKeyPathExprSyntax: CustomReflectable {
 
 // MARK: - ObjcSelectorExprSyntax
 
-public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol {
+public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case poundSelector
     case leftParen
@@ -3624,7 +3624,7 @@ extension ObjcSelectorExprSyntax: CustomReflectable {
 
 // MARK: - EditorPlaceholderExprSyntax
 
-public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol {
+public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case identifier
   }
@@ -3678,7 +3678,7 @@ extension EditorPlaceholderExprSyntax: CustomReflectable {
 
 // MARK: - ObjectLiteralExprSyntax
 
-public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol {
+public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case identifier
     case leftParen

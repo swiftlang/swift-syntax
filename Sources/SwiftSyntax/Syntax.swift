@@ -1,4 +1,4 @@
-//===-------------------- Syntax.swift - Syntax Protocol ------------------===//
+//===--------------- Syntax.swift - Base Syntax Type eraser  --------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -13,7 +13,7 @@
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
-public struct Syntax: SyntaxProtocol {
+public struct Syntax: SyntaxProtocol, SyntaxHashable {
   let data: SyntaxData
 
   public var _syntaxNode: Syntax {
@@ -57,11 +57,26 @@ extension Syntax: CustomReflectable {
   }
 }
 
+/// Protocol that provides a common Hashable implementation for all syntax nodes
+public protocol SyntaxHashable: Hashable {
+  var _syntaxNode: Syntax { get }
+}
+
+public extension SyntaxHashable {
+  func hash(into hasher: inout Hasher) {
+    return _syntaxNode.data.nodeId.hash(into: &hasher)
+  }
+
+  static func ==(lhs: Self, rhs: Self) -> Bool {
+    return lhs._syntaxNode.data.nodeId == rhs._syntaxNode.data.nodeId
+  }
+}
+
 /// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol SyntaxProtocol: CustomStringConvertible,
-    CustomDebugStringConvertible, TextOutputStreamable, Hashable {
+    CustomDebugStringConvertible, TextOutputStreamable {
 
   /// Retrieve the generic syntax node that is represented by this node.
   /// Do not retrieve this property directly. Use `Syntax(self)` instead.
@@ -414,14 +429,6 @@ public extension SyntaxProtocol {
   func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
     data.raw.write(to: &target)
-  }
-
-  func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
-
-  static func ==(lhs: Self, rhs: Self) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
   }
 }
 

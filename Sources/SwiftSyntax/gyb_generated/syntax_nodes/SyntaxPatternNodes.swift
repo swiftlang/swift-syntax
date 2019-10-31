@@ -15,7 +15,7 @@
 
 // MARK: - UnknownPatternSyntax
 
-public struct UnknownPatternSyntax: PatternSyntaxProtocol {
+public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
@@ -44,7 +44,7 @@ extension UnknownPatternSyntax: CustomReflectable {
 
 // MARK: - EnumCasePatternSyntax
 
-public struct EnumCasePatternSyntax: PatternSyntaxProtocol {
+public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case type
     case period
@@ -169,7 +169,7 @@ extension EnumCasePatternSyntax: CustomReflectable {
 
 // MARK: - IsTypePatternSyntax
 
-public struct IsTypePatternSyntax: PatternSyntaxProtocol {
+public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case isKeyword
     case type
@@ -246,7 +246,7 @@ extension IsTypePatternSyntax: CustomReflectable {
 
 // MARK: - OptionalPatternSyntax
 
-public struct OptionalPatternSyntax: PatternSyntaxProtocol {
+public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case subPattern
     case questionMark
@@ -323,7 +323,7 @@ extension OptionalPatternSyntax: CustomReflectable {
 
 // MARK: - IdentifierPatternSyntax
 
-public struct IdentifierPatternSyntax: PatternSyntaxProtocol {
+public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case identifier
   }
@@ -377,7 +377,7 @@ extension IdentifierPatternSyntax: CustomReflectable {
 
 // MARK: - AsTypePatternSyntax
 
-public struct AsTypePatternSyntax: PatternSyntaxProtocol {
+public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case pattern
     case asKeyword
@@ -477,7 +477,7 @@ extension AsTypePatternSyntax: CustomReflectable {
 
 // MARK: - TuplePatternSyntax
 
-public struct TuplePatternSyntax: PatternSyntaxProtocol {
+public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case elements
@@ -596,7 +596,7 @@ extension TuplePatternSyntax: CustomReflectable {
 
 // MARK: - WildcardPatternSyntax
 
-public struct WildcardPatternSyntax: PatternSyntaxProtocol {
+public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case wildcard
     case typeAnnotation
@@ -674,7 +674,7 @@ extension WildcardPatternSyntax: CustomReflectable {
 
 // MARK: - ExpressionPatternSyntax
 
-public struct ExpressionPatternSyntax: PatternSyntaxProtocol {
+public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case expression
   }
@@ -728,7 +728,7 @@ extension ExpressionPatternSyntax: CustomReflectable {
 
 // MARK: - ValueBindingPatternSyntax
 
-public struct ValueBindingPatternSyntax: PatternSyntaxProtocol {
+public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case letOrVarKeyword
     case valuePattern

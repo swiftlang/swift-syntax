@@ -19,7 +19,7 @@
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 
-public struct DeclSyntax: DeclSyntaxProtocol {
+public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init<S: DeclSyntaxProtocol>(_ syntax: S) {
@@ -81,7 +81,7 @@ extension DeclSyntax: CustomReflectable {
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 
-public struct ExprSyntax: ExprSyntaxProtocol {
+public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init<S: ExprSyntaxProtocol>(_ syntax: S) {
@@ -143,7 +143,7 @@ extension ExprSyntax: CustomReflectable {
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 
-public struct StmtSyntax: StmtSyntaxProtocol {
+public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init<S: StmtSyntaxProtocol>(_ syntax: S) {
@@ -205,7 +205,7 @@ extension StmtSyntax: CustomReflectable {
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 
-public struct TypeSyntax: TypeSyntaxProtocol {
+public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init<S: TypeSyntaxProtocol>(_ syntax: S) {
@@ -267,7 +267,7 @@ extension TypeSyntax: CustomReflectable {
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 
-public struct PatternSyntax: PatternSyntaxProtocol {
+public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   public init<S: PatternSyntaxProtocol>(_ syntax: S) {

@@ -15,7 +15,7 @@
 // MARK: UnknownSyntax
 
 /// A wrapper around a raw Syntax layout.
-public struct UnknownSyntax: SyntaxProtocol {
+public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Convert the given `Syntax` node to an `UnknownSyntax` if possible. Return
@@ -43,7 +43,7 @@ extension UnknownSyntax: CustomReflectable {
 // MARK: TokenSyntax
 
 /// A Syntax node representing a single token.
-public struct TokenSyntax: SyntaxProtocol {
+public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TokenSyntax` if possible. Returns

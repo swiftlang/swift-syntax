@@ -15,7 +15,7 @@
 
 // MARK: - UnknownTypeSyntax
 
-public struct UnknownTypeSyntax: TypeSyntaxProtocol {
+public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
@@ -44,7 +44,7 @@ extension UnknownTypeSyntax: CustomReflectable {
 
 // MARK: - SimpleTypeIdentifierSyntax
 
-public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol {
+public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case genericArgumentClause
@@ -122,7 +122,7 @@ extension SimpleTypeIdentifierSyntax: CustomReflectable {
 
 // MARK: - MemberTypeIdentifierSyntax
 
-public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol {
+public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case baseType
     case period
@@ -246,7 +246,7 @@ extension MemberTypeIdentifierSyntax: CustomReflectable {
 
 // MARK: - ClassRestrictionTypeSyntax
 
-public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol {
+public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case classKeyword
   }
@@ -300,7 +300,7 @@ extension ClassRestrictionTypeSyntax: CustomReflectable {
 
 // MARK: - ArrayTypeSyntax
 
-public struct ArrayTypeSyntax: TypeSyntaxProtocol {
+public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquareBracket
     case elementType
@@ -400,7 +400,7 @@ extension ArrayTypeSyntax: CustomReflectable {
 
 // MARK: - DictionaryTypeSyntax
 
-public struct DictionaryTypeSyntax: TypeSyntaxProtocol {
+public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquareBracket
     case keyType
@@ -546,7 +546,7 @@ extension DictionaryTypeSyntax: CustomReflectable {
 
 // MARK: - MetatypeTypeSyntax
 
-public struct MetatypeTypeSyntax: TypeSyntaxProtocol {
+public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case baseType
     case period
@@ -646,7 +646,7 @@ extension MetatypeTypeSyntax: CustomReflectable {
 
 // MARK: - OptionalTypeSyntax
 
-public struct OptionalTypeSyntax: TypeSyntaxProtocol {
+public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case wrappedType
     case questionMark
@@ -723,7 +723,7 @@ extension OptionalTypeSyntax: CustomReflectable {
 
 // MARK: - SomeTypeSyntax
 
-public struct SomeTypeSyntax: TypeSyntaxProtocol {
+public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case someSpecifier
     case baseType
@@ -800,7 +800,7 @@ extension SomeTypeSyntax: CustomReflectable {
 
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
 
-public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol {
+public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case wrappedType
     case exclamationMark
@@ -877,7 +877,7 @@ extension ImplicitlyUnwrappedOptionalTypeSyntax: CustomReflectable {
 
 // MARK: - CompositionTypeSyntax
 
-public struct CompositionTypeSyntax: TypeSyntaxProtocol {
+public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case elements
   }
@@ -950,7 +950,7 @@ extension CompositionTypeSyntax: CustomReflectable {
 
 // MARK: - TupleTypeSyntax
 
-public struct TupleTypeSyntax: TypeSyntaxProtocol {
+public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case elements
@@ -1069,7 +1069,7 @@ extension TupleTypeSyntax: CustomReflectable {
 
 // MARK: - FunctionTypeSyntax
 
-public struct FunctionTypeSyntax: TypeSyntaxProtocol {
+public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case arguments
@@ -1258,7 +1258,7 @@ extension FunctionTypeSyntax: CustomReflectable {
 
 // MARK: - AttributedTypeSyntax
 
-public struct AttributedTypeSyntax: TypeSyntaxProtocol {
+public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case specifier
     case attributes

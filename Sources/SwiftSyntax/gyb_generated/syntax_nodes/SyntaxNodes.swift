@@ -116,9 +116,9 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension CodeBlockItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "item": Syntax(item)._asConcreteType,
-      "semicolon": semicolon.map(Syntax.init)?._asConcreteType as Any,
-      "errorTokens": errorTokens.map(Syntax.init)?._asConcreteType as Any,
+      "item": Syntax(item).as(SyntaxProtocol.self),
+      "semicolon": semicolon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "errorTokens": errorTokens.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -235,9 +235,9 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension CodeBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": Syntax(leftBrace)._asConcreteType,
-      "statements": Syntax(statements)._asConcreteType,
-      "rightBrace": Syntax(rightBrace)._asConcreteType,
+      "leftBrace": Syntax(leftBrace).as(SyntaxProtocol.self),
+      "statements": Syntax(statements).as(SyntaxProtocol.self),
+      "rightBrace": Syntax(rightBrace).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -313,8 +313,8 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclNameArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -431,9 +431,9 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclNameArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "arguments": Syntax(arguments)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "arguments": Syntax(arguments).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -556,10 +556,10 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension TupleExprElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "label": label.map(Syntax.init)?._asConcreteType as Any,
-      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
-      "expression": Syntax(expression)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "label": label.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "colon": colon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -636,8 +636,8 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension ArrayElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": Syntax(expression)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "expression": Syntax(expression).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -758,10 +758,10 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension DictionaryElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "keyExpression": Syntax(keyExpression)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "valueExpression": Syntax(valueExpression)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "keyExpression": Syntax(keyExpression).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "valueExpression": Syntax(valueExpression).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -926,11 +926,11 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureCaptureItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "specifier": specifier.map(Syntax.init)?._asConcreteType as Any,
-      "name": name.map(Syntax.init)?._asConcreteType as Any,
-      "assignToken": assignToken.map(Syntax.init)?._asConcreteType as Any,
-      "expression": Syntax(expression)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "specifier": specifier.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "name": name.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "assignToken": assignToken.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "expression": Syntax(expression).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1048,9 +1048,9 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureCaptureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquare": Syntax(leftSquare)._asConcreteType,
-      "items": items.map(Syntax.init)?._asConcreteType as Any,
-      "rightSquare": Syntax(rightSquare)._asConcreteType,
+      "leftSquare": Syntax(leftSquare).as(SyntaxProtocol.self),
+      "items": items.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "rightSquare": Syntax(rightSquare).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1127,8 +1127,8 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureParamSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1274,11 +1274,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "capture": capture.map(Syntax.init)?._asConcreteType as Any,
-      "input": input.map(Syntax.init)?._asConcreteType as Any,
-      "throwsTok": throwsTok.map(Syntax.init)?._asConcreteType as Any,
-      "output": output.map(Syntax.init)?._asConcreteType as Any,
-      "inTok": Syntax(inTok)._asConcreteType,
+      "capture": capture.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "input": input.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "throwsTok": throwsTok.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "output": output.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "inTok": Syntax(inTok).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1332,7 +1332,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 extension StringSegmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "content": Syntax(content)._asConcreteType,
+      "content": Syntax(content).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1494,11 +1494,11 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 extension ExpressionSegmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "backslash": Syntax(backslash)._asConcreteType,
-      "delimiter": delimiter.map(Syntax.init)?._asConcreteType as Any,
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "expressions": Syntax(expressions)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "backslash": Syntax(backslash).as(SyntaxProtocol.self),
+      "delimiter": delimiter.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "expressions": Syntax(expressions).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1575,8 +1575,8 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
 extension ObjcNamePieceSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "dot": dot.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "dot": dot.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1652,8 +1652,8 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension TypeInitializerClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "equal": Syntax(equal)._asConcreteType,
-      "value": Syntax(value)._asConcreteType,
+      "equal": Syntax(equal).as(SyntaxProtocol.self),
+      "value": Syntax(value).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1770,9 +1770,9 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension ParameterClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "parameterList": Syntax(parameterList)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "parameterList": Syntax(parameterList).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1848,8 +1848,8 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension ReturnClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "arrow": Syntax(arrow)._asConcreteType,
-      "returnType": Syntax(returnType)._asConcreteType,
+      "arrow": Syntax(arrow).as(SyntaxProtocol.self),
+      "returnType": Syntax(returnType).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -1949,9 +1949,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension FunctionSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "input": Syntax(input)._asConcreteType,
-      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?._asConcreteType as Any,
-      "output": output.map(Syntax.init)?._asConcreteType as Any,
+      "input": Syntax(input).as(SyntaxProtocol.self),
+      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "output": output.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2050,9 +2050,9 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension IfConfigClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundKeyword": Syntax(poundKeyword)._asConcreteType,
-      "condition": condition.map(Syntax.init)?._asConcreteType as Any,
-      "elements": Syntax(elements)._asConcreteType,
+      "poundKeyword": Syntax(poundKeyword).as(SyntaxProtocol.self),
+      "condition": condition.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "elements": Syntax(elements).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -2238,13 +2238,13 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
 extension PoundSourceLocationArgsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "fileArgLabel": Syntax(fileArgLabel)._asConcreteType,
-      "fileArgColon": Syntax(fileArgColon)._asConcreteType,
-      "fileName": Syntax(fileName)._asConcreteType,
-      "comma": Syntax(comma)._asConcreteType,
-      "lineArgLabel": Syntax(lineArgLabel)._asConcreteType,
-      "lineArgColon": Syntax(lineArgColon)._asConcreteType,
-      "lineNumber": Syntax(lineNumber)._asConcreteType,
+      "fileArgLabel": Syntax(fileArgLabel).as(SyntaxProtocol.self),
+      "fileArgColon": Syntax(fileArgColon).as(SyntaxProtocol.self),
+      "fileName": Syntax(fileName).as(SyntaxProtocol.self),
+      "comma": Syntax(comma).as(SyntaxProtocol.self),
+      "lineArgLabel": Syntax(lineArgLabel).as(SyntaxProtocol.self),
+      "lineArgColon": Syntax(lineArgColon).as(SyntaxProtocol.self),
+      "lineNumber": Syntax(lineNumber).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -2367,10 +2367,10 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "detailLeftParen": detailLeftParen.map(Syntax.init)?._asConcreteType as Any,
-      "detail": detail.map(Syntax.init)?._asConcreteType as Any,
-      "detailRightParen": detailRightParen.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "detailLeftParen": detailLeftParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "detail": detail.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "detailRightParen": detailRightParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2447,8 +2447,8 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 extension InheritedTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "typeName": Syntax(typeName)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "typeName": Syntax(typeName).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2543,8 +2543,8 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension TypeInheritanceClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "colon": Syntax(colon)._asConcreteType,
-      "inheritedTypeCollection": Syntax(inheritedTypeCollection)._asConcreteType,
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "inheritedTypeCollection": Syntax(inheritedTypeCollection).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -2661,9 +2661,9 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension MemberDeclBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": Syntax(leftBrace)._asConcreteType,
-      "members": Syntax(members)._asConcreteType,
-      "rightBrace": Syntax(rightBrace)._asConcreteType,
+      "leftBrace": Syntax(leftBrace).as(SyntaxProtocol.self),
+      "members": Syntax(members).as(SyntaxProtocol.self),
+      "rightBrace": Syntax(rightBrace).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -2671,7 +2671,8 @@ extension MemberDeclBlockSyntax: CustomReflectable {
 // MARK: - MemberDeclListItemSyntax
 
 /// 
-/// A member declaration of a type consisting of a declaration and an          optional semicolon;
+/// A member declaration of a type consisting of a declaration and an
+/// optional semicolon;
 /// 
 public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -2745,8 +2746,8 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension MemberDeclListItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "decl": Syntax(decl)._asConcreteType,
-      "semicolon": semicolon.map(Syntax.init)?._asConcreteType as Any,
+      "decl": Syntax(decl).as(SyntaxProtocol.self),
+      "semicolon": semicolon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2841,8 +2842,8 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
 extension SourceFileSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "statements": Syntax(statements)._asConcreteType,
-      "eofToken": Syntax(eofToken)._asConcreteType,
+      "statements": Syntax(statements).as(SyntaxProtocol.self),
+      "eofToken": Syntax(eofToken).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -2918,8 +2919,8 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension InitializerClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "equal": Syntax(equal)._asConcreteType,
-      "value": Syntax(value)._asConcreteType,
+      "equal": Syntax(equal).as(SyntaxProtocol.self),
+      "value": Syntax(value).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -3154,14 +3155,14 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
 extension FunctionParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
-      "firstName": firstName.map(Syntax.init)?._asConcreteType as Any,
-      "secondName": secondName.map(Syntax.init)?._asConcreteType as Any,
-      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
-      "type": type.map(Syntax.init)?._asConcreteType as Any,
-      "ellipsis": ellipsis.map(Syntax.init)?._asConcreteType as Any,
-      "defaultArgument": defaultArgument.map(Syntax.init)?._asConcreteType as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "firstName": firstName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "secondName": secondName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "colon": colon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "type": type.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "ellipsis": ellipsis.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "defaultArgument": defaultArgument.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3284,10 +3285,10 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessLevelModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
-      "modifier": modifier.map(Syntax.init)?._asConcreteType as Any,
-      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "leftParen": leftParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "modifier": modifier.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "rightParen": rightParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3364,8 +3365,8 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessPathComponentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "trailingDot": trailingDot.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "trailingDot": trailingDot.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3463,9 +3464,9 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessorParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "name": Syntax(name)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -3582,9 +3583,9 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension AccessorBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftBrace": Syntax(leftBrace)._asConcreteType,
-      "accessors": Syntax(accessors)._asConcreteType,
-      "rightBrace": Syntax(rightBrace)._asConcreteType,
+      "leftBrace": Syntax(leftBrace).as(SyntaxProtocol.self),
+      "accessors": Syntax(accessors).as(SyntaxProtocol.self),
+      "rightBrace": Syntax(rightBrace).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -3730,11 +3731,11 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
 extension PatternBindingSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": Syntax(pattern)._asConcreteType,
-      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
-      "initializer": initializer.map(Syntax.init)?._asConcreteType as Any,
-      "accessor": accessor.map(Syntax.init)?._asConcreteType as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "initializer": initializer.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "accessor": accessor.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3742,7 +3743,8 @@ extension PatternBindingSyntax: CustomReflectable {
 // MARK: - EnumCaseElementSyntax
 
 /// 
-/// An element of an enum case, containing the name of the case and,          optionally, either associated values or an assignment to a raw value.
+/// An element of an enum case, containing the name of the case and,
+/// optionally, either associated values or an assignment to a raw value.
 /// 
 public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -3840,7 +3842,8 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The trailing comma of this element, if the case has                    multiple elements.
+  /// The trailing comma of this element, if the case has
+  /// multiple elements.
   /// 
   public var trailingComma: TokenSyntax? {
     get {
@@ -3868,10 +3871,10 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension EnumCaseElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": Syntax(identifier)._asConcreteType,
-      "associatedValue": associatedValue.map(Syntax.init)?._asConcreteType as Any,
-      "rawValue": rawValue.map(Syntax.init)?._asConcreteType as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
+      "associatedValue": associatedValue.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "rawValue": rawValue.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3972,8 +3975,8 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
 extension OperatorPrecedenceAndTypesSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "colon": Syntax(colon)._asConcreteType,
-      "precedenceGroupAndDesignatedTypes": Syntax(precedenceGroupAndDesignatedTypes)._asConcreteType,
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "precedenceGroupAndDesignatedTypes": Syntax(precedenceGroupAndDesignatedTypes).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -4101,9 +4104,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupRelationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "higherThanOrLowerThan": Syntax(higherThanOrLowerThan)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "otherNames": Syntax(otherNames)._asConcreteType,
+      "higherThanOrLowerThan": Syntax(higherThanOrLowerThan).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "otherNames": Syntax(otherNames).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -4180,8 +4183,8 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupNameElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4290,9 +4293,9 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupAssignmentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "assignmentKeyword": Syntax(assignmentKeyword)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "flag": Syntax(flag)._asConcreteType,
+      "assignmentKeyword": Syntax(assignmentKeyword).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "flag": Syntax(flag).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -4400,9 +4403,9 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
 extension PrecedenceGroupAssociativitySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "associativityKeyword": Syntax(associativityKeyword)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "value": Syntax(value)._asConcreteType,
+      "associativityKeyword": Syntax(associativityKeyword).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "value": Syntax(value).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -4571,11 +4574,11 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
 extension CustomAttributeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "atSignToken": Syntax(atSignToken)._asConcreteType,
-      "attributeName": Syntax(attributeName)._asConcreteType,
-      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
-      "argumentList": argumentList.map(Syntax.init)?._asConcreteType as Any,
-      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
+      "atSignToken": Syntax(atSignToken).as(SyntaxProtocol.self),
+      "attributeName": Syntax(attributeName).as(SyntaxProtocol.self),
+      "leftParen": leftParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "argumentList": argumentList.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "rightParen": rightParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4682,7 +4685,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The arguments of the attribute. In case the attribute                     takes multiple arguments, they are gather in the                    appropriate takes first.
+  /// The arguments of the attribute. In case the attribute
+  /// takes multiple arguments, they are gather in the
+  /// appropriate takes first.
   /// 
   public var argument: Syntax? {
     get {
@@ -4776,12 +4781,12 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
 extension AttributeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "atSignToken": Syntax(atSignToken)._asConcreteType,
-      "attributeName": Syntax(attributeName)._asConcreteType,
-      "leftParen": leftParen.map(Syntax.init)?._asConcreteType as Any,
-      "argument": argument.map(Syntax.init)?._asConcreteType as Any,
-      "rightParen": rightParen.map(Syntax.init)?._asConcreteType as Any,
-      "tokenList": tokenList.map(Syntax.init)?._asConcreteType as Any,
+      "atSignToken": Syntax(atSignToken).as(SyntaxProtocol.self),
+      "attributeName": Syntax(attributeName).as(SyntaxProtocol.self),
+      "leftParen": leftParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "argument": argument.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "rightParen": rightParen.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "tokenList": tokenList.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4789,7 +4794,8 @@ extension AttributeSyntax: CustomReflectable {
 // MARK: - LabeledSpecializeEntrySyntax
 
 /// 
-/// A labeled argument for the `@_specialize` attribute like          `exported: true`
+/// A labeled argument for the `@_specialize` attribute like
+/// `exported: true`
 /// 
 public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -4911,10 +4917,10 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
 extension LabeledSpecializeEntrySyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "label": Syntax(label)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "value": Syntax(value)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "label": Syntax(label).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "value": Syntax(value).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4922,7 +4928,9 @@ extension LabeledSpecializeEntrySyntax: CustomReflectable {
 // MARK: - NamedAttributeStringArgumentSyntax
 
 /// 
-/// The argument for the `@_dynamic_replacement` or `@_private`          attribute of the form `for: "function()"` or `sourceFile:          "Src.swift"`
+/// The argument for the `@_dynamic_replacement` or `@_private`
+/// attribute of the form `for: "function()"` or `sourceFile:
+/// "Src.swift"`
 /// 
 public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -5017,9 +5025,9 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
 extension NamedAttributeStringArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "nameTok": Syntax(nameTok)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "stringOrDeclname": Syntax(stringOrDeclname)._asConcreteType,
+      "nameTok": Syntax(nameTok).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "stringOrDeclname": Syntax(stringOrDeclname).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -5074,7 +5082,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The argument labels of the protocol's requirement if it                is a function requirement.
+  /// The argument labels of the protocol's requirement if it
+  /// is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
@@ -5102,8 +5111,8 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 extension DeclNameSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "declBaseName": Syntax(declBaseName)._asConcreteType,
-      "declNameArguments": declNameArguments.map(Syntax.init)?._asConcreteType as Any,
+      "declBaseName": Syntax(declBaseName).as(SyntaxProtocol.self),
+      "declNameArguments": declNameArguments.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5111,7 +5120,8 @@ extension DeclNameSyntax: CustomReflectable {
 // MARK: - ImplementsAttributeArgumentsSyntax
 
 /// 
-/// The arguments for the `@_implements` attribute of the form          `Type, methodName(arg1Label:arg2Label:)`
+/// The arguments for the `@_implements` attribute of the form
+/// `Type, methodName(arg1Label:arg2Label:)`
 /// 
 public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -5139,7 +5149,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
 
   /// 
-  /// The type for which the method with this attribute                    implements a requirement.
+  /// The type for which the method with this attribute
+  /// implements a requirement.
   /// 
   public var type: SimpleTypeIdentifierSyntax {
     get {
@@ -5211,7 +5222,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
 
   /// 
-  /// The argument labels of the protocol's requirement if it                    is a function requirement.
+  /// The argument labels of the protocol's requirement if it
+  /// is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
@@ -5239,10 +5251,10 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": Syntax(type)._asConcreteType,
-      "comma": Syntax(comma)._asConcreteType,
-      "declBaseName": Syntax(declBaseName)._asConcreteType,
-      "declNameArguments": declNameArguments.map(Syntax.init)?._asConcreteType as Any,
+      "type": Syntax(type).as(SyntaxProtocol.self),
+      "comma": Syntax(comma).as(SyntaxProtocol.self),
+      "declBaseName": Syntax(declBaseName).as(SyntaxProtocol.self),
+      "declNameArguments": declNameArguments.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5250,7 +5262,9 @@ extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
 // MARK: - ObjCSelectorPieceSyntax
 
 /// 
-/// A piece of an Objective-C selector. Either consisiting of just an          identifier for a nullary selector, an identifier and a colon for a          labeled argument or just a colon for an unlabeled argument
+/// A piece of an Objective-C selector. Either consisiting of just an
+/// identifier for a nullary selector, an identifier and a colon for a
+/// labeled argument or just a colon for an unlabeled argument
 /// 
 public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -5323,8 +5337,8 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
 extension ObjCSelectorPieceSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": name.map(Syntax.init)?._asConcreteType as Any,
-      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
+      "name": name.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "colon": colon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5400,8 +5414,8 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension WhereClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "whereKeyword": Syntax(whereKeyword)._asConcreteType,
-      "guardResult": Syntax(guardResult)._asConcreteType,
+      "whereKeyword": Syntax(whereKeyword).as(SyntaxProtocol.self),
+      "guardResult": Syntax(guardResult).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -5541,10 +5555,10 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
 extension YieldListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "elementList": Syntax(elementList)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "elementList": Syntax(elementList).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -5621,8 +5635,8 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension ConditionElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "condition": Syntax(condition)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "condition": Syntax(condition).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5761,10 +5775,10 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension AvailabilityConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundAvailableKeyword": Syntax(poundAvailableKeyword)._asConcreteType,
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "availabilitySpec": Syntax(availabilitySpec)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "poundAvailableKeyword": Syntax(poundAvailableKeyword).as(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "availabilitySpec": Syntax(availabilitySpec).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -5885,10 +5899,10 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension MatchingPatternConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "caseKeyword": Syntax(caseKeyword)._asConcreteType,
-      "pattern": Syntax(pattern)._asConcreteType,
-      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
-      "initializer": Syntax(initializer)._asConcreteType,
+      "caseKeyword": Syntax(caseKeyword).as(SyntaxProtocol.self),
+      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "initializer": Syntax(initializer).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6009,10 +6023,10 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
 extension OptionalBindingConditionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "letOrVarKeyword": Syntax(letOrVarKeyword)._asConcreteType,
-      "pattern": Syntax(pattern)._asConcreteType,
-      "typeAnnotation": typeAnnotation.map(Syntax.init)?._asConcreteType as Any,
-      "initializer": Syntax(initializer)._asConcreteType,
+      "letOrVarKeyword": Syntax(letOrVarKeyword).as(SyntaxProtocol.self),
+      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "initializer": Syntax(initializer).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6066,7 +6080,7 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
 extension ElseIfContinuationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "ifStatement": Syntax(ifStatement)._asConcreteType,
+      "ifStatement": Syntax(ifStatement).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6142,8 +6156,8 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
 extension ElseBlockSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "elseKeyword": Syntax(elseKeyword)._asConcreteType,
-      "body": Syntax(body)._asConcreteType,
+      "elseKeyword": Syntax(elseKeyword).as(SyntaxProtocol.self),
+      "body": Syntax(body).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6261,9 +6275,9 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
 extension SwitchCaseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "unknownAttr": unknownAttr.map(Syntax.init)?._asConcreteType as Any,
-      "label": Syntax(label)._asConcreteType,
-      "statements": Syntax(statements)._asConcreteType,
+      "unknownAttr": unknownAttr.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "label": Syntax(label).as(SyntaxProtocol.self),
+      "statements": Syntax(statements).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6339,8 +6353,8 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
 extension SwitchDefaultLabelSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "defaultKeyword": Syntax(defaultKeyword)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
+      "defaultKeyword": Syntax(defaultKeyword).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6440,9 +6454,9 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
 extension CaseItemSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": Syntax(pattern)._asConcreteType,
-      "whereClause": whereClause.map(Syntax.init)?._asConcreteType as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
+      "whereClause": whereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -6559,9 +6573,9 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 extension SwitchCaseLabelSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "caseKeyword": Syntax(caseKeyword)._asConcreteType,
-      "caseItems": Syntax(caseItems)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
+      "caseKeyword": Syntax(caseKeyword).as(SyntaxProtocol.self),
+      "caseItems": Syntax(caseItems).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6683,10 +6697,10 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension CatchClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "catchKeyword": Syntax(catchKeyword)._asConcreteType,
-      "pattern": pattern.map(Syntax.init)?._asConcreteType as Any,
-      "whereClause": whereClause.map(Syntax.init)?._asConcreteType as Any,
-      "body": Syntax(body)._asConcreteType,
+      "catchKeyword": Syntax(catchKeyword).as(SyntaxProtocol.self),
+      "pattern": pattern.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "whereClause": whereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "body": Syntax(body).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6781,8 +6795,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericWhereClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "whereKeyword": Syntax(whereKeyword)._asConcreteType,
-      "requirementList": Syntax(requirementList)._asConcreteType,
+      "whereKeyword": Syntax(whereKeyword).as(SyntaxProtocol.self),
+      "requirementList": Syntax(requirementList).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -6859,8 +6873,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "body": Syntax(body)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "body": Syntax(body).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -6958,9 +6972,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension SameTypeRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftTypeIdentifier": Syntax(leftTypeIdentifier)._asConcreteType,
-      "equalityToken": Syntax(equalityToken)._asConcreteType,
-      "rightTypeIdentifier": Syntax(rightTypeIdentifier)._asConcreteType,
+      "leftTypeIdentifier": Syntax(leftTypeIdentifier).as(SyntaxProtocol.self),
+      "equalityToken": Syntax(equalityToken).as(SyntaxProtocol.self),
+      "rightTypeIdentifier": Syntax(rightTypeIdentifier).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -7125,11 +7139,11 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericParameterSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
-      "name": Syntax(name)._asConcreteType,
-      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
-      "inheritedType": inheritedType.map(Syntax.init)?._asConcreteType as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "colon": colon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "inheritedType": inheritedType.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7246,9 +7260,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericParameterClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftAngleBracket": Syntax(leftAngleBracket)._asConcreteType,
-      "genericParameterList": Syntax(genericParameterList)._asConcreteType,
-      "rightAngleBracket": Syntax(rightAngleBracket)._asConcreteType,
+      "leftAngleBracket": Syntax(leftAngleBracket).as(SyntaxProtocol.self),
+      "genericParameterList": Syntax(genericParameterList).as(SyntaxProtocol.self),
+      "rightAngleBracket": Syntax(rightAngleBracket).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -7346,9 +7360,9 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 extension ConformanceRequirementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftTypeIdentifier": Syntax(leftTypeIdentifier)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "rightTypeIdentifier": Syntax(rightTypeIdentifier)._asConcreteType,
+      "leftTypeIdentifier": Syntax(leftTypeIdentifier).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "rightTypeIdentifier": Syntax(rightTypeIdentifier).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -7425,8 +7439,8 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension CompositionTypeElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": Syntax(type)._asConcreteType,
-      "ampersand": ampersand.map(Syntax.init)?._asConcreteType as Any,
+      "type": Syntax(type).as(SyntaxProtocol.self),
+      "ampersand": ampersand.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7641,14 +7655,14 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension TupleTypeElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "inOut": inOut.map(Syntax.init)?._asConcreteType as Any,
-      "name": name.map(Syntax.init)?._asConcreteType as Any,
-      "secondName": secondName.map(Syntax.init)?._asConcreteType as Any,
-      "colon": colon.map(Syntax.init)?._asConcreteType as Any,
-      "type": Syntax(type)._asConcreteType,
-      "ellipsis": ellipsis.map(Syntax.init)?._asConcreteType as Any,
-      "initializer": initializer.map(Syntax.init)?._asConcreteType as Any,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "inOut": inOut.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "name": name.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "secondName": secondName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "colon": colon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "type": Syntax(type).as(SyntaxProtocol.self),
+      "ellipsis": ellipsis.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "initializer": initializer.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7725,8 +7739,8 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "argumentType": Syntax(argumentType)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "argumentType": Syntax(argumentType).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -7843,9 +7857,9 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
 extension GenericArgumentClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftAngleBracket": Syntax(leftAngleBracket)._asConcreteType,
-      "arguments": Syntax(arguments)._asConcreteType,
-      "rightAngleBracket": Syntax(rightAngleBracket)._asConcreteType,
+      "leftAngleBracket": Syntax(leftAngleBracket).as(SyntaxProtocol.self),
+      "arguments": Syntax(arguments).as(SyntaxProtocol.self),
+      "rightAngleBracket": Syntax(rightAngleBracket).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -7921,8 +7935,8 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
 extension TypeAnnotationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "colon": Syntax(colon)._asConcreteType,
-      "type": Syntax(type)._asConcreteType,
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "type": Syntax(type).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -8045,10 +8059,10 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
 extension TuplePatternElementSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?._asConcreteType as Any,
-      "labelColon": labelColon.map(Syntax.init)?._asConcreteType as Any,
-      "pattern": Syntax(pattern)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -8056,7 +8070,8 @@ extension TuplePatternElementSyntax: CustomReflectable {
 // MARK: - AvailabilityArgumentSyntax
 
 /// 
-/// A single argument to an `@available` argument like `*`, `iOS 10.1`,          or `message: "This has been deprecated"`.
+/// A single argument to an `@available` argument like `*`, `iOS 10.1`,
+/// or `message: "This has been deprecated"`.
 /// 
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -8104,7 +8119,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// A trailing comma if the argument is followed by another                    argument
+  /// A trailing comma if the argument is followed by another
+  /// argument
   /// 
   public var trailingComma: TokenSyntax? {
     get {
@@ -8132,8 +8148,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 extension AvailabilityArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "entry": Syntax(entry)._asConcreteType,
-      "trailingComma": trailingComma.map(Syntax.init)?._asConcreteType as Any,
+      "entry": Syntax(entry).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -8141,7 +8157,8 @@ extension AvailabilityArgumentSyntax: CustomReflectable {
 // MARK: - AvailabilityLabeledArgumentSyntax
 
 /// 
-/// A argument to an `@available` attribute that consists of a label and          a value, e.g. `message: "This has been deprecated"`.
+/// A argument to an `@available` attribute that consists of a label and
+/// a value, e.g. `message: "This has been deprecated"`.
 /// 
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -8237,9 +8254,9 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
 extension AvailabilityLabeledArgumentSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "label": Syntax(label)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "value": Syntax(value)._asConcreteType,
+      "label": Syntax(label).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "value": Syntax(value).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -8247,7 +8264,8 @@ extension AvailabilityLabeledArgumentSyntax: CustomReflectable {
 // MARK: - AvailabilityVersionRestrictionSyntax
 
 /// 
-/// An argument to `@available` that restricts the availability on a          certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
+/// An argument to `@available` that restricts the availability on a
+/// certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 /// 
 public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -8273,7 +8291,9 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   }
 
   /// 
-  /// The name of the OS on which the availability should be                    restricted or 'swift' if the availability should be                    restricted based on a Swift version.
+  /// The name of the OS on which the availability should be
+  /// restricted or 'swift' if the availability should be
+  /// restricted based on a Swift version.
   /// 
   public var platform: TokenSyntax {
     get {
@@ -8321,8 +8341,8 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
 extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "platform": Syntax(platform)._asConcreteType,
-      "version": Syntax(version)._asConcreteType,
+      "platform": Syntax(platform).as(SyntaxProtocol.self),
+      "version": Syntax(version).as(SyntaxProtocol.self),
     ])
   }
 }
@@ -8330,7 +8350,8 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
 // MARK: - VersionTupleSyntax
 
 /// 
-/// A version number of the form major.minor.patch in which the minor          and patch part may be ommited.
+/// A version number of the form major.minor.patch in which the minor
+/// and patch part may be ommited.
 /// 
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -8357,7 +8378,11 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// In case the version consists only of the major version, an                    integer literal that specifies the major version. In case                    the version consists of major and minor version number, a                    floating literal in which the decimal part is interpreted                    as the minor version.
+  /// In case the version consists only of the major version, an
+  /// integer literal that specifies the major version. In case
+  /// the version consists of major and minor version number, a
+  /// floating literal in which the decimal part is interpreted
+  /// as the minor version.
   /// 
   public var majorMinor: Syntax {
     get {
@@ -8381,7 +8406,8 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// If the version contains a patch number, the period                    separating the minor from the patch number.
+  /// If the version contains a patch number, the period
+  /// separating the minor from the patch number.
   /// 
   public var patchPeriod: TokenSyntax? {
     get {
@@ -8434,9 +8460,9 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 extension VersionTupleSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "majorMinor": Syntax(majorMinor)._asConcreteType,
-      "patchPeriod": patchPeriod.map(Syntax.init)?._asConcreteType as Any,
-      "patchVersion": patchVersion.map(Syntax.init)?._asConcreteType as Any,
+      "majorMinor": Syntax(majorMinor).as(SyntaxProtocol.self),
+      "patchPeriod": patchPeriod.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "patchVersion": patchVersion.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }

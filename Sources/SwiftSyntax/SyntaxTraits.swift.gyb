@@ -20,6 +20,8 @@
 //===----------------------------------------------------------------------===//
 
 % for trait in TRAITS:
+// MARK: - ${trait.trait_name}Syntax
+
 public protocol ${trait.trait_name}Syntax: SyntaxProtocol {
 % for child in trait.children:
 %   ret_type = child.type_name
@@ -30,6 +32,21 @@ public protocol ${trait.trait_name}Syntax: SyntaxProtocol {
   func with${child.name}(_ newChild: ${child.type_name}?) -> Self
 % end
 }
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to 
+  /// `${trait.trait_name}Syntax`. 
+  func `is`(_: ${trait.trait_name}Syntax.Protocol) -> Bool {
+    return self.as(${trait.trait_name}Syntax.self) != nil
+  }
+
+  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// `${trait.trait_name}Syntax`. Otherwise return `nil`.
+  func `as`(_: ${trait.trait_name}Syntax.Protocol) -> ${trait.trait_name}Syntax? {
+    return Syntax(self).as(SyntaxProtocol.self) as? ${trait.trait_name}Syntax
+  }
+}
+
 % end
 
 % for node in SYNTAX_NODES:

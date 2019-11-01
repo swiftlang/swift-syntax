@@ -162,9 +162,9 @@ extension ${node.name}: CustomReflectable {
     return Mirror(self, children: [
 %     for child in node.children:
 %       if child.is_optional:
-      "${child.swift_name}": ${child.swift_name}.map(Syntax.init)?._asConcreteType as Any,
+      "${child.swift_name}": ${child.swift_name}.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
 %       else:
-      "${child.swift_name}": Syntax(${child.swift_name})._asConcreteType,
+      "${child.swift_name}": Syntax(${child.swift_name}).as(SyntaxProtocol.self),
 %       end
 %     end
     ])

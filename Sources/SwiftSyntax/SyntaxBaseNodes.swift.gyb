@@ -29,6 +29,20 @@
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol ${node.name}Protocol: ${base_type}Protocol {}
 
+public extension Syntax {
+  /// Check whether the non-type erased version of this syntax node conforms to 
+  /// ${node.name}Protocol. 
+  func `is`(_: ${node.name}Protocol.Protocol) -> Bool {
+    return self.as(${node.name}Protocol.self) != nil
+  }
+
+  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// ${node.name}Protocol. Otherwise return nil.
+  func `as`(_: ${node.name}Protocol.Protocol) -> ${node.name}Protocol? {
+    return self.as(SyntaxProtocol.self) as? ${node.name}Protocol
+  }
+}
+
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
@@ -83,13 +97,25 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
   public func `as`<S: ${node.name}Protocol>(_ syntaxType: S.Type) -> S? {
     return S.init(_syntaxNode)
   }
+
+  /// Syntax nodes always conform to `${node.name}Protocol`. This API is just
+  /// added for consistency.
+  @available(*, deprecated, message: "Expression always evaluates to true")
+  public func `is`(_: ${node.name}Protocol.Protocol) -> Bool {
+    return true
+  }
+
+  /// Return the non-type erased version of this syntax node.
+  public func `as`(_: ${node.name}Protocol.Protocol) -> ${node.name}Protocol {
+    return Syntax(self).as(${node.name}Protocol.self)!
+  }
 }
 
 extension ${node.name}: CustomReflectable {
   /// Reconstructs the real syntax type for this type from the node's kind and
   /// provides a mirror that reflects this type.
   public var customMirror: Mirror {
-    return Mirror(reflecting: Syntax(self)._asConcreteType)
+    return Mirror(reflecting: Syntax(self).as(SyntaxProtocol.self))
   }
 }
 

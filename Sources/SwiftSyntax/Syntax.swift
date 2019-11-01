@@ -53,7 +53,7 @@ extension Syntax: CustomReflectable {
   /// Reconstructs the real syntax type for this type from the node's kind and
   /// provides a mirror that reflects this type.
   public var customMirror: Mirror {
-    return Mirror(reflecting: self._asConcreteType)
+    return Mirror(reflecting: self.as(SyntaxProtocol.self))
   }
 }
 

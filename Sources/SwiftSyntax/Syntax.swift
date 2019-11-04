@@ -24,6 +24,11 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self.data = data
   }
 
+  public func _validateLayout() {
+    // Check the layout of the concrete type
+    return self.as(SyntaxProtocol.self)._validateLayout()
+  }
+
   /// Create a `Syntax` node from a specialized syntax node.
   public init<S: SyntaxProtocol>(_ syntax: S) {
     self = syntax._syntaxNode
@@ -85,6 +90,11 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// Converts the given `Syntax` node to this type. Returns `nil` if the
   /// conversion is not possible.
   init?(_ syntaxNode: Syntax)
+
+  /// Check that the raw layout of this node is valid. Used to verify a node's
+  /// integrity after it has been rewritten by the syntax rewriter.
+  /// Results in an assertion failure if the layout is invalid.
+  func _validateLayout()
 }
 
 internal extension SyntaxProtocol {

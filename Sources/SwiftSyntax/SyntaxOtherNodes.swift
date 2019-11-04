@@ -25,6 +25,11 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = syntax
   }
 
+  public func _validateLayout() {
+    // We are verifying an unknown node. Since we don’t know anything about it
+    // we need to assume it’s valid.
+  }
+
   /// Creates an `UnknownSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
@@ -59,6 +64,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .token)
     self._syntaxNode = Syntax(data)
+  }
+
+  public func _validateLayout() {
+    /// A token is always valid as it has no children. Nothing to do here.
   }
 
   public var presence: SourcePresence {

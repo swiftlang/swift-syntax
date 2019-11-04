@@ -27,7 +27,7 @@ struct RawSyntaxChildren: Sequence {
       self.nextChildInfo = startFrom
     }
 
-    mutating func next() -> (RawSyntax?, AbsoluteSyntaxInfo)? {
+    mutating func next() -> (raw: RawSyntax?, syntaxInfo: AbsoluteSyntaxInfo)? {
       let idx = Int(nextChildInfo.indexInParent)
       guard idx < parent.numberOfChildren else {
         return nil

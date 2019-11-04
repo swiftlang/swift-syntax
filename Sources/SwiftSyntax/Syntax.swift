@@ -119,34 +119,12 @@ public extension SyntaxProtocol {
     return raw.isToken
   }
 
-  /// Whether or not this node represents an Expression.
-  var isExpr: Bool {
-    return raw.kind.isExpr
-  }
-
   /// Whether or not this node represents an SyntaxCollection.
   var isCollection: Bool {
+    // We need to provide a custom implementation for is(SyntaxCollection.self)
+    // since SyntaxCollection has generic or self requirements and can thus
+    // not be used as a method argument.
     return raw.kind.isSyntaxCollection
-  }
-
-  /// Whether or not this node represents a Declaration.
-  var isDecl: Bool {
-    return raw.kind.isDecl
-  }
-
-  /// Whether or not this node represents a Statement.
-  var isStmt: Bool {
-    return raw.kind.isStmt
-  }
-
-  /// Whether or not this node represents a Type.
-  var isType: Bool {
-    return raw.kind.isType
-  }
-
-  /// Whether or not this node represents a Pattern.
-  var isPattern: Bool {
-    return raw.kind.isPattern
   }
 
   /// Whether or not this node represents an unknown node.

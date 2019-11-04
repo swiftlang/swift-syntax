@@ -4,6 +4,10 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 ## Swift 5.2
 
+- Properties `isExpr`, `isDecl`, `isStmt`, `isType` and `isPattern` removed from `SyntaxNode`
+
+  Use `is(ExprSyntaxProtocol.self)` etc. instead.
+
 - Property `uniqueIdentifier` removed from syntax nodes and `SyntaxNode` ([#164](https://github.com/apple/swift-syntax/pull/164))
   
   Use the newly added property `id` or the conformance to `Identifiable` instead.

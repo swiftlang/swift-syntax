@@ -79,11 +79,12 @@ def check_gyb_exec():
     if not os.path.exists(GYB_EXEC):
         fatal_error('''
 Error: Could not find gyb.
+Looking at '%s'.
 
 Make sure you have the main swift repo checked out next to the swift-syntax
 repository.
 Refer to README.md for more information.
-''')
+''' % GYB_EXEC)
 
 
 def check_rsync():
@@ -246,10 +247,11 @@ def check_lit_exec():
     if not os.path.exists(LIT_EXEC):
         fatal_error('''
 Error: Could not find lit.py.
+Looking at '%s'.
 
 Make sure you have the llvm repo checked out next to the swift-syntax repo.
 Refer to README.md for more information.
-''')
+''' % LIT_EXEC)
 
 
 def check_incr_transfer_roundtrip_exec():

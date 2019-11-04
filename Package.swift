@@ -25,7 +25,7 @@ let swiftSyntaxTarget: PackageDescription.Target
 
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
-if getenv("SWIFT_SYNTAX_CI_ENVIRONMENT") != nil {
+if getenv("SWIFT_BUILD_SCRIPT_ENVIRONMENT") != nil {
   let groupFile = URL(fileURLWithPath: #file)
     .deletingLastPathComponent()
     .appendingPathComponent("utils")
@@ -48,9 +48,9 @@ package.targets.append(swiftSyntaxTarget)
 
 let libraryType: Product.Library.LibraryType
 
-/// When we're in a CI environment, we want to build a dylib instead of a static
-/// library since we install the dylib into the toolchain.
-if getenv("SWIFT_SYNTAX_CI_ENVIRONMENT") != nil {
+/// When we're in a build-script environment, we want to build a dylib instead
+/// of a static library since we install the dylib into the toolchain.
+if getenv("SWIFT_BUILD_SCRIPT_ENVIRONMENT") != nil {
   libraryType = .dynamic
 } else {
   libraryType = .static

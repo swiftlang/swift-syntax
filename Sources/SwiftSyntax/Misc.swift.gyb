@@ -1,0 +1,64 @@
+%{
+  # -*- mode: Swift -*-
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Traits import TRAITS
+  NODE_MAP = create_node_map()
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===---------- Misc.swift - Miscelaneous SwiftSyntax definitions ---------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2019 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import _InternalSwiftSyntaxParser
+
+extension SyntaxNode {
+  public var isUnknown: Bool { return raw.kind.isUnknown }
+  public var asUnknown: UnknownSyntax? {
+    guard isUnknown else { return nil }
+    return UnknownSyntax(asSyntaxData)
+  }
+% for node in SYNTAX_NODES:
+%   if not node.is_base():
+
+  public var is${node.syntax_kind}: Bool { return raw.kind == .${node.swift_syntax_kind} }
+  public var as${node.syntax_kind}: ${node.name}? {
+    guard is${node.syntax_kind} else { return nil }
+    return ${node.name}(asSyntaxData)
+  }
+%   end
+% end
+}
+
+public extension Syntax {
+  /// Retrieve the concretely typed node that this Syntax node wraps.
+  /// This property is exposed for testing purposes only.
+  var _asConcreteType: Any {
+    switch self.asSyntaxEnum {
+    case .token(let node):
+      return node
+    case .unknown(let node):
+      return node
+% for node in SYNTAX_NODES:
+    case .${node.swift_syntax_kind}(let node):
+      return node
+% end
+    }
+  }
+}
+
+extension SyntaxParser {
+  static func verifyNodeDeclarationHash() -> Bool {
+    return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
+      "${calculate_node_hash()}"
+  }
+}

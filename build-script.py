@@ -19,6 +19,15 @@ GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
 LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
 GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
 
+BASE_KIND_FILES = {
+  'Decl': 'SyntaxDeclNodes.swift',
+  'Expr': 'SyntaxExprNodes.swift',
+  'Pattern': 'SyntaxPatternNodes.swift',
+  'Stmt': 'SyntaxStmtNodes.swift',
+  'Syntax': 'SyntaxNodes.swift',
+  'Type': 'SyntaxTypeNodes.swift',
+}
+
 ### Generate Xcode project
 
 def xcode_gen(config):
@@ -92,22 +101,52 @@ def check_rsync():
             fatal_error('Error: Could not find rsync.')
 
 
+def generate_single_gyb_file(gyb_file, output_file_name, destination,
+                             temp_files_dir, add_source_locations,
+                             additional_gyb_flags, verbose):
+  # Source locations are added by default by gyb, and cleared by passing
+  # `--line-directive=` (nothing following the `=`) to the generator. Our
+  # flag is the reverse; we don't want them by default, only if requested.
+  line_directive_flags = [] if add_source_locations \
+                            else ['--line-directive=']
+
+  # Generate the new file
+  check_call([GYB_EXEC] +
+             [gyb_file] +
+             ['-o', temp_files_dir + '/' + output_file_name] +
+             line_directive_flags +
+             additional_gyb_flags,
+             verbose=verbose)
+
+  # Copy the file if different from the file already present in
+  # gyb_generated
+  check_call(['rsync'] +
+             ['--checksum'] +
+             [temp_files_dir + '/' + output_file_name] +
+             [destination + '/' + output_file_name],
+             verbose=verbose)
+
 def generate_gyb_files(verbose, add_source_locations, destination=None):
     print('** Generating gyb Files **')
 
     check_gyb_exec()
     check_rsync()
 
-    swiftsyntax_sources_dir = PACKAGE_DIR + '/Sources/SwiftSyntax'
+    swiftsyntax_sources_dir = os.path.join(PACKAGE_DIR, 'Sources',
+                                           'SwiftSyntax')
     temp_files_dir = tempfile.gettempdir()
 
     if destination is None:
-        destination = swiftsyntax_sources_dir + '/gyb_generated'
+        destination = os.path.join(swiftsyntax_sources_dir, 'gyb_generated')
+
+    template_destination = os.path.join(destination, 'syntax_nodes')
 
     if not os.path.exists(temp_files_dir):
-        os.makedirs(temp_files_dir)
+      os.makedirs(temp_files_dir)
     if not os.path.exists(destination):
-        os.makedirs(destination)
+      os.makedirs(destination)
+    if not os.path.exists(template_destination):
+      os.makedirs(template_destination)
 
     # Clear any *.swift files that are relics from the previous run.
     for previous_gyb_gen_file in os.listdir(destination):
@@ -116,6 +155,12 @@ def generate_gyb_files(verbose, add_source_locations, destination=None):
                                 previous_gyb_gen_file + '.gyb')
         if not os.path.exists(gyb_file):
           check_call(['rm', previous_gyb_gen_file], cwd=destination,
+                     verbose=verbose)
+
+    for previous_gyb_gen_file in os.listdir(template_destination):
+      if previous_gyb_gen_file.endswith('.swift'):
+        if not previous_gyb_gen_file in BASE_KIND_FILES.values():
+          check_call(['rm', previous_gyb_gen_file], cwd=template_destination,
                      verbose=verbose)
 
     # Generate the new .swift files in a temporary directory and only copy them
@@ -129,26 +174,24 @@ def generate_gyb_files(verbose, add_source_locations, destination=None):
         # Slice off the '.gyb' to get the name for the output file
         output_file_name = gyb_file[:-4]
 
-        # Source locations are added by default by gyb, and cleared by passing
-        # `--line-directive=` (nothing following the `=`) to the generator. Our
-        # flag is the reverse; we don't want them by default, only if requested.
-        line_directive_flags = [] if add_source_locations \
-                                  else ['--line-directive=']
+        generate_single_gyb_file(swiftsyntax_sources_dir + '/' + gyb_file,
+                                 output_file_name, destination,
+                                 temp_files_dir, add_source_locations,
+                                 additional_gyb_flags=[],
+                                 verbose=verbose)
 
-        # Generate the new file
-        check_call([GYB_EXEC] +
-                   [swiftsyntax_sources_dir + '/' + gyb_file] +
-                   ['-o', temp_files_dir + '/' + output_file_name] +
-                   line_directive_flags,
-                   verbose=verbose)
+    for base_kind in BASE_KIND_FILES:
+        output_file_name = BASE_KIND_FILES[base_kind]
 
-        # Copy the file if different from the file already present in
-        # gyb_generated
-        check_call(['rsync'] +
-                   ['--checksum'] +
-                   [temp_files_dir + '/' + output_file_name] +
-                   [destination + '/' + output_file_name],
-                   verbose=verbose)
+        gyb_file = swiftsyntax_sources_dir + '/SyntaxNodes.swift.gyb.template'
+
+        generate_single_gyb_file(gyb_file, output_file_name,
+                                 template_destination, temp_files_dir,
+                                 add_source_locations,
+                                 additional_gyb_flags=[
+                                   '-DEMIT_KIND=%s' % base_kind
+                                 ],
+                                 verbose=verbose)
 
     print('Done Generating gyb Files')
 

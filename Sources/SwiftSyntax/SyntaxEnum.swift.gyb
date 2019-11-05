@@ -1,0 +1,53 @@
+%{
+  # -*- mode: Swift -*-
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Traits import TRAITS
+  NODE_MAP = create_node_map()
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===--- SyntaxEnum.swift - Enum for exhaustive Syntax node switching -----===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2019 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+/// Enum to exhaustively switch over all different syntax nodes.
+public enum SyntaxEnum {
+  case unknown(UnknownSyntax)
+  case token(TokenSyntax)
+% for node in SYNTAX_NODES:
+%   if node.is_base():
+  case ${node.swift_syntax_kind}(Unknown${node.name})
+%   else:
+  case ${node.swift_syntax_kind}(${node.name})
+%   end
+% end
+}
+
+public extension Syntax {
+  /// Get an enum that can be used to exhaustively switch over all syntax nodes.
+  var asSyntaxEnum: SyntaxEnum {
+    switch raw.kind {
+    case .token:
+      return .token(TokenSyntax(self)!)
+    case .unknown:
+      return .unknown(UnknownSyntax(self)!)
+% for node in SYNTAX_NODES:
+    case .${node.swift_syntax_kind}:
+%   if node.is_base():
+      return .${node.swift_syntax_kind}(Unknown${node.name}(self)!)
+%   else:
+      return .${node.swift_syntax_kind}(${node.name}(self)!)
+%   end
+% end
+    }
+  }
+}

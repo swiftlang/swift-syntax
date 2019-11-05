@@ -12031,7 +12031,8 @@ public protocol MemberDeclListItemSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// A member declaration of a type consisting of a declaration and an          optional semicolon;
+/// A member declaration of a type consisting of a declaration and an
+/// optional semicolon;
 /// 
 public struct MemberDeclListItemSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -15197,7 +15198,8 @@ public protocol EnumCaseElementSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// An element of an enum case, containing the name of the case and,          optionally, either associated values or an assignment to a raw value.
+/// An element of an enum case, containing the name of the case and,
+/// optionally, either associated values or an assignment to a raw value.
 /// 
 public struct EnumCaseElementSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -15292,7 +15294,8 @@ public struct EnumCaseElementSyntax: SyntaxProtocol {
     return EnumCaseElementSyntax(newData)
   }
   /// 
-  /// The trailing comma of this element, if the case has                    multiple elements.
+  /// The trailing comma of this element, if the case has
+  /// multiple elements.
   /// 
   public var trailingComma: TokenSyntax? {
     get {
@@ -15375,7 +15378,8 @@ public protocol EnumCaseDeclSyntaxProtocol: DeclSyntaxProtocol {}
 
 
 /// 
-/// A `case` declaration of a Swift `enum`. It can have 1 or more          `EnumCaseElement`s inside, each declaring a different case of the
+/// A `case` declaration of a Swift `enum`. It can have 1 or more
+/// `EnumCaseElement`s inside, each declaring a different case of the
 /// enum.
 /// 
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol {
@@ -15791,7 +15795,8 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol {
     return EnumDeclSyntax(newData)
   }
   /// 
-  /// The inheritance clause describing conformances or raw                    values for this enum.
+  /// The inheritance clause describing conformances or raw
+  /// values for this enum.
   /// 
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
@@ -15815,7 +15820,8 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol {
     return EnumDeclSyntax(newData)
   }
   /// 
-  /// The `where` clause that applies to the generic parameters of                    this enum.
+  /// The `where` clause that applies to the generic parameters of
+  /// this enum.
   /// 
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
@@ -17496,7 +17502,9 @@ public struct AttributeSyntax: SyntaxProtocol {
     return AttributeSyntax(newData)
   }
   /// 
-  /// The arguments of the attribute. In case the attribute                     takes multiple arguments, they are gather in the                    appropriate takes first.
+  /// The arguments of the attribute. In case the attribute
+  /// takes multiple arguments, they are gather in the
+  /// appropriate takes first.
   /// 
   public var argument: Syntax? {
     get {
@@ -17648,7 +17656,8 @@ public protocol LabeledSpecializeEntrySyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// A labeled argument for the `@_specialize` attribute like          `exported: true`
+/// A labeled argument for the `@_specialize` attribute like
+/// `exported: true`
 /// 
 public struct LabeledSpecializeEntrySyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -17817,7 +17826,9 @@ public protocol NamedAttributeStringArgumentSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// The argument for the `@_dynamic_replacement` or `@_private`          attribute of the form `for: "function()"` or `sourceFile:          "Src.swift"`
+/// The argument for the `@_dynamic_replacement` or `@_private`
+/// attribute of the form `for: "function()"` or `sourceFile:
+/// "Src.swift"`
 /// 
 public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -18006,7 +18017,8 @@ public struct DeclNameSyntax: SyntaxProtocol {
     return DeclNameSyntax(newData)
   }
   /// 
-  /// The argument labels of the protocol's requirement if it                is a function requirement.
+  /// The argument labels of the protocol's requirement if it
+  /// is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
@@ -18084,7 +18096,8 @@ public protocol ImplementsAttributeArgumentsSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// The arguments for the `@_implements` attribute of the form          `Type, methodName(arg1Label:arg2Label:)`
+/// The arguments for the `@_implements` attribute of the form
+/// `Type, methodName(arg1Label:arg2Label:)`
 /// 
 public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -18112,7 +18125,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The type for which the method with this attribute                    implements a requirement.
+  /// The type for which the method with this attribute
+  /// implements a requirement.
   /// 
   public var type: SimpleTypeIdentifierSyntax {
     get {
@@ -18181,7 +18195,8 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol {
     return ImplementsAttributeArgumentsSyntax(newData)
   }
   /// 
-  /// The argument labels of the protocol's requirement if it                    is a function requirement.
+  /// The argument labels of the protocol's requirement if it
+  /// is a function requirement.
   /// 
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
@@ -18259,7 +18274,9 @@ public protocol ObjCSelectorPieceSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// A piece of an Objective-C selector. Either consisiting of just an          identifier for a nullary selector, an identifier and a colon for a          labeled argument or just a colon for an unlabeled argument
+/// A piece of an Objective-C selector. Either consisiting of just an
+/// identifier for a nullary selector, an identifier and a colon for a
+/// labeled argument or just a colon for an unlabeled argument
 /// 
 public struct ObjCSelectorPieceSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -27822,7 +27839,8 @@ public protocol AvailabilityArgumentSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// A single argument to an `@available` argument like `*`, `iOS 10.1`,          or `message: "This has been deprecated"`.
+/// A single argument to an `@available` argument like `*`, `iOS 10.1`,
+/// or `message: "This has been deprecated"`.
 /// 
 public struct AvailabilityArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -27869,7 +27887,8 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol {
     return AvailabilityArgumentSyntax(newData)
   }
   /// 
-  /// A trailing comma if the argument is followed by another                    argument
+  /// A trailing comma if the argument is followed by another
+  /// argument
   /// 
   public var trailingComma: TokenSyntax? {
     get {
@@ -27947,7 +27966,8 @@ public protocol AvailabilityLabeledArgumentSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// A argument to an `@available` attribute that consists of a label and          a value, e.g. `message: "This has been deprecated"`.
+/// A argument to an `@available` attribute that consists of a label and
+/// a value, e.g. `message: "This has been deprecated"`.
 /// 
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -28091,7 +28111,8 @@ public protocol AvailabilityVersionRestrictionSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// An argument to `@available` that restricts the availability on a          certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
+/// An argument to `@available` that restricts the availability on a
+/// certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 /// 
 public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -28117,7 +28138,9 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// The name of the OS on which the availability should be                    restricted or 'swift' if the availability should be                    restricted based on a Swift version.
+  /// The name of the OS on which the availability should be
+  /// restricted or 'swift' if the availability should be
+  /// restricted based on a Swift version.
   /// 
   public var platform: TokenSyntax {
     get {
@@ -28214,7 +28237,8 @@ public protocol VersionTupleSyntaxProtocol: SyntaxProtocol {}
 
 
 /// 
-/// A version number of the form major.minor.patch in which the minor          and patch part may be ommited.
+/// A version number of the form major.minor.patch in which the minor
+/// and patch part may be ommited.
 /// 
 public struct VersionTupleSyntax: SyntaxProtocol {
   enum Cursor: Int {
@@ -28241,7 +28265,11 @@ public struct VersionTupleSyntax: SyntaxProtocol {
   }
 
   /// 
-  /// In case the version consists only of the major version, an                    integer literal that specifies the major version. In case                    the version consists of major and minor version number, a                    floating literal in which the decimal part is interpreted                    as the minor version.
+  /// In case the version consists only of the major version, an
+  /// integer literal that specifies the major version. In case
+  /// the version consists of major and minor version number, a
+  /// floating literal in which the decimal part is interpreted
+  /// as the minor version.
   /// 
   public var majorMinor: Syntax {
     get {
@@ -28264,7 +28292,8 @@ public struct VersionTupleSyntax: SyntaxProtocol {
     return VersionTupleSyntax(newData)
   }
   /// 
-  /// If the version contains a patch number, the period                    separating the minor from the patch number.
+  /// If the version contains a patch number, the period
+  /// separating the minor from the patch number.
   /// 
   public var patchPeriod: TokenSyntax? {
     get {

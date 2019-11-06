@@ -3,11 +3,6 @@ import SwiftSyntax
 
 public class TriviaTests: XCTestCase {
 
-  public static let allTests = [
-    ("testTriviaEquatable", testTriviaEquatable),
-    ("testTriviaPieceEquatable", testTriviaPieceEquatable)
-  ]
-
   func testTriviaEquatable() {
     XCTAssertEqual([.spaces(2), .tabs(1)] as Trivia, [.spaces(2), .tabs(1)])
     XCTAssertNotEqual([.spaces(2), .tabs(1)] as Trivia, [.spaces(2), .tabs(2)])

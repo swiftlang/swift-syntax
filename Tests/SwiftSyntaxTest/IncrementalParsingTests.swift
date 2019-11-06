@@ -3,11 +3,6 @@ import SwiftSyntax
 
 public class IncrementalParsingTests: XCTestCase {
 
-  public static let allTests = [
-    ("testIncrementalInvalid", testIncrementalInvalid),
-    ("testReusedNode", testReusedNode),
-  ]
-
   public func testIncrementalInvalid() {
     let original = "struct A { func f() {"
     let step: (String, (Int, Int, String)) =

@@ -25,11 +25,6 @@ enum Animal {
 
 public class ParseFileTests: XCTestCase {
 
-  public static let allTests = [
-    ("testParseSingleFile", testParseSingleFile),
-    ("testEnumCaseStructure", testEnumCaseStructure)
-  ]
-
   public func testParseSingleFile() {
     let currentFile = URL(fileURLWithPath: #file)
     XCTAssertNoThrow(try {

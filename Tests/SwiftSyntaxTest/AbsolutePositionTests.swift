@@ -12,18 +12,6 @@ fileprivate class FuncRenamer: SyntaxRewriter {
 
 public class AbsolutePositionTests: XCTestCase {
 
-  public static let allTests = [
-    ("testVisitor", testVisitor),
-    ("testClosure", testClosure),
-    ("testRename", testRename),
-    ("testCurrentFile", testCurrentFile),
-    ("testRecursion", testRecursion),
-    ("testTrivias", testTrivias),
-    ("testImplicit", testImplicit),
-    ("testWithoutSourceFileRoot", testWithoutSourceFileRoot),
-    ("testSourceLocation", testSourceLocation),
-  ]
-
   public func testVisitor() {
     XCTAssertNoThrow(try {
       let source = try String(contentsOf: getInput("visitor.swift"))

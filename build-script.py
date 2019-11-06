@@ -165,6 +165,8 @@ def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file,
 
     swiftpm_call = [swift_exec, action]
     swiftpm_call.extend(['--package-path', PACKAGE_DIR])
+    if platform.system() != 'Darwin':
+      swiftpm_call.extend(['--enable-test-discovery'])
     if release:
         swiftpm_call.extend(['--configuration', 'release'])
     if build_dir:

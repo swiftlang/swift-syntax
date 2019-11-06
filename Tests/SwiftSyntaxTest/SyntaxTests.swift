@@ -3,11 +3,6 @@ import SwiftSyntax
 
 public class SyntaxTests: XCTestCase {
 
-  public static let allTests = [
-    ("testSyntaxAPI", testSyntaxAPI),
-    ("testPositions", testPositions),
-  ]
-
   public func testSyntaxAPI() {
     let source = "struct A { func f() {} }"
     let tree = try! SyntaxParser.parse(source: source)

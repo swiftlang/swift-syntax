@@ -1,12 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class IncrementalParsingTestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testIncrementalInvalid", testIncrementalInvalid),
-    ("testReusedNode", testReusedNode),
-  ]
+public class IncrementalParsingTests: XCTestCase {
 
   public func testIncrementalInvalid() {
     let original = "struct A { func f() {"

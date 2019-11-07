@@ -8,18 +8,7 @@ fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
         trailingComma: nil)
 }
 
-public class SyntaxCollectionsAPITestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testAppendingElement", testAppendingElement),
-    ("testInsertingElement", testInsertingElement),
-    ("testPrependingElement", testPrependingElement),
-    ("testRemovingFirstElement", testRemovingFirstElement),
-    ("testRemovingLastElement", testRemovingLastElement),
-    ("testRemovingElement", testRemovingElement),
-    ("testReplacingElement", testReplacingElement),
-    ("testIteration", testIteration),
-  ]
+public class SyntaxCollectionsTests: XCTestCase {
 
   public func testAppendingElement() {
       let arrayElementList = SyntaxFactory.makeArrayElementList([

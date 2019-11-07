@@ -88,11 +88,12 @@ def check_gyb_exec():
     if not os.path.exists(GYB_EXEC):
         fatal_error('''
 Error: Could not find gyb.
+Looking at '%s'.
 
 Make sure you have the main swift repo checked out next to the swift-syntax
 repository.
 Refer to README.md for more information.
-''')
+''' % GYB_EXEC)
 
 
 def check_rsync():
@@ -207,6 +208,8 @@ def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file,
 
     swiftpm_call = [swift_exec, action]
     swiftpm_call.extend(['--package-path', PACKAGE_DIR])
+    if platform.system() != 'Darwin':
+      swiftpm_call.extend(['--enable-test-discovery'])
     if release:
         swiftpm_call.extend(['--configuration', 'release'])
     if build_dir:
@@ -289,10 +292,11 @@ def check_lit_exec():
     if not os.path.exists(LIT_EXEC):
         fatal_error('''
 Error: Could not find lit.py.
+Looking at '%s'.
 
 Make sure you have the llvm repo checked out next to the swift-syntax repo.
 Refer to README.md for more information.
-''')
+''' % LIT_EXEC)
 
 
 def check_incr_transfer_roundtrip_exec():

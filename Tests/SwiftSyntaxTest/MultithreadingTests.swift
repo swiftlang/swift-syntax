@@ -1,12 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class MultithreadingTestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testPathological", testPathological),
-    ("testTwoAccesses", testTwoAccesses),
-  ]
+public class MultithreadingTests: XCTestCase {
 
   public func testPathological() {
     let tuple = SyntaxFactory.makeVoidTupleType()

@@ -1,11 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class TokenSyntaxTestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testKeywordKinds", testKeywordKinds),
-  ]
+public class TokenTests: XCTestCase {
 
   public func testKeywordKinds() {
     XCTAssertTrue(TokenKind.operatorKeyword.isKeyword)

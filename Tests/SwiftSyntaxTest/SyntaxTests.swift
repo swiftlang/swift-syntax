@@ -1,12 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class SyntaxAPITestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testSyntaxAPI", testSyntaxAPI),
-    ("testPositions", testPositions),
-  ]
+public class SyntaxTests: XCTestCase {
 
   public func testSyntaxAPI() {
     let source = "struct A { func f() {} }"

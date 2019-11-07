@@ -23,12 +23,7 @@ enum Animal {
   case dog
 }
 
-public class ParseFileTestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testParseSingleFile", testParseSingleFile),
-    ("testEnumCaseStructure", testEnumCaseStructure)
-  ]
+public class ParseFileTests: XCTestCase {
 
   public func testParseSingleFile() {
     let currentFile = URL(fileURLWithPath: #file)

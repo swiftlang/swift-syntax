@@ -1,15 +1,7 @@
 import XCTest
 import SwiftSyntax
 
-public class SyntaxVisitorTestCase: XCTestCase {
-
-  public static let allTests = [
-    ("testBasic", testBasic),
-    ("testRewritingNodeWithEmptyChild", testRewritingNodeWithEmptyChild),
-    ("testSyntaxRewriterVisitAny", testSyntaxRewriterVisitAny),
-    ("testSyntaxRewriterVisitCollection", testSyntaxRewriterVisitCollection),
-    ("testVisitorClass", testVisitorClass),
-  ]
+public class SyntaxVisitorTests: XCTestCase {
 
   public func testBasic() {
     class FuncCounter: SyntaxVisitor {

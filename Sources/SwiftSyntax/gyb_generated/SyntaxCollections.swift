@@ -22,7 +22,7 @@ public protocol SyntaxCollection: SyntaxProtocol, Sequence {
 /// `CodeBlockItemSyntax` nodes. CodeBlockItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct CodeBlockItemListSyntax: SyntaxCollection {
+public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `CodeBlockItemListSyntax` if possible. Returns 
@@ -258,7 +258,7 @@ extension CodeBlockItemListSyntax: Sequence {
 /// `TupleExprElementSyntax` nodes. TupleExprElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct TupleExprElementListSyntax: SyntaxCollection {
+public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TupleExprElementListSyntax` if possible. Returns 
@@ -494,7 +494,7 @@ extension TupleExprElementListSyntax: Sequence {
 /// `ArrayElementSyntax` nodes. ArrayElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ArrayElementListSyntax: SyntaxCollection {
+public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ArrayElementListSyntax` if possible. Returns 
@@ -730,7 +730,7 @@ extension ArrayElementListSyntax: Sequence {
 /// `DictionaryElementSyntax` nodes. DictionaryElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct DictionaryElementListSyntax: SyntaxCollection {
+public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DictionaryElementListSyntax` if possible. Returns 
@@ -966,7 +966,7 @@ extension DictionaryElementListSyntax: Sequence {
 /// `Syntax` nodes. StringLiteralSegmentsSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct StringLiteralSegmentsSyntax: SyntaxCollection {
+public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `StringLiteralSegmentsSyntax` if possible. Returns 
@@ -1202,7 +1202,7 @@ extension StringLiteralSegmentsSyntax: Sequence {
 /// `DeclNameArgumentSyntax` nodes. DeclNameArgumentListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct DeclNameArgumentListSyntax: SyntaxCollection {
+public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `DeclNameArgumentListSyntax` if possible. Returns 
@@ -1438,7 +1438,7 @@ extension DeclNameArgumentListSyntax: Sequence {
 /// `ExprSyntax` nodes. ExprListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ExprListSyntax: SyntaxCollection {
+public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ExprListSyntax` if possible. Returns 
@@ -1674,7 +1674,7 @@ extension ExprListSyntax: Sequence {
 /// `ClosureCaptureItemSyntax` nodes. ClosureCaptureItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ClosureCaptureItemListSyntax: SyntaxCollection {
+public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ClosureCaptureItemListSyntax` if possible. Returns 
@@ -1910,7 +1910,7 @@ extension ClosureCaptureItemListSyntax: Sequence {
 /// `ClosureParamSyntax` nodes. ClosureParamListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ClosureParamListSyntax: SyntaxCollection {
+public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ClosureParamListSyntax` if possible. Returns 
@@ -2146,7 +2146,7 @@ extension ClosureParamListSyntax: Sequence {
 /// `ObjcNamePieceSyntax` nodes. ObjcNameSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ObjcNameSyntax: SyntaxCollection {
+public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ObjcNameSyntax` if possible. Returns 
@@ -2382,7 +2382,7 @@ extension ObjcNameSyntax: Sequence {
 /// `FunctionParameterSyntax` nodes. FunctionParameterListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct FunctionParameterListSyntax: SyntaxCollection {
+public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `FunctionParameterListSyntax` if possible. Returns 
@@ -2618,7 +2618,7 @@ extension FunctionParameterListSyntax: Sequence {
 /// `IfConfigClauseSyntax` nodes. IfConfigClauseListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct IfConfigClauseListSyntax: SyntaxCollection {
+public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IfConfigClauseListSyntax` if possible. Returns 
@@ -2854,7 +2854,7 @@ extension IfConfigClauseListSyntax: Sequence {
 /// `InheritedTypeSyntax` nodes. InheritedTypeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct InheritedTypeListSyntax: SyntaxCollection {
+public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `InheritedTypeListSyntax` if possible. Returns 
@@ -3090,7 +3090,7 @@ extension InheritedTypeListSyntax: Sequence {
 /// `MemberDeclListItemSyntax` nodes. MemberDeclListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct MemberDeclListSyntax: SyntaxCollection {
+public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `MemberDeclListSyntax` if possible. Returns 
@@ -3326,7 +3326,7 @@ extension MemberDeclListSyntax: Sequence {
 /// `DeclModifierSyntax` nodes. ModifierListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ModifierListSyntax: SyntaxCollection {
+public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ModifierListSyntax` if possible. Returns 
@@ -3562,7 +3562,7 @@ extension ModifierListSyntax: Sequence {
 /// `AccessPathComponentSyntax` nodes. AccessPathSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct AccessPathSyntax: SyntaxCollection {
+public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AccessPathSyntax` if possible. Returns 
@@ -3798,7 +3798,7 @@ extension AccessPathSyntax: Sequence {
 /// `AccessorDeclSyntax` nodes. AccessorListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct AccessorListSyntax: SyntaxCollection {
+public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AccessorListSyntax` if possible. Returns 
@@ -4034,7 +4034,7 @@ extension AccessorListSyntax: Sequence {
 /// `PatternBindingSyntax` nodes. PatternBindingListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct PatternBindingListSyntax: SyntaxCollection {
+public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PatternBindingListSyntax` if possible. Returns 
@@ -4270,7 +4270,7 @@ extension PatternBindingListSyntax: Sequence {
 /// `EnumCaseElementSyntax` nodes. EnumCaseElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct EnumCaseElementListSyntax: SyntaxCollection {
+public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `EnumCaseElementListSyntax` if possible. Returns 
@@ -4506,7 +4506,7 @@ extension EnumCaseElementListSyntax: Sequence {
 /// `TokenSyntax` nodes. IdentifierListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct IdentifierListSyntax: SyntaxCollection {
+public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `IdentifierListSyntax` if possible. Returns 
@@ -4742,7 +4742,7 @@ extension IdentifierListSyntax: Sequence {
 /// `Syntax` nodes. PrecedenceGroupAttributeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection {
+public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PrecedenceGroupAttributeListSyntax` if possible. Returns 
@@ -4978,7 +4978,7 @@ extension PrecedenceGroupAttributeListSyntax: Sequence {
 /// `PrecedenceGroupNameElementSyntax` nodes. PrecedenceGroupNameListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct PrecedenceGroupNameListSyntax: SyntaxCollection {
+public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `PrecedenceGroupNameListSyntax` if possible. Returns 
@@ -5214,7 +5214,7 @@ extension PrecedenceGroupNameListSyntax: Sequence {
 /// `TokenSyntax` nodes. TokenListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct TokenListSyntax: SyntaxCollection {
+public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TokenListSyntax` if possible. Returns 
@@ -5450,7 +5450,7 @@ extension TokenListSyntax: Sequence {
 /// `TokenSyntax` nodes. NonEmptyTokenListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct NonEmptyTokenListSyntax: SyntaxCollection {
+public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `NonEmptyTokenListSyntax` if possible. Returns 
@@ -5686,7 +5686,7 @@ extension NonEmptyTokenListSyntax: Sequence {
 /// `Syntax` nodes. AttributeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct AttributeListSyntax: SyntaxCollection {
+public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AttributeListSyntax` if possible. Returns 
@@ -5922,7 +5922,7 @@ extension AttributeListSyntax: Sequence {
 /// `Syntax` nodes. SpecializeAttributeSpecListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct SpecializeAttributeSpecListSyntax: SyntaxCollection {
+public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `SpecializeAttributeSpecListSyntax` if possible. Returns 
@@ -6158,7 +6158,7 @@ extension SpecializeAttributeSpecListSyntax: Sequence {
 /// `ObjCSelectorPieceSyntax` nodes. ObjCSelectorSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ObjCSelectorSyntax: SyntaxCollection {
+public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ObjCSelectorSyntax` if possible. Returns 
@@ -6394,7 +6394,7 @@ extension ObjCSelectorSyntax: Sequence {
 /// `Syntax` nodes. SwitchCaseListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct SwitchCaseListSyntax: SyntaxCollection {
+public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `SwitchCaseListSyntax` if possible. Returns 
@@ -6630,7 +6630,7 @@ extension SwitchCaseListSyntax: Sequence {
 /// `CatchClauseSyntax` nodes. CatchClauseListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct CatchClauseListSyntax: SyntaxCollection {
+public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `CatchClauseListSyntax` if possible. Returns 
@@ -6866,7 +6866,7 @@ extension CatchClauseListSyntax: Sequence {
 /// `CaseItemSyntax` nodes. CaseItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct CaseItemListSyntax: SyntaxCollection {
+public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `CaseItemListSyntax` if possible. Returns 
@@ -7102,7 +7102,7 @@ extension CaseItemListSyntax: Sequence {
 /// `ConditionElementSyntax` nodes. ConditionElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct ConditionElementListSyntax: SyntaxCollection {
+public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `ConditionElementListSyntax` if possible. Returns 
@@ -7338,7 +7338,7 @@ extension ConditionElementListSyntax: Sequence {
 /// `GenericRequirementSyntax` nodes. GenericRequirementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct GenericRequirementListSyntax: SyntaxCollection {
+public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `GenericRequirementListSyntax` if possible. Returns 
@@ -7574,7 +7574,7 @@ extension GenericRequirementListSyntax: Sequence {
 /// `GenericParameterSyntax` nodes. GenericParameterListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct GenericParameterListSyntax: SyntaxCollection {
+public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `GenericParameterListSyntax` if possible. Returns 
@@ -7810,7 +7810,7 @@ extension GenericParameterListSyntax: Sequence {
 /// `CompositionTypeElementSyntax` nodes. CompositionTypeElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct CompositionTypeElementListSyntax: SyntaxCollection {
+public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `CompositionTypeElementListSyntax` if possible. Returns 
@@ -8046,7 +8046,7 @@ extension CompositionTypeElementListSyntax: Sequence {
 /// `TupleTypeElementSyntax` nodes. TupleTypeElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct TupleTypeElementListSyntax: SyntaxCollection {
+public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TupleTypeElementListSyntax` if possible. Returns 
@@ -8282,7 +8282,7 @@ extension TupleTypeElementListSyntax: Sequence {
 /// `GenericArgumentSyntax` nodes. GenericArgumentListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct GenericArgumentListSyntax: SyntaxCollection {
+public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `GenericArgumentListSyntax` if possible. Returns 
@@ -8518,7 +8518,7 @@ extension GenericArgumentListSyntax: Sequence {
 /// `TuplePatternElementSyntax` nodes. TuplePatternElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct TuplePatternElementListSyntax: SyntaxCollection {
+public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `TuplePatternElementListSyntax` if possible. Returns 
@@ -8754,7 +8754,7 @@ extension TuplePatternElementListSyntax: Sequence {
 /// `AvailabilityArgumentSyntax` nodes. AvailabilitySpecListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct AvailabilitySpecListSyntax: SyntaxCollection {
+public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
   /// Converts the given `Syntax` node to a `AvailabilitySpecListSyntax` if possible. Returns 

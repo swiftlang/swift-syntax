@@ -101,6 +101,15 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   exprSyntax.is(IdentifierExprSyntax.self)
   ```
 
+- To retrieve the non-type erased version of a type, use the `as(_: SyntaxProtocol.self)` method
+
+  ```swift
+  let identifierExprSyntax: IdentifierExprSyntax = /* ... */
+  let node = Syntax(identifierExprSyntax)
+  node.as(SyntaxProtocol.self) // returns a IdentifierExprSyntax with static type SyntaxProtocol
+  node.as(ExprSyntaxProtocol.self) // returns a IdentifierExprSyntax with static type ExprSyntaxProtocol?
+  ```
+
 
 - Downcasting can no longer be performed using the `as` operator. For downcasting use the `as(_: SyntaxProtocol)` method on any type eraser. ([#155](https://github.com/apple/swift-syntax/pull/155))
 

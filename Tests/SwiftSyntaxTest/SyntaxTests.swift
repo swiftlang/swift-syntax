@@ -83,4 +83,35 @@ public class SyntaxTests: XCTestCase {
       testFuncKw(funcKW)
     }
   }
+
+  public func testCasting() {
+    let integerExpr = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
+    }
+
+    let expr = ExprSyntax(integerExpr)
+    let node = Syntax(expr)
+    XCTAssertTrue(expr.is(IntegerLiteralExprSyntax.self))
+    XCTAssertTrue(node.is(IntegerLiteralExprSyntax.self))
+    XCTAssertTrue(node.as(ExprSyntax.self)!.is(IntegerLiteralExprSyntax.self))
+
+    XCTAssertTrue(node.is(ExprSyntaxProtocol.self))
+    XCTAssertTrue(node.as(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
+    XCTAssertTrue(expr.as(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
+    XCTAssertTrue(expr.as(ExprSyntaxProtocol.self) as? IntegerLiteralExprSyntax == integerExpr)
+
+    XCTAssertFalse(node.is(BracedSyntax.self))
+    XCTAssertNil(node.as(BracedSyntax.self))
+    XCTAssertFalse(expr.is(BracedSyntax.self))
+    XCTAssertNil(expr.as(BracedSyntax.self))
+
+    let classDecl = SyntaxFactory.makeCodeBlock(
+      leftBrace: SyntaxFactory.makeToken(.leftBrace, presence: .present),
+      statements: SyntaxFactory.makeCodeBlockItemList([]),
+      rightBrace: SyntaxFactory.makeToken(.rightBrace, presence: .present)
+    )
+
+    XCTAssertTrue(classDecl.is(BracedSyntax.self))
+    XCTAssertNotNil(classDecl.as(BracedSyntax.self))
+  }
 }

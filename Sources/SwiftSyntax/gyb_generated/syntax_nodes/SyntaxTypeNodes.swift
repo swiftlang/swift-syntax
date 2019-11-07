@@ -15,7 +15,7 @@
 
 // MARK: - UnknownTypeSyntax
 
-public struct UnknownTypeSyntax: TypeSyntaxProtocol {
+public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
@@ -44,7 +44,7 @@ extension UnknownTypeSyntax: CustomReflectable {
 
 // MARK: - SimpleTypeIdentifierSyntax
 
-public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol {
+public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
     case genericArgumentClause
@@ -114,15 +114,15 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol {
 extension SimpleTypeIdentifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name)._asConcreteType,
-      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?._asConcreteType as Any,
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - MemberTypeIdentifierSyntax
 
-public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol {
+public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case baseType
     case period
@@ -236,17 +236,17 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol {
 extension MemberTypeIdentifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "baseType": Syntax(baseType)._asConcreteType,
-      "period": Syntax(period)._asConcreteType,
-      "name": Syntax(name)._asConcreteType,
-      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?._asConcreteType as Any,
+      "baseType": Syntax(baseType).as(SyntaxProtocol.self),
+      "period": Syntax(period).as(SyntaxProtocol.self),
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - ClassRestrictionTypeSyntax
 
-public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol {
+public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case classKeyword
   }
@@ -293,14 +293,14 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol {
 extension ClassRestrictionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "classKeyword": Syntax(classKeyword)._asConcreteType,
+      "classKeyword": Syntax(classKeyword).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - ArrayTypeSyntax
 
-public struct ArrayTypeSyntax: TypeSyntaxProtocol {
+public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquareBracket
     case elementType
@@ -391,16 +391,16 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol {
 extension ArrayTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquareBracket": Syntax(leftSquareBracket)._asConcreteType,
-      "elementType": Syntax(elementType)._asConcreteType,
-      "rightSquareBracket": Syntax(rightSquareBracket)._asConcreteType,
+      "leftSquareBracket": Syntax(leftSquareBracket).as(SyntaxProtocol.self),
+      "elementType": Syntax(elementType).as(SyntaxProtocol.self),
+      "rightSquareBracket": Syntax(rightSquareBracket).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - DictionaryTypeSyntax
 
-public struct DictionaryTypeSyntax: TypeSyntaxProtocol {
+public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftSquareBracket
     case keyType
@@ -535,18 +535,18 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol {
 extension DictionaryTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquareBracket": Syntax(leftSquareBracket)._asConcreteType,
-      "keyType": Syntax(keyType)._asConcreteType,
-      "colon": Syntax(colon)._asConcreteType,
-      "valueType": Syntax(valueType)._asConcreteType,
-      "rightSquareBracket": Syntax(rightSquareBracket)._asConcreteType,
+      "leftSquareBracket": Syntax(leftSquareBracket).as(SyntaxProtocol.self),
+      "keyType": Syntax(keyType).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "valueType": Syntax(valueType).as(SyntaxProtocol.self),
+      "rightSquareBracket": Syntax(rightSquareBracket).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - MetatypeTypeSyntax
 
-public struct MetatypeTypeSyntax: TypeSyntaxProtocol {
+public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case baseType
     case period
@@ -637,16 +637,16 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol {
 extension MetatypeTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "baseType": Syntax(baseType)._asConcreteType,
-      "period": Syntax(period)._asConcreteType,
-      "typeOrProtocol": Syntax(typeOrProtocol)._asConcreteType,
+      "baseType": Syntax(baseType).as(SyntaxProtocol.self),
+      "period": Syntax(period).as(SyntaxProtocol.self),
+      "typeOrProtocol": Syntax(typeOrProtocol).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - OptionalTypeSyntax
 
-public struct OptionalTypeSyntax: TypeSyntaxProtocol {
+public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case wrappedType
     case questionMark
@@ -715,15 +715,15 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol {
 extension OptionalTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wrappedType": Syntax(wrappedType)._asConcreteType,
-      "questionMark": Syntax(questionMark)._asConcreteType,
+      "wrappedType": Syntax(wrappedType).as(SyntaxProtocol.self),
+      "questionMark": Syntax(questionMark).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - SomeTypeSyntax
 
-public struct SomeTypeSyntax: TypeSyntaxProtocol {
+public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case someSpecifier
     case baseType
@@ -792,15 +792,15 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol {
 extension SomeTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "someSpecifier": Syntax(someSpecifier)._asConcreteType,
-      "baseType": Syntax(baseType)._asConcreteType,
+      "someSpecifier": Syntax(someSpecifier).as(SyntaxProtocol.self),
+      "baseType": Syntax(baseType).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
 
-public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol {
+public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case wrappedType
     case exclamationMark
@@ -869,15 +869,15 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol {
 extension ImplicitlyUnwrappedOptionalTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wrappedType": Syntax(wrappedType)._asConcreteType,
-      "exclamationMark": Syntax(exclamationMark)._asConcreteType,
+      "wrappedType": Syntax(wrappedType).as(SyntaxProtocol.self),
+      "exclamationMark": Syntax(exclamationMark).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - CompositionTypeSyntax
 
-public struct CompositionTypeSyntax: TypeSyntaxProtocol {
+public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case elements
   }
@@ -943,14 +943,14 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol {
 extension CompositionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "elements": Syntax(elements)._asConcreteType,
+      "elements": Syntax(elements).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - TupleTypeSyntax
 
-public struct TupleTypeSyntax: TypeSyntaxProtocol {
+public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case elements
@@ -1060,16 +1060,16 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol {
 extension TupleTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "elements": Syntax(elements)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "elements": Syntax(elements).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - FunctionTypeSyntax
 
-public struct FunctionTypeSyntax: TypeSyntaxProtocol {
+public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case leftParen
     case arguments
@@ -1246,19 +1246,19 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol {
 extension FunctionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen)._asConcreteType,
-      "arguments": Syntax(arguments)._asConcreteType,
-      "rightParen": Syntax(rightParen)._asConcreteType,
-      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?._asConcreteType as Any,
-      "arrow": Syntax(arrow)._asConcreteType,
-      "returnType": Syntax(returnType)._asConcreteType,
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "arguments": Syntax(arguments).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "arrow": Syntax(arrow).as(SyntaxProtocol.self),
+      "returnType": Syntax(returnType).as(SyntaxProtocol.self),
     ])
   }
 }
 
 // MARK: - AttributedTypeSyntax
 
-public struct AttributedTypeSyntax: TypeSyntaxProtocol {
+public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case specifier
     case attributes
@@ -1370,9 +1370,9 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol {
 extension AttributedTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "specifier": specifier.map(Syntax.init)?._asConcreteType as Any,
-      "attributes": attributes.map(Syntax.init)?._asConcreteType as Any,
-      "baseType": Syntax(baseType)._asConcreteType,
+      "specifier": specifier.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "baseType": Syntax(baseType).as(SyntaxProtocol.self),
     ])
   }
 }

@@ -1348,10 +1348,16 @@ extension SyntaxNode {
   }
 }
 
-public extension Syntax {
-  /// Retrieve the concretely typed node that this Syntax node wraps.
-  /// This property is exposed for testing purposes only.
-  var _asConcreteType: Any {
+extension Syntax {
+  /// Syntax nodes always conform to SyntaxProtocol. This API is just added
+  /// for consistency.
+  @available(*, deprecated, message: "Expression always evaluates to true")
+  public func `is`(_: SyntaxProtocol.Protocol) -> Bool {
+    return true
+  }
+
+  /// Return the non-type erased version of this syntax node.
+  public func `as`(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
     switch self.as(SyntaxEnum.self) {
     case .token(let node):
       return node

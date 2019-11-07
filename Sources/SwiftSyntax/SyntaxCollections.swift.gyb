@@ -209,64 +209,66 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `${node.name}`` to the Sequence protocol.
-extension ${node.name}: Sequence {
-  fileprivate static func nextElement<Iter>(
-    _ iterator: inout Iter, parent: Syntax
-  ) -> ${node.collection_element_type}? where Iter: AbsoluteRawSyntaxIteratorProtocol {
-    guard let absoluteRaw = iterator.next() else { return nil }
-    let data = SyntaxData(absoluteRaw, parent: parent)
-    return ${node.collection_element_type}(data)
-  }
+/// Conformance for `${node.name}` to the `BidirectionalCollection` protocol.
+extension ${node.name}: BidirectionalCollection {
+  public typealias Element = ${node.collection_element_type}
+  public typealias Index = SyntaxChildrenIndex
 
   public struct Iterator: IteratorProtocol {
     private let parent: Syntax
-    private var iterator: PresentRawSyntaxChildren.Iterator
+    private var iterator: RawSyntaxChildren.Iterator
 
-    public init(collection node: ${node.name}) {
-      self.iterator = .init(parent: node.data.absoluteRaw)
-      self.parent = Syntax(node)
+    init(parent: Syntax, rawChildren: RawSyntaxChildren) {
+      self.parent = parent
+      self.iterator = rawChildren.makeIterator()
     }
 
     public mutating func next() -> ${node.collection_element_type}? {
-      return ${node.name}.nextElement(&iterator, parent: parent)
+      guard let (raw, info) = self.iterator.next() else {
+        return nil
+      }
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let data = SyntaxData(absoluteRaw, parent: parent)
+      return ${node.collection_element_type}(data)
     }
   }
 
-  /// Returns an iterator over the elements of this syntax collection.
   public func makeIterator() -> Iterator {
-    return Iterator(collection: self)
+    return Iterator(parent: Syntax(self), rawChildren: rawChildren)
   }
 
-  public func reversed() -> Reversed {
-    return Reversed(collection: self)
+  private var rawChildren: RawSyntaxChildren {
+    // We know children in a syntax collection cannot be missing. So we can 
+    // use the low-level and faster RawSyntaxChildren collection instead of
+    // PresentRawSyntaxChildren.
+    return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
-  public struct Reversed: Sequence {
-    public struct Iterator: IteratorProtocol {
-      private let parent: Syntax
-      private var iterator: ReversedPresentRawSyntaxChildren.Iterator
+  public var startIndex: SyntaxChildrenIndex {
+    return rawChildren.startIndex
+  }
+  public var endIndex: SyntaxChildrenIndex {
+    return rawChildren.endIndex
+  }
 
-      public init(collection node: ${node.name}) {
-        self.iterator = .init(parent: node.data.absoluteRaw)
-        self.parent = Syntax(node)
-      }
+  public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(after: index)
+  }
 
-      public mutating func next() -> ${node.collection_element_type}? {
-        return ${node.name}.nextElement(&iterator, parent: parent)
-      }
-    }
+  public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(before: index)
+  }
 
-    let collection: ${node.name}
+  public func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
+      -> Int {
+    return rawChildren.distance(from: start, to: end)
+  }
 
-    /// Returns an iterator over the elements of this syntax collection.
-    public func makeIterator() -> Iterator {
-      return Iterator(collection: collection)
-    }
-
-    public func reversed() -> ${node.name} {
-      return collection
-    }
+  public subscript(position: SyntaxChildrenIndex) -> ${node.collection_element_type} {
+    let (raw, info) = rawChildren[position]
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let data = SyntaxData(absoluteRaw, parent: Syntax(self))
+    return ${node.collection_element_type}(data)
   }
 }
 %   end

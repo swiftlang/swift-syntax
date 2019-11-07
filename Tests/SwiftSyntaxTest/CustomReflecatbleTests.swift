@@ -170,8 +170,8 @@ public class CustomReflectableTests: XCTestCase {
         let tuples = SyntaxFactory.makeTupleExprElementList(elements)
         return .init(syntax: tuples.reversed(),
                      expectedDumped: """
-                                     ▿ SwiftSyntax.TupleExprElementListSyntax.Reversed
-                                       ▿ collection: SwiftSyntax.TupleExprElementListSyntax
+                                     ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>
+                                       ▿ _base: SwiftSyntax.TupleExprElementListSyntax
                                          ▿ SwiftSyntax.TupleExprElementSyntax
                                            - label: nil
                                            - colon: nil

@@ -27,10 +27,16 @@ public protocol SyntaxCollection: SyntaxProtocol, Sequence {
 %   if node.collection_element:
 %     element_node = NODE_MAP.get(node.collection_element)
 
+% if node.description:
+%   for line in dedented_lines(node.description):
+/// ${line}
+%   end
+% else:
 /// `${node.name}` represents a collection of one or more
 /// `${node.collection_element_type}` nodes. ${node.name} behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
+% end
 public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 

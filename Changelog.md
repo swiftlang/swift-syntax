@@ -4,6 +4,14 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 ## Swift 5.2
 
+- `ReversedSyntaxChildren` has been removed
+  
+  Use the `reversed()` property on `SyntaxCollection`, which now conforms to `BidirectionalCollection` instead.
+
+- `SyntaxCollection`s now conform to `BidirectionalCollection`
+
+  The previous conformance to `Sequence` has been upgraded to a conformance to `BidirectionalCollection`
+
 - Properties `isExpr`, `isDecl`, `isStmt`, `isType` and `isPattern` removed from `SyntaxNode`
 
   Use `is(ExprSyntaxProtocol.self)` etc. instead.

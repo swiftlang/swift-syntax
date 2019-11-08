@@ -23,11 +23,13 @@
     "SyntaxTypeNodes.swift",
   ],
   "Utils": [
+    "SyntaxAnyVisitor.swift",
     "SyntaxBuilders.swift",
     "SyntaxClassifier.swift",
     "SyntaxClassification.swift",
     "SyntaxFactory.swift",
     "SyntaxRewriter.swift",
+    "SyntaxVisitor.swift",
     "Misc.swift",
   ],
   "Diagnostic": [

@@ -1,0 +1,135 @@
+%{
+  from gyb_syntax_support import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxFactory.swift.gyb.
+//// Do Not Edit Directly!
+//===------------- SyntaxVisitor.swift - Syntax Visitor class -------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2019 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+/// The enum describes how the SyntaxVistor should continue after visiting
+/// the current node.
+public enum SyntaxVisitorContinueKind {
+
+  /// The visitor should visit the descendents of the current node.
+  case visitChildren
+
+  /// The visitor should avoid visiting the descendents of the current node.
+  case skipChildren
+}
+
+open class SyntaxVisitor {
+  public init() {}
+
+  /// Walk all nodes of the given syntax tree, calling the corresponding `visit` 
+  /// function for every node that is being visited.
+  public func walk<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+    visit(node.data)
+  }
+
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+  /// Visiting `${node.name}` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `${node.name}` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ${node.name}) {}
+%   end
+% end
+
+  /// Visiting `TokenSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting the node and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: TokenSyntax) {}
+
+  /// Visiting `UnknownSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting the node and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: UnknownSyntax) {}
+
+% for node in SYNTAX_NODES:
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImpl${node.name}(_ data: SyntaxData) {
+%   if node.is_base():
+      let node = Unknown${node.name}(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+%   else:
+      let node = ${node.name}(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+%   end
+  }
+
+% end
+
+  private func visit(_ data: SyntaxData) {
+    switch data.raw.kind {
+    case .token:
+      let node = TokenSyntax(data)
+      _ = visit(node)
+      // No children to visit.
+      visitPost(node)
+    case .unknown:
+      let node = UnknownSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+    // The implementation of every generated case goes into its own function. This
+    // circumvents an issue where the compiler allocates stack space for every
+    // case statement next to each other in debug builds, causing it to allocate
+    // ~50KB per call to this function. rdar://55929175
+  % for node in SYNTAX_NODES:
+    case .${node.swift_syntax_kind}:
+      visitImpl${node.name}(data)
+  % end
+    }
+  }
+
+  private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
+    let syntaxNode = Syntax(node)
+    let parentBox = SyntaxBox(syntaxNode)
+    for childRaw in PresentRawSyntaxChildren(syntaxNode) {
+      let childData = SyntaxData(childRaw, parentBox: parentBox)
+      visit(childData)
+    }
+  }
+}

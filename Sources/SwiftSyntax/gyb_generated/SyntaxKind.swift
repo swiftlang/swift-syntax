@@ -243,109 +243,6 @@ internal enum SyntaxKind: CSyntaxKind {
   case availabilityVersionRestriction = 161
   case versionTuple = 162
 
-  /// Whether the underlying kind is a sub-kind of DeclSyntax.
-  var isDecl: Bool {
-    switch self {
-    case .unknownDecl: return true
-    case .typealiasDecl: return true
-    case .associatedtypeDecl: return true
-    case .ifConfigDecl: return true
-    case .poundErrorDecl: return true
-    case .poundWarningDecl: return true
-    case .poundSourceLocation: return true
-    case .classDecl: return true
-    case .structDecl: return true
-    case .protocolDecl: return true
-    case .extensionDecl: return true
-    case .functionDecl: return true
-    case .initializerDecl: return true
-    case .deinitializerDecl: return true
-    case .subscriptDecl: return true
-    case .importDecl: return true
-    case .accessorDecl: return true
-    case .variableDecl: return true
-    case .enumCaseDecl: return true
-    case .enumDecl: return true
-    case .operatorDecl: return true
-    case .precedenceGroupDecl: return true
-    default: return false
-    }
-  }
-  /// Whether the underlying kind is a sub-kind of ExprSyntax.
-  var isExpr: Bool {
-    switch self {
-    case .unknownExpr: return true
-    case .inOutExpr: return true
-    case .poundColumnExpr: return true
-    case .tryExpr: return true
-    case .identifierExpr: return true
-    case .superRefExpr: return true
-    case .nilLiteralExpr: return true
-    case .discardAssignmentExpr: return true
-    case .assignmentExpr: return true
-    case .sequenceExpr: return true
-    case .poundLineExpr: return true
-    case .poundFileExpr: return true
-    case .poundFunctionExpr: return true
-    case .poundDsohandleExpr: return true
-    case .symbolicReferenceExpr: return true
-    case .prefixOperatorExpr: return true
-    case .binaryOperatorExpr: return true
-    case .arrowExpr: return true
-    case .floatLiteralExpr: return true
-    case .tupleExpr: return true
-    case .arrayExpr: return true
-    case .dictionaryExpr: return true
-    case .integerLiteralExpr: return true
-    case .booleanLiteralExpr: return true
-    case .ternaryExpr: return true
-    case .memberAccessExpr: return true
-    case .isExpr: return true
-    case .asExpr: return true
-    case .typeExpr: return true
-    case .closureExpr: return true
-    case .unresolvedPatternExpr: return true
-    case .functionCallExpr: return true
-    case .subscriptExpr: return true
-    case .optionalChainingExpr: return true
-    case .forcedValueExpr: return true
-    case .postfixUnaryExpr: return true
-    case .specializeExpr: return true
-    case .stringLiteralExpr: return true
-    case .keyPathExpr: return true
-    case .keyPathBaseExpr: return true
-    case .objcKeyPathExpr: return true
-    case .objcSelectorExpr: return true
-    case .editorPlaceholderExpr: return true
-    case .objectLiteralExpr: return true
-    default: return false
-    }
-  }
-  /// Whether the underlying kind is a sub-kind of StmtSyntax.
-  var isStmt: Bool {
-    switch self {
-    case .unknownStmt: return true
-    case .continueStmt: return true
-    case .whileStmt: return true
-    case .deferStmt: return true
-    case .expressionStmt: return true
-    case .repeatWhileStmt: return true
-    case .guardStmt: return true
-    case .forInStmt: return true
-    case .switchStmt: return true
-    case .doStmt: return true
-    case .returnStmt: return true
-    case .yieldStmt: return true
-    case .fallthroughStmt: return true
-    case .breakStmt: return true
-    case .declarationStmt: return true
-    case .throwStmt: return true
-    case .ifStmt: return true
-    case .poundAssertStmt: return true
-    default: return false
-    }
-  }
-  /// Whether the underlying kind is a sub-kind of SyntaxCollectionSyntax.
   var isSyntaxCollection: Bool {
     switch self {
     case .codeBlockItemList: return true
@@ -386,42 +283,7 @@ internal enum SyntaxKind: CSyntaxKind {
     case .genericArgumentList: return true
     case .tuplePatternElementList: return true
     case .availabilitySpecList: return true
-    default: return false
-    }
-  }
-  /// Whether the underlying kind is a sub-kind of PatternSyntax.
-  var isPattern: Bool {
-    switch self {
-    case .unknownPattern: return true
-    case .enumCasePattern: return true
-    case .isTypePattern: return true
-    case .optionalPattern: return true
-    case .identifierPattern: return true
-    case .asTypePattern: return true
-    case .tuplePattern: return true
-    case .wildcardPattern: return true
-    case .expressionPattern: return true
-    case .valueBindingPattern: return true
-    default: return false
-    }
-  }
-  /// Whether the underlying kind is a sub-kind of TypeSyntax.
-  var isType: Bool {
-    switch self {
-    case .unknownType: return true
-    case .simpleTypeIdentifier: return true
-    case .memberTypeIdentifier: return true
-    case .classRestrictionType: return true
-    case .arrayType: return true
-    case .dictionaryType: return true
-    case .metatypeType: return true
-    case .optionalType: return true
-    case .someType: return true
-    case .implicitlyUnwrappedOptionalType: return true
-    case .compositionType: return true
-    case .tupleType: return true
-    case .functionType: return true
-    case .attributedType: return true
+    case .unknown: return true
     default: return false
     }
   }
@@ -430,8 +292,8 @@ internal enum SyntaxKind: CSyntaxKind {
     switch self {
     case .unknownDecl: return true
     case .unknownExpr: return true
-    case .unknownStmt: return true
     case .unknownPattern: return true
+    case .unknownStmt: return true
     case .unknownType: return true
     case .unknown: return true
     default: return false

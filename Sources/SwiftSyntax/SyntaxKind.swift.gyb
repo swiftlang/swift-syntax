@@ -1,9 +1,6 @@
 %{
   from gyb_syntax_support import *
   from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
-  grouped_nodes = { kind: [] for kind in SYNTAX_BASE_KINDS }
-  for node in SYNTAX_NODES:
-    grouped_nodes[node.base_kind].append(node)
   # -*- mode: Swift -*-
   # Ignore the following admonition; it applies to the resulting .swift file only
 }%
@@ -29,23 +26,21 @@ internal enum SyntaxKind: CSyntaxKind {
   case ${node.swift_syntax_kind} = ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}
 % end
 
-% for name, nodes in grouped_nodes.items():
-%   if name not in ["Syntax"]:
-  /// Whether the underlying kind is a sub-kind of ${name}Syntax.
-  var is${name}: Bool {
+  var isSyntaxCollection: Bool {
     switch self {
-%     for node in nodes:
+% for node in SYNTAX_NODES:
+%   if node.base_kind == "SyntaxCollection":
     case .${node.swift_syntax_kind}: return true
-%     end
+%   end
+% end
+    case .unknown: return true
     default: return false
     }
   }
-%   end
-% end
 
   var isUnknown: Bool {
     switch self {
-% for name, nodes in grouped_nodes.items():
+% for name in SYNTAX_BASE_KINDS:
 %   if name not in ["Syntax", "SyntaxCollection"]:
     case .unknown${name}: return true
 %   end

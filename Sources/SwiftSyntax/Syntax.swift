@@ -114,6 +114,11 @@ public extension SyntaxProtocol {
     return SyntaxChildren(_syntaxNode)
   }
 
+  /// The index of this node in a `SyntaxChildren` collection.
+  var index: SyntaxChildrenIndex {
+    return SyntaxChildrenIndex(self.data.absoluteRaw.info)
+  }
+
   /// Whether or not this node is marked as `present`.
   var isPresent: Bool {
     return raw.isPresent
@@ -163,7 +168,8 @@ public extension SyntaxProtocol {
     guard let parent = self.parent else {
       return nil
     }
-    for absoluteRaw in PresentRawSyntaxPreviousSiblings(_syntaxNode) {
+    let siblings = PresentRawSyntaxChildren(parent)
+    for absoluteRaw in siblings[..<self.index].reversed() {
       let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
       if let token = child.lastToken {
         return token
@@ -178,7 +184,9 @@ public extension SyntaxProtocol {
     guard let parent = self.parent else {
       return nil
     }
-    for absoluteRaw in PresentRawSyntaxNextSiblings(_syntaxNode) {
+    let siblings = PresentRawSyntaxChildren(parent)
+    let nextSiblingIndex = siblings.index(after: self.index)
+    for absoluteRaw in siblings[nextSiblingIndex...] {
       let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
       if let token = child.firstToken {
         return token

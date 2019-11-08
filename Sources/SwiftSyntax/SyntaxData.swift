@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 struct AbsoluteSyntaxPosition {
+  /// The UTF-8 offset of the syntax node in the source file
   let offset: UInt32
   let indexInParent: UInt32
 
@@ -47,6 +48,7 @@ struct AbsoluteSyntaxInfo {
   let position: AbsoluteSyntaxPosition
   let nodeId: SyntaxIdentifier
 
+  /// The UTF-8 offset of the syntax node in the source file
   var offset: UInt32 { return position.offset }
   var indexInParent: UInt32 { return position.indexInParent }
 
@@ -79,35 +81,70 @@ struct AbsoluteSyntaxInfo {
   }
 }
 
+/// Represents a unique value for a node within its own tree.
+struct SyntaxIndexInTree: Hashable {
+  let indexInTree: UInt32
+
+  static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
+
+  func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIndexInTree {
+    let newIndexInTree = self.indexInTree +
+                         UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    return .init(indexInTree: newIndexInTree)
+  }
+
+  func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIndexInTree {
+    let newIndexInTree = self.indexInTree -
+                         UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    return .init(indexInTree: newIndexInTree)
+  }
+
+  func advancedToFirstChild() -> SyntaxIndexInTree {
+    let newIndexInTree = self.indexInTree + 1
+    return .init(indexInTree: newIndexInTree)
+  }
+
+  func advancedToEndOfChildren(_ raw: RawSyntax) -> SyntaxIndexInTree {
+    let newIndexInTree = self.indexInTree +
+                         UInt32(truncatingIfNeeded: raw.totalNodes)
+    return .init(indexInTree: newIndexInTree)
+  }
+
+  init(indexInTree: UInt32) {
+    self.indexInTree = indexInTree
+  }
+}
+
 /// Provides a stable and unique identity for `Syntax` nodes.
 public struct SyntaxIdentifier: Hashable {
   /// Unique value for each root node created.
   let rootId: UInt32
   /// Unique value for a node within its own tree.
-  let indexInTree: UInt32
+  let indexInTree: SyntaxIndexInTree
 
   func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    let newIndexInTree = indexInTree.advancedBySibling(raw)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+    let newIndexInTree = self.indexInTree.reversedBySibling(raw)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   func advancedToFirstChild() -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree + 1
+    let newIndexInTree = self.indexInTree.advancedToFirstChild()
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   func advancedToEndOfChildren(_ raw: RawSyntax) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw.totalNodes)
+    let newIndexInTree = self.indexInTree.advancedToEndOfChildren(raw)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   static func newRoot() -> SyntaxIdentifier {
-    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()), indexInTree: 0)
+    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()),
+                 indexInTree: .zero)
   }
 }
 

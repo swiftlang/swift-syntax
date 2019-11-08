@@ -16,7 +16,8 @@ let package = Package(
     .testTarget(name: "SwiftSyntaxTest", dependencies: ["SwiftSyntax"], exclude: ["Inputs"]),
     .target(name: "SwiftSyntaxBuilder", dependencies: ["SwiftSyntax"]),
     .testTarget(name: "SwiftSyntaxBuilderTest", dependencies: ["SwiftSyntaxBuilder"]),
-    .target(name: "lit-test-helper", dependencies: ["SwiftSyntax"])
+    .target(name: "lit-test-helper", dependencies: ["SwiftSyntax"]),
+    .testTarget(name: "PerformanceTest", dependencies: ["SwiftSyntax"])
     // Also see targets added below
   ]
 )

@@ -203,7 +203,13 @@ open class SyntaxRewriter {
       assert(newLayout.count == node.raw.numberOfChildren)
       
       let newRaw = node.raw.replacingLayout(Array(newLayout))
-      return SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
+      let newNode = SyntaxType(Syntax(SyntaxData.forRoot(newRaw)))!
+      assert({
+        // In assertion builds inovoke the _validateLayout method
+        newNode._validateLayout()
+        return true
+      }())
+      return newNode
     } else {
       // No child node was rewritten. So no need to change this node as well.
       return node

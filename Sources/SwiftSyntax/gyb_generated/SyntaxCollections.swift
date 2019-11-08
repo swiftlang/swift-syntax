@@ -191,6 +191,13 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(CodeBlockItemSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `CodeBlockItemListSyntax`` to the Sequence protocol.
@@ -426,6 +433,13 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(TupleExprElementSyntax.self)
+    })
   }
 }
 
@@ -663,6 +677,13 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ArrayElementSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `ArrayElementListSyntax`` to the Sequence protocol.
@@ -898,6 +919,13 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(DictionaryElementSyntax.self)
+    })
   }
 }
 
@@ -1135,6 +1163,13 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(Syntax.self)
+    })
+  }
 }
 
 /// Conformance for `StringLiteralSegmentsSyntax`` to the Sequence protocol.
@@ -1370,6 +1405,13 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(DeclNameArgumentSyntax.self)
+    })
   }
 }
 
@@ -1607,6 +1649,13 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ExprSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `ExprListSyntax`` to the Sequence protocol.
@@ -1842,6 +1891,13 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ClosureCaptureItemSyntax.self)
+    })
   }
 }
 
@@ -2079,6 +2135,13 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ClosureParamSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `ClosureParamListSyntax`` to the Sequence protocol.
@@ -2314,6 +2377,13 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ObjcNamePieceSyntax.self)
+    })
   }
 }
 
@@ -2551,6 +2621,13 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(FunctionParameterSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `FunctionParameterListSyntax`` to the Sequence protocol.
@@ -2786,6 +2863,13 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(IfConfigClauseSyntax.self)
+    })
   }
 }
 
@@ -3023,6 +3107,13 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(InheritedTypeSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `InheritedTypeListSyntax`` to the Sequence protocol.
@@ -3258,6 +3349,13 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(MemberDeclListItemSyntax.self)
+    })
   }
 }
 
@@ -3495,6 +3593,13 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(DeclModifierSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `ModifierListSyntax`` to the Sequence protocol.
@@ -3730,6 +3835,13 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(AccessPathComponentSyntax.self)
+    })
   }
 }
 
@@ -3967,6 +4079,13 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(AccessorDeclSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `AccessorListSyntax`` to the Sequence protocol.
@@ -4202,6 +4321,13 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(PatternBindingSyntax.self)
+    })
   }
 }
 
@@ -4439,6 +4565,13 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(EnumCaseElementSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `EnumCaseElementListSyntax`` to the Sequence protocol.
@@ -4674,6 +4807,13 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(TokenSyntax.self)
+    })
   }
 }
 
@@ -4911,6 +5051,13 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(Syntax.self)
+    })
+  }
 }
 
 /// Conformance for `PrecedenceGroupAttributeListSyntax`` to the Sequence protocol.
@@ -5146,6 +5293,13 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(PrecedenceGroupNameElementSyntax.self)
+    })
   }
 }
 
@@ -5383,6 +5537,13 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(TokenSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `TokenListSyntax`` to the Sequence protocol.
@@ -5618,6 +5779,13 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(TokenSyntax.self)
+    })
   }
 }
 
@@ -5855,6 +6023,13 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(Syntax.self)
+    })
+  }
 }
 
 /// Conformance for `AttributeListSyntax`` to the Sequence protocol.
@@ -6090,6 +6265,13 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(Syntax.self)
+    })
   }
 }
 
@@ -6327,6 +6509,13 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ObjCSelectorPieceSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `ObjCSelectorSyntax`` to the Sequence protocol.
@@ -6562,6 +6751,13 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(Syntax.self)
+    })
   }
 }
 
@@ -6799,6 +6995,13 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(CatchClauseSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `CatchClauseListSyntax`` to the Sequence protocol.
@@ -7034,6 +7237,13 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(CaseItemSyntax.self)
+    })
   }
 }
 
@@ -7271,6 +7481,13 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(ConditionElementSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `ConditionElementListSyntax`` to the Sequence protocol.
@@ -7506,6 +7723,13 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(GenericRequirementSyntax.self)
+    })
   }
 }
 
@@ -7743,6 +7967,13 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(GenericParameterSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `GenericParameterListSyntax`` to the Sequence protocol.
@@ -7978,6 +8209,13 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(CompositionTypeElementSyntax.self)
+    })
   }
 }
 
@@ -8215,6 +8453,13 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(TupleTypeElementSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `TupleTypeElementListSyntax`` to the Sequence protocol.
@@ -8450,6 +8695,13 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(GenericArgumentSyntax.self)
+    })
   }
 }
 
@@ -8687,6 +8939,13 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
       self = withTrailingTrivia(newValue ?? [])
     }
   }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(TuplePatternElementSyntax.self)
+    })
+  }
 }
 
 /// Conformance for `TuplePatternElementListSyntax`` to the Sequence protocol.
@@ -8922,6 +9181,13 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     set {
       self = withTrailingTrivia(newValue ?? [])
     }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(AvailabilityArgumentSyntax.self)
+    })
   }
 }
 

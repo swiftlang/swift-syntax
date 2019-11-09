@@ -4,19 +4,27 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 ## Swift 5.2
 
+- `ReversedSyntaxChildren` has been removed
+  
+  Use the `reversed()` property on `SyntaxCollection`, which now conforms to `BidirectionalCollection` instead.
+
+- `SyntaxCollection`s now conform to `BidirectionalCollection`
+
+  The previous conformance to `Sequence` has been upgraded to a conformance to `BidirectionalCollection`
+
 - Properties `isExpr`, `isDecl`, `isStmt`, `isType` and `isPattern` removed from `SyntaxNode`
 
   Use `is(ExprSyntaxProtocol.self)` etc. instead.
 
-- Property `uniqueIdentifier` removed from syntax nodes and `SyntaxNode` ([#164](https://github.com/apple/swift-syntax/pull/164))
+- Property `uniqueIdentifier` removed from syntax nodes and `SyntaxNode`
   
   Use the newly added property `id` or the conformance to `Identifiable` instead.
 
-- Syntax nodes and `SyntaxNode` conform to `Identifiable` ([#164](https://github.com/apple/swift-syntax/pull/164))
+- Syntax nodes and `SyntaxNode` conform to `Identifiable`
   
   `Identifiable` conformance has been added to all syntax nodes and the `SyntaxNode` type using `SyntaxIdentifier` as the identifier.
 
-- The `walk` method on syntax nodes has been removed. ([#158](https://github.com/apple/swift-syntax/pull/158))
+- The `walk` method on syntax nodes has been removed.
 
   Instead, use the `walk` method on the `SyntaxVisitor`.
   
@@ -28,7 +36,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
   visitor.walk(tree)
   ```
 
-- `SyntaxVisitor` and `SyntaxAnyVisitor` are a `class` and no longer a `protocol`. ([#158](https://github.com/apple/swift-syntax/pull/158))
+- `SyntaxVisitor` and `SyntaxAnyVisitor` are a `class` and no longer a `protocol`.
 
   For performance reasons the `SyntaxVisitor` and `SyntaxAnyVisitor` were migrated from being a protocol to being a class.
   
@@ -50,7 +58,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
   }
   ```
   
-- A new type `SyntaxEnum` has been introduced ([#155](https://github.com/apple/swift-syntax/pull/155))
+- A new type `SyntaxEnum` has been introduced
   
   The new type `SyntaxEnum` allow exhaustive switching over all syntax types. It can be constructed by calling `asSyntaxEnum` on `Syntax`.
   
@@ -68,7 +76,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 For increased performance, the modelling of the syntax node hierarchy has been switched from being `protocol`-based to being `struct`-based. This includes the following changes:
 
-- The protocols `ExprSyntax`, `DeclSyntax`, `Syntax` etc. have been removed. ([#155](https://github.com/apple/swift-syntax/pull/155))
+- The protocols `ExprSyntax`, `DeclSyntax`, `Syntax` etc. have been removed
 
   For passing values of these types around, use the new type erasers `ExprSyntax`, `DeclSyntax`, `Syntax` etc. instead. To add computed properties or functions to all expression nodes, write an extension on `ExprSyntaxProtocol`. To add methods to all syntax nodes, extend `SyntaxProtcol`.
 
@@ -95,7 +103,7 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   ```
 
 
-- Checking a node's type can no longer be performed using the `is` operator. Use the `is(_: SyntaxProtocol)` method on any type eraser instead. ([#155](https://github.com/apple/swift-syntax/pull/155))
+- Checking a node's type can no longer be performed using the `is` operator. Use the `is(_: SyntaxProtocol)` method on any type eraser instead. 
 
   ```swift
   // Before 
@@ -115,7 +123,7 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   ```
 
 
-- Downcasting can no longer be performed using the `as` operator. For downcasting use the `as(_: SyntaxProtocol)` method on any type eraser. ([#155](https://github.com/apple/swift-syntax/pull/155))
+- Downcasting can no longer be performed using the `as` operator. For downcasting use the `as(_: SyntaxProtocol)` method on any type eraser. 
 
   ```swift
   // Before
@@ -125,7 +133,7 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   exprSyntax.as(IdentifierExprSyntax.self)
   ```
 
-- Upcasting needs to be performed explicitly. Use the designated initializers for this. ([#155](https://github.com/apple/swift-syntax/pull/155))
+- Upcasting needs to be performed explicitly. Use the designated initializers for this.
 
   ```swift
   // Before

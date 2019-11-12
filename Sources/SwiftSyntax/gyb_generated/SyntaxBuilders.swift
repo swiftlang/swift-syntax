@@ -6223,6 +6223,330 @@ extension ObjCSelectorPieceSyntax {
   }
 }
 
+public struct DifferentiableAttributeArgumentsSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 7)
+
+  internal init() {}
+
+  public mutating func useDiffParams(_ node: DifferentiationParamsClauseSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.diffParams.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useDiffParamsComma(_ node: TokenSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.diffParamsComma.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useMaybePrimal(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.maybePrimal.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useMaybeAdjoint(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.maybeAdjoint.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useMaybeJVP(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.maybeJVP.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useMaybeVJP(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.maybeVJP.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useWhereClause(_ node: GenericWhereClauseSyntax) {
+    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.whereClause.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiableAttributeArguments,
+      layout: layout, presence: .present))
+  }
+}
+
+extension DifferentiableAttributeArgumentsSyntax {
+  /// Creates a `DifferentiableAttributeArgumentsSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `DifferentiableAttributeArgumentsSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `DifferentiableAttributeArgumentsSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout DifferentiableAttributeArgumentsSyntaxBuilder) -> Void) {
+    var builder = DifferentiableAttributeArgumentsSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct DifferentiationParamsClauseSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func useWrtLabel(_ node: TokenSyntax) {
+    let idx = DifferentiationParamsClauseSyntax.Cursor.wrtLabel.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = DifferentiationParamsClauseSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useParameters(_ node: Syntax) {
+    let idx = DifferentiationParamsClauseSyntax.Cursor.parameters.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiationParamsClause,
+      layout: layout, presence: .present))
+  }
+}
+
+extension DifferentiationParamsClauseSyntax {
+  /// Creates a `DifferentiationParamsClauseSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `DifferentiationParamsClauseSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `DifferentiationParamsClauseSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout DifferentiationParamsClauseSyntaxBuilder) -> Void) {
+    var builder = DifferentiationParamsClauseSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct DifferentiationParamsSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func useLeftParen(_ node: TokenSyntax) {
+    let idx = DifferentiationParamsSyntax.Cursor.leftParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func addDifferentiationParam(_ elt: DifferentiationParamSyntax) {
+    let idx = DifferentiationParamsSyntax.Cursor.diffParams.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.differentiationParamList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func useRightParen(_ node: TokenSyntax) {
+    let idx = DifferentiationParamsSyntax.Cursor.rightParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missing(SyntaxKind.differentiationParamList)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiationParams,
+      layout: layout, presence: .present))
+  }
+}
+
+extension DifferentiationParamsSyntax {
+  /// Creates a `DifferentiationParamsSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `DifferentiationParamsSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `DifferentiationParamsSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout DifferentiationParamsSyntaxBuilder) -> Void) {
+    var builder = DifferentiationParamsSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct DifferentiationParamSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 2)
+
+  internal init() {}
+
+  public mutating func useParameter(_ node: Syntax) {
+    let idx = DifferentiationParamSyntax.Cursor.parameter.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useTrailingComma(_ node: TokenSyntax) {
+    let idx = DifferentiationParamSyntax.Cursor.trailingComma.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiationParam,
+      layout: layout, presence: .present))
+  }
+}
+
+extension DifferentiationParamSyntax {
+  /// Creates a `DifferentiationParamSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `DifferentiationParamSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `DifferentiationParamSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout DifferentiationParamSyntaxBuilder) -> Void) {
+    var builder = DifferentiationParamSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct DifferentiableAttributeFuncSpecifierSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 4)
+
+  internal init() {}
+
+  public mutating func useLabel(_ node: TokenSyntax) {
+    let idx = DifferentiableAttributeFuncSpecifierSyntax.Cursor.label.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = DifferentiableAttributeFuncSpecifierSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useFunctionDeclName(_ node: FunctionDeclNameSyntax) {
+    let idx = DifferentiableAttributeFuncSpecifierSyntax.Cursor.functionDeclName.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useTrailingComma(_ node: TokenSyntax) {
+    let idx = DifferentiableAttributeFuncSpecifierSyntax.Cursor.trailingComma.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.functionDeclName)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiableAttributeFuncSpecifier,
+      layout: layout, presence: .present))
+  }
+}
+
+extension DifferentiableAttributeFuncSpecifierSyntax {
+  /// Creates a `DifferentiableAttributeFuncSpecifierSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `DifferentiableAttributeFuncSpecifierSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `DifferentiableAttributeFuncSpecifierSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout DifferentiableAttributeFuncSpecifierSyntaxBuilder) -> Void) {
+    var builder = DifferentiableAttributeFuncSpecifierSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct FunctionDeclNameSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 2)
+
+  internal init() {}
+
+  public mutating func useName(_ node: Syntax) {
+    let idx = FunctionDeclNameSyntax.Cursor.name.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useArguments(_ node: DeclNameArgumentsSyntax) {
+    let idx = FunctionDeclNameSyntax.Cursor.arguments.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionDeclName,
+      layout: layout, presence: .present))
+  }
+}
+
+extension FunctionDeclNameSyntax {
+  /// Creates a `FunctionDeclNameSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `FunctionDeclNameSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `FunctionDeclNameSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout FunctionDeclNameSyntaxBuilder) -> Void) {
+    var builder = FunctionDeclNameSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct ContinueStmtSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 2)

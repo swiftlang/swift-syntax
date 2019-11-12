@@ -1017,6 +1017,55 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `DifferentiableAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `DifferentiationParamsClauseSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiationParamsClauseSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `DifferentiationParamsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiationParamsSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `DifferentiationParamListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiationParamListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `DifferentiationParamSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiationParamSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `DifferentiableAttributeFuncSpecifierSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiableAttributeFuncSpecifierSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `FunctionDeclNameSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FunctionDeclNameSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `ContinueStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3082,6 +3131,76 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiableAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DifferentiableAttributeArgumentsSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiationParamsClauseSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DifferentiationParamsClauseSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiationParamsSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DifferentiationParamsSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiationParamListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DifferentiationParamListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiationParamSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DifferentiationParamSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiableAttributeFuncSpecifierSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DifferentiableAttributeFuncSpecifierSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) -> Syntax {
+      let node = FunctionDeclNameSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplContinueStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ContinueStmtSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4186,6 +4305,20 @@ open class SyntaxRewriter {
       return visitImplObjCSelectorPieceSyntax(data)
     case .objCSelector:
       return visitImplObjCSelectorSyntax(data)
+    case .differentiableAttributeArguments:
+      return visitImplDifferentiableAttributeArgumentsSyntax(data)
+    case .differentiationParamsClause:
+      return visitImplDifferentiationParamsClauseSyntax(data)
+    case .differentiationParams:
+      return visitImplDifferentiationParamsSyntax(data)
+    case .differentiationParamList:
+      return visitImplDifferentiationParamListSyntax(data)
+    case .differentiationParam:
+      return visitImplDifferentiationParamSyntax(data)
+    case .differentiableAttributeFuncSpecifier:
+      return visitImplDifferentiableAttributeFuncSpecifierSyntax(data)
+    case .functionDeclName:
+      return visitImplFunctionDeclNameSyntax(data)
     case .continueStmt:
       return visitImplContinueStmtSyntax(data)
     case .whileStmt:

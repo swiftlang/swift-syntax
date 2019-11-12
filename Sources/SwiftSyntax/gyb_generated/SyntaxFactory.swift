@@ -2853,6 +2853,152 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ObjCSelectorSyntax(data)
   }
+  public static func makeDifferentiableAttributeArguments(diffParams: DifferentiationParamsClauseSyntax?, diffParamsComma: TokenSyntax?, maybePrimal: DifferentiableAttributeFuncSpecifierSyntax?, maybeAdjoint: DifferentiableAttributeFuncSpecifierSyntax?, maybeJVP: DifferentiableAttributeFuncSpecifierSyntax?, maybeVJP: DifferentiableAttributeFuncSpecifierSyntax?, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      diffParams?.raw,
+      diffParamsComma?.raw,
+      maybePrimal?.raw,
+      maybeAdjoint?.raw,
+      maybeJVP?.raw,
+      maybeVJP?.raw,
+      whereClause?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeArguments,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DifferentiableAttributeArgumentsSyntax(data)
+  }
+
+  public static func makeBlankDifferentiableAttributeArguments() -> DifferentiableAttributeArgumentsSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiableAttributeArguments,
+      layout: [
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+      nil,
+    ], length: .zero, presence: .present))
+    return DifferentiableAttributeArgumentsSyntax(data)
+  }
+  public static func makeDifferentiationParamsClause(wrtLabel: TokenSyntax, colon: TokenSyntax, parameters: Syntax) -> DifferentiationParamsClauseSyntax {
+    let layout: [RawSyntax?] = [
+      wrtLabel.raw,
+      colon.raw,
+      parameters.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiationParamsClause,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DifferentiationParamsClauseSyntax(data)
+  }
+
+  public static func makeBlankDifferentiationParamsClause() -> DifferentiationParamsClauseSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiationParamsClause,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.unknown),
+    ], length: .zero, presence: .present))
+    return DifferentiationParamsClauseSyntax(data)
+  }
+  public static func makeDifferentiationParams(leftParen: TokenSyntax, diffParams: DifferentiationParamListSyntax, rightParen: TokenSyntax) -> DifferentiationParamsSyntax {
+    let layout: [RawSyntax?] = [
+      leftParen.raw,
+      diffParams.raw,
+      rightParen.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiationParams,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DifferentiationParamsSyntax(data)
+  }
+
+  public static func makeBlankDifferentiationParams() -> DifferentiationParamsSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiationParams,
+      layout: [
+      RawSyntax.missingToken(TokenKind.leftParen),
+      RawSyntax.missing(SyntaxKind.differentiationParamList),
+      RawSyntax.missingToken(TokenKind.rightParen),
+    ], length: .zero, presence: .present))
+    return DifferentiationParamsSyntax(data)
+  }
+  public static func makeDifferentiationParamList(
+    _ elements: [DifferentiationParamSyntax]) -> DifferentiationParamListSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiationParamList,
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DifferentiationParamListSyntax(data)
+  }
+
+  public static func makeBlankDifferentiationParamList() -> DifferentiationParamListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiationParamList,
+      layout: [
+    ], length: .zero, presence: .present))
+    return DifferentiationParamListSyntax(data)
+  }
+  public static func makeDifferentiationParam(parameter: Syntax, trailingComma: TokenSyntax?) -> DifferentiationParamSyntax {
+    let layout: [RawSyntax?] = [
+      parameter.raw,
+      trailingComma?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiationParam,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DifferentiationParamSyntax(data)
+  }
+
+  public static func makeBlankDifferentiationParam() -> DifferentiationParamSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiationParam,
+      layout: [
+      RawSyntax.missing(SyntaxKind.unknown),
+      nil,
+    ], length: .zero, presence: .present))
+    return DifferentiationParamSyntax(data)
+  }
+  public static func makeDifferentiableAttributeFuncSpecifier(label: TokenSyntax, colon: TokenSyntax, functionDeclName: FunctionDeclNameSyntax, trailingComma: TokenSyntax?) -> DifferentiableAttributeFuncSpecifierSyntax {
+    let layout: [RawSyntax?] = [
+      label.raw,
+      colon.raw,
+      functionDeclName.raw,
+      trailingComma?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeFuncSpecifier,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DifferentiableAttributeFuncSpecifierSyntax(data)
+  }
+
+  public static func makeBlankDifferentiableAttributeFuncSpecifier() -> DifferentiableAttributeFuncSpecifierSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiableAttributeFuncSpecifier,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.functionDeclName),
+      nil,
+    ], length: .zero, presence: .present))
+    return DifferentiableAttributeFuncSpecifierSyntax(data)
+  }
+  public static func makeFunctionDeclName(name: Syntax, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
+    let layout: [RawSyntax?] = [
+      name.raw,
+      arguments?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDeclName,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return FunctionDeclNameSyntax(data)
+  }
+
+  public static func makeBlankFunctionDeclName() -> FunctionDeclNameSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionDeclName,
+      layout: [
+      RawSyntax.missing(SyntaxKind.unknown),
+      nil,
+    ], length: .zero, presence: .present))
+    return FunctionDeclNameSyntax(data)
+  }
   public static func makeContinueStmt(continueKeyword: TokenSyntax, label: TokenSyntax?) -> ContinueStmtSyntax {
     let layout: [RawSyntax?] = [
       continueKeyword.raw,

@@ -163,6 +163,13 @@ public enum SyntaxEnum {
   case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
   case objCSelector(ObjCSelectorSyntax)
+  case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
+  case differentiationParamsClause(DifferentiationParamsClauseSyntax)
+  case differentiationParams(DifferentiationParamsSyntax)
+  case differentiationParamList(DifferentiationParamListSyntax)
+  case differentiationParam(DifferentiationParamSyntax)
+  case differentiableAttributeFuncSpecifier(DifferentiableAttributeFuncSpecifierSyntax)
+  case functionDeclName(FunctionDeclNameSyntax)
   case continueStmt(ContinueStmtSyntax)
   case whileStmt(WhileStmtSyntax)
   case deferStmt(DeferStmtSyntax)
@@ -546,6 +553,20 @@ public extension Syntax {
       return .objCSelectorPiece(ObjCSelectorPieceSyntax(self)!)
     case .objCSelector:
       return .objCSelector(ObjCSelectorSyntax(self)!)
+    case .differentiableAttributeArguments:
+      return .differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax(self)!)
+    case .differentiationParamsClause:
+      return .differentiationParamsClause(DifferentiationParamsClauseSyntax(self)!)
+    case .differentiationParams:
+      return .differentiationParams(DifferentiationParamsSyntax(self)!)
+    case .differentiationParamList:
+      return .differentiationParamList(DifferentiationParamListSyntax(self)!)
+    case .differentiationParam:
+      return .differentiationParam(DifferentiationParamSyntax(self)!)
+    case .differentiableAttributeFuncSpecifier:
+      return .differentiableAttributeFuncSpecifier(DifferentiableAttributeFuncSpecifierSyntax(self)!)
+    case .functionDeclName:
+      return .functionDeclName(FunctionDeclNameSyntax(self)!)
     case .continueStmt:
       return .continueStmt(ContinueStmtSyntax(self)!)
     case .whileStmt:

@@ -873,6 +873,48 @@ extension SyntaxNode {
     return ObjCSelectorSyntax(asSyntaxData)
   }
 
+  public var isDifferentiableAttributeArguments: Bool { return raw.kind == .differentiableAttributeArguments }
+  public var asDifferentiableAttributeArguments: DifferentiableAttributeArgumentsSyntax? {
+    guard isDifferentiableAttributeArguments else { return nil }
+    return DifferentiableAttributeArgumentsSyntax(asSyntaxData)
+  }
+
+  public var isDifferentiationParamsClause: Bool { return raw.kind == .differentiationParamsClause }
+  public var asDifferentiationParamsClause: DifferentiationParamsClauseSyntax? {
+    guard isDifferentiationParamsClause else { return nil }
+    return DifferentiationParamsClauseSyntax(asSyntaxData)
+  }
+
+  public var isDifferentiationParams: Bool { return raw.kind == .differentiationParams }
+  public var asDifferentiationParams: DifferentiationParamsSyntax? {
+    guard isDifferentiationParams else { return nil }
+    return DifferentiationParamsSyntax(asSyntaxData)
+  }
+
+  public var isDifferentiationParamList: Bool { return raw.kind == .differentiationParamList }
+  public var asDifferentiationParamList: DifferentiationParamListSyntax? {
+    guard isDifferentiationParamList else { return nil }
+    return DifferentiationParamListSyntax(asSyntaxData)
+  }
+
+  public var isDifferentiationParam: Bool { return raw.kind == .differentiationParam }
+  public var asDifferentiationParam: DifferentiationParamSyntax? {
+    guard isDifferentiationParam else { return nil }
+    return DifferentiationParamSyntax(asSyntaxData)
+  }
+
+  public var isDifferentiableAttributeFuncSpecifier: Bool { return raw.kind == .differentiableAttributeFuncSpecifier }
+  public var asDifferentiableAttributeFuncSpecifier: DifferentiableAttributeFuncSpecifierSyntax? {
+    guard isDifferentiableAttributeFuncSpecifier else { return nil }
+    return DifferentiableAttributeFuncSpecifierSyntax(asSyntaxData)
+  }
+
+  public var isFunctionDeclName: Bool { return raw.kind == .functionDeclName }
+  public var asFunctionDeclName: FunctionDeclNameSyntax? {
+    guard isFunctionDeclName else { return nil }
+    return FunctionDeclNameSyntax(asSyntaxData)
+  }
+
   public var isContinueStmt: Bool { return raw.kind == .continueStmt }
   public var asContinueStmt: ContinueStmtSyntax? {
     guard isContinueStmt else { return nil }
@@ -1657,6 +1699,20 @@ extension Syntax {
       return node
     case .objCSelector(let node):
       return node
+    case .differentiableAttributeArguments(let node):
+      return node
+    case .differentiationParamsClause(let node):
+      return node
+    case .differentiationParams(let node):
+      return node
+    case .differentiationParamList(let node):
+      return node
+    case .differentiationParam(let node):
+      return node
+    case .differentiableAttributeFuncSpecifier(let node):
+      return node
+    case .functionDeclName(let node):
+      return node
     case .continueStmt(let node):
       return node
     case .whileStmt(let node):
@@ -1822,6 +1878,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "1232070026209439384"
+      "274521544372836110"
   }
 }

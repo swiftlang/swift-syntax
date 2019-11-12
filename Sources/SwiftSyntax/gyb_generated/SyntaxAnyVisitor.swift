@@ -1058,6 +1058,55 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: ObjCSelectorSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DifferentiableAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: DifferentiationParamsClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DifferentiationParamsClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: DifferentiationParamsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DifferentiationParamsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: DifferentiationParamListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DifferentiationParamListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: DifferentiationParamSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DifferentiationParamSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: DifferentiableAttributeFuncSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: FunctionDeclNameSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: FunctionDeclNameSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

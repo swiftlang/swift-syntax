@@ -6901,6 +6901,947 @@ extension ObjCSelectorPieceSyntax: CustomReflectable {
   }
 }
 
+// MARK: - DifferentiableAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the `@differentiable` attribute: an optional          differentiation parameter list and associated functions.
+/// 
+public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case diffParams
+    case diffParamsComma
+    case maybePrimal
+    case maybeAdjoint
+    case maybeJVP
+    case maybeVJP
+    case whereClause
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DifferentiableAttributeArgumentsSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .differentiableAttributeArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DifferentiableAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .differentiableAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var diffParams: DifferentiationParamsClauseSyntax? {
+    get {
+      let childData = data.child(at: Cursor.diffParams,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DifferentiationParamsClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withDiffParams(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `diffParams` replaced.
+  /// - param newChild: The new `diffParams` to replace the node's
+  ///                   current `diffParams`, if present.
+  public func withDiffParams(
+    _ newChild: DifferentiationParamsClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.diffParams)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  /// 
+  /// The comma following the differentiation parameters clause,
+  /// if it exists.
+  /// 
+  public var diffParamsComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.diffParamsComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDiffParamsComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `diffParamsComma` replaced.
+  /// - param newChild: The new `diffParamsComma` to replace the node's
+  ///                   current `diffParamsComma`, if present.
+  public func withDiffParamsComma(
+    _ newChild: TokenSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.diffParamsComma)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  public var maybePrimal: DifferentiableAttributeFuncSpecifierSyntax? {
+    get {
+      let childData = data.child(at: Cursor.maybePrimal,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DifferentiableAttributeFuncSpecifierSyntax(childData!)
+    }
+    set(value) {
+      self = withMaybePrimal(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `maybePrimal` replaced.
+  /// - param newChild: The new `maybePrimal` to replace the node's
+  ///                   current `maybePrimal`, if present.
+  public func withMaybePrimal(
+    _ newChild: DifferentiableAttributeFuncSpecifierSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.maybePrimal)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  public var maybeAdjoint: DifferentiableAttributeFuncSpecifierSyntax? {
+    get {
+      let childData = data.child(at: Cursor.maybeAdjoint,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DifferentiableAttributeFuncSpecifierSyntax(childData!)
+    }
+    set(value) {
+      self = withMaybeAdjoint(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `maybeAdjoint` replaced.
+  /// - param newChild: The new `maybeAdjoint` to replace the node's
+  ///                   current `maybeAdjoint`, if present.
+  public func withMaybeAdjoint(
+    _ newChild: DifferentiableAttributeFuncSpecifierSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.maybeAdjoint)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  public var maybeJVP: DifferentiableAttributeFuncSpecifierSyntax? {
+    get {
+      let childData = data.child(at: Cursor.maybeJVP,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DifferentiableAttributeFuncSpecifierSyntax(childData!)
+    }
+    set(value) {
+      self = withMaybeJVP(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `maybeJVP` replaced.
+  /// - param newChild: The new `maybeJVP` to replace the node's
+  ///                   current `maybeJVP`, if present.
+  public func withMaybeJVP(
+    _ newChild: DifferentiableAttributeFuncSpecifierSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.maybeJVP)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  public var maybeVJP: DifferentiableAttributeFuncSpecifierSyntax? {
+    get {
+      let childData = data.child(at: Cursor.maybeVJP,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DifferentiableAttributeFuncSpecifierSyntax(childData!)
+    }
+    set(value) {
+      self = withMaybeVJP(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `maybeVJP` replaced.
+  /// - param newChild: The new `maybeVJP` to replace the node's
+  ///                   current `maybeVJP`, if present.
+  public func withMaybeVJP(
+    _ newChild: DifferentiableAttributeFuncSpecifierSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.maybeVJP)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  public var whereClause: GenericWhereClauseSyntax? {
+    get {
+      let childData = data.child(at: Cursor.whereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return GenericWhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `whereClause` replaced.
+  /// - param newChild: The new `whereClause` to replace the node's
+  ///                   current `whereClause`, if present.
+  public func withWhereClause(
+    _ newChild: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.whereClause)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 7)
+    // Check child #0 child is DifferentiationParamsClauseSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiationParamsClauseSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax or missing
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is DifferentiableAttributeFuncSpecifierSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
+    }
+    // Check child #3 child is DifferentiableAttributeFuncSpecifierSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
+    }
+    // Check child #4 child is DifferentiableAttributeFuncSpecifierSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
+    }
+    // Check child #5 child is DifferentiableAttributeFuncSpecifierSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
+    }
+    // Check child #6 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+  }
+}
+
+extension DifferentiableAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "diffParams": diffParams.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "diffParamsComma": diffParamsComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "maybePrimal": maybePrimal.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "maybeAdjoint": maybeAdjoint.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "maybeJVP": maybeJVP.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "maybeVJP": maybeVJP.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "whereClause": whereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - DifferentiationParamsClauseSyntax
+
+/// A clause containing differentiation parameters.
+public struct DifferentiationParamsClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case wrtLabel
+    case colon
+    case parameters
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DifferentiationParamsClauseSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .differentiationParamsClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DifferentiationParamsClauseSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .differentiationParamsClause)
+    self._syntaxNode = Syntax(data)
+  }
+
+  /// The "wrt" label.
+  public var wrtLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.wrtLabel,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withWrtLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `wrtLabel` replaced.
+  /// - param newChild: The new `wrtLabel` to replace the node's
+  ///                   current `wrtLabel`, if present.
+  public func withWrtLabel(
+    _ newChild: TokenSyntax?) -> DifferentiationParamsClauseSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.wrtLabel)
+    return DifferentiationParamsClauseSyntax(newData)
+  }
+
+  /// 
+  /// The colon separating "wrt" and the parameter list.
+  /// 
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> DifferentiationParamsClauseSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return DifferentiationParamsClauseSyntax(newData)
+  }
+
+  public var parameters: Syntax {
+    get {
+      let childData = data.child(at: Cursor.parameters,
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withParameters(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `parameters` replaced.
+  /// - param newChild: The new `parameters` to replace the node's
+  ///                   current `parameters`, if present.
+  public func withParameters(
+    _ newChild: Syntax?) -> DifferentiationParamsClauseSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let newData = data.replacingChild(raw, at: Cursor.parameters)
+    return DifferentiationParamsClauseSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 3)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is Syntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(Syntax.self))
+    }
+  }
+}
+
+extension DifferentiationParamsClauseSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "wrtLabel": Syntax(wrtLabel).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "parameters": Syntax(parameters).as(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - DifferentiationParamsSyntax
+
+/// The differentiation parameters.
+public struct DifferentiationParamsSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case leftParen
+    case diffParams
+    case rightParen
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DifferentiationParamsSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .differentiationParams else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DifferentiationParamsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .differentiationParams)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var leftParen: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.leftParen,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(
+    _ newChild: TokenSyntax?) -> DifferentiationParamsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    return DifferentiationParamsSyntax(newData)
+  }
+
+  /// The parameters for differentiation.
+  public var diffParams: DifferentiationParamListSyntax {
+    get {
+      let childData = data.child(at: Cursor.diffParams,
+                                 parent: Syntax(self))
+      return DifferentiationParamListSyntax(childData!)
+    }
+    set(value) {
+      self = withDiffParams(value)
+    }
+  }
+
+  /// Adds the provided `DifferentiationParam` to the node's `diffParams`
+  /// collection.
+  /// - param element: The new `DifferentiationParam` to add to the node's
+  ///                  `diffParams` collection.
+  /// - returns: A copy of the receiver with the provided `DifferentiationParam`
+  ///            appended to its `diffParams` collection.
+  public func addDifferentiationParam(_ element: DifferentiationParamSyntax) -> DifferentiationParamsSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.diffParams] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.differentiationParamList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.diffParams)
+    return DifferentiationParamsSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `diffParams` replaced.
+  /// - param newChild: The new `diffParams` to replace the node's
+  ///                   current `diffParams`, if present.
+  public func withDiffParams(
+    _ newChild: DifferentiationParamListSyntax?) -> DifferentiationParamsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.differentiationParamList)
+    let newData = data.replacingChild(raw, at: Cursor.diffParams)
+    return DifferentiationParamsSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.rightParen,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(
+    _ newChild: TokenSyntax?) -> DifferentiationParamsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    return DifferentiationParamsSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 3)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is DifferentiationParamListSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiationParamListSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension DifferentiationParamsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
+      "diffParams": Syntax(diffParams).as(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+    ])
+  }
+}
+
+// MARK: - DifferentiationParamSyntax
+
+/// 
+/// A differentiation parameter: either the "self" identifier or a          function parameter name.
+/// 
+public struct DifferentiationParamSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case parameter
+    case trailingComma
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DifferentiationParamSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .differentiationParam else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DifferentiationParamSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .differentiationParam)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var parameter: Syntax {
+    get {
+      let childData = data.child(at: Cursor.parameter,
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withParameter(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `parameter` replaced.
+  /// - param newChild: The new `parameter` to replace the node's
+  ///                   current `parameter`, if present.
+  public func withParameter(
+    _ newChild: Syntax?) -> DifferentiationParamSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let newData = data.replacingChild(raw, at: Cursor.parameter)
+    return DifferentiationParamSyntax(newData)
+  }
+
+  public var trailingComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.trailingComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `trailingComma` replaced.
+  /// - param newChild: The new `trailingComma` to replace the node's
+  ///                   current `trailingComma`, if present.
+  public func withTrailingComma(
+    _ newChild: TokenSyntax?) -> DifferentiationParamSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.trailingComma)
+    return DifferentiationParamSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 2)
+    // Check child #0 child is Syntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(Syntax.self))
+    }
+    // Check child #1 child is TokenSyntax or missing
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension DifferentiationParamSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "parameter": Syntax(parameter).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - DifferentiableAttributeFuncSpecifierSyntax
+
+/// 
+/// A function specifier, consisting of an identifier, colon, and a          function declaration name (e.g. `vjp: foo(_:_:)`).
+/// 
+public struct DifferentiableAttributeFuncSpecifierSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case label
+    case colon
+    case functionDeclName
+    case trailingComma
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DifferentiableAttributeFuncSpecifierSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .differentiableAttributeFuncSpecifier else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DifferentiableAttributeFuncSpecifierSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .differentiableAttributeFuncSpecifier)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var label: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.label,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `label` replaced.
+  /// - param newChild: The new `label` to replace the node's
+  ///                   current `label`, if present.
+  public func withLabel(
+    _ newChild: TokenSyntax?) -> DifferentiableAttributeFuncSpecifierSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.label)
+    return DifferentiableAttributeFuncSpecifierSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> DifferentiableAttributeFuncSpecifierSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return DifferentiableAttributeFuncSpecifierSyntax(newData)
+  }
+
+  /// The referenced function name.
+  public var functionDeclName: FunctionDeclNameSyntax {
+    get {
+      let childData = data.child(at: Cursor.functionDeclName,
+                                 parent: Syntax(self))
+      return FunctionDeclNameSyntax(childData!)
+    }
+    set(value) {
+      self = withFunctionDeclName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `functionDeclName` replaced.
+  /// - param newChild: The new `functionDeclName` to replace the node's
+  ///                   current `functionDeclName`, if present.
+  public func withFunctionDeclName(
+    _ newChild: FunctionDeclNameSyntax?) -> DifferentiableAttributeFuncSpecifierSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.functionDeclName)
+    let newData = data.replacingChild(raw, at: Cursor.functionDeclName)
+    return DifferentiableAttributeFuncSpecifierSyntax(newData)
+  }
+
+  public var trailingComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.trailingComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `trailingComma` replaced.
+  /// - param newChild: The new `trailingComma` to replace the node's
+  ///                   current `trailingComma`, if present.
+  public func withTrailingComma(
+    _ newChild: TokenSyntax?) -> DifferentiableAttributeFuncSpecifierSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.trailingComma)
+    return DifferentiableAttributeFuncSpecifierSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 4)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is FunctionDeclNameSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(FunctionDeclNameSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension DifferentiableAttributeFuncSpecifierSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "label": Syntax(label).as(SyntaxProtocol.self),
+      "colon": Syntax(colon).as(SyntaxProtocol.self),
+      "functionDeclName": Syntax(functionDeclName).as(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - FunctionDeclNameSyntax
+
+/// A function declaration name (e.g. `foo(_:_:)`).
+public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case name
+    case arguments
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `FunctionDeclNameSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .functionDeclName else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `FunctionDeclNameSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .functionDeclName)
+    self._syntaxNode = Syntax(data)
+  }
+
+  /// 
+  /// The base name of the referenced function.
+  /// 
+  public var name: Syntax {
+    get {
+      let childData = data.child(at: Cursor.name,
+                                 parent: Syntax(self))
+      return Syntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `name` replaced.
+  /// - param newChild: The new `name` to replace the node's
+  ///                   current `name`, if present.
+  public func withName(
+    _ newChild: Syntax?) -> FunctionDeclNameSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let newData = data.replacingChild(raw, at: Cursor.name)
+    return FunctionDeclNameSyntax(newData)
+  }
+
+  /// 
+  /// The argument labels of the referenced function, optionally                    specified.
+  /// 
+  public var arguments: DeclNameArgumentsSyntax? {
+    get {
+      let childData = data.child(at: Cursor.arguments,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withArguments(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `arguments` replaced.
+  /// - param newChild: The new `arguments` to replace the node's
+  ///                   current `arguments`, if present.
+  public func withArguments(
+    _ newChild: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.arguments)
+    return FunctionDeclNameSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 2)
+    // Check child #0 child is Syntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(Syntax.self))
+    }
+    // Check child #1 child is DeclNameArgumentsSyntax or missing
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DeclNameArgumentsSyntax.self))
+    }
+  }
+}
+
+extension FunctionDeclNameSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "name": Syntax(name).as(SyntaxProtocol.self),
+      "arguments": arguments.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - WhereClauseSyntax
 
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {

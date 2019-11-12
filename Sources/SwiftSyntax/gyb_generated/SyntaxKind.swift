@@ -163,6 +163,13 @@ internal enum SyntaxKind: CSyntaxKind {
   case implementsAttributeArguments = 134
   case objCSelectorPiece = 135
   case objCSelector = 189
+  case differentiableAttributeArguments = 233
+  case differentiationParamsClause = 234
+  case differentiationParams = 235
+  case differentiationParamList = 236
+  case differentiationParam = 237
+  case differentiableAttributeFuncSpecifier = 238
+  case functionDeclName = 239
   case continueStmt = 72
   case whileStmt = 73
   case deferStmt = 74
@@ -272,6 +279,7 @@ internal enum SyntaxKind: CSyntaxKind {
     case .attributeList: return true
     case .specializeAttributeSpecList: return true
     case .objCSelector: return true
+    case .differentiationParamList: return true
     case .switchCaseList: return true
     case .catchClauseList: return true
     case .caseItemList: return true

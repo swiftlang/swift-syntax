@@ -2853,12 +2853,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ObjCSelectorSyntax(data)
   }
-  public static func makeDifferentiableAttributeArguments(diffParams: DifferentiationParamsClauseSyntax?, diffParamsComma: TokenSyntax?, maybePrimal: DifferentiableAttributeFuncSpecifierSyntax?, maybeAdjoint: DifferentiableAttributeFuncSpecifierSyntax?, maybeJVP: DifferentiableAttributeFuncSpecifierSyntax?, maybeVJP: DifferentiableAttributeFuncSpecifierSyntax?, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  public static func makeDifferentiableAttributeArguments(diffParams: DifferentiationParamsClauseSyntax?, diffParamsComma: TokenSyntax?, maybeJVP: DifferentiableAttributeFuncSpecifierSyntax?, maybeVJP: DifferentiableAttributeFuncSpecifierSyntax?, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       diffParams?.raw,
       diffParamsComma?.raw,
-      maybePrimal?.raw,
-      maybeAdjoint?.raw,
       maybeJVP?.raw,
       maybeVJP?.raw,
       whereClause?.raw,
@@ -2872,8 +2870,6 @@ public enum SyntaxFactory {
   public static func makeBlankDifferentiableAttributeArguments() -> DifferentiableAttributeArgumentsSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiableAttributeArguments,
       layout: [
-      nil,
-      nil,
       nil,
       nil,
       nil,

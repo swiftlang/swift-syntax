@@ -6225,7 +6225,7 @@ extension ObjCSelectorPieceSyntax {
 
 public struct DifferentiableAttributeArgumentsSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+    Array<RawSyntax?>(repeating: nil, count: 5)
 
   internal init() {}
 
@@ -6236,16 +6236,6 @@ public struct DifferentiableAttributeArgumentsSyntaxBuilder {
 
   public mutating func useDiffParamsComma(_ node: TokenSyntax) {
     let idx = DifferentiableAttributeArgumentsSyntax.Cursor.diffParamsComma.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useMaybePrimal(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
-    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.maybePrimal.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useMaybeAdjoint(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
-    let idx = DifferentiableAttributeArgumentsSyntax.Cursor.maybeAdjoint.rawValue
     layout[idx] = node.raw
   }
 

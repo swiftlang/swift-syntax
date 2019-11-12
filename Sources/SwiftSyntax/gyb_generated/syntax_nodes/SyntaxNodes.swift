@@ -6904,14 +6904,13 @@ extension ObjCSelectorPieceSyntax: CustomReflectable {
 // MARK: - DifferentiableAttributeArgumentsSyntax
 
 /// 
-/// The arguments for the `@differentiable` attribute: an optional          differentiation parameter list and associated functions.
+/// The arguments for the `@differentiable` attribute: an optional
+/// differentiation parameter list and associated functions.
 /// 
 public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case diffParams
     case diffParamsComma
-    case maybePrimal
-    case maybeAdjoint
     case maybeJVP
     case maybeVJP
     case whereClause
@@ -6979,50 +6978,6 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     _ newChild: TokenSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.diffParamsComma)
-    return DifferentiableAttributeArgumentsSyntax(newData)
-  }
-
-  public var maybePrimal: DifferentiableAttributeFuncSpecifierSyntax? {
-    get {
-      let childData = data.child(at: Cursor.maybePrimal,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return DifferentiableAttributeFuncSpecifierSyntax(childData!)
-    }
-    set(value) {
-      self = withMaybePrimal(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `maybePrimal` replaced.
-  /// - param newChild: The new `maybePrimal` to replace the node's
-  ///                   current `maybePrimal`, if present.
-  public func withMaybePrimal(
-    _ newChild: DifferentiableAttributeFuncSpecifierSyntax?) -> DifferentiableAttributeArgumentsSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.maybePrimal)
-    return DifferentiableAttributeArgumentsSyntax(newData)
-  }
-
-  public var maybeAdjoint: DifferentiableAttributeFuncSpecifierSyntax? {
-    get {
-      let childData = data.child(at: Cursor.maybeAdjoint,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return DifferentiableAttributeFuncSpecifierSyntax(childData!)
-    }
-    set(value) {
-      self = withMaybeAdjoint(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `maybeAdjoint` replaced.
-  /// - param newChild: The new `maybeAdjoint` to replace the node's
-  ///                   current `maybeAdjoint`, if present.
-  public func withMaybeAdjoint(
-    _ newChild: DifferentiableAttributeFuncSpecifierSyntax?) -> DifferentiableAttributeArgumentsSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.maybeAdjoint)
     return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
@@ -7095,7 +7050,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
+    assert(rawChildren.count == 5)
     // Check child #0 child is DifferentiationParamsClauseSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -7128,25 +7083,9 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
     }
-    // Check child #4 child is DifferentiableAttributeFuncSpecifierSyntax or missing
+    // Check child #4 child is GenericWhereClauseSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
-    }
-    // Check child #5 child is DifferentiableAttributeFuncSpecifierSyntax or missing
-    if let raw = rawChildren[5].raw {
-      let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(DifferentiableAttributeFuncSpecifierSyntax.self))
-    }
-    // Check child #6 child is GenericWhereClauseSyntax or missing
-    if let raw = rawChildren[6].raw {
-      let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -7160,8 +7099,6 @@ extension DifferentiableAttributeArgumentsSyntax: CustomReflectable {
     return Mirror(self, children: [
       "diffParams": diffParams.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
       "diffParamsComma": diffParamsComma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "maybePrimal": maybePrimal.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "maybeAdjoint": maybeAdjoint.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
       "maybeJVP": maybeJVP.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
       "maybeVJP": maybeVJP.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
       "whereClause": whereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
@@ -7464,7 +7401,8 @@ extension DifferentiationParamsSyntax: CustomReflectable {
 // MARK: - DifferentiationParamSyntax
 
 /// 
-/// A differentiation parameter: either the "self" identifier or a          function parameter name.
+/// A differentiation parameter: either the "self" identifier or a
+/// function parameter name.
 /// 
 public struct DifferentiationParamSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -7568,7 +7506,8 @@ extension DifferentiationParamSyntax: CustomReflectable {
 // MARK: - DifferentiableAttributeFuncSpecifierSyntax
 
 /// 
-/// A function specifier, consisting of an identifier, colon, and a          function declaration name (e.g. `vjp: foo(_:_:)`).
+/// A function specifier, consisting of an identifier, colon, and a
+/// function declaration name (e.g. `vjp: foo(_:_:)`).
 /// 
 public struct DifferentiableAttributeFuncSpecifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -7785,7 +7724,8 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// 
-  /// The argument labels of the referenced function, optionally                    specified.
+  /// The argument labels of the referenced function, optionally
+  /// specified.
   /// 
   public var arguments: DeclNameArgumentsSyntax? {
     get {

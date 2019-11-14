@@ -1488,10 +1488,10 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ExprListSyntax` represents a collection of one or more
-/// `ExprSyntax` nodes. ExprListSyntax behaves
-/// as a regular Swift collection, and has accessors that return new
-/// versions of the collection with different children.
+/// 
+/// A list of expressions connected by operators. This list is contained
+/// by a `SequenceExprSyntax`.
+/// 
 public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
@@ -4428,10 +4428,7 @@ extension PatternBindingListSyntax: BidirectionalCollection {
   }
 }
 
-/// `EnumCaseElementListSyntax` represents a collection of one or more
-/// `EnumCaseElementSyntax` nodes. EnumCaseElementListSyntax behaves
-/// as a regular Swift collection, and has accessors that return new
-/// versions of the collection with different children.
+/// A collection of 0 or more `EnumCaseElement`s.
 public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
@@ -6143,10 +6140,9 @@ extension AttributeListSyntax: BidirectionalCollection {
   }
 }
 
-/// `SpecializeAttributeSpecListSyntax` represents a collection of one or more
-/// `Syntax` nodes. SpecializeAttributeSpecListSyntax behaves
-/// as a regular Swift collection, and has accessors that return new
-/// versions of the collection with different children.
+/// 
+/// A collection of arguments for the `@_specialize` attribute
+/// 
 public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 

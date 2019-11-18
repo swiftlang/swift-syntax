@@ -16,7 +16,7 @@ WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
 INCR_TRANSFER_ROUNDTRIP_EXEC = \
     WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
 GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
-LIT_EXEC = WORKSPACE_DIR + '/llvm/utils/lit/lit.py'
+LIT_EXEC = WORKSPACE_DIR + '/llvm-project/llvm/utils/lit/lit.py'
 GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
 
 BASE_KIND_FILES = {

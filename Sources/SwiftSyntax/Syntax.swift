@@ -34,6 +34,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self = syntax._syntaxNode
   }
 
+  /// Create a `Syntax` node from a specialized optional syntax node.
+  public init?<S: SyntaxProtocol>(_ syntax: S?) {
+    guard let syntax = syntax else { return nil }
+    self = syntax._syntaxNode
+  }
+
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)
   }

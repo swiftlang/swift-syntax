@@ -26,7 +26,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     // Check the layout of the concrete type
-    return self.as(SyntaxProtocol.self)._validateLayout()
+    return self.asProtocol(SyntaxProtocol.self)._validateLayout()
   }
 
   /// Create a `Syntax` node from a specialized syntax node.
@@ -64,7 +64,7 @@ extension Syntax: CustomReflectable {
   /// Reconstructs the real syntax type for this type from the node's kind and
   /// provides a mirror that reflects this type.
   public var customMirror: Mirror {
-    return Mirror(reflecting: self.as(SyntaxProtocol.self))
+    return Mirror(reflecting: self.asProtocol(SyntaxProtocol.self))
   }
 }
 

@@ -95,15 +95,15 @@ public class SyntaxTests: XCTestCase {
     XCTAssertTrue(node.is(IntegerLiteralExprSyntax.self))
     XCTAssertTrue(node.as(ExprSyntax.self)!.is(IntegerLiteralExprSyntax.self))
 
-    XCTAssertTrue(node.is(ExprSyntaxProtocol.self))
-    XCTAssertTrue(node.as(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
-    XCTAssertTrue(expr.as(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
-    XCTAssertTrue(expr.as(ExprSyntaxProtocol.self) as? IntegerLiteralExprSyntax == integerExpr)
+    XCTAssertTrue(node.isProtocol(ExprSyntaxProtocol.self))
+    XCTAssertTrue(node.asProtocol(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
+    XCTAssertTrue(expr.asProtocol(ExprSyntaxProtocol.self) is IntegerLiteralExprSyntax)
+    XCTAssertTrue(expr.asProtocol(ExprSyntaxProtocol.self) as? IntegerLiteralExprSyntax == integerExpr)
 
-    XCTAssertFalse(node.is(BracedSyntax.self))
-    XCTAssertNil(node.as(BracedSyntax.self))
-    XCTAssertFalse(expr.is(BracedSyntax.self))
-    XCTAssertNil(expr.as(BracedSyntax.self))
+    XCTAssertFalse(node.isProtocol(BracedSyntax.self))
+    XCTAssertNil(node.asProtocol(BracedSyntax.self))
+    XCTAssertFalse(expr.isProtocol(BracedSyntax.self))
+    XCTAssertNil(expr.asProtocol(BracedSyntax.self))
 
     let classDecl = SyntaxFactory.makeCodeBlock(
       leftBrace: SyntaxFactory.makeToken(.leftBrace, presence: .present),
@@ -111,8 +111,8 @@ public class SyntaxTests: XCTestCase {
       rightBrace: SyntaxFactory.makeToken(.rightBrace, presence: .present)
     )
 
-    XCTAssertTrue(classDecl.is(BracedSyntax.self))
-    XCTAssertNotNil(classDecl.as(BracedSyntax.self))
+    XCTAssertTrue(classDecl.isProtocol(BracedSyntax.self))
+    XCTAssertNotNil(classDecl.asProtocol(BracedSyntax.self))
 
     let optNode: Syntax? = node
     switch optNode?.as(SyntaxEnum.self) {

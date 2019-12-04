@@ -88,7 +88,7 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   
   stays the same. `ExprSyntax` is now a struct and not a protocol. See below on how to create an `ExprSyntax`.
 
-  **Extening a type**
+  **Extending a type**
   
   ```swift
   // Before
@@ -118,8 +118,8 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   ```swift
   let identifierExprSyntax: IdentifierExprSyntax = /* ... */
   let node = Syntax(identifierExprSyntax)
-  node.as(SyntaxProtocol.self) // returns a IdentifierExprSyntax with static type SyntaxProtocol
-  node.as(ExprSyntaxProtocol.self) // returns a IdentifierExprSyntax with static type ExprSyntaxProtocol?
+  node.asProtocol(SyntaxProtocol.self) // returns a IdentifierExprSyntax with static type SyntaxProtocol
+  node.asProtocol(ExprSyntaxProtocol.self) // returns a IdentifierExprSyntax with static type ExprSyntaxProtocol?
   ```
 
 

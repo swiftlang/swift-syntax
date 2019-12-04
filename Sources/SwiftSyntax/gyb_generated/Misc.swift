@@ -1393,13 +1393,15 @@ extension SyntaxNode {
 extension Syntax {
   /// Syntax nodes always conform to SyntaxProtocol. This API is just added
   /// for consistency.
+  /// Note that this will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
-  public func `is`(_: SyntaxProtocol.Protocol) -> Bool {
+  public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
     return true
   }
 
   /// Return the non-type erased version of this syntax node.
-  public func `as`(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
+  /// Note that this will incur an existential conversion.
+  public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
     switch self.as(SyntaxEnum.self) {
     case .token(let node):
       return node

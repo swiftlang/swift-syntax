@@ -113,5 +113,11 @@ public class SyntaxTests: XCTestCase {
 
     XCTAssertTrue(classDecl.is(BracedSyntax.self))
     XCTAssertNotNil(classDecl.as(BracedSyntax.self))
+
+    let optNode: Syntax? = node
+    switch optNode?.as(SyntaxEnum.self) {
+    case .integerLiteralExpr: break
+    default: XCTFail("failed to convert to SyntaxEnum")
+    }
   }
 }

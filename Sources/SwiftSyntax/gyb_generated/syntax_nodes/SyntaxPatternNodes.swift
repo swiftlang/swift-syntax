@@ -205,10 +205,10 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension EnumCasePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "type": type.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "period": Syntax(period).as(SyntaxProtocol.self),
-      "caseName": Syntax(caseName).as(SyntaxProtocol.self),
-      "associatedTuple": associatedTuple.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "type": type.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "period": Syntax(period).asProtocol(SyntaxProtocol.self),
+      "caseName": Syntax(caseName).asProtocol(SyntaxProtocol.self),
+      "associatedTuple": associatedTuple.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -308,8 +308,8 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension IsTypePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "isKeyword": Syntax(isKeyword).as(SyntaxProtocol.self),
-      "type": Syntax(type).as(SyntaxProtocol.self),
+      "isKeyword": Syntax(isKeyword).asProtocol(SyntaxProtocol.self),
+      "type": Syntax(type).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -409,8 +409,8 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension OptionalPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "subPattern": Syntax(subPattern).as(SyntaxProtocol.self),
-      "questionMark": Syntax(questionMark).as(SyntaxProtocol.self),
+      "subPattern": Syntax(subPattern).asProtocol(SyntaxProtocol.self),
+      "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -479,7 +479,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension IdentifierPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -610,9 +610,9 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension AsTypePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
-      "asKeyword": Syntax(asKeyword).as(SyntaxProtocol.self),
-      "type": Syntax(type).as(SyntaxProtocol.self),
+      "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
+      "asKeyword": Syntax(asKeyword).asProtocol(SyntaxProtocol.self),
+      "type": Syntax(type).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -762,9 +762,9 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension TuplePatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
-      "elements": Syntax(elements).as(SyntaxProtocol.self),
-      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -864,8 +864,8 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension WildcardPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wildcard": Syntax(wildcard).as(SyntaxProtocol.self),
-      "typeAnnotation": typeAnnotation.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "wildcard": Syntax(wildcard).asProtocol(SyntaxProtocol.self),
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -934,7 +934,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension ExpressionPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": Syntax(expression).as(SyntaxProtocol.self),
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1034,8 +1034,8 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 extension ValueBindingPatternSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "letOrVarKeyword": Syntax(letOrVarKeyword).as(SyntaxProtocol.self),
-      "valuePattern": Syntax(valuePattern).as(SyntaxProtocol.self),
+      "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self),
+      "valuePattern": Syntax(valuePattern).asProtocol(SyntaxProtocol.self),
     ])
   }
 }

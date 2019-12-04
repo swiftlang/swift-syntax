@@ -399,11 +399,11 @@ func performRoundtrip(args: CommandLineArguments) throws {
 class NodePrinter: SyntaxAnyVisitor {
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     assert(!node.isUnknown)
-    print("<\(type(of: node.as(SyntaxProtocol.self)))>", terminator: "")
+    print("<\(type(of: node.asProtocol(SyntaxProtocol.self)))>", terminator: "")
     return .visitChildren
   }
   override func visitAnyPost(_ node: Syntax) {
-    print("</\(type(of: node.as(SyntaxProtocol.self)))>", terminator: "")
+    print("</\(type(of: node.asProtocol(SyntaxProtocol.self)))>", terminator: "")
   }
   override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     print("<\(type(of: token))>", terminator: "")

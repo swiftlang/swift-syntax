@@ -336,13 +336,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension TypealiasDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "typealiasKeyword": Syntax(typealiasKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "genericParameterClause": genericParameterClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "initializer": initializer.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "typealiasKeyword": Syntax(typealiasKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -635,13 +635,13 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension AssociatedtypeDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "associatedtypeKeyword": Syntax(associatedtypeKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "inheritanceClause": inheritanceClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "initializer": initializer.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "associatedtypeKeyword": Syntax(associatedtypeKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -760,8 +760,8 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension IfConfigDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "clauses": Syntax(clauses).as(SyntaxProtocol.self),
-      "poundEndif": Syntax(poundEndif).as(SyntaxProtocol.self),
+      "clauses": Syntax(clauses).asProtocol(SyntaxProtocol.self),
+      "poundEndif": Syntax(poundEndif).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -923,10 +923,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PoundErrorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundError": Syntax(poundError).as(SyntaxProtocol.self),
-      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
-      "message": Syntax(message).as(SyntaxProtocol.self),
-      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+      "poundError": Syntax(poundError).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "message": Syntax(message).asProtocol(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1088,10 +1088,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PoundWarningDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundWarning": Syntax(poundWarning).as(SyntaxProtocol.self),
-      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
-      "message": Syntax(message).as(SyntaxProtocol.self),
-      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+      "poundWarning": Syntax(poundWarning).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "message": Syntax(message).asProtocol(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1253,10 +1253,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PoundSourceLocationSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundSourceLocation": Syntax(poundSourceLocation).as(SyntaxProtocol.self),
-      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
-      "args": args.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+      "poundSourceLocation": Syntax(poundSourceLocation).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "args": args.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1580,14 +1580,14 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ClassDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "classKeyword": Syntax(classKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "genericParameterClause": genericParameterClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "inheritanceClause": inheritanceClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "members": Syntax(members).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1911,14 +1911,14 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension StructDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "structKeyword": Syntax(structKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "genericParameterClause": genericParameterClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "inheritanceClause": inheritanceClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "members": Syntax(members).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "structKeyword": Syntax(structKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2211,13 +2211,13 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ProtocolDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "protocolKeyword": Syntax(protocolKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "inheritanceClause": inheritanceClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "members": Syntax(members).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "protocolKeyword": Syntax(protocolKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2510,13 +2510,13 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ExtensionDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "extensionKeyword": Syntax(extensionKeyword).as(SyntaxProtocol.self),
-      "extendedType": Syntax(extendedType).as(SyntaxProtocol.self),
-      "inheritanceClause": inheritanceClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "members": Syntax(members).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "extensionKeyword": Syntax(extensionKeyword).asProtocol(SyntaxProtocol.self),
+      "extendedType": Syntax(extendedType).asProtocol(SyntaxProtocol.self),
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2840,14 +2840,14 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension FunctionDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "funcKeyword": Syntax(funcKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "genericParameterClause": genericParameterClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "signature": Syntax(signature).as(SyntaxProtocol.self),
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "body": body.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "funcKeyword": Syntax(funcKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "signature": Syntax(signature).asProtocol(SyntaxProtocol.self),
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3202,15 +3202,15 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension InitializerDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "initKeyword": Syntax(initKeyword).as(SyntaxProtocol.self),
-      "optionalMark": optionalMark.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericParameterClause": genericParameterClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "parameters": Syntax(parameters).as(SyntaxProtocol.self),
-      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "body": body.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "initKeyword": Syntax(initKeyword).asProtocol(SyntaxProtocol.self),
+      "optionalMark": optionalMark.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "parameters": Syntax(parameters).asProtocol(SyntaxProtocol.self),
+      "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3410,10 +3410,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension DeinitializerDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "deinitKeyword": Syntax(deinitKeyword).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "deinitKeyword": Syntax(deinitKeyword).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -3737,14 +3737,14 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension SubscriptDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "subscriptKeyword": Syntax(subscriptKeyword).as(SyntaxProtocol.self),
-      "genericParameterClause": genericParameterClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "indices": Syntax(indices).as(SyntaxProtocol.self),
-      "result": Syntax(result).as(SyntaxProtocol.self),
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "accessor": accessor.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "subscriptKeyword": Syntax(subscriptKeyword).asProtocol(SyntaxProtocol.self),
+      "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "indices": Syntax(indices).asProtocol(SyntaxProtocol.self),
+      "result": Syntax(result).asProtocol(SyntaxProtocol.self),
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "accessor": accessor.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3994,11 +3994,11 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension ImportDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "importTok": Syntax(importTok).as(SyntaxProtocol.self),
-      "importKind": importKind.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "path": Syntax(path).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "importTok": Syntax(importTok).asProtocol(SyntaxProtocol.self),
+      "importKind": importKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "path": Syntax(path).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -4210,11 +4210,11 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension AccessorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifier": modifier.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "accessorKind": Syntax(accessorKind).as(SyntaxProtocol.self),
-      "parameter": parameter.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "body": body.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "accessorKind": Syntax(accessorKind).asProtocol(SyntaxProtocol.self),
+      "parameter": parameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4433,10 +4433,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension VariableDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "letOrVarKeyword": Syntax(letOrVarKeyword).as(SyntaxProtocol.self),
-      "bindings": Syntax(bindings).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self),
+      "bindings": Syntax(bindings).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -4668,10 +4668,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension EnumCaseDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "caseKeyword": Syntax(caseKeyword).as(SyntaxProtocol.self),
-      "elements": Syntax(elements).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "caseKeyword": Syntax(caseKeyword).asProtocol(SyntaxProtocol.self),
+      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -5022,14 +5022,14 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension EnumDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "enumKeyword": Syntax(enumKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "genericParameters": genericParameters.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "inheritanceClause": inheritanceClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "genericWhereClause": genericWhereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "members": Syntax(members).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "enumKeyword": Syntax(enumKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "genericParameters": genericParameters.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "members": Syntax(members).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -5271,11 +5271,11 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension OperatorDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "operatorKeyword": Syntax(operatorKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "operatorKeyword": Syntax(operatorKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "operatorPrecedenceAndTypes": operatorPrecedenceAndTypes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -5601,13 +5601,13 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 extension PrecedenceGroupDeclSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "attributes": attributes.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "modifiers": modifiers.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "precedencegroupKeyword": Syntax(precedencegroupKeyword).as(SyntaxProtocol.self),
-      "identifier": Syntax(identifier).as(SyntaxProtocol.self),
-      "leftBrace": Syntax(leftBrace).as(SyntaxProtocol.self),
-      "groupAttributes": Syntax(groupAttributes).as(SyntaxProtocol.self),
-      "rightBrace": Syntax(rightBrace).as(SyntaxProtocol.self),
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "precedencegroupKeyword": Syntax(precedencegroupKeyword).asProtocol(SyntaxProtocol.self),
+      "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
+      "groupAttributes": Syntax(groupAttributes).asProtocol(SyntaxProtocol.self),
+      "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
     ])
   }
 }

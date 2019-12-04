@@ -143,8 +143,8 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension ContinueStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "continueKeyword": Syntax(continueKeyword).as(SyntaxProtocol.self),
-      "label": label.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "continueKeyword": Syntax(continueKeyword).asProtocol(SyntaxProtocol.self),
+      "label": label.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -356,11 +356,11 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension WhileStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "whileKeyword": Syntax(whileKeyword).as(SyntaxProtocol.self),
-      "conditions": Syntax(conditions).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
+      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "whileKeyword": Syntax(whileKeyword).asProtocol(SyntaxProtocol.self),
+      "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -460,8 +460,8 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension DeferStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "deferKeyword": Syntax(deferKeyword).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
+      "deferKeyword": Syntax(deferKeyword).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -530,7 +530,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension ExpressionStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "expression": Syntax(expression).as(SyntaxProtocol.self),
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -754,12 +754,12 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension RepeatWhileStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "repeatKeyword": Syntax(repeatKeyword).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
-      "whileKeyword": Syntax(whileKeyword).as(SyntaxProtocol.self),
-      "condition": Syntax(condition).as(SyntaxProtocol.self),
+      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "repeatKeyword": Syntax(repeatKeyword).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
+      "whileKeyword": Syntax(whileKeyword).asProtocol(SyntaxProtocol.self),
+      "condition": Syntax(condition).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -940,10 +940,10 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension GuardStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "guardKeyword": Syntax(guardKeyword).as(SyntaxProtocol.self),
-      "conditions": Syntax(conditions).as(SyntaxProtocol.self),
-      "elseKeyword": Syntax(elseKeyword).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
+      "guardKeyword": Syntax(guardKeyword).asProtocol(SyntaxProtocol.self),
+      "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),
+      "elseKeyword": Syntax(elseKeyword).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1291,16 +1291,16 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension ForInStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "forKeyword": Syntax(forKeyword).as(SyntaxProtocol.self),
-      "caseKeyword": caseKeyword.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "pattern": Syntax(pattern).as(SyntaxProtocol.self),
-      "typeAnnotation": typeAnnotation.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "inKeyword": Syntax(inKeyword).as(SyntaxProtocol.self),
-      "sequenceExpr": Syntax(sequenceExpr).as(SyntaxProtocol.self),
-      "whereClause": whereClause.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "body": Syntax(body).as(SyntaxProtocol.self),
+      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "forKeyword": Syntax(forKeyword).asProtocol(SyntaxProtocol.self),
+      "caseKeyword": caseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
+      "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "inKeyword": Syntax(inKeyword).asProtocol(SyntaxProtocol.self),
+      "sequenceExpr": Syntax(sequenceExpr).asProtocol(SyntaxProtocol.self),
+      "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1574,13 +1574,13 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension SwitchStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "switchKeyword": Syntax(switchKeyword).as(SyntaxProtocol.self),
-      "expression": Syntax(expression).as(SyntaxProtocol.self),
-      "leftBrace": Syntax(leftBrace).as(SyntaxProtocol.self),
-      "cases": Syntax(cases).as(SyntaxProtocol.self),
-      "rightBrace": Syntax(rightBrace).as(SyntaxProtocol.self),
+      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "switchKeyword": Syntax(switchKeyword).asProtocol(SyntaxProtocol.self),
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+      "leftBrace": Syntax(leftBrace).asProtocol(SyntaxProtocol.self),
+      "cases": Syntax(cases).asProtocol(SyntaxProtocol.self),
+      "rightBrace": Syntax(rightBrace).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -1792,11 +1792,11 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension DoStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "doKeyword": Syntax(doKeyword).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
-      "catchClauses": catchClauses.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "doKeyword": Syntax(doKeyword).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
+      "catchClauses": catchClauses.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1896,8 +1896,8 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension ReturnStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "returnKeyword": Syntax(returnKeyword).as(SyntaxProtocol.self),
-      "expression": expression.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "returnKeyword": Syntax(returnKeyword).asProtocol(SyntaxProtocol.self),
+      "expression": expression.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -1997,8 +1997,8 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension YieldStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "yieldKeyword": Syntax(yieldKeyword).as(SyntaxProtocol.self),
-      "yields": Syntax(yields).as(SyntaxProtocol.self),
+      "yieldKeyword": Syntax(yieldKeyword).asProtocol(SyntaxProtocol.self),
+      "yields": Syntax(yields).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2067,7 +2067,7 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension FallthroughStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "fallthroughKeyword": Syntax(fallthroughKeyword).as(SyntaxProtocol.self),
+      "fallthroughKeyword": Syntax(fallthroughKeyword).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2167,8 +2167,8 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension BreakStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "breakKeyword": Syntax(breakKeyword).as(SyntaxProtocol.self),
-      "label": label.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "breakKeyword": Syntax(breakKeyword).asProtocol(SyntaxProtocol.self),
+      "label": label.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2237,7 +2237,7 @@ public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension DeclarationStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "declaration": Syntax(declaration).as(SyntaxProtocol.self),
+      "declaration": Syntax(declaration).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2337,8 +2337,8 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension ThrowStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "throwKeyword": Syntax(throwKeyword).as(SyntaxProtocol.self),
-      "expression": Syntax(expression).as(SyntaxProtocol.self),
+      "throwKeyword": Syntax(throwKeyword).asProtocol(SyntaxProtocol.self),
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
     ])
   }
 }
@@ -2612,13 +2612,13 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension IfStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "labelName": labelName.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "labelColon": labelColon.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "ifKeyword": Syntax(ifKeyword).as(SyntaxProtocol.self),
-      "conditions": Syntax(conditions).as(SyntaxProtocol.self),
-      "body": Syntax(body).as(SyntaxProtocol.self),
-      "elseKeyword": elseKeyword.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "elseBody": elseBody.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
+      "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "ifKeyword": Syntax(ifKeyword).asProtocol(SyntaxProtocol.self),
+      "conditions": Syntax(conditions).asProtocol(SyntaxProtocol.self),
+      "body": Syntax(body).asProtocol(SyntaxProtocol.self),
+      "elseKeyword": elseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "elseBody": elseBody.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -2845,12 +2845,12 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 extension PoundAssertStmtSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "poundAssert": Syntax(poundAssert).as(SyntaxProtocol.self),
-      "leftParen": Syntax(leftParen).as(SyntaxProtocol.self),
-      "condition": Syntax(condition).as(SyntaxProtocol.self),
-      "comma": comma.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "message": message.map(Syntax.init)?.as(SyntaxProtocol.self) as Any,
-      "rightParen": Syntax(rightParen).as(SyntaxProtocol.self),
+      "poundAssert": Syntax(poundAssert).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "condition": Syntax(condition).asProtocol(SyntaxProtocol.self),
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "message": message.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
     ])
   }
 }

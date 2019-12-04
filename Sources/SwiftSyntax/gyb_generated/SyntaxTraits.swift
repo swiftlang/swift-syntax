@@ -26,14 +26,16 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `DeclGroupSyntax`. 
-  func `is`(_: DeclGroupSyntax.Protocol) -> Bool {
-    return self.as(DeclGroupSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: DeclGroupSyntax.Protocol) -> Bool {
+    return self.asProtocol(DeclGroupSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `DeclGroupSyntax`. Otherwise return `nil`.
-  func `as`(_: DeclGroupSyntax.Protocol) -> DeclGroupSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? DeclGroupSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: DeclGroupSyntax.Protocol) -> DeclGroupSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? DeclGroupSyntax
   }
 }
 
@@ -49,14 +51,16 @@ public protocol BracedSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `BracedSyntax`. 
-  func `is`(_: BracedSyntax.Protocol) -> Bool {
-    return self.as(BracedSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: BracedSyntax.Protocol) -> Bool {
+    return self.asProtocol(BracedSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `BracedSyntax`. Otherwise return `nil`.
-  func `as`(_: BracedSyntax.Protocol) -> BracedSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? BracedSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: BracedSyntax.Protocol) -> BracedSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? BracedSyntax
   }
 }
 
@@ -70,14 +74,16 @@ public protocol IdentifiedDeclSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `IdentifiedDeclSyntax`. 
-  func `is`(_: IdentifiedDeclSyntax.Protocol) -> Bool {
-    return self.as(IdentifiedDeclSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: IdentifiedDeclSyntax.Protocol) -> Bool {
+    return self.asProtocol(IdentifiedDeclSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `IdentifiedDeclSyntax`. Otherwise return `nil`.
-  func `as`(_: IdentifiedDeclSyntax.Protocol) -> IdentifiedDeclSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? IdentifiedDeclSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: IdentifiedDeclSyntax.Protocol) -> IdentifiedDeclSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? IdentifiedDeclSyntax
   }
 }
 
@@ -91,14 +97,16 @@ public protocol WithCodeBlockSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `WithCodeBlockSyntax`. 
-  func `is`(_: WithCodeBlockSyntax.Protocol) -> Bool {
-    return self.as(WithCodeBlockSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: WithCodeBlockSyntax.Protocol) -> Bool {
+    return self.asProtocol(WithCodeBlockSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `WithCodeBlockSyntax`. Otherwise return `nil`.
-  func `as`(_: WithCodeBlockSyntax.Protocol) -> WithCodeBlockSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? WithCodeBlockSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: WithCodeBlockSyntax.Protocol) -> WithCodeBlockSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithCodeBlockSyntax
   }
 }
 
@@ -114,14 +122,16 @@ public protocol ParenthesizedSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `ParenthesizedSyntax`. 
-  func `is`(_: ParenthesizedSyntax.Protocol) -> Bool {
-    return self.as(ParenthesizedSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: ParenthesizedSyntax.Protocol) -> Bool {
+    return self.asProtocol(ParenthesizedSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `ParenthesizedSyntax`. Otherwise return `nil`.
-  func `as`(_: ParenthesizedSyntax.Protocol) -> ParenthesizedSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? ParenthesizedSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: ParenthesizedSyntax.Protocol) -> ParenthesizedSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? ParenthesizedSyntax
   }
 }
 
@@ -135,14 +145,16 @@ public protocol WithTrailingCommaSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `WithTrailingCommaSyntax`. 
-  func `is`(_: WithTrailingCommaSyntax.Protocol) -> Bool {
-    return self.as(WithTrailingCommaSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: WithTrailingCommaSyntax.Protocol) -> Bool {
+    return self.asProtocol(WithTrailingCommaSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `WithTrailingCommaSyntax`. Otherwise return `nil`.
-  func `as`(_: WithTrailingCommaSyntax.Protocol) -> WithTrailingCommaSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? WithTrailingCommaSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: WithTrailingCommaSyntax.Protocol) -> WithTrailingCommaSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithTrailingCommaSyntax
   }
 }
 
@@ -158,14 +170,16 @@ public protocol LabeledSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `LabeledSyntax`. 
-  func `is`(_: LabeledSyntax.Protocol) -> Bool {
-    return self.as(LabeledSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: LabeledSyntax.Protocol) -> Bool {
+    return self.asProtocol(LabeledSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `LabeledSyntax`. Otherwise return `nil`.
-  func `as`(_: LabeledSyntax.Protocol) -> LabeledSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? LabeledSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: LabeledSyntax.Protocol) -> LabeledSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? LabeledSyntax
   }
 }
 
@@ -179,14 +193,16 @@ public protocol WithStatementsSyntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `WithStatementsSyntax`. 
-  func `is`(_: WithStatementsSyntax.Protocol) -> Bool {
-    return self.as(WithStatementsSyntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: WithStatementsSyntax.Protocol) -> Bool {
+    return self.asProtocol(WithStatementsSyntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `WithStatementsSyntax`. Otherwise return `nil`.
-  func `as`(_: WithStatementsSyntax.Protocol) -> WithStatementsSyntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? WithStatementsSyntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: WithStatementsSyntax.Protocol) -> WithStatementsSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithStatementsSyntax
   }
 }
 

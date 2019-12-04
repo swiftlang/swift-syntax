@@ -36,14 +36,16 @@ public protocol ${trait.trait_name}Syntax: SyntaxProtocol {
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to 
   /// `${trait.trait_name}Syntax`. 
-  func `is`(_: ${trait.trait_name}Syntax.Protocol) -> Bool {
-    return self.as(${trait.trait_name}Syntax.self) != nil
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: ${trait.trait_name}Syntax.Protocol) -> Bool {
+    return self.asProtocol(${trait.trait_name}Syntax.self) != nil
   }
 
   /// Return the non-type erased version of this syntax node if it conforms to 
   /// `${trait.trait_name}Syntax`. Otherwise return `nil`.
-  func `as`(_: ${trait.trait_name}Syntax.Protocol) -> ${trait.trait_name}Syntax? {
-    return Syntax(self).as(SyntaxProtocol.self) as? ${trait.trait_name}Syntax
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: ${trait.trait_name}Syntax.Protocol) -> ${trait.trait_name}Syntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? ${trait.trait_name}Syntax
   }
 }
 

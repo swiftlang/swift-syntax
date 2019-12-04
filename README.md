@@ -184,7 +184,7 @@ class AddOneToIntegerLiterals: SyntaxRewriter {
 
 let file = CommandLine.arguments[1]
 let url = URL(fileURLWithPath: file)
-let sourceFile = try SyntaxTreeParser.parse(url)
+let sourceFile = try SyntaxParser.parse(url)
 let incremented = AddOneToIntegerLiterals().visit(sourceFile)
 print(incremented)
 ```

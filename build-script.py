@@ -15,7 +15,6 @@ WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
 
 INCR_TRANSFER_ROUNDTRIP_EXEC = \
     WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
-GYB_EXEC = WORKSPACE_DIR + '/swift/utils/gyb'
 LIT_EXEC = WORKSPACE_DIR + '/llvm-project/llvm/utils/lit/lit.py'
 GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
 
@@ -84,8 +83,8 @@ def realpath(path):
 
 ## Generating gyb files
 
-def check_gyb_exec():
-    if not os.path.exists(GYB_EXEC):
+def check_gyb_exec(gyb_exec):
+    if not os.path.exists(gyb_exec):
         fatal_error('''
 Error: Could not find gyb.
 Looking at '%s'.
@@ -93,7 +92,7 @@ Looking at '%s'.
 Make sure you have the main swift repo checked out next to the swift-syntax
 repository.
 Refer to README.md for more information.
-''' % GYB_EXEC)
+''' % gyb_exec)
 
 
 def check_rsync():
@@ -102,7 +101,7 @@ def check_rsync():
             fatal_error('Error: Could not find rsync.')
 
 
-def generate_single_gyb_file(gyb_file, output_file_name, destination,
+def generate_single_gyb_file(gyb_exec, gyb_file, output_file_name, destination,
                              temp_files_dir, add_source_locations,
                              additional_gyb_flags, verbose):
   # Source locations are added by default by gyb, and cleared by passing
@@ -112,7 +111,7 @@ def generate_single_gyb_file(gyb_file, output_file_name, destination,
                             else ['--line-directive=']
 
   # Generate the new file
-  check_call([GYB_EXEC] +
+  check_call([gyb_exec] +
              [gyb_file] +
              ['-o', temp_files_dir + '/' + output_file_name] +
              line_directive_flags +
@@ -127,10 +126,10 @@ def generate_single_gyb_file(gyb_file, output_file_name, destination,
              [destination + '/' + output_file_name],
              verbose=verbose)
 
-def generate_gyb_files(verbose, add_source_locations, destination=None):
+def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None):
     print('** Generating gyb Files **')
 
-    check_gyb_exec()
+    check_gyb_exec(gyb_exec)
     check_rsync()
 
     swiftsyntax_sources_dir = os.path.join(PACKAGE_DIR, 'Sources',
@@ -175,7 +174,8 @@ def generate_gyb_files(verbose, add_source_locations, destination=None):
         # Slice off the '.gyb' to get the name for the output file
         output_file_name = gyb_file[:-4]
 
-        generate_single_gyb_file(swiftsyntax_sources_dir + '/' + gyb_file,
+        generate_single_gyb_file(gyb_exec,
+                                 swiftsyntax_sources_dir + '/' + gyb_file,
                                  output_file_name, destination,
                                  temp_files_dir, add_source_locations,
                                  additional_gyb_flags=[],
@@ -186,7 +186,7 @@ def generate_gyb_files(verbose, add_source_locations, destination=None):
 
         gyb_file = swiftsyntax_sources_dir + '/SyntaxNodes.swift.gyb.template'
 
-        generate_single_gyb_file(gyb_file, output_file_name,
+        generate_single_gyb_file(gyb_exec, gyb_file, output_file_name,
                                  template_destination, temp_files_dir,
                                  add_source_locations,
                                  additional_gyb_flags=[
@@ -246,11 +246,11 @@ class Builder(object):
 
 
 ## Testing
-def verify_generated_files(verbose):
+def verify_generated_files(gyb_exec, verbose):
     user_generated_dir = os.path.join(PACKAGE_DIR, 'Sources', 'SwiftSyntax',
                                       'gyb_generated')
     self_generated_dir = tempfile.mkdtemp()
-    generate_gyb_files(verbose=verbose,
+    generate_gyb_files(gyb_exec, verbose=verbose,
                        add_source_locations=False,
                        destination=self_generated_dir)
 
@@ -438,6 +438,8 @@ test utilities that are not shipped as part of the toolchains. See the Testing
 section for arguments that need to be specified for this.
 ''')
 
+    default_gyb_exec = WORKSPACE_DIR + '/swift/utils/gyb'
+
     basic_group = parser.add_argument_group('Basic')
 
     basic_group.add_argument('--build-dir', default=None, help='''
@@ -507,6 +509,9 @@ section for arguments that need to be specified for this.
       Path to the FileCheck executable that was built as part of the LLVM
       repository. If not specified, it will be looked up from PATH.
       ''')
+    testing_group.add_argument('--gyb-exec', default=default_gyb_exec, help='''
+      Path to the gyb tool. (default: '%s').
+      ''' % (default_gyb_exec) )
     testing_group.add_argument('--verify-generated-files', action='store_true',
                                help='''
       Instead of generating files using gyb, verify that the files which
@@ -533,7 +538,7 @@ section for arguments that need to be specified for this.
 
     try:
         if not args.verify_generated_files:
-            generate_gyb_files(verbose=args.verbose,
+            generate_gyb_files(args.gyb_exec, verbose=args.verbose,
                                add_source_locations=args.add_source_locations)
         # Skip the rest of the build if we should perform degyb only
         if args.degyb_only:
@@ -546,7 +551,7 @@ section for arguments that need to be specified for this.
 
     if args.verify_generated_files:
         try:
-            success = verify_generated_files(verbose=args.verbose)
+            success = verify_generated_files(args.gyb_exec, verbose=args.verbose)
         except subprocess.CalledProcessError as e:
             printerr('FAIL: Gyb-generated files committed to repository do '
                      'not match generated ones. Please re-generate the '

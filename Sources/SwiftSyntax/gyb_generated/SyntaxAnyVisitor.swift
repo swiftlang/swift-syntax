@@ -253,6 +253,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: PoundFileExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: PoundFilePathExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PoundFilePathExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: PoundFunctionExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

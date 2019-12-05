@@ -212,6 +212,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `PoundFilePathExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PoundFilePathExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `PoundFunctionExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1973,6 +1980,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplPoundFileExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = PoundFileExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPoundFilePathExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = PoundFilePathExprSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4075,6 +4092,8 @@ open class SyntaxRewriter {
       return visitImplPoundLineExprSyntax(data)
     case .poundFileExpr:
       return visitImplPoundFileExprSyntax(data)
+    case .poundFilePathExpr:
+      return visitImplPoundFilePathExprSyntax(data)
     case .poundFunctionExpr:
       return visitImplPoundFunctionExprSyntax(data)
     case .poundDsohandleExpr:

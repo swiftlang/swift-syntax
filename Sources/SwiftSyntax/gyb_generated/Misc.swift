@@ -183,6 +183,12 @@ extension SyntaxNode {
     return PoundFileExprSyntax(asSyntaxData)
   }
 
+  public var isPoundFilePathExpr: Bool { return raw.kind == .poundFilePathExpr }
+  public var asPoundFilePathExpr: PoundFilePathExprSyntax? {
+    guard isPoundFilePathExpr else { return nil }
+    return PoundFilePathExprSyntax(asSyntaxData)
+  }
+
   public var isPoundFunctionExpr: Bool { return raw.kind == .poundFunctionExpr }
   public var asPoundFunctionExpr: PoundFunctionExprSyntax? {
     guard isPoundFunctionExpr else { return nil }
@@ -1471,6 +1477,8 @@ extension Syntax {
       return node
     case .poundFileExpr(let node):
       return node
+    case .poundFilePathExpr(let node):
+      return node
     case .poundFunctionExpr(let node):
       return node
     case .poundDsohandleExpr(let node):
@@ -1880,6 +1888,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "3924247553615556843"
+      "7184602491276114819"
   }
 }

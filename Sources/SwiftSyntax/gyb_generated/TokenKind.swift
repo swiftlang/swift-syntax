@@ -105,6 +105,7 @@ public enum TokenKind {
   case poundLineKeyword
   case poundSelectorKeyword
   case poundFileKeyword
+  case poundFilePathKeyword
   case poundColumnKeyword
   case poundFunctionKeyword
   case poundDsohandleKeyword
@@ -230,6 +231,7 @@ public enum TokenKind {
     case .poundLineKeyword: return "#line"
     case .poundSelectorKeyword: return "#selector"
     case .poundFileKeyword: return "#file"
+    case .poundFilePathKeyword: return "#filePath"
     case .poundColumnKeyword: return "#column"
     case .poundFunctionKeyword: return "#function"
     case .poundDsohandleKeyword: return "#dsohandle"
@@ -356,6 +358,7 @@ public enum TokenKind {
     case .poundLineKeyword: return true
     case .poundSelectorKeyword: return true
     case .poundFileKeyword: return true
+    case .poundFilePathKeyword: return true
     case .poundColumnKeyword: return true
     case .poundFunctionKeyword: return true
     case .poundDsohandleKeyword: return true
@@ -482,6 +485,7 @@ public enum TokenKind {
     case .poundLineKeyword: return "pound_line"
     case .poundSelectorKeyword: return "pound_selector"
     case .poundFileKeyword: return "pound_file"
+    case .poundFilePathKeyword: return "pound_filePath"
     case .poundColumnKeyword: return "pound_column"
     case .poundFunctionKeyword: return "pound_function"
     case .poundDsohandleKeyword: return "pound_dsohandle"
@@ -608,6 +612,7 @@ public enum TokenKind {
     case .poundLineKeyword: return SourceLength(utf8Length: 5)
     case .poundSelectorKeyword: return SourceLength(utf8Length: 9)
     case .poundFileKeyword: return SourceLength(utf8Length: 5)
+    case .poundFilePathKeyword: return SourceLength(utf8Length: 9)
     case .poundColumnKeyword: return SourceLength(utf8Length: 7)
     case .poundFunctionKeyword: return SourceLength(utf8Length: 9)
     case .poundDsohandleKeyword: return SourceLength(utf8Length: 10)
@@ -736,6 +741,7 @@ extension TokenKind: Equatable {
     case (.poundLineKeyword, .poundLineKeyword): return true
     case (.poundSelectorKeyword, .poundSelectorKeyword): return true
     case (.poundFileKeyword, .poundFileKeyword): return true
+    case (.poundFilePathKeyword, .poundFilePathKeyword): return true
     case (.poundColumnKeyword, .poundColumnKeyword): return true
     case (.poundFunctionKeyword, .poundFunctionKeyword): return true
     case (.poundDsohandleKeyword, .poundDsohandleKeyword): return true
@@ -969,6 +975,8 @@ extension TokenKind {
       return .poundSelectorKeyword
     case 68:
       return .poundFileKeyword
+    case 121:
+      return .poundFilePathKeyword
     case 70:
       return .poundColumnKeyword
     case 72:
@@ -1225,6 +1233,8 @@ extension TokenKind {
       return false
     case 68:
       return false
+    case 121:
+      return false
     case 70:
       return false
     case 72:
@@ -1384,6 +1394,7 @@ internal enum RawTokenKind: CTokenKind {
   case poundLineKeyword = 69
   case poundSelectorKeyword = 73
   case poundFileKeyword = 68
+  case poundFilePathKeyword = 121
   case poundColumnKeyword = 70
   case poundFunctionKeyword = 72
   case poundDsohandleKeyword = 71
@@ -1697,6 +1708,9 @@ extension TokenKind {
     case .poundFileKeyword:
       let length = 5
       return body(.init(kind: .poundFileKeyword, length: length))
+    case .poundFilePathKeyword:
+      let length = 9
+      return body(.init(kind: .poundFilePathKeyword, length: length))
     case .poundColumnKeyword:
       let length = 7
       return body(.init(kind: .poundColumnKeyword, length: length))

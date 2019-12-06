@@ -96,6 +96,8 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**Swift Variable Injector**](https://github.com/LucianoPAlmeida/variable-injector): a tool to replace string literals with environment variables values.
 
+[**Pecker**](https://github.com/woshiccm/Pecker): a tool to detect unused code based on [SwiftSyntax](https://github.com/apple/swift-syntax.git) and [IndexStoreDB](https://github.com/apple/indexstore-db.git).
+
 ### Reporting Issues
 
 If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [bugs.swift.org](https://bugs.swift.org) in the [SwiftSyntax component](https://bugs.swift.org/issues/?jql=component%20%3D%20SwiftSyntax).

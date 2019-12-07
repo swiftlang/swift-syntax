@@ -456,6 +456,23 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return PoundFileExprSyntax(data)
   }
+  public static func makePoundFilePathExpr(poundFilePath: TokenSyntax) -> PoundFilePathExprSyntax {
+    let layout: [RawSyntax?] = [
+      poundFilePath.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFilePathExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return PoundFilePathExprSyntax(data)
+  }
+
+  public static func makeBlankPoundFilePathExpr() -> PoundFilePathExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundFilePathExpr,
+      layout: [
+      RawSyntax.missingToken(TokenKind.poundFilePathKeyword),
+    ], length: .zero, presence: .present))
+    return PoundFilePathExprSyntax(data)
+  }
   public static func makePoundFunctionExpr(poundFunction: TokenSyntax) -> PoundFunctionExprSyntax {
     let layout: [RawSyntax?] = [
       poundFunction.raw,
@@ -5127,6 +5144,12 @@ public enum SyntaxFactory {
   public static func makePoundFileKeyword(leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeToken(.poundFileKeyword, presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+  public static func makePoundFilePathKeyword(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.poundFilePathKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

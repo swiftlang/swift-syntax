@@ -286,6 +286,8 @@ extension RawTokenKind {
       return .keyword
     case .poundFileKeyword:
       return .keyword
+    case .poundFilePathKeyword:
+      return .keyword
     case .poundColumnKeyword:
       return .keyword
     case .poundFunctionKeyword:

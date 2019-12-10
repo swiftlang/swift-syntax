@@ -2993,6 +2993,31 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return DifferentiableAttributeFuncSpecifierSyntax(data)
   }
+  public static func makeDerivativeRegistrationAttributeArguments(ofLabel: TokenSyntax, colon: TokenSyntax, original: FunctionDeclNameSyntax, comma: TokenSyntax?, diffParams: DifferentiationParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let layout: [RawSyntax?] = [
+      ofLabel.raw,
+      colon.raw,
+      original.raw,
+      comma?.raw,
+      diffParams?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DerivativeRegistrationAttributeArgumentsSyntax(data)
+  }
+
+  public static func makeBlankDerivativeRegistrationAttributeArguments() -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .derivativeRegistrationAttributeArguments,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.functionDeclName),
+      nil,
+      nil,
+    ], length: .zero, presence: .present))
+    return DerivativeRegistrationAttributeArgumentsSyntax(data)
+  }
   public static func makeFunctionDeclName(name: Syntax, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
     let layout: [RawSyntax?] = [
       name.raw,

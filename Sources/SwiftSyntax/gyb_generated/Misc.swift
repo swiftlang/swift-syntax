@@ -915,6 +915,12 @@ extension SyntaxNode {
     return DifferentiableAttributeFuncSpecifierSyntax(asSyntaxData)
   }
 
+  public var isDerivativeRegistrationAttributeArguments: Bool { return raw.kind == .derivativeRegistrationAttributeArguments }
+  public var asDerivativeRegistrationAttributeArguments: DerivativeRegistrationAttributeArgumentsSyntax? {
+    guard isDerivativeRegistrationAttributeArguments else { return nil }
+    return DerivativeRegistrationAttributeArgumentsSyntax(asSyntaxData)
+  }
+
   public var isFunctionDeclName: Bool { return raw.kind == .functionDeclName }
   public var asFunctionDeclName: FunctionDeclNameSyntax? {
     guard isFunctionDeclName else { return nil }
@@ -1721,6 +1727,8 @@ extension Syntax {
       return node
     case .differentiableAttributeFuncSpecifier(let node):
       return node
+    case .derivativeRegistrationAttributeArguments(let node):
+      return node
     case .functionDeclName(let node):
       return node
     case .continueStmt(let node):
@@ -1888,6 +1896,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "7184602491276114819"
+      "3760114301864113995"
   }
 }

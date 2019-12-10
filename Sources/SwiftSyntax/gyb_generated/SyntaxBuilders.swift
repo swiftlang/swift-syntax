@@ -6532,6 +6532,70 @@ extension DifferentiableAttributeFuncSpecifierSyntax {
   }
 }
 
+public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 5)
+
+  internal init() {}
+
+  public mutating func useOfLabel(_ node: TokenSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.ofLabel.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useOriginal(_ node: FunctionDeclNameSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.original.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useComma(_ node: TokenSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.comma.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useDiffParams(_ node: DifferentiationParamsClauseSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.diffParams.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.functionDeclName)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .derivativeRegistrationAttributeArguments,
+      layout: layout, presence: .present))
+  }
+}
+
+extension DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Creates a `DerivativeRegistrationAttributeArgumentsSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `DerivativeRegistrationAttributeArgumentsSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `DerivativeRegistrationAttributeArgumentsSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout DerivativeRegistrationAttributeArgumentsSyntaxBuilder) -> Void) {
+    var builder = DerivativeRegistrationAttributeArgumentsSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct FunctionDeclNameSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 2)

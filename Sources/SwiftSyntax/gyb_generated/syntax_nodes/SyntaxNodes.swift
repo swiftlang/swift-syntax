@@ -7673,6 +7673,214 @@ extension DifferentiableAttributeFuncSpecifierSyntax: CustomReflectable {
   }
 }
 
+// MARK: - DerivativeRegistrationAttributeArgumentsSyntax
+
+/// 
+/// The arguments for the '@derivative(of:)' attribute: the 'of:' label,
+/// the original declaration name, and an optional differentiation
+/// parameter list.
+/// 
+public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case ofLabel
+    case colon
+    case original
+    case comma
+    case diffParams
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DerivativeRegistrationAttributeArgumentsSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .derivativeRegistrationAttributeArguments else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DerivativeRegistrationAttributeArgumentsSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .derivativeRegistrationAttributeArguments)
+    self._syntaxNode = Syntax(data)
+  }
+
+  /// The "of" label.
+  public var ofLabel: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.ofLabel,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withOfLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `ofLabel` replaced.
+  /// - param newChild: The new `ofLabel` to replace the node's
+  ///                   current `ofLabel`, if present.
+  public func withOfLabel(
+    _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.ofLabel)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
+  /// 
+  /// The colon separating the "of" label and the original
+  /// declaration name.
+  /// 
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
+  /// The referenced original declaration.
+  public var original: FunctionDeclNameSyntax {
+    get {
+      let childData = data.child(at: Cursor.original,
+                                 parent: Syntax(self))
+      return FunctionDeclNameSyntax(childData!)
+    }
+    set(value) {
+      self = withOriginal(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `original` replaced.
+  /// - param newChild: The new `original` to replace the node's
+  ///                   current `original`, if present.
+  public func withOriginal(
+    _ newChild: FunctionDeclNameSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.functionDeclName)
+    let newData = data.replacingChild(raw, at: Cursor.original)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
+  public var comma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.comma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `comma` replaced.
+  /// - param newChild: The new `comma` to replace the node's
+  ///                   current `comma`, if present.
+  public func withComma(
+    _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.comma)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
+  public var diffParams: DifferentiationParamsClauseSyntax? {
+    get {
+      let childData = data.child(at: Cursor.diffParams,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DifferentiationParamsClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withDiffParams(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `diffParams` replaced.
+  /// - param newChild: The new `diffParams` to replace the node's
+  ///                   current `diffParams`, if present.
+  public func withDiffParams(
+    _ newChild: DifferentiationParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.diffParams)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 5)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is FunctionDeclNameSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(FunctionDeclNameSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is DifferentiationParamsClauseSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiationParamsClauseSyntax.self))
+    }
+  }
+}
+
+extension DerivativeRegistrationAttributeArgumentsSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "ofLabel": Syntax(ofLabel).asProtocol(SyntaxProtocol.self),
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "original": Syntax(original).asProtocol(SyntaxProtocol.self),
+      "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "diffParams": diffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - FunctionDeclNameSyntax
 
 /// A function declaration name (e.g. `foo(_:_:)`).

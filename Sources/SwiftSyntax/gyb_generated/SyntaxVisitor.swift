@@ -1522,6 +1522,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `DifferentiableAttributeFuncSpecifierSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiableAttributeFuncSpecifierSyntax) {}
+  /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `DerivativeRegistrationAttributeArgumentsSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {}
   /// Visiting `FunctionDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4040,6 +4050,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDerivativeRegistrationAttributeArgumentsSyntax(_ data: SyntaxData) {
+      let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) {
       let node = FunctionDeclNameSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5247,6 +5268,8 @@ open class SyntaxVisitor {
       visitImplDifferentiationParamSyntax(data)
     case .differentiableAttributeFuncSpecifier:
       visitImplDifferentiableAttributeFuncSpecifierSyntax(data)
+    case .derivativeRegistrationAttributeArguments:
+      visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
     case .functionDeclName:
       visitImplFunctionDeclNameSyntax(data)
     case .continueStmt:

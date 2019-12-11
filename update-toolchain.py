@@ -46,7 +46,7 @@ def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='''
-Build and re-install SwiftSytnax for an existing toolchain.
+Build and re-install SwiftSyntax for an existing toolchain.
 
 This script calls ./build-script internally to rebuild SwiftSyntax using an
 existing toolchain and install the build artifacts back to the toolchain.

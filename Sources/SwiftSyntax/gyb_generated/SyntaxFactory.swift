@@ -2993,11 +2993,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return DifferentiableAttributeFuncSpecifierSyntax(data)
   }
-  public static func makeDerivativeRegistrationAttributeArguments(ofLabel: TokenSyntax, colon: TokenSyntax, original: FunctionDeclNameSyntax, comma: TokenSyntax?, diffParams: DifferentiationParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public static func makeDerivativeRegistrationAttributeArguments(ofLabel: TokenSyntax, colon: TokenSyntax, originalDeclName: QualifiedDeclNameSyntax, comma: TokenSyntax?, diffParams: DifferentiationParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       ofLabel.raw,
       colon.raw,
-      original.raw,
+      originalDeclName.raw,
       comma?.raw,
       diffParams?.raw,
     ]
@@ -3012,11 +3012,34 @@ public enum SyntaxFactory {
       layout: [
       RawSyntax.missingToken(TokenKind.identifier("")),
       RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.functionDeclName),
+      RawSyntax.missing(SyntaxKind.qualifiedDeclName),
       nil,
       nil,
     ], length: .zero, presence: .present))
     return DerivativeRegistrationAttributeArgumentsSyntax(data)
+  }
+  public static func makeQualifiedDeclName(baseType: TypeSyntax?, dot: TokenSyntax?, name: TokenSyntax, arguments: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
+    let layout: [RawSyntax?] = [
+      baseType?.raw,
+      dot?.raw,
+      name.raw,
+      arguments?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.qualifiedDeclName,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return QualifiedDeclNameSyntax(data)
+  }
+
+  public static func makeBlankQualifiedDeclName() -> QualifiedDeclNameSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .qualifiedDeclName,
+      layout: [
+      nil,
+      nil,
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+    ], length: .zero, presence: .present))
+    return QualifiedDeclNameSyntax(data)
   }
   public static func makeFunctionDeclName(name: Syntax, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
     let layout: [RawSyntax?] = [

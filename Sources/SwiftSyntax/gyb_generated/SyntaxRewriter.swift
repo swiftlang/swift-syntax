@@ -1073,6 +1073,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `QualifiedDeclNameSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: QualifiedDeclNameSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `FunctionDeclNameSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3225,6 +3232,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplQualifiedDeclNameSyntax(_ data: SyntaxData) -> Syntax {
+      let node = QualifiedDeclNameSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) -> Syntax {
       let node = FunctionDeclNameSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4355,6 +4372,8 @@ open class SyntaxRewriter {
       return visitImplDifferentiableAttributeFuncSpecifierSyntax(data)
     case .derivativeRegistrationAttributeArguments:
       return visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
+    case .qualifiedDeclName:
+      return visitImplQualifiedDeclNameSyntax(data)
     case .functionDeclName:
       return visitImplFunctionDeclNameSyntax(data)
     case .continueStmt:

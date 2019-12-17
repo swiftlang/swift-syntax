@@ -1114,6 +1114,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: QualifiedDeclNameSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: QualifiedDeclNameSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: FunctionDeclNameSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

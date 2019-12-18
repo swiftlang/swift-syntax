@@ -1532,6 +1532,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `DerivativeRegistrationAttributeArgumentsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {}
+  /// Visiting `QualifiedDeclNameSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: QualifiedDeclNameSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `QualifiedDeclNameSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: QualifiedDeclNameSyntax) {}
   /// Visiting `FunctionDeclNameSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4061,6 +4071,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplQualifiedDeclNameSyntax(_ data: SyntaxData) {
+      let node = QualifiedDeclNameSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionDeclNameSyntax(_ data: SyntaxData) {
       let node = FunctionDeclNameSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5270,6 +5291,8 @@ open class SyntaxVisitor {
       visitImplDifferentiableAttributeFuncSpecifierSyntax(data)
     case .derivativeRegistrationAttributeArguments:
       visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
+    case .qualifiedDeclName:
+      visitImplQualifiedDeclNameSyntax(data)
     case .functionDeclName:
       visitImplFunctionDeclNameSyntax(data)
     case .continueStmt:

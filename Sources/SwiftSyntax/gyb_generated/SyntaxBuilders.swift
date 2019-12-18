@@ -6548,8 +6548,8 @@ public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func useOriginal(_ node: FunctionDeclNameSyntax) {
-    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.original.rawValue
+  public mutating func useOriginalDeclName(_ node: QualifiedDeclNameSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.originalDeclName.rawValue
     layout[idx] = node.raw
   }
 
@@ -6571,7 +6571,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
       layout[1] = RawSyntax.missingToken(TokenKind.colon)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.functionDeclName)
+      layout[2] = RawSyntax.missing(SyntaxKind.qualifiedDeclName)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .derivativeRegistrationAttributeArguments,
@@ -6590,6 +6590,59 @@ extension DerivativeRegistrationAttributeArgumentsSyntax {
   ///            closure.
   public init(_ build: (inout DerivativeRegistrationAttributeArgumentsSyntaxBuilder) -> Void) {
     var builder = DerivativeRegistrationAttributeArgumentsSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct QualifiedDeclNameSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 4)
+
+  internal init() {}
+
+  public mutating func useBaseType(_ node: TypeSyntax) {
+    let idx = QualifiedDeclNameSyntax.Cursor.baseType.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useDot(_ node: TokenSyntax) {
+    let idx = QualifiedDeclNameSyntax.Cursor.dot.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useName(_ node: TokenSyntax) {
+    let idx = QualifiedDeclNameSyntax.Cursor.name.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useArguments(_ node: DeclNameArgumentsSyntax) {
+    let idx = QualifiedDeclNameSyntax.Cursor.arguments.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .qualifiedDeclName,
+      layout: layout, presence: .present))
+  }
+}
+
+extension QualifiedDeclNameSyntax {
+  /// Creates a `QualifiedDeclNameSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `QualifiedDeclNameSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `QualifiedDeclNameSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout QualifiedDeclNameSyntaxBuilder) -> Void) {
+    var builder = QualifiedDeclNameSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
     self.init(data)

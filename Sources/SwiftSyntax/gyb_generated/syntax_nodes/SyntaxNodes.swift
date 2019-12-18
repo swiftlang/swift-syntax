@@ -7401,8 +7401,8 @@ extension DifferentiationParamsSyntax: CustomReflectable {
 // MARK: - DifferentiationParamSyntax
 
 /// 
-/// A differentiation parameter: either the "self" identifier or a
-/// function parameter name.
+/// A differentiation parameter: either the "self" identifier, a function
+/// parameter name, or a function parameter index.
 /// 
 public struct DifferentiationParamSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
@@ -7676,15 +7676,15 @@ extension DifferentiableAttributeFuncSpecifierSyntax: CustomReflectable {
 // MARK: - DerivativeRegistrationAttributeArgumentsSyntax
 
 /// 
-/// The arguments for the '@derivative(of:)' attribute: the 'of:' label,
-/// the original declaration name, and an optional differentiation
-/// parameter list.
+/// The arguments for the '@derivative(of:)' and '@transpose(of:)'
+/// attributes: the 'of:' label, the original declaration name, and an
+/// optional differentiation parameter list.
 /// 
 public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case ofLabel
     case colon
-    case original
+    case originalDeclName
     case comma
     case diffParams
   }
@@ -7753,25 +7753,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
-  /// The referenced original declaration.
-  public var original: FunctionDeclNameSyntax {
+  /// The referenced original declaration name.
+  public var originalDeclName: QualifiedDeclNameSyntax {
     get {
-      let childData = data.child(at: Cursor.original,
+      let childData = data.child(at: Cursor.originalDeclName,
                                  parent: Syntax(self))
-      return FunctionDeclNameSyntax(childData!)
+      return QualifiedDeclNameSyntax(childData!)
     }
     set(value) {
-      self = withOriginal(value)
+      self = withOriginalDeclName(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `original` replaced.
-  /// - param newChild: The new `original` to replace the node's
-  ///                   current `original`, if present.
-  public func withOriginal(
-    _ newChild: FunctionDeclNameSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.functionDeclName)
-    let newData = data.replacingChild(raw, at: Cursor.original)
+  /// Returns a copy of the receiver with its `originalDeclName` replaced.
+  /// - param newChild: The new `originalDeclName` to replace the node's
+  ///                   current `originalDeclName`, if present.
+  public func withOriginalDeclName(
+    _ newChild: QualifiedDeclNameSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.qualifiedDeclName)
+    let newData = data.replacingChild(raw, at: Cursor.originalDeclName)
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
@@ -7841,14 +7841,14 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #2 child is FunctionDeclNameSyntax 
+    // Check child #2 child is QualifiedDeclNameSyntax 
     assert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(FunctionDeclNameSyntax.self))
+      assert(syntaxChild.is(QualifiedDeclNameSyntax.self))
     }
     // Check child #3 child is TokenSyntax or missing
     if let raw = rawChildren[3].raw {
@@ -7874,9 +7874,188 @@ extension DerivativeRegistrationAttributeArgumentsSyntax: CustomReflectable {
     return Mirror(self, children: [
       "ofLabel": Syntax(ofLabel).asProtocol(SyntaxProtocol.self),
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "original": Syntax(original).asProtocol(SyntaxProtocol.self),
+      "originalDeclName": Syntax(originalDeclName).asProtocol(SyntaxProtocol.self),
       "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParams": diffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
+// MARK: - QualifiedDeclNameSyntax
+
+/// 
+/// An optionally qualified function declaration name (e.g. `+(_:_:)`,
+/// `A.B.C.foo(_:_:)`).
+/// 
+public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case baseType
+    case dot
+    case name
+    case arguments
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `QualifiedDeclNameSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .qualifiedDeclName else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `QualifiedDeclNameSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .qualifiedDeclName)
+    self._syntaxNode = Syntax(data)
+  }
+
+  /// 
+  /// The base type of the qualified name, optionally specified.
+  /// 
+  public var baseType: TypeSyntax? {
+    get {
+      let childData = data.child(at: Cursor.baseType,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withBaseType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `baseType` replaced.
+  /// - param newChild: The new `baseType` to replace the node's
+  ///                   current `baseType`, if present.
+  public func withBaseType(
+    _ newChild: TypeSyntax?) -> QualifiedDeclNameSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.baseType)
+    return QualifiedDeclNameSyntax(newData)
+  }
+
+  public var dot: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.dot,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDot(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `dot` replaced.
+  /// - param newChild: The new `dot` to replace the node's
+  ///                   current `dot`, if present.
+  public func withDot(
+    _ newChild: TokenSyntax?) -> QualifiedDeclNameSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.dot)
+    return QualifiedDeclNameSyntax(newData)
+  }
+
+  /// 
+  /// The base name of the referenced function.
+  /// 
+  public var name: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.name,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `name` replaced.
+  /// - param newChild: The new `name` to replace the node's
+  ///                   current `name`, if present.
+  public func withName(
+    _ newChild: TokenSyntax?) -> QualifiedDeclNameSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.name)
+    return QualifiedDeclNameSyntax(newData)
+  }
+
+  /// 
+  /// The argument labels of the referenced function, optionally
+  /// specified.
+  /// 
+  public var arguments: DeclNameArgumentsSyntax? {
+    get {
+      let childData = data.child(at: Cursor.arguments,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return DeclNameArgumentsSyntax(childData!)
+    }
+    set(value) {
+      self = withArguments(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `arguments` replaced.
+  /// - param newChild: The new `arguments` to replace the node's
+  ///                   current `arguments`, if present.
+  public func withArguments(
+    _ newChild: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.arguments)
+    return QualifiedDeclNameSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 4)
+    // Check child #0 child is TypeSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax or missing
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #3 child is DeclNameArgumentsSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DeclNameArgumentsSyntax.self))
+    }
+  }
+}
+
+extension QualifiedDeclNameSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "baseType": baseType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "dot": dot.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
+      "arguments": arguments.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

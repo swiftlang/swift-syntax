@@ -171,6 +171,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case differentiationParam = 237
   case differentiableAttributeFuncSpecifier = 238
   case derivativeRegistrationAttributeArguments = 241
+  case qualifiedDeclName = 242
   case functionDeclName = 239
   case continueStmt = 72
   case whileStmt = 73

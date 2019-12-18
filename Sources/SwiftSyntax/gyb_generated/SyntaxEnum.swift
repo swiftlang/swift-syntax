@@ -171,6 +171,7 @@ public enum SyntaxEnum {
   case differentiationParam(DifferentiationParamSyntax)
   case differentiableAttributeFuncSpecifier(DifferentiableAttributeFuncSpecifierSyntax)
   case derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax)
+  case qualifiedDeclName(QualifiedDeclNameSyntax)
   case functionDeclName(FunctionDeclNameSyntax)
   case continueStmt(ContinueStmtSyntax)
   case whileStmt(WhileStmtSyntax)
@@ -571,6 +572,8 @@ public extension Syntax {
       return .differentiableAttributeFuncSpecifier(DifferentiableAttributeFuncSpecifierSyntax(self)!)
     case .derivativeRegistrationAttributeArguments:
       return .derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax(self)!)
+    case .qualifiedDeclName:
+      return .qualifiedDeclName(QualifiedDeclNameSyntax(self)!)
     case .functionDeclName:
       return .functionDeclName(FunctionDeclNameSyntax(self)!)
     case .continueStmt:

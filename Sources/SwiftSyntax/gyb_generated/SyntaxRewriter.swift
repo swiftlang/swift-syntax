@@ -1213,6 +1213,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `CatchItemListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: CatchItemListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `ConditionElementSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1301,6 +1308,13 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CaseItemSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `CatchItemSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: CatchItemSyntax) -> Syntax {
     return Syntax(visitChildren(node))
   }
 
@@ -3432,6 +3446,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplCatchItemListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = CatchItemListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConditionElementSyntax(_ data: SyntaxData) -> Syntax {
       let node = ConditionElementSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3554,6 +3578,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplCaseItemSyntax(_ data: SyntaxData) -> Syntax {
       let node = CaseItemSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplCatchItemSyntax(_ data: SyntaxData) -> Syntax {
+      let node = CatchItemSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4443,6 +4477,8 @@ open class SyntaxRewriter {
       return visitImplBreakStmtSyntax
     case .caseItemList:
       return visitImplCaseItemListSyntax
+    case .catchItemList:
+      return visitImplCatchItemListSyntax
     case .conditionElement:
       return visitImplConditionElementSyntax
     case .availabilityCondition:
@@ -4469,6 +4505,8 @@ open class SyntaxRewriter {
       return visitImplSwitchDefaultLabelSyntax
     case .caseItem:
       return visitImplCaseItemSyntax
+    case .catchItem:
+      return visitImplCatchItemSyntax
     case .switchCaseLabel:
       return visitImplSwitchCaseLabelSyntax
     case .catchClause:
@@ -4930,6 +4968,8 @@ open class SyntaxRewriter {
       return visitImplBreakStmtSyntax(data)
     case .caseItemList:
       return visitImplCaseItemListSyntax(data)
+    case .catchItemList:
+      return visitImplCatchItemListSyntax(data)
     case .conditionElement:
       return visitImplConditionElementSyntax(data)
     case .availabilityCondition:
@@ -4956,6 +4996,8 @@ open class SyntaxRewriter {
       return visitImplSwitchDefaultLabelSyntax(data)
     case .caseItem:
       return visitImplCaseItemSyntax(data)
+    case .catchItem:
+      return visitImplCatchItemSyntax(data)
     case .switchCaseLabel:
       return visitImplSwitchCaseLabelSyntax(data)
     case .catchClause:

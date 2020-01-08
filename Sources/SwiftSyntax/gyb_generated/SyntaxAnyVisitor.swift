@@ -1254,6 +1254,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: CaseItemListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: CatchItemListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: CatchItemListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1343,6 +1350,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: CaseItemSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: CatchItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: CatchItemSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {

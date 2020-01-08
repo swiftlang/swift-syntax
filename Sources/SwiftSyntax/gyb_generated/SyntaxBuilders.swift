@@ -8186,6 +8186,51 @@ extension CaseItemSyntax {
   }
 }
 
+public struct CatchItemSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func usePattern(_ node: PatternSyntax) {
+    let idx = CatchItemSyntax.Cursor.pattern.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useWhereClause(_ node: WhereClauseSyntax) {
+    let idx = CatchItemSyntax.Cursor.whereClause.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useTrailingComma(_ node: TokenSyntax) {
+    let idx = CatchItemSyntax.Cursor.trailingComma.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .catchItem,
+      layout: layout, presence: .present))
+  }
+}
+
+extension CatchItemSyntax {
+  /// Creates a `CatchItemSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `CatchItemSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `CatchItemSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout CatchItemSyntaxBuilder) -> Void) {
+    var builder = CatchItemSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct SwitchCaseLabelSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 3)
@@ -8248,7 +8293,7 @@ extension SwitchCaseLabelSyntax {
 
 public struct CatchClauseSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+    Array<RawSyntax?>(repeating: nil, count: 3)
 
   internal init() {}
 
@@ -8257,14 +8302,15 @@ public struct CatchClauseSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func usePattern(_ node: PatternSyntax) {
-    let idx = CatchClauseSyntax.Cursor.pattern.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useWhereClause(_ node: WhereClauseSyntax) {
-    let idx = CatchClauseSyntax.Cursor.whereClause.rawValue
-    layout[idx] = node.raw
+  public mutating func addCatchItem(_ elt: CatchItemSyntax) {
+    let idx = CatchClauseSyntax.Cursor.catchItems.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.catchItemList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
   }
 
   public mutating func useBody(_ node: CodeBlockSyntax) {
@@ -8276,8 +8322,8 @@ public struct CatchClauseSyntaxBuilder {
     if (layout[0] == nil) {
       layout[0] = RawSyntax.missingToken(TokenKind.catchKeyword)
     }
-    if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.codeBlock)
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.codeBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .catchClause,

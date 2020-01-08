@@ -191,6 +191,7 @@ public enum SyntaxEnum {
   case fallthroughStmt(FallthroughStmtSyntax)
   case breakStmt(BreakStmtSyntax)
   case caseItemList(CaseItemListSyntax)
+  case catchItemList(CatchItemListSyntax)
   case conditionElement(ConditionElementSyntax)
   case availabilityCondition(AvailabilityConditionSyntax)
   case matchingPatternCondition(MatchingPatternConditionSyntax)
@@ -204,6 +205,7 @@ public enum SyntaxEnum {
   case switchCase(SwitchCaseSyntax)
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   case caseItem(CaseItemSyntax)
+  case catchItem(CatchItemSyntax)
   case switchCaseLabel(SwitchCaseLabelSyntax)
   case catchClause(CatchClauseSyntax)
   case poundAssertStmt(PoundAssertStmtSyntax)
@@ -612,6 +614,8 @@ public extension Syntax {
       return .breakStmt(BreakStmtSyntax(self)!)
     case .caseItemList:
       return .caseItemList(CaseItemListSyntax(self)!)
+    case .catchItemList:
+      return .catchItemList(CatchItemListSyntax(self)!)
     case .conditionElement:
       return .conditionElement(ConditionElementSyntax(self)!)
     case .availabilityCondition:
@@ -638,6 +642,8 @@ public extension Syntax {
       return .switchDefaultLabel(SwitchDefaultLabelSyntax(self)!)
     case .caseItem:
       return .caseItem(CaseItemSyntax(self)!)
+    case .catchItem:
+      return .catchItem(CatchItemSyntax(self)!)
     case .switchCaseLabel:
       return .switchCaseLabel(SwitchCaseLabelSyntax(self)!)
     case .catchClause:

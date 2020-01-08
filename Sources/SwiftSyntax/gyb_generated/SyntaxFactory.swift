@@ -3437,6 +3437,20 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return CaseItemListSyntax(data)
   }
+  public static func makeCatchItemList(
+    _ elements: [CatchItemSyntax]) -> CatchItemListSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItemList,
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return CatchItemListSyntax(data)
+  }
+
+  public static func makeBlankCatchItemList() -> CatchItemListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchItemList,
+      layout: [
+    ], length: .zero, presence: .present))
+    return CatchItemListSyntax(data)
+  }
   public static func makeConditionElement(condition: Syntax, trailingComma: TokenSyntax?) -> ConditionElementSyntax {
     let layout: [RawSyntax?] = [
       condition.raw,
@@ -3701,6 +3715,27 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return CaseItemSyntax(data)
   }
+  public static func makeCatchItem(pattern: PatternSyntax?, whereClause: WhereClauseSyntax?, trailingComma: TokenSyntax?) -> CatchItemSyntax {
+    let layout: [RawSyntax?] = [
+      pattern?.raw,
+      whereClause?.raw,
+      trailingComma?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItem,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return CatchItemSyntax(data)
+  }
+
+  public static func makeBlankCatchItem() -> CatchItemSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchItem,
+      layout: [
+      nil,
+      nil,
+      nil,
+    ], length: .zero, presence: .present))
+    return CatchItemSyntax(data)
+  }
   public static func makeSwitchCaseLabel(caseKeyword: TokenSyntax, caseItems: CaseItemListSyntax, colon: TokenSyntax) -> SwitchCaseLabelSyntax {
     let layout: [RawSyntax?] = [
       caseKeyword.raw,
@@ -3722,11 +3757,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return SwitchCaseLabelSyntax(data)
   }
-  public static func makeCatchClause(catchKeyword: TokenSyntax, pattern: PatternSyntax?, whereClause: WhereClauseSyntax?, body: CodeBlockSyntax) -> CatchClauseSyntax {
+  public static func makeCatchClause(catchKeyword: TokenSyntax, catchItems: CatchItemListSyntax?, body: CodeBlockSyntax) -> CatchClauseSyntax {
     let layout: [RawSyntax?] = [
       catchKeyword.raw,
-      pattern?.raw,
-      whereClause?.raw,
+      catchItems?.raw,
       body.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClause,
@@ -3739,7 +3773,6 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchClause,
       layout: [
       RawSyntax.missingToken(TokenKind.catchKeyword),
-      nil,
       nil,
       RawSyntax.missing(SyntaxKind.codeBlock),
     ], length: .zero, presence: .present))

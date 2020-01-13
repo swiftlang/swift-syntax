@@ -98,6 +98,8 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**Pecker**](https://github.com/woshiccm/Pecker): a tool to detect unused code based on [SwiftSyntax](https://github.com/apple/swift-syntax.git) and [IndexStoreDB](https://github.com/apple/indexstore-db.git).
 
+[**Piranha**](https://github.com/uber/piranha): a tool for refactoring code related to feature flags.
+
 ### Reporting Issues
 
 If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [bugs.swift.org](https://bugs.swift.org) in the [SwiftSyntax component](https://bugs.swift.org/issues/?jql=component%20%3D%20SwiftSyntax).

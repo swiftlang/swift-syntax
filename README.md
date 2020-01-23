@@ -20,7 +20,7 @@ import PackageDescription
 let package = Package(
   name: "MyTool",
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", .exact("<#Specify Release tag#>")),
+    .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .exact("<#Specify Release tag#>")),
   ],
   targets: [
     .target(name: "MyTool", dependencies: ["SwiftSyntax"]),

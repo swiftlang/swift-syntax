@@ -92,7 +92,7 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**BartyCrouch**](https://github.com/Flinesoft/BartyCrouch): a tool to incrementally update strings files to help App localization.
 
-[**Muter**](https://github.com/SeanROlszewski/muter): Automated mutation testing for Swift
+[**Muter**](https://github.com/muter-mutation-testing/muter): Automated mutation testing for Swift
 
 [**Swift Variable Injector**](https://github.com/LucianoPAlmeida/variable-injector): a tool to replace string literals with environment variables values.
 

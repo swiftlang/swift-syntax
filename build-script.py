@@ -20,6 +20,8 @@ WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
 INCR_TRANSFER_ROUNDTRIP_EXEC = \
     WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
 
+GYB_EXEC = os.path.join(WORKSPACE_DIR, 'swift', 'utils', 'gyb')
+
 LIT_EXEC = WORKSPACE_DIR + '/llvm-project/llvm/utils/lit/lit.py'
 
 GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
@@ -448,108 +450,155 @@ def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
 
 
 # -----------------------------------------------------------------------------
+# Arugment Parsing
 
-def main():
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='''
+_DESCRIPTION = """
 Build and test script for SwiftSyntax.
 
 Build SwiftSyntax by generating all necessary files form the corresponding
 .swift.gyb files first. For this, SwiftSyntax needs to be check out alongside
 the main swift repo (http://github.com/apple/swift/) in the following structure
+
 - (containing directory)
   - swift
   - swift-syntax
+
 It is not necessary to build the compiler project.
 
 The build script can also drive the test suite included in the SwiftSyntax
 repo. This requires a custom build of the compiler project since it accesses
 test utilities that are not shipped as part of the toolchains. See the Testing
 section for arguments that need to be specified for this.
-''')
+"""
 
-    default_gyb_exec = WORKSPACE_DIR + '/swift/utils/gyb'
 
-    basic_group = parser.add_argument_group('Basic')
+_SWIFTMODULE_BASE_NAME_HELP = """
+The name under which the Swift module should be installed. A .swiftdoc and
+.swiftmodule file extension will be added to this path and the corresponding
+files will be copied there.
 
-    basic_group.add_argument('--build-dir', default=None, help='''
-        The directory in which build products shall be put. If omitted a
-        directory named '.build' will be put in the swift-syntax directory.
-        ''')
-    basic_group.add_argument('-v', '--verbose', action='store_true', help='''
-        Enable extensive logging of executed steps.
-        ''')
-    basic_group.add_argument('-r', '--release', action='store_true', help='''
-      Build as a release build.
-      ''')
-    basic_group.add_argument('--add-source-locations', action='store_true',
-                             help='''
-      Insert ###sourceLocation comments in generated code for line-directive.
-      ''')
-    basic_group.add_argument('--install', action='store_true',
-                             help='''
-      Install the build artifact to a specified toolchain directory.
-      ''')
-    basic_group.add_argument('--generate-xcodeproj', action='store_true',
-                             help='''
-      Generate an Xcode project for SwiftSyntax.
-      ''')
-    basic_group.add_argument('--xcconfig-path',
-                             help='''
-      The path to an xcconfig file for generating Xcode projct.
-      ''')
-    basic_group.add_argument('--dylib-dir',
-                             help='''
-      The directory to where the .dylib should be installed.
-      ''')
-    basic_group.add_argument('--swiftmodule-base-name',
-                             help='''
-      The name under which the Swift module should be installed. A .swiftdoc
-      and .swiftmodule file extension will be added to this path and the
-      corresponding files will be copied there.
-      Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
-      /path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
-      /path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
-      ''')
-    basic_group.add_argument('--toolchain', help='''
-      The path to the toolchain that shall be used to build SwiftSyntax.
-      ''')
+Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
+/path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
+/path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
+"""
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=_DESCRIPTION)
+
+    # -------------------------------------------------------------------------
+
+    parser.add_argument(
+        '-v', '--verbose',
+        action='store_true',
+        help='Enable verbose logging.')
+
+    # -------------------------------------------------------------------------
+    xcode_project_group = parser.add_argument_group('Xcode Project')
+
+    xcode_project_group.add_argument(
+        '--generate-xcodeproj',
+        action='store_true',
+        help='Generate an Xcode project for SwiftSyntax.')
+
+    xcode_project_group.add_argument(
+        '--xcconfig-path',
+        help='The path to an xcconfig file for generating Xcode projct.')
+
+    # -------------------------------------------------------------------------
     build_group = parser.add_argument_group('Build')
-    build_group.add_argument('--disable-sandbox',
-                             action='store_true',
-                             help='Disable sandboxes when building with '
-                                  'Swift PM')
 
-    build_group.add_argument('--degyb-only',
-                             action='store_true',
-                             help='The script only generates swift files from '
-                                  'gyb and skips the rest of the build')
+    build_group.add_argument(
+        '-r', '--release',
+        action='store_true',
+        help='Build in release mode.')
 
-    build_group.add_argument('--multiroot-data-file',
-                             help='Path to an Xcode workspace to create a '
-                                  'unified build of SwiftSyntax with other '
-                                  'projects.')
+    build_group.add_argument(
+        '--build-dir',
+        default=None,
+        help='The directory in which build products shall be put. If omitted '
+             'a directory named ".build" will be put in the swift-syntax '
+             'directory.')
 
-    testing_group = parser.add_argument_group('Testing')
-    testing_group.add_argument('-t', '--test', action='store_true',
-                               help='Run tests')
+    build_group.add_argument(
+        '--add-source-locations',
+        action='store_true',
+        help='Insert ###sourceLocation comments in generated code for '
+             'line-directive.')
 
-    testing_group.add_argument('--filecheck-exec', default=None, help='''
-      Path to the FileCheck executable that was built as part of the LLVM
-      repository. If not specified, it will be looked up from PATH.
-      ''')
-    testing_group.add_argument('--gyb-exec', default=default_gyb_exec, help='''
-      Path to the gyb tool. (default: '%s').
-      ''' % (default_gyb_exec))
-    testing_group.add_argument('--verify-generated-files', action='store_true',
-                               help='''
-      Instead of generating files using gyb, verify that the files which
-      already exist match the ones that would be generated by this script.
-      ''')
+    build_group.add_argument(
+        '--degyb-only',
+        action='store_true',
+        help='The script only generates swift files from gyb and skips the '
+             'rest of the build')
 
-    args = parser.parse_args(sys.argv[1:])
+    build_group.add_argument(
+        '--disable-sandbox',
+        action='store_true',
+        help='Disable sandboxes when building with SwiftPM')
+
+    build_group.add_argument(
+        '--multiroot-data-file',
+        help='Path to an Xcode workspace to create a unified build of '
+             'SwiftSyntax with other projects.')
+
+    build_group.add_argument(
+        '--toolchain',
+        help='The path to the toolchain that shall be used to build '
+             'SwiftSyntax.')
+
+    # -------------------------------------------------------------------------
+    install_group = parser.add_argument_group('Install')
+
+    install_group.add_argument(
+        '-i', '--install',
+        action='store_true',
+        help='Install the build artifact to a specified toolchain directory.')
+
+    install_group.add_argument(
+        '--dylib-dir',
+        help='The directory to where the .dylib should be installed.')
+
+    install_group.add_argument(
+        '--swiftmodule-base-name',
+        help=_SWIFTMODULE_BASE_NAME_HELP)
+
+    # -------------------------------------------------------------------------
+    test_group = parser.add_argument_group('Test')
+
+    test_group.add_argument(
+        '-t', '--test',
+        action='store_true',
+        help='Run tests')
+
+    test_group.add_argument(
+        '--filecheck-exec',
+        default=None,
+        help='Path to the FileCheck executable that was built as part of the '
+             'LLVM repository. If not specified, it will be looked up from '
+             'PATH.')
+
+    test_group.add_argument(
+        '--gyb-exec',
+        default=GYB_EXEC,
+        help='Path to the gyb tool (default: %(default)s).')
+
+    test_group.add_argument(
+        '--verify-generated-files',
+        action='store_true',
+        help='Instead of generating files using gyb, verify that the files '
+             'which already exist match the ones that would be generated by '
+             'this script.')
+
+    return parser.parse_args()
+
+
+# -----------------------------------------------------------------------------
+
+def main():
+    args = parse_args()
 
     if args.install:
         if not args.dylib_dir:

@@ -1,33 +1,41 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
+
+from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
 import os
+import platform
 import subprocess
 import sys
 import tempfile
-import errno
-import platform
+
+
+# -----------------------------------------------------------------------------
+# Constants
 
 PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
 
 INCR_TRANSFER_ROUNDTRIP_EXEC = \
     WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
+
 LIT_EXEC = WORKSPACE_DIR + '/llvm-project/llvm/utils/lit/lit.py'
+
 GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
 
 BASE_KIND_FILES = {
-  'Decl': 'SyntaxDeclNodes.swift',
-  'Expr': 'SyntaxExprNodes.swift',
-  'Pattern': 'SyntaxPatternNodes.swift',
-  'Stmt': 'SyntaxStmtNodes.swift',
-  'Syntax': 'SyntaxNodes.swift',
-  'Type': 'SyntaxTypeNodes.swift',
+    'Decl': 'SyntaxDeclNodes.swift',
+    'Expr': 'SyntaxExprNodes.swift',
+    'Pattern': 'SyntaxPatternNodes.swift',
+    'Stmt': 'SyntaxStmtNodes.swift',
+    'Syntax': 'SyntaxNodes.swift',
+    'Type': 'SyntaxTypeNodes.swift',
 }
 
-### Generate Xcode project
+
+# -----------------------------------------------------------------------------
+# Xcode Projects Generation
 
 def xcode_gen(config):
     print('** Generate SwiftSyntax as an Xcode project **')
@@ -37,18 +45,23 @@ def xcode_gen(config):
         swiftpm_call.extend(['--xcconfig-overrides', config])
     check_call(swiftpm_call)
 
-### Generic helper functions
+
+# -----------------------------------------------------------------------------
+# Helpers
 
 def printerr(message):
     print(message, file=sys.stderr)
+
 
 def note(message):
     print("--- %s: note: %s" % (os.path.basename(sys.argv[0]), message))
     sys.stdout.flush()
 
+
 def fatal_error(message):
     printerr(message)
     sys.exit(1)
+
 
 def escapeCmdArg(arg):
     if '"' in arg or ' ' in arg:
@@ -70,7 +83,8 @@ def call(cmd, env=os.environ, stdout=None, stderr=subprocess.STDOUT,
 def check_call(cmd, cwd=None, env=os.environ, verbose=False):
     if verbose:
         print(' '.join([escapeCmdArg(arg) for arg in cmd]))
-    return subprocess.check_call(cmd, cwd=cwd, env=env, stderr=subprocess.STDOUT)
+    return subprocess.check_call(
+        cmd, cwd=cwd, env=env, stderr=subprocess.STDOUT)
 
 
 def realpath(path):
@@ -79,9 +93,8 @@ def realpath(path):
     return os.path.realpath(path)
 
 
-### Build phases
-
-## Generating gyb files
+# -----------------------------------------------------------------------------
+# Generating gyb Files
 
 def check_gyb_exec(gyb_exec):
     if not os.path.exists(gyb_exec):
@@ -104,29 +117,31 @@ def check_rsync():
 def generate_single_gyb_file(gyb_exec, gyb_file, output_file_name, destination,
                              temp_files_dir, add_source_locations,
                              additional_gyb_flags, verbose):
-  # Source locations are added by default by gyb, and cleared by passing
-  # `--line-directive=` (nothing following the `=`) to the generator. Our
-  # flag is the reverse; we don't want them by default, only if requested.
-  line_directive_flags = [] if add_source_locations \
-                            else ['--line-directive=']
+    # Source locations are added by default by gyb, and cleared by passing
+    # `--line-directive=` (nothing following the `=`) to the generator. Our
+    # flag is the reverse; we don't want them by default, only if requested.
+    line_directive_flags = (
+        [] if add_source_locations else ['--line-directive='])
 
-  # Generate the new file
-  check_call([gyb_exec] +
-             [gyb_file] +
-             ['-o', temp_files_dir + '/' + output_file_name] +
-             line_directive_flags +
-             additional_gyb_flags,
-             verbose=verbose)
+    # Generate the new file
+    check_call([gyb_exec] +
+               [gyb_file] +
+               ['-o', temp_files_dir + '/' + output_file_name] +
+               line_directive_flags +
+               additional_gyb_flags,
+               verbose=verbose)
 
-  # Copy the file if different from the file already present in
-  # gyb_generated
-  check_call(['rsync'] +
-             ['--checksum'] +
-             [temp_files_dir + '/' + output_file_name] +
-             [destination + '/' + output_file_name],
-             verbose=verbose)
+    # Copy the file if different from the file already present in
+    # gyb_generated
+    check_call(['rsync'] +
+               ['--checksum'] +
+               [temp_files_dir + '/' + output_file_name] +
+               [destination + '/' + output_file_name],
+               verbose=verbose)
 
-def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None):
+
+def generate_gyb_files(gyb_exec, verbose, add_source_locations,
+                       destination=None):
     print('** Generating gyb Files **')
 
     check_gyb_exec(gyb_exec)
@@ -142,26 +157,27 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None
     template_destination = os.path.join(destination, 'syntax_nodes')
 
     if not os.path.exists(temp_files_dir):
-      os.makedirs(temp_files_dir)
+        os.makedirs(temp_files_dir)
     if not os.path.exists(destination):
-      os.makedirs(destination)
+        os.makedirs(destination)
     if not os.path.exists(template_destination):
-      os.makedirs(template_destination)
+        os.makedirs(template_destination)
 
     # Clear any *.swift files that are relics from the previous run.
     for previous_gyb_gen_file in os.listdir(destination):
-      if previous_gyb_gen_file.endswith('.swift'):
-        gyb_file = os.path.join(swiftsyntax_sources_dir,
-                                previous_gyb_gen_file + '.gyb')
-        if not os.path.exists(gyb_file):
-          check_call(['rm', previous_gyb_gen_file], cwd=destination,
-                     verbose=verbose)
+        if previous_gyb_gen_file.endswith('.swift'):
+            gyb_file = os.path.join(swiftsyntax_sources_dir,
+                                    previous_gyb_gen_file + '.gyb')
+            if not os.path.exists(gyb_file):
+                check_call(['rm', previous_gyb_gen_file], cwd=destination,
+                           verbose=verbose)
 
     for previous_gyb_gen_file in os.listdir(template_destination):
-      if previous_gyb_gen_file.endswith('.swift'):
-        if not previous_gyb_gen_file in BASE_KIND_FILES.values():
-          check_call(['rm', previous_gyb_gen_file], cwd=template_destination,
-                     verbose=verbose)
+        if previous_gyb_gen_file.endswith('.swift'):
+            if previous_gyb_gen_file not in BASE_KIND_FILES.values():
+                check_call(['rm', previous_gyb_gen_file],
+                           cwd=template_destination,
+                           verbose=verbose)
 
     # Generate the new .swift files in a temporary directory and only copy them
     # to Sources/SwiftSyntax/gyb_generated if they are different than the files
@@ -190,17 +206,19 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None
                                  template_destination, temp_files_dir,
                                  add_source_locations,
                                  additional_gyb_flags=[
-                                   '-DEMIT_KIND=%s' % base_kind
+                                     '-DEMIT_KIND=%s' % base_kind
                                  ],
                                  verbose=verbose)
 
     print('Done Generating gyb Files')
 
 
-## Building swiftSyntax
+# -----------------------------------------------------------------------------
+# Building SwiftSyntax
 
 def get_installed_dylib_name():
     return 'libSwiftSyntax.dylib'
+
 
 def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file,
                            release):
@@ -209,7 +227,7 @@ def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file,
     swiftpm_call = [swift_exec, action]
     swiftpm_call.extend(['--package-path', PACKAGE_DIR])
     if platform.system() != 'Darwin':
-      swiftpm_call.extend(['--enable-test-discovery'])
+        swiftpm_call.extend(['--enable-test-discovery'])
     if release:
         swiftpm_call.extend(['--configuration', 'release'])
     if build_dir:
@@ -219,33 +237,37 @@ def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file,
 
     return swiftpm_call
 
+
 class Builder(object):
-  def __init__(self, toolchain, build_dir, multiroot_data_file, release,
-               verbose, disable_sandbox=False):
-      self.swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
-                                                 action='build',
-                                                 build_dir=build_dir,
-                                                 multiroot_data_file=multiroot_data_file,
-                                                 release=release)
-      if disable_sandbox:
-          self.swiftpm_call.append('--disable-sandbox')
-      if verbose:
-          self.swiftpm_call.extend(['--verbose'])
-      self.verbose = verbose
+    def __init__(self, toolchain, build_dir, multiroot_data_file, release,
+                 verbose, disable_sandbox=False):
+        self.swiftpm_call = get_swiftpm_invocation(
+            toolchain=toolchain,
+            action='build',
+            build_dir=build_dir,
+            multiroot_data_file=multiroot_data_file,
+            release=release)
+        if disable_sandbox:
+            self.swiftpm_call.append('--disable-sandbox')
+        if verbose:
+            self.swiftpm_call.extend(['--verbose'])
+        self.verbose = verbose
 
-  def build(self, product_name, module_group_path=''):
-      print('** Building ' + product_name + ' **')
-      command = list(self.swiftpm_call)
-      command.extend(['--product', product_name])
+    def build(self, product_name, module_group_path=''):
+        print('** Building ' + product_name + ' **')
+        command = list(self.swiftpm_call)
+        command.extend(['--product', product_name])
 
-      env = dict(os.environ)
-      env['SWIFT_BUILD_SCRIPT_ENVIRONMENT'] = '1'
-      # Tell other projects in the unified build to use local dependencies
-      env['SWIFTCI_USE_LOCAL_DEPS'] = '1'
-      check_call(command, env=env, verbose=self.verbose)
+        env = dict(os.environ)
+        env['SWIFT_BUILD_SCRIPT_ENVIRONMENT'] = '1'
+        # Tell other projects in the unified build to use local dependencies
+        env['SWIFTCI_USE_LOCAL_DEPS'] = '1'
+        check_call(command, env=env, verbose=self.verbose)
 
 
-## Testing
+# -----------------------------------------------------------------------------
+# Testing
+
 def verify_generated_files(gyb_exec, verbose):
     user_generated_dir = os.path.join(PACKAGE_DIR, 'Sources', 'SwiftSyntax',
                                       'gyb_generated')
@@ -256,7 +278,7 @@ def verify_generated_files(gyb_exec, verbose):
 
     command = [
         'diff', '-r',
-        '-x', '.*', # Exclude dot files like .DS_Store
+        '-x', '.*',  # Exclude dot files like .DS_Store
         '--context=0',
         self_generated_dir,
         user_generated_dir,
@@ -286,7 +308,9 @@ def run_tests(toolchain, build_dir, multiroot_data_file, release,
 
     return True
 
-# Lit-based tests
+
+# -----------------------------------------------------------------------------
+# Lit Tests
 
 def check_lit_exec():
     if not os.path.exists(LIT_EXEC):
@@ -352,15 +376,17 @@ def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
     return call(lit_call, verbose=verbose) == 0
 
 
-## XCTest based tests
+# -----------------------------------------------------------------------------
+# XCTest Tests
 
 def run_xctests(toolchain, build_dir, multiroot_data_file, release, verbose):
     print('** Running XCTests **')
-    swiftpm_call = get_swiftpm_invocation(toolchain=toolchain,
-                                          action='test',
-                                          build_dir=build_dir,
-                                          multiroot_data_file=multiroot_data_file,
-                                          release=release)
+    swiftpm_call = get_swiftpm_invocation(
+        toolchain=toolchain,
+        action='test',
+        build_dir=build_dir,
+        multiroot_data_file=multiroot_data_file,
+        release=release)
 
     if verbose:
         swiftpm_call.extend(['--verbose'])
@@ -373,13 +399,15 @@ def run_xctests(toolchain, build_dir, multiroot_data_file, release, verbose):
     env['SWIFTCI_USE_LOCAL_DEPS'] = '1'
     return call(swiftpm_call, env=env, verbose=verbose) == 0
 
+
 def delete_rpath(rpath, binary):
     if platform.system() == 'Darwin':
         cmd = ["install_name_tool", "-delete_rpath", rpath, binary]
         note("removing RPATH from %s: %s" % (binary, ' '.join(cmd)))
-        result = subprocess.call(cmd)
+        subprocess.call(cmd)
     else:
         fatal_error("unable to remove RPATHs on this platform")
+
 
 def change_id_rpath(rpath, binary):
     if platform.system() == 'Darwin':
@@ -391,12 +419,14 @@ def change_id_rpath(rpath, binary):
     else:
         fatal_error("unable to invoke install_name_tool on this platform")
 
+
 def check_and_sync(file_path, install_path):
     cmd = ["rsync", "-a", file_path, install_path]
     note("installing %s: %s" % (os.path.basename(file_path), ' '.join(cmd)))
     result = subprocess.check_call(cmd)
     if result != 0:
         fatal_error("install failed with exit status %d" % (result,))
+
 
 def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
     dylibPath = build_dir + '/libSwiftSyntax.dylib'
@@ -407,16 +437,17 @@ def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
     # we don't wanna hard-code the stdlib dylibs into rpath.
     delete_rpath(stdlib_rpath, dylibPath)
     check_and_sync(file_path=dylibPath,
-                   install_path=dylib_dir+'/'+get_installed_dylib_name())
+                   install_path=dylib_dir + '/' + get_installed_dylib_name())
     # Optionally install .swiftmodule
     if swiftmodule_base_name:
         module_dest = swiftmodule_base_name + '.swiftmodule'
         doc_dest = swiftmodule_base_name + '.swiftdoc'
-        check_and_sync(file_path=modulePath,install_path=module_dest)
-        check_and_sync(file_path=docPath,install_path=doc_dest)
+        check_and_sync(file_path=modulePath, install_path=module_dest)
+        check_and_sync(file_path=docPath, install_path=doc_dest)
     return
 
-### Main
+
+# -----------------------------------------------------------------------------
 
 def main():
     parser = argparse.ArgumentParser(
@@ -474,8 +505,8 @@ section for arguments that need to be specified for this.
       ''')
     basic_group.add_argument('--swiftmodule-base-name',
                              help='''
-      The name under which the Swift module should be installed. A .swiftdoc and
-      .swiftmodule file extension will be added to this path and the
+      The name under which the Swift module should be installed. A .swiftdoc
+      and .swiftmodule file extension will be added to this path and the
       corresponding files will be copied there.
       Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
       /path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
@@ -493,8 +524,8 @@ section for arguments that need to be specified for this.
 
     build_group.add_argument('--degyb-only',
                              action='store_true',
-                             help='The script only generates swift files from gyb '
-                                  'and skips the rest of the build')
+                             help='The script only generates swift files from '
+                                  'gyb and skips the rest of the build')
 
     build_group.add_argument('--multiroot-data-file',
                              help='Path to an Xcode workspace to create a '
@@ -511,7 +542,7 @@ section for arguments that need to be specified for this.
       ''')
     testing_group.add_argument('--gyb-exec', default=default_gyb_exec, help='''
       Path to the gyb tool. (default: '%s').
-      ''' % (default_gyb_exec) )
+      ''' % (default_gyb_exec))
     testing_group.add_argument('--verify-generated-files', action='store_true',
                                help='''
       Instead of generating files using gyb, verify that the files which
@@ -526,11 +557,12 @@ section for arguments that need to be specified for this.
         if not args.build_dir:
             fatal_error('Must specify build directory to copy from')
         if args.release:
-            build_dir=args.build_dir + '/release'
+            build_dir = args.build_dir + '/release'
         else:
             # will this ever happen?
-            build_dir=args.build_dir + '/debug'
-        stdlib_rpath = os.path.join(args.toolchain, 'usr', 'lib', 'swift', 'macosx')
+            build_dir = args.build_dir + '/debug'
+        stdlib_rpath = os.path.join(
+            args.toolchain, 'usr', 'lib', 'swift', 'macosx')
         install(build_dir=build_dir, dylib_dir=args.dylib_dir,
                 swiftmodule_base_name=args.swiftmodule_base_name,
                 stdlib_rpath=stdlib_rpath)
@@ -551,7 +583,8 @@ section for arguments that need to be specified for this.
 
     if args.verify_generated_files:
         try:
-            success = verify_generated_files(args.gyb_exec, verbose=args.verbose)
+            success = verify_generated_files(
+                args.gyb_exec, verbose=args.verbose)
         except subprocess.CalledProcessError as e:
             printerr('FAIL: Gyb-generated files committed to repository do '
                      'not match generated ones. Please re-generate the '
@@ -573,7 +606,7 @@ section for arguments that need to be specified for this.
 
         # Only build lit-test-helper if we are planning to run tests
         if args.test:
-          builder.build('lit-test-helper')
+            builder.build('lit-test-helper')
     except subprocess.CalledProcessError as e:
         printerr('FAIL: Building SwiftSyntax failed')
         printerr('Executing: %s' % ' '.join(e.cmd))

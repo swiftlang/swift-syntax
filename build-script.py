@@ -15,16 +15,22 @@ import tempfile
 # Constants
 
 PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
-WORKSPACE_DIR = os.path.realpath(PACKAGE_DIR + '/..')
+WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
 
-INCR_TRANSFER_ROUNDTRIP_EXEC = \
-    WORKSPACE_DIR + '/swift/utils/incrparse/incr_transfer_round_trip.py'
+LLVM_DIR = os.path.join(WORKSPACE_DIR, 'llvm-project', 'llvm')
+SWIFT_DIR = os.path.join(WORKSPACE_DIR, 'swift')
 
-GYB_EXEC = os.path.join(WORKSPACE_DIR, 'swift', 'utils', 'gyb')
+INCR_TRANSFER_ROUNDTRIP_EXEC = os.path.join(
+    SWIFT_DIR, 'utils', 'incrparse', 'incr_transfer_round_trip.py')
 
-LIT_EXEC = WORKSPACE_DIR + '/llvm-project/llvm/utils/lit/lit.py'
+GYB_EXEC = os.path.join(
+    SWIFT_DIR, 'utils', 'gyb')
 
-GROUP_INFO_PATH = PACKAGE_DIR + '/utils/group.json'
+LIT_EXEC = os.path.join(
+    LLVM_DIR, 'utils', 'lit', 'lit.py')
+
+GROUP_INFO_PATH = os.path.join(
+    PACKAGE_DIR, 'utils', 'group.json')
 
 BASE_KIND_FILES = {
     'Decl': 'SyntaxDeclNodes.swift',
@@ -126,20 +132,24 @@ def generate_single_gyb_file(gyb_exec, gyb_file, output_file_name, destination,
         [] if add_source_locations else ['--line-directive='])
 
     # Generate the new file
-    check_call([gyb_exec] +
-               [gyb_file] +
-               ['-o', temp_files_dir + '/' + output_file_name] +
-               line_directive_flags +
-               additional_gyb_flags,
-               verbose=verbose)
+    gyb_command = [
+        gyb_exec, gyb_file,
+        '-o', os.path.join(temp_files_dir, output_file_name),
+    ]
+    gyb_command += line_directive_flags
+    gyb_command += additional_gyb_flags
+
+    check_call(gyb_command, verbose=verbose)
 
     # Copy the file if different from the file already present in
     # gyb_generated
-    check_call(['rsync'] +
-               ['--checksum'] +
-               [temp_files_dir + '/' + output_file_name] +
-               [destination + '/' + output_file_name],
-               verbose=verbose)
+    rsync_command = [
+        'rsync', '--checksum',
+        os.path.join(temp_files_dir, output_file_name),
+        os.path.join(destination, output_file_name),
+    ]
+
+    check_call(rsync_command, verbose=verbose)
 
 
 def generate_gyb_files(gyb_exec, verbose, add_source_locations,
@@ -149,8 +159,8 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations,
     check_gyb_exec(gyb_exec)
     check_rsync()
 
-    swiftsyntax_sources_dir = os.path.join(PACKAGE_DIR, 'Sources',
-                                           'SwiftSyntax')
+    swiftsyntax_sources_dir = os.path.join(
+        PACKAGE_DIR, 'Sources', 'SwiftSyntax')
     temp_files_dir = tempfile.gettempdir()
 
     if destination is None:
@@ -189,11 +199,13 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations,
         if not gyb_file.endswith('.gyb'):
             continue
 
+        gyb_file_path = os.path.join(swiftsyntax_sources_dir, gyb_file)
+
         # Slice off the '.gyb' to get the name for the output file
         output_file_name = gyb_file[:-4]
 
         generate_single_gyb_file(gyb_exec,
-                                 swiftsyntax_sources_dir + '/' + gyb_file,
+                                 gyb_file_path,
                                  output_file_name, destination,
                                  temp_files_dir, add_source_locations,
                                  additional_gyb_flags=[],
@@ -202,7 +214,8 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations,
     for base_kind in BASE_KIND_FILES:
         output_file_name = BASE_KIND_FILES[base_kind]
 
-        gyb_file = swiftsyntax_sources_dir + '/SyntaxNodes.swift.gyb.template'
+        gyb_file = os.path.join(
+            swiftsyntax_sources_dir, 'SyntaxNodes.swift.gyb.template')
 
         generate_single_gyb_file(gyb_exec, gyb_file, output_file_name,
                                  template_destination, temp_files_dir,
@@ -271,8 +284,9 @@ class Builder(object):
 # Testing
 
 def verify_generated_files(gyb_exec, verbose):
-    user_generated_dir = os.path.join(PACKAGE_DIR, 'Sources', 'SwiftSyntax',
-                                      'gyb_generated')
+    user_generated_dir = os.path.join(
+        PACKAGE_DIR, 'Sources', 'SwiftSyntax', 'gyb_generated')
+
     self_generated_dir = tempfile.mkdtemp()
     generate_gyb_files(gyb_exec, verbose=verbose,
                        add_source_locations=False,
@@ -346,7 +360,7 @@ def find_lit_test_helper_exec(toolchain, build_dir, release):
     swiftpm_call.extend(['--show-bin-path'])
 
     bin_dir = subprocess.check_output(swiftpm_call, stderr=subprocess.STDOUT)
-    return bin_dir.strip() + '/lit-test-helper'
+    return os.path.join(bin_dir.strip(), 'lit-test-helper')
 
 
 def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
@@ -361,7 +375,7 @@ def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
                                   release=release)
 
     lit_call = [LIT_EXEC]
-    lit_call.extend([PACKAGE_DIR + '/lit_tests'])
+    lit_call.append(os.path.join(PACKAGE_DIR, 'lit_tests'))
 
     if filecheck_exec:
         lit_call.extend(['--param', 'FILECHECK=' + filecheck_exec])
@@ -431,22 +445,26 @@ def check_and_sync(file_path, install_path):
 
 
 def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
-    dylibPath = build_dir + '/libSwiftSyntax.dylib'
-    modulePath = build_dir + '/SwiftSyntax.swiftmodule'
-    docPath = build_dir + '/SwiftSyntax.swiftdoc'
+    dylib_name = get_installed_dylib_name()
+
+    dylib_path = os.path.join(build_dir, dylib_name)
+    module_path = os.path.join(build_dir, 'SwiftSyntax.swiftmodule')
+    doc_path = os.path.join(build_dir, 'SwiftSyntax.swiftdoc')
+
     # users should find the dylib as if it's a part of stdlib.
-    change_id_rpath('@rpath/' + get_installed_dylib_name(), dylibPath)
+    change_id_rpath(os.path.join('@rpath', dylib_name), dylib_path)
+
     # we don't wanna hard-code the stdlib dylibs into rpath.
-    delete_rpath(stdlib_rpath, dylibPath)
-    check_and_sync(file_path=dylibPath,
-                   install_path=dylib_dir + '/' + get_installed_dylib_name())
+    delete_rpath(stdlib_rpath, dylib_path)
+    check_and_sync(file_path=dylib_path,
+                   install_path=os.path.join(dylib_dir, dylib_name))
+
     # Optionally install .swiftmodule
     if swiftmodule_base_name:
         module_dest = swiftmodule_base_name + '.swiftmodule'
         doc_dest = swiftmodule_base_name + '.swiftdoc'
-        check_and_sync(file_path=modulePath, install_path=module_dest)
-        check_and_sync(file_path=docPath, install_path=doc_dest)
-    return
+        check_and_sync(file_path=module_path, install_path=module_dest)
+        check_and_sync(file_path=doc_path, install_path=doc_dest)
 
 
 # -----------------------------------------------------------------------------
@@ -606,10 +624,10 @@ def main():
         if not args.build_dir:
             fatal_error('Must specify build directory to copy from')
         if args.release:
-            build_dir = args.build_dir + '/release'
+            build_dir = os.path.join(args.build_dir, 'release')
         else:
             # will this ever happen?
-            build_dir = args.build_dir + '/debug'
+            build_dir = os.path.join(args.build_dir, 'debug')
         stdlib_rpath = os.path.join(
             args.toolchain, 'usr', 'lib', 'swift', 'macosx')
         install(build_dir=build_dir, dylib_dir=args.dylib_dir,

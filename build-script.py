@@ -639,9 +639,6 @@ def main():
         if not args.verify_generated_files:
             generate_gyb_files(args.gyb_exec, verbose=args.verbose,
                                add_source_locations=args.add_source_locations)
-        # Skip the rest of the build if we should perform degyb only
-        if args.degyb_only:
-            sys.exit(0)
     except subprocess.CalledProcessError as e:
         printerr('FAIL: Generating .gyb files failed')
         printerr('Executing: %s' % ' '.join(e.cmd))
@@ -657,6 +654,10 @@ def main():
                      'not match generated ones. Please re-generate the '
                      'gyb-files and recommit them.')
             sys.exit(1)
+
+    # Skip the rest of the build if we should perform degyb only
+    if args.degyb_only:
+        sys.exit(0)
 
     if args.generate_xcodeproj:
         xcode_gen(config=args.xcconfig_path)

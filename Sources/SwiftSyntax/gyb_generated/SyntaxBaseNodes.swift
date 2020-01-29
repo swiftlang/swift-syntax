@@ -38,11 +38,18 @@ public extension Syntax {
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  /// Create a `DeclSyntax` node from a specialized syntax node.
   public init<S: DeclSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
     self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `DeclSyntax` node from a specialized optional syntax node.
+  public init?<S: DeclSyntaxProtocol>(_ syntax: S?) {
+    guard let syntax = syntax else { return nil }
+    self.init(syntax)
   }
 
   /// Converts the given `Syntax` node to a `DeclSyntax` if possible. Returns
@@ -135,11 +142,18 @@ public extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  /// Create a `ExprSyntax` node from a specialized syntax node.
   public init<S: ExprSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
     self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `ExprSyntax` node from a specialized optional syntax node.
+  public init?<S: ExprSyntaxProtocol>(_ syntax: S?) {
+    guard let syntax = syntax else { return nil }
+    self.init(syntax)
   }
 
   /// Converts the given `Syntax` node to a `ExprSyntax` if possible. Returns
@@ -232,11 +246,18 @@ public extension Syntax {
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  /// Create a `StmtSyntax` node from a specialized syntax node.
   public init<S: StmtSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
     self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `StmtSyntax` node from a specialized optional syntax node.
+  public init?<S: StmtSyntaxProtocol>(_ syntax: S?) {
+    guard let syntax = syntax else { return nil }
+    self.init(syntax)
   }
 
   /// Converts the given `Syntax` node to a `StmtSyntax` if possible. Returns
@@ -329,11 +350,18 @@ public extension Syntax {
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  /// Create a `TypeSyntax` node from a specialized syntax node.
   public init<S: TypeSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
     self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `TypeSyntax` node from a specialized optional syntax node.
+  public init?<S: TypeSyntaxProtocol>(_ syntax: S?) {
+    guard let syntax = syntax else { return nil }
+    self.init(syntax)
   }
 
   /// Converts the given `Syntax` node to a `TypeSyntax` if possible. Returns
@@ -426,11 +454,18 @@ public extension Syntax {
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
+  /// Create a `PatternSyntax` node from a specialized syntax node.
   public init<S: PatternSyntaxProtocol>(_ syntax: S) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
     self.init(syntax._syntaxNode.data)
+  }
+
+  /// Create a `PatternSyntax` node from a specialized optional syntax node.
+  public init?<S: PatternSyntaxProtocol>(_ syntax: S?) {
+    guard let syntax = syntax else { return nil }
+    self.init(syntax)
   }
 
   /// Converts the given `Syntax` node to a `PatternSyntax` if possible. Returns

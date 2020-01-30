@@ -94,4 +94,19 @@ public class SyntaxVisitorTests: XCTestCase {
       XCTAssertEqual(hashBefore, parsed.hashValue)
     }())
   }
+
+  public func testRewriteTrivia() {
+    class TriviaRemover: SyntaxRewriter {
+      override func visit(_ token: TokenSyntax) -> Syntax {
+        return Syntax(token.withTrailingTrivia(.zero))
+      }
+    }
+
+    XCTAssertNoThrow(try {
+      let parsed = try SyntaxParser.parse(source: "let a = 5")
+      let visitor = TriviaRemover()
+      let rewritten = visitor.visit(parsed)
+      XCTAssertEqual(rewritten.description, "leta=5")
+    }())
+  }
 }

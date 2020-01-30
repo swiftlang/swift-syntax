@@ -119,5 +119,8 @@ public class SyntaxTests: XCTestCase {
     case .integerLiteralExpr: break
     default: XCTFail("failed to convert to SyntaxEnum")
     }
+
+    XCTAssertNil(ExprSyntax(nil as IntegerLiteralExprSyntax?))
+    XCTAssertEqual(ExprSyntax(integerExpr).as(IntegerLiteralExprSyntax.self)!, integerExpr)
   }
 }

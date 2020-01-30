@@ -188,8 +188,10 @@ struct AbsoluteRawSyntax {
     return nil
   }
 
-  func replacingSelf(_ newRaw: RawSyntax) -> AbsoluteRawSyntax {
-    return .init(raw: newRaw, info: info)
+  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt32) -> AbsoluteRawSyntax {
+    let nodeId = SyntaxIdentifier(rootId: newRootId, indexInTree: info.nodeId.indexInTree)
+    let newInfo = AbsoluteSyntaxInfo(position: info.position, nodeId: nodeId)
+    return .init(raw: newRaw, info: newInfo)
   }
 
   static func forRoot(_ raw: RawSyntax) -> AbsoluteRawSyntax {
@@ -334,7 +336,7 @@ struct SyntaxData {
     if let parent = parent {
       let parentData = parent.data.replacingChild(newRaw, at: indexInParent)
       let newParent = Syntax(parentData)
-      return SyntaxData(absoluteRaw.replacingSelf(newRaw), parent: newParent)
+      return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {
       // Otherwise, we're already the root, so return the new root data.
       return .forRoot(newRaw)

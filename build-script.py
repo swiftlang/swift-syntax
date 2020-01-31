@@ -563,7 +563,7 @@ def parse_args():
              'SwiftSyntax with other projects.')
 
     build_group.add_argument(
-        '--toolchain',
+        '--toolchain', required=True,
         help='The path to the toolchain that shall be used to build '
              'SwiftSyntax.')
 

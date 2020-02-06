@@ -82,7 +82,11 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**Swift AST Explorer**](https://swift-ast-explorer.kishikawakatsumi.com/): a Swift AST visualizer.
 
+[**swift-format**](https://github.com/apple/swift-format): formatting technology for Swift source code.
+
 [**Swift Stress Tester**](https://github.com/apple/swift-stress-tester): a test driver for sourcekitd and Swift evolution.
+
+[**SwiftSemantics**](https://github.com/SwiftDocOrg/SwiftSemantics): parses Swift code into its constituent declarations.
 
 [**SwiftRewriter**](https://github.com/inamiy/SwiftRewriter): a Swift code formatter.
 

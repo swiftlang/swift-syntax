@@ -216,6 +216,7 @@ extension DictionaryElementSyntax: WithTrailingCommaSyntax {}
 extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {}
 extension ClosureParamSyntax: WithTrailingCommaSyntax {}
 extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {}
+extension MultipleTrailingClosureClauseSyntax: BracedSyntax {}
 extension ExpressionSegmentSyntax: ParenthesizedSyntax {}
 extension ObjcKeyPathExprSyntax: ParenthesizedSyntax {}
 extension ObjcSelectorExprSyntax: ParenthesizedSyntax {}

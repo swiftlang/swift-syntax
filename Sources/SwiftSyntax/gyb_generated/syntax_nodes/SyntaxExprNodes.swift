@@ -3228,12 +3228,12 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return FunctionCallExprSyntax(newData)
   }
 
-  public var trailingClosure: ClosureExprSyntax? {
+  public var trailingClosure: Syntax? {
     get {
       let childData = data.child(at: Cursor.trailingClosure,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return ClosureExprSyntax(childData!)
+      return Syntax(childData!)
     }
     set(value) {
       self = withTrailingClosure(value)
@@ -3244,7 +3244,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `trailingClosure` to replace the node's
   ///                   current `trailingClosure`, if present.
   public func withTrailingClosure(
-    _ newChild: ClosureExprSyntax?) -> FunctionCallExprSyntax {
+    _ newChild: Syntax?) -> FunctionCallExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.trailingClosure)
     return FunctionCallExprSyntax(newData)
@@ -3288,13 +3288,13 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is ClosureExprSyntax or missing
+    // Check child #4 child is Syntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ClosureExprSyntax.self))
+      assert(syntaxChild.is(Syntax.self))
     }
   }
 }
@@ -3442,12 +3442,12 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return SubscriptExprSyntax(newData)
   }
 
-  public var trailingClosure: ClosureExprSyntax? {
+  public var trailingClosure: Syntax? {
     get {
       let childData = data.child(at: Cursor.trailingClosure,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return ClosureExprSyntax(childData!)
+      return Syntax(childData!)
     }
     set(value) {
       self = withTrailingClosure(value)
@@ -3458,7 +3458,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `trailingClosure` to replace the node's
   ///                   current `trailingClosure`, if present.
   public func withTrailingClosure(
-    _ newChild: ClosureExprSyntax?) -> SubscriptExprSyntax {
+    _ newChild: Syntax?) -> SubscriptExprSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.trailingClosure)
     return SubscriptExprSyntax(newData)
@@ -3504,13 +3504,13 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is ClosureExprSyntax or missing
+    // Check child #4 child is Syntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ClosureExprSyntax.self))
+      assert(syntaxChild.is(Syntax.self))
     }
   }
 }

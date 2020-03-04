@@ -1987,6 +1987,120 @@ extension UnresolvedPatternExprSyntax {
   }
 }
 
+public struct MultipleTrailingClosureElementSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func useLabel(_ node: TokenSyntax) {
+    let idx = MultipleTrailingClosureElementSyntax.Cursor.label.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = MultipleTrailingClosureElementSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useClosure(_ node: ClosureExprSyntax) {
+    let idx = MultipleTrailingClosureElementSyntax.Cursor.closure.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.closureExpr)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .multipleTrailingClosureElement,
+      layout: layout, presence: .present))
+  }
+}
+
+extension MultipleTrailingClosureElementSyntax {
+  /// Creates a `MultipleTrailingClosureElementSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `MultipleTrailingClosureElementSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `MultipleTrailingClosureElementSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout MultipleTrailingClosureElementSyntaxBuilder) -> Void) {
+    var builder = MultipleTrailingClosureElementSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct MultipleTrailingClosureClauseSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func useLeftBrace(_ node: TokenSyntax) {
+    let idx = MultipleTrailingClosureClauseSyntax.Cursor.leftBrace.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func addElement(_ elt: MultipleTrailingClosureElementSyntax) {
+    let idx = MultipleTrailingClosureClauseSyntax.Cursor.elements.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func useRightBrace(_ node: TokenSyntax) {
+    let idx = MultipleTrailingClosureClauseSyntax.Cursor.rightBrace.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.leftBrace)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missing(SyntaxKind.multipleTrailingClosureElementList)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.rightBrace)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .multipleTrailingClosureClause,
+      layout: layout, presence: .present))
+  }
+}
+
+extension MultipleTrailingClosureClauseSyntax {
+  /// Creates a `MultipleTrailingClosureClauseSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `MultipleTrailingClosureClauseSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `MultipleTrailingClosureClauseSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout MultipleTrailingClosureClauseSyntaxBuilder) -> Void) {
+    var builder = MultipleTrailingClosureClauseSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct FunctionCallExprSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 5)
@@ -2019,7 +2133,7 @@ public struct FunctionCallExprSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func useTrailingClosure(_ node: ClosureExprSyntax) {
+  public mutating func useTrailingClosure(_ node: Syntax) {
     let idx = FunctionCallExprSyntax.Cursor.trailingClosure.rawValue
     layout[idx] = node.raw
   }
@@ -2086,7 +2200,7 @@ public struct SubscriptExprSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func useTrailingClosure(_ node: ClosureExprSyntax) {
+  public mutating func useTrailingClosure(_ node: Syntax) {
     let idx = SubscriptExprSyntax.Cursor.trailingClosure.rawValue
     layout[idx] = node.raw
   }

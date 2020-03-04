@@ -456,6 +456,27 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: UnresolvedPatternExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: MultipleTrailingClosureElementSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MultipleTrailingClosureElementSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MultipleTrailingClosureElementListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MultipleTrailingClosureClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MultipleTrailingClosureClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

@@ -77,6 +77,9 @@ public enum SyntaxEnum {
   case closureSignature(ClosureSignatureSyntax)
   case closureExpr(ClosureExprSyntax)
   case unresolvedPatternExpr(UnresolvedPatternExprSyntax)
+  case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
+  case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
+  case multipleTrailingClosureClause(MultipleTrailingClosureClauseSyntax)
   case functionCallExpr(FunctionCallExprSyntax)
   case subscriptExpr(SubscriptExprSyntax)
   case optionalChainingExpr(OptionalChainingExprSyntax)
@@ -384,6 +387,12 @@ public extension Syntax {
       return .closureExpr(ClosureExprSyntax(self)!)
     case .unresolvedPatternExpr:
       return .unresolvedPatternExpr(UnresolvedPatternExprSyntax(self)!)
+    case .multipleTrailingClosureElement:
+      return .multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax(self)!)
+    case .multipleTrailingClosureElementList:
+      return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
+    case .multipleTrailingClosureClause:
+      return .multipleTrailingClosureClause(MultipleTrailingClosureClauseSyntax(self)!)
     case .functionCallExpr:
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
     case .subscriptExpr:

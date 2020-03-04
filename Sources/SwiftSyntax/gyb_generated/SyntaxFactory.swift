@@ -1023,7 +1023,63 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return UnresolvedPatternExprSyntax(data)
   }
-  public static func makeFunctionCallExpr(calledExpression: ExprSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax, rightParen: TokenSyntax?, trailingClosure: ClosureExprSyntax?) -> FunctionCallExprSyntax {
+  public static func makeMultipleTrailingClosureElement(label: TokenSyntax, colon: TokenSyntax, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
+    let layout: [RawSyntax?] = [
+      label.raw,
+      colon.raw,
+      closure.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MultipleTrailingClosureElementSyntax(data)
+  }
+
+  public static func makeBlankMultipleTrailingClosureElement() -> MultipleTrailingClosureElementSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureElement,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.closureExpr),
+    ], length: .zero, presence: .present))
+    return MultipleTrailingClosureElementSyntax(data)
+  }
+  public static func makeMultipleTrailingClosureElementList(
+    _ elements: [MultipleTrailingClosureElementSyntax]) -> MultipleTrailingClosureElementListSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElementList,
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MultipleTrailingClosureElementListSyntax(data)
+  }
+
+  public static func makeBlankMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureElementList,
+      layout: [
+    ], length: .zero, presence: .present))
+    return MultipleTrailingClosureElementListSyntax(data)
+  }
+  public static func makeMultipleTrailingClosureClause(leftBrace: TokenSyntax, elements: MultipleTrailingClosureElementListSyntax, rightBrace: TokenSyntax) -> MultipleTrailingClosureClauseSyntax {
+    let layout: [RawSyntax?] = [
+      leftBrace.raw,
+      elements.raw,
+      rightBrace.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureClause,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MultipleTrailingClosureClauseSyntax(data)
+  }
+
+  public static func makeBlankMultipleTrailingClosureClause() -> MultipleTrailingClosureClauseSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureClause,
+      layout: [
+      RawSyntax.missingToken(TokenKind.leftBrace),
+      RawSyntax.missing(SyntaxKind.multipleTrailingClosureElementList),
+      RawSyntax.missingToken(TokenKind.rightBrace),
+    ], length: .zero, presence: .present))
+    return MultipleTrailingClosureClauseSyntax(data)
+  }
+  public static func makeFunctionCallExpr(calledExpression: ExprSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax, rightParen: TokenSyntax?, trailingClosure: Syntax?) -> FunctionCallExprSyntax {
     let layout: [RawSyntax?] = [
       calledExpression.raw,
       leftParen?.raw,
@@ -1048,7 +1104,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return FunctionCallExprSyntax(data)
   }
-  public static func makeSubscriptExpr(calledExpression: ExprSyntax, leftBracket: TokenSyntax, argumentList: TupleExprElementListSyntax, rightBracket: TokenSyntax, trailingClosure: ClosureExprSyntax?) -> SubscriptExprSyntax {
+  public static func makeSubscriptExpr(calledExpression: ExprSyntax, leftBracket: TokenSyntax, argumentList: TupleExprElementListSyntax, rightBracket: TokenSyntax, trailingClosure: Syntax?) -> SubscriptExprSyntax {
     let layout: [RawSyntax?] = [
       calledExpression.raw,
       leftBracket.raw,

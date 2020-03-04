@@ -77,6 +77,9 @@ internal enum SyntaxKind: CSyntaxKind {
   case closureSignature = 103
   case closureExpr = 56
   case unresolvedPatternExpr = 57
+  case multipleTrailingClosureElement = 245
+  case multipleTrailingClosureElementList = 244
+  case multipleTrailingClosureClause = 243
   case functionCallExpr = 58
   case subscriptExpr = 59
   case optionalChainingExpr = 60
@@ -264,6 +267,7 @@ internal enum SyntaxKind: CSyntaxKind {
     case .exprList: return true
     case .closureCaptureItemList: return true
     case .closureParamList: return true
+    case .multipleTrailingClosureElementList: return true
     case .objcName: return true
     case .functionParameterList: return true
     case .ifConfigClauseList: return true

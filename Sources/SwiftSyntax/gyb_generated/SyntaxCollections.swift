@@ -2223,6 +2223,251 @@ extension ClosureParamListSyntax: BidirectionalCollection {
   }
 }
 
+/// `MultipleTrailingClosureElementListSyntax` represents a collection of one or more
+/// `MultipleTrailingClosureElementSyntax` nodes. MultipleTrailingClosureElementListSyntax behaves
+/// as a regular Swift collection, and has accessors that return new
+/// versions of the collection with different children.
+public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MultipleTrailingClosureElementListSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .multipleTrailingClosureElementList else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a Syntax node from the provided root and data. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .multipleTrailingClosureElementList)
+    self._syntaxNode = Syntax(data)
+  }
+
+  /// The number of elements, `present` or `missing`, in this collection.
+  public var count: Int { return raw.numberOfChildren }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the underlying layout with
+  /// a different set of raw syntax nodes.
+  ///
+  /// - Parameter layout: The new list of raw syntax nodes underlying this
+  ///                     collection.
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
+  internal func replacingLayout(
+    _ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
+    let newRaw = data.raw.replacingLayout(layout)
+    let newData = data.replacingSelf(newRaw)
+    return MultipleTrailingClosureElementListSyntax(newData)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by appending the provided syntax element
+  /// to the children.
+  ///
+  /// - Parameter syntax: The element to append.
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element appended to the end.
+  public func appending(
+    _ syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.append(syntax.raw)
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by prepending the provided syntax element
+  /// to the children.
+  ///
+  /// - Parameter syntax: The element to prepend.
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element prepended to the
+  ///            beginning.
+  public func prepending(
+    _ syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementListSyntax {
+    return inserting(syntax, at: 0)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by inserting the provided syntax element
+  /// at the provided index in the children.
+  ///
+  /// - Parameters:
+  ///   - syntax: The element to insert.
+  ///   - index: The index at which to insert the element in the collection.
+  ///
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element appended to the end.
+  public func inserting(_ syntax: MultipleTrailingClosureElementSyntax,
+                        at index: Int) -> MultipleTrailingClosureElementListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    /// Make sure the index is a valid insertion index (0 to 1 past the end)
+    precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
+    newLayout.insert(syntax.raw, at: index)
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the syntax element
+  /// at the provided index.
+  ///
+  /// - Parameters:
+  ///   - index: The index at which to replace the element in the collection.
+  ///   - syntax: The element to replace with.
+  ///
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new element at the provided index.
+  public func replacing(childAt index: Int,
+                        with syntax: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    /// Make sure the index is a valid index for replacing
+    precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
+    newLayout[index] = syntax.raw
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by removing the syntax element at the
+  /// provided index.
+  ///
+  /// - Parameter index: The index of the element to remove from the collection.
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the element at the provided index
+  ///            removed.
+  public func removing(childAt index: Int) -> MultipleTrailingClosureElementListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.remove(at: index)
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by removing the first element.
+  ///
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the first element removed.
+  public func removingFirst() -> MultipleTrailingClosureElementListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.removeFirst()
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `MultipleTrailingClosureElementListSyntax` by removing the last element.
+  ///
+  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the last element removed.
+  public func removingLast() -> MultipleTrailingClosureElementListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.removeLast()
+    return replacingLayout(newLayout)
+  }
+
+  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its leading trivia replaced
+  /// by the provided trivia.
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> MultipleTrailingClosureElementListSyntax {
+    return MultipleTrailingClosureElementListSyntax(data.withLeadingTrivia(leadingTrivia))
+  }
+
+  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its trailing trivia replaced
+  /// by the provided trivia.
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> MultipleTrailingClosureElementListSyntax {
+    return MultipleTrailingClosureElementListSyntax(data.withTrailingTrivia(trailingTrivia))
+  }
+
+  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> MultipleTrailingClosureElementListSyntax {
+    return withLeadingTrivia([])
+  }
+
+  /// Returns a new `MultipleTrailingClosureElementListSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> MultipleTrailingClosureElementListSyntax {
+    return withTrailingTrivia([])
+  }
+
+  /// Returns a new `MultipleTrailingClosureElementListSyntax` with all trivia removed.
+  public func withoutTrivia() -> MultipleTrailingClosureElementListSyntax {
+    return withoutLeadingTrivia().withoutTrailingTrivia()
+  }
+
+  /// The leading trivia (spaces, newlines, etc.) associated with this `MultipleTrailingClosureElementListSyntax`.
+  public var leadingTrivia: Trivia? {
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
+  }
+
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `MultipleTrailingClosureElementListSyntax`.
+  public var trailingTrivia: Trivia? {
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(MultipleTrailingClosureElementSyntax.self)
+    })
+  }
+}
+
+/// Conformance for `MultipleTrailingClosureElementListSyntax` to the `BidirectionalCollection` protocol.
+extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
+  public typealias Element = MultipleTrailingClosureElementSyntax
+  public typealias Index = SyntaxChildrenIndex
+
+  public struct Iterator: IteratorProtocol {
+    private let parent: Syntax
+    private var iterator: RawSyntaxChildren.Iterator
+
+    init(parent: Syntax, rawChildren: RawSyntaxChildren) {
+      self.parent = parent
+      self.iterator = rawChildren.makeIterator()
+    }
+
+    public mutating func next() -> MultipleTrailingClosureElementSyntax? {
+      guard let (raw, info) = self.iterator.next() else {
+        return nil
+      }
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let data = SyntaxData(absoluteRaw, parent: parent)
+      return MultipleTrailingClosureElementSyntax(data)
+    }
+  }
+
+  public func makeIterator() -> Iterator {
+    return Iterator(parent: Syntax(self), rawChildren: rawChildren)
+  }
+
+  private var rawChildren: RawSyntaxChildren {
+    // We know children in a syntax collection cannot be missing. So we can 
+    // use the low-level and faster RawSyntaxChildren collection instead of
+    // PresentRawSyntaxChildren.
+    return RawSyntaxChildren(self.data.absoluteRaw)
+  }
+
+  public var startIndex: SyntaxChildrenIndex {
+    return rawChildren.startIndex
+  }
+  public var endIndex: SyntaxChildrenIndex {
+    return rawChildren.endIndex
+  }
+
+  public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(after: index)
+  }
+
+  public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(before: index)
+  }
+
+  public func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
+      -> Int {
+    return rawChildren.distance(from: start, to: end)
+  }
+
+  public subscript(position: SyntaxChildrenIndex) -> MultipleTrailingClosureElementSyntax {
+    let (raw, info) = rawChildren[position]
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let data = SyntaxData(absoluteRaw, parent: Syntax(self))
+    return MultipleTrailingClosureElementSyntax(data)
+  }
+}
+
 /// `ObjcNameSyntax` represents a collection of one or more
 /// `ObjcNamePieceSyntax` nodes. ObjcNameSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
@@ -9610,6 +9855,11 @@ extension ClosureCaptureItemListSyntax: CustomReflectable {
   }
 }
 extension ClosureParamListSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, unlabeledChildren: self.map{ $0 })
+  }
+}
+extension MultipleTrailingClosureElementListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }

@@ -592,6 +592,36 @@ open class SyntaxVisitor {
   /// The function called after visiting `UnresolvedPatternExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedPatternExprSyntax) {}
+  /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MultipleTrailingClosureElementSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MultipleTrailingClosureElementSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MultipleTrailingClosureElementSyntax) {}
+  /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MultipleTrailingClosureElementListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MultipleTrailingClosureElementListSyntax) {}
+  /// Visiting `MultipleTrailingClosureClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MultipleTrailingClosureClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MultipleTrailingClosureClauseSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MultipleTrailingClosureClauseSyntax) {}
   /// Visiting `FunctionCallExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3037,6 +3067,39 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMultipleTrailingClosureElementSyntax(_ data: SyntaxData) {
+      let node = MultipleTrailingClosureElementSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMultipleTrailingClosureElementListSyntax(_ data: SyntaxData) {
+      let node = MultipleTrailingClosureElementListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMultipleTrailingClosureClauseSyntax(_ data: SyntaxData) {
+      let node = MultipleTrailingClosureClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) {
       let node = FunctionCallExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5103,6 +5166,12 @@ open class SyntaxVisitor {
       visitImplClosureExprSyntax(data)
     case .unresolvedPatternExpr:
       visitImplUnresolvedPatternExprSyntax(data)
+    case .multipleTrailingClosureElement:
+      visitImplMultipleTrailingClosureElementSyntax(data)
+    case .multipleTrailingClosureElementList:
+      visitImplMultipleTrailingClosureElementListSyntax(data)
+    case .multipleTrailingClosureClause:
+      visitImplMultipleTrailingClosureClauseSyntax(data)
     case .functionCallExpr:
       visitImplFunctionCallExprSyntax(data)
     case .subscriptExpr:

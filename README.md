@@ -89,6 +89,8 @@ the Swift compiler source because we always push gyb-generated files to a tag.
 
 [**SwiftSemantics**](https://github.com/SwiftDocOrg/SwiftSemantics): parses Swift code into its constituent declarations.
 
+[**Sitrep**](https://github.com/twostraws/Sitrep): A source code analyzer for Swift projects
+
 [**SwiftRewriter**](https://github.com/inamiy/SwiftRewriter): a Swift code formatter.
 
 [**SwiftPack**](https://github.com/omochi/SwiftPack): a tool for automatically embedding Swift library source.

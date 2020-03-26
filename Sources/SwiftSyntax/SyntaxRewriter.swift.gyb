@@ -106,32 +106,84 @@ open class SyntaxRewriter {
 
 % end
 
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplTokenSyntax(_ data: SyntaxData) -> Syntax {
+    let node = TokenSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnknownSyntax(_ data: SyntaxData) -> Syntax {
+    let node = UnknownSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer { visitPost(node._syntaxNode) }
+    if let newNode = visitAny(node._syntaxNode) { return newNode }
+    return visit(node)
+  }
+
+// SwiftSyntax requires a lot of stack space in debug builds for syntax tree
+// rewriting. In scenarios with reduced stack space (in particular dispatch 
+// queues), this easily results in a stack overflow. To work around this issue, 
+// use a less performant but also less stack-hungry version of SwiftSyntax's 
+// SyntaxRewriter in debug builds.
+#if DEBUG
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  /// 
+  /// Returns the function that shall be called to visit a specific syntax node.
+  ///
+  /// To determine the correct specific visitation function for a syntax node,
+  /// we need to switch through a huge switch statement that covers all syntax
+  /// types. In debug builds, the cases of this switch statement do not share 
+  /// stack space (rdar://55929175). Because of this, the switch statement 
+  /// requires allocates about 15KB of stack space. In scenarios with reduced 
+  /// stack size (in particular dispatch queues), this often results in a stack 
+  /// overflow during syntax tree rewriting.
+  /// 
+  /// To circumvent this problem, make calling the specific visitation function 
+  /// a two-step process: First determine the function to call in this function
+  /// and return a reference to it, then call it. This way, the stack frame
+  /// that determines the correct visitiation function will be popped of the
+  /// stack before the function is being called, making the switch's stack
+  /// space transient instead of having it linger in the call stack.
+  private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax) {
+    switch data.raw.kind {
+    case .token:
+      return visitImplTokenSyntax
+    case .unknown:
+      return visitImplUnknownSyntax
+  % for node in SYNTAX_NODES:
+    case .${node.swift_syntax_kind}:
+      return visitImpl${node.name}
+  % end
+    }
+  }
+
+  private func visit(_ data: SyntaxData) -> Syntax {
+    return visitationFunc(for: data)(data)
+  }
+
+#else
+
   private func visit(_ data: SyntaxData) -> Syntax {
     switch data.raw.kind {
     case .token:
-      let node = TokenSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
+      return visitImplTokenSyntax(data)
     case .unknown:
-      let node = UnknownSyntax(data)
-      // Accessing _syntaxNode directly is faster than calling Syntax(node)
-      visitPre(node._syntaxNode)
-      defer { visitPost(node._syntaxNode) }
-      if let newNode = visitAny(node._syntaxNode) { return newNode }
-      return visit(node)
-    // The implementation of every generated case goes into its own function. This
-    // circumvents an issue where the compiler allocates stack space for every
-    // case statement next to each other in debug builds, causing it to allocate
-    // ~50KB per call to this function. rdar://55929175
+      return visitImplUnknownSyntax(data)
   % for node in SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
       return visitImpl${node.name}(data)
   % end
     }
   }
+
+#endif
 
   private func visitChildren<SyntaxType: SyntaxProtocol>(
     _ node: SyntaxType

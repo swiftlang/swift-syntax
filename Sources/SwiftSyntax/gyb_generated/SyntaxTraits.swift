@@ -257,6 +257,8 @@ extension IfStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
 extension ElseBlockSyntax: WithCodeBlockSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 extension CaseItemSyntax: WithTrailingCommaSyntax {}
+extension CatchItemSyntax: WithTrailingCommaSyntax {}
+extension CatchClauseSyntax: WithCodeBlockSyntax {}
 extension GenericRequirementSyntax: WithTrailingCommaSyntax {}
 extension GenericParameterSyntax: WithTrailingCommaSyntax {}
 extension TupleTypeElementSyntax: WithTrailingCommaSyntax {}

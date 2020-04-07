@@ -1041,6 +1041,12 @@ extension SyntaxNode {
     return CaseItemListSyntax(asSyntaxData)
   }
 
+  public var isCatchItemList: Bool { return raw.kind == .catchItemList }
+  public var asCatchItemList: CatchItemListSyntax? {
+    guard isCatchItemList else { return nil }
+    return CatchItemListSyntax(asSyntaxData)
+  }
+
   public var isConditionElement: Bool { return raw.kind == .conditionElement }
   public var asConditionElement: ConditionElementSyntax? {
     guard isConditionElement else { return nil }
@@ -1117,6 +1123,12 @@ extension SyntaxNode {
   public var asCaseItem: CaseItemSyntax? {
     guard isCaseItem else { return nil }
     return CaseItemSyntax(asSyntaxData)
+  }
+
+  public var isCatchItem: Bool { return raw.kind == .catchItem }
+  public var asCatchItem: CatchItemSyntax? {
+    guard isCatchItem else { return nil }
+    return CatchItemSyntax(asSyntaxData)
   }
 
   public var isSwitchCaseLabel: Bool { return raw.kind == .switchCaseLabel }
@@ -1775,6 +1787,8 @@ extension Syntax {
       return node
     case .caseItemList(let node):
       return node
+    case .catchItemList(let node):
+      return node
     case .conditionElement(let node):
       return node
     case .availabilityCondition(let node):
@@ -1800,6 +1814,8 @@ extension Syntax {
     case .switchDefaultLabel(let node):
       return node
     case .caseItem(let node):
+      return node
+    case .catchItem(let node):
       return node
     case .switchCaseLabel(let node):
       return node
@@ -1904,6 +1920,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "-7765007021548643080"
+      "-1461032627210044719"
   }
 }

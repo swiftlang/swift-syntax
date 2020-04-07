@@ -1732,6 +1732,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `CaseItemListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CaseItemListSyntax) {}
+  /// Visiting `CatchItemListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: CatchItemListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `CatchItemListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: CatchItemListSyntax) {}
   /// Visiting `ConditionElementSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1862,6 +1872,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `CaseItemSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CaseItemSyntax) {}
+  /// Visiting `CatchItemSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: CatchItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `CatchItemSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: CatchItemSyntax) {}
   /// Visiting `SwitchCaseLabelSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4291,6 +4311,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCatchItemListSyntax(_ data: SyntaxData) {
+      let node = CatchItemListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplConditionElementSyntax(_ data: SyntaxData) {
       let node = ConditionElementSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -4425,6 +4456,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCaseItemSyntax(_ data: SyntaxData) {
       let node = CaseItemSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCatchItemSyntax(_ data: SyntaxData) {
+      let node = CatchItemSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -5331,6 +5373,8 @@ open class SyntaxVisitor {
       visitImplBreakStmtSyntax(data)
     case .caseItemList:
       visitImplCaseItemListSyntax(data)
+    case .catchItemList:
+      visitImplCatchItemListSyntax(data)
     case .conditionElement:
       visitImplConditionElementSyntax(data)
     case .availabilityCondition:
@@ -5357,6 +5401,8 @@ open class SyntaxVisitor {
       visitImplSwitchDefaultLabelSyntax(data)
     case .caseItem:
       visitImplCaseItemSyntax(data)
+    case .catchItem:
+      visitImplCatchItemSyntax(data)
     case .switchCaseLabel:
       visitImplSwitchCaseLabelSyntax(data)
     case .catchClause:

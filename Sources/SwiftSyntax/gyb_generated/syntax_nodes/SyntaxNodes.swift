@@ -9625,6 +9625,139 @@ extension CaseItemSyntax: CustomReflectable {
   }
 }
 
+// MARK: - CatchItemSyntax
+
+public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case pattern
+    case whereClause
+    case trailingComma
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `CatchItemSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .catchItem else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `CatchItemSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .catchItem)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var pattern: PatternSyntax? {
+    get {
+      let childData = data.child(at: Cursor.pattern,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return PatternSyntax(childData!)
+    }
+    set(value) {
+      self = withPattern(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `pattern` replaced.
+  /// - param newChild: The new `pattern` to replace the node's
+  ///                   current `pattern`, if present.
+  public func withPattern(
+    _ newChild: PatternSyntax?) -> CatchItemSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.pattern)
+    return CatchItemSyntax(newData)
+  }
+
+  public var whereClause: WhereClauseSyntax? {
+    get {
+      let childData = data.child(at: Cursor.whereClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return WhereClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withWhereClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `whereClause` replaced.
+  /// - param newChild: The new `whereClause` to replace the node's
+  ///                   current `whereClause`, if present.
+  public func withWhereClause(
+    _ newChild: WhereClauseSyntax?) -> CatchItemSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.whereClause)
+    return CatchItemSyntax(newData)
+  }
+
+  public var trailingComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.trailingComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `trailingComma` replaced.
+  /// - param newChild: The new `trailingComma` to replace the node's
+  ///                   current `trailingComma`, if present.
+  public func withTrailingComma(
+    _ newChild: TokenSyntax?) -> CatchItemSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.trailingComma)
+    return CatchItemSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 3)
+    // Check child #0 child is PatternSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(PatternSyntax.self))
+    }
+    // Check child #1 child is WhereClauseSyntax or missing
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(WhereClauseSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension CatchItemSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "pattern": pattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - SwitchCaseLabelSyntax
 
 public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
@@ -9782,8 +9915,7 @@ extension SwitchCaseLabelSyntax: CustomReflectable {
 public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case catchKeyword
-    case pattern
-    case whereClause
+    case catchItems
     case body
   }
 
@@ -9825,47 +9957,44 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return CatchClauseSyntax(newData)
   }
 
-  public var pattern: PatternSyntax? {
+  public var catchItems: CatchItemListSyntax? {
     get {
-      let childData = data.child(at: Cursor.pattern,
+      let childData = data.child(at: Cursor.catchItems,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return PatternSyntax(childData!)
+      return CatchItemListSyntax(childData!)
     }
     set(value) {
-      self = withPattern(value)
+      self = withCatchItems(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `pattern` replaced.
-  /// - param newChild: The new `pattern` to replace the node's
-  ///                   current `pattern`, if present.
-  public func withPattern(
-    _ newChild: PatternSyntax?) -> CatchClauseSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.pattern)
+  /// Adds the provided `CatchItem` to the node's `catchItems`
+  /// collection.
+  /// - param element: The new `CatchItem` to add to the node's
+  ///                  `catchItems` collection.
+  /// - returns: A copy of the receiver with the provided `CatchItem`
+  ///            appended to its `catchItems` collection.
+  public func addCatchItem(_ element: CatchItemSyntax) -> CatchClauseSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.catchItems] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.catchItemList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.catchItems)
     return CatchClauseSyntax(newData)
   }
 
-  public var whereClause: WhereClauseSyntax? {
-    get {
-      let childData = data.child(at: Cursor.whereClause,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return WhereClauseSyntax(childData!)
-    }
-    set(value) {
-      self = withWhereClause(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `whereClause` replaced.
-  /// - param newChild: The new `whereClause` to replace the node's
-  ///                   current `whereClause`, if present.
-  public func withWhereClause(
-    _ newChild: WhereClauseSyntax?) -> CatchClauseSyntax {
+  /// Returns a copy of the receiver with its `catchItems` replaced.
+  /// - param newChild: The new `catchItems` to replace the node's
+  ///                   current `catchItems`, if present.
+  public func withCatchItems(
+    _ newChild: CatchItemListSyntax?) -> CatchClauseSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.whereClause)
+    let newData = data.replacingChild(raw, at: Cursor.catchItems)
     return CatchClauseSyntax(newData)
   }
 
@@ -9893,7 +10022,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
+    assert(rawChildren.count == 3)
     // Check child #0 child is TokenSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -9903,26 +10032,18 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #1 child is PatternSyntax or missing
+    // Check child #1 child is CatchItemListSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PatternSyntax.self))
+      assert(syntaxChild.is(CatchItemListSyntax.self))
     }
-    // Check child #2 child is WhereClauseSyntax or missing
+    // Check child #2 child is CodeBlockSyntax 
+    assert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(WhereClauseSyntax.self))
-    }
-    // Check child #3 child is CodeBlockSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -9935,8 +10056,7 @@ extension CatchClauseSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "catchKeyword": Syntax(catchKeyword).asProtocol(SyntaxProtocol.self),
-      "pattern": pattern.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "catchItems": catchItems.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": Syntax(body).asProtocol(SyntaxProtocol.self),
     ])
   }

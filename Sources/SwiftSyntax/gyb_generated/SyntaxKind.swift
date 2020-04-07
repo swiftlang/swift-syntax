@@ -191,6 +191,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case fallthroughStmt = 82
   case breakStmt = 83
   case caseItemList = 192
+  case catchItemList = 244
   case conditionElement = 137
   case availabilityCondition = 138
   case matchingPatternCondition = 139
@@ -204,6 +205,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case switchCase = 143
   case switchDefaultLabel = 144
   case caseItem = 145
+  case catchItem = 243
   case switchCaseLabel = 146
   case catchClause = 147
   case poundAssertStmt = 229
@@ -286,6 +288,7 @@ internal enum SyntaxKind: CSyntaxKind {
     case .switchCaseList: return true
     case .catchClauseList: return true
     case .caseItemList: return true
+    case .catchItemList: return true
     case .conditionElementList: return true
     case .genericRequirementList: return true
     case .genericParameterList: return true

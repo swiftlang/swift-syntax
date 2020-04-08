@@ -165,11 +165,10 @@ public enum SyntaxEnum {
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
   case objCSelector(ObjCSelectorSyntax)
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
-  case differentiationParamsClause(DifferentiationParamsClauseSyntax)
-  case differentiationParams(DifferentiationParamsSyntax)
-  case differentiationParamList(DifferentiationParamListSyntax)
-  case differentiationParam(DifferentiationParamSyntax)
-  case differentiableAttributeFuncSpecifier(DifferentiableAttributeFuncSpecifierSyntax)
+  case differentiabilityParamsClause(DifferentiabilityParamsClauseSyntax)
+  case differentiabilityParams(DifferentiabilityParamsSyntax)
+  case differentiabilityParamList(DifferentiabilityParamListSyntax)
+  case differentiabilityParam(DifferentiabilityParamSyntax)
   case derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax)
   case qualifiedDeclName(QualifiedDeclNameSyntax)
   case functionDeclName(FunctionDeclNameSyntax)
@@ -562,16 +561,14 @@ public extension Syntax {
       return .objCSelector(ObjCSelectorSyntax(self)!)
     case .differentiableAttributeArguments:
       return .differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax(self)!)
-    case .differentiationParamsClause:
-      return .differentiationParamsClause(DifferentiationParamsClauseSyntax(self)!)
-    case .differentiationParams:
-      return .differentiationParams(DifferentiationParamsSyntax(self)!)
-    case .differentiationParamList:
-      return .differentiationParamList(DifferentiationParamListSyntax(self)!)
-    case .differentiationParam:
-      return .differentiationParam(DifferentiationParamSyntax(self)!)
-    case .differentiableAttributeFuncSpecifier:
-      return .differentiableAttributeFuncSpecifier(DifferentiableAttributeFuncSpecifierSyntax(self)!)
+    case .differentiabilityParamsClause:
+      return .differentiabilityParamsClause(DifferentiabilityParamsClauseSyntax(self)!)
+    case .differentiabilityParams:
+      return .differentiabilityParams(DifferentiabilityParamsSyntax(self)!)
+    case .differentiabilityParamList:
+      return .differentiabilityParamList(DifferentiabilityParamListSyntax(self)!)
+    case .differentiabilityParam:
+      return .differentiabilityParam(DifferentiabilityParamSyntax(self)!)
     case .derivativeRegistrationAttributeArguments:
       return .derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax(self)!)
     case .qualifiedDeclName:

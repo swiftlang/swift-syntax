@@ -1472,56 +1472,46 @@ open class SyntaxVisitor {
   /// The function called after visiting `DifferentiableAttributeArgumentsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiableAttributeArgumentsSyntax) {}
-  /// Visiting `DifferentiationParamsClauseSyntax` specifically.
+  /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiationParamsClauseSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `DifferentiationParamsClauseSyntax` and its descendents.
+  /// The function called after visiting `DifferentiabilityParamsClauseSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiationParamsClauseSyntax) {}
-  /// Visiting `DifferentiationParamsSyntax` specifically.
+  open func visitPost(_ node: DifferentiabilityParamsClauseSyntax) {}
+  /// Visiting `DifferentiabilityParamsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiationParamsSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityParamsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `DifferentiationParamsSyntax` and its descendents.
+  /// The function called after visiting `DifferentiabilityParamsSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiationParamsSyntax) {}
-  /// Visiting `DifferentiationParamListSyntax` specifically.
+  open func visitPost(_ node: DifferentiabilityParamsSyntax) {}
+  /// Visiting `DifferentiabilityParamListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiationParamListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityParamListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `DifferentiationParamListSyntax` and its descendents.
+  /// The function called after visiting `DifferentiabilityParamListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiationParamListSyntax) {}
-  /// Visiting `DifferentiationParamSyntax` specifically.
+  open func visitPost(_ node: DifferentiabilityParamListSyntax) {}
+  /// Visiting `DifferentiabilityParamSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiationParamSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityParamSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `DifferentiationParamSyntax` and its descendents.
+  /// The function called after visiting `DifferentiabilityParamSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiationParamSyntax) {}
-  /// Visiting `DifferentiableAttributeFuncSpecifierSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiableAttributeFuncSpecifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `DifferentiableAttributeFuncSpecifierSyntax` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiableAttributeFuncSpecifierSyntax) {}
+  open func visitPost(_ node: DifferentiabilityParamSyntax) {}
   /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4025,8 +4015,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiationParamsClauseSyntax(_ data: SyntaxData) {
-      let node = DifferentiationParamsClauseSyntax(data)
+  private func visitImplDifferentiabilityParamsClauseSyntax(_ data: SyntaxData) {
+      let node = DifferentiabilityParamsClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -4036,8 +4026,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiationParamsSyntax(_ data: SyntaxData) {
-      let node = DifferentiationParamsSyntax(data)
+  private func visitImplDifferentiabilityParamsSyntax(_ data: SyntaxData) {
+      let node = DifferentiabilityParamsSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -4047,8 +4037,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiationParamListSyntax(_ data: SyntaxData) {
-      let node = DifferentiationParamListSyntax(data)
+  private func visitImplDifferentiabilityParamListSyntax(_ data: SyntaxData) {
+      let node = DifferentiabilityParamListSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -4058,19 +4048,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiationParamSyntax(_ data: SyntaxData) {
-      let node = DifferentiationParamSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
-        visitChildren(node)
-      }
-      visitPost(node)
-  }
-
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiableAttributeFuncSpecifierSyntax(_ data: SyntaxData) {
-      let node = DifferentiableAttributeFuncSpecifierSyntax(data)
+  private func visitImplDifferentiabilityParamSyntax(_ data: SyntaxData) {
+      let node = DifferentiabilityParamSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -5321,16 +5300,14 @@ open class SyntaxVisitor {
       visitImplObjCSelectorSyntax(data)
     case .differentiableAttributeArguments:
       visitImplDifferentiableAttributeArgumentsSyntax(data)
-    case .differentiationParamsClause:
-      visitImplDifferentiationParamsClauseSyntax(data)
-    case .differentiationParams:
-      visitImplDifferentiationParamsSyntax(data)
-    case .differentiationParamList:
-      visitImplDifferentiationParamListSyntax(data)
-    case .differentiationParam:
-      visitImplDifferentiationParamSyntax(data)
-    case .differentiableAttributeFuncSpecifier:
-      visitImplDifferentiableAttributeFuncSpecifierSyntax(data)
+    case .differentiabilityParamsClause:
+      visitImplDifferentiabilityParamsClauseSyntax(data)
+    case .differentiabilityParams:
+      visitImplDifferentiabilityParamsSyntax(data)
+    case .differentiabilityParamList:
+      visitImplDifferentiabilityParamListSyntax(data)
+    case .differentiabilityParam:
+      visitImplDifferentiabilityParamSyntax(data)
     case .derivativeRegistrationAttributeArguments:
       visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
     case .qualifiedDeclName:

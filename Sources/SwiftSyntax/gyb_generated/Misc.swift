@@ -885,34 +885,28 @@ extension SyntaxNode {
     return DifferentiableAttributeArgumentsSyntax(asSyntaxData)
   }
 
-  public var isDifferentiationParamsClause: Bool { return raw.kind == .differentiationParamsClause }
-  public var asDifferentiationParamsClause: DifferentiationParamsClauseSyntax? {
-    guard isDifferentiationParamsClause else { return nil }
-    return DifferentiationParamsClauseSyntax(asSyntaxData)
+  public var isDifferentiabilityParamsClause: Bool { return raw.kind == .differentiabilityParamsClause }
+  public var asDifferentiabilityParamsClause: DifferentiabilityParamsClauseSyntax? {
+    guard isDifferentiabilityParamsClause else { return nil }
+    return DifferentiabilityParamsClauseSyntax(asSyntaxData)
   }
 
-  public var isDifferentiationParams: Bool { return raw.kind == .differentiationParams }
-  public var asDifferentiationParams: DifferentiationParamsSyntax? {
-    guard isDifferentiationParams else { return nil }
-    return DifferentiationParamsSyntax(asSyntaxData)
+  public var isDifferentiabilityParams: Bool { return raw.kind == .differentiabilityParams }
+  public var asDifferentiabilityParams: DifferentiabilityParamsSyntax? {
+    guard isDifferentiabilityParams else { return nil }
+    return DifferentiabilityParamsSyntax(asSyntaxData)
   }
 
-  public var isDifferentiationParamList: Bool { return raw.kind == .differentiationParamList }
-  public var asDifferentiationParamList: DifferentiationParamListSyntax? {
-    guard isDifferentiationParamList else { return nil }
-    return DifferentiationParamListSyntax(asSyntaxData)
+  public var isDifferentiabilityParamList: Bool { return raw.kind == .differentiabilityParamList }
+  public var asDifferentiabilityParamList: DifferentiabilityParamListSyntax? {
+    guard isDifferentiabilityParamList else { return nil }
+    return DifferentiabilityParamListSyntax(asSyntaxData)
   }
 
-  public var isDifferentiationParam: Bool { return raw.kind == .differentiationParam }
-  public var asDifferentiationParam: DifferentiationParamSyntax? {
-    guard isDifferentiationParam else { return nil }
-    return DifferentiationParamSyntax(asSyntaxData)
-  }
-
-  public var isDifferentiableAttributeFuncSpecifier: Bool { return raw.kind == .differentiableAttributeFuncSpecifier }
-  public var asDifferentiableAttributeFuncSpecifier: DifferentiableAttributeFuncSpecifierSyntax? {
-    guard isDifferentiableAttributeFuncSpecifier else { return nil }
-    return DifferentiableAttributeFuncSpecifierSyntax(asSyntaxData)
+  public var isDifferentiabilityParam: Bool { return raw.kind == .differentiabilityParam }
+  public var asDifferentiabilityParam: DifferentiabilityParamSyntax? {
+    guard isDifferentiabilityParam else { return nil }
+    return DifferentiabilityParamSyntax(asSyntaxData)
   }
 
   public var isDerivativeRegistrationAttributeArguments: Bool { return raw.kind == .derivativeRegistrationAttributeArguments }
@@ -1735,15 +1729,13 @@ extension Syntax {
       return node
     case .differentiableAttributeArguments(let node):
       return node
-    case .differentiationParamsClause(let node):
+    case .differentiabilityParamsClause(let node):
       return node
-    case .differentiationParams(let node):
+    case .differentiabilityParams(let node):
       return node
-    case .differentiationParamList(let node):
+    case .differentiabilityParamList(let node):
       return node
-    case .differentiationParam(let node):
-      return node
-    case .differentiableAttributeFuncSpecifier(let node):
+    case .differentiabilityParam(let node):
       return node
     case .derivativeRegistrationAttributeArguments(let node):
       return node
@@ -1920,6 +1912,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "-1461032627210044719"
+      "3634919159735844058"
   }
 }

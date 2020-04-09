@@ -6629,17 +6629,17 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
   }
 }
 
-/// `DifferentiationParamListSyntax` represents a collection of one or more
-/// `DifferentiationParamSyntax` nodes. DifferentiationParamListSyntax behaves
+/// `DifferentiabilityParamListSyntax` represents a collection of one or more
+/// `DifferentiabilityParamSyntax` nodes. DifferentiabilityParamListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
-public struct DifferentiationParamListSyntax: SyntaxCollection, SyntaxHashable {
+public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `DifferentiationParamListSyntax` if possible. Returns 
+  /// Converts the given `Syntax` node to a `DifferentiabilityParamListSyntax` if possible. Returns 
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .differentiationParamList else { return nil }
+    guard syntax.raw.kind == .differentiabilityParamList else { return nil }
     self._syntaxNode = syntax
   }
 
@@ -6647,59 +6647,59 @@ public struct DifferentiationParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .differentiationParamList)
+    assert(data.raw.kind == .differentiabilityParamList)
     self._syntaxNode = Syntax(data)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
-  /// Creates a new `DifferentiationParamListSyntax` by replacing the underlying layout with
+  /// Creates a new `DifferentiabilityParamListSyntax` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `DifferentiationParamListSyntax` with the new layout underlying it.
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
   internal func replacingLayout(
-    _ layout: [RawSyntax?]) -> DifferentiationParamListSyntax {
+    _ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
     let newRaw = data.raw.replacingLayout(layout)
     let newData = data.replacingSelf(newRaw)
-    return DifferentiationParamListSyntax(newData)
+    return DifferentiabilityParamListSyntax(newData)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by appending the provided syntax element
+  /// Creates a new `DifferentiabilityParamListSyntax` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `DifferentiationParamListSyntax` with that element appended to the end.
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with that element appended to the end.
   public func appending(
-    _ syntax: DifferentiationParamSyntax) -> DifferentiationParamListSyntax {
+    _ syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamListSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by prepending the provided syntax element
+  /// Creates a new `DifferentiabilityParamListSyntax` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `DifferentiationParamListSyntax` with that element prepended to the
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with that element prepended to the
   ///            beginning.
   public func prepending(
-    _ syntax: DifferentiationParamSyntax) -> DifferentiationParamListSyntax {
+    _ syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamListSyntax {
     return inserting(syntax, at: 0)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by inserting the provided syntax element
+  /// Creates a new `DifferentiabilityParamListSyntax` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `DifferentiationParamListSyntax` with that element appended to the end.
-  public func inserting(_ syntax: DifferentiationParamSyntax,
-                        at index: Int) -> DifferentiationParamListSyntax {
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with that element appended to the end.
+  public func inserting(_ syntax: DifferentiabilityParamSyntax,
+                        at index: Int) -> DifferentiabilityParamListSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
     precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
@@ -6708,16 +6708,16 @@ public struct DifferentiationParamListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by replacing the syntax element
+  /// Creates a new `DifferentiabilityParamListSyntax` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `DifferentiationParamListSyntax` with the new element at the provided index.
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
-                        with syntax: DifferentiationParamSyntax) -> DifferentiationParamListSyntax {
+                        with syntax: DifferentiabilityParamSyntax) -> DifferentiabilityParamListSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -6726,64 +6726,64 @@ public struct DifferentiationParamListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by removing the syntax element at the
+  /// Creates a new `DifferentiabilityParamListSyntax` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `DifferentiationParamListSyntax` with the element at the provided index
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with the element at the provided index
   ///            removed.
-  public func removing(childAt index: Int) -> DifferentiationParamListSyntax {
+  public func removing(childAt index: Int) -> DifferentiabilityParamListSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.remove(at: index)
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by removing the first element.
+  /// Creates a new `DifferentiabilityParamListSyntax` by removing the first element.
   ///
-  /// - Returns: A new `DifferentiationParamListSyntax` with the first element removed.
-  public func removingFirst() -> DifferentiationParamListSyntax {
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with the first element removed.
+  public func removingFirst() -> DifferentiabilityParamListSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
 
-  /// Creates a new `DifferentiationParamListSyntax` by removing the last element.
+  /// Creates a new `DifferentiabilityParamListSyntax` by removing the last element.
   ///
-  /// - Returns: A new `DifferentiationParamListSyntax` with the last element removed.
-  public func removingLast() -> DifferentiationParamListSyntax {
+  /// - Returns: A new `DifferentiabilityParamListSyntax` with the last element removed.
+  public func removingLast() -> DifferentiabilityParamListSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.removeLast()
     return replacingLayout(newLayout)
   }
 
-  /// Returns a new `DifferentiationParamListSyntax` with its leading trivia replaced
+  /// Returns a new `DifferentiabilityParamListSyntax` with its leading trivia replaced
   /// by the provided trivia.
-  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DifferentiationParamListSyntax {
-    return DifferentiationParamListSyntax(data.withLeadingTrivia(leadingTrivia))
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> DifferentiabilityParamListSyntax {
+    return DifferentiabilityParamListSyntax(data.withLeadingTrivia(leadingTrivia))
   }
 
-  /// Returns a new `DifferentiationParamListSyntax` with its trailing trivia replaced
+  /// Returns a new `DifferentiabilityParamListSyntax` with its trailing trivia replaced
   /// by the provided trivia.
-  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DifferentiationParamListSyntax {
-    return DifferentiationParamListSyntax(data.withTrailingTrivia(trailingTrivia))
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> DifferentiabilityParamListSyntax {
+    return DifferentiabilityParamListSyntax(data.withTrailingTrivia(trailingTrivia))
   }
 
-  /// Returns a new `DifferentiationParamListSyntax` with its leading trivia removed.
-  public func withoutLeadingTrivia() -> DifferentiationParamListSyntax {
+  /// Returns a new `DifferentiabilityParamListSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> DifferentiabilityParamListSyntax {
     return withLeadingTrivia([])
   }
 
-  /// Returns a new `DifferentiationParamListSyntax` with its trailing trivia removed.
-  public func withoutTrailingTrivia() -> DifferentiationParamListSyntax {
+  /// Returns a new `DifferentiabilityParamListSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> DifferentiabilityParamListSyntax {
     return withTrailingTrivia([])
   }
 
-  /// Returns a new `DifferentiationParamListSyntax` with all trivia removed.
-  public func withoutTrivia() -> DifferentiationParamListSyntax {
+  /// Returns a new `DifferentiabilityParamListSyntax` with all trivia removed.
+  public func withoutTrivia() -> DifferentiabilityParamListSyntax {
     return withoutLeadingTrivia().withoutTrailingTrivia()
   }
 
-  /// The leading trivia (spaces, newlines, etc.) associated with this `DifferentiationParamListSyntax`.
+  /// The leading trivia (spaces, newlines, etc.) associated with this `DifferentiabilityParamListSyntax`.
   public var leadingTrivia: Trivia? {
     get {
       return raw.formLeadingTrivia()
@@ -6793,7 +6793,7 @@ public struct DifferentiationParamListSyntax: SyntaxCollection, SyntaxHashable {
     }
   }
 
-  /// The trailing trivia (spaces, newlines, etc.) associated with this `DifferentiationParamListSyntax`.
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `DifferentiabilityParamListSyntax`.
   public var trailingTrivia: Trivia? {
     get {
       return raw.formTrailingTrivia()
@@ -6806,14 +6806,14 @@ public struct DifferentiationParamListSyntax: SyntaxCollection, SyntaxHashable {
   public func _validateLayout() {
     // Check that all children match the expected element type
     assert(self.allSatisfy { node in
-      return Syntax(node).is(DifferentiationParamSyntax.self)
+      return Syntax(node).is(DifferentiabilityParamSyntax.self)
     })
   }
 }
 
-/// Conformance for `DifferentiationParamListSyntax` to the `BidirectionalCollection` protocol.
-extension DifferentiationParamListSyntax: BidirectionalCollection {
-  public typealias Element = DifferentiationParamSyntax
+/// Conformance for `DifferentiabilityParamListSyntax` to the `BidirectionalCollection` protocol.
+extension DifferentiabilityParamListSyntax: BidirectionalCollection {
+  public typealias Element = DifferentiabilityParamSyntax
   public typealias Index = SyntaxChildrenIndex
 
   public struct Iterator: IteratorProtocol {
@@ -6825,13 +6825,13 @@ extension DifferentiationParamListSyntax: BidirectionalCollection {
       self.iterator = rawChildren.makeIterator()
     }
 
-    public mutating func next() -> DifferentiationParamSyntax? {
+    public mutating func next() -> DifferentiabilityParamSyntax? {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
       let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
-      return DifferentiationParamSyntax(data)
+      return DifferentiabilityParamSyntax(data)
     }
   }
 
@@ -6866,11 +6866,11 @@ extension DifferentiationParamListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
 
-  public subscript(position: SyntaxChildrenIndex) -> DifferentiationParamSyntax {
+  public subscript(position: SyntaxChildrenIndex) -> DifferentiabilityParamSyntax {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-    return DifferentiationParamSyntax(data)
+    return DifferentiabilityParamSyntax(data)
   }
 }
 
@@ -9949,7 +9949,7 @@ extension ObjCSelectorSyntax: CustomReflectable {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }
 }
-extension DifferentiationParamListSyntax: CustomReflectable {
+extension DifferentiabilityParamListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }

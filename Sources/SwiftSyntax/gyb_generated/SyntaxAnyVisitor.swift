@@ -1072,39 +1072,32 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: DifferentiableAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: DifferentiationParamsClauseSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  override open func visitPost(_ node: DifferentiationParamsClauseSyntax) {
+  override open func visitPost(_ node: DifferentiabilityParamsClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: DifferentiationParamsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityParamsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  override open func visitPost(_ node: DifferentiationParamsSyntax) {
+  override open func visitPost(_ node: DifferentiabilityParamsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: DifferentiationParamListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityParamListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  override open func visitPost(_ node: DifferentiationParamListSyntax) {
+  override open func visitPost(_ node: DifferentiabilityParamListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: DifferentiationParamSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityParamSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  override open func visitPost(_ node: DifferentiationParamSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  override open func visit(_ node: DifferentiableAttributeFuncSpecifierSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: DifferentiableAttributeFuncSpecifierSyntax) {
+  override open func visitPost(_ node: DifferentiabilityParamSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {

@@ -181,7 +181,7 @@ class AddOneToIntegerLiterals: SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> Syntax {
     // Only transform integer literals.
     guard case .integerLiteral(let text) = token.tokenKind else {
-      return token
+      return Syntax(token)
     }
 
     // Remove underscores from the original text.
@@ -190,8 +190,11 @@ class AddOneToIntegerLiterals: SyntaxRewriter {
     // Parse out the integer.
     let int = Int(integerText)!
 
-    // Return a new integer literal token with `int + 1` as its text.
-    return token.withKind(.integerLiteral("\(int + 1)"))
+    // Create a new integer literal token with `int + 1` as its text.
+    let newIntegerLiteralToken = token.withKind(.integerLiteral("\(int + 1)"))
+    
+    // Return the new integer literal.
+    return Syntax(newIntegerLiteralToken)
   }
 }
 

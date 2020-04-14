@@ -1023,13 +1023,49 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return UnresolvedPatternExprSyntax(data)
   }
-  public static func makeFunctionCallExpr(calledExpression: ExprSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax, rightParen: TokenSyntax?, trailingClosure: ClosureExprSyntax?) -> FunctionCallExprSyntax {
+  public static func makeMultipleTrailingClosureElement(label: TokenSyntax, colon: TokenSyntax, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
+    let layout: [RawSyntax?] = [
+      label.raw,
+      colon.raw,
+      closure.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MultipleTrailingClosureElementSyntax(data)
+  }
+
+  public static func makeBlankMultipleTrailingClosureElement() -> MultipleTrailingClosureElementSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureElement,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.closureExpr),
+    ], length: .zero, presence: .present))
+    return MultipleTrailingClosureElementSyntax(data)
+  }
+  public static func makeMultipleTrailingClosureElementList(
+    _ elements: [MultipleTrailingClosureElementSyntax]) -> MultipleTrailingClosureElementListSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElementList,
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return MultipleTrailingClosureElementListSyntax(data)
+  }
+
+  public static func makeBlankMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureElementList,
+      layout: [
+    ], length: .zero, presence: .present))
+    return MultipleTrailingClosureElementListSyntax(data)
+  }
+  public static func makeFunctionCallExpr(calledExpression: ExprSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax, rightParen: TokenSyntax?, trailingClosure: ClosureExprSyntax?, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
     let layout: [RawSyntax?] = [
       calledExpression.raw,
       leftParen?.raw,
       argumentList.raw,
       rightParen?.raw,
       trailingClosure?.raw,
+      additionalTrailingClosures?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionCallExpr,
       layout: layout, presence: SourcePresence.present)
@@ -1045,16 +1081,18 @@ public enum SyntaxFactory {
       RawSyntax.missing(SyntaxKind.tupleExprElementList),
       nil,
       nil,
+      nil,
     ], length: .zero, presence: .present))
     return FunctionCallExprSyntax(data)
   }
-  public static func makeSubscriptExpr(calledExpression: ExprSyntax, leftBracket: TokenSyntax, argumentList: TupleExprElementListSyntax, rightBracket: TokenSyntax, trailingClosure: ClosureExprSyntax?) -> SubscriptExprSyntax {
+  public static func makeSubscriptExpr(calledExpression: ExprSyntax, leftBracket: TokenSyntax, argumentList: TupleExprElementListSyntax, rightBracket: TokenSyntax, trailingClosure: ClosureExprSyntax?, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
     let layout: [RawSyntax?] = [
       calledExpression.raw,
       leftBracket.raw,
       argumentList.raw,
       rightBracket.raw,
       trailingClosure?.raw,
+      additionalTrailingClosures?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.subscriptExpr,
       layout: layout, presence: SourcePresence.present)
@@ -1069,6 +1107,7 @@ public enum SyntaxFactory {
       RawSyntax.missingToken(TokenKind.leftSquareBracket),
       RawSyntax.missing(SyntaxKind.tupleExprElementList),
       RawSyntax.missingToken(TokenKind.rightSquareBracket),
+      nil,
       nil,
     ], length: .zero, presence: .present))
     return SubscriptExprSyntax(data)

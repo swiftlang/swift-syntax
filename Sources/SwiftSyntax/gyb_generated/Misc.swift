@@ -357,6 +357,18 @@ extension SyntaxNode {
     return UnresolvedPatternExprSyntax(asSyntaxData)
   }
 
+  public var isMultipleTrailingClosureElement: Bool { return raw.kind == .multipleTrailingClosureElement }
+  public var asMultipleTrailingClosureElement: MultipleTrailingClosureElementSyntax? {
+    guard isMultipleTrailingClosureElement else { return nil }
+    return MultipleTrailingClosureElementSyntax(asSyntaxData)
+  }
+
+  public var isMultipleTrailingClosureElementList: Bool { return raw.kind == .multipleTrailingClosureElementList }
+  public var asMultipleTrailingClosureElementList: MultipleTrailingClosureElementListSyntax? {
+    guard isMultipleTrailingClosureElementList else { return nil }
+    return MultipleTrailingClosureElementListSyntax(asSyntaxData)
+  }
+
   public var isFunctionCallExpr: Bool { return raw.kind == .functionCallExpr }
   public var asFunctionCallExpr: FunctionCallExprSyntax? {
     guard isFunctionCallExpr else { return nil }
@@ -1553,6 +1565,10 @@ extension Syntax {
       return node
     case .unresolvedPatternExpr(let node):
       return node
+    case .multipleTrailingClosureElement(let node):
+      return node
+    case .multipleTrailingClosureElementList(let node):
+      return node
     case .functionCallExpr(let node):
       return node
     case .subscriptExpr(let node):
@@ -1912,6 +1928,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "3634919159735844058"
+      "3723395330444835342"
   }
 }

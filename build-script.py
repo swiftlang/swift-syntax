@@ -258,7 +258,7 @@ def get_installed_dylib_name():
 
 
 def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file, release):
-    swift_exec = os.path.join(toolchain, "usr", "bin", "swift")
+    swift_exec = os.path.join(toolchain, "bin", "swift")
 
     swiftpm_call = [swift_exec, action]
     swiftpm_call.extend(["--package-path", PACKAGE_DIR])
@@ -689,7 +689,7 @@ def main():
         else:
             # will this ever happen?
             build_dir = os.path.join(args.build_dir, "debug")
-        stdlib_rpath = os.path.join(args.toolchain, "usr", "lib", "swift", "macosx")
+        stdlib_rpath = os.path.join(args.toolchain, "lib", "swift", "macosx")
         install(
             build_dir=build_dir,
             dylib_dir=args.dylib_dir,

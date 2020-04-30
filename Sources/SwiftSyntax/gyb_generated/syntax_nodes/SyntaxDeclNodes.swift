@@ -34,6 +34,10 @@ public struct UnknownDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
 
   public func _validateLayout() {
     // We are verifying an unknown node. Since we don’t know anything about it
@@ -76,6 +80,10 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .typealiasDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -377,6 +385,10 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var attributes: AttributeListSyntax? {
     get {
       let childData = data.child(at: Cursor.attributes,
@@ -671,6 +683,10 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var clauses: IfConfigClauseListSyntax {
     get {
       let childData = data.child(at: Cursor.clauses,
@@ -791,6 +807,10 @@ public struct PoundErrorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .poundErrorDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundError: TokenSyntax {
@@ -958,6 +978,10 @@ public struct PoundWarningDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var poundWarning: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundWarning,
@@ -1121,6 +1145,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .poundSourceLocation)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundSourceLocation: TokenSyntax {
@@ -1290,6 +1318,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .classDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -1623,6 +1655,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var attributes: AttributeListSyntax? {
     get {
       let childData = data.child(at: Cursor.attributes,
@@ -1953,6 +1989,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var attributes: AttributeListSyntax? {
     get {
       let childData = data.child(at: Cursor.attributes,
@@ -2250,6 +2290,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .extensionDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -2550,6 +2594,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .functionDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -2882,6 +2930,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .initializerDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3242,6 +3294,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var attributes: AttributeListSyntax? {
     get {
       let childData = data.child(at: Cursor.attributes,
@@ -3447,6 +3503,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .subscriptDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -3777,6 +3837,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var attributes: AttributeListSyntax? {
     get {
       let childData = data.child(at: Cursor.attributes,
@@ -4031,6 +4095,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var attributes: AttributeListSyntax? {
     get {
       let childData = data.child(at: Cursor.attributes,
@@ -4244,6 +4312,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .variableDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -4471,6 +4543,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .enumCaseDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// 
@@ -4706,6 +4782,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .enumDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// 
@@ -5063,6 +5143,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// 
   /// The attributes applied to the 'operator' declaration.
   /// 
@@ -5309,6 +5393,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .precedenceGroupDecl)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// 

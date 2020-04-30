@@ -43,6 +43,10 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The underlying node inside the code block.
   public var item: Syntax {
     get {
@@ -178,6 +182,10 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .codeBlock)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftBrace: TokenSyntax {
@@ -331,6 +339,10 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -431,6 +443,10 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .declNameArguments)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -584,6 +600,10 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tupleExprElement)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var label: TokenSyntax? {
@@ -749,6 +769,10 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var expression: ExprSyntax {
     get {
       let childData = data.child(at: Cursor.expression,
@@ -850,6 +874,10 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .dictionaryElement)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var keyExpression: ExprSyntax {
@@ -1016,6 +1044,10 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .closureCaptureItem)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var specifier: TokenListSyntax? {
@@ -1232,6 +1264,10 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var leftSquare: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftSquare,
@@ -1383,6 +1419,10 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -1485,6 +1525,10 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .closureSignature)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var capture: ClosureCaptureSignatureSyntax? {
@@ -1680,6 +1724,10 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var content: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.content,
@@ -1751,6 +1799,10 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .expressionSegment)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var backslash: TokenSyntax {
@@ -1966,6 +2018,10 @@ public struct ObjcNamePieceSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -2065,6 +2121,10 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .typeInitializerClause)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var equal: TokenSyntax {
@@ -2167,6 +2227,10 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .parameterClause)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -2320,6 +2384,10 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var arrow: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.arrow,
@@ -2420,6 +2488,10 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .functionSignature)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var input: ParameterClauseSyntax {
@@ -2553,6 +2625,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .ifConfigClause)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundKeyword: TokenSyntax {
@@ -2690,6 +2766,10 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .poundSourceLocationArgs)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var fileArgLabel: TokenSyntax {
@@ -2950,6 +3030,10 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -3113,6 +3197,10 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var typeName: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.typeName,
@@ -3212,6 +3300,10 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .typeInheritanceClause)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var colon: TokenSyntax {
@@ -3333,6 +3425,10 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .memberDeclBlock)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftBrace: TokenSyntax {
@@ -3490,6 +3586,10 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The declaration of the type member.
   public var decl: DeclSyntax {
     get {
@@ -3591,6 +3691,10 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .sourceFile)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var statements: CodeBlockItemListSyntax {
@@ -3713,6 +3817,10 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var equal: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.equal,
@@ -3818,6 +3926,10 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .functionParameter)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -4128,6 +4240,10 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -4291,6 +4407,10 @@ public struct AccessPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -4391,6 +4511,10 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .accessorParameter)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -4524,6 +4648,10 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .accessorBlock)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftBrace: TokenSyntax {
@@ -4678,6 +4806,10 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .patternBinding)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var pattern: PatternSyntax {
@@ -4880,6 +5012,10 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The name of this case.
   public var identifier: TokenSyntax {
     get {
@@ -5055,6 +5191,10 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var colon: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.colon,
@@ -5181,6 +5321,10 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .precedenceGroupRelation)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// 
@@ -5341,6 +5485,10 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.name,
@@ -5445,6 +5593,10 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .precedenceGroupAssignment)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var assignmentKeyword: TokenSyntax {
@@ -5591,6 +5743,10 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var associativityKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.associativityKeyword,
@@ -5733,6 +5889,10 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .customAttribute)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The `@` sign.
@@ -5955,6 +6115,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .attribute)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The `@` sign.
@@ -6220,6 +6384,10 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The label of the argument
   public var label: TokenSyntax {
     get {
@@ -6395,6 +6563,10 @@ public struct NamedAttributeStringArgumentSyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The label of the argument
   public var nameTok: TokenSyntax {
     get {
@@ -6529,6 +6701,10 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// 
   /// The base name of the protocol's requirement.
   /// 
@@ -6641,6 +6817,10 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .implementsAttributeArguments)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// 
@@ -6825,6 +7005,10 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var name: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.name,
@@ -6929,6 +7113,10 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .differentiableAttributeArguments)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var diffParams: DifferentiabilityParamsClauseSyntax? {
@@ -7069,6 +7257,10 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The "wrt" label.
   public var wrtLabel: TokenSyntax {
     get {
@@ -7205,6 +7397,10 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .differentiabilityParams)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -7363,6 +7559,10 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var parameter: Syntax {
     get {
       let childData = data.child(at: Cursor.parameter,
@@ -7470,6 +7670,10 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .derivativeRegistrationAttributeArguments)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The "of" label.
@@ -7678,6 +7882,10 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// 
   /// The base type of the qualified name, optionally specified.
   /// 
@@ -7852,6 +8060,10 @@ public struct FunctionDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// 
   /// The base name of the referenced function.
   /// 
@@ -7960,6 +8172,10 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var whereKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.whereKeyword,
@@ -8061,6 +8277,10 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .yieldList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -8245,6 +8465,10 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var condition: Syntax {
     get {
       let childData = data.child(at: Cursor.condition,
@@ -8346,6 +8570,10 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .availabilityCondition)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundAvailableKeyword: TokenSyntax {
@@ -8532,6 +8760,10 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var caseKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.caseKeyword,
@@ -8697,6 +8929,10 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var letOrVarKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.letOrVarKeyword,
@@ -8859,6 +9095,10 @@ public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var ifStatement: IfStmtSyntax {
     get {
       let childData = data.child(at: Cursor.ifStatement,
@@ -8927,6 +9167,10 @@ public struct ElseBlockSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .elseBlock)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var elseKeyword: TokenSyntax {
@@ -9029,6 +9273,10 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .switchCase)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var unknownAttr: AttributeSyntax? {
@@ -9182,6 +9430,10 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var defaultKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.defaultKeyword,
@@ -9282,6 +9534,10 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .caseItem)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var pattern: PatternSyntax {
@@ -9417,6 +9673,10 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var pattern: PatternSyntax? {
     get {
       let childData = data.child(at: Cursor.pattern,
@@ -9548,6 +9808,10 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .switchCaseLabel)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var caseKeyword: TokenSyntax {
@@ -9702,6 +9966,10 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var catchKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.catchKeyword,
@@ -9853,6 +10121,10 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var whereKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.whereKeyword,
@@ -9973,6 +10245,10 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var body: Syntax {
     get {
       let childData = data.child(at: Cursor.body,
@@ -10073,6 +10349,10 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .sameTypeRequirement)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftTypeIdentifier: TypeSyntax {
@@ -10208,6 +10488,10 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .genericParameter)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var attributes: AttributeListSyntax? {
@@ -10424,6 +10708,10 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var leftAngleBracket: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftAngleBracket,
@@ -10576,6 +10864,10 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var leftTypeIdentifier: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.leftTypeIdentifier,
@@ -10708,6 +11000,10 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var type: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.type,
@@ -10813,6 +11109,10 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tupleTypeElement)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var inOut: TokenSyntax? {
@@ -11102,6 +11402,10 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var argumentType: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.argumentType,
@@ -11202,6 +11506,10 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .genericArgumentClause)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftAngleBracket: TokenSyntax {
@@ -11355,6 +11663,10 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var colon: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.colon,
@@ -11456,6 +11768,10 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tuplePatternElement)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var labelName: TokenSyntax? {
@@ -11625,6 +11941,10 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The actual argument
   public var entry: Syntax {
     get {
@@ -11734,6 +12054,10 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .availabilityLabeledArgument)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The label of the argument
@@ -11875,6 +12199,10 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// 
   /// The name of the OS on which the availability should be
   /// restricted or 'swift' if the availability should be
@@ -11984,6 +12312,10 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .versionTuple)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// 

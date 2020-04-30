@@ -39,7 +39,10 @@ public enum ParserError: Error, CustomStringConvertible {
   /// normal circumstances, and it should be reported as a bug.
   case invalidSyntaxData
 
-  /// The SwiftSyntax parser library isn't compatible with this client
+  /// The SwiftSyntax parser library isn't compatible with this SwiftSyntax version.
+  ///
+  /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
+  /// is from a toolchain that is not compatible with this version of SwiftSyntax.
   case parserCompatibilityCheckFailed
 
   public var description: String {
@@ -47,7 +50,7 @@ public enum ParserError: Error, CustomStringConvertible {
     case .invalidSyntaxData:
       return "parser created invalid syntax data"
     case .parserCompatibilityCheckFailed:
-      return "SwiftSyntax parser library isn't compatible"
+      return "The loaded '_InternalSwiftSyntaxParser' library is from a toolchain that is not compatible with this version of SwiftSyntax"
     }
   }
 }
@@ -55,8 +58,11 @@ public enum ParserError: Error, CustomStringConvertible {
 /// Namespace for functions to parse swift source and retrieve a syntax tree.
 public enum SyntaxParser {
 
-  /// True if the parser library is compatible with the SwiftSyntax client;
+  /// True if the parser library is compatible with this SwiftSyntax version;
   /// false otherwise.
+  ///
+  /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
+  /// is from a toolchain that is not compatible with this version of SwiftSyntax.
   fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
 
   /// Parses the string into a full-fidelity Syntax tree.

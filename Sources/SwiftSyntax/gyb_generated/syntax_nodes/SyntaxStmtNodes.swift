@@ -34,6 +34,10 @@ public struct UnknownStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
 
   public func _validateLayout() {
     // We are verifying an unknown node. Since we don’t know anything about it
@@ -71,6 +75,10 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .continueStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var continueKeyword: TokenSyntax {
@@ -175,6 +183,10 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .whileStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var labelName: TokenSyntax? {
@@ -390,6 +402,10 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var deferKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.deferKeyword,
@@ -490,6 +506,10 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var expression: ExprSyntax {
     get {
       let childData = data.child(at: Cursor.expression,
@@ -562,6 +582,10 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .repeatWhileStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var labelName: TokenSyntax? {
@@ -791,6 +815,10 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var guardKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.guardKeyword,
@@ -979,6 +1007,10 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .forInStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var labelName: TokenSyntax? {
@@ -1335,6 +1367,10 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var labelName: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.labelName,
@@ -1613,6 +1649,10 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var labelName: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.labelName,
@@ -1826,6 +1866,10 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var returnKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.returnKeyword,
@@ -1925,6 +1969,10 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .yieldStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var yieldKeyword: TokenSyntax {
@@ -2027,6 +2075,10 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var fallthroughKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.fallthroughKeyword,
@@ -2095,6 +2147,10 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .breakStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var breakKeyword: TokenSyntax {
@@ -2197,6 +2253,10 @@ public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var declaration: DeclSyntax {
     get {
       let childData = data.child(at: Cursor.declaration,
@@ -2265,6 +2325,10 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .throwStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var throwKeyword: TokenSyntax {
@@ -2371,6 +2435,10 @@ public struct IfStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .ifStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var labelName: TokenSyntax? {
@@ -2650,6 +2718,10 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .poundAssertStmt)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundAssert: TokenSyntax {

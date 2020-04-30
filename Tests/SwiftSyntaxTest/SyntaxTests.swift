@@ -123,4 +123,16 @@ public class SyntaxTests: XCTestCase {
     XCTAssertNil(ExprSyntax(nil as IntegerLiteralExprSyntax?))
     XCTAssertEqual(ExprSyntax(integerExpr).as(IntegerLiteralExprSyntax.self)!, integerExpr)
   }
+
+  public func testNodeType() {
+    let integerExpr = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
+    }
+    let expr = ExprSyntax(integerExpr)
+    let node = Syntax(expr)
+
+    XCTAssertTrue(integerExpr.syntaxNodeType == expr.syntaxNodeType)
+    XCTAssertTrue(integerExpr.syntaxNodeType == node.syntaxNodeType)
+    XCTAssertEqual("\(integerExpr.syntaxNodeType)", "IntegerLiteralExprSyntax")
+  }
 }

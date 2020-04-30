@@ -80,6 +80,10 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return _syntaxNode.syntaxNodeType
+  }
+
   public func _validateLayout() {
     // Check the layout of the concrete type
     return Syntax(self)._validateLayout()
@@ -182,6 +186,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 #endif
 
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return _syntaxNode.syntaxNodeType
   }
 
   public func _validateLayout() {
@@ -288,6 +296,10 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return _syntaxNode.syntaxNodeType
+  }
+
   public func _validateLayout() {
     // Check the layout of the concrete type
     return Syntax(self)._validateLayout()
@@ -392,6 +404,10 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return _syntaxNode.syntaxNodeType
+  }
+
   public func _validateLayout() {
     // Check the layout of the concrete type
     return Syntax(self)._validateLayout()
@@ -494,6 +510,10 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 #endif
 
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return _syntaxNode.syntaxNodeType
   }
 
   public func _validateLayout() {

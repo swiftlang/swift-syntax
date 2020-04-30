@@ -79,6 +79,10 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
     assert(data.raw.kind == .${node.swift_syntax_kind})
     self._syntaxNode = Syntax(data)
   }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
 %     for child in node.children:
 %       child_node = NODE_MAP.get(child.syntax_kind)
 %

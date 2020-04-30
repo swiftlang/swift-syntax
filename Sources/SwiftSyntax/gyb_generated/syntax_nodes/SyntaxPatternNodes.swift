@@ -34,6 +34,10 @@ public struct UnknownPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
 
   public func _validateLayout() {
     // We are verifying an unknown node. Since we don’t know anything about it
@@ -73,6 +77,10 @@ public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .enumCasePattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var type: TypeSyntax? {
@@ -238,6 +246,10 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var isKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.isKeyword,
@@ -337,6 +349,10 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .optionalPattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var subPattern: PatternSyntax {
@@ -439,6 +455,10 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -508,6 +528,10 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .asTypePattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var pattern: PatternSyntax {
@@ -641,6 +665,10 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tuplePattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -794,6 +822,10 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var wildcard: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.wildcard,
@@ -894,6 +926,10 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var expression: ExprSyntax {
     get {
       let childData = data.child(at: Cursor.expression,
@@ -962,6 +998,10 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .valueBindingPattern)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var letOrVarKeyword: TokenSyntax {

@@ -40,6 +40,10 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -283,6 +287,10 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tupleExprElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -530,6 +538,10 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -773,6 +785,10 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .dictionaryElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1020,6 +1036,10 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -1263,6 +1283,10 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .declNameArgumentList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1510,6 +1534,10 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -1753,6 +1781,10 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .closureCaptureItemList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2000,6 +2032,10 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -2243,6 +2279,10 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .objcName)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2490,6 +2530,10 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -2733,6 +2777,10 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .ifConfigClauseList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2980,6 +3028,10 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -3223,6 +3275,10 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .memberDeclList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3470,6 +3526,10 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -3713,6 +3773,10 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .accessPath)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3960,6 +4024,10 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -4205,6 +4273,10 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -4445,6 +4517,10 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .enumCaseElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -4692,6 +4768,10 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -4935,6 +5015,10 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .precedenceGroupAttributeList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5182,6 +5266,10 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -5425,6 +5513,10 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tokenList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5672,6 +5764,10 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -5917,6 +6013,10 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -6159,6 +6259,10 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .specializeAttributeSpecList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6406,6 +6510,10 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -6649,6 +6757,10 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .differentiabilityParamList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6896,6 +7008,10 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -7139,6 +7255,10 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .catchClauseList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -7386,6 +7506,10 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -7629,6 +7753,10 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .catchItemList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -7876,6 +8004,10 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -8119,6 +8251,10 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .genericRequirementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -8366,6 +8502,10 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -8609,6 +8749,10 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .compositionTypeElementList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -8856,6 +9000,10 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -9099,6 +9247,10 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .genericArgumentList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -9346,6 +9498,10 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 
@@ -9589,6 +9745,10 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .availabilitySpecList)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.

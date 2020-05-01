@@ -99,6 +99,10 @@ public struct ${node.name}: ${node.name}Protocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return _syntaxNode.syntaxNodeType
+  }
+
   public func _validateLayout() {
     // Check the layout of the concrete type
     return Syntax(self)._validateLayout()

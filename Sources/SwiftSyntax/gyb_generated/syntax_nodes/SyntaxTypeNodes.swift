@@ -34,6 +34,10 @@ public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
 
   public func _validateLayout() {
     // We are verifying an unknown node. Since we don’t know anything about it
@@ -71,6 +75,10 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .simpleTypeIdentifier)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var name: TokenSyntax {
@@ -174,6 +182,10 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .memberTypeIdentifier)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var baseType: TypeSyntax {
@@ -338,6 +350,10 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var classKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.classKeyword,
@@ -407,6 +423,10 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .arrayType)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftSquareBracket: TokenSyntax {
@@ -542,6 +562,10 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .dictionaryType)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftSquareBracket: TokenSyntax {
@@ -739,6 +763,10 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var baseType: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.baseType,
@@ -871,6 +899,10 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var wrappedType: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.wrappedType,
@@ -970,6 +1002,10 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .someType)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var someSpecifier: TokenSyntax {
@@ -1073,6 +1109,10 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var wrappedType: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.wrappedType,
@@ -1173,6 +1213,10 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var elements: CompositionTypeElementListSyntax {
     get {
       let childData = data.child(at: Cursor.elements,
@@ -1261,6 +1305,10 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tupleType)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -1416,6 +1464,10 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .functionType)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -1661,6 +1713,10 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .attributedType)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var specifier: TokenSyntax? {

@@ -25,6 +25,10 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = syntax
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public func _validateLayout() {
     // We are verifying an unknown node. Since we don’t know anything about it
     // we need to assume it’s valid.
@@ -64,6 +68,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .token)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public func _validateLayout() {

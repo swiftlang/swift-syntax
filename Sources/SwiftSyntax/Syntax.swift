@@ -58,6 +58,10 @@ extension Syntax {
   public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self.asProtocol(SyntaxProtocol.self))
+  }
 }
 
 extension Syntax: CustomReflectable {
@@ -101,6 +105,9 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   /// integrity after it has been rewritten by the syntax rewriter.
   /// Results in an assertion failure if the layout is invalid.
   func _validateLayout()
+
+  /// Returns the underlying syntax node type.
+  var syntaxNodeType: SyntaxProtocol.Type { get }
 }
 
 internal extension SyntaxProtocol {

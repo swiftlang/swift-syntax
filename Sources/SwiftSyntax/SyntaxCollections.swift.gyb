@@ -55,6 +55,10 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int { return raw.numberOfChildren }
 

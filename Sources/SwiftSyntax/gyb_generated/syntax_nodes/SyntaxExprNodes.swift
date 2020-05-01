@@ -34,6 +34,10 @@ public struct UnknownExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
 
   public func _validateLayout() {
     // We are verifying an unknown node. Since we don’t know anything about it
@@ -71,6 +75,10 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .inOutExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var ampersand: TokenSyntax {
@@ -173,6 +181,10 @@ public struct PoundColumnExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var poundColumn: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundColumn,
@@ -242,6 +254,10 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tryExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var tryKeyword: TokenSyntax {
@@ -376,6 +392,10 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -476,6 +496,10 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var superKeyword: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.superKeyword,
@@ -543,6 +567,10 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .nilLiteralExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var nilKeyword: TokenSyntax {
@@ -614,6 +642,10 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var wildcard: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.wildcard,
@@ -683,6 +715,10 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var assignToken: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.assignToken,
@@ -750,6 +786,10 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .sequenceExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var elements: ExprListSyntax {
@@ -840,6 +880,10 @@ public struct PoundLineExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var poundLine: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundLine,
@@ -907,6 +951,10 @@ public struct PoundFileExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .poundFileExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundFile: TokenSyntax {
@@ -978,6 +1026,10 @@ public struct PoundFilePathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var poundFilePath: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundFilePath,
@@ -1045,6 +1097,10 @@ public struct PoundFunctionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .poundFunctionExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundFunction: TokenSyntax {
@@ -1116,6 +1172,10 @@ public struct PoundDsohandleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var poundDsohandle: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.poundDsohandle,
@@ -1184,6 +1244,10 @@ public struct SymbolicReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .symbolicReferenceExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var identifier: TokenSyntax {
@@ -1287,6 +1351,10 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var operatorToken: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.operatorToken,
@@ -1387,6 +1455,10 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var operatorToken: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.operatorToken,
@@ -1455,6 +1527,10 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .arrowExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var throwsToken: TokenSyntax? {
@@ -1557,6 +1633,10 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var floatingDigits: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.floatingDigits,
@@ -1626,6 +1706,10 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .tupleExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftParen: TokenSyntax {
@@ -1780,6 +1864,10 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var leftSquare: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftSquare,
@@ -1932,6 +2020,10 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var leftSquare: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.leftSquare,
@@ -2063,6 +2155,10 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var digits: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.digits,
@@ -2130,6 +2226,10 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .booleanLiteralExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var booleanLiteral: TokenSyntax {
@@ -2203,6 +2303,10 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .ternaryExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var conditionExpression: ExprSyntax {
@@ -2401,6 +2505,10 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var base: ExprSyntax? {
     get {
       let childData = data.child(at: Cursor.base,
@@ -2564,6 +2672,10 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var isTok: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.isTok,
@@ -2664,6 +2776,10 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .asExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var asTok: TokenSyntax {
@@ -2797,6 +2913,10 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var type: TypeSyntax {
     get {
       let childData = data.child(at: Cursor.type,
@@ -2867,6 +2987,10 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .closureExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var leftBrace: TokenSyntax {
@@ -3050,6 +3174,10 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var pattern: PatternSyntax {
     get {
       let childData = data.child(at: Cursor.pattern,
@@ -3121,6 +3249,10 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .functionCallExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var calledExpression: ExprSyntax {
@@ -3339,6 +3471,10 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var calledExpression: ExprSyntax {
     get {
       let childData = data.child(at: Cursor.calledExpression,
@@ -3552,6 +3688,10 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var expression: ExprSyntax {
     get {
       let childData = data.child(at: Cursor.expression,
@@ -3651,6 +3791,10 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .forcedValueExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var expression: ExprSyntax {
@@ -3754,6 +3898,10 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var expression: ExprSyntax {
     get {
       let childData = data.child(at: Cursor.expression,
@@ -3853,6 +4001,10 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .specializeExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var expression: ExprSyntax {
@@ -3957,6 +4109,10 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .stringLiteralExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var openDelimiter: TokenSyntax? {
@@ -4173,6 +4329,10 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var backslash: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.backslash,
@@ -4304,6 +4464,10 @@ public struct KeyPathBaseExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var period: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.period,
@@ -4374,6 +4538,10 @@ public struct ObjcKeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .objcKeyPathExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var keyPath: TokenSyntax {
@@ -4560,6 +4728,10 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .objcSelectorExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var poundSelector: TokenSyntax {
@@ -4786,6 +4958,10 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
   public var identifier: TokenSyntax {
     get {
       let childData = data.child(at: Cursor.identifier,
@@ -4856,6 +5032,10 @@ public struct ObjectLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .objectLiteralExpr)
     self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
   }
 
   public var identifier: TokenSyntax {

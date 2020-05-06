@@ -1700,6 +1700,143 @@ extension ClosureSignatureSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MultipleTrailingClosureElementSyntax
+
+public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case label
+    case colon
+    case closure
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MultipleTrailingClosureElementSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .multipleTrailingClosureElement else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MultipleTrailingClosureElementSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .multipleTrailingClosureElement)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var label: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.label,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `label` replaced.
+  /// - param newChild: The new `label` to replace the node's
+  ///                   current `label`, if present.
+  public func withLabel(
+    _ newChild: TokenSyntax?) -> MultipleTrailingClosureElementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.label)
+    return MultipleTrailingClosureElementSyntax(newData)
+  }
+
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> MultipleTrailingClosureElementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return MultipleTrailingClosureElementSyntax(newData)
+  }
+
+  public var closure: ClosureExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.closure,
+                                 parent: Syntax(self))
+      return ClosureExprSyntax(childData!)
+    }
+    set(value) {
+      self = withClosure(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `closure` replaced.
+  /// - param newChild: The new `closure` to replace the node's
+  ///                   current `closure`, if present.
+  public func withClosure(
+    _ newChild: ClosureExprSyntax?) -> MultipleTrailingClosureElementSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.closureExpr)
+    let newData = data.replacingChild(raw, at: Cursor.closure)
+    return MultipleTrailingClosureElementSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 3)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is ClosureExprSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ClosureExprSyntax.self))
+    }
+  }
+}
+
+extension MultipleTrailingClosureElementSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "closure": Syntax(closure).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - StringSegmentSyntax
 
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {

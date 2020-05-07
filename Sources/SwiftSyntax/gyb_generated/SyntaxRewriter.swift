@@ -415,6 +415,20 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `MultipleTrailingClosureElementSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MultipleTrailingClosureElementSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `MultipleTrailingClosureElementListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `FunctionCallExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2296,6 +2310,26 @@ open class SyntaxRewriter {
       defer { visitPost(node._syntaxNode) }
       if let newNode = visitAny(node._syntaxNode) { return newNode }
       return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMultipleTrailingClosureElementSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MultipleTrailingClosureElementSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMultipleTrailingClosureElementListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MultipleTrailingClosureElementListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
@@ -4232,6 +4266,10 @@ open class SyntaxRewriter {
       return visitImplClosureExprSyntax
     case .unresolvedPatternExpr:
       return visitImplUnresolvedPatternExprSyntax
+    case .multipleTrailingClosureElement:
+      return visitImplMultipleTrailingClosureElementSyntax
+    case .multipleTrailingClosureElementList:
+      return visitImplMultipleTrailingClosureElementListSyntax
     case .functionCallExpr:
       return visitImplFunctionCallExprSyntax
     case .subscriptExpr:
@@ -4721,6 +4759,10 @@ open class SyntaxRewriter {
       return visitImplClosureExprSyntax(data)
     case .unresolvedPatternExpr:
       return visitImplUnresolvedPatternExprSyntax(data)
+    case .multipleTrailingClosureElement:
+      return visitImplMultipleTrailingClosureElementSyntax(data)
+    case .multipleTrailingClosureElementList:
+      return visitImplMultipleTrailingClosureElementListSyntax(data)
     case .functionCallExpr:
       return visitImplFunctionCallExprSyntax(data)
     case .subscriptExpr:

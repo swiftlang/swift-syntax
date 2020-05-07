@@ -3232,6 +3232,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     case argumentList
     case rightParen
     case trailingClosure
+    case additionalTrailingClosures
   }
 
   public let _syntaxNode: Syntax
@@ -3382,10 +3383,51 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return FunctionCallExprSyntax(newData)
   }
 
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+    get {
+      let childData = data.child(at: Cursor.additionalTrailingClosures,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return MultipleTrailingClosureElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withAdditionalTrailingClosures(value)
+    }
+  }
+
+  /// Adds the provided `AdditionalTralingClosure` to the node's `additionalTrailingClosures`
+  /// collection.
+  /// - param element: The new `AdditionalTralingClosure` to add to the node's
+  ///                  `additionalTrailingClosures` collection.
+  /// - returns: A copy of the receiver with the provided `AdditionalTralingClosure`
+  ///            appended to its `additionalTrailingClosures` collection.
+  public func addAdditionalTralingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.additionalTrailingClosures] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.additionalTrailingClosures)
+    return FunctionCallExprSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `additionalTrailingClosures` replaced.
+  /// - param newChild: The new `additionalTrailingClosures` to replace the node's
+  ///                   current `additionalTrailingClosures`, if present.
+  public func withAdditionalTrailingClosures(
+    _ newChild: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.additionalTrailingClosures)
+    return FunctionCallExprSyntax(newData)
+  }
+
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
+    assert(rawChildren.count == 6)
     // Check child #0 child is ExprSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -3428,6 +3470,14 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(ClosureExprSyntax.self))
     }
+    // Check child #5 child is MultipleTrailingClosureElementListSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(MultipleTrailingClosureElementListSyntax.self))
+    }
   }
 }
 
@@ -3439,6 +3489,7 @@ extension FunctionCallExprSyntax: CustomReflectable {
       "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self),
       "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -3452,6 +3503,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     case argumentList
     case rightBracket
     case trailingClosure
+    case additionalTrailingClosures
   }
 
   public let _syntaxNode: Syntax
@@ -3600,10 +3652,51 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return SubscriptExprSyntax(newData)
   }
 
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+    get {
+      let childData = data.child(at: Cursor.additionalTrailingClosures,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return MultipleTrailingClosureElementListSyntax(childData!)
+    }
+    set(value) {
+      self = withAdditionalTrailingClosures(value)
+    }
+  }
+
+  /// Adds the provided `AdditionalTralingClosure` to the node's `additionalTrailingClosures`
+  /// collection.
+  /// - param element: The new `AdditionalTralingClosure` to add to the node's
+  ///                  `additionalTrailingClosures` collection.
+  /// - returns: A copy of the receiver with the provided `AdditionalTralingClosure`
+  ///            appended to its `additionalTrailingClosures` collection.
+  public func addAdditionalTralingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptExprSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.additionalTrailingClosures] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.additionalTrailingClosures)
+    return SubscriptExprSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `additionalTrailingClosures` replaced.
+  /// - param newChild: The new `additionalTrailingClosures` to replace the node's
+  ///                   current `additionalTrailingClosures`, if present.
+  public func withAdditionalTrailingClosures(
+    _ newChild: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.additionalTrailingClosures)
+    return SubscriptExprSyntax(newData)
+  }
+
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
+    assert(rawChildren.count == 6)
     // Check child #0 child is ExprSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -3648,6 +3741,14 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(ClosureExprSyntax.self))
     }
+    // Check child #5 child is MultipleTrailingClosureElementListSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(MultipleTrailingClosureElementListSyntax.self))
+    }
   }
 }
 
@@ -3659,6 +3760,7 @@ extension SubscriptExprSyntax: CustomReflectable {
       "argumentList": Syntax(argumentList).asProtocol(SyntaxProtocol.self),
       "rightBracket": Syntax(rightBracket).asProtocol(SyntaxProtocol.self),
       "trailingClosure": trailingClosure.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "additionalTrailingClosures": additionalTrailingClosures.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

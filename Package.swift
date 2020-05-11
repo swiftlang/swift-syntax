@@ -3,7 +3,7 @@
 import PackageDescription
 import Foundation
 
-#if os(Linux)
+#if canImport(Glibc)
 import Glibc
 #else
 import Darwin.C

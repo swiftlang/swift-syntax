@@ -79,6 +79,27 @@ should be specified with the intended tag.
 Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require
 the Swift compiler source because we always push gyb-generated files to a tag.
 
+### Embedding SwiftSyntax in an Application
+
+SwiftSyntax depends on the `lib_InternalSwiftSyntaxParser.dylib/.so` library which provides a C interface to the underlying Swift C++ parser. When you do `swift build` SwiftSyntax links and uses the library included in the Swift toolchain. If you are building an application make sure to embed `_InternalSwiftSyntaxParser` as part of your application's libraries.
+
+You can either copy `lib_InternalSwiftSyntaxParser.dylib/.so` directly from the toolchain or even build it yourself from the [Swift repository](https://github.com/apple/swift), as long as you are matching the same tags or branches in both the SwiftSyntax and Swift repositories. To build it for the host os (macOS/linux) use the following steps:
+
+```
+git clone https://github.com/apple/swift.git
+./swift/utils/update-checkout --clone
+./swift/utils/build-parser-lib --release --no-assertions --build-dir /tmp/parser-lib-build
+```
+
+### Embedding in an iOS Application
+
+You need to build `lib_InternalSwiftSyntaxParser.dylib` yourself, you cannot copy it from the toolchain. Follow the instructions above and change the invocation of `build-parser-lib` accordingly:
+
+```
+./swift/utils/build-parser-lib --release --no-assertions --build-dir /tmp/parser-lib-build-iossim --host iphonesimulator --architectures x86_64
+./swift/utils/build-parser-lib --release --no-assertions --build-dir /tmp/parser-lib-build-ios --host iphoneos --architectures arm64
+```
+
 ### Some Example Users
 
 [**Swift AST Explorer**](https://swift-ast-explorer.kishikawakatsumi.com/): a Swift AST visualizer.

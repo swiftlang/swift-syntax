@@ -2078,7 +2078,7 @@ public struct FunctionCallExprSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func addAdditionalTralingClosure(_ elt: MultipleTrailingClosureElementSyntax) {
+  public mutating func addAdditionalTrailingClosure(_ elt: MultipleTrailingClosureElementSyntax) {
     let idx = FunctionCallExprSyntax.Cursor.additionalTrailingClosures.rawValue
     if let list = layout[idx] {
       layout[idx] = list.appending(elt.raw)
@@ -2156,7 +2156,7 @@ public struct SubscriptExprSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func addAdditionalTralingClosure(_ elt: MultipleTrailingClosureElementSyntax) {
+  public mutating func addAdditionalTrailingClosure(_ elt: MultipleTrailingClosureElementSyntax) {
     let idx = SubscriptExprSyntax.Cursor.additionalTrailingClosures.rawValue
     if let list = layout[idx] {
       layout[idx] = list.appending(elt.raw)

@@ -3395,13 +3395,13 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
 
-  /// Adds the provided `AdditionalTralingClosure` to the node's `additionalTrailingClosures`
+  /// Adds the provided `AdditionalTrailingClosure` to the node's `additionalTrailingClosures`
   /// collection.
-  /// - param element: The new `AdditionalTralingClosure` to add to the node's
+  /// - param element: The new `AdditionalTrailingClosure` to add to the node's
   ///                  `additionalTrailingClosures` collection.
-  /// - returns: A copy of the receiver with the provided `AdditionalTralingClosure`
+  /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
   ///            appended to its `additionalTrailingClosures` collection.
-  public func addAdditionalTralingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
+  public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.additionalTrailingClosures] {
       collection = col.appending(element.raw)
@@ -3664,13 +3664,13 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
 
-  /// Adds the provided `AdditionalTralingClosure` to the node's `additionalTrailingClosures`
+  /// Adds the provided `AdditionalTrailingClosure` to the node's `additionalTrailingClosures`
   /// collection.
-  /// - param element: The new `AdditionalTralingClosure` to add to the node's
+  /// - param element: The new `AdditionalTrailingClosure` to add to the node's
   ///                  `additionalTrailingClosures` collection.
-  /// - returns: A copy of the receiver with the provided `AdditionalTralingClosure`
+  /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
   ///            appended to its `additionalTrailingClosures` collection.
-  public func addAdditionalTralingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptExprSyntax {
+  public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.additionalTrailingClosures] {
       collection = col.appending(element.raw)

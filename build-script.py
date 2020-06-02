@@ -141,6 +141,7 @@ def generate_single_gyb_file(
 
     # Generate the new file
     gyb_command = [
+        sys.executable,
         gyb_exec,
         gyb_file,
         "-o",

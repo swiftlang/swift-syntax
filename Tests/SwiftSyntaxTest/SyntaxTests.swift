@@ -135,4 +135,13 @@ public class SyntaxTests: XCTestCase {
     XCTAssertTrue(integerExpr.syntaxNodeType == node.syntaxNodeType)
     XCTAssertEqual("\(integerExpr.syntaxNodeType)", "IntegerLiteralExprSyntax")
   }
+
+  public func testConstructFromSyntaxProtocol() {
+    let integerExpr = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
+    }
+
+    XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as SyntaxProtocol))
+    XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as ExprSyntaxProtocol))
+  }
 }

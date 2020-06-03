@@ -39,6 +39,15 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     guard let syntax = syntax else { return nil }
     self = syntax._syntaxNode
   }
+  
+  public init(fromProtocol syntax: SyntaxProtocol) {
+    self = syntax._syntaxNode
+  }
+  
+  public init?(fromProtocol syntax: SyntaxProtocol?) {
+    guard let syntax = syntax else { return nil }
+    self = syntax._syntaxNode
+  }
 
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)

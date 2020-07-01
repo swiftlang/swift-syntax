@@ -7788,6 +7788,8 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     case ofLabel
     case colon
     case originalDeclName
+    case period
+    case accessorKind
     case comma
     case diffParams
   }
@@ -7882,6 +7884,55 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
     return DerivativeRegistrationAttributeArgumentsSyntax(newData)
   }
 
+  /// 
+  /// The period separating the original declaration name and the
+  /// accessor name.
+  /// 
+  public var period: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.period,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPeriod(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `period` replaced.
+  /// - param newChild: The new `period` to replace the node's
+  ///                   current `period`, if present.
+  public func withPeriod(
+    _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.period)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
+  /// The accessor name.
+  public var accessorKind: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.accessorKind,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAccessorKind(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `accessorKind` replaced.
+  /// - param newChild: The new `accessorKind` to replace the node's
+  ///                   current `accessorKind`, if present.
+  public func withAccessorKind(
+    _ newChild: TokenSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.accessorKind)
+    return DerivativeRegistrationAttributeArgumentsSyntax(newData)
+  }
+
   public var comma: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.comma,
@@ -7929,7 +7980,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
+    assert(rawChildren.count == 7)
     // Check child #0 child is TokenSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -7965,9 +8016,25 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is DifferentiabilityParamsClauseSyntax or missing
+    // Check child #4 child is TokenSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is DifferentiabilityParamsClauseSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -7982,6 +8049,8 @@ extension DerivativeRegistrationAttributeArgumentsSyntax: CustomReflectable {
       "ofLabel": Syntax(ofLabel).asProtocol(SyntaxProtocol.self),
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
       "originalDeclName": Syntax(originalDeclName).asProtocol(SyntaxProtocol.self),
+      "period": period.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "accessorKind": accessorKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "comma": comma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParams": diffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])

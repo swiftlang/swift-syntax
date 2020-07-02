@@ -3005,11 +3005,13 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return DifferentiabilityParamSyntax(data)
   }
-  public static func makeDerivativeRegistrationAttributeArguments(ofLabel: TokenSyntax, colon: TokenSyntax, originalDeclName: QualifiedDeclNameSyntax, comma: TokenSyntax?, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public static func makeDerivativeRegistrationAttributeArguments(ofLabel: TokenSyntax, colon: TokenSyntax, originalDeclName: QualifiedDeclNameSyntax, period: TokenSyntax?, accessorKind: TokenSyntax?, comma: TokenSyntax?, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       ofLabel.raw,
       colon.raw,
       originalDeclName.raw,
+      period?.raw,
+      accessorKind?.raw,
       comma?.raw,
       diffParams?.raw,
     ]
@@ -3025,6 +3027,8 @@ public enum SyntaxFactory {
       RawSyntax.missingToken(TokenKind.identifier("")),
       RawSyntax.missingToken(TokenKind.colon),
       RawSyntax.missing(SyntaxKind.qualifiedDeclName),
+      nil,
+      nil,
       nil,
       nil,
     ], length: .zero, presence: .present))

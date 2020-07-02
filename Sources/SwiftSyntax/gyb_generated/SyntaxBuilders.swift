@@ -6541,7 +6541,7 @@ extension DifferentiabilityParamSyntax {
 
 public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+    Array<RawSyntax?>(repeating: nil, count: 7)
 
   internal init() {}
 
@@ -6557,6 +6557,16 @@ public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
 
   public mutating func useOriginalDeclName(_ node: QualifiedDeclNameSyntax) {
     let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.originalDeclName.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func usePeriod(_ node: TokenSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.period.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAccessorKind(_ node: TokenSyntax) {
+    let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.accessorKind.rawValue
     layout[idx] = node.raw
   }
 

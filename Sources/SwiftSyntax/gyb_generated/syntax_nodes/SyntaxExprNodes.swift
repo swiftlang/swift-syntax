@@ -1002,6 +1002,79 @@ extension PoundFileExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PoundFileIDExprSyntax
+
+public struct PoundFileIDExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case poundFileID
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `PoundFileIDExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .poundFileIDExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PoundFileIDExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .poundFileIDExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var poundFileID: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.poundFileID,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundFileID(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `poundFileID` replaced.
+  /// - param newChild: The new `poundFileID` to replace the node's
+  ///                   current `poundFileID`, if present.
+  public func withPoundFileID(
+    _ newChild: TokenSyntax?) -> PoundFileIDExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundFileIDKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.poundFileID)
+    return PoundFileIDExprSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 1)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension PoundFileIDExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "poundFileID": Syntax(poundFileID).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - PoundFilePathExprSyntax
 
 public struct PoundFilePathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

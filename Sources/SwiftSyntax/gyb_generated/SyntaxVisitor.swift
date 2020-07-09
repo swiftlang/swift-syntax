@@ -302,6 +302,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `PoundFileExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PoundFileExprSyntax) {}
+  /// Visiting `PoundFileIDExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PoundFileIDExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `PoundFileIDExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PoundFileIDExprSyntax) {}
   /// Visiting `PoundFilePathExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2748,6 +2758,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPoundFileIDExprSyntax(_ data: SyntaxData) {
+      let node = PoundFileIDExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPoundFilePathExprSyntax(_ data: SyntaxData) {
       let node = PoundFilePathExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5108,6 +5129,8 @@ open class SyntaxVisitor {
       visitImplPoundLineExprSyntax(data)
     case .poundFileExpr:
       visitImplPoundFileExprSyntax(data)
+    case .poundFileIDExpr:
+      visitImplPoundFileIDExprSyntax(data)
     case .poundFilePathExpr:
       visitImplPoundFilePathExprSyntax(data)
     case .poundFunctionExpr:

@@ -48,6 +48,7 @@ public enum SyntaxEnum {
   case exprList(ExprListSyntax)
   case poundLineExpr(PoundLineExprSyntax)
   case poundFileExpr(PoundFileExprSyntax)
+  case poundFileIDExpr(PoundFileIDExprSyntax)
   case poundFilePathExpr(PoundFilePathExprSyntax)
   case poundFunctionExpr(PoundFunctionExprSyntax)
   case poundDsohandleExpr(PoundDsohandleExprSyntax)
@@ -329,6 +330,8 @@ public extension Syntax {
       return .poundLineExpr(PoundLineExprSyntax(self)!)
     case .poundFileExpr:
       return .poundFileExpr(PoundFileExprSyntax(self)!)
+    case .poundFileIDExpr:
+      return .poundFileIDExpr(PoundFileIDExprSyntax(self)!)
     case .poundFilePathExpr:
       return .poundFilePathExpr(PoundFilePathExprSyntax(self)!)
     case .poundFunctionExpr:

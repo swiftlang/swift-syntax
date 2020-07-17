@@ -677,6 +677,44 @@ extension PoundFileExprSyntax {
   }
 }
 
+public struct PoundFileIDExprSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 1)
+
+  internal init() {}
+
+  public mutating func usePoundFileID(_ node: TokenSyntax) {
+    let idx = PoundFileIDExprSyntax.Cursor.poundFileID.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.poundFileIDKeyword)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundFileIDExpr,
+      layout: layout, presence: .present))
+  }
+}
+
+extension PoundFileIDExprSyntax {
+  /// Creates a `PoundFileIDExprSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `PoundFileIDExprSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `PoundFileIDExprSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout PoundFileIDExprSyntaxBuilder) -> Void) {
+    var builder = PoundFileIDExprSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct PoundFilePathExprSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 1)

@@ -48,6 +48,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case exprList = 170
   case poundLineExpr = 34
   case poundFileExpr = 35
+  case poundFileIDExpr = 247
   case poundFilePathExpr = 240
   case poundFunctionExpr = 36
   case poundDsohandleExpr = 37

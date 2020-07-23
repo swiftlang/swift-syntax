@@ -128,6 +128,8 @@ You need to build `lib_InternalSwiftSyntaxParser.dylib` yourself, you cannot cop
 
 [**Piranha**](https://github.com/uber/piranha): a tool for refactoring code related to feature flags.
 
+[**STAR**](https://github.com/thumbtack/star): a tool to find how often specified Swift type(s) are used in a project.
+
 ### Reporting Issues
 
 If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [bugs.swift.org](https://bugs.swift.org) in the [SwiftSyntax component](https://bugs.swift.org/issues/?jql=component%20%3D%20SwiftSyntax).

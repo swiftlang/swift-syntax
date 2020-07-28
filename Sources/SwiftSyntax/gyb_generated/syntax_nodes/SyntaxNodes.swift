@@ -2606,6 +2606,7 @@ extension ReturnClauseSyntax: CustomReflectable {
 public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case input
+    case asyncKeyword
     case throwsOrRethrowsKeyword
     case output
   }
@@ -2649,6 +2650,28 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     _ newChild: ParameterClauseSyntax?) -> FunctionSignatureSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.parameterClause)
     let newData = data.replacingChild(raw, at: Cursor.input)
+    return FunctionSignatureSyntax(newData)
+  }
+
+  public var asyncKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.asyncKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsyncKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
+  /// - param newChild: The new `asyncKeyword` to replace the node's
+  ///                   current `asyncKeyword`, if present.
+  public func withAsyncKeyword(
+    _ newChild: TokenSyntax?) -> FunctionSignatureSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
     return FunctionSignatureSyntax(newData)
   }
 
@@ -2699,7 +2722,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
+    assert(rawChildren.count == 4)
     // Check child #0 child is ParameterClauseSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -2717,9 +2740,17 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #2 child is ReturnClauseSyntax or missing
+    // Check child #2 child is TokenSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #3 child is ReturnClauseSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -2732,6 +2763,7 @@ extension FunctionSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "input": Syntax(input).asProtocol(SyntaxProtocol.self),
+      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "output": output.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])

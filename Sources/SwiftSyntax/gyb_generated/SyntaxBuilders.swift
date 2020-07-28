@@ -955,9 +955,14 @@ extension BinaryOperatorExprSyntax {
 
 public struct ArrowExprSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+    Array<RawSyntax?>(repeating: nil, count: 3)
 
   internal init() {}
+
+  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
+    let idx = ArrowExprSyntax.Cursor.asyncKeyword.rawValue
+    layout[idx] = node.raw
+  }
 
   public mutating func useThrowsToken(_ node: TokenSyntax) {
     let idx = ArrowExprSyntax.Cursor.throwsToken.rawValue
@@ -970,8 +975,8 @@ public struct ArrowExprSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.arrow)
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.arrow)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .arrowExpr,
@@ -3304,12 +3309,17 @@ extension ReturnClauseSyntax {
 
 public struct FunctionSignatureSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+    Array<RawSyntax?>(repeating: nil, count: 4)
 
   internal init() {}
 
   public mutating func useInput(_ node: ParameterClauseSyntax) {
     let idx = FunctionSignatureSyntax.Cursor.input.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
+    let idx = FunctionSignatureSyntax.Cursor.asyncKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -9480,7 +9490,7 @@ extension TupleTypeSyntax {
 
 public struct FunctionTypeSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+    Array<RawSyntax?>(repeating: nil, count: 7)
 
   internal init() {}
 
@@ -9502,6 +9512,11 @@ public struct FunctionTypeSyntaxBuilder {
 
   public mutating func useRightParen(_ node: TokenSyntax) {
     let idx = FunctionTypeSyntax.Cursor.rightParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
+    let idx = FunctionTypeSyntax.Cursor.asyncKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -9530,11 +9545,11 @@ public struct FunctionTypeSyntaxBuilder {
     if (layout[2] == nil) {
       layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
     }
-    if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.arrow)
-    }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.type)
+      layout[5] = RawSyntax.missingToken(TokenKind.arrow)
+    }
+    if (layout[6] == nil) {
+      layout[6] = RawSyntax.missing(SyntaxKind.type)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .functionType,

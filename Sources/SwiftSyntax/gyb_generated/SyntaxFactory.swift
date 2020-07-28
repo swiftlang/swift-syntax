@@ -579,8 +579,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return BinaryOperatorExprSyntax(data)
   }
-  public static func makeArrowExpr(throwsToken: TokenSyntax?, arrowToken: TokenSyntax) -> ArrowExprSyntax {
+  public static func makeArrowExpr(asyncKeyword: TokenSyntax?, throwsToken: TokenSyntax?, arrowToken: TokenSyntax) -> ArrowExprSyntax {
     let layout: [RawSyntax?] = [
+      asyncKeyword?.raw,
       throwsToken?.raw,
       arrowToken.raw,
     ]
@@ -593,6 +594,7 @@ public enum SyntaxFactory {
   public static func makeBlankArrowExpr() -> ArrowExprSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .arrowExpr,
       layout: [
+      nil,
       nil,
       RawSyntax.missingToken(TokenKind.arrow),
     ], length: .zero, presence: .present))
@@ -1564,9 +1566,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ReturnClauseSyntax(data)
   }
-  public static func makeFunctionSignature(input: ParameterClauseSyntax, throwsOrRethrowsKeyword: TokenSyntax?, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
+  public static func makeFunctionSignature(input: ParameterClauseSyntax, asyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
     let layout: [RawSyntax?] = [
       input.raw,
+      asyncKeyword?.raw,
       throwsOrRethrowsKeyword?.raw,
       output?.raw,
     ]
@@ -1580,6 +1583,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionSignature,
       layout: [
       RawSyntax.missing(SyntaxKind.parameterClause),
+      nil,
       nil,
       nil,
     ], length: .zero, presence: .present))
@@ -4291,11 +4295,12 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return TupleTypeSyntax(data)
   }
-  public static func makeFunctionType(leftParen: TokenSyntax, arguments: TupleTypeElementListSyntax, rightParen: TokenSyntax, throwsOrRethrowsKeyword: TokenSyntax?, arrow: TokenSyntax, returnType: TypeSyntax) -> FunctionTypeSyntax {
+  public static func makeFunctionType(leftParen: TokenSyntax, arguments: TupleTypeElementListSyntax, rightParen: TokenSyntax, asyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, arrow: TokenSyntax, returnType: TypeSyntax) -> FunctionTypeSyntax {
     let layout: [RawSyntax?] = [
       leftParen.raw,
       arguments.raw,
       rightParen.raw,
+      asyncKeyword?.raw,
       throwsOrRethrowsKeyword?.raw,
       arrow.raw,
       returnType.raw,
@@ -4312,6 +4317,7 @@ public enum SyntaxFactory {
       RawSyntax.missingToken(TokenKind.leftParen),
       RawSyntax.missing(SyntaxKind.tupleTypeElementList),
       RawSyntax.missingToken(TokenKind.rightParen),
+      nil,
       nil,
       RawSyntax.missingToken(TokenKind.arrow),
       RawSyntax.missing(SyntaxKind.type),

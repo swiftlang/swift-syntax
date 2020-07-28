@@ -1581,6 +1581,7 @@ extension BinaryOperatorExprSyntax: CustomReflectable {
 
 public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case asyncKeyword
     case throwsToken
     case arrowToken
   }
@@ -1604,6 +1605,28 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var asyncKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.asyncKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsyncKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
+  /// - param newChild: The new `asyncKeyword` to replace the node's
+  ///                   current `asyncKeyword`, if present.
+  public func withAsyncKeyword(
+    _ newChild: TokenSyntax?) -> ArrowExprSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
+    return ArrowExprSyntax(newData)
   }
 
   public var throwsToken: TokenSyntax? {
@@ -1652,7 +1675,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
+    assert(rawChildren.count == 3)
     // Check child #0 child is TokenSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -1661,10 +1684,18 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
+    // Check child #1 child is TokenSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1676,6 +1707,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension ArrowExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsToken": throwsToken.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arrowToken": Syntax(arrowToken).asProtocol(SyntaxProtocol.self),
     ])

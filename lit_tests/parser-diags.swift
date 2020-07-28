@@ -20,7 +20,7 @@ if (true ꝸꝸꝸ false) {}
 if (5 ‒ 5) == 0 {}
 // CHECK-NEXT: [[@LINE-1]]:7 error: invalid character in source file
 // CHECK-NEXT: Fixit: ([[@LINE-2]]:7,[[@LINE-2]]:10) Text: " "
-// CHECK-NEXT: [[@LINE-3]]:7 [[@LINE-3]]:7 note: unicode character '‒' (Figure Dash) looks similar to '-' (Figure Dash); did you mean to use '-' (Hyphen Minus)?
+// CHECK-NEXT: [[@LINE-3]]:7 [[@LINE-3]]:7 note: unicode character '‒' (Figure Dash) looks similar to '-' (Hyphen Minus); did you mean to use '-' (Hyphen Minus)?
 // CHECK-NEXT: Fixit: ([[@LINE-4]]:7,[[@LINE-4]]:10) Text: "-"
 // CHECK-NEXT: [[@LINE-5]]:11 error: expected ',' separator
 // CHECK-NEXT: Fixit: ([[@LINE-6]]:6,[[@LINE-6]]:6) Text: ","

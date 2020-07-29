@@ -1444,6 +1444,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case leftParen
     case arguments
     case rightParen
+    case asyncKeyword
     case throwsOrRethrowsKeyword
     case arrow
     case returnType
@@ -1552,6 +1553,28 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return FunctionTypeSyntax(newData)
   }
 
+  public var asyncKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.asyncKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsyncKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
+  /// - param newChild: The new `asyncKeyword` to replace the node's
+  ///                   current `asyncKeyword`, if present.
+  public func withAsyncKeyword(
+    _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
+    return FunctionTypeSyntax(newData)
+  }
+
   public var throwsOrRethrowsKeyword: TokenSyntax? {
     get {
       let childData = data.child(at: Cursor.throwsOrRethrowsKeyword,
@@ -1619,7 +1642,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 6)
+    assert(rawChildren.count == 7)
     // Check child #0 child is TokenSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -1655,8 +1678,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is TokenSyntax 
-    assert(rawChildren[4].raw != nil)
+    // Check child #4 child is TokenSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -1664,10 +1686,19 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #5 child is TypeSyntax 
+    // Check child #5 child is TokenSyntax 
     assert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is TypeSyntax 
+    assert(rawChildren[6].raw != nil)
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1682,6 +1713,7 @@ extension FunctionTypeSyntax: CustomReflectable {
       "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
       "arguments": Syntax(arguments).asProtocol(SyntaxProtocol.self),
       "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "arrow": Syntax(arrow).asProtocol(SyntaxProtocol.self),
       "returnType": Syntax(returnType).asProtocol(SyntaxProtocol.self),

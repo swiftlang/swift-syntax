@@ -222,6 +222,8 @@ extension RawTokenKind {
       return .keyword
     case .throwsKeyword:
       return .keyword
+    case .awaitKeyword:
+      return .keyword
     case .__file__Keyword:
       return .keyword
     case .__line__Keyword:

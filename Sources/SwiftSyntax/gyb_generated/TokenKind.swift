@@ -68,6 +68,7 @@ public enum TokenKind {
   case trueKeyword
   case tryKeyword
   case throwsKeyword
+  case awaitKeyword
   case __file__Keyword
   case __line__Keyword
   case __column__Keyword
@@ -195,6 +196,7 @@ public enum TokenKind {
     case .trueKeyword: return "true"
     case .tryKeyword: return "try"
     case .throwsKeyword: return "throws"
+    case .awaitKeyword: return "__await"
     case .__file__Keyword: return "__FILE__"
     case .__line__Keyword: return "__LINE__"
     case .__column__Keyword: return "__COLUMN__"
@@ -323,6 +325,7 @@ public enum TokenKind {
     case .trueKeyword: return true
     case .tryKeyword: return true
     case .throwsKeyword: return true
+    case .awaitKeyword: return true
     case .__file__Keyword: return true
     case .__line__Keyword: return true
     case .__column__Keyword: return true
@@ -451,6 +454,7 @@ public enum TokenKind {
     case .trueKeyword: return "kw_true"
     case .tryKeyword: return "kw_try"
     case .throwsKeyword: return "kw_throws"
+    case .awaitKeyword: return "kw___await"
     case .__file__Keyword: return "kw___FILE__"
     case .__line__Keyword: return "kw___LINE__"
     case .__column__Keyword: return "kw___COLUMN__"
@@ -579,6 +583,7 @@ public enum TokenKind {
     case .trueKeyword: return SourceLength(utf8Length: 4)
     case .tryKeyword: return SourceLength(utf8Length: 3)
     case .throwsKeyword: return SourceLength(utf8Length: 6)
+    case .awaitKeyword: return SourceLength(utf8Length: 7)
     case .__file__Keyword: return SourceLength(utf8Length: 8)
     case .__line__Keyword: return SourceLength(utf8Length: 8)
     case .__column__Keyword: return SourceLength(utf8Length: 10)
@@ -709,6 +714,7 @@ extension TokenKind: Equatable {
     case (.trueKeyword, .trueKeyword): return true
     case (.tryKeyword, .tryKeyword): return true
     case (.throwsKeyword, .throwsKeyword): return true
+    case (.awaitKeyword, .awaitKeyword): return true
     case (.__file__Keyword, .__file__Keyword): return true
     case (.__line__Keyword, .__line__Keyword): return true
     case (.__column__Keyword, .__column__Keyword): return true
@@ -907,6 +913,8 @@ extension TokenKind {
       return .tryKeyword
     case 53:
       return .throwsKeyword
+    case 123:
+      return .awaitKeyword
     case 54:
       return .__file__Keyword
     case 55:
@@ -1167,6 +1175,8 @@ extension TokenKind {
       return false
     case 53:
       return false
+    case 123:
+      return false
     case 54:
       return false
     case 55:
@@ -1367,6 +1377,7 @@ internal enum RawTokenKind: CTokenKind {
   case trueKeyword = 51
   case tryKeyword = 52
   case throwsKeyword = 53
+  case awaitKeyword = 123
   case __file__Keyword = 54
   case __line__Keyword = 55
   case __column__Keyword = 56
@@ -1608,6 +1619,9 @@ extension TokenKind {
     case .throwsKeyword:
       let length = 6
       return body(.init(kind: .throwsKeyword, length: length))
+    case .awaitKeyword:
+      let length = 7
+      return body(.init(kind: .awaitKeyword, length: length))
     case .__file__Keyword:
       let length = 8
       return body(.init(kind: .__file__Keyword, length: length))

@@ -250,6 +250,25 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return TryExprSyntax(data)
   }
+  public static func makeAwaitExpr(awaitKeyword: TokenSyntax, expression: ExprSyntax) -> AwaitExprSyntax {
+    let layout: [RawSyntax?] = [
+      awaitKeyword.raw,
+      expression.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.awaitExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return AwaitExprSyntax(data)
+  }
+
+  public static func makeBlankAwaitExpr() -> AwaitExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .awaitExpr,
+      layout: [
+      RawSyntax.missingToken(TokenKind.awaitKeyword),
+      RawSyntax.missing(SyntaxKind.expr),
+    ], length: .zero, presence: .present))
+    return AwaitExprSyntax(data)
+  }
   public static func makeDeclNameArgument(name: TokenSyntax, colon: TokenSyntax) -> DeclNameArgumentSyntax {
     let layout: [RawSyntax?] = [
       name.raw,
@@ -5042,6 +5061,12 @@ public enum SyntaxFactory {
   public static func makeThrowsKeyword(leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeToken(.throwsKeyword, presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+  public static func makeAwaitKeyword(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.awaitKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

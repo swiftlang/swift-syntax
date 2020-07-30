@@ -36,6 +36,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case dictionaryElementList = 167
   case stringLiteralSegments = 168
   case tryExpr = 27
+  case awaitExpr = 249
   case declNameArgument = 94
   case declNameArgumentList = 169
   case declNameArguments = 95

@@ -111,6 +111,12 @@ extension SyntaxNode {
     return TryExprSyntax(asSyntaxData)
   }
 
+  public var isAwaitExpr: Bool { return raw.kind == .awaitExpr }
+  public var asAwaitExpr: AwaitExprSyntax? {
+    guard isAwaitExpr else { return nil }
+    return AwaitExprSyntax(asSyntaxData)
+  }
+
   public var isDeclNameArgument: Bool { return raw.kind == .declNameArgument }
   public var asDeclNameArgument: DeclNameArgumentSyntax? {
     guard isDeclNameArgument else { return nil }
@@ -1489,6 +1495,8 @@ extension Syntax {
       return node
     case .tryExpr(let node):
       return node
+    case .awaitExpr(let node):
+      return node
     case .declNameArgument(let node):
       return node
     case .declNameArgumentList(let node):
@@ -1936,6 +1944,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "3a049b2faed8cf5c7c125ffe4354a6e8b5d9620f"
+      "fd719aaf2e0dab2620af2d4d123d123b3d0de28d"
   }
 }

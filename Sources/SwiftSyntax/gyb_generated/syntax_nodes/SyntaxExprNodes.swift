@@ -367,6 +367,111 @@ extension TryExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - AwaitExprSyntax
+
+public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case awaitKeyword
+    case expression
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `AwaitExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .awaitExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AwaitExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .awaitExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var awaitKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.awaitKeyword,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAwaitKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `awaitKeyword` replaced.
+  /// - param newChild: The new `awaitKeyword` to replace the node's
+  ///                   current `awaitKeyword`, if present.
+  public func withAwaitKeyword(
+    _ newChild: TokenSyntax?) -> AwaitExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.awaitKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.awaitKeyword)
+    return AwaitExprSyntax(newData)
+  }
+
+  public var expression: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.expression,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withExpression(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `expression` replaced.
+  /// - param newChild: The new `expression` to replace the node's
+  ///                   current `expression`, if present.
+  public func withExpression(
+    _ newChild: ExprSyntax?) -> AwaitExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let newData = data.replacingChild(raw, at: Cursor.expression)
+    return AwaitExprSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 2)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is ExprSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+  }
+}
+
+extension AwaitExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "awaitKeyword": Syntax(awaitKeyword).asProtocol(SyntaxProtocol.self),
+      "expression": Syntax(expression).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - IdentifierExprSyntax
 
 public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

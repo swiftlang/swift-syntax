@@ -256,6 +256,52 @@ extension TryExprSyntax {
   }
 }
 
+public struct AwaitExprSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 2)
+
+  internal init() {}
+
+  public mutating func useAwaitKeyword(_ node: TokenSyntax) {
+    let idx = AwaitExprSyntax.Cursor.awaitKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useExpression(_ node: ExprSyntax) {
+    let idx = AwaitExprSyntax.Cursor.expression.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.awaitKeyword)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .awaitExpr,
+      layout: layout, presence: .present))
+  }
+}
+
+extension AwaitExprSyntax {
+  /// Creates a `AwaitExprSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `AwaitExprSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `AwaitExprSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout AwaitExprSyntaxBuilder) -> Void) {
+    var builder = AwaitExprSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct DeclNameArgumentSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 2)

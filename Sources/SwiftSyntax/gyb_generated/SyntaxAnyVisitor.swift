@@ -169,6 +169,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: TryExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: AwaitExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

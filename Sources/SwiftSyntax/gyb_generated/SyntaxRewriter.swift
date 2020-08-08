@@ -2128,7 +2128,8 @@ open class SyntaxRewriter {
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-      let node = FloatLiteralExprSyntax(data)
+      // We know that the SyntaxData is valid since we are walking a valid syntax tree and haven't modified the syntax data. Thus the initializer below will never return nil.
+      let node = FloatLiteralExprSyntax(data)!
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -2198,7 +2199,8 @@ open class SyntaxRewriter {
 
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-      let node = IntegerLiteralExprSyntax(data)
+      // We know that the SyntaxData is valid since we are walking a valid syntax tree and haven't modified the syntax data. Thus the initializer below will never return nil.
+      let node = IntegerLiteralExprSyntax(data)!
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }

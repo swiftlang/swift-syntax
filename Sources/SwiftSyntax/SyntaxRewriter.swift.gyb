@@ -91,7 +91,12 @@ open class SyntaxRewriter {
       if let newNode = visitAny(node._syntaxNode) { return newNode }
       return Syntax(visit(node))
 %   else:
+%     if node.must_uphold_invariant:
+      // We know that the SyntaxData is valid since we are walking a valid syntax tree and haven't modified the syntax data. Thus the initializer below will never return nil.
+      let node = ${node.name}(data)!
+%     else:
       let node = ${node.name}(data)
+%     end
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }

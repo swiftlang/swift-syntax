@@ -619,7 +619,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ArrowExprSyntax(data)
   }
-  public static func makeFloatLiteralExpr(floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
+  public static func makeFloatLiteralExpr(floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax? {
     let layout: [RawSyntax?] = [
       floatingDigits.raw,
     ]
@@ -629,13 +629,6 @@ public enum SyntaxFactory {
     return FloatLiteralExprSyntax(data)
   }
 
-  public static func makeBlankFloatLiteralExpr() -> FloatLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .floatLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.floatingLiteral("")),
-    ], length: .zero, presence: .present))
-    return FloatLiteralExprSyntax(data)
-  }
   public static func makeTupleExpr(leftParen: TokenSyntax, elementList: TupleExprElementListSyntax, rightParen: TokenSyntax) -> TupleExprSyntax {
     let layout: [RawSyntax?] = [
       leftParen.raw,
@@ -764,7 +757,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return DictionaryElementSyntax(data)
   }
-  public static func makeIntegerLiteralExpr(digits: TokenSyntax) -> IntegerLiteralExprSyntax {
+  public static func makeIntegerLiteralExpr(digits: TokenSyntax) -> IntegerLiteralExprSyntax? {
     let layout: [RawSyntax?] = [
       digits.raw,
     ]
@@ -774,13 +767,6 @@ public enum SyntaxFactory {
     return IntegerLiteralExprSyntax(data)
   }
 
-  public static func makeBlankIntegerLiteralExpr() -> IntegerLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .integerLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.integerLiteral("")),
-    ], length: .zero, presence: .present))
-    return IntegerLiteralExprSyntax(data)
-  }
   public static func makeBooleanLiteralExpr(booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       booleanLiteral.raw,

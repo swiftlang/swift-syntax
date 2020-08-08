@@ -57,7 +57,11 @@ public enum SyntaxFactory {
 %            param_type = param_type + "?"
 %         child_params.append("%s: %s" % (child.swift_name, param_type))
 %     child_params = ', '.join(child_params)
+%     if node.must_uphold_invariant:
+  public static func make${node.syntax_kind}(${child_params}) -> ${node.name}? {
+%     else:
   public static func make${node.syntax_kind}(${child_params}) -> ${node.name} {
+%     end
     let layout: [RawSyntax?] = [
 %     for child in node.children:
 %       if child.is_optional:
@@ -82,7 +86,7 @@ public enum SyntaxFactory {
   }
 %   end
 
-%   if not node.is_base():
+%   if not node.is_base() and not node.must_uphold_invariant:
   public static func makeBlank${node.syntax_kind}() -> ${node.name} {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .${node.swift_syntax_kind},
       layout: [

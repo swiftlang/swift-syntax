@@ -67,6 +67,8 @@ extension SyntaxClassification {
       switch (parentKind, indexInParent) {
       case (.arrowExpr, 0):
         return (.keyword, false)
+      case (.closureSignature, 2):
+        return (.keyword, false)
       case (.expressionSegment, 2):
         return (.stringInterpolationAnchor, true)
       case (.functionSignature, 1):

@@ -1917,7 +1917,7 @@ extension ClosureParamSyntax {
 
 public struct ClosureSignatureSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+    Array<RawSyntax?>(repeating: nil, count: 6)
 
   internal init() {}
 
@@ -1928,6 +1928,11 @@ public struct ClosureSignatureSyntaxBuilder {
 
   public mutating func useInput(_ node: Syntax) {
     let idx = ClosureSignatureSyntax.Cursor.input.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
+    let idx = ClosureSignatureSyntax.Cursor.asyncKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -1947,8 +1952,8 @@ public struct ClosureSignatureSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.inKeyword)
+    if (layout[5] == nil) {
+      layout[5] = RawSyntax.missingToken(TokenKind.inKeyword)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .closureSignature,

@@ -996,10 +996,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ClosureParamListSyntax(data)
   }
-  public static func makeClosureSignature(capture: ClosureCaptureSignatureSyntax?, input: Syntax?, throwsTok: TokenSyntax?, output: ReturnClauseSyntax?, inTok: TokenSyntax) -> ClosureSignatureSyntax {
+  public static func makeClosureSignature(capture: ClosureCaptureSignatureSyntax?, input: Syntax?, asyncKeyword: TokenSyntax?, throwsTok: TokenSyntax?, output: ReturnClauseSyntax?, inTok: TokenSyntax) -> ClosureSignatureSyntax {
     let layout: [RawSyntax?] = [
       capture?.raw,
       input?.raw,
+      asyncKeyword?.raw,
       throwsTok?.raw,
       output?.raw,
       inTok.raw,
@@ -1013,6 +1014,7 @@ public enum SyntaxFactory {
   public static func makeBlankClosureSignature() -> ClosureSignatureSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureSignature,
       layout: [
+      nil,
       nil,
       nil,
       nil,

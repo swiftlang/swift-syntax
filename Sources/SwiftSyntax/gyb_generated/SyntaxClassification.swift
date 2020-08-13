@@ -65,6 +65,8 @@ extension SyntaxClassification {
     // Separate checks for token nodes (most common checks) versus checks for layout nodes.
     if childKind == .token {
       switch (parentKind, indexInParent) {
+      case (.awaitExpr, 0):
+        return (.keyword, false)
       case (.arrowExpr, 0):
         return (.keyword, false)
       case (.closureSignature, 2):
@@ -219,8 +221,6 @@ extension RawTokenKind {
     case .tryKeyword:
       return .keyword
     case .throwsKeyword:
-      return .keyword
-    case .awaitKeyword:
       return .keyword
     case .__file__Keyword:
       return .keyword

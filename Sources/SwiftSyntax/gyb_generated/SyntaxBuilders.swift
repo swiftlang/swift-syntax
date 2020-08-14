@@ -274,7 +274,7 @@ public struct AwaitExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.awaitKeyword)
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missing(SyntaxKind.expr)

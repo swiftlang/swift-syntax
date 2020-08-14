@@ -264,7 +264,7 @@ public enum SyntaxFactory {
   public static func makeBlankAwaitExpr() -> AwaitExprSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .awaitExpr,
       layout: [
-      RawSyntax.missingToken(TokenKind.awaitKeyword),
+      RawSyntax.missingToken(TokenKind.identifier("")),
       RawSyntax.missing(SyntaxKind.expr),
     ], length: .zero, presence: .present))
     return AwaitExprSyntax(data)
@@ -5063,12 +5063,6 @@ public enum SyntaxFactory {
   public static func makeThrowsKeyword(leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeToken(.throwsKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
-  }
-  public static func makeAwaitKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeToken(.awaitKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

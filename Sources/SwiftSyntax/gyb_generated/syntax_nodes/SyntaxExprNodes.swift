@@ -412,7 +412,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `awaitKeyword`, if present.
   public func withAwaitKeyword(
     _ newChild: TokenSyntax?) -> AwaitExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.awaitKeyword)
     let newData = data.replacingChild(raw, at: Cursor.awaitKeyword)
     return AwaitExprSyntax(newData)
   }

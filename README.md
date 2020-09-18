@@ -181,7 +181,7 @@ swift/utils/build-script --swiftsyntax --swiftpm --llbuild -t --skip-test-cmark 
 ```
 This command will build SwiftSyntax and all its dependencies, tell the build script to run tests, but skip all tests but the SwiftSyntax tests.
 
-Note that it is not currently supported to SwiftSyntax while building the Swift compiler using Xcode.
+Note that it is not currently supported to build SwiftSyntax while building the Swift compiler using Xcode.
 
 ### CI Testing
 

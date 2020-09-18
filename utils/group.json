@@ -14,6 +14,7 @@
     "Syntax.swift",
     "SyntaxBaseNodes.swift",
     "SyntaxCollections.swift",
+    "SyntaxConvenienceMethods.swift",
     "SyntaxDeclNodes.swift",
     "SyntaxExprNodes.swift",
     "SyntaxNodes.swift",

@@ -274,7 +274,7 @@ public struct AwaitExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawSyntax.missingToken(TokenKind.awaitKeyword)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missing(SyntaxKind.expr)
@@ -1077,7 +1077,7 @@ extension FloatLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FloatLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FloatLiteralExprSyntaxBuilder) -> Void) {
+  public init?(_ build: (inout FloatLiteralExprSyntaxBuilder) -> Void) {
     var builder = FloatLiteralExprSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
@@ -1444,7 +1444,7 @@ extension IntegerLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IntegerLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IntegerLiteralExprSyntaxBuilder) -> Void) {
+  public init?(_ build: (inout IntegerLiteralExprSyntaxBuilder) -> Void) {
     var builder = IntegerLiteralExprSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
@@ -1917,7 +1917,7 @@ extension ClosureParamSyntax {
 
 public struct ClosureSignatureSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+    Array<RawSyntax?>(repeating: nil, count: 5)
 
   internal init() {}
 
@@ -1928,11 +1928,6 @@ public struct ClosureSignatureSyntaxBuilder {
 
   public mutating func useInput(_ node: Syntax) {
     let idx = ClosureSignatureSyntax.Cursor.input.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
-    let idx = ClosureSignatureSyntax.Cursor.asyncKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -1952,8 +1947,8 @@ public struct ClosureSignatureSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.inKeyword)
+    if (layout[4] == nil) {
+      layout[4] = RawSyntax.missingToken(TokenKind.inKeyword)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .closureSignature,

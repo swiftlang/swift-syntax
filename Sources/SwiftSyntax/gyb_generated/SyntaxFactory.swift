@@ -264,7 +264,7 @@ public enum SyntaxFactory {
   public static func makeBlankAwaitExpr() -> AwaitExprSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .awaitExpr,
       layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.awaitKeyword),
       RawSyntax.missing(SyntaxKind.expr),
     ], length: .zero, presence: .present))
     return AwaitExprSyntax(data)
@@ -619,7 +619,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ArrowExprSyntax(data)
   }
-  public static func makeFloatLiteralExpr(floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
+  public static func makeFloatLiteralExpr(floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax? {
     let layout: [RawSyntax?] = [
       floatingDigits.raw,
     ]
@@ -629,13 +629,6 @@ public enum SyntaxFactory {
     return FloatLiteralExprSyntax(data)
   }
 
-  public static func makeBlankFloatLiteralExpr() -> FloatLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .floatLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.floatingLiteral("")),
-    ], length: .zero, presence: .present))
-    return FloatLiteralExprSyntax(data)
-  }
   public static func makeTupleExpr(leftParen: TokenSyntax, elementList: TupleExprElementListSyntax, rightParen: TokenSyntax) -> TupleExprSyntax {
     let layout: [RawSyntax?] = [
       leftParen.raw,
@@ -764,7 +757,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return DictionaryElementSyntax(data)
   }
-  public static func makeIntegerLiteralExpr(digits: TokenSyntax) -> IntegerLiteralExprSyntax {
+  public static func makeIntegerLiteralExpr(digits: TokenSyntax) -> IntegerLiteralExprSyntax? {
     let layout: [RawSyntax?] = [
       digits.raw,
     ]
@@ -774,13 +767,6 @@ public enum SyntaxFactory {
     return IntegerLiteralExprSyntax(data)
   }
 
-  public static func makeBlankIntegerLiteralExpr() -> IntegerLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .integerLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.integerLiteral("")),
-    ], length: .zero, presence: .present))
-    return IntegerLiteralExprSyntax(data)
-  }
   public static func makeBooleanLiteralExpr(booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       booleanLiteral.raw,
@@ -996,11 +982,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ClosureParamListSyntax(data)
   }
-  public static func makeClosureSignature(capture: ClosureCaptureSignatureSyntax?, input: Syntax?, asyncKeyword: TokenSyntax?, throwsTok: TokenSyntax?, output: ReturnClauseSyntax?, inTok: TokenSyntax) -> ClosureSignatureSyntax {
+  public static func makeClosureSignature(capture: ClosureCaptureSignatureSyntax?, input: Syntax?, throwsTok: TokenSyntax?, output: ReturnClauseSyntax?, inTok: TokenSyntax) -> ClosureSignatureSyntax {
     let layout: [RawSyntax?] = [
       capture?.raw,
       input?.raw,
-      asyncKeyword?.raw,
       throwsTok?.raw,
       output?.raw,
       inTok.raw,
@@ -1014,7 +999,6 @@ public enum SyntaxFactory {
   public static func makeBlankClosureSignature() -> ClosureSignatureSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureSignature,
       layout: [
-      nil,
       nil,
       nil,
       nil,
@@ -5063,6 +5047,12 @@ public enum SyntaxFactory {
   public static func makeThrowsKeyword(leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeToken(.throwsKeyword, presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+  public static func makeAwaitKeyword(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.awaitKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

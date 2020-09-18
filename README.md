@@ -35,10 +35,10 @@ Replace `<#Specify Release tag#>` by the version of SwiftSyntax that you want to
 
 | Xcode Release | Swift Release Tag | SwiftSyntax Release Tag  |
 |:-------------------:|:-------------------:|:-------------------------:|
+| Xcode 12.0   | swift-5.3-RELEASE   | 0.50300.0 |
 | Xcode 11.4   | swift-5.2-RELEASE   | 0.50200.0 |
 | Xcode 11.3   | swift-5.1-RELEASE   | 0.50100.0 |
 | Xcode 10.2   | swift-5.0-RELEASE   | 0.50000.0 |
-| Xcode 10.0   | swift-4.2-RELEASE   | 0.40200.0 |
 
 
 Then, import `SwiftSyntax` in your Swift code.

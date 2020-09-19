@@ -87,9 +87,9 @@ public class SyntaxTests: XCTestCase {
   public func testCasting() {
     let integerExpr = IntegerLiteralExprSyntax {
       $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
-    }
+    }!
 
-    let expr = ExprSyntax(integerExpr)
+    let expr = ExprSyntax(integerExpr)!
     let node = Syntax(expr)
     XCTAssertTrue(expr.is(IntegerLiteralExprSyntax.self))
     XCTAssertTrue(node.is(IntegerLiteralExprSyntax.self))
@@ -127,7 +127,7 @@ public class SyntaxTests: XCTestCase {
   public func testNodeType() {
     let integerExpr = IntegerLiteralExprSyntax {
       $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
-    }
+    }!
     let expr = ExprSyntax(integerExpr)
     let node = Syntax(expr)
 
@@ -139,9 +139,60 @@ public class SyntaxTests: XCTestCase {
   public func testConstructFromSyntaxProtocol() {
     let integerExpr = IntegerLiteralExprSyntax {
       $0.useDigits(SyntaxFactory.makeIntegerLiteral("1", trailingTrivia: .spaces(1)))
-    }
+    }!
 
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as SyntaxProtocol))
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as ExprSyntaxProtocol))
+  }
+
+  public func testNumericLiteralSetters() {
+    var integerExpr = IntegerLiteralExprSyntax {
+      $0.useDigits(SyntaxFactory.makeIntegerLiteral("1"))
+    }!
+    XCTAssert(integerExpr.isValid)
+
+    var token: TokenSyntax
+    var source = "2"
+    var tree = try! SyntaxParser.parse(source: source)
+    token = tree.firstToken!
+    try! integerExpr.setDigits(token)
+    XCTAssert(integerExpr.isValid)
+
+    let invalidNumericLiteral = "🥥"
+
+    source = invalidNumericLiteral
+    tree = try! SyntaxParser.parse(source: source)
+    token = tree.firstToken!
+
+    XCTAssertThrowsError(try integerExpr.setDigits(token)) { error in
+      if let error = error as? IntegerLiteralExprSyntax.DigitsError {
+        XCTAssertEqual("attempted to use setter with invalid Digits \"\(source)\"", error.description)
+      } else {
+        return XCTFail("unexpected error thrown")
+      }
+    }
+
+    var floatExpr = FloatLiteralExprSyntax {
+      $0.useFloatingDigits(SyntaxFactory.makeFloatingLiteral("4.2"))
+    }!
+    XCTAssert(floatExpr.isValid)
+
+    source = "2.4"
+    tree = try! SyntaxParser.parse(source: source)
+    token = tree.firstToken!
+    try! floatExpr.setFloatingDigits(token)
+    XCTAssert(floatExpr.isValid)
+
+    source = invalidNumericLiteral
+    tree = try! SyntaxParser.parse(source: source)
+    token = tree.firstToken!
+
+    XCTAssertThrowsError(try floatExpr.setFloatingDigits(token)) { error in
+      if let error = error as? FloatLiteralExprSyntax.FloatingDigitsError {
+        XCTAssertEqual("attempted to use setter with invalid FloatingDigits \"\(source)\"", error.description)
+      } else {
+        return XCTFail("unexpected error thrown")
+      }
+    }
   }
 }

@@ -11,24 +11,20 @@
 //===----------------------------------------------------------------------===//
 
 public extension FloatLiteralExprSyntax {
-  var floatingValue: Double {
-    return potentialFloatingValue!
-  }
-
-  fileprivate var potentialFloatingValue: Double? {
+  var floatLiteralValue: Double? {
     let floatingDigitsWithoutUnderscores = floatingDigits.text.filter {
       $0 != "_"
     }
     return Double(floatingDigitsWithoutUnderscores)
   }
+
+  var isValid: Bool {
+    floatLiteralValue != nil
+  }
 }
 
 public extension IntegerLiteralExprSyntax {
-  var integerValue: Int {
-    return potentialIntegerValue!
-  }
-
-  fileprivate var potentialIntegerValue: Int? {
+  var integerLiteralValue: Int? {
     let text = digits.text
     let (prefixLength, radix) = IntegerLiteralExprSyntax.prefixLengthAndRadix(text: text)
     let digitsStartIndex = text.index(text.startIndex, offsetBy: prefixLength)
@@ -65,16 +61,8 @@ public extension IntegerLiteralExprSyntax {
       return (decimalPrefix.count, decimalRadix)
     }
   }
-}
 
-public extension IntegerLiteralExprSyntax {
   var isValid: Bool {
-    potentialIntegerValue != nil
-  }
-}
-
-public extension FloatLiteralExprSyntax {
-  var isValid: Bool {
-    potentialFloatingValue != nil
+    integerLiteralValue != nil
   }
 }

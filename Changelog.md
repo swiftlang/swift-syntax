@@ -4,7 +4,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 ## Swift 5.3
 
-* Introduced `integerValue` and `floatingValue` properties to `IntegerLiteralExprSyntax` and `FloatLiteralExprSyntax`, respectively. Converted their `digits` and `floatingDigits` setters, respectively, into throwing functions.
+* Introduced `integerLiteralValue` and `floatLiteralValue` properties to `IntegerLiteralExprSyntax` and `FloatLiteralExprSyntax`, respectively.
 
 * Introduced `FunctionCallExprSyntax.additionalTrailingClosures` property with type `MultipleTrailingClosureElementListSyntax?` for supporting [SE-0279 Multiple Trailing Closures](https://github.com/apple/swift-evolution/blob/master/proposals/0279-multiple-trailing-closures.md).
 

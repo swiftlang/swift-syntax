@@ -29,27 +29,21 @@ public class SyntaxConvenienceMethodsTests: XCTestCase {
 fileprivate func testFloatValue(text: String, expectedValue: Double?) {
   let digits = SyntaxFactory.makeFloatingLiteral(text)
 
-  if let literalExpr = SyntaxFactory.makeFloatLiteralExpr(floatingDigits: digits) {
-    if let expectedValue = expectedValue {
-      XCTAssertEqual(literalExpr.floatLiteralValue!, expectedValue)
-    } else {
-      XCTAssertNil(literalExpr.floatLiteralValue)
-    }
+  let literalExpr = SyntaxFactory.makeFloatLiteralExpr(floatingDigits: digits)
+  if let expectedValue = expectedValue {
+    XCTAssertEqual(literalExpr.floatLiteralValue!, expectedValue)
   } else {
-    XCTAssertNil(expectedValue)
+    XCTAssertNil(literalExpr.floatLiteralValue)
   }
 }
 
 fileprivate func testIntegerValue(text: String, expectedValue: Int?) {
   let digits = SyntaxFactory.makeIntegerLiteral(text)
 
-  if let literalExpr = SyntaxFactory.makeIntegerLiteralExpr(digits: digits) {
-    if let expectedValue = expectedValue {
-      XCTAssertEqual(literalExpr.integerLiteralValue!, expectedValue)
-    } else {
-      XCTAssertNil(literalExpr.integerLiteralValue)
-    }
+  let literalExpr = SyntaxFactory.makeIntegerLiteralExpr(digits: digits)
+  if let expectedValue = expectedValue {
+    XCTAssertEqual(literalExpr.integerLiteralValue!, expectedValue)
   } else {
-    XCTAssertNil(expectedValue)
+    XCTAssertNil(literalExpr.integerLiteralValue)
   }
 }

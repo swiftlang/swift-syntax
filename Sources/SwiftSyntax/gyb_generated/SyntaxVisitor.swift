@@ -2868,8 +2868,7 @@ open class SyntaxVisitor {
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
-      // We know that the SyntaxData is valid since we are walking a valid syntax tree and haven't modified the syntax data. Thus the initializer below will never return nil.
-      let node = FloatLiteralExprSyntax(data)!
+      let node = FloatLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -2946,8 +2945,7 @@ open class SyntaxVisitor {
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) {
-      // We know that the SyntaxData is valid since we are walking a valid syntax tree and haven't modified the syntax data. Thus the initializer below will never return nil.
-      let node = IntegerLiteralExprSyntax(data)!
+      let node = IntegerLiteralExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {

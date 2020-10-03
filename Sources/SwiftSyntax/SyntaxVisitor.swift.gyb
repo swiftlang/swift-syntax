@@ -86,12 +86,7 @@ open class SyntaxVisitor {
       }
       visitPost(node)
 %   else:
-%     if node.must_uphold_invariant:
-      // We know that the SyntaxData is valid since we are walking a valid syntax tree and haven't modified the syntax data. Thus the initializer below will never return nil.
-      let node = ${node.name}(data)!
-%     else:
       let node = ${node.name}(data)
-%     end
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {

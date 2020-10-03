@@ -85,11 +85,7 @@ extension ${node.name} {
   ///            incrementally build the structure of the node.
   /// - Returns: A `${node.name}` with all the fields populated in the builder
   ///            closure.
-%     if node.must_uphold_invariant:
-  public init?(_ build: (inout ${Builder}) -> Void) {
-%     else:
   public init(_ build: (inout ${Builder}) -> Void) {
-%     end
     var builder = ${Builder}()
     build(&builder)
     let data = builder.buildData()

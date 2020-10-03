@@ -1077,7 +1077,7 @@ extension FloatLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FloatLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init?(_ build: (inout FloatLiteralExprSyntaxBuilder) -> Void) {
+  public init(_ build: (inout FloatLiteralExprSyntaxBuilder) -> Void) {
     var builder = FloatLiteralExprSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
@@ -1444,7 +1444,7 @@ extension IntegerLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IntegerLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init?(_ build: (inout IntegerLiteralExprSyntaxBuilder) -> Void) {
+  public init(_ build: (inout IntegerLiteralExprSyntaxBuilder) -> Void) {
     var builder = IntegerLiteralExprSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()

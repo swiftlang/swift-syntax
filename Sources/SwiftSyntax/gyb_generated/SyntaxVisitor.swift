@@ -1452,6 +1452,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `LabeledSpecializeEntrySyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LabeledSpecializeEntrySyntax) {}
+  /// Visiting `TargetFunctionEntrySyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: TargetFunctionEntrySyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `TargetFunctionEntrySyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: TargetFunctionEntrySyntax) {}
   /// Visiting `NamedAttributeStringArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4035,6 +4045,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTargetFunctionEntrySyntax(_ data: SyntaxData) {
+      let node = TargetFunctionEntrySyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) {
       let node = NamedAttributeStringArgumentSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5382,6 +5403,8 @@ open class SyntaxVisitor {
       visitImplSpecializeAttributeSpecListSyntax(data)
     case .labeledSpecializeEntry:
       visitImplLabeledSpecializeEntrySyntax(data)
+    case .targetFunctionEntry:
+      visitImplTargetFunctionEntrySyntax(data)
     case .namedAttributeStringArgument:
       visitImplNamedAttributeStringArgumentSyntax(data)
     case .declName:

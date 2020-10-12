@@ -2841,6 +2841,29 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return LabeledSpecializeEntrySyntax(data)
   }
+  public static func makeTargetFunctionEntry(label: TokenSyntax, colon: TokenSyntax, delcname: DeclNameSyntax, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
+    let layout: [RawSyntax?] = [
+      label.raw,
+      colon.raw,
+      delcname.raw,
+      trailingComma?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return TargetFunctionEntrySyntax(data)
+  }
+
+  public static func makeBlankTargetFunctionEntry() -> TargetFunctionEntrySyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .targetFunctionEntry,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.declName),
+      nil,
+    ], length: .zero, presence: .present))
+    return TargetFunctionEntrySyntax(data)
+  }
   public static func makeNamedAttributeStringArgument(nameTok: TokenSyntax, colon: TokenSyntax, stringOrDeclname: Syntax) -> NamedAttributeStringArgumentSyntax {
     let layout: [RawSyntax?] = [
       nameTok.raw,

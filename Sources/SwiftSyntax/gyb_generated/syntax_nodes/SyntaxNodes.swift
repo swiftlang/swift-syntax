@@ -6733,6 +6733,186 @@ extension LabeledSpecializeEntrySyntax: CustomReflectable {
   }
 }
 
+// MARK: - TargetFunctionEntrySyntax
+
+/// 
+/// A labeled argument for the `@_specialize` attribute with a function
+/// decl value like
+/// `target: myFunc(_:)`
+/// 
+public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case label
+    case colon
+    case delcname
+    case trailingComma
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `TargetFunctionEntrySyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .targetFunctionEntry else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `TargetFunctionEntrySyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .targetFunctionEntry)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  /// The label of the argument
+  public var label: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.label,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `label` replaced.
+  /// - param newChild: The new `label` to replace the node's
+  ///                   current `label`, if present.
+  public func withLabel(
+    _ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.label)
+    return TargetFunctionEntrySyntax(newData)
+  }
+
+  /// The colon separating the label and the value
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return TargetFunctionEntrySyntax(newData)
+  }
+
+  /// The value for this argument
+  public var delcname: DeclNameSyntax {
+    get {
+      let childData = data.child(at: Cursor.delcname,
+                                 parent: Syntax(self))
+      return DeclNameSyntax(childData!)
+    }
+    set(value) {
+      self = withDelcname(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `delcname` replaced.
+  /// - param newChild: The new `delcname` to replace the node's
+  ///                   current `delcname`, if present.
+  public func withDelcname(
+    _ newChild: DeclNameSyntax?) -> TargetFunctionEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.declName)
+    let newData = data.replacingChild(raw, at: Cursor.delcname)
+    return TargetFunctionEntrySyntax(newData)
+  }
+
+  /// 
+  /// A trailing comma if this argument is followed by another one
+  /// 
+  public var trailingComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.trailingComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `trailingComma` replaced.
+  /// - param newChild: The new `trailingComma` to replace the node's
+  ///                   current `trailingComma`, if present.
+  public func withTrailingComma(
+    _ newChild: TokenSyntax?) -> TargetFunctionEntrySyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.trailingComma)
+    return TargetFunctionEntrySyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 4)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is DeclNameSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DeclNameSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension TargetFunctionEntrySyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "delcname": Syntax(delcname).asProtocol(SyntaxProtocol.self),
+      "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - NamedAttributeStringArgumentSyntax
 
 /// 

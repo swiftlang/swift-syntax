@@ -163,6 +163,7 @@ public enum SyntaxEnum {
   case attributeList(AttributeListSyntax)
   case specializeAttributeSpecList(SpecializeAttributeSpecListSyntax)
   case labeledSpecializeEntry(LabeledSpecializeEntrySyntax)
+  case targetFunctionEntry(TargetFunctionEntrySyntax)
   case namedAttributeStringArgument(NamedAttributeStringArgumentSyntax)
   case declName(DeclNameSyntax)
   case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
@@ -561,6 +562,8 @@ public extension Syntax {
       return .specializeAttributeSpecList(SpecializeAttributeSpecListSyntax(self)!)
     case .labeledSpecializeEntry:
       return .labeledSpecializeEntry(LabeledSpecializeEntrySyntax(self)!)
+    case .targetFunctionEntry:
+      return .targetFunctionEntry(TargetFunctionEntrySyntax(self)!)
     case .namedAttributeStringArgument:
       return .namedAttributeStringArgument(NamedAttributeStringArgumentSyntax(self)!)
     case .declName:

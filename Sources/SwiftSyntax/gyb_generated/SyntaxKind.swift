@@ -163,6 +163,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case attributeList = 187
   case specializeAttributeSpecList = 188
   case labeledSpecializeEntry = 133
+  case targetFunctionEntry = 248
   case namedAttributeStringArgument = 227
   case declName = 228
   case implementsAttributeArguments = 134

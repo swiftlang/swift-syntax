@@ -6240,6 +6240,65 @@ extension LabeledSpecializeEntrySyntax {
   }
 }
 
+public struct TargetFunctionEntrySyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 4)
+
+  internal init() {}
+
+  public mutating func useLabel(_ node: TokenSyntax) {
+    let idx = TargetFunctionEntrySyntax.Cursor.label.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = TargetFunctionEntrySyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useDelcname(_ node: DeclNameSyntax) {
+    let idx = TargetFunctionEntrySyntax.Cursor.delcname.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useTrailingComma(_ node: TokenSyntax) {
+    let idx = TargetFunctionEntrySyntax.Cursor.trailingComma.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.declName)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .targetFunctionEntry,
+      layout: layout, presence: .present))
+  }
+}
+
+extension TargetFunctionEntrySyntax {
+  /// Creates a `TargetFunctionEntrySyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that wil be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `TargetFunctionEntrySyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `TargetFunctionEntrySyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout TargetFunctionEntrySyntaxBuilder) -> Void) {
+    var builder = TargetFunctionEntrySyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct NamedAttributeStringArgumentSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 3)

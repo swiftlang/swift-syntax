@@ -243,6 +243,7 @@ extension EnumDeclSyntax: IdentifiedDeclSyntax {}
 extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
 extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax {}
 extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {}
+extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {}
 extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {}
 extension WhileStmtSyntax: WithCodeBlockSyntax, LabeledSyntax {}
 extension DeferStmtSyntax: WithCodeBlockSyntax {}

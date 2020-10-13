@@ -873,6 +873,12 @@ extension SyntaxNode {
     return LabeledSpecializeEntrySyntax(asSyntaxData)
   }
 
+  public var isTargetFunctionEntry: Bool { return raw.kind == .targetFunctionEntry }
+  public var asTargetFunctionEntry: TargetFunctionEntrySyntax? {
+    guard isTargetFunctionEntry else { return nil }
+    return TargetFunctionEntrySyntax(asSyntaxData)
+  }
+
   public var isNamedAttributeStringArgument: Bool { return raw.kind == .namedAttributeStringArgument }
   public var asNamedAttributeStringArgument: NamedAttributeStringArgumentSyntax? {
     guard isNamedAttributeStringArgument else { return nil }
@@ -1749,6 +1755,8 @@ extension Syntax {
       return node
     case .labeledSpecializeEntry(let node):
       return node
+    case .targetFunctionEntry(let node):
+      return node
     case .namedAttributeStringArgument(let node):
       return node
     case .declName(let node):
@@ -1944,6 +1952,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "26709743ccc5ea2001419f44996c8fa671901c03"
+      "0741fb1877365f4e66ca42dc7d84d31d7ccdd35a"
   }
 }

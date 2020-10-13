@@ -1017,6 +1017,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `TargetFunctionEntrySyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: TargetFunctionEntrySyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `NamedAttributeStringArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3189,6 +3196,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplTargetFunctionEntrySyntax(_ data: SyntaxData) -> Syntax {
+      let node = TargetFunctionEntrySyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplNamedAttributeStringArgumentSyntax(_ data: SyntaxData) -> Syntax {
       let node = NamedAttributeStringArgumentSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4474,6 +4491,8 @@ open class SyntaxRewriter {
       return visitImplSpecializeAttributeSpecListSyntax
     case .labeledSpecializeEntry:
       return visitImplLabeledSpecializeEntrySyntax
+    case .targetFunctionEntry:
+      return visitImplTargetFunctionEntrySyntax
     case .namedAttributeStringArgument:
       return visitImplNamedAttributeStringArgumentSyntax
     case .declName:
@@ -4971,6 +4990,8 @@ open class SyntaxRewriter {
       return visitImplSpecializeAttributeSpecListSyntax(data)
     case .labeledSpecializeEntry:
       return visitImplLabeledSpecializeEntrySyntax(data)
+    case .targetFunctionEntry:
+      return visitImplTargetFunctionEntrySyntax(data)
     case .namedAttributeStringArgument:
       return visitImplNamedAttributeStringArgumentSyntax(data)
     case .declName:

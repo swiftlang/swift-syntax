@@ -70,29 +70,14 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   public init?(_ syntax: Syntax) {
     guard syntax.raw.kind == .${node.swift_syntax_kind} else { return nil }
     self._syntaxNode = syntax
-  %   if node.must_uphold_invariant:
-    if !isValid {
-      fatalError("Instance of ${node.name} is invalid.")
-    }
-%   end
   }
 
   /// Creates a `${node.name}` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-%   if node.must_uphold_invariant:
-  /// This initializer returns nil if the invariant is not satisfied.
-  internal init?(_ data: SyntaxData) {
-%   else:
   internal init(_ data: SyntaxData) {
-%   end
     assert(data.raw.kind == .${node.swift_syntax_kind})
     self._syntaxNode = Syntax(data)
-%   if node.must_uphold_invariant:
-    if !isValid {
-      return nil
-    }
-%   end
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -122,33 +107,10 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
 %       end
       return ${child.type_name}(childData!)
     }
-%       if not node.must_uphold_invariant:
     set(value) {
       self = with${child.name}(value)
     }
-%       end
   }
-%       if node.must_uphold_invariant:
-
-  public enum ${child.name}Error: Error, CustomStringConvertible {
-    case invalid(${child.swift_name}: ${ret_type})
-
-    public var description: String {
-      switch self {
-      case .invalid(let ${child.swift_name}):
-        return "attempted to use setter with invalid ${child.name} \"\(${child.swift_name})\""
-      }
-    }
-  }
-
-  mutating public func set${child.name}(_ ${child.swift_name}: ${ret_type}) throws {
-    if let childSyntax = with${child.name}(${child.swift_name}) {
-      self = childSyntax
-    } else {
-      throw ${child.name}Error.invalid(${child.swift_name}: ${child.swift_name})
-    }
-  }
-%       end
 %
 %       # ===============
 %       # Adding children
@@ -187,11 +149,7 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   /// - param newChild: The new `${child.swift_name}` to replace the node's
   ///                   current `${child.swift_name}`, if present.
   public func with${child.name}(
-%       if node.must_uphold_invariant:
-    _ newChild: ${child.type_name}?) -> ${node.name}? {
-%       else:
     _ newChild: ${child.type_name}?) -> ${node.name} {
-%       end
 %       if child.is_optional:
     let raw = newChild?.raw
 %       else:

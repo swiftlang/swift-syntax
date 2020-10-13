@@ -1833,21 +1833,14 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init?(_ syntax: Syntax) {
     guard syntax.raw.kind == .floatLiteralExpr else { return nil }
     self._syntaxNode = syntax
-    if !isValid {
-      fatalError("Instance of FloatLiteralExprSyntax is invalid.")
-    }
   }
 
   /// Creates a `FloatLiteralExprSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  /// This initializer returns nil if the invariant is not satisfied.
-  internal init?(_ data: SyntaxData) {
+  internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .floatLiteralExpr)
     self._syntaxNode = Syntax(data)
-    if !isValid {
-      return nil
-    }
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -1860,24 +1853,8 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
                                  parent: Syntax(self))
       return TokenSyntax(childData!)
     }
-  }
-
-  public enum FloatingDigitsError: Error, CustomStringConvertible {
-    case invalid(floatingDigits: TokenSyntax)
-
-    public var description: String {
-      switch self {
-      case .invalid(let floatingDigits):
-        return "attempted to use setter with invalid FloatingDigits \"\(floatingDigits)\""
-      }
-    }
-  }
-
-  mutating public func setFloatingDigits(_ floatingDigits: TokenSyntax) throws {
-    if let childSyntax = withFloatingDigits(floatingDigits) {
-      self = childSyntax
-    } else {
-      throw FloatingDigitsError.invalid(floatingDigits: floatingDigits)
+    set(value) {
+      self = withFloatingDigits(value)
     }
   }
 
@@ -1885,7 +1862,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `floatingDigits` to replace the node's
   ///                   current `floatingDigits`, if present.
   public func withFloatingDigits(
-    _ newChild: TokenSyntax?) -> FloatLiteralExprSyntax? {
+    _ newChild: TokenSyntax?) -> FloatLiteralExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.floatingLiteral(""))
     let newData = data.replacingChild(raw, at: Cursor.floatingDigits)
     return FloatLiteralExprSyntax(newData)
@@ -2378,21 +2355,14 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init?(_ syntax: Syntax) {
     guard syntax.raw.kind == .integerLiteralExpr else { return nil }
     self._syntaxNode = syntax
-    if !isValid {
-      fatalError("Instance of IntegerLiteralExprSyntax is invalid.")
-    }
   }
 
   /// Creates a `IntegerLiteralExprSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  /// This initializer returns nil if the invariant is not satisfied.
-  internal init?(_ data: SyntaxData) {
+  internal init(_ data: SyntaxData) {
     assert(data.raw.kind == .integerLiteralExpr)
     self._syntaxNode = Syntax(data)
-    if !isValid {
-      return nil
-    }
   }
 
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -2405,24 +2375,8 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
                                  parent: Syntax(self))
       return TokenSyntax(childData!)
     }
-  }
-
-  public enum DigitsError: Error, CustomStringConvertible {
-    case invalid(digits: TokenSyntax)
-
-    public var description: String {
-      switch self {
-      case .invalid(let digits):
-        return "attempted to use setter with invalid Digits \"\(digits)\""
-      }
-    }
-  }
-
-  mutating public func setDigits(_ digits: TokenSyntax) throws {
-    if let childSyntax = withDigits(digits) {
-      self = childSyntax
-    } else {
-      throw DigitsError.invalid(digits: digits)
+    set(value) {
+      self = withDigits(value)
     }
   }
 
@@ -2430,7 +2384,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `digits` to replace the node's
   ///                   current `digits`, if present.
   public func withDigits(
-    _ newChild: TokenSyntax?) -> IntegerLiteralExprSyntax? {
+    _ newChild: TokenSyntax?) -> IntegerLiteralExprSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.integerLiteral(""))
     let newData = data.replacingChild(raw, at: Cursor.digits)
     return IntegerLiteralExprSyntax(newData)

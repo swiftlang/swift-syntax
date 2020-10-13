@@ -101,12 +101,12 @@ public class CustomReflectableTests: XCTestCase {
                                              presence: .present,
                                              leadingTrivia: [],
                                              trailingTrivia: [])
-        let expr1 = SyntaxFactory.makeIntegerLiteralExpr(digits: token1)!
+        let expr1 = SyntaxFactory.makeIntegerLiteralExpr(digits: token1)
         let token2 = SyntaxFactory.makeToken(.integerLiteral("2"),
                                              presence: .present,
                                              leadingTrivia: [],
                                              trailingTrivia: [])
-        let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)!
+        let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
         let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
                                                        expression: ExprSyntax(expr1),
@@ -153,12 +153,12 @@ public class CustomReflectableTests: XCTestCase {
                                              presence: .present,
                                              leadingTrivia: [],
                                              trailingTrivia: [])
-        let expr1 = SyntaxFactory.makeIntegerLiteralExpr(digits: token1)!
+        let expr1 = SyntaxFactory.makeIntegerLiteralExpr(digits: token1)
         let token2 = SyntaxFactory.makeToken(.integerLiteral("2"),
                                              presence: .present,
                                              leadingTrivia: [],
                                              trailingTrivia: [])
-        let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)!
+        let expr2 = SyntaxFactory.makeIntegerLiteralExpr(digits: token2)
         let elements = [SyntaxFactory.makeTupleExprElement(label: nil,
                                                        colon: nil,
                                                        expression: ExprSyntax(expr1),

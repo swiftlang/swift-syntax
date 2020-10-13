@@ -46,7 +46,7 @@ public struct IntegerLiteral: ExprBuildable {
     public func buildExpr(format: Format, leadingTrivia: Trivia) -> ExprSyntax {
         let integerLiteral = SyntaxFactory.makeIntegerLiteralExpr(
             digits: SyntaxFactory.makeIntegerLiteral(String(value))
-        )!.withLeadingTrivia(leadingTrivia)
+        ).withLeadingTrivia(leadingTrivia)
         return ExprSyntax(integerLiteral)
     }
 }

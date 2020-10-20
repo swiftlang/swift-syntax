@@ -21,10 +21,39 @@ public class DiagnosticEngine {
   public init() {
   }
 
+  private var consumersQueue = DispatchQueue(
+      label: "com.apple.SwiftSyntax.DiagnosticEngine.consumers", attributes: .concurrent)
+  private var _consumers = [DiagnosticConsumer]()
   /// The list of consumers of the diagnostic passing through this engine.
-  internal var consumers = [DiagnosticConsumer]()
+  private var consumers: [DiagnosticConsumer] {
+      get {
+          consumersQueue.sync {
+              _consumers
+          }
+      }
 
-  public private(set) var diagnostics = [Diagnostic]()
+      set {
+          consumersQueue.async(flags: .barrier) {
+              self._consumers = newValue
+          }
+      }
+  }
+
+  private var diagnosticsQueue = DispatchQueue(
+      label: "com.apple.SwiftSyntax.DiagnosticEngine.diagnostics", attributes: .concurrent)
+  private var _diagnostics = [Diagnostic]()
+  public private(set) var diagnostics: [Diagnostic] {
+      get {
+          diagnosticsQueue.sync {
+              _diagnostics
+          }
+      }
+      set {
+          diagnosticsQueue.async(flags: .barrier) {
+              self._diagnostics = newValue
+          }
+      }
+  }
 
   internal var needsLineColumn: Bool {
     // Check if any consumer is interested in line and column.

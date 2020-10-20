@@ -332,17 +332,17 @@ public extension SyntaxProtocol {
     return Self(Syntax(data.withTrailingTrivia(trailingTrivia)))!
   }
 
-  /// Returns a new `${node.name}` with its leading trivia removed.
+  /// Returns a new syntax node with its leading trivia removed.
   func withoutLeadingTrivia() -> Self {
     return withLeadingTrivia([])
   }
 
-  /// Returns a new `${node.name}` with its trailing trivia removed.
+  /// Returns a new syntax node with its trailing trivia removed.
   func withoutTrailingTrivia() -> Self {
     return withTrailingTrivia([])
   }
 
-  /// Returns a new `${node.name}` with all trivia removed.
+  /// Returns a new syntax node with all trivia removed.
   func withoutTrivia() -> Self {
     return withoutLeadingTrivia().withoutTrailingTrivia()
   }

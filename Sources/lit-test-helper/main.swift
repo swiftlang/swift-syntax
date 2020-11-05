@@ -424,6 +424,7 @@ func printParserDiags(args: CommandLineArguments) throws {
   class ParserDiagPrinter: DiagnosticConsumer {
     var counter : (error: Int, warning: Int, note: Int) = (0, 0, 0)
     var calculateLineColumn: Bool { return true }
+    func finalize() {}
     func handle(_ diag: Diagnostic) {
       switch diag.message.severity {
       case .error:
@@ -437,7 +438,7 @@ func printParserDiags(args: CommandLineArguments) throws {
       }
       print(diag.debugDescription)
     }
-    func finalize() {
+    deinit {
       print("\(counter.error) error(s) \(counter.warning) warnings(s) \(counter.note) note(s)")
     }
   }

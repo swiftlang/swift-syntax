@@ -409,7 +409,7 @@ def find_lit_test_helper_exec(toolchain, build_dir, release):
     swiftpm_call.extend(["--product", "lit-test-helper"])
     swiftpm_call.extend(["--show-bin-path"])
 
-    bin_dir = subprocess.check_output(swiftpm_call, stderr=subprocess.STDOUT)
+    bin_dir = subprocess.check_output(swiftpm_call)
     return os.path.join(bin_dir.strip(), "lit-test-helper")
 
 

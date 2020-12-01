@@ -5,7 +5,7 @@
 # Ignore Data Xcode stores when opening the project directly
 /.swiftpm/xcode
 
-# We always build swiftSyntax of master dependencies. Ignore any fixed 
+# We always build swiftSyntax of trunk dependencies. Ignore any fixed 
 # dependency versions.
 Package.resolved
 

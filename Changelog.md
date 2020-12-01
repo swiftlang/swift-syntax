@@ -4,7 +4,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 
 ## Swift 5.3
 
-* Introduced `FunctionCallExprSyntax.additionalTrailingClosures` property with type `MultipleTrailingClosureElementListSyntax?` for supporting [SE-0279 Multiple Trailing Closures](https://github.com/apple/swift-evolution/blob/master/proposals/0279-multiple-trailing-closures.md).
+* Introduced `FunctionCallExprSyntax.additionalTrailingClosures` property with type `MultipleTrailingClosureElementListSyntax?` for supporting [SE-0279 Multiple Trailing Closures](https://github.com/apple/swift-evolution/blob/main/proposals/0279-multiple-trailing-closures.md).
 
 * Introduced `syntaxNodeType` property for all types conforming to `SyntaxProtocol`, which returns the underlying syntax node type. It is primarily intended as a debugging aid during development.
 

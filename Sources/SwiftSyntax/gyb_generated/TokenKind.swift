@@ -1771,79 +1771,79 @@ extension TokenKind {
       let length = 13
       return body(.init(kind: .poundColorLiteralKeyword, length: length))
     case .integerLiteral(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .integerLiteral, length: length, customText: buf))
       })!
     case .floatingLiteral(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .floatingLiteral, length: length, customText: buf))
       })!
     case .stringLiteral(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .stringLiteral, length: length, customText: buf))
       })!
     case .unknown(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .unknown, length: length, customText: buf))
       })!
     case .identifier(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .identifier, length: length, customText: buf))
       })!
     case .unspacedBinaryOperator(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .unspacedBinaryOperator, length: length, customText: buf))
       })!
     case .spacedBinaryOperator(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .spacedBinaryOperator, length: length, customText: buf))
       })!
     case .postfixOperator(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .postfixOperator, length: length, customText: buf))
       })!
     case .prefixOperator(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .prefixOperator, length: length, customText: buf))
       })!
     case .dollarIdentifier(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .dollarIdentifier, length: length, customText: buf))
       })!
     case .contextualKeyword(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .contextualKeyword, length: length, customText: buf))
       })!
     case .rawStringDelimiter(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .rawStringDelimiter, length: length, customText: buf))
       })!
     case .stringSegment(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .stringSegment, length: length, customText: buf))

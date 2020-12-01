@@ -1,7 +1,7 @@
 # SwiftSyntax
 
 SwiftSyntax is a set of Swift bindings for the
-[libSyntax](https://github.com/apple/swift/tree/master/lib/Syntax) library. It
+[libSyntax](https://github.com/apple/swift/tree/main/lib/Syntax) library. It
 allows for Swift tools to parse, inspect, generate, and transform Swift source
 code.
 
@@ -46,7 +46,7 @@ Then, import `SwiftSyntax` in your Swift code.
 
 ### Declare SwiftPM dependency with nightly build
 
-1. Download and install the latest Trunk Development (master) [toolchain](https://swift.org/download/#snapshots).
+1. Download and install the latest Trunk Development [toolchain](https://swift.org/download/#snapshots).
 
 2. Define the `TOOLCHAINS` environment variable as below to have the `swift` command point inside the toolchain:
 
@@ -136,11 +136,11 @@ If you should hit any issues while using SwiftSyntax, we appreciate bug reports 
 
 ## Contributing
 
-### Building SwiftSyntax from `master`
+### Building SwiftSyntax from `main`
 
-Since SwiftSyntax relies on definitions in the main Swift repository to generate the layout of the syntax tree using `gyb`, a checkout of [apple/swift](https://github.com/apple/swift) is still required to build `master` of SwiftSyntax.
+Since SwiftSyntax relies on definitions in the main Swift repository to generate the layout of the syntax tree using `gyb`, a checkout of [apple/swift](https://github.com/apple/swift) is still required to build the latest development snapshot of SwiftSyntax.
 
-To build the `master` version of SwiftSyntax, follow the following instructions:
+To build the `main` branch of SwiftSyntax, follow the following instructions:
 
 1. Check `swift-syntax` and  `swift` out side by side:
 
@@ -150,14 +150,14 @@ To build the `master` version of SwiftSyntax, follow the following instructions:
   - swift-syntax
 ```
 
-2. Make sure you have a recent [master Swift toolchain](https://swift.org/download/#snapshots) installed.
+2. Make sure you have a recent [Trunk Swift Toolchain](https://swift.org/download/#snapshots) installed.
 3. Define the `TOOLCHAINS` environment variable as below to have the `swift` command point inside the toolchain:
 
 ```
 $ export TOOLCHAINS=swift
 ```
 
-4. To make sure everything is setup correctly, check the return statement of `xcrun --find swift`. It should point inside the latest installed master toolchain. If it points inside an Xcode toolchain, check that you exported the `TOOLCHAINS` environment variable correctly. If it points inside a version specific toolchain (like Swift 5.0-dev), you'll need to remove that toolchain.
+4. To make sure everything is setup correctly, check the return statement of `xcrun --find swift`. It should point inside the latest installed trunk development toolchain. If it points inside an Xcode toolchain, check that you exported the `TOOLCHAINS` environment variable correctly. If it points inside a version specific toolchain (like Swift 5.0-dev), you'll need to remove that toolchain.
 5. Run `swift-syntax/build-script.py`.
 
 If, despite following those instructions, you get compiler errors, the Swift toolchain might be too old to contain recent changes in Swift's SwiftSyntaxParser C library. In that case, you'll have to build the compiler and SwiftSyntax together with the following command:
@@ -173,7 +173,7 @@ Afterwards, SwiftPM can also generate an Xcode project to develop SwiftSyntax by
 If you also want to run tests locally, read the section below as testing has additional requirements.
 
 ### Local Testing
-SwiftSyntax uses some test utilities that need to be built as part of the Swift compiler project. To build the most recent version of SwiftSyntax and test it, follow the steps in [swift/README.md](https://github.com/apple/swift/blob/master/README.md) and pass `--llbuild --swiftpm --swiftsyntax` to the build script invocation to build SwiftSyntax and all its dependencies using the current `master` compiler.
+SwiftSyntax uses some test utilities that need to be built as part of the Swift compiler project. To build the most recent version of SwiftSyntax and test it, follow the steps in [swift/README.md](https://github.com/apple/swift/blob/main/README.md) and pass `--llbuild --swiftpm --swiftsyntax` to the build script invocation to build SwiftSyntax and all its dependencies using the current trunk (`main`) compiler.
 
 SwiftSyntax can then be tested using the build script in `apple/swift` by running
 ```

@@ -89,7 +89,7 @@ public enum SyntaxParser {
     // If the string is backed by an NSString then such indexing will become
     // extremely slow.
     var utf8Source = source
-    utf8Source.makeNativeUTF8IfNeeded()
+    utf8Source.makeContiguousUTF8()
 
     let rawSyntax = parseRaw(utf8Source, parseTransition, filenameForDiagnostics,
                              diagnosticEngine)
@@ -127,7 +127,7 @@ public enum SyntaxParser {
     _ filenameForDiagnostics: String,
     _ diagnosticEngine: DiagnosticEngine?
   ) -> RawSyntax {
-    assert(source.isNativeUTF8)
+    precondition(source.isContiguousUTF8)
     let c_parser = swiftparse_parser_create()
     defer {
       swiftparse_parser_dispose(c_parser)

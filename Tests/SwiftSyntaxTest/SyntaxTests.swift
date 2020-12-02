@@ -144,4 +144,11 @@ public class SyntaxTests: XCTestCase {
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as SyntaxProtocol))
     XCTAssertEqual(Syntax(integerExpr), Syntax(fromProtocol: integerExpr as ExprSyntaxProtocol))
   }
+
+  public func testRunParserOnForeignString() {
+    // Store the source code in a foreign non-UTF-8 string.
+    // If SwiftSyntax fails to convert it to a native UTF-8 string, internal assertions should fail.
+    let sourceNsString = "var 🎉 = 2" as NSString
+    _ = try? SyntaxParser.parse(source: sourceNsString as String)
+  }
 }

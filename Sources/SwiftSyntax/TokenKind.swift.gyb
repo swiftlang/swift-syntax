@@ -172,7 +172,7 @@ extension TokenKind {
       return body(.init(kind: .${token.swift_kind()}, length: length))
 %   else:
     case .${token.swift_kind()}(var text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .${token.swift_kind()}, length: length, customText: buf))

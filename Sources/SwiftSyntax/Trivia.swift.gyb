@@ -236,7 +236,7 @@ extension TriviaPiece {
       return body(.init(kind: .${trivia.lower_name}s, length: length))
 %   else:
     case var .${trivia.lower_name}(text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .${trivia.lower_name}, length: length, customText: buf))

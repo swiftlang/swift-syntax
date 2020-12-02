@@ -366,31 +366,31 @@ extension TriviaPiece {
       let length = count * 2
       return body(.init(kind: .carriageReturnLineFeeds, length: length))
     case var .lineComment(text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .lineComment, length: length, customText: buf))
       })!
     case var .blockComment(text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .blockComment, length: length, customText: buf))
       })!
     case var .docLineComment(text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .docLineComment, length: length, customText: buf))
       })!
     case var .docBlockComment(text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .docBlockComment, length: length, customText: buf))
       })!
     case var .garbageText(text):
-      text.makeNativeUTF8IfNeeded()
+      text.makeContiguousUTF8()
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .garbageText, length: length, customText: buf))

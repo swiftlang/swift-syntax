@@ -140,10 +140,14 @@ fileprivate struct TokenData {
     let trailingTriviaCount = Int(data.trailing_trivia_count)
     var curPtr = extraPtr
     for i in 0..<leadingTriviaCount {
+      assert(MemoryLayout.size(ofValue: data.leading_trivia![i])
+              <= MemoryLayout<RawSyntaxDataElement>.size)
       initializeElement(curPtr, with: data.leading_trivia![i])
       curPtr = curPtr.successor()
     }
     for i in 0..<trailingTriviaCount {
+      assert(MemoryLayout.size(ofValue: data.trailing_trivia![i])
+              <= MemoryLayout<RawSyntaxDataElement>.size)
       initializeElement(curPtr, with: data.trailing_trivia![i])
       curPtr = curPtr.successor()
     }
@@ -544,6 +548,8 @@ fileprivate struct LayoutData {
   ) {
     var curPtr = extraPtr
     for i in 0..<Int(data.nodes_count) {
+      assert(MemoryLayout.size(ofValue: data.nodes![i])
+              <= MemoryLayout<RawSyntaxDataElement>.size)
       initializeElement(curPtr, with: data.nodes![i])
       curPtr = curPtr.successor()
     }

@@ -12,7 +12,7 @@
 
 /// Represent the user-facing part of SourceLocation that can be calculated
 /// on demand.
-struct ComputedLocation: Codable, CustomDebugStringConvertible {
+struct ComputedLocation: Hashable, Codable, CustomDebugStringConvertible {
   /// The line in the file where this location resides. 1-based.
   let line: Int
 
@@ -43,7 +43,7 @@ struct ComputedLocation: Codable, CustomDebugStringConvertible {
 }
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Codable, CustomDebugStringConvertible {
+public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
 
   /// Line and column that can be computed on demand.
   private var compLoc: ComputedLocation?
@@ -91,7 +91,7 @@ public struct SourceLocation: Codable, CustomDebugStringConvertible {
 }
 
 /// Represents a start and end location in a Swift file.
-public struct SourceRange: Codable, CustomDebugStringConvertible {
+public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
 
   /// The beginning location in the source range.
   public let start: SourceLocation

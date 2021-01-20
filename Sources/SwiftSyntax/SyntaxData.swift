@@ -75,13 +75,17 @@ struct SyntaxIndexInTree: Hashable {
 
   static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
 
-  func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIndexInTree {
+  /// Assuming that this index points to the start of `Raw`, so that it points
+  /// to the next sibling of `Raw`.
+  func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
     let newIndexInTree = self.indexInTree +
                          UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
     return .init(indexInTree: newIndexInTree)
   }
 
-  func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIndexInTree {
+  /// Assuming that this index points to the next sibling of `Raw`, reverse it
+  /// so that it points to the start of `Raw`.
+  func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
     let newIndexInTree = self.indexInTree -
                          UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
     return .init(indexInTree: newIndexInTree)
@@ -105,12 +109,12 @@ public struct SyntaxIdentifier: Hashable {
   let indexInTree: SyntaxIndexInTree
 
   func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = indexInTree.advancedBySibling(raw)
+    let newIndexInTree = indexInTree.advancedBy(raw)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree.reversedBySibling(raw)
+    let newIndexInTree = self.indexInTree.reversedBy(raw)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 

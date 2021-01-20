@@ -156,7 +156,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
     if index.indexInParent + 1 < numberOfChildren {
       // Compute the next materialized index
       let nodeLength = UInt32(node?.totalLength.utf8Length ?? 0)
-      let advancedIndexInTree = index.indexInTree.advancedBySibling(node)
+      let advancedIndexInTree = index.indexInTree.advancedBy(node)
       return SyntaxChildrenIndex(offset: index.offset + nodeLength,
                                  indexInParent: index.indexInParent + 1,
                                  indexInTree: advancedIndexInTree)
@@ -176,7 +176,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
       // We are reversing a non-end index.
       let previousNode = parent.child(at: Int(index.indexInParent - 1))
       let previousNodeLength = UInt32(previousNode?.totalLength.utf8Length ?? 0)
-      let reversedIndexInTree = index.indexInTree.reversedBySibling(previousNode)
+      let reversedIndexInTree = index.indexInTree.reversedBy(previousNode)
       return SyntaxChildrenIndex(offset: index.offset - previousNodeLength,
                                  indexInParent: index.indexInParent - 1,
                                  indexInTree: reversedIndexInTree)

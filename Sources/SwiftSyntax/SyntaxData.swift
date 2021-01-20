@@ -31,12 +31,6 @@ struct AbsoluteSyntaxPosition {
     return .init(offset: self.offset, indexInParent: 0)
   }
 
-  func advancedToEndOfChildren(_ raw: RawSyntax) -> AbsoluteSyntaxPosition {
-    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw.totalLength.utf8Length)
-    let newIndexInParent = UInt32(truncatingIfNeeded: raw.numberOfChildren)
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
-  }
-
   static var forRoot: AbsoluteSyntaxPosition {
     return .init(offset: 0, indexInParent: 0)
   }
@@ -70,12 +64,6 @@ struct AbsoluteSyntaxInfo {
     return .init(position: newPosition, nodeId: newNodeId)
   }
 
-  func advancedToEndOfChildren(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
-    let newPosition = position.advancedToEndOfChildren(raw)
-    let newNodeId = nodeId.advancedToEndOfChildren(raw)
-    return .init(position: newPosition, nodeId: newNodeId)
-  }
-
   static var forRoot: AbsoluteSyntaxInfo {
     return .init(position: .forRoot, nodeId: .newRoot())
   }
@@ -104,12 +92,6 @@ struct SyntaxIndexInTree: Hashable {
     return .init(indexInTree: newIndexInTree)
   }
 
-  func advancedToEndOfChildren(_ raw: RawSyntax) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree +
-                         UInt32(truncatingIfNeeded: raw.totalNodes)
-    return .init(indexInTree: newIndexInTree)
-  }
-
   init(indexInTree: UInt32) {
     self.indexInTree = indexInTree
   }
@@ -134,11 +116,6 @@ public struct SyntaxIdentifier: Hashable {
 
   func advancedToFirstChild() -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree.advancedToFirstChild()
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
-  func advancedToEndOfChildren(_ raw: RawSyntax) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree.advancedToEndOfChildren(raw)
     return .init(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 

@@ -7252,7 +7252,7 @@ extension WhereClauseSyntax {
 
 public struct ForInStmtSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 10)
+    Array<RawSyntax?>(repeating: nil, count: 12)
 
   internal init() {}
 
@@ -7268,6 +7268,16 @@ public struct ForInStmtSyntaxBuilder {
 
   public mutating func useForKeyword(_ node: TokenSyntax) {
     let idx = ForInStmtSyntax.Cursor.forKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useTryKeyword(_ node: TokenSyntax) {
+    let idx = ForInStmtSyntax.Cursor.tryKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAwaitKeyword(_ node: TokenSyntax) {
+    let idx = ForInStmtSyntax.Cursor.awaitKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -7310,17 +7320,17 @@ public struct ForInStmtSyntaxBuilder {
     if (layout[2] == nil) {
       layout[2] = RawSyntax.missingToken(TokenKind.forKeyword)
     }
-    if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.pattern)
-    }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missingToken(TokenKind.inKeyword)
+      layout[6] = RawSyntax.missing(SyntaxKind.pattern)
     }
-    if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.expr)
+    if (layout[8] == nil) {
+      layout[8] = RawSyntax.missingToken(TokenKind.inKeyword)
     }
     if (layout[9] == nil) {
-      layout[9] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[9] = RawSyntax.missing(SyntaxKind.expr)
+    }
+    if (layout[11] == nil) {
+      layout[11] = RawSyntax.missing(SyntaxKind.codeBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .forInStmt,

@@ -983,6 +983,8 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     case labelName
     case labelColon
     case forKeyword
+    case tryKeyword
+    case awaitKeyword
     case caseKeyword
     case pattern
     case typeAnnotation
@@ -1075,6 +1077,50 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     _ newChild: TokenSyntax?) -> ForInStmtSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.forKeyword)
     let newData = data.replacingChild(raw, at: Cursor.forKeyword)
+    return ForInStmtSyntax(newData)
+  }
+
+  public var tryKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.tryKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTryKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `tryKeyword` replaced.
+  /// - param newChild: The new `tryKeyword` to replace the node's
+  ///                   current `tryKeyword`, if present.
+  public func withTryKeyword(
+    _ newChild: TokenSyntax?) -> ForInStmtSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.tryKeyword)
+    return ForInStmtSyntax(newData)
+  }
+
+  public var awaitKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.awaitKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAwaitKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `awaitKeyword` replaced.
+  /// - param newChild: The new `awaitKeyword` to replace the node's
+  ///                   current `awaitKeyword`, if present.
+  public func withAwaitKeyword(
+    _ newChild: TokenSyntax?) -> ForInStmtSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.awaitKeyword)
     return ForInStmtSyntax(newData)
   }
 
@@ -1231,7 +1277,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 10)
+    assert(rawChildren.count == 12)
     // Check child #0 child is TokenSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -1265,53 +1311,69 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is PatternSyntax 
-    assert(rawChildren[4].raw != nil)
+    // Check child #4 child is TokenSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(PatternSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #5 child is TypeAnnotationSyntax or missing
+    // Check child #5 child is TokenSyntax or missing
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeAnnotationSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #6 child is TokenSyntax 
+    // Check child #6 child is PatternSyntax 
     assert(rawChildren[6].raw != nil)
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(PatternSyntax.self))
     }
-    // Check child #7 child is ExprSyntax 
-    assert(rawChildren[7].raw != nil)
+    // Check child #7 child is TypeAnnotationSyntax or missing
     if let raw = rawChildren[7].raw {
       let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ExprSyntax.self))
+      assert(syntaxChild.is(TypeAnnotationSyntax.self))
     }
-    // Check child #8 child is WhereClauseSyntax or missing
+    // Check child #8 child is TokenSyntax 
+    assert(rawChildren[8].raw != nil)
     if let raw = rawChildren[8].raw {
       let info = rawChildren[8].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(WhereClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #9 child is CodeBlockSyntax 
+    // Check child #9 child is ExprSyntax 
     assert(rawChildren[9].raw != nil)
     if let raw = rawChildren[9].raw {
       let info = rawChildren[9].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+    // Check child #10 child is WhereClauseSyntax or missing
+    if let raw = rawChildren[10].raw {
+      let info = rawChildren[10].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(WhereClauseSyntax.self))
+    }
+    // Check child #11 child is CodeBlockSyntax 
+    assert(rawChildren[11].raw != nil)
+    if let raw = rawChildren[11].raw {
+      let info = rawChildren[11].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1326,6 +1388,8 @@ extension ForInStmtSyntax: CustomReflectable {
       "labelName": labelName.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "labelColon": labelColon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "forKeyword": Syntax(forKeyword).asProtocol(SyntaxProtocol.self),
+      "tryKeyword": tryKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "awaitKeyword": awaitKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "caseKeyword": caseKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
       "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

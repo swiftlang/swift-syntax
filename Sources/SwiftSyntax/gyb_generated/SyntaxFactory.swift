@@ -3304,11 +3304,13 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return WhereClauseSyntax(data)
   }
-  public static func makeForInStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, forKeyword: TokenSyntax, caseKeyword: TokenSyntax?, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, inKeyword: TokenSyntax, sequenceExpr: ExprSyntax, whereClause: WhereClauseSyntax?, body: CodeBlockSyntax) -> ForInStmtSyntax {
+  public static func makeForInStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, forKeyword: TokenSyntax, tryKeyword: TokenSyntax?, awaitKeyword: TokenSyntax?, caseKeyword: TokenSyntax?, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, inKeyword: TokenSyntax, sequenceExpr: ExprSyntax, whereClause: WhereClauseSyntax?, body: CodeBlockSyntax) -> ForInStmtSyntax {
     let layout: [RawSyntax?] = [
       labelName?.raw,
       labelColon?.raw,
       forKeyword.raw,
+      tryKeyword?.raw,
+      awaitKeyword?.raw,
       caseKeyword?.raw,
       pattern.raw,
       typeAnnotation?.raw,
@@ -3329,6 +3331,8 @@ public enum SyntaxFactory {
       nil,
       nil,
       RawSyntax.missingToken(TokenKind.forKeyword),
+      nil,
+      nil,
       nil,
       RawSyntax.missing(SyntaxKind.pattern),
       nil,

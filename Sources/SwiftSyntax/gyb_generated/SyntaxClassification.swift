@@ -87,6 +87,8 @@ extension SyntaxClassification {
         return (.keyword, false)
       case (.attribute, 1):
         return (.attribute, false)
+      case (.forInStmt, 4):
+        return (.keyword, false)
       case (.simpleTypeIdentifier, 0):
         return (.typeIdentifier, false)
       case (.memberTypeIdentifier, 2):

@@ -7470,10 +7470,13 @@ extension ObjCSelectorPieceSyntax: CustomReflectable {
 
 /// 
 /// The arguments for the `@differentiable` attribute: an optional
-/// differentiability parameter clause and an optional 'where' clause.
+/// differentiability kind, an optional differentiability parameter clause,
+/// and an optional 'where' clause.
 /// 
 public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case diffKind
+    case diffKindComma
     case diffParams
     case diffParamsComma
     case whereClause
@@ -7498,6 +7501,53 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var diffKind: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.diffKind,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDiffKind(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `diffKind` replaced.
+  /// - param newChild: The new `diffKind` to replace the node's
+  ///                   current `diffKind`, if present.
+  public func withDiffKind(
+    _ newChild: TokenSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.diffKind)
+    return DifferentiableAttributeArgumentsSyntax(newData)
+  }
+
+  /// 
+  /// The comma following the differentiability kind, if it exists.
+  /// 
+  public var diffKindComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.diffKindComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDiffKindComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `diffKindComma` replaced.
+  /// - param newChild: The new `diffKindComma` to replace the node's
+  ///                   current `diffKindComma`, if present.
+  public func withDiffKindComma(
+    _ newChild: TokenSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.diffKindComma)
+    return DifferentiableAttributeArgumentsSyntax(newData)
   }
 
   public var diffParams: DifferentiabilityParamsClauseSyntax? {
@@ -7573,14 +7623,14 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
-    // Check child #0 child is DifferentiabilityParamsClauseSyntax or missing
+    assert(rawChildren.count == 5)
+    // Check child #0 child is TokenSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(DifferentiabilityParamsClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is TokenSyntax or missing
     if let raw = rawChildren[1].raw {
@@ -7590,9 +7640,25 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #2 child is GenericWhereClauseSyntax or missing
+    // Check child #2 child is DifferentiabilityParamsClauseSyntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(DifferentiabilityParamsClauseSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #4 child is GenericWhereClauseSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -7604,6 +7670,8 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 extension DifferentiableAttributeArgumentsSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "diffKind": diffKind.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "diffKindComma": diffKindComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParams": diffParams.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "diffParamsComma": diffParamsComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "whereClause": whereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

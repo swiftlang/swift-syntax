@@ -3959,8 +3959,8 @@ public struct ClassDeclSyntaxBuilder {
     }
   }
 
-  public mutating func useClassKeyword(_ node: TokenSyntax) {
-    let idx = ClassDeclSyntax.Cursor.classKeyword.rawValue
+  public mutating func useClassOrActorKeyword(_ node: TokenSyntax) {
+    let idx = ClassDeclSyntax.Cursor.classOrActorKeyword.rawValue
     layout[idx] = node.raw
   }
 

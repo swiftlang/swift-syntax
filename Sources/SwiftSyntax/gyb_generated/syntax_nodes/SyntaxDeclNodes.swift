@@ -1295,7 +1295,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case attributes
     case modifiers
-    case classKeyword
+    case classOrActorKeyword
     case identifier
     case genericParameterClause
     case inheritanceClause
@@ -1406,24 +1406,24 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ClassDeclSyntax(newData)
   }
 
-  public var classKeyword: TokenSyntax {
+  public var classOrActorKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.classKeyword,
+      let childData = data.child(at: Cursor.classOrActorKeyword,
                                  parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withClassKeyword(value)
+      self = withClassOrActorKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `classKeyword` replaced.
-  /// - param newChild: The new `classKeyword` to replace the node's
-  ///                   current `classKeyword`, if present.
-  public func withClassKeyword(
+  /// Returns a copy of the receiver with its `classOrActorKeyword` replaced.
+  /// - param newChild: The new `classOrActorKeyword` to replace the node's
+  ///                   current `classOrActorKeyword`, if present.
+  public func withClassOrActorKeyword(
     _ newChild: TokenSyntax?) -> ClassDeclSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.classKeyword)
-    let newData = data.replacingChild(raw, at: Cursor.classKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.classOrActorKeyword)
     return ClassDeclSyntax(newData)
   }
 
@@ -1614,7 +1614,7 @@ extension ClassDeclSyntax: CustomReflectable {
     return Mirror(self, children: [
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self),
+      "classOrActorKeyword": Syntax(classOrActorKeyword).asProtocol(SyntaxProtocol.self),
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
       "genericParameterClause": genericParameterClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

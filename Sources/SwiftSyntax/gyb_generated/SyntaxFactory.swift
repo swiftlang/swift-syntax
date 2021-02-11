@@ -1837,11 +1837,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return TypeInheritanceClauseSyntax(data)
   }
-  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
+  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classOrActorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
-      classKeyword.raw,
+      classOrActorKeyword.raw,
       identifier.raw,
       genericParameterClause?.raw,
       inheritanceClause?.raw,

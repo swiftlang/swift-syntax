@@ -201,7 +201,7 @@ public struct Extension: DeclBuildable {
   }
 
   public func buildDecl(format: Format, leadingTrivia: Trivia) -> DeclSyntax {
-    let extensionKeyword = SyntaxFactory.makeExtensionKeyword().withTrailingTrivia(.spaces(1))
+    let extensionKeyword = Tokens.extension.withLeadingTrivia(leadingTrivia)
 
     let declList = memberList.buildDeclList(
       format: format._indented(),

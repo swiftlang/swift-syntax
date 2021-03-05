@@ -28,6 +28,9 @@ enum Tokens {
   /// `"struct "`
   static let `struct` = SyntaxFactory.makeStructKeyword().withTrailingTrivia(.spaces(1))
 
+  /// `"extension"`
+  static let `extension` = SyntaxFactory.makeExtensionKeyword().withTrailingTrivia(.spaces(1))
+
   // MARK: Punctuations and Signs
 
   /// `":"`

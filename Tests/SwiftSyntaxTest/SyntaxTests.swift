@@ -151,4 +151,10 @@ public class SyntaxTests: XCTestCase {
     let sourceNsString = "var 🎉 = 2" as NSString
     _ = try? SyntaxParser.parse(source: sourceNsString as String)
   }
+
+  public func testParseFileWithNullCharacter() throws {
+    let source = "var x = 1\0\nvar y = 2"
+    let tree = try SyntaxParser.parse(source: source)
+    XCTAssertEqual(tree.description, source)
+  }
 }

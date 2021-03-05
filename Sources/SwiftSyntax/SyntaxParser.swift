@@ -192,9 +192,11 @@ public enum SyntaxParser {
       swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
     }
 
-    let c_top = swiftparse_parse_string(c_parser, source)
+    let c_top = source.withCString { buf in
+      swiftparse_parse_string(c_parser, buf, source.utf8.count)
+    }
 
-  // Get ownership back from the C parser.
+    // Get ownership back from the C parser.
     return RawSyntax.moveFromOpaque(c_top)!
   }
 }

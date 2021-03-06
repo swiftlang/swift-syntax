@@ -1,8 +1,16 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.kinds import lowercase_first_word
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From Tokens.swift.gyb.
+//// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2019 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2021 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -16,17 +24,12 @@ import SwiftSyntax
 enum Tokens {
   // MARK: Keywords
 
-  /// `"let "`
-  static let `let` = SyntaxFactory.makeLetKeyword().withTrailingTrivia(.spaces(1))
-
-  /// `"var "`
-  static let `var` = SyntaxFactory.makeVarKeyword().withTrailingTrivia(.spaces(1))
-
-  /// `"import "`
-  static let `import` = SyntaxFactory.makeImportKeyword().withTrailingTrivia(.spaces(1))
-
-  /// `"struct "`
-  static let `struct` = SyntaxFactory.makeStructKeyword().withTrailingTrivia(.spaces(1))
+% for token in SYNTAX_TOKENS:
+%   if token.is_keyword:
+  /// The `${token.text}` keyword
+  static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Keyword().withTrailingTrivia(.spaces(1))
+%   end
+% end
 
   // MARK: Punctuations and Signs
 

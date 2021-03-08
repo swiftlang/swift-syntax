@@ -117,7 +117,7 @@ fileprivate struct TokenData {
     let hasCustomText = TokenKind.hasText(kind: data.kind) ||
       hasTriviaText(leadingTriviaCount, data.leading_trivia) ||
       hasTriviaText(trailingTriviaCount, data.trailing_trivia)
-    let textSize = hasCustomText ? Int(cnode.range.length) : 0
+    let textSize = hasCustomText ? Int(data.range.length) : 0
 
     let rawData: RawSyntaxData = .token(.init(kind: data.kind,
       leadingTriviaCount: data.leading_trivia_count,
@@ -154,11 +154,11 @@ fileprivate struct TokenData {
 
     if hasCustomText {
       // Copy the full token text, including trivia.
-      let startOffset = Int(cnode.range.offset)
+      let startOffset = Int(data.range.offset)
       var charPtr = UnsafeMutableRawPointer(curPtr).assumingMemoryBound(to: UInt8.self)
       let utf8 = source.utf8
       let begin = utf8.index(utf8.startIndex, offsetBy: startOffset)
-      let end = utf8.index(begin, offsetBy: Int(cnode.range.length))
+      let end = utf8.index(begin, offsetBy: Int(data.range.length))
       for ch in utf8[begin..<end] {
         charPtr.pointee = ch
         charPtr = charPtr.successor()
@@ -523,22 +523,25 @@ fileprivate struct LayoutData {
     self.isConstructed = isConstructed
   }
 
-  /// Returns header `RawSyntaxData` value and number of elements to tail-allocate.
-  static func dataAndExtraCapacity(
+  /// Returns header `RawSyntaxData` value, number of elements to tail-allocate
+  /// and the total byte length of the node.
+  static func dataExtraCapacityAndTotalLength(
     for kind: SyntaxKind,
     data: CLayoutData
-  ) -> (RawSyntaxData, Int) {
+  ) -> (data: RawSyntaxData, extraCapacity: Int, totalLength: Int) {
     var totalCount = 0
+    var totalLength: Int = 0
     for i in 0..<Int(data.nodes_count) {
       if let raw = RawSyntax.getFromOpaque(data.nodes![i]) {
         totalCount += raw.totalNodes
+        totalLength += raw.totalLength.utf8Length
       }
     }
     let totalSubNodeCount = UInt32(truncatingIfNeeded: totalCount)
     let rawData: RawSyntaxData = .layout(.init(kind: kind,
       nodeCount: data.nodes_count, totalSubNodeCount: totalSubNodeCount,
       isConstructed: false))
-    return (rawData, Int(data.nodes_count))
+    return (rawData, Int(data.nodes_count), totalLength)
   }
 
   /// Initializes the tail-allocated elements.
@@ -876,15 +879,16 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     source: String
   ) -> RawSyntax {
     let cnode = p.pointee
-    let byteLength = Int(cnode.range.length)
     let isPresent = cnode.present
 
     let data: RawSyntaxData
     let capacity: Int
+    let byteLength: Int
     if cnode.kind == 0 {
       (data, capacity) = TokenData.dataAndExtraCapacity(for: cnode)
+      byteLength = Int(cnode.token_data.range.length)
     } else {
-      (data, capacity) = LayoutData.dataAndExtraCapacity(
+      (data, capacity, byteLength) = LayoutData.dataExtraCapacityAndTotalLength(
         for: SyntaxKind.fromRawValue(cnode.kind), data: cnode.layout_data)
     }
     let buffer = self.create(minimumCapacity: capacity) { _ in

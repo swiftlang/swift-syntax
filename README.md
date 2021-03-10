@@ -241,3 +241,8 @@ into:
 let x = 3
 let y = 3001
 ```
+
+## LICENSE
+
+ Please see [LICENSE](LICENSE.txt) for more information. 
+

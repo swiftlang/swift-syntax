@@ -242,7 +242,7 @@ let x = 3
 let y = 3001
 ```
 
-## LICENSE
+## License
 
  Please see [LICENSE](LICENSE.txt) for more information. 
 

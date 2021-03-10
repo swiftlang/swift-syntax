@@ -140,7 +140,19 @@ public enum SyntaxParser {
       let bits = Unmanaged.passRetained(node)
       return bits.toOpaque()
     }
-    swiftparse_parser_set_node_handler(c_parser, nodeHandler);
+    let getSyntaxKind = { (cnode: CClientNode?) -> CSyntaxKind in
+      precondition(cnode != nil)
+      return RawSyntax.getFromOpaque(cnode)!.kind.rawValue
+    }
+    let getTokenKind = { (cnode: CClientNode?) -> CTokenKind in
+      precondition(cnode != nil)
+      return RawSyntax.getFromOpaque(cnode)!.formRawTokenKind()!.rawValue
+    }
+    let isPresent = { (cnode: CClientNode?) -> Bool in
+      precondition(cnode != nil)
+      return RawSyntax.getFromOpaque(cnode)!.isPresent
+    }
+    swiftparse_parser_set_required_callbacks(c_parser, nodeHandler, getSyntaxKind, getTokenKind, isPresent);
 
     if let parseTransition = parseTransition {
       var parseLookup = IncrementalParseLookup(transition: parseTransition)

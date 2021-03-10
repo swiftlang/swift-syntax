@@ -769,6 +769,16 @@ struct RawSyntaxBase {
     }
   }
 
+  /// Returns the `TokenKind` for a token node.
+  /// - Returns: nil if called on a layout node.
+  fileprivate func formRawTokenKind(extraPtr: DataElementPtr) -> RawTokenKind? {
+    switch data {
+    case .token(let data):
+      return RawTokenKind.fromRawValue(data.tokenKind)
+    case .layout(_): return nil
+    }
+  }
+
   /// Returns the leading `Trivia` length for a token node.
   /// - Returns: .zero if called on a layout node.
   fileprivate func getTokenLeadingTriviaLength(
@@ -1010,6 +1020,12 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
   func formTokenKind() -> TokenKind? {
     return withUnsafeMutablePointers {
       $0.pointee.formTokenKind(extraPtr: $1)
+    }
+  }
+
+  func formRawTokenKind() -> RawTokenKind? {
+    return withUnsafeMutablePointers {
+      $0.pointee.formRawTokenKind(extraPtr: $1)
     }
   }
 

@@ -16,6 +16,9 @@ import tempfile
 
 PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
+SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
+SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
+SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 
 LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")
@@ -164,37 +167,38 @@ def generate_single_gyb_file(
     check_call(rsync_command, verbose=verbose)
 
 
-def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None):
+def generate_gyb_files(
+    gyb_exec, verbose, add_source_locations, 
+    swiftsyntax_destination=None, swiftsyntaxbuilder_destination=None
+):
     print("** Generating gyb Files **")
 
     check_gyb_exec(gyb_exec)
     check_rsync()
 
-    swiftsyntax_sources_dir = os.path.join(PACKAGE_DIR, "Sources", "SwiftSyntax")
     temp_files_dir = tempfile.gettempdir()
 
-    if destination is None:
-        destination = os.path.join(swiftsyntax_sources_dir, "gyb_generated")
+    if swiftsyntax_destination is None:
+        swiftsyntax_destination = os.path.join(
+            SWIFTSYNTAX_DIR, "gyb_generated")
+    
+    if swiftsyntaxbuilder_destination is None:
+        swiftsyntaxbuilder_destination = os.path.join(
+            SWIFTSYNTAXBUILDER_DIR, "gyb_generated")
 
-    template_destination = os.path.join(destination, "syntax_nodes")
+    template_destination = os.path.join(swiftsyntax_destination, "syntax_nodes")
 
-    if not os.path.exists(temp_files_dir):
-        os.makedirs(temp_files_dir)
-    if not os.path.exists(destination):
-        os.makedirs(destination)
-    if not os.path.exists(template_destination):
-        os.makedirs(template_destination)
+    make_dir_if_needed(temp_files_dir)
+    make_dir_if_needed(swiftsyntax_destination)
+    make_dir_if_needed(swiftsyntaxbuilder_destination)
+    make_dir_if_needed(template_destination)
 
     # Clear any *.swift files that are relics from the previous run.
-    for previous_gyb_gen_file in os.listdir(destination):
-        if previous_gyb_gen_file.endswith(".swift"):
-            gyb_file = os.path.join(
-                swiftsyntax_sources_dir, previous_gyb_gen_file + ".gyb"
-            )
-            if not os.path.exists(gyb_file):
-                check_call(
-                    ["rm", previous_gyb_gen_file], cwd=destination, verbose=verbose
-                )
+    clear_gyb_files_from_previous_run(
+        SWIFTSYNTAX_DIR, swiftsyntax_destination)
+
+    clear_gyb_files_from_previous_run(
+        SWIFTSYNTAXBUILDER_DIR, swiftsyntaxbuilder_destination)
 
     for previous_gyb_gen_file in os.listdir(template_destination):
         if previous_gyb_gen_file.endswith(".swift"):
@@ -205,35 +209,18 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None
                     verbose=verbose,
                 )
 
-    # Generate the new .swift files in a temporary directory and only copy them
-    # to Sources/SwiftSyntax/gyb_generated if they are different than the files
-    # already residing there. This way we don't touch the generated .swift
-    # files if they haven't changed and don't trigger a rebuild.
-    for gyb_file in os.listdir(swiftsyntax_sources_dir):
-        if not gyb_file.endswith(".gyb"):
-            continue
+    generate_gyb_files_helper(gyb_exec, SWIFTSYNTAX_DIR, swiftsyntax_destination,
+        temp_files_dir, add_source_locations, verbose)
 
-        gyb_file_path = os.path.join(swiftsyntax_sources_dir, gyb_file)
-
-        # Slice off the '.gyb' to get the name for the output file
-        output_file_name = gyb_file[:-4]
-
-        generate_single_gyb_file(
-            gyb_exec,
-            gyb_file_path,
-            output_file_name,
-            destination,
-            temp_files_dir,
-            add_source_locations,
-            additional_gyb_flags=[],
-            verbose=verbose,
-        )
+    generate_gyb_files_helper(gyb_exec, SWIFTSYNTAXBUILDER_DIR, 
+        swiftsyntaxbuilder_destination, temp_files_dir, add_source_locations, 
+        verbose)
 
     for base_kind in BASE_KIND_FILES:
         output_file_name = BASE_KIND_FILES[base_kind]
 
         gyb_file = os.path.join(
-            swiftsyntax_sources_dir, "SyntaxNodes.swift.gyb.template"
+            SWIFTSYNTAX_DIR, "SyntaxNodes.swift.gyb.template"
         )
 
         generate_single_gyb_file(
@@ -248,6 +235,60 @@ def generate_gyb_files(gyb_exec, verbose, add_source_locations, destination=None
         )
 
     print("Done Generating gyb Files")
+
+
+def make_dir_if_needed(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+# Remove any files in the `gyb_generated` directory that no longer have a 
+# corresponding `.gyb` file in the `Sources` directory.
+def clear_gyb_files_from_previous_run(sources_dir, destination_dir):
+    for previous_gyb_gen_file in os.listdir(destination_dir):
+        if previous_gyb_gen_file.endswith(".swift"):
+            gyb_file = os.path.join(
+                sources_dir, previous_gyb_gen_file + ".gyb"
+            )
+            if not os.path.exists(gyb_file):
+                check_call(
+                    ["rm", previous_gyb_gen_file], 
+                    cwd=destination, 
+                    verbose=verbose
+                )
+
+
+# Generate the new .swift files in `temp_files_dir` and only copy them
+# to `destiantion_dir` if they are different than the
+# files already residing there. This way we don't touch the generated .swift
+# files if they haven't changed and don't trigger a rebuild.
+def generate_gyb_files_helper(
+    gyb_exec,
+    sources_dir, 
+    destination_dir,
+    temp_files_dir, 
+    add_source_locations,
+    verbose
+):
+    for gyb_file in os.listdir(sources_dir):
+        if not gyb_file.endswith(".gyb"):
+            continue
+
+        gyb_file_path = os.path.join(sources_dir, gyb_file)
+
+        # Slice off the '.gyb' to get the name for the output file
+        output_file_name = gyb_file[:-4]
+
+        generate_single_gyb_file(
+            gyb_exec,
+            gyb_file_path,
+            output_file_name,
+            destination_dir,
+            temp_files_dir,
+            add_source_locations,
+            additional_gyb_flags=[],
+            verbose=verbose,
+        )
 
 
 # -----------------------------------------------------------------------------
@@ -315,18 +356,32 @@ class Builder(object):
 
 
 def verify_generated_files(gyb_exec, verbose):
-    user_generated_dir = os.path.join(
-        PACKAGE_DIR, "Sources", "SwiftSyntax", "gyb_generated"
+    user_swiftsyntax_generated_dir = os.path.join(
+        SWIFTSYNTAX_DIR, "gyb_generated"
     )
 
-    self_generated_dir = tempfile.mkdtemp()
+    user_swiftsyntaxbuilder_generated_dir = os.path.join(
+        SWIFTSYNTAXBUILDER_DIR, "gyb_generated"
+    )
+
+    self_swiftsyntax_generated_dir = tempfile.mkdtemp()
+    self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
+    
     generate_gyb_files(
         gyb_exec,
         verbose=verbose,
         add_source_locations=False,
-        destination=self_generated_dir,
+        swiftsyntax_destination=self_swiftsyntax_generated_dir,
+        swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
     )
 
+    check_generated_files_match(self_swiftsyntax_generated_dir, 
+        user_swiftsyntax_generated_dir)
+    check_generated_files_match(self_swiftsyntaxbuilder_generated_dir, 
+        user_swiftsyntaxbuilder_generated_dir)
+
+
+def check_generated_files_match(self_generated_dir, user_generated_dir):
     command = [
         "diff",
         "-r",

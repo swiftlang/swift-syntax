@@ -60,12 +60,8 @@ fileprivate var emptyStringBuffer: UnsafeBufferPointer<UInt8> {
 /// There's additional data that are tail-allocated. The data are as follows:
 ///
 /// * For a parsed token (`TokenData.isConstructed` is false):
-///   * List of leading `CTriviaPiece`s
-///   * List of trailing `CTriviaPiece`s
-///   * A string buffer. If `TokenData.hasCustomText` is false then the buffer is empty
-///     otherwise it contains the full text for the token, including the trivia.
-///     `TokenData.hasCustomText` is true if there's any custom text in any of the trivia
-///     or the token kind.
+///   * A string buffer that contains the full text for the token, including
+///     the trivia.
 /// * For a constructed token (`TokenData.isConstructed` is true):
 ///   * A `ConstructedTokenData` value
 ///
@@ -73,28 +69,22 @@ fileprivate var emptyStringBuffer: UnsafeBufferPointer<UInt8> {
 /// there is any custom text, is more efficient than trying to copy only the
 /// individual strings from trivia or token kind containing custom text.
 fileprivate struct TokenData {
-  let leadingTriviaCount: UInt16
-  let trailingTriviaCount: UInt16
+  /// The length of the leading trivia in bytes
+  let leadingTriviaLength: UInt32
+  /// The length of the trailing trivia in bytes
+  let trailingTriviaLength: UInt32
   let tokenKind: CTokenKind
-  /// Returns true if there's any custom text in any of the trivia or the token kind.
-  ///
-  /// If true then there is a string buffer in the tail-allocated storage for
-  /// the full token range (including trivia).
-  /// It is ignored for a constructed token node (`isConstructed` == true).
-  let hasCustomText: Bool
   private let isConstructed: Bool
 
   private init(
     kind: CTokenKind,
-    leadingTriviaCount: UInt16,
-    trailingTriviaCount: UInt16,
-    hasCustomText: Bool,
+    leadingTriviaLength: UInt32,
+    trailingTriviaLength: UInt32,
     isConstructed: Bool
   ) {
     self.tokenKind = kind
-    self.leadingTriviaCount = leadingTriviaCount
-    self.trailingTriviaCount = trailingTriviaCount
-    self.hasCustomText = hasCustomText
+    self.leadingTriviaLength = leadingTriviaLength
+    self.trailingTriviaLength = trailingTriviaLength
     self.isConstructed = isConstructed
   }
 
@@ -104,27 +94,14 @@ fileprivate struct TokenData {
   ) -> (RawSyntaxData, Int) {
     assert(cnode.kind == 0)
     let data = cnode.token_data
-    let leadingTriviaCount = Int(data.leading_trivia_count)
-    let trailingTriviaCount = Int(data.trailing_trivia_count)
-    let totalTrivia = leadingTriviaCount + trailingTriviaCount
-
-    let hasTriviaText = { (count: Int, p: CTriviaPiecePtr?) -> Bool in
-      for i in 0..<count {
-        if TriviaPiece.hasText(kind: p![i].kind) { return true }
-      }
-      return false
-    }
-    let hasCustomText = TokenKind.hasText(kind: data.kind) ||
-      hasTriviaText(leadingTriviaCount, data.leading_trivia) ||
-      hasTriviaText(trailingTriviaCount, data.trailing_trivia)
-    let textSize = hasCustomText ? Int(data.range.length) : 0
 
     let rawData: RawSyntaxData = .token(.init(kind: data.kind,
-      leadingTriviaCount: data.leading_trivia_count,
-      trailingTriviaCount: data.trailing_trivia_count,
-      hasCustomText: hasCustomText, isConstructed: false))
+      leadingTriviaLength: data.leading_trivia_length,
+      trailingTriviaLength: data.trailing_trivia_length,
+      isConstructed: false))
 
-    let capacity = totalTrivia + numberOfElements(forBytes: textSize)
+    /// Allocate capacity to hold the token's text, including trivia
+    let capacity = numberOfElements(forBytes: Int(data.range.length))
     return (rawData, capacity)
   }
 
@@ -132,37 +109,18 @@ fileprivate struct TokenData {
   static func initializeExtra(
     _ cnode: CSyntaxNode,
     source: String,
-    hasCustomText: Bool,
     extraPtr: MutableDataElementPtr
   ) {
     let data = cnode.token_data
-    let leadingTriviaCount = Int(data.leading_trivia_count)
-    let trailingTriviaCount = Int(data.trailing_trivia_count)
-    var curPtr = extraPtr
-    for i in 0..<leadingTriviaCount {
-      assert(MemoryLayout.size(ofValue: data.leading_trivia![i])
-              <= MemoryLayout<RawSyntaxDataElement>.size)
-      initializeElement(curPtr, with: data.leading_trivia![i])
-      curPtr = curPtr.successor()
-    }
-    for i in 0..<trailingTriviaCount {
-      assert(MemoryLayout.size(ofValue: data.trailing_trivia![i])
-              <= MemoryLayout<RawSyntaxDataElement>.size)
-      initializeElement(curPtr, with: data.trailing_trivia![i])
-      curPtr = curPtr.successor()
-    }
-
-    if hasCustomText {
-      // Copy the full token text, including trivia.
-      let startOffset = Int(data.range.offset)
-      var charPtr = UnsafeMutableRawPointer(curPtr).assumingMemoryBound(to: UInt8.self)
-      let utf8 = source.utf8
-      let begin = utf8.index(utf8.startIndex, offsetBy: startOffset)
-      let end = utf8.index(begin, offsetBy: Int(data.range.length))
-      for ch in utf8[begin..<end] {
-        charPtr.pointee = ch
-        charPtr = charPtr.successor()
-      }
+    // Copy the full token text, including trivia.
+    let startOffset = Int(data.range.offset)
+    var charPtr = UnsafeMutableRawPointer(extraPtr).assumingMemoryBound(to: UInt8.self)
+    let utf8 = source.utf8
+    let begin = utf8.index(utf8.startIndex, offsetBy: startOffset)
+    let end = utf8.index(begin, offsetBy: Int(data.range.length))
+    for ch in utf8[begin..<end] {
+      charPtr.pointee = ch
+      charPtr = charPtr.successor()
     }
   }
 
@@ -171,9 +129,9 @@ fileprivate struct TokenData {
     for data: ConstructedTokenData
   ) -> (RawSyntaxData, Int) {
     let rawData: RawSyntaxData = .token(.init(kind: /*irrelevant*/0,
-      leadingTriviaCount: UInt16(truncatingIfNeeded: data.leadingTrivia.count),
-      trailingTriviaCount: UInt16(truncatingIfNeeded: data.trailingTrivia.count),
-      hasCustomText: /*irrelevant*/false, isConstructed: true))
+      leadingTriviaLength: UInt32(data.leadingTrivia.byteSize),
+      trailingTriviaLength: UInt32(data.trailingTrivia.byteSize),
+      isConstructed: true))
     let capacity = numberOfElements(for: data)
     return (rawData, capacity)
   }
@@ -200,22 +158,12 @@ fileprivate struct TokenData {
     length: UInt32, extraPtr: DataElementPtr
   ) -> UnsafeParsedTokenData {
     assert(isParsed)
-    let leadingTriviaCount = Int(self.leadingTriviaCount)
-    let trailingTriviaCount = Int(self.trailingTriviaCount)
-    var curPtr = extraPtr
-    let leadingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece> =
-      .init(start: castElementAs(curPtr), count: leadingTriviaCount)
-    curPtr = curPtr.advanced(by: leadingTriviaCount)
-    let trailingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece> =
-      .init(start: castElementAs(curPtr), count: trailingTriviaCount)
-    curPtr = curPtr.advanced(by: trailingTriviaCount)
-    let textSize = hasCustomText ? Int(length) : 0
     let textBuffer: UnsafeBufferPointer<UInt8> =
-      .init(start: castElementAs(curPtr), count: textSize)
+      .init(start: castElementAs(extraPtr), count: Int(length))
     return .init(length: length, tokenKind: tokenKind,
-      leadingTriviaBuffer: leadingTriviaBuffer,
-      trailingTriviaBuffer: trailingTriviaBuffer,
-      fullTextBuffer: textBuffer, hasCustomText: hasCustomText)
+      leadingTriviaLength: leadingTriviaLength,
+      trailingTriviaLength: trailingTriviaLength,
+      fullTextBuffer: textBuffer)
   }
 
   fileprivate func formTokenKind(
@@ -227,34 +175,6 @@ fileprivate struct TokenData {
     } else {
       let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
       return tok.kind
-    }
-  }
-
-  /// Returns the leading `Trivia` length for a token node.
-  /// - Returns: .zero if called on a layout node.
-  fileprivate func getLeadingTriviaLength(
-    length: UInt32, extraPtr: DataElementPtr
-  ) -> SourceLength {
-    if isParsed {
-      let data = parsedData(length: length, extraPtr: extraPtr)
-      return SourceLength(utf8Length: data.getLeadingTriviaLength())
-    } else {
-      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
-      return tok.leadingTrivia.sourceLength
-    }
-  }
-
-  /// Returns the trailing `Trivia` length for a token node.
-  /// - Returns: .zero if called on a layout node.
-  fileprivate func getTrailingTriviaLength(
-    length: UInt32, extraPtr: DataElementPtr
-  ) -> SourceLength {
-    if isParsed {
-      let data = parsedData(length: length, extraPtr: extraPtr)
-      return SourceLength(utf8Length: data.getTrailingTriviaLength())
-    } else {
-      let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
-      return tok.trailingTrivia.sourceLength
     }
   }
 
@@ -287,14 +207,13 @@ fileprivate struct TokenData {
   }
 
   fileprivate func withUnsafeTokenText<Result>(
-    relativeOffset: Int,
     length: UInt32,
     extraPtr: DataElementPtr,
     _ body: (UnsafeTokenText) -> Result
   ) -> Result {
     if isParsed {
       let data = parsedData(length: length, extraPtr: extraPtr)
-      return body(data.getTokenText(relativeOffset: relativeOffset))
+      return body(data.getTokenText())
     } else {
       let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
       return tok.kind.withUnsafeTokenText(body)
@@ -303,14 +222,17 @@ fileprivate struct TokenData {
 
   fileprivate func withUnsafeLeadingTriviaPiece<Result>(
     at index: Int,
-    relativeOffset: Int,
     length: UInt32,
     extraPtr: DataElementPtr,
     _ body: (UnsafeTriviaPiece?) -> Result
   ) -> Result {
     if isParsed {
       let data = parsedData(length: length, extraPtr: extraPtr)
-      return body(data.getLeadingTriviaPiece(at: index, relativeOffset: relativeOffset))
+      let leadingTrivia = data.formLeadingTrivia()
+      guard index < leadingTrivia.count else {
+        return body(nil)
+      }
+      return leadingTrivia[index].withUnsafeTriviaPiece(body)
     } else {
       let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
       guard index < tok.leadingTrivia.count else { return body(nil) }
@@ -320,14 +242,17 @@ fileprivate struct TokenData {
 
   fileprivate func withUnsafeTrailingTriviaPiece<Result>(
     at index: Int,
-    relativeOffset: Int,
     length: UInt32,
     extraPtr: DataElementPtr,
     _ body: (UnsafeTriviaPiece?) -> Result
   ) -> Result {
     if isParsed {
       let data = parsedData(length: length, extraPtr: extraPtr)
-      return body(data.getTrailingTriviaPiece(at: index, relativeOffset: relativeOffset))
+      let trailingTrivia = data.formTrailingTrivia()
+      guard index < trailingTrivia.count else {
+        return body(nil)
+      }
+      return trailingTrivia[index].withUnsafeTriviaPiece(body)
     } else {
       let tok: ConstructedTokenData = castElementAs(extraPtr).pointee
       guard index < tok.trailingTrivia.count else { return body(nil) }
@@ -354,10 +279,9 @@ fileprivate struct TokenData {
 fileprivate struct UnsafeParsedTokenData {
   let length: UInt32
   let tokenKind: CTokenKind
-  let leadingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
-  let trailingTriviaBuffer: UnsafeBufferPointer<CTriviaPiece>
+  let leadingTriviaLength: UInt32
+  let trailingTriviaLength: UInt32
   let fullTextBuffer: UnsafeBufferPointer<UInt8>
-  let hasCustomText: Bool
 
   func formTokenKind() -> TokenKind {
     if fullTextBuffer.isEmpty {
@@ -365,130 +289,36 @@ fileprivate struct UnsafeParsedTokenData {
       // token length.
       return TokenKind.fromRawValue(kind: tokenKind, textBuffer: emptyStringBuffer)
     }
-    let leadingTriviaLength = self.getLeadingTriviaLength()
-    let trailingTriviaLength = self.getTrailingTriviaLength()
-    let tokenLength = Int(length) - (leadingTriviaLength + trailingTriviaLength)
-    let tokenText = getTextSlice(start: leadingTriviaLength, length: tokenLength)
+    let tokenLength = Int(length - leadingTriviaLength - trailingTriviaLength)
+    let tokenText = getTextSlice(start: Int(leadingTriviaLength), length: tokenLength)
     return TokenKind.fromRawValue(kind: tokenKind, textBuffer: tokenText)
   }
 
   func formLeadingTrivia() -> Trivia {
-    var newPieces: [TriviaPiece] = []
-    newPieces.reserveCapacity(leadingTriviaBuffer.count)
-    if fullTextBuffer.isEmpty {
-      // Fast path, there's no text in the buffer so no need to determine the
-      // trivia piece length.
-      for cpiece in leadingTriviaBuffer {
-        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: emptyStringBuffer)
-        newPieces.append(newPiece)
-      }
-    } else {
-      var textOffset = 0
-      for cpiece in leadingTriviaBuffer {
-        let len = Int(cpiece.length)
-        let textBuffer = getTextSlice(start: textOffset, length: len)
-        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: textBuffer)
-        newPieces.append(newPiece)
-        textOffset += len
-      }
-    }
-    return .init(pieces: newPieces)
+    let text = getTextSlice(start: 0, length: Int(leadingTriviaLength))
+    return SyntaxParser.parseTrivia(text: text)
   }
 
   func formTrailingTrivia() -> Trivia {
-    var newPieces: [TriviaPiece] = []
-    newPieces.reserveCapacity(trailingTriviaBuffer.count)
-    if fullTextBuffer.isEmpty {
-      // Fast path, there's no text in the buffer so no need to determine the
-      // trivia piece length.
-      for cpiece in trailingTriviaBuffer {
-        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: emptyStringBuffer)
-        newPieces.append(newPiece)
-      }
-    } else {
-      let leadingTriviaLength = self.getLeadingTriviaLength()
-      let trailingTriviaLength = self.getTrailingTriviaLength()
-      let tokenLength = Int(length) - (leadingTriviaLength + trailingTriviaLength)
-      var textOffset = leadingTriviaLength + tokenLength
-      for cpiece in trailingTriviaBuffer {
-        let len = Int(cpiece.length)
-        let textBuffer = getTextSlice(start: textOffset, length: len)
-        let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: textBuffer)
-        newPieces.append(newPiece)
-        textOffset += len
-      }
-    }
-    return .init(pieces: newPieces)
+    let text = getTextSlice(
+      start: Int(length - trailingTriviaLength),
+      length: Int(trailingTriviaLength)
+    )
+    return SyntaxParser.parseTrivia(text: text)
   }
 
-  func getTokenText(relativeOffset: Int) -> UnsafeTokenText {
-    let leadingTriviaLength = relativeOffset
-    let trailingTriviaLength = self.getTrailingTriviaLength()
-    let tokenLength = Int(length) - (leadingTriviaLength + trailingTriviaLength)
+  func getTokenText() -> UnsafeTokenText {
+    let tokenLength = Int(length - leadingTriviaLength - trailingTriviaLength)
     let customText = fullTextBuffer.isEmpty ? emptyStringBuffer :
-      getTextSlice(start: relativeOffset, length: tokenLength)
+      getTextSlice(start: Int(leadingTriviaLength), length: tokenLength)
     return .init(kind: .fromRawValue(tokenKind), length: tokenLength, customText: customText)
-  }
-
-  func getLeadingTriviaPiece(
-    at index: Int, relativeOffset: Int
-  ) -> UnsafeTriviaPiece? {
-    return getTriviaPiece(at: index, relativeOffset: relativeOffset,
-      trivia: leadingTriviaBuffer)
-  }
-
-  func getTrailingTriviaPiece(
-    at index: Int, relativeOffset: Int
-  ) -> UnsafeTriviaPiece? {
-    return getTriviaPiece(at: index, relativeOffset: relativeOffset,
-      trivia: trailingTriviaBuffer)
-  }
-
-  private func getTriviaPiece(
-    at index: Int,
-    relativeOffset: Int,
-    trivia: UnsafeBufferPointer<CTriviaPiece>
-  ) -> UnsafeTriviaPiece? {
-    guard index < trivia.count else { return nil }
-    let cpiece = trivia[index]
-    let length = Int(cpiece.length)
-    let customText = fullTextBuffer.isEmpty ? emptyStringBuffer :
-      getTextSlice(start: relativeOffset, length: length)
-    return .init(kind: .fromRawValue(cpiece.kind), length: length, customText: customText)
   }
 
   func write<Target>(
     to target: inout Target
   ) where Target: TextOutputStream {
-    if hasCustomText {
-      // Fast path, we recorded the full token text, including trivia.
-      // FIXME: A way to print the buffer directly and avoid the copy ?
-      target.write(String.fromBuffer(fullTextBuffer))
-    } else {
-      func printTrivia(_ buf: UnsafeBufferPointer<CTriviaPiece>) {
-        for cpiece in buf {
-          let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: emptyStringBuffer)
-          newPiece.write(to: &target)
-        }
-      }
-      printTrivia(leadingTriviaBuffer)
-      let tokKind = TokenKind.fromRawValue(kind: tokenKind,
-        textBuffer: emptyStringBuffer)
-      target.write(tokKind.text)
-      printTrivia(trailingTriviaBuffer)
-    }
-  }
-
-  func getLeadingTriviaLength() -> Int {
-    var len = 0
-    for piece in leadingTriviaBuffer { len += Int(piece.length) }
-    return len
-  }
-
-  func getTrailingTriviaLength() -> Int {
-    var len = 0
-    for piece in trailingTriviaBuffer { len += Int(piece.length) }
-    return len
+    // FIXME: A way to print the buffer directly and avoid the copy ?
+    target.write(String.fromBuffer(fullTextBuffer))
   }
 
   func getTextSlice(start: Int, length: Int) -> UnsafeBufferPointer<UInt8> {
@@ -769,26 +599,20 @@ struct RawSyntaxBase {
     }
   }
 
-  /// Returns the leading `Trivia` length for a token node.
-  /// - Returns: .zero if called on a layout node.
-  fileprivate func getTokenLeadingTriviaLength(
-    extraPtr: DataElementPtr
-  ) -> SourceLength {
+  /// The leading trivia length for a token node. `0` if called on a layout node.
+  fileprivate var tokenLeadingTriviaLength: SourceLength {
     switch data {
     case .token(let data):
-      return data.getLeadingTriviaLength(length: byteLength, extraPtr: extraPtr)
+      return SourceLength(utf8Length: Int(data.leadingTriviaLength))
     case .layout(_): return .zero
     }
   }
 
-  /// Returns the trailing `Trivia` length for a token node.
-  /// - Returns: .zero if called on a layout node.
-  fileprivate func getTokenTrailingTriviaLength(
-    extraPtr: DataElementPtr
-  ) -> SourceLength {
+  /// The trailing trivia length for a token node. `0` if called on a layout node.
+  fileprivate var tokenTrailingTriviaLength: SourceLength {
     switch data {
     case .token(let data):
-      return data.getTrailingTriviaLength(length: byteLength, extraPtr: extraPtr)
+      return SourceLength(utf8Length: Int(data.trailingTriviaLength))
     case .layout(_): return .zero
     }
   }
@@ -814,27 +638,24 @@ struct RawSyntaxBase {
   }
 
   fileprivate func withUnsafeTokenText<Result>(
-    relativeOffset: Int,
     extraPtr: DataElementPtr,
     _ body: (UnsafeTokenText?) -> Result
   ) -> Result {
     switch data {
     case .token(let data):
-      return data.withUnsafeTokenText(relativeOffset: relativeOffset,
-        length: byteLength, extraPtr: extraPtr, body)
+      return data.withUnsafeTokenText(length: byteLength, extraPtr: extraPtr, body)
     case .layout(_): return body(nil)
     }
   }
 
   fileprivate func withUnsafeLeadingTriviaPiece<Result>(
     at index: Int,
-    relativeOffset: Int,
     extraPtr: DataElementPtr,
     _ body: (UnsafeTriviaPiece?) -> Result
   ) -> Result {
     switch data {
     case .token(let data):
-      return data.withUnsafeLeadingTriviaPiece(at: index, relativeOffset: relativeOffset,
+      return data.withUnsafeLeadingTriviaPiece(at: index,
         length: byteLength, extraPtr: extraPtr, body)
     case .layout(_): return body(nil)
     }
@@ -842,13 +663,12 @@ struct RawSyntaxBase {
 
   fileprivate func withUnsafeTrailingTriviaPiece<Result>(
     at index: Int,
-    relativeOffset: Int,
     extraPtr: DataElementPtr,
     _ body: (UnsafeTriviaPiece?) -> Result
   ) -> Result {
     switch data {
     case .token(let data):
-      return data.withUnsafeTrailingTriviaPiece(at: index, relativeOffset: relativeOffset,
+      return data.withUnsafeTrailingTriviaPiece(at: index,
         length: byteLength, extraPtr: extraPtr, body)
     case .layout(_): return body(nil)
     }
@@ -898,9 +718,8 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     let raw = unsafeDowncast(buffer, to: RawSyntax.self)
     raw.withUnsafeMutablePointers {
       switch $0.pointee.data {
-      case .token(let tokdata):
-        TokenData.initializeExtra(cnode, source: source,
-          hasCustomText: tokdata.hasCustomText, extraPtr: $1)
+      case .token(_):
+        TokenData.initializeExtra(cnode, source: source, extraPtr: $1)
       case .layout(_):
         LayoutData.initializeExtra(cnode.layout_data, extraPtr: $1)
       }
@@ -1016,17 +835,13 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
   /// Returns the leading `Trivia` length for a token node.
   /// - Returns: .zero if called on a layout node.
   var tokenLeadingTriviaLength: SourceLength {
-    return withUnsafeMutablePointers {
-      $0.pointee.getTokenLeadingTriviaLength(extraPtr: $1)
-    }
+    return header.tokenLeadingTriviaLength
   }
 
   /// Returns the trailing `Trivia` length for a token node.
   /// - Returns: .zero if called on a layout node.
   var tokenTrailingTriviaLength: SourceLength {
-    return withUnsafeMutablePointers {
-      $0.pointee.getTokenTrailingTriviaLength(extraPtr: $1)
-    }
+    return header.tokenTrailingTriviaLength
   }
 
   /// Returns the leading `Trivia` for a token node.
@@ -1047,59 +862,44 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
 
   /// Passes token info to the provided closure as `UnsafeTokenText`.
   /// - Parameters:
-  ///   - relativeOffset: For efficiency, the caller keeps track of the relative
-  ///     byte offset (from start of leading trivia) of the token text, to avoid
-  ///     calculating it within this function.
   ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
   ///     must not escape the closure.
   /// - Returns: Return value of `body`.
   func withUnsafeTokenText<Result>(
-    relativeOffset: Int,
     _ body: (UnsafeTokenText?) -> Result
   ) -> Result {
     return withUnsafeMutablePointers {
-      $0.pointee.withUnsafeTokenText(relativeOffset: relativeOffset,
-        extraPtr: $1, body)
+      $0.pointee.withUnsafeTokenText(extraPtr: $1, body)
     }
   }
 
   /// Passes trivia piece info to the provided closure as `UnsafeTriviaPiece`.
   /// - Parameters:
   ///   - at: The index for the trivia piace.
-  ///   - relativeOffset: For efficiency, the caller keeps track of the relative
-  ///     byte offset (from start of leading trivia) of the trivia piece text,
-  ///     to avoid calculating it within this function.
   ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
   ///     must not escape the closure.
   /// - Returns: Return value of `body`.
   func withUnsafeLeadingTriviaPiece<Result>(
     at index: Int,
-    relativeOffset: Int,
     _ body: (UnsafeTriviaPiece?) -> Result
   ) -> Result {
     return withUnsafeMutablePointers {
-      $0.pointee.withUnsafeLeadingTriviaPiece(at: index,
-        relativeOffset: relativeOffset, extraPtr: $1, body)
+      $0.pointee.withUnsafeLeadingTriviaPiece(at: index, extraPtr: $1, body)
     }
   }
 
   /// Passes trivia piece info to the provided closure as `UnsafeTriviaPiece`.
   /// - Parameters:
   ///   - at: The index for the trivia piace.
-  ///   - relativeOffset: For efficiency, the caller keeps track of the relative
-  ///     byte offset (from start of leading trivia) of the trivia piece text,
-  ///     to avoid calculating it within this function.
   ///   - body: The closure that accepts the `UnsafeTokenText` value. This value
   ///     must not escape the closure.
   /// - Returns: Return value of `body`.
   func withUnsafeTrailingTriviaPiece<Result>(
     at index: Int,
-    relativeOffset: Int,
     _ body: (UnsafeTriviaPiece?) -> Result
   ) -> Result {
     return withUnsafeMutablePointers {
-      $0.pointee.withUnsafeTrailingTriviaPiece(at: index,
-        relativeOffset: relativeOffset, extraPtr: $1, body)
+      $0.pointee.withUnsafeTrailingTriviaPiece(at: index, extraPtr: $1, body)
     }
   }
 

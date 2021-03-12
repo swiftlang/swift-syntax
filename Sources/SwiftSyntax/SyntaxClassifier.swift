@@ -30,9 +30,8 @@ extension TokenSyntax {
     let contextualClassification = self.data.contextualClassification
     let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    let classifiedRange = raw.withUnsafeTokenText(
-      relativeOffset: relativeOffset
-    ) { (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
+    let classifiedRange = raw.withUnsafeTokenText() {
+        (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
       return tokText!.classify(offset: absoluteOffset,
         contextualClassification: contextualClassification)
     }
@@ -292,14 +291,12 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
     self.state = .atLeadingTrivia(0)
   }
 
-  var relativeOffset: Int { return offset - Int(token.position.offset) }
-
   mutating func next() -> SyntaxClassifiedRange? {
     while true {
       switch state {
       case .atLeadingTrivia(let index):
         let classifiedRangeOpt = token.raw.withUnsafeLeadingTriviaPiece(
-          at: index, relativeOffset: relativeOffset
+          at: index
         ) { (trivia: UnsafeTriviaPiece?) -> SyntaxClassifiedRange? in
           guard let trivia = trivia else { return nil }
           return trivia.classify(offset: offset)
@@ -315,10 +312,12 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
         return classifiedRange
 
       case .atTokenText:
-        let classifiedRange = token.raw.withUnsafeTokenText(
-          relativeOffset: relativeOffset
-        ) { (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
-          return tokText!.classify(offset: offset, contextualClassification: token.classification)
+        let classifiedRange = token.raw.withUnsafeTokenText() {
+            (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
+          return tokText!.classify(
+            offset: offset,
+            contextualClassification: token.classification
+          )
         }
         // Move on to trailing trivia.
         state = .atTrailingTrivia(0)
@@ -328,7 +327,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
 
       case .atTrailingTrivia(let index):
         let classifiedRangeOpt = token.raw.withUnsafeTrailingTriviaPiece(
-          at: index, relativeOffset: relativeOffset
+          at: index
         ) { (trivia: UnsafeTriviaPiece?) -> SyntaxClassifiedRange? in
           guard let trivia = trivia else { return nil }
           return trivia.classify(offset: offset)

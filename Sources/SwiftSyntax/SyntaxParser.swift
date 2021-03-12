@@ -199,6 +199,30 @@ public enum SyntaxParser {
     // Get ownership back from the C parser.
     return RawSyntax.moveFromOpaque(c_top)!
   }
+
+  /// Parse a raw trivia string (given by `text`) into trivia pieces.
+  ///
+  public static func parseTrivia(text: UnsafeBufferPointer<UInt8>) -> Trivia {
+    var pieces: [TriviaPiece] = []
+    text.withMemoryRebound(to: CChar.self) {
+        (charBuffer: UnsafeBufferPointer<CChar>) -> Void in
+      let callback: swiftparse_trivia_handler_t = {
+          (cpieces: UnsafePointer<CTriviaPiece>?, numPieces: Int) -> Void in
+        precondition(numPieces == 0 || cpieces != nil)
+        var textOffset = 0
+        for i in 0..<numPieces {
+          let cpiece: CTriviaPiece = cpieces![i]
+          let len = Int(cpiece.length)
+          let textBuffer = UnsafeBufferPointer(rebasing: text[textOffset..<textOffset+len])
+          let newPiece = TriviaPiece.fromRawValue(cpiece, textBuffer: textBuffer)
+          pieces.append(newPiece)
+          textOffset += len
+        }
+      }
+      swiftparse_parse_trivia(charBuffer.baseAddress, charBuffer.count, callback)
+    }
+    return Trivia(pieces: pieces)
+  }
 }
 
 extension SourceRange {

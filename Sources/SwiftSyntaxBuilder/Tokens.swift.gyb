@@ -22,27 +22,36 @@ import SwiftSyntax
 
 /// Namespace for commonly used tokens with default trivia.
 enum Tokens {
-  // MARK: Keywords
-
 % for token in SYNTAX_TOKENS:
 %   if token.is_keyword:
-  /// The `${token.text}` keyword
-  static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Keyword().withTrailingTrivia(.spaces(1))
+  /// The `${token.text.encode('utf-8').decode('unicode_escape')}` keyword
+  static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Keyword()
+%   if token.requires_leading_space:
+    .withLeadingTrivia(.spaces(1))
 %   end
+%   if token.requires_trailing_space:
+    .withTrailingTrivia(.spaces(1))
+%   end
+%   elif token.text:
+  /// The `${token.text.encode('utf-8').decode('unicode_escape')}` token
+  static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Token()
+%   if token.requires_leading_space:
+    .withLeadingTrivia(.spaces(1))
+%   end
+%   if token.requires_trailing_space:
+    .withTrailingTrivia(.spaces(1))
+%   end
+%   else:
+  static func `${lowercase_first_word(token.name)}`(_ text: String) -> TokenSyntax {
+    SyntaxFactory.make${token.name}(text)
+%   if token.requires_leading_space:
+    .withLeadingTrivia(.spaces(1))
+%   end
+%   if token.requires_trailing_space:
+    .withTrailingTrivia(.spaces(1))
+%   end
+  }
+%   end
+
 % end
-
-  // MARK: Punctuations and Signs
-
-  /// `":"`
-  static let colon = SyntaxFactory.makeColonToken().withTrailingTrivia(.spaces(1))
-
-  /// `" = "`
-  static let equal = SyntaxFactory.makeEqualToken().withLeadingTrivia(.spaces(1))
-                                                   .withTrailingTrivia(.spaces(1))
-
-  /// `"{"`
-  static let leftBrace = SyntaxFactory.makeLeftBraceToken()
-
-  /// `"}"`
-  static let rightBrace = SyntaxFactory.makeRightBraceToken()
 }

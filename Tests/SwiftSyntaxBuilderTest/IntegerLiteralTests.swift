@@ -7,11 +7,9 @@ final class IntegerLiteralTests: XCTestCase {
   func testIntegerLiteral() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let testCases: [UInt: (IntegerLiteral, String)] = [
-      #line: (IntegerLiteral(123), "␣123"),
-      #line: (IntegerLiteral(-123), "␣-123"),
-      #line: (123, "␣123"),
-      #line: (-123, "␣-123"),
+    let testCases: [UInt: (IntegerLiteralExpr, String)] = [
+      #line: (IntegerLiteralExpr(digits: SyntaxFactory.makeIntegerLiteral(String(123))), "␣123"),
+      #line: (IntegerLiteralExpr(digits: SyntaxFactory.makeIntegerLiteral(String(-123))), "␣-123"),
     ]
 
     for (line, testCase) in testCases {

@@ -395,17 +395,21 @@ def check_generated_files_match(self_generated_dir, user_generated_dir):
 
 
 def run_tests(
-    toolchain, build_dir, multiroot_data_file, release, filecheck_exec, verbose
+    toolchain, build_dir, multiroot_data_file, release, filecheck_exec,
+    skip_lit_tests, verbose
 ):
     print("** Running SwiftSyntax Tests **")
 
-    lit_success = run_lit_tests(
-        toolchain=toolchain,
-        build_dir=build_dir,
-        release=release,
-        filecheck_exec=filecheck_exec,
-        verbose=verbose,
-    )
+    if skip_lit_tests:
+        lit_success = True
+    else:
+        lit_success = run_lit_tests(
+            toolchain=toolchain,
+            build_dir=build_dir,
+            release=release,
+            filecheck_exec=filecheck_exec,
+            verbose=verbose,
+        )
     if not lit_success:
         return False
 
@@ -704,6 +708,10 @@ def parse_args():
 
     test_group.add_argument("-t", "--test", action="store_true", help="Run tests")
 
+    test_group.add_argument("--skip-lit-tests", action="store_true",
+        help="Don't run lit-based tests"
+    )
+
     test_group.add_argument(
         "--filecheck-exec",
         default=None,
@@ -814,6 +822,7 @@ def main():
                 multiroot_data_file=args.multiroot_data_file,
                 release=args.release,
                 filecheck_exec=realpath(args.filecheck_exec),
+                skip_lit_tests=args.skip_lit_tests,
                 verbose=args.verbose,
             )
             if not success:

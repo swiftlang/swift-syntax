@@ -14,7 +14,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InternalSwiftSyntaxParser
+@_implementationOnly import _InternalSwiftSyntaxParser
 import Foundation
 
 typealias CSyntaxNode = swiftparse_syntax_node_t

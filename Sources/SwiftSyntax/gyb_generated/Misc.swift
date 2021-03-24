@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InternalSwiftSyntaxParser
+@_implementationOnly import _InternalSwiftSyntaxParser
 
 extension SyntaxNode {
   public var isUnknown: Bool { return raw.kind.isUnknown }

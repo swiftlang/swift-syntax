@@ -468,6 +468,13 @@ def find_lit_test_helper_exec(toolchain, build_dir, release):
     return os.path.join(bin_dir.strip(), "lit-test-helper")
 
 
+def get_lit_exec_invocation():
+    if 'SWIFT_SYNTAX_LIT_TESTS_USE_PYTHON_DEFAULT' in os.environ:
+        return [LIT_EXEC]
+    else
+        return ["python3", LIT_EXEC]
+
+
 def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
     print("** Running lit-based tests **")
 
@@ -478,7 +485,7 @@ def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):
         toolchain=toolchain, build_dir=build_dir, release=release
     )
 
-    lit_call = [LIT_EXEC]
+    lit_call = get_lit_exec_invocation()
     lit_call.append(os.path.join(PACKAGE_DIR, "lit_tests"))
 
     if filecheck_exec:

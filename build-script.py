@@ -471,7 +471,7 @@ def find_lit_test_helper_exec(toolchain, build_dir, release):
 def get_lit_exec_invocation():
     if 'SWIFT_SYNTAX_LIT_TESTS_USE_PYTHON_DEFAULT' in os.environ:
         return [LIT_EXEC]
-    else
+    else:
         return ["python3", LIT_EXEC]
 
 

@@ -155,10 +155,14 @@ fileprivate struct TokenData {
     if hasCustomText {
       // Copy the full token text, including trivia.
       let startOffset = Int(data.range.offset)
-      var charPtr = UnsafeMutableRawPointer(curPtr).assumingMemoryBound(to: UInt8.self)
+      let length = Int(data.range.length)
       let utf8 = source.utf8
+      precondition(startOffset <= utf8.count)
+      precondition(startOffset + length <= utf8.count)
       let begin = utf8.index(utf8.startIndex, offsetBy: startOffset)
-      let end = utf8.index(begin, offsetBy: Int(data.range.length))
+      let end = utf8.index(begin, offsetBy: length)
+
+      var charPtr = UnsafeMutableRawPointer(curPtr).assumingMemoryBound(to: UInt8.self)
       for ch in utf8[begin..<end] {
         charPtr.pointee = ch
         charPtr = charPtr.successor()

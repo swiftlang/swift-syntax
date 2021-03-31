@@ -1587,10 +1587,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ReturnClauseSyntax(data)
   }
-  public static func makeFunctionSignature(input: ParameterClauseSyntax, asyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
+  public static func makeFunctionSignature(input: ParameterClauseSyntax, asyncOrReasyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
     let layout: [RawSyntax?] = [
       input.raw,
-      asyncKeyword?.raw,
+      asyncOrReasyncKeyword?.raw,
       throwsOrRethrowsKeyword?.raw,
       output?.raw,
     ]

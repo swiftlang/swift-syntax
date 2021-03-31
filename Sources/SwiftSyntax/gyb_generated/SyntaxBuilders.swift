@@ -3369,8 +3369,8 @@ public struct FunctionSignatureSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
-    let idx = FunctionSignatureSyntax.Cursor.asyncKeyword.rawValue
+  public mutating func useAsyncOrReasyncKeyword(_ node: TokenSyntax) {
+    let idx = FunctionSignatureSyntax.Cursor.asyncOrReasyncKeyword.rawValue
     layout[idx] = node.raw
   }
 

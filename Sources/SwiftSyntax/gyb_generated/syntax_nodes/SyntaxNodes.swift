@@ -2638,7 +2638,7 @@ extension ReturnClauseSyntax: CustomReflectable {
 public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case input
-    case asyncKeyword
+    case asyncOrReasyncKeyword
     case throwsOrRethrowsKeyword
     case output
   }
@@ -2685,25 +2685,25 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     return FunctionSignatureSyntax(newData)
   }
 
-  public var asyncKeyword: TokenSyntax? {
+  public var asyncOrReasyncKeyword: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.asyncKeyword,
+      let childData = data.child(at: Cursor.asyncOrReasyncKeyword,
                                  parent: Syntax(self))
       if childData == nil { return nil }
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withAsyncKeyword(value)
+      self = withAsyncOrReasyncKeyword(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
-  /// - param newChild: The new `asyncKeyword` to replace the node's
-  ///                   current `asyncKeyword`, if present.
-  public func withAsyncKeyword(
+  /// Returns a copy of the receiver with its `asyncOrReasyncKeyword` replaced.
+  /// - param newChild: The new `asyncOrReasyncKeyword` to replace the node's
+  ///                   current `asyncOrReasyncKeyword`, if present.
+  public func withAsyncOrReasyncKeyword(
     _ newChild: TokenSyntax?) -> FunctionSignatureSyntax {
     let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.asyncOrReasyncKeyword)
     return FunctionSignatureSyntax(newData)
   }
 
@@ -2795,7 +2795,7 @@ extension FunctionSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "input": Syntax(input).asProtocol(SyntaxProtocol.self),
-      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "asyncOrReasyncKeyword": asyncOrReasyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "output": output.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])

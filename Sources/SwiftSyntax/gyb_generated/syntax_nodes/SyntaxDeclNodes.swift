@@ -4075,6 +4075,8 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case modifier
     case accessorKind
     case parameter
+    case asyncKeyword
+    case throwsKeyword
     case body
   }
 
@@ -4205,6 +4207,50 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return AccessorDeclSyntax(newData)
   }
 
+  public var asyncKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.asyncKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withAsyncKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
+  /// - param newChild: The new `asyncKeyword` to replace the node's
+  ///                   current `asyncKeyword`, if present.
+  public func withAsyncKeyword(
+    _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
+    return AccessorDeclSyntax(newData)
+  }
+
+  public var throwsKeyword: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.throwsKeyword,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withThrowsKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `throwsKeyword` replaced.
+  /// - param newChild: The new `throwsKeyword` to replace the node's
+  ///                   current `throwsKeyword`, if present.
+  public func withThrowsKeyword(
+    _ newChild: TokenSyntax?) -> AccessorDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.throwsKeyword)
+    return AccessorDeclSyntax(newData)
+  }
+
   public var body: CodeBlockSyntax? {
     get {
       let childData = data.child(at: Cursor.body,
@@ -4230,7 +4276,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
+    assert(rawChildren.count == 7)
     // Check child #0 child is AttributeListSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -4264,9 +4310,25 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(AccessorParameterSyntax.self))
     }
-    // Check child #4 child is CodeBlockSyntax or missing
+    // Check child #4 child is TokenSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #6 child is CodeBlockSyntax or missing
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -4282,6 +4344,8 @@ extension AccessorDeclSyntax: CustomReflectable {
       "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "accessorKind": Syntax(accessorKind).asProtocol(SyntaxProtocol.self),
       "parameter": parameter.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "throwsKeyword": throwsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "body": body.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }

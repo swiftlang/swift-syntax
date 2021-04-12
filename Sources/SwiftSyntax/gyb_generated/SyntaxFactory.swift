@@ -2314,12 +2314,14 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return AccessorParameterSyntax(data)
   }
-  public static func makeAccessorDecl(attributes: AttributeListSyntax?, modifier: DeclModifierSyntax?, accessorKind: TokenSyntax, parameter: AccessorParameterSyntax?, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
+  public static func makeAccessorDecl(attributes: AttributeListSyntax?, modifier: DeclModifierSyntax?, accessorKind: TokenSyntax, parameter: AccessorParameterSyntax?, asyncKeyword: TokenSyntax?, throwsKeyword: TokenSyntax?, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifier?.raw,
       accessorKind.raw,
       parameter?.raw,
+      asyncKeyword?.raw,
+      throwsKeyword?.raw,
       body?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorDecl,
@@ -2334,6 +2336,8 @@ public enum SyntaxFactory {
       nil,
       nil,
       RawSyntax.missingToken(TokenKind.unknown("")),
+      nil,
+      nil,
       nil,
       nil,
     ], length: .zero, presence: .present))
@@ -4736,10 +4740,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return AvailabilityLabeledArgumentSyntax(data)
   }
-  public static func makeAvailabilityVersionRestriction(platform: TokenSyntax, version: VersionTupleSyntax) -> AvailabilityVersionRestrictionSyntax {
+  public static func makeAvailabilityVersionRestriction(platform: TokenSyntax, version: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
     let layout: [RawSyntax?] = [
       platform.raw,
-      version.raw,
+      version?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityVersionRestriction,
       layout: layout, presence: SourcePresence.present)
@@ -4751,7 +4755,7 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityVersionRestriction,
       layout: [
       RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missing(SyntaxKind.versionTuple),
+      nil,
     ], length: .zero, presence: .present))
     return AvailabilityVersionRestrictionSyntax(data)
   }

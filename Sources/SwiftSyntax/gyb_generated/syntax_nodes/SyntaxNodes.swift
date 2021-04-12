@@ -12747,10 +12747,11 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
     return AvailabilityVersionRestrictionSyntax(newData)
   }
 
-  public var version: VersionTupleSyntax {
+  public var version: VersionTupleSyntax? {
     get {
       let childData = data.child(at: Cursor.version,
                                  parent: Syntax(self))
+      if childData == nil { return nil }
       return VersionTupleSyntax(childData!)
     }
     set(value) {
@@ -12763,7 +12764,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
   ///                   current `version`, if present.
   public func withVersion(
     _ newChild: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.versionTuple)
+    let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.version)
     return AvailabilityVersionRestrictionSyntax(newData)
   }
@@ -12781,8 +12782,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #1 child is VersionTupleSyntax 
-    assert(rawChildren[1].raw != nil)
+    // Check child #1 child is VersionTupleSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -12797,7 +12797,7 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "platform": Syntax(platform).asProtocol(SyntaxProtocol.self),
-      "version": Syntax(version).asProtocol(SyntaxProtocol.self),
+      "version": version.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

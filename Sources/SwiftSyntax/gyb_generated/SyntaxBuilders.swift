@@ -5136,7 +5136,7 @@ extension AccessorParameterSyntax {
 
 public struct AccessorDeclSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+    Array<RawSyntax?>(repeating: nil, count: 7)
 
   internal init() {}
 
@@ -5163,6 +5163,16 @@ public struct AccessorDeclSyntaxBuilder {
 
   public mutating func useParameter(_ node: AccessorParameterSyntax) {
     let idx = AccessorDeclSyntax.Cursor.parameter.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useAsyncKeyword(_ node: TokenSyntax) {
+    let idx = AccessorDeclSyntax.Cursor.asyncKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useThrowsKeyword(_ node: TokenSyntax) {
+    let idx = AccessorDeclSyntax.Cursor.throwsKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -10503,9 +10513,6 @@ public struct AvailabilityVersionRestrictionSyntaxBuilder {
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
       layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
-    }
-    if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.versionTuple)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityVersionRestriction,

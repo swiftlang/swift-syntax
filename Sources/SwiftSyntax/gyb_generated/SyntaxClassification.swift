@@ -81,6 +81,8 @@ extension SyntaxClassification {
         return (.buildConfigId, false)
       case (.declModifier, 0):
         return (.attribute, false)
+      case (.accessorDecl, 4):
+        return (.keyword, false)
       case (.precedenceGroupRelation, 0):
         return (.keyword, false)
       case (.precedenceGroupAssociativity, 0):

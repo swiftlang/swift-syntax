@@ -195,10 +195,10 @@ def generate_gyb_files(
 
     # Clear any *.swift files that are relics from the previous run.
     clear_gyb_files_from_previous_run(
-        SWIFTSYNTAX_DIR, swiftsyntax_destination)
+        SWIFTSYNTAX_DIR, swiftsyntax_destination, verbose)
 
     clear_gyb_files_from_previous_run(
-        SWIFTSYNTAXBUILDER_DIR, swiftsyntaxbuilder_destination)
+        SWIFTSYNTAXBUILDER_DIR, swiftsyntaxbuilder_destination, verbose)
 
     for previous_gyb_gen_file in os.listdir(template_destination):
         if previous_gyb_gen_file.endswith(".swift"):
@@ -244,7 +244,7 @@ def make_dir_if_needed(path):
 
 # Remove any files in the `gyb_generated` directory that no longer have a 
 # corresponding `.gyb` file in the `Sources` directory.
-def clear_gyb_files_from_previous_run(sources_dir, destination_dir):
+def clear_gyb_files_from_previous_run(sources_dir, destination_dir, verbose):
     for previous_gyb_gen_file in os.listdir(destination_dir):
         if previous_gyb_gen_file.endswith(".swift"):
             gyb_file = os.path.join(
@@ -253,7 +253,7 @@ def clear_gyb_files_from_previous_run(sources_dir, destination_dir):
             if not os.path.exists(gyb_file):
                 check_call(
                     ["rm", previous_gyb_gen_file], 
-                    cwd=destination, 
+                    cwd=destination_dir, 
                     verbose=verbose
                 )
 

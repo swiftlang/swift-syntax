@@ -47,7 +47,7 @@ public struct CodeBlockItemSyntaxBuilder {
 extension CodeBlockItemSyntax {
   /// Creates a `CodeBlockItemSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CodeBlockItemSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -107,7 +107,7 @@ public struct CodeBlockSyntaxBuilder {
 extension CodeBlockSyntax {
   /// Creates a `CodeBlockSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CodeBlockSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -153,7 +153,7 @@ public struct InOutExprSyntaxBuilder {
 extension InOutExprSyntax {
   /// Creates a `InOutExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `InOutExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -191,7 +191,7 @@ public struct PoundColumnExprSyntaxBuilder {
 extension PoundColumnExprSyntax {
   /// Creates a `PoundColumnExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundColumnExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -242,7 +242,7 @@ public struct TryExprSyntaxBuilder {
 extension TryExprSyntax {
   /// Creates a `TryExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TryExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -288,7 +288,7 @@ public struct AwaitExprSyntaxBuilder {
 extension AwaitExprSyntax {
   /// Creates a `AwaitExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AwaitExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -334,7 +334,7 @@ public struct DeclNameArgumentSyntaxBuilder {
 extension DeclNameArgumentSyntax {
   /// Creates a `DeclNameArgumentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeclNameArgumentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -394,7 +394,7 @@ public struct DeclNameArgumentsSyntaxBuilder {
 extension DeclNameArgumentsSyntax {
   /// Creates a `DeclNameArgumentsSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeclNameArgumentsSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -437,7 +437,7 @@ public struct IdentifierExprSyntaxBuilder {
 extension IdentifierExprSyntax {
   /// Creates a `IdentifierExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IdentifierExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -475,7 +475,7 @@ public struct SuperRefExprSyntaxBuilder {
 extension SuperRefExprSyntax {
   /// Creates a `SuperRefExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SuperRefExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -513,7 +513,7 @@ public struct NilLiteralExprSyntaxBuilder {
 extension NilLiteralExprSyntax {
   /// Creates a `NilLiteralExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `NilLiteralExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -551,7 +551,7 @@ public struct DiscardAssignmentExprSyntaxBuilder {
 extension DiscardAssignmentExprSyntax {
   /// Creates a `DiscardAssignmentExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DiscardAssignmentExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -589,7 +589,7 @@ public struct AssignmentExprSyntaxBuilder {
 extension AssignmentExprSyntax {
   /// Creates a `AssignmentExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AssignmentExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -633,7 +633,7 @@ public struct SequenceExprSyntaxBuilder {
 extension SequenceExprSyntax {
   /// Creates a `SequenceExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SequenceExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -671,7 +671,7 @@ public struct PoundLineExprSyntaxBuilder {
 extension PoundLineExprSyntax {
   /// Creates a `PoundLineExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundLineExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -709,7 +709,7 @@ public struct PoundFileExprSyntaxBuilder {
 extension PoundFileExprSyntax {
   /// Creates a `PoundFileExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundFileExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -747,7 +747,7 @@ public struct PoundFileIDExprSyntaxBuilder {
 extension PoundFileIDExprSyntax {
   /// Creates a `PoundFileIDExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundFileIDExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -785,7 +785,7 @@ public struct PoundFilePathExprSyntaxBuilder {
 extension PoundFilePathExprSyntax {
   /// Creates a `PoundFilePathExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundFilePathExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -823,7 +823,7 @@ public struct PoundFunctionExprSyntaxBuilder {
 extension PoundFunctionExprSyntax {
   /// Creates a `PoundFunctionExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundFunctionExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -861,7 +861,7 @@ public struct PoundDsohandleExprSyntaxBuilder {
 extension PoundDsohandleExprSyntax {
   /// Creates a `PoundDsohandleExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundDsohandleExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -904,7 +904,7 @@ public struct SymbolicReferenceExprSyntaxBuilder {
 extension SymbolicReferenceExprSyntax {
   /// Creates a `SymbolicReferenceExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SymbolicReferenceExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -947,7 +947,7 @@ public struct PrefixOperatorExprSyntaxBuilder {
 extension PrefixOperatorExprSyntax {
   /// Creates a `PrefixOperatorExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PrefixOperatorExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -985,7 +985,7 @@ public struct BinaryOperatorExprSyntaxBuilder {
 extension BinaryOperatorExprSyntax {
   /// Creates a `BinaryOperatorExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `BinaryOperatorExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1033,7 +1033,7 @@ public struct ArrowExprSyntaxBuilder {
 extension ArrowExprSyntax {
   /// Creates a `ArrowExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ArrowExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1071,7 +1071,7 @@ public struct FloatLiteralExprSyntaxBuilder {
 extension FloatLiteralExprSyntax {
   /// Creates a `FloatLiteralExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FloatLiteralExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1131,7 +1131,7 @@ public struct TupleExprSyntaxBuilder {
 extension TupleExprSyntax {
   /// Creates a `TupleExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TupleExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1191,7 +1191,7 @@ public struct ArrayExprSyntaxBuilder {
 extension ArrayExprSyntax {
   /// Creates a `ArrayExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ArrayExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1245,7 +1245,7 @@ public struct DictionaryExprSyntaxBuilder {
 extension DictionaryExprSyntax {
   /// Creates a `DictionaryExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DictionaryExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1298,7 +1298,7 @@ public struct TupleExprElementSyntaxBuilder {
 extension TupleExprElementSyntax {
   /// Creates a `TupleExprElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TupleExprElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1341,7 +1341,7 @@ public struct ArrayElementSyntaxBuilder {
 extension ArrayElementSyntax {
   /// Creates a `ArrayElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ArrayElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1400,7 +1400,7 @@ public struct DictionaryElementSyntaxBuilder {
 extension DictionaryElementSyntax {
   /// Creates a `DictionaryElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DictionaryElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1438,7 +1438,7 @@ public struct IntegerLiteralExprSyntaxBuilder {
 extension IntegerLiteralExprSyntax {
   /// Creates a `IntegerLiteralExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IntegerLiteralExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1476,7 +1476,7 @@ public struct BooleanLiteralExprSyntaxBuilder {
 extension BooleanLiteralExprSyntax {
   /// Creates a `BooleanLiteralExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `BooleanLiteralExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1546,7 +1546,7 @@ public struct TernaryExprSyntaxBuilder {
 extension TernaryExprSyntax {
   /// Creates a `TernaryExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TernaryExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1602,7 +1602,7 @@ public struct MemberAccessExprSyntaxBuilder {
 extension MemberAccessExprSyntax {
   /// Creates a `MemberAccessExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MemberAccessExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1648,7 +1648,7 @@ public struct IsExprSyntaxBuilder {
 extension IsExprSyntax {
   /// Creates a `IsExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IsExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1699,7 +1699,7 @@ public struct AsExprSyntaxBuilder {
 extension AsExprSyntax {
   /// Creates a `AsExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AsExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1737,7 +1737,7 @@ public struct TypeExprSyntaxBuilder {
 extension TypeExprSyntax {
   /// Creates a `TypeExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TypeExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1801,7 +1801,7 @@ public struct ClosureCaptureItemSyntaxBuilder {
 extension ClosureCaptureItemSyntax {
   /// Creates a `ClosureCaptureItemSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClosureCaptureItemSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1858,7 +1858,7 @@ public struct ClosureCaptureSignatureSyntaxBuilder {
 extension ClosureCaptureSignatureSyntax {
   /// Creates a `ClosureCaptureSignatureSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClosureCaptureSignatureSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1901,7 +1901,7 @@ public struct ClosureParamSyntaxBuilder {
 extension ClosureParamSyntax {
   /// Creates a `ClosureParamSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClosureParamSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -1964,7 +1964,7 @@ public struct ClosureSignatureSyntaxBuilder {
 extension ClosureSignatureSyntax {
   /// Creates a `ClosureSignatureSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClosureSignatureSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2029,7 +2029,7 @@ public struct ClosureExprSyntaxBuilder {
 extension ClosureExprSyntax {
   /// Creates a `ClosureExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClosureExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2067,7 +2067,7 @@ public struct UnresolvedPatternExprSyntaxBuilder {
 extension UnresolvedPatternExprSyntax {
   /// Creates a `UnresolvedPatternExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `UnresolvedPatternExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2121,7 +2121,7 @@ public struct MultipleTrailingClosureElementSyntaxBuilder {
 extension MultipleTrailingClosureElementSyntax {
   /// Creates a `MultipleTrailingClosureElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MultipleTrailingClosureElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2199,7 +2199,7 @@ public struct FunctionCallExprSyntaxBuilder {
 extension FunctionCallExprSyntax {
   /// Creates a `FunctionCallExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FunctionCallExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2283,7 +2283,7 @@ public struct SubscriptExprSyntaxBuilder {
 extension SubscriptExprSyntax {
   /// Creates a `SubscriptExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SubscriptExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2329,7 +2329,7 @@ public struct OptionalChainingExprSyntaxBuilder {
 extension OptionalChainingExprSyntax {
   /// Creates a `OptionalChainingExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `OptionalChainingExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2375,7 +2375,7 @@ public struct ForcedValueExprSyntaxBuilder {
 extension ForcedValueExprSyntax {
   /// Creates a `ForcedValueExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ForcedValueExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2421,7 +2421,7 @@ public struct PostfixUnaryExprSyntaxBuilder {
 extension PostfixUnaryExprSyntax {
   /// Creates a `PostfixUnaryExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PostfixUnaryExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2467,7 +2467,7 @@ public struct SpecializeExprSyntaxBuilder {
 extension SpecializeExprSyntax {
   /// Creates a `SpecializeExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SpecializeExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2505,7 +2505,7 @@ public struct StringSegmentSyntaxBuilder {
 extension StringSegmentSyntax {
   /// Creates a `StringSegmentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `StringSegmentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2578,7 +2578,7 @@ public struct ExpressionSegmentSyntaxBuilder {
 extension ExpressionSegmentSyntax {
   /// Creates a `ExpressionSegmentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ExpressionSegmentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2648,7 +2648,7 @@ public struct StringLiteralExprSyntaxBuilder {
 extension StringLiteralExprSyntax {
   /// Creates a `StringLiteralExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `StringLiteralExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2699,7 +2699,7 @@ public struct KeyPathExprSyntaxBuilder {
 extension KeyPathExprSyntax {
   /// Creates a `KeyPathExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `KeyPathExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2737,7 +2737,7 @@ public struct KeyPathBaseExprSyntaxBuilder {
 extension KeyPathBaseExprSyntax {
   /// Creates a `KeyPathBaseExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `KeyPathBaseExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2780,7 +2780,7 @@ public struct ObjcNamePieceSyntaxBuilder {
 extension ObjcNamePieceSyntax {
   /// Creates a `ObjcNamePieceSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ObjcNamePieceSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2848,7 +2848,7 @@ public struct ObjcKeyPathExprSyntaxBuilder {
 extension ObjcKeyPathExprSyntax {
   /// Creates a `ObjcKeyPathExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ObjcKeyPathExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2920,7 +2920,7 @@ public struct ObjcSelectorExprSyntaxBuilder {
 extension ObjcSelectorExprSyntax {
   /// Creates a `ObjcSelectorExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ObjcSelectorExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -2958,7 +2958,7 @@ public struct EditorPlaceholderExprSyntaxBuilder {
 extension EditorPlaceholderExprSyntax {
   /// Creates a `EditorPlaceholderExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `EditorPlaceholderExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3026,7 +3026,7 @@ public struct ObjectLiteralExprSyntaxBuilder {
 extension ObjectLiteralExprSyntax {
   /// Creates a `ObjectLiteralExprSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ObjectLiteralExprSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3072,7 +3072,7 @@ public struct TypeInitializerClauseSyntaxBuilder {
 extension TypeInitializerClauseSyntax {
   /// Creates a `TypeInitializerClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TypeInitializerClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3155,7 +3155,7 @@ public struct TypealiasDeclSyntaxBuilder {
 extension TypealiasDeclSyntax {
   /// Creates a `TypealiasDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TypealiasDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3238,7 +3238,7 @@ public struct AssociatedtypeDeclSyntaxBuilder {
 extension AssociatedtypeDeclSyntax {
   /// Creates a `AssociatedtypeDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AssociatedtypeDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3298,7 +3298,7 @@ public struct ParameterClauseSyntaxBuilder {
 extension ParameterClauseSyntax {
   /// Creates a `ParameterClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ParameterClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3344,7 +3344,7 @@ public struct ReturnClauseSyntaxBuilder {
 extension ReturnClauseSyntax {
   /// Creates a `ReturnClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ReturnClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3397,7 +3397,7 @@ public struct FunctionSignatureSyntaxBuilder {
 extension FunctionSignatureSyntax {
   /// Creates a `FunctionSignatureSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FunctionSignatureSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3448,7 +3448,7 @@ public struct IfConfigClauseSyntaxBuilder {
 extension IfConfigClauseSyntax {
   /// Creates a `IfConfigClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IfConfigClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3500,7 +3500,7 @@ public struct IfConfigDeclSyntaxBuilder {
 extension IfConfigDeclSyntax {
   /// Creates a `IfConfigDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IfConfigDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3562,7 +3562,7 @@ public struct PoundErrorDeclSyntaxBuilder {
 extension PoundErrorDeclSyntax {
   /// Creates a `PoundErrorDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundErrorDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3624,7 +3624,7 @@ public struct PoundWarningDeclSyntaxBuilder {
 extension PoundWarningDeclSyntax {
   /// Creates a `PoundWarningDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundWarningDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3683,7 +3683,7 @@ public struct PoundSourceLocationSyntaxBuilder {
 extension PoundSourceLocationSyntax {
   /// Creates a `PoundSourceLocationSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundSourceLocationSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3769,7 +3769,7 @@ public struct PoundSourceLocationArgsSyntaxBuilder {
 extension PoundSourceLocationArgsSyntax {
   /// Creates a `PoundSourceLocationArgsSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundSourceLocationArgsSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3822,7 +3822,7 @@ public struct DeclModifierSyntaxBuilder {
 extension DeclModifierSyntax {
   /// Creates a `DeclModifierSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeclModifierSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3865,7 +3865,7 @@ public struct InheritedTypeSyntaxBuilder {
 extension InheritedTypeSyntax {
   /// Creates a `InheritedTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `InheritedTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -3917,7 +3917,7 @@ public struct TypeInheritanceClauseSyntaxBuilder {
 extension TypeInheritanceClauseSyntax {
   /// Creates a `TypeInheritanceClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TypeInheritanceClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4008,7 +4008,7 @@ public struct ClassDeclSyntaxBuilder {
 extension ClassDeclSyntax {
   /// Creates a `ClassDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClassDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4099,7 +4099,7 @@ public struct StructDeclSyntaxBuilder {
 extension StructDeclSyntax {
   /// Creates a `StructDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `StructDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4185,7 +4185,7 @@ public struct ProtocolDeclSyntaxBuilder {
 extension ProtocolDeclSyntax {
   /// Creates a `ProtocolDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ProtocolDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4271,7 +4271,7 @@ public struct ExtensionDeclSyntaxBuilder {
 extension ExtensionDeclSyntax {
   /// Creates a `ExtensionDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ExtensionDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4331,7 +4331,7 @@ public struct MemberDeclBlockSyntaxBuilder {
 extension MemberDeclBlockSyntax {
   /// Creates a `MemberDeclBlockSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MemberDeclBlockSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4374,7 +4374,7 @@ public struct MemberDeclListItemSyntaxBuilder {
 extension MemberDeclListItemSyntax {
   /// Creates a `MemberDeclListItemSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MemberDeclListItemSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4426,7 +4426,7 @@ public struct SourceFileSyntaxBuilder {
 extension SourceFileSyntax {
   /// Creates a `SourceFileSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SourceFileSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4472,7 +4472,7 @@ public struct InitializerClauseSyntaxBuilder {
 extension InitializerClauseSyntax {
   /// Creates a `InitializerClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `InitializerClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4548,7 +4548,7 @@ public struct FunctionParameterSyntaxBuilder {
 extension FunctionParameterSyntax {
   /// Creates a `FunctionParameterSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FunctionParameterSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4639,7 +4639,7 @@ public struct FunctionDeclSyntaxBuilder {
 extension FunctionDeclSyntax {
   /// Creates a `FunctionDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FunctionDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4732,7 +4732,7 @@ public struct InitializerDeclSyntaxBuilder {
 extension InitializerDeclSyntax {
   /// Creates a `InitializerDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `InitializerDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4800,7 +4800,7 @@ public struct DeinitializerDeclSyntaxBuilder {
 extension DeinitializerDeclSyntax {
   /// Creates a `DeinitializerDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeinitializerDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4891,7 +4891,7 @@ public struct SubscriptDeclSyntaxBuilder {
 extension SubscriptDeclSyntax {
   /// Creates a `SubscriptDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SubscriptDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4944,7 +4944,7 @@ public struct AccessLevelModifierSyntaxBuilder {
 extension AccessLevelModifierSyntax {
   /// Creates a `AccessLevelModifierSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AccessLevelModifierSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -4987,7 +4987,7 @@ public struct AccessPathComponentSyntaxBuilder {
 extension AccessPathComponentSyntax {
   /// Creates a `AccessPathComponentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AccessPathComponentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5066,7 +5066,7 @@ public struct ImportDeclSyntaxBuilder {
 extension ImportDeclSyntax {
   /// Creates a `ImportDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ImportDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5120,7 +5120,7 @@ public struct AccessorParameterSyntaxBuilder {
 extension AccessorParameterSyntax {
   /// Creates a `AccessorParameterSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AccessorParameterSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5194,7 +5194,7 @@ public struct AccessorDeclSyntaxBuilder {
 extension AccessorDeclSyntax {
   /// Creates a `AccessorDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AccessorDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5254,7 +5254,7 @@ public struct AccessorBlockSyntaxBuilder {
 extension AccessorBlockSyntax {
   /// Creates a `AccessorBlockSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AccessorBlockSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5312,7 +5312,7 @@ public struct PatternBindingSyntaxBuilder {
 extension PatternBindingSyntax {
   /// Creates a `PatternBindingSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PatternBindingSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5386,7 +5386,7 @@ public struct VariableDeclSyntaxBuilder {
 extension VariableDeclSyntax {
   /// Creates a `VariableDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `VariableDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5439,7 +5439,7 @@ public struct EnumCaseElementSyntaxBuilder {
 extension EnumCaseElementSyntax {
   /// Creates a `EnumCaseElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `EnumCaseElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5513,7 +5513,7 @@ public struct EnumCaseDeclSyntaxBuilder {
 extension EnumCaseDeclSyntax {
   /// Creates a `EnumCaseDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `EnumCaseDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5604,7 +5604,7 @@ public struct EnumDeclSyntaxBuilder {
 extension EnumDeclSyntax {
   /// Creates a `EnumDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `EnumDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5677,7 +5677,7 @@ public struct OperatorDeclSyntaxBuilder {
 extension OperatorDeclSyntax {
   /// Creates a `OperatorDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `OperatorDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5729,7 +5729,7 @@ public struct OperatorPrecedenceAndTypesSyntaxBuilder {
 extension OperatorPrecedenceAndTypesSyntax {
   /// Creates a `OperatorPrecedenceAndTypesSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `OperatorPrecedenceAndTypesSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5827,7 +5827,7 @@ public struct PrecedenceGroupDeclSyntaxBuilder {
 extension PrecedenceGroupDeclSyntax {
   /// Creates a `PrecedenceGroupDeclSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PrecedenceGroupDeclSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5887,7 +5887,7 @@ public struct PrecedenceGroupRelationSyntaxBuilder {
 extension PrecedenceGroupRelationSyntax {
   /// Creates a `PrecedenceGroupRelationSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PrecedenceGroupRelationSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5930,7 +5930,7 @@ public struct PrecedenceGroupNameElementSyntaxBuilder {
 extension PrecedenceGroupNameElementSyntax {
   /// Creates a `PrecedenceGroupNameElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PrecedenceGroupNameElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -5984,7 +5984,7 @@ public struct PrecedenceGroupAssignmentSyntaxBuilder {
 extension PrecedenceGroupAssignmentSyntax {
   /// Creates a `PrecedenceGroupAssignmentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PrecedenceGroupAssignmentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6038,7 +6038,7 @@ public struct PrecedenceGroupAssociativitySyntaxBuilder {
 extension PrecedenceGroupAssociativitySyntax {
   /// Creates a `PrecedenceGroupAssociativitySyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PrecedenceGroupAssociativitySyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6105,7 +6105,7 @@ public struct CustomAttributeSyntaxBuilder {
 extension CustomAttributeSyntax {
   /// Creates a `CustomAttributeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CustomAttributeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6177,7 +6177,7 @@ public struct AttributeSyntaxBuilder {
 extension AttributeSyntax {
   /// Creates a `AttributeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AttributeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6236,7 +6236,7 @@ public struct LabeledSpecializeEntrySyntaxBuilder {
 extension LabeledSpecializeEntrySyntax {
   /// Creates a `LabeledSpecializeEntrySyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `LabeledSpecializeEntrySyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6295,7 +6295,7 @@ public struct TargetFunctionEntrySyntaxBuilder {
 extension TargetFunctionEntrySyntax {
   /// Creates a `TargetFunctionEntrySyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TargetFunctionEntrySyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6349,7 +6349,7 @@ public struct NamedAttributeStringArgumentSyntaxBuilder {
 extension NamedAttributeStringArgumentSyntax {
   /// Creates a `NamedAttributeStringArgumentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `NamedAttributeStringArgumentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6392,7 +6392,7 @@ public struct DeclNameSyntaxBuilder {
 extension DeclNameSyntax {
   /// Creates a `DeclNameSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeclNameSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6451,7 +6451,7 @@ public struct ImplementsAttributeArgumentsSyntaxBuilder {
 extension ImplementsAttributeArgumentsSyntax {
   /// Creates a `ImplementsAttributeArgumentsSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ImplementsAttributeArgumentsSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6491,7 +6491,7 @@ public struct ObjCSelectorPieceSyntaxBuilder {
 extension ObjCSelectorPieceSyntax {
   /// Creates a `ObjCSelectorPieceSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ObjCSelectorPieceSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6546,7 +6546,7 @@ public struct DifferentiableAttributeArgumentsSyntaxBuilder {
 extension DifferentiableAttributeArgumentsSyntax {
   /// Creates a `DifferentiableAttributeArgumentsSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DifferentiableAttributeArgumentsSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6600,7 +6600,7 @@ public struct DifferentiabilityParamsClauseSyntaxBuilder {
 extension DifferentiabilityParamsClauseSyntax {
   /// Creates a `DifferentiabilityParamsClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DifferentiabilityParamsClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6660,7 +6660,7 @@ public struct DifferentiabilityParamsSyntaxBuilder {
 extension DifferentiabilityParamsSyntax {
   /// Creates a `DifferentiabilityParamsSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DifferentiabilityParamsSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6703,7 +6703,7 @@ public struct DifferentiabilityParamSyntaxBuilder {
 extension DifferentiabilityParamSyntax {
   /// Creates a `DifferentiabilityParamSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DifferentiabilityParamSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6777,7 +6777,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
 extension DerivativeRegistrationAttributeArgumentsSyntax {
   /// Creates a `DerivativeRegistrationAttributeArgumentsSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DerivativeRegistrationAttributeArgumentsSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6830,7 +6830,7 @@ public struct QualifiedDeclNameSyntaxBuilder {
 extension QualifiedDeclNameSyntax {
   /// Creates a `QualifiedDeclNameSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `QualifiedDeclNameSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6873,7 +6873,7 @@ public struct FunctionDeclNameSyntaxBuilder {
 extension FunctionDeclNameSyntax {
   /// Creates a `FunctionDeclNameSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FunctionDeclNameSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6916,7 +6916,7 @@ public struct ContinueStmtSyntaxBuilder {
 extension ContinueStmtSyntax {
   /// Creates a `ContinueStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ContinueStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -6986,7 +6986,7 @@ public struct WhileStmtSyntaxBuilder {
 extension WhileStmtSyntax {
   /// Creates a `WhileStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `WhileStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7032,7 +7032,7 @@ public struct DeferStmtSyntaxBuilder {
 extension DeferStmtSyntax {
   /// Creates a `DeferStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeferStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7070,7 +7070,7 @@ public struct ExpressionStmtSyntaxBuilder {
 extension ExpressionStmtSyntax {
   /// Creates a `ExpressionStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ExpressionStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7142,7 +7142,7 @@ public struct RepeatWhileStmtSyntaxBuilder {
 extension RepeatWhileStmtSyntax {
   /// Creates a `RepeatWhileStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `RepeatWhileStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7210,7 +7210,7 @@ public struct GuardStmtSyntaxBuilder {
 extension GuardStmtSyntax {
   /// Creates a `GuardStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GuardStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7256,7 +7256,7 @@ public struct WhereClauseSyntaxBuilder {
 extension WhereClauseSyntax {
   /// Creates a `WhereClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `WhereClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7361,7 +7361,7 @@ public struct ForInStmtSyntaxBuilder {
 extension ForInStmtSyntax {
   /// Creates a `ForInStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ForInStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7447,7 +7447,7 @@ public struct SwitchStmtSyntaxBuilder {
 extension SwitchStmtSyntax {
   /// Creates a `SwitchStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SwitchStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7514,7 +7514,7 @@ public struct DoStmtSyntaxBuilder {
 extension DoStmtSyntax {
   /// Creates a `DoStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DoStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7557,7 +7557,7 @@ public struct ReturnStmtSyntaxBuilder {
 extension ReturnStmtSyntax {
   /// Creates a `ReturnStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ReturnStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7603,7 +7603,7 @@ public struct YieldStmtSyntaxBuilder {
 extension YieldStmtSyntax {
   /// Creates a `YieldStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `YieldStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7668,7 +7668,7 @@ public struct YieldListSyntaxBuilder {
 extension YieldListSyntax {
   /// Creates a `YieldListSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `YieldListSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7706,7 +7706,7 @@ public struct FallthroughStmtSyntaxBuilder {
 extension FallthroughStmtSyntax {
   /// Creates a `FallthroughStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FallthroughStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7749,7 +7749,7 @@ public struct BreakStmtSyntaxBuilder {
 extension BreakStmtSyntax {
   /// Creates a `BreakStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `BreakStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7792,7 +7792,7 @@ public struct ConditionElementSyntaxBuilder {
 extension ConditionElementSyntax {
   /// Creates a `ConditionElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ConditionElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7860,7 +7860,7 @@ public struct AvailabilityConditionSyntaxBuilder {
 extension AvailabilityConditionSyntax {
   /// Creates a `AvailabilityConditionSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AvailabilityConditionSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7919,7 +7919,7 @@ public struct MatchingPatternConditionSyntaxBuilder {
 extension MatchingPatternConditionSyntax {
   /// Creates a `MatchingPatternConditionSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MatchingPatternConditionSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -7978,7 +7978,7 @@ public struct OptionalBindingConditionSyntaxBuilder {
 extension OptionalBindingConditionSyntax {
   /// Creates a `OptionalBindingConditionSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `OptionalBindingConditionSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8016,7 +8016,7 @@ public struct DeclarationStmtSyntaxBuilder {
 extension DeclarationStmtSyntax {
   /// Creates a `DeclarationStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DeclarationStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8062,7 +8062,7 @@ public struct ThrowStmtSyntaxBuilder {
 extension ThrowStmtSyntax {
   /// Creates a `ThrowStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ThrowStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8142,7 +8142,7 @@ public struct IfStmtSyntaxBuilder {
 extension IfStmtSyntax {
   /// Creates a `IfStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IfStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8180,7 +8180,7 @@ public struct ElseIfContinuationSyntaxBuilder {
 extension ElseIfContinuationSyntax {
   /// Creates a `ElseIfContinuationSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ElseIfContinuationSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8226,7 +8226,7 @@ public struct ElseBlockSyntaxBuilder {
 extension ElseBlockSyntax {
   /// Creates a `ElseBlockSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ElseBlockSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8283,7 +8283,7 @@ public struct SwitchCaseSyntaxBuilder {
 extension SwitchCaseSyntax {
   /// Creates a `SwitchCaseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SwitchCaseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8329,7 +8329,7 @@ public struct SwitchDefaultLabelSyntaxBuilder {
 extension SwitchDefaultLabelSyntax {
   /// Creates a `SwitchDefaultLabelSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SwitchDefaultLabelSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8377,7 +8377,7 @@ public struct CaseItemSyntaxBuilder {
 extension CaseItemSyntax {
   /// Creates a `CaseItemSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CaseItemSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8422,7 +8422,7 @@ public struct CatchItemSyntaxBuilder {
 extension CatchItemSyntax {
   /// Creates a `CatchItemSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CatchItemSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8482,7 +8482,7 @@ public struct SwitchCaseLabelSyntaxBuilder {
 extension SwitchCaseLabelSyntax {
   /// Creates a `SwitchCaseLabelSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SwitchCaseLabelSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8539,7 +8539,7 @@ public struct CatchClauseSyntaxBuilder {
 extension CatchClauseSyntax {
   /// Creates a `CatchClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CatchClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8611,7 +8611,7 @@ public struct PoundAssertStmtSyntaxBuilder {
 extension PoundAssertStmtSyntax {
   /// Creates a `PoundAssertStmtSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `PoundAssertStmtSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8663,7 +8663,7 @@ public struct GenericWhereClauseSyntaxBuilder {
 extension GenericWhereClauseSyntax {
   /// Creates a `GenericWhereClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GenericWhereClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8706,7 +8706,7 @@ public struct GenericRequirementSyntaxBuilder {
 extension GenericRequirementSyntax {
   /// Creates a `GenericRequirementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GenericRequirementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8760,7 +8760,7 @@ public struct SameTypeRequirementSyntaxBuilder {
 extension SameTypeRequirementSyntax {
   /// Creates a `SameTypeRequirementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SameTypeRequirementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8824,7 +8824,7 @@ public struct GenericParameterSyntaxBuilder {
 extension GenericParameterSyntax {
   /// Creates a `GenericParameterSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GenericParameterSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8884,7 +8884,7 @@ public struct GenericParameterClauseSyntaxBuilder {
 extension GenericParameterClauseSyntax {
   /// Creates a `GenericParameterClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GenericParameterClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8938,7 +8938,7 @@ public struct ConformanceRequirementSyntaxBuilder {
 extension ConformanceRequirementSyntax {
   /// Creates a `ConformanceRequirementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ConformanceRequirementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -8981,7 +8981,7 @@ public struct SimpleTypeIdentifierSyntaxBuilder {
 extension SimpleTypeIdentifierSyntax {
   /// Creates a `SimpleTypeIdentifierSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SimpleTypeIdentifierSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9040,7 +9040,7 @@ public struct MemberTypeIdentifierSyntaxBuilder {
 extension MemberTypeIdentifierSyntax {
   /// Creates a `MemberTypeIdentifierSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MemberTypeIdentifierSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9078,7 +9078,7 @@ public struct ClassRestrictionTypeSyntaxBuilder {
 extension ClassRestrictionTypeSyntax {
   /// Creates a `ClassRestrictionTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ClassRestrictionTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9132,7 +9132,7 @@ public struct ArrayTypeSyntaxBuilder {
 extension ArrayTypeSyntax {
   /// Creates a `ArrayTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ArrayTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9202,7 +9202,7 @@ public struct DictionaryTypeSyntaxBuilder {
 extension DictionaryTypeSyntax {
   /// Creates a `DictionaryTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `DictionaryTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9256,7 +9256,7 @@ public struct MetatypeTypeSyntaxBuilder {
 extension MetatypeTypeSyntax {
   /// Creates a `MetatypeTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `MetatypeTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9302,7 +9302,7 @@ public struct OptionalTypeSyntaxBuilder {
 extension OptionalTypeSyntax {
   /// Creates a `OptionalTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `OptionalTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9348,7 +9348,7 @@ public struct SomeTypeSyntaxBuilder {
 extension SomeTypeSyntax {
   /// Creates a `SomeTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `SomeTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9394,7 +9394,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntaxBuilder {
 extension ImplicitlyUnwrappedOptionalTypeSyntax {
   /// Creates a `ImplicitlyUnwrappedOptionalTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ImplicitlyUnwrappedOptionalTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9437,7 +9437,7 @@ public struct CompositionTypeElementSyntaxBuilder {
 extension CompositionTypeElementSyntax {
   /// Creates a `CompositionTypeElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CompositionTypeElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9481,7 +9481,7 @@ public struct CompositionTypeSyntaxBuilder {
 extension CompositionTypeSyntax {
   /// Creates a `CompositionTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `CompositionTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9554,7 +9554,7 @@ public struct TupleTypeElementSyntaxBuilder {
 extension TupleTypeElementSyntax {
   /// Creates a `TupleTypeElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TupleTypeElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9614,7 +9614,7 @@ public struct TupleTypeSyntaxBuilder {
 extension TupleTypeSyntax {
   /// Creates a `TupleTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TupleTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9700,7 +9700,7 @@ public struct FunctionTypeSyntaxBuilder {
 extension FunctionTypeSyntax {
   /// Creates a `FunctionTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `FunctionTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9754,7 +9754,7 @@ public struct AttributedTypeSyntaxBuilder {
 extension AttributedTypeSyntax {
   /// Creates a `AttributedTypeSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AttributedTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9797,7 +9797,7 @@ public struct GenericArgumentSyntaxBuilder {
 extension GenericArgumentSyntax {
   /// Creates a `GenericArgumentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GenericArgumentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9857,7 +9857,7 @@ public struct GenericArgumentClauseSyntaxBuilder {
 extension GenericArgumentClauseSyntax {
   /// Creates a `GenericArgumentClauseSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `GenericArgumentClauseSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9903,7 +9903,7 @@ public struct TypeAnnotationSyntaxBuilder {
 extension TypeAnnotationSyntax {
   /// Creates a `TypeAnnotationSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TypeAnnotationSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -9959,7 +9959,7 @@ public struct EnumCasePatternSyntaxBuilder {
 extension EnumCasePatternSyntax {
   /// Creates a `EnumCasePatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `EnumCasePatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10005,7 +10005,7 @@ public struct IsTypePatternSyntaxBuilder {
 extension IsTypePatternSyntax {
   /// Creates a `IsTypePatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IsTypePatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10051,7 +10051,7 @@ public struct OptionalPatternSyntaxBuilder {
 extension OptionalPatternSyntax {
   /// Creates a `OptionalPatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `OptionalPatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10089,7 +10089,7 @@ public struct IdentifierPatternSyntaxBuilder {
 extension IdentifierPatternSyntax {
   /// Creates a `IdentifierPatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `IdentifierPatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10143,7 +10143,7 @@ public struct AsTypePatternSyntaxBuilder {
 extension AsTypePatternSyntax {
   /// Creates a `AsTypePatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AsTypePatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10203,7 +10203,7 @@ public struct TuplePatternSyntaxBuilder {
 extension TuplePatternSyntax {
   /// Creates a `TuplePatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TuplePatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10246,7 +10246,7 @@ public struct WildcardPatternSyntaxBuilder {
 extension WildcardPatternSyntax {
   /// Creates a `WildcardPatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `WildcardPatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10299,7 +10299,7 @@ public struct TuplePatternElementSyntaxBuilder {
 extension TuplePatternElementSyntax {
   /// Creates a `TuplePatternElementSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `TuplePatternElementSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10337,7 +10337,7 @@ public struct ExpressionPatternSyntaxBuilder {
 extension ExpressionPatternSyntax {
   /// Creates a `ExpressionPatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ExpressionPatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10383,7 +10383,7 @@ public struct ValueBindingPatternSyntaxBuilder {
 extension ValueBindingPatternSyntax {
   /// Creates a `ValueBindingPatternSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `ValueBindingPatternSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10426,7 +10426,7 @@ public struct AvailabilityArgumentSyntaxBuilder {
 extension AvailabilityArgumentSyntax {
   /// Creates a `AvailabilityArgumentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AvailabilityArgumentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10480,7 +10480,7 @@ public struct AvailabilityLabeledArgumentSyntaxBuilder {
 extension AvailabilityLabeledArgumentSyntax {
   /// Creates a `AvailabilityLabeledArgumentSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AvailabilityLabeledArgumentSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10523,7 +10523,7 @@ public struct AvailabilityVersionRestrictionSyntaxBuilder {
 extension AvailabilityVersionRestrictionSyntax {
   /// Creates a `AvailabilityVersionRestrictionSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `AvailabilityVersionRestrictionSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
@@ -10571,7 +10571,7 @@ public struct VersionTupleSyntaxBuilder {
 extension VersionTupleSyntax {
   /// Creates a `VersionTupleSyntax` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `VersionTupleSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.

@@ -79,7 +79,7 @@ public struct ${Builder} {
 extension ${node.name} {
   /// Creates a `${node.name}` using the provided build function.
   /// - Parameter:
-  ///   - build: A closure that wil be invoked in order to initialize
+  ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
   ///            This closure is passed a `${Builder}` which you can use to
   ///            incrementally build the structure of the node.

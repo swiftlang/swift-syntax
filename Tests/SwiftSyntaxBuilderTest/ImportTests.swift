@@ -6,11 +6,11 @@ import SwiftSyntaxBuilder
 final class ImportTests: XCTestCase {
   func testImport() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let identifier = SyntaxFactory.makeIdentifier("SwiftSyntax").withLeadingTrivia(.spaces(1))
+    let identifier = SyntaxFactory.makeIdentifier("SwiftSyntax")
 
     let importDecl = ImportDecl(attributes: nil,
                                 modifiers: nil,
-                                importTok: SyntaxFactory.makeImportKeyword(),
+                                importTok: Tokens.import,
                                 importKind: nil,
                                 path: AccessPath([AccessPathComponent(name: identifier, trailingDot: nil)]))
 

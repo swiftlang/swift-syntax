@@ -16,9 +16,9 @@ final class StringLiteralTests: XCTestCase {
       let string = SyntaxFactory.makeStringSegment(value)
       let segment = StringSegment(content: string)
       let builder = StringLiteralExpr(openDelimiter: nil,
-                                      openQuote: SyntaxFactory.makeStringQuoteToken(),
+                                      openQuote: Tokens.stringQuote,
                                       segments: StringLiteralSegments([segment]),
-                                      closeQuote: SyntaxFactory.makeStringQuoteToken(),
+                                      closeQuote: Tokens.stringQuote,
                                       closeDelimiter: nil)
       let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 

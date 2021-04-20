@@ -6,13 +6,13 @@ import SwiftSyntaxBuilder
 final class StructTests: XCTestCase {
   func testEmptyStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let members = MemberDeclBlock(leftBrace: SyntaxFactory.makeLeftBraceToken().withLeadingTrivia(.spaces(1)),
+    let members = MemberDeclBlock(leftBrace: Tokens.leftBrace.withLeadingTrivia(.spaces(1)),
                                   members: MemberDeclList([]),
-                                  rightBrace: SyntaxFactory.makeRightBraceToken())
+                                  rightBrace: Tokens.rightBrace)
     let buildable = StructDecl(attributes: nil,
                                modifiers: nil,
-                               structKeyword: SyntaxFactory.makeStructKeyword(),
-                               identifier: SyntaxFactory.makeIdentifier("TestStruct").withLeadingTrivia(.spaces(1)),
+                               structKeyword: Tokens.struct,
+                               identifier: SyntaxFactory.makeIdentifier("TestStruct"),
                                genericParameterClause: nil,
                                inheritanceClause: nil,
                                genericWhereClause: nil,
@@ -30,12 +30,10 @@ final class StructTests: XCTestCase {
 
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let leftBrace = SyntaxFactory.makeLeftBraceToken().withLeadingTrivia(.spaces(1))
-    let rightBrace = SyntaxFactory.makeRightBraceToken().withLeadingTrivia(.spaces(1))
     let structKeyword = SyntaxFactory.makeStructKeyword()
-    let emptyMembers = MemberDeclBlock(leftBrace: leftBrace,
+    let emptyMembers = MemberDeclBlock(leftBrace: Tokens.leftBrace.withLeadingTrivia(.spaces(1)),
                                   members: MemberDeclList([]),
-                                  rightBrace: rightBrace)
+                                  rightBrace: Tokens.rightBrace)
     let nestedStruct = StructDecl(attributes: nil,
                                modifiers: nil,
                                structKeyword: structKeyword,
@@ -44,9 +42,9 @@ final class StructTests: XCTestCase {
                                inheritanceClause: nil,
                                genericWhereClause: nil,
                                members: emptyMembers)
-    let members = MemberDeclBlock(leftBrace: leftBrace,
+    let members = MemberDeclBlock(leftBrace: Tokens.leftBrace.withLeadingTrivia(.spaces(1)),
                                   members: MemberDeclList([MemberDeclListItem(decl: nestedStruct, semicolon: nil)]),
-                                  rightBrace: rightBrace)
+                                  rightBrace: Tokens.rightBrace)
     let testStruct = StructDecl(attributes: nil,
                                modifiers: nil,
                                structKeyword: structKeyword,

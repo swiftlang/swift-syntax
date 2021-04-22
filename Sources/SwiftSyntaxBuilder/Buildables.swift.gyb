@@ -1,0 +1,179 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.kinds import lowercase_first_word
+  from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+
+  def syntax_buildable_child_type(type_name, syntax_kind, is_token, is_optional=False):
+    if syntax_kind in SYNTAX_BASE_KINDS:
+      buildable_type = syntax_kind + 'Buildable'
+    elif not is_token:
+      buildable_type = syntax_kind
+    else:
+      buildable_type = type_name
+
+    if is_optional:
+      buildable_type += '?'
+
+    return buildable_type
+}%
+//// Automatically Generated From DeclBuildables.swift.gyb.
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2021 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+// MARK: Protocols
+
+% for kind in SYNTAX_BASE_KINDS:
+%   if kind != 'SyntaxCollection':
+%     build_kind = 'Syntax' if kind == 'Syntax' else kind + 'Syntax'
+%     if kind == 'Syntax':
+public protocol ${kind}ListBuildable {
+%     else:
+public protocol ${kind}ListBuildable: SyntaxListBuildable {
+%     end
+  func build${kind}List(format: Format, leadingTrivia: Trivia?) -> [${build_kind}]
+}
+
+%     if kind == 'Syntax':
+public protocol ${kind}Buildable: ${kind}ListBuildable {
+%     else:
+public protocol ${kind}Buildable: SyntaxBuildable, ${kind}ListBuildable {
+%     end
+  func build${kind}(format: Format, leadingTrivia: Trivia?) -> ${build_kind}
+}
+
+extension ${kind}Buildable {
+%     if kind != 'Syntax':
+  func build${kind}(format: Format) -> ${build_kind} {
+    build${kind}(format: format, leadingTrivia: nil)
+  }
+%     end
+  public func buildSyntax(format: Format) -> Syntax {
+    buildSyntax(format: format, leadingTrivia: nil)
+  }
+
+  public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
+    Syntax(build${kind}(format: format, leadingTrivia: leadingTrivia))
+  }
+
+  public func build${kind}List(format: Format) -> [${build_kind}] {
+    build${kind}List(format: format, leadingTrivia: nil)
+  }
+
+  public func build${kind}List(format: Format, leadingTrivia: Trivia?) -> [${build_kind}] {
+    [build${kind}(format: format, leadingTrivia: leadingTrivia)]
+  }
+}
+
+%   end
+% end
+
+// MARK: - Buildables
+
+% for node in SYNTAX_NODES:
+%   if node.is_buildable():
+public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
+%     child_params = []
+%     for child in node.children:
+%       param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
+%       child_params.append("%s: %s" % (child.swift_name, param_type))
+%     end
+%     for child_param in child_params:
+  let ${child_param}
+%     end
+
+  public init(
+    ${',\n    '.join(child_params)}
+  ) {
+%     for child in node.children:
+    self.${child.swift_name} = ${child.swift_name}
+%     end
+  }
+  
+  func build${node.syntax_kind}(format: Format, leadingTrivia: Trivia? = nil) -> ${node.syntax_kind}Syntax {
+%     child_params = []
+%     for child in node.children:
+%       param_expr = child.swift_name
+%       if child.is_token() and child.requires_leading_newline:
+%         param_expr = param_expr + '.withLeadingTrivia(.newlines(1) + format._makeIndent())'
+%       elif child.syntax_kind in SYNTAX_BASE_KINDS or not child.is_token():
+%         if child.is_optional:
+%           param_expr = param_expr + "?"
+%         end
+%         format = 'format'
+%         if child.is_indented:
+%           format += '._indented()'
+%         end            
+%         param_expr = param_expr + ".build" + child.syntax_kind + "(format: " + format + ")"
+%       end
+%       child_params.append("%s: %s" % (child.swift_name, param_expr))
+%     end
+    let ${node.swift_syntax_kind} = SyntaxFactory.make${node.syntax_kind}(
+      ${',\n      '.join(child_params)}
+    )
+    
+    if let leadingTrivia = leadingTrivia {
+      return ${node.swift_syntax_kind}
+        .withLeadingTrivia(leadingTrivia)
+    }
+
+    return ${node.swift_syntax_kind}
+  }
+
+  /// Conformance for `${node.syntax_kind}` to the `${node.base_kind}Buildable` protocol.
+%     return_type = 'Syntax' if node.base_kind == 'Syntax' else node.base_kind + 'Syntax'
+  public func build${node.base_kind}(format: Format, leadingTrivia: Trivia? = nil) -> ${return_type} {
+    let ${node.swift_syntax_kind} = build${node.syntax_kind}(format: format, leadingTrivia: leadingTrivia)
+    return ${return_type}(${node.swift_syntax_kind})
+  }
+}
+
+%   elif node.is_syntax_collection():
+// MARK: - Syntax collection
+public struct ${node.syntax_kind}: SyntaxBuildable {
+%     element_type = syntax_buildable_child_type(node.collection_element_type, node.collection_element, node.is_token())
+  let elements: [${element_type}]
+
+  public init(_ elements: [${element_type}]) {
+    self.elements = elements
+  }
+
+  public func build${node.syntax_kind}(format: Format, leadingTrivia: Trivia? = nil) -> ${node.syntax_kind}Syntax {
+%     if not node.is_token():
+%       leading_trivia = 'nil'
+%       if node.elements_separated_by_newline:
+%         leading_trivia = '.newlines(1) + format._makeIndent()'
+%       end
+    return SyntaxFactory.make${node.syntax_kind}(elements.map {
+      $0.build${node.collection_element}(format: format, leadingTrivia: ${leading_trivia})
+    })
+%     else:
+    return SyntaxFactory.make${node.syntax_kind}(elements)
+%     end
+  }
+
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let ${node.swift_syntax_kind} = build${node.syntax_kind}(format: format, leadingTrivia: leadingTrivia)
+
+    if let leadingTrivia = leadingTrivia {
+      return Syntax(${node.swift_syntax_kind}).withLeadingTrivia(leadingTrivia)
+    }
+
+    return Syntax(${node.swift_syntax_kind})
+  }
+}
+
+%   end
+% end

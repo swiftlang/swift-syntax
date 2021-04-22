@@ -6,20 +6,19 @@ import SwiftSyntaxBuilder
 final class ImportTests: XCTestCase {
   func testImport() {
     let leadingTrivia = Trivia.garbageText("␣")
+    let identifier = SyntaxFactory.makeIdentifier("SwiftSyntax").withLeadingTrivia(.spaces(1))
 
-    let testCases: [UInt: (Import, String)] = [
-      #line: (Import("SwiftSyntax"),
-              "␣import SwiftSyntax"),
-    ]
+    let importDecl = ImportDecl(attributes: nil,
+                                modifiers: nil,
+                                importTok: SyntaxFactory.makeImportKeyword(),
+                                importKind: nil,
+                                path: AccessPath([AccessPathComponent(name: identifier, trailingDot: nil)]))
 
-    for (line, testCase) in testCases {
-      let (builder, expected) = testCase
-      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    let syntax = importDecl.buildDecl(format: Format(), leadingTrivia: leadingTrivia)
 
-      var text = ""
-      syntax.write(to: &text)
+    var text = ""
+    syntax.write(to: &text)
 
-      XCTAssertEqual(text, expected, line: line)
-    }
+    XCTAssertEqual(text, "␣import SwiftSyntax")
   }
 }

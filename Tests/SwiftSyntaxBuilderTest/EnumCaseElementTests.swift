@@ -10,15 +10,15 @@ final class EnumCaseElementTests: XCTestCase {
     let segments = StringLiteralSegments([segment])
 
     let stringLiteralExpr: ExprBuildable = StringLiteralExpr(openDelimiter: nil,
-                                                             openQuote: SyntaxFactory.makeStringQuoteToken(),
+                                                             openQuote: Tokens.stringQuote,
                                                              segments: segments,
-                                                             closeQuote: SyntaxFactory.makeStringQuoteToken(),
+                                                             closeQuote: Tokens.stringQuote,
                                                              closeDelimiter: nil)
 
-    let initializerClause = InitializerClause(equal: SyntaxFactory.makeEqualToken().withTrailingTrivia(.spaces(1)),
+    let initializerClause = InitializerClause(equal: Tokens.equal,
                                               value: stringLiteralExpr)
 
-    let enumCase = EnumCaseElement(identifier: SyntaxFactory.makeIdentifier("TestEnum").withTrailingTrivia(.spaces(1)),
+    let enumCase = EnumCaseElement(identifier: SyntaxFactory.makeIdentifier("TestEnum"),
                                    associatedValue: nil,
                                    rawValue: initializerClause,
                                    trailingComma: nil)

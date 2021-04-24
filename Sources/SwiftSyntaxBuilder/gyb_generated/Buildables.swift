@@ -16,152 +16,270 @@ import SwiftSyntax
 // MARK: Protocols
 
 public protocol DeclListBuildable: SyntaxListBuildable {
+  /// Builds list of `DeclSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `DeclSyntax`.
   func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
 }
 
 public protocol DeclBuildable: SyntaxBuildable, DeclListBuildable {
+  /// Builds a `DeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `DeclSyntax`.
   func buildDecl(format: Format, leadingTrivia: Trivia?) -> DeclSyntax
 }
 
 extension DeclBuildable {
+  /// Builds a `DeclSyntax`.
+  /// - Returns: A `DeclSyntax`.
   func buildDecl(format: Format) -> DeclSyntax {
     buildDecl(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `DeclSyntax`.
+  /// - Returns: A `DeclSyntax`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `DeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `DeclSyntax`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(buildDecl(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `DeclSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `DeclSyntax`.
   public func buildDeclList(format: Format, leadingTrivia: Trivia? = nil) -> [DeclSyntax] {
     [buildDecl(format: format, leadingTrivia: leadingTrivia)]
   }
 }
 
 public protocol ExprListBuildable: SyntaxListBuildable {
+  /// Builds list of `ExprSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `ExprSyntax`.
   func buildExprList(format: Format, leadingTrivia: Trivia?) -> [ExprSyntax]
 }
 
 public protocol ExprBuildable: SyntaxBuildable, ExprListBuildable {
+  /// Builds a `ExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `ExprSyntax`.
   func buildExpr(format: Format, leadingTrivia: Trivia?) -> ExprSyntax
 }
 
 extension ExprBuildable {
+  /// Builds a `ExprSyntax`.
+  /// - Returns: A `ExprSyntax`.
   func buildExpr(format: Format) -> ExprSyntax {
     buildExpr(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `ExprSyntax`.
+  /// - Returns: A `ExprSyntax`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `ExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `ExprSyntax`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(buildExpr(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `ExprSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `ExprSyntax`.
   public func buildExprList(format: Format, leadingTrivia: Trivia? = nil) -> [ExprSyntax] {
     [buildExpr(format: format, leadingTrivia: leadingTrivia)]
   }
 }
 
 public protocol PatternListBuildable: SyntaxListBuildable {
+  /// Builds list of `PatternSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `PatternSyntax`.
   func buildPatternList(format: Format, leadingTrivia: Trivia?) -> [PatternSyntax]
 }
 
 public protocol PatternBuildable: SyntaxBuildable, PatternListBuildable {
+  /// Builds a `PatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `PatternSyntax`.
   func buildPattern(format: Format, leadingTrivia: Trivia?) -> PatternSyntax
 }
 
 extension PatternBuildable {
+  /// Builds a `PatternSyntax`.
+  /// - Returns: A `PatternSyntax`.
   func buildPattern(format: Format) -> PatternSyntax {
     buildPattern(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `PatternSyntax`.
+  /// - Returns: A `PatternSyntax`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `PatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `PatternSyntax`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(buildPattern(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `PatternSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `PatternSyntax`.
   public func buildPatternList(format: Format, leadingTrivia: Trivia? = nil) -> [PatternSyntax] {
     [buildPattern(format: format, leadingTrivia: leadingTrivia)]
   }
 }
 
 public protocol StmtListBuildable: SyntaxListBuildable {
+  /// Builds list of `StmtSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `StmtSyntax`.
   func buildStmtList(format: Format, leadingTrivia: Trivia?) -> [StmtSyntax]
 }
 
 public protocol StmtBuildable: SyntaxBuildable, StmtListBuildable {
+  /// Builds a `StmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `StmtSyntax`.
   func buildStmt(format: Format, leadingTrivia: Trivia?) -> StmtSyntax
 }
 
 extension StmtBuildable {
+  /// Builds a `StmtSyntax`.
+  /// - Returns: A `StmtSyntax`.
   func buildStmt(format: Format) -> StmtSyntax {
     buildStmt(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `StmtSyntax`.
+  /// - Returns: A `StmtSyntax`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `StmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `StmtSyntax`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(buildStmt(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `StmtSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `StmtSyntax`.
   public func buildStmtList(format: Format, leadingTrivia: Trivia? = nil) -> [StmtSyntax] {
     [buildStmt(format: format, leadingTrivia: leadingTrivia)]
   }
 }
 
 public protocol SyntaxListBuildable {
+  /// Builds list of `Syntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `Syntax`.
   func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
 }
 
 public protocol SyntaxBuildable: SyntaxListBuildable {
+  /// Builds a `Syntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `Syntax`.
   func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax
 }
 
 extension SyntaxBuildable {
+  /// Builds a `Syntax`.
+  /// - Returns: A `Syntax`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `Syntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `Syntax`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(buildSyntax(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `Syntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `Syntax`.
   public func buildSyntaxList(format: Format, leadingTrivia: Trivia? = nil) -> [Syntax] {
     [buildSyntax(format: format, leadingTrivia: leadingTrivia)]
   }
 }
 
 public protocol TypeListBuildable: SyntaxListBuildable {
+  /// Builds list of `TypeSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `TypeSyntax`.
   func buildTypeList(format: Format, leadingTrivia: Trivia?) -> [TypeSyntax]
 }
 
 public protocol TypeBuildable: SyntaxBuildable, TypeListBuildable {
+  /// Builds a `TypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `TypeSyntax`.
   func buildType(format: Format, leadingTrivia: Trivia?) -> TypeSyntax
 }
 
 extension TypeBuildable {
+  /// Builds a `TypeSyntax`.
+  /// - Returns: A `TypeSyntax`.
   func buildType(format: Format) -> TypeSyntax {
     buildType(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `TypeSyntax`.
+  /// - Returns: A `TypeSyntax`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `TypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `TypeSyntax`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(buildType(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `TypeSyntax`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `TypeSyntax`.
   public func buildTypeList(format: Format, leadingTrivia: Trivia? = nil) -> [TypeSyntax] {
     [buildType(format: format, leadingTrivia: leadingTrivia)]
   }
@@ -169,6 +287,10 @@ extension TypeBuildable {
 
 // MARK: - Buildables
 
+/// 
+/// A CodeBlockItem is any Syntax node that appears on its own line inside
+/// a CodeBlock.
+/// 
 public struct CodeBlockItem: SyntaxBuildable {
   let item: SyntaxBuildable
   let semicolon: TokenSyntax?
@@ -206,6 +328,9 @@ public struct CodeBlockItem: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `CodeBlockItemList` represents a collection of 
+/// `CodeBlockItem`s.
 public struct CodeBlockItemList: SyntaxBuildable {
   let elements: [CodeBlockItem]
 
@@ -327,6 +452,9 @@ public struct PoundColumnExpr: ExprBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `TupleExprElementList` represents a collection of 
+/// `TupleExprElement`s.
 public struct TupleExprElementList: SyntaxBuildable {
   let elements: [TupleExprElement]
 
@@ -352,6 +480,9 @@ public struct TupleExprElementList: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ArrayElementList` represents a collection of 
+/// `ArrayElement`s.
 public struct ArrayElementList: SyntaxBuildable {
   let elements: [ArrayElement]
 
@@ -377,6 +508,9 @@ public struct ArrayElementList: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `DictionaryElementList` represents a collection of 
+/// `DictionaryElement`s.
 public struct DictionaryElementList: SyntaxBuildable {
   let elements: [DictionaryElement]
 
@@ -402,6 +536,9 @@ public struct DictionaryElementList: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `StringLiteralSegments` represents a collection of 
+/// `SyntaxBuildable`s.
 public struct StringLiteralSegments: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
@@ -527,6 +664,9 @@ public struct DeclNameArgument: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `DeclNameArgumentList` represents a collection of 
+/// `DeclNameArgument`s.
 public struct DeclNameArgumentList: SyntaxBuildable {
   let elements: [DeclNameArgument]
 
@@ -760,6 +900,11 @@ public struct SequenceExpr: ExprBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// 
+/// A list of expressions connected by operators. This list is contained
+/// by a `SequenceExprSyntax`.
+/// 
 public struct ExprList: SyntaxBuildable {
   let elements: [ExprBuildable]
 
@@ -1609,6 +1754,9 @@ public struct ClosureCaptureItem: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ClosureCaptureItemList` represents a collection of 
+/// `ClosureCaptureItem`s.
 public struct ClosureCaptureItemList: SyntaxBuildable {
   let elements: [ClosureCaptureItem]
 
@@ -1702,6 +1850,9 @@ public struct ClosureParam: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ClosureParamList` represents a collection of 
+/// `ClosureParam`s.
 public struct ClosureParamList: SyntaxBuildable {
   let elements: [ClosureParam]
 
@@ -1879,6 +2030,9 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `MultipleTrailingClosureElementList` represents a collection of 
+/// `MultipleTrailingClosureElement`s.
 public struct MultipleTrailingClosureElementList: SyntaxBuildable {
   let elements: [MultipleTrailingClosureElement]
 
@@ -2340,6 +2494,9 @@ public struct ObjcNamePiece: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ObjcName` represents a collection of 
+/// `ObjcNamePiece`s.
 public struct ObjcName: SyntaxBuildable {
   let elements: [ObjcNamePiece]
 
@@ -2689,6 +2846,9 @@ public struct AssociatedtypeDecl: DeclBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `FunctionParameterList` represents a collection of 
+/// `FunctionParameter`s.
 public struct FunctionParameterList: SyntaxBuildable {
   let elements: [FunctionParameter]
 
@@ -2858,6 +3018,9 @@ public struct IfConfigClause: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `IfConfigClauseList` represents a collection of 
+/// `IfConfigClause`s.
 public struct IfConfigClauseList: SyntaxBuildable {
   let elements: [IfConfigClause]
 
@@ -3159,6 +3322,9 @@ public struct InheritedType: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `InheritedTypeList` represents a collection of 
+/// `InheritedType`s.
 public struct InheritedTypeList: SyntaxBuildable {
   let elements: [InheritedType]
 
@@ -3468,6 +3634,9 @@ public struct MemberDeclBlock: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `MemberDeclList` represents a collection of 
+/// `MemberDeclListItem`s.
 public struct MemberDeclList: SyntaxBuildable {
   let elements: [MemberDeclListItem]
 
@@ -3492,6 +3661,10 @@ public struct MemberDeclList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A member declaration of a type consisting of a declaration and an
+/// optional semicolon;
+/// 
 public struct MemberDeclListItem: SyntaxBuildable {
   let decl: DeclBuildable
   let semicolon: TokenSyntax?
@@ -3645,6 +3818,9 @@ public struct FunctionParameter: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ModifierList` represents a collection of 
+/// `DeclModifier`s.
 public struct ModifierList: SyntaxBuildable {
   let elements: [DeclModifier]
 
@@ -3954,6 +4130,9 @@ public struct AccessPathComponent: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `AccessPath` represents a collection of 
+/// `AccessPathComponent`s.
 public struct AccessPath: SyntaxBuildable {
   let elements: [AccessPathComponent]
 
@@ -4111,6 +4290,9 @@ public struct AccessorDecl: DeclBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `AccessorList` represents a collection of 
+/// `AccessorDecl`s.
 public struct AccessorList: SyntaxBuildable {
   let elements: [AccessorDecl]
 
@@ -4216,6 +4398,9 @@ public struct PatternBinding: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `PatternBindingList` represents a collection of 
+/// `PatternBinding`s.
 public struct PatternBindingList: SyntaxBuildable {
   let elements: [PatternBinding]
 
@@ -4280,6 +4465,10 @@ public struct VariableDecl: DeclBuildable {
   }
 }
 
+/// 
+/// An element of an enum case, containing the name of the case and,
+/// optionally, either associated values or an assignment to a raw value.
+/// 
 public struct EnumCaseElement: SyntaxBuildable {
   let identifier: TokenSyntax
   let associatedValue: ParameterClause?
@@ -4321,6 +4510,8 @@ public struct EnumCaseElement: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// A collection of 0 or more `EnumCaseElement`s.
 public struct EnumCaseElementList: SyntaxBuildable {
   let elements: [EnumCaseElement]
 
@@ -4345,6 +4536,11 @@ public struct EnumCaseElementList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A `case` declaration of a Swift `enum`. It can have 1 or more
+/// `EnumCaseElement`s inside, each declaring a different case of the
+/// enum.
+/// 
 public struct EnumCaseDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -4385,6 +4581,7 @@ public struct EnumCaseDecl: DeclBuildable {
   }
 }
 
+/// A Swift `enum` declaration.
 public struct EnumDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -4441,6 +4638,7 @@ public struct EnumDecl: DeclBuildable {
   }
 }
 
+/// A Swift `operator` declaration.
 public struct OperatorDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -4486,6 +4684,9 @@ public struct OperatorDecl: DeclBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `IdentifierList` represents a collection of 
+/// `TokenSyntax`s.
 public struct IdentifierList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
@@ -4508,6 +4709,9 @@ public struct IdentifierList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
+/// 
 public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   let colon: TokenSyntax
   let precedenceGroupAndDesignatedTypes: IdentifierList
@@ -4540,6 +4744,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   }
 }
 
+/// A Swift `precedencegroup` declaration.
 public struct PrecedenceGroupDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -4593,6 +4798,9 @@ public struct PrecedenceGroupDecl: DeclBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `PrecedenceGroupAttributeList` represents a collection of 
+/// `SyntaxBuildable`s.
 public struct PrecedenceGroupAttributeList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
@@ -4617,6 +4825,10 @@ public struct PrecedenceGroupAttributeList: SyntaxBuildable {
   }
 }
 
+/// 
+/// Specify the new precedence group's relation to existing precedence
+/// groups.
+/// 
 public struct PrecedenceGroupRelation: SyntaxBuildable {
   let higherThanOrLowerThan: TokenSyntax
   let colon: TokenSyntax
@@ -4654,6 +4866,9 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `PrecedenceGroupNameList` represents a collection of 
+/// `PrecedenceGroupNameElement`s.
 public struct PrecedenceGroupNameList: SyntaxBuildable {
   let elements: [PrecedenceGroupNameElement]
 
@@ -4710,6 +4925,10 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   }
 }
 
+/// 
+/// Specifies the precedence of an operator when used in an operation
+/// that includes optional chaining.
+/// 
 public struct PrecedenceGroupAssignment: SyntaxBuildable {
   let assignmentKeyword: TokenSyntax
   let colon: TokenSyntax
@@ -4746,6 +4965,10 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
   }
 }
 
+/// 
+/// Specifies how a sequence of operators with the same precedence level
+/// are grouped together in the absence of grouping parentheses.
+/// 
 public struct PrecedenceGroupAssociativity: SyntaxBuildable {
   let associativityKeyword: TokenSyntax
   let colon: TokenSyntax
@@ -4783,6 +5006,9 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `TokenList` represents a collection of 
+/// `TokenSyntax`s.
 public struct TokenList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
@@ -4806,6 +5032,9 @@ public struct TokenList: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `NonEmptyTokenList` represents a collection of 
+/// `TokenSyntax`s.
 public struct NonEmptyTokenList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
@@ -4828,6 +5057,9 @@ public struct NonEmptyTokenList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A custom `@` attribute.
+/// 
 public struct CustomAttribute: SyntaxBuildable {
   let atSignToken: TokenSyntax
   let attributeName: TypeBuildable
@@ -4872,6 +5104,9 @@ public struct CustomAttribute: SyntaxBuildable {
   }
 }
 
+/// 
+/// An `@` attribute.
+/// 
 public struct Attribute: SyntaxBuildable {
   let atSignToken: TokenSyntax
   let attributeName: TokenSyntax
@@ -4921,6 +5156,9 @@ public struct Attribute: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `AttributeList` represents a collection of 
+/// `SyntaxBuildable`s.
 public struct AttributeList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
@@ -4946,6 +5184,10 @@ public struct AttributeList: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// 
+/// A collection of arguments for the `@_specialize` attribute
+/// 
 public struct SpecializeAttributeSpecList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
@@ -4970,6 +5212,10 @@ public struct SpecializeAttributeSpecList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A labeled argument for the `@_specialize` attribute like
+/// `exported: true`
+/// 
 public struct LabeledSpecializeEntry: SyntaxBuildable {
   let label: TokenSyntax
   let colon: TokenSyntax
@@ -5010,6 +5256,11 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   }
 }
 
+/// 
+/// A labeled argument for the `@_specialize` attribute with a function
+/// decl value like
+/// `target: myFunc(_:)`
+/// 
 public struct TargetFunctionEntry: SyntaxBuildable {
   let label: TokenSyntax
   let colon: TokenSyntax
@@ -5050,6 +5301,11 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   }
 }
 
+/// 
+/// The argument for the `@_dynamic_replacement` or `@_private`
+/// attribute of the form `for: "function()"` or `sourceFile:
+/// "Src.swift"`
+/// 
 public struct NamedAttributeStringArgument: SyntaxBuildable {
   let nameTok: TokenSyntax
   let colon: TokenSyntax
@@ -5118,6 +5374,10 @@ public struct DeclName: SyntaxBuildable {
   }
 }
 
+/// 
+/// The arguments for the `@_implements` attribute of the form
+/// `Type, methodName(arg1Label:arg2Label:)`
+/// 
 public struct ImplementsAttributeArguments: SyntaxBuildable {
   let type: SimpleTypeIdentifier
   let comma: TokenSyntax
@@ -5158,6 +5418,11 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   }
 }
 
+/// 
+/// A piece of an Objective-C selector. Either consisiting of just an
+/// identifier for a nullary selector, an identifier and a colon for a
+/// labeled argument or just a colon for an unlabeled argument
+/// 
 public struct ObjCSelectorPiece: SyntaxBuildable {
   let name: TokenSyntax?
   let colon: TokenSyntax?
@@ -5191,6 +5456,9 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ObjCSelector` represents a collection of 
+/// `ObjCSelectorPiece`s.
 public struct ObjCSelector: SyntaxBuildable {
   let elements: [ObjCSelectorPiece]
 
@@ -5215,6 +5483,11 @@ public struct ObjCSelector: SyntaxBuildable {
   }
 }
 
+/// 
+/// The arguments for the `@differentiable` attribute: an optional
+/// differentiability kind, an optional differentiability parameter clause,
+/// and an optional 'where' clause.
+/// 
 public struct DifferentiableAttributeArguments: SyntaxBuildable {
   let diffKind: TokenSyntax?
   let diffKindComma: TokenSyntax?
@@ -5259,6 +5532,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
   }
 }
 
+/// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClause: SyntaxBuildable {
   let wrtLabel: TokenSyntax
   let colon: TokenSyntax
@@ -5295,6 +5569,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
   }
 }
 
+/// The differentiability parameters.
 public struct DifferentiabilityParams: SyntaxBuildable {
   let leftParen: TokenSyntax
   let diffParams: DifferentiabilityParamList
@@ -5332,6 +5607,9 @@ public struct DifferentiabilityParams: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `DifferentiabilityParamList` represents a collection of 
+/// `DifferentiabilityParam`s.
 public struct DifferentiabilityParamList: SyntaxBuildable {
   let elements: [DifferentiabilityParam]
 
@@ -5356,6 +5634,10 @@ public struct DifferentiabilityParamList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A differentiability parameter: either the "self" identifier, a function
+/// parameter name, or a function parameter index.
+/// 
 public struct DifferentiabilityParam: SyntaxBuildable {
   let parameter: SyntaxBuildable
   let trailingComma: TokenSyntax?
@@ -5388,6 +5670,11 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   }
 }
 
+/// 
+/// The arguments for the '@derivative(of:)' and '@transpose(of:)'
+/// attributes: the 'of:' label, the original declaration name, and an
+/// optional differentiability parameter list.
+/// 
 public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   let ofLabel: TokenSyntax
   let colon: TokenSyntax
@@ -5440,6 +5727,10 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   }
 }
 
+/// 
+/// An optionally qualified function declaration name (e.g. `+(_:_:)`,
+/// `A.B.C.foo(_:_:)`).
+/// 
 public struct QualifiedDeclName: SyntaxBuildable {
   let baseType: TypeBuildable?
   let dot: TokenSyntax?
@@ -5480,6 +5771,7 @@ public struct QualifiedDeclName: SyntaxBuildable {
   }
 }
 
+/// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclName: SyntaxBuildable {
   let name: SyntaxBuildable
   let arguments: DeclNameArguments?
@@ -5649,6 +5941,9 @@ public struct ExpressionStmt: StmtBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `SwitchCaseList` represents a collection of 
+/// `SyntaxBuildable`s.
 public struct SwitchCaseList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
@@ -5918,6 +6213,9 @@ public struct SwitchStmt: StmtBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `CatchClauseList` represents a collection of 
+/// `CatchClause`s.
 public struct CatchClauseList: SyntaxBuildable {
   let elements: [CatchClause]
 
@@ -6151,6 +6449,9 @@ public struct BreakStmt: StmtBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `CaseItemList` represents a collection of 
+/// `CaseItem`s.
 public struct CaseItemList: SyntaxBuildable {
   let elements: [CaseItem]
 
@@ -6176,6 +6477,9 @@ public struct CaseItemList: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `CatchItemList` represents a collection of 
+/// `CatchItem`s.
 public struct CatchItemList: SyntaxBuildable {
   let elements: [CatchItem]
 
@@ -6353,6 +6657,9 @@ public struct OptionalBindingCondition: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `ConditionElementList` represents a collection of 
+/// `ConditionElement`s.
 public struct ConditionElementList: SyntaxBuildable {
   let elements: [ConditionElement]
 
@@ -6842,6 +7149,9 @@ public struct GenericWhereClause: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `GenericRequirementList` represents a collection of 
+/// `GenericRequirement`s.
 public struct GenericRequirementList: SyntaxBuildable {
   let elements: [GenericRequirement]
 
@@ -6935,6 +7245,9 @@ public struct SameTypeRequirement: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `GenericParameterList` represents a collection of 
+/// `GenericParameter`s.
 public struct GenericParameterList: SyntaxBuildable {
   let elements: [GenericParameter]
 
@@ -7420,6 +7733,9 @@ public struct CompositionTypeElement: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `CompositionTypeElementList` represents a collection of 
+/// `CompositionTypeElement`s.
 public struct CompositionTypeElementList: SyntaxBuildable {
   let elements: [CompositionTypeElement]
 
@@ -7529,6 +7845,9 @@ public struct TupleTypeElement: SyntaxBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `TupleTypeElementList` represents a collection of 
+/// `TupleTypeElement`s.
 public struct TupleTypeElementList: SyntaxBuildable {
   let elements: [TupleTypeElement]
 
@@ -7678,6 +7997,9 @@ public struct AttributedType: TypeBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `GenericArgumentList` represents a collection of 
+/// `GenericArgument`s.
 public struct GenericArgumentList: SyntaxBuildable {
   let elements: [GenericArgument]
 
@@ -8107,6 +8429,9 @@ public struct ExpressionPattern: PatternBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `TuplePatternElementList` represents a collection of 
+/// `TuplePatternElement`s.
 public struct TuplePatternElementList: SyntaxBuildable {
   let elements: [TuplePatternElement]
 
@@ -8164,6 +8489,9 @@ public struct ValueBindingPattern: PatternBuildable {
 }
 
 // MARK: - Syntax collection
+
+/// `AvailabilitySpecList` represents a collection of 
+/// `AvailabilityArgument`s.
 public struct AvailabilitySpecList: SyntaxBuildable {
   let elements: [AvailabilityArgument]
 
@@ -8188,6 +8516,10 @@ public struct AvailabilitySpecList: SyntaxBuildable {
   }
 }
 
+/// 
+/// A single argument to an `@available` argument like `*`, `iOS 10.1`,
+/// or `message: "This has been deprecated"`.
+/// 
 public struct AvailabilityArgument: SyntaxBuildable {
   let entry: SyntaxBuildable
   let trailingComma: TokenSyntax?
@@ -8220,6 +8552,10 @@ public struct AvailabilityArgument: SyntaxBuildable {
   }
 }
 
+/// 
+/// A argument to an `@available` attribute that consists of a label and
+/// a value, e.g. `message: "This has been deprecated"`.
+/// 
 public struct AvailabilityLabeledArgument: SyntaxBuildable {
   let label: TokenSyntax
   let colon: TokenSyntax
@@ -8256,6 +8592,10 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   }
 }
 
+/// 
+/// An argument to `@available` that restricts the availability on a
+/// certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
+/// 
 public struct AvailabilityVersionRestriction: SyntaxBuildable {
   let platform: TokenSyntax
   let version: VersionTuple?
@@ -8288,6 +8628,10 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
   }
 }
 
+/// 
+/// A version number of the form major.minor.patch in which the minor
+/// and patch part may be ommited.
+/// 
 public struct VersionTuple: SyntaxBuildable {
   let majorMinor: SyntaxBuildable
   let patchPeriod: TokenSyntax?

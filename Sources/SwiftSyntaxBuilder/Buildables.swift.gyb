@@ -43,6 +43,10 @@ public protocol ${kind}ListBuildable {
 %     else:
 public protocol ${kind}ListBuildable: SyntaxListBuildable {
 %     end
+  /// Builds list of `${build_kind}`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `${build_kind}`.
   func build${kind}List(format: Format, leadingTrivia: Trivia?) -> [${build_kind}]
 }
 
@@ -51,24 +55,40 @@ public protocol ${kind}Buildable: ${kind}ListBuildable {
 %     else:
 public protocol ${kind}Buildable: SyntaxBuildable, ${kind}ListBuildable {
 %     end
+  /// Builds a `${build_kind}`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `${build_kind}`.
   func build${kind}(format: Format, leadingTrivia: Trivia?) -> ${build_kind}
 }
 
 extension ${kind}Buildable {
 %     if kind != 'Syntax':
+  /// Builds a `${build_kind}`.
+  /// - Returns: A `${build_kind}`.
   func build${kind}(format: Format) -> ${build_kind} {
     build${kind}(format: format, leadingTrivia: nil)
   }
 
 %     end
+  /// Builds a `${build_kind}`.
+  /// - Returns: A `${build_kind}`.
   public func buildSyntax(format: Format) -> Syntax {
     buildSyntax(format: format, leadingTrivia: nil)
   }
 
+  /// Builds a `${build_kind}`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `${build_kind}`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax {
     Syntax(build${kind}(format: format, leadingTrivia: leadingTrivia))
   }
 
+  /// Builds list of `${build_kind}`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `${build_kind}`.
   public func build${kind}List(format: Format, leadingTrivia: Trivia? = nil) -> [${build_kind}] {
     [build${kind}(format: format, leadingTrivia: leadingTrivia)]
   }
@@ -80,6 +100,11 @@ extension ${kind}Buildable {
 
 % for node in SYNTAX_NODES:
 %   if node.is_buildable():
+%     if node.description:
+%       for line in dedented_lines(node.description):
+/// ${line}
+%       end
+%     end
 public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
 %     child_params = []
 %     for child in node.children:
@@ -137,8 +162,17 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
 
 %   elif node.is_syntax_collection():
 // MARK: - Syntax collection
-public struct ${node.syntax_kind}: SyntaxBuildable {
+
 %     element_type = syntax_buildable_child_type(node.collection_element_type, node.collection_element, node.is_token())
+%     if node.description:
+%       for line in dedented_lines(node.description):
+/// ${line}
+%       end
+%     else:
+/// `${node.syntax_kind}` represents a collection of 
+/// `${element_type}`s.
+%     end
+public struct ${node.syntax_kind}: SyntaxBuildable {
   let elements: [${element_type}]
 
   public init(_ elements: [${element_type}]) {

@@ -34,24 +34,14 @@ final class StructTests: XCTestCase {
     let emptyMembers = MemberDeclBlock(leftBrace: Tokens.leftBrace.withLeadingTrivia(.spaces(1)),
                                   members: MemberDeclList([]),
                                   rightBrace: Tokens.rightBrace)
-    let nestedStruct = StructDecl(attributes: nil,
-                               modifiers: nil,
-                               structKeyword: structKeyword,
+    let nestedStruct = StructDecl(structKeyword: structKeyword,
                                identifier: SyntaxFactory.makeIdentifier("NestedStruct").withLeadingTrivia(.spaces(1)),
-                               genericParameterClause: nil,
-                               inheritanceClause: nil,
-                               genericWhereClause: nil,
                                members: emptyMembers)
     let members = MemberDeclBlock(leftBrace: Tokens.leftBrace.withLeadingTrivia(.spaces(1)),
-                                  members: MemberDeclList([MemberDeclListItem(decl: nestedStruct, semicolon: nil)]),
+                                  members: MemberDeclList([MemberDeclListItem(decl: nestedStruct)]),
                                   rightBrace: Tokens.rightBrace)
-    let testStruct = StructDecl(attributes: nil,
-                               modifiers: nil,
-                               structKeyword: structKeyword,
+    let testStruct = StructDecl(structKeyword: structKeyword,
                                identifier: SyntaxFactory.makeIdentifier("TestStruct").withLeadingTrivia(.spaces(1)),
-                               genericParameterClause: nil,
-                               inheritanceClause: nil,
-                               genericWhereClause: nil,
                                members: members)
     let syntax = testStruct.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 

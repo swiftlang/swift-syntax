@@ -8,11 +8,8 @@ final class ImportTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
     let identifier = SyntaxFactory.makeIdentifier("SwiftSyntax")
 
-    let importDecl = ImportDecl(attributes: nil,
-                                modifiers: nil,
-                                importTok: Tokens.import,
-                                importKind: nil,
-                                path: AccessPath([AccessPathComponent(name: identifier, trailingDot: nil)]))
+    let importDecl = ImportDecl(importTok: Tokens.import,
+                                path: AccessPath([AccessPathComponent(name: identifier)]))
 
     let syntax = importDecl.buildDecl(format: Format(), leadingTrivia: leadingTrivia)
 

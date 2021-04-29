@@ -2452,6 +2452,38 @@ public struct ObjcSelectorExpr: ExprBuildable {
   }
 }
 
+public struct PostfixIfConfigExpr: ExprBuildable {
+  let base: ExprBuildable
+  let config: IfConfigDecl
+
+  public init(
+    base: ExprBuildable,
+    config: IfConfigDecl
+  ) {
+    self.base = base
+    self.config = config
+  }
+  
+  func buildPostfixIfConfigExpr(format: Format, leadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
+    let postfixIfConfigExpr = SyntaxFactory.makePostfixIfConfigExpr(
+      base: base.buildExpr(format: format),
+      config: config.buildIfConfigDecl(format: format)
+    )
+    
+    if let leadingTrivia = leadingTrivia {
+      return postfixIfConfigExpr.withLeadingTrivia(leadingTrivia)
+    }
+
+    return postfixIfConfigExpr
+  }
+
+  /// Conformance for `PostfixIfConfigExpr` to the `ExprBuildable` protocol.
+  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let postfixIfConfigExpr = buildPostfixIfConfigExpr(format: format, leadingTrivia: leadingTrivia)
+    return ExprSyntax(postfixIfConfigExpr)
+  }
+}
+
 public struct EditorPlaceholderExpr: ExprBuildable {
   let identifier: TokenSyntax
 

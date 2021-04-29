@@ -2934,6 +2934,52 @@ extension ObjcSelectorExprSyntax {
   }
 }
 
+public struct PostfixIfConfigExprSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 2)
+
+  internal init() {}
+
+  public mutating func useBase(_ node: ExprSyntax) {
+    let idx = PostfixIfConfigExprSyntax.Cursor.base.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useConfig(_ node: IfConfigDeclSyntax) {
+    let idx = PostfixIfConfigExprSyntax.Cursor.config.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missing(SyntaxKind.ifConfigDecl)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .postfixIfConfigExpr,
+      layout: layout, presence: .present))
+  }
+}
+
+extension PostfixIfConfigExprSyntax {
+  /// Creates a `PostfixIfConfigExprSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `PostfixIfConfigExprSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `PostfixIfConfigExprSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout PostfixIfConfigExprSyntaxBuilder) -> Void) {
+    var builder = PostfixIfConfigExprSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct EditorPlaceholderExprSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 1)

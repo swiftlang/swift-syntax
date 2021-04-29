@@ -548,6 +548,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `PostfixIfConfigExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `EditorPlaceholderExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2524,6 +2531,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = PostfixIfConfigExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = EditorPlaceholderExprSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4355,6 +4372,8 @@ open class SyntaxRewriter {
       return visitImplObjcKeyPathExprSyntax
     case .objcSelectorExpr:
       return visitImplObjcSelectorExprSyntax
+    case .postfixIfConfigExpr:
+      return visitImplPostfixIfConfigExprSyntax
     case .editorPlaceholderExpr:
       return visitImplEditorPlaceholderExprSyntax
     case .objectLiteralExpr:
@@ -4854,6 +4873,8 @@ open class SyntaxRewriter {
       return visitImplObjcKeyPathExprSyntax(data)
     case .objcSelectorExpr:
       return visitImplObjcSelectorExprSyntax(data)
+    case .postfixIfConfigExpr:
+      return visitImplPostfixIfConfigExprSyntax(data)
     case .editorPlaceholderExpr:
       return visitImplEditorPlaceholderExprSyntax(data)
     case .objectLiteralExpr:

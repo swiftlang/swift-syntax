@@ -96,6 +96,7 @@ public enum SyntaxEnum {
   case objcName(ObjcNameSyntax)
   case objcKeyPathExpr(ObjcKeyPathExprSyntax)
   case objcSelectorExpr(ObjcSelectorExprSyntax)
+  case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
   case objectLiteralExpr(ObjectLiteralExprSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
@@ -428,6 +429,8 @@ public extension Syntax {
       return .objcKeyPathExpr(ObjcKeyPathExprSyntax(self)!)
     case .objcSelectorExpr:
       return .objcSelectorExpr(ObjcSelectorExprSyntax(self)!)
+    case .postfixIfConfigExpr:
+      return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
     case .editorPlaceholderExpr:
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
     case .objectLiteralExpr:

@@ -589,6 +589,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: ObjcSelectorExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: PostfixIfConfigExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PostfixIfConfigExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

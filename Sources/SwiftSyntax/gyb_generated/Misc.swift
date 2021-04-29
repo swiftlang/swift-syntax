@@ -471,6 +471,12 @@ extension SyntaxNode {
     return ObjcSelectorExprSyntax(asSyntaxData)
   }
 
+  public var isPostfixIfConfigExpr: Bool { return raw.kind == .postfixIfConfigExpr }
+  public var asPostfixIfConfigExpr: PostfixIfConfigExprSyntax? {
+    guard isPostfixIfConfigExpr else { return nil }
+    return PostfixIfConfigExprSyntax(asSyntaxData)
+  }
+
   public var isEditorPlaceholderExpr: Bool { return raw.kind == .editorPlaceholderExpr }
   public var asEditorPlaceholderExpr: EditorPlaceholderExprSyntax? {
     guard isEditorPlaceholderExpr else { return nil }
@@ -1621,6 +1627,8 @@ extension Syntax {
       return node
     case .objcSelectorExpr(let node):
       return node
+    case .postfixIfConfigExpr(let node):
+      return node
     case .editorPlaceholderExpr(let node):
       return node
     case .objectLiteralExpr(let node):
@@ -1952,6 +1960,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "468bcd348ceb5f9281692e63d4c80e3333a18211"
+      "4f85168b3860f575ce60ac0d223fc89da37014df"
   }
 }

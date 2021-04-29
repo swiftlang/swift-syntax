@@ -782,6 +782,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `ObjcSelectorExprSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjcSelectorExprSyntax) {}
+  /// Visiting `PostfixIfConfigExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PostfixIfConfigExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `PostfixIfConfigExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PostfixIfConfigExprSyntax) {}
   /// Visiting `EditorPlaceholderExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3306,6 +3316,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) {
+      let node = PostfixIfConfigExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) {
       let node = EditorPlaceholderExprSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5267,6 +5288,8 @@ open class SyntaxVisitor {
       visitImplObjcKeyPathExprSyntax(data)
     case .objcSelectorExpr:
       visitImplObjcSelectorExprSyntax(data)
+    case .postfixIfConfigExpr:
+      visitImplPostfixIfConfigExprSyntax(data)
     case .editorPlaceholderExpr:
       visitImplEditorPlaceholderExprSyntax(data)
     case .objectLiteralExpr:

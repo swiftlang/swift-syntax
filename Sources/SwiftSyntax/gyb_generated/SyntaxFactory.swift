@@ -1416,6 +1416,25 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ObjcSelectorExprSyntax(data)
   }
+  public static func makePostfixIfConfigExpr(base: ExprSyntax, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
+    let layout: [RawSyntax?] = [
+      base.raw,
+      config.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixIfConfigExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return PostfixIfConfigExprSyntax(data)
+  }
+
+  public static func makeBlankPostfixIfConfigExpr() -> PostfixIfConfigExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .postfixIfConfigExpr,
+      layout: [
+      RawSyntax.missing(SyntaxKind.expr),
+      RawSyntax.missing(SyntaxKind.ifConfigDecl),
+    ], length: .zero, presence: .present))
+    return PostfixIfConfigExprSyntax(data)
+  }
   public static func makeEditorPlaceholderExpr(identifier: TokenSyntax) -> EditorPlaceholderExprSyntax {
     let layout: [RawSyntax?] = [
       identifier.raw,

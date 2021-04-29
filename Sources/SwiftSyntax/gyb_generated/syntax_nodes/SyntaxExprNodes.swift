@@ -5246,6 +5246,111 @@ extension ObjcSelectorExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PostfixIfConfigExprSyntax
+
+public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case base
+    case config
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `PostfixIfConfigExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .postfixIfConfigExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PostfixIfConfigExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .postfixIfConfigExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var base: ExprSyntax {
+    get {
+      let childData = data.child(at: Cursor.base,
+                                 parent: Syntax(self))
+      return ExprSyntax(childData!)
+    }
+    set(value) {
+      self = withBase(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `base` replaced.
+  /// - param newChild: The new `base` to replace the node's
+  ///                   current `base`, if present.
+  public func withBase(
+    _ newChild: ExprSyntax?) -> PostfixIfConfigExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let newData = data.replacingChild(raw, at: Cursor.base)
+    return PostfixIfConfigExprSyntax(newData)
+  }
+
+  public var config: IfConfigDeclSyntax {
+    get {
+      let childData = data.child(at: Cursor.config,
+                                 parent: Syntax(self))
+      return IfConfigDeclSyntax(childData!)
+    }
+    set(value) {
+      self = withConfig(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `config` replaced.
+  /// - param newChild: The new `config` to replace the node's
+  ///                   current `config`, if present.
+  public func withConfig(
+    _ newChild: IfConfigDeclSyntax?) -> PostfixIfConfigExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.ifConfigDecl)
+    let newData = data.replacingChild(raw, at: Cursor.config)
+    return PostfixIfConfigExprSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 2)
+    // Check child #0 child is ExprSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ExprSyntax.self))
+    }
+    // Check child #1 child is IfConfigDeclSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(IfConfigDeclSyntax.self))
+    }
+  }
+}
+
+extension PostfixIfConfigExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "base": Syntax(base).asProtocol(SyntaxProtocol.self),
+      "config": Syntax(config).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - EditorPlaceholderExprSyntax
 
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

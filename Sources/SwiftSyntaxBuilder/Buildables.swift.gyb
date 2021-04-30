@@ -81,17 +81,19 @@ extension ${kind}Buildable {
 % for node in SYNTAX_NODES:
 %   if node.is_buildable():
 public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
-%     child_params = []
 %     for child in node.children:
 %       param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
-%       child_params.append("%s: %s" % (child.swift_name, param_type))
-%     end
-%     for child_param in child_params:
-  let ${child_param}
+  let ${"%s: %s" % (child.swift_name, param_type)}
 %     end
 
   public init(
-    ${',\n    '.join(child_params)}
+%     init_parameters = []
+%     for child in node.children:
+%       param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
+%       default_value = " = nil" if child.is_optional else ""
+%       init_parameters.append("%s: %s%s" % (child.swift_name, param_type, default_value))
+%     end
+    ${',\n    '.join(init_parameters)}
   ) {
 %     for child in node.children:
     self.${child.swift_name} = ${child.swift_name}

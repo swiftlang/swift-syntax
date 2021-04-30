@@ -96,6 +96,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case objcName = 173
   case objcKeyPathExpr = 67
   case objcSelectorExpr = 68
+  case postfixIfConfigExpr = 250
   case editorPlaceholderExpr = 69
   case objectLiteralExpr = 70
   case typeInitializerClause = 107

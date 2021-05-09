@@ -1,0 +1,91 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS, lowercase_first_word, syntax_buildable_child_type
+  NODE_MAP = create_node_map()
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From DeclBuildables.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2021 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+% for node in SYNTAX_NODES:
+%   if node.is_buildable():
+%     has_syntax_collection_child = False
+%     for child in node.children:
+%       child_node = NODE_MAP.get(child.syntax_kind)
+%       if child_node and child_node.is_syntax_collection():
+%         has_syntax_collection_child = True
+%       end
+%     end
+%     if has_syntax_collection_child:
+extension ${node.syntax_kind} {
+  public init(
+%       init_parameters = []
+%       for child in node.children:
+%         child_node = NODE_MAP.get(child.syntax_kind)
+%         token = SYNTAX_TOKEN_MAP.get(child.syntax_kind)
+%         if child_node and child_node.is_syntax_collection():
+%           # Allow initializing syntax collections with result builders
+%           default_value = "? = { nil }" if child.is_optional else " = { .empty }"
+%           init_parameters.append("@%sBuilder %sBuilder: () -> %s%s" % (child.syntax_kind, child.swift_name, child.syntax_kind, default_value))
+%         elif child.syntax_kind is "IdentifierToken" or (token and not token.text):
+%           # Allow initializing identifier or a token without a text with String value
+%           param_type = "String?" if child.is_optional else "String"
+%           init_parameters.append("%s: %s" % (child.swift_name, param_type))
+%         else:
+%           # When type is not handled above, use default value
+%           param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
+%           default_value = ""
+%           if token and token.text and not child.is_optional:
+%             default_value = " = Tokens.`%s`" % lowercase_first_word(token.name)
+%           elif child.is_optional:
+%             default_value = " = nil"
+%           init_parameters.append("%s: %s%s" % (child.swift_name, param_type, default_value))
+%         end
+%       end
+    ${',\n    '.join(init_parameters)}
+  ) {
+    self.init(
+%     init_parameters = []
+%     for child in node.children:
+%       child_node = NODE_MAP.get(child.syntax_kind)
+%       token = SYNTAX_TOKEN_MAP.get(child.syntax_kind)
+%       if child_node and child_node.is_syntax_collection():
+%         init_parameters.append("%s: %sBuilder()" % (child.swift_name, child.swift_name))
+%       elif child.syntax_kind is "IdentifierToken":
+%         if child.is_optional:
+%           init_parameters.append("%s: %s.map({ SyntaxFactory.makeIdentifier($0) })" % (child.swift_name, child.swift_name))
+%         else:
+%           init_parameters.append("%s: SyntaxFactory.makeIdentifier(%s)" % (child.swift_name, child.swift_name))
+%         end
+%       elif token and not token.text:
+%         if child.is_optional:
+%           init_parameters.append("%s: %s.map(Tokens.%s)" % (child.swift_name, child.swift_name, lowercase_first_word(token.name)))
+%         else:
+%           init_parameters.append("%s: Tokens.%s(%s)" % (child.swift_name, token.name, child.swift_name))
+%         end
+%       else:
+%         init_parameters.append("%s: %s" % (child.swift_name, child.swift_name))
+%       end
+%     end
+      ${',\n      '.join(init_parameters)}
+    )
+  }
+}
+
+%     end
+%   end
+% end

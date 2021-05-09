@@ -2,23 +2,12 @@
   from gyb_syntax_support import *
   from gyb_syntax_support.kinds import lowercase_first_word
   from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
+  from gyb_syntax_support.kinds import syntax_buildable_child_type
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
-
-  def syntax_buildable_child_type(type_name, syntax_kind, is_token, is_optional=False):
-    if syntax_kind in SYNTAX_BASE_KINDS:
-      buildable_type = syntax_kind + 'Buildable'
-    elif not is_token:
-      buildable_type = syntax_kind
-    else:
-      buildable_type = type_name
-
-    if is_optional:
-      buildable_type += '?'
-
-    return buildable_type
 }%
 //// Automatically Generated From DeclBuildables.swift.gyb.
+//// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project

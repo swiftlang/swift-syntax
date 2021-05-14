@@ -1710,14 +1710,14 @@ public struct TypeExpr: ExprBuildable {
 }
 
 public struct ClosureCaptureItem: SyntaxBuildable {
-  let specifier: TokenListSyntax?
+  let specifier: TokenList?
   let name: TokenSyntax?
   let assignToken: TokenSyntax?
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
   public init(
-    specifier: TokenListSyntax? = nil,
+    specifier: TokenList? = nil,
     name: TokenSyntax? = nil,
     assignToken: TokenSyntax? = nil,
     expression: ExprBuildable,
@@ -1732,7 +1732,7 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   
   func buildClosureCaptureItem(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
     let closureCaptureItem = SyntaxFactory.makeClosureCaptureItem(
-      specifier: specifier,
+      specifier: specifier?.buildTokenList(format: format),
       name: name,
       assignToken: assignToken,
       expression: expression.buildExpr(format: format),
@@ -5113,7 +5113,7 @@ public struct Attribute: SyntaxBuildable {
   let leftParen: TokenSyntax?
   let argument: SyntaxBuildable?
   let rightParen: TokenSyntax?
-  let tokenList: TokenListSyntax?
+  let tokenList: TokenList?
 
   public init(
     atSignToken: TokenSyntax,
@@ -5121,7 +5121,7 @@ public struct Attribute: SyntaxBuildable {
     leftParen: TokenSyntax? = nil,
     argument: SyntaxBuildable? = nil,
     rightParen: TokenSyntax? = nil,
-    tokenList: TokenListSyntax? = nil
+    tokenList: TokenList? = nil
   ) {
     self.atSignToken = atSignToken
     self.attributeName = attributeName
@@ -5138,7 +5138,7 @@ public struct Attribute: SyntaxBuildable {
       leftParen: leftParen,
       argument: argument?.buildSyntax(format: format),
       rightParen: rightParen,
-      tokenList: tokenList
+      tokenList: tokenList?.buildTokenList(format: format)
     )
     
     if let leadingTrivia = leadingTrivia {

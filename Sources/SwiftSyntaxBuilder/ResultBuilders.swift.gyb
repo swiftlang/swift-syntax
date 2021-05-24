@@ -1,0 +1,39 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS, lowercase_first_word, syntax_buildable_child_type
+  NODE_MAP = create_node_map()
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From ResultBuilders.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2021 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+% for node in SYNTAX_NODES:
+%   if node.is_syntax_collection():
+@resultBuilder
+public struct ${node.syntax_kind}Builder {
+%     element_type = syntax_buildable_child_type(node.collection_element_type, node.collection_element, node.is_token())
+  public static func buildBlock(_ elements: ${element_type}...) -> ${node.syntax_kind} {
+    ${node.syntax_kind}(elements)
+  }
+}
+
+extension ${node.syntax_kind} {
+  public static let empty: ${node.syntax_kind} = ${node.syntax_kind}([])
+}
+
+%   end
+% end

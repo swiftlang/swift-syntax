@@ -1,4 +1,4 @@
-//// Automatically Generated From DeclBuildables.swift.gyb.
+//// Automatically Generated From BuildablesConvenienceInitializers.swift.gyb.
 //// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
@@ -28,6 +28,18 @@ extension CodeBlock {
   }
 }
 
+extension AwaitExpr {
+  public init(
+    awaitKeyword: String,
+    expression: ExprBuildable
+  ) {
+    self.init(
+      awaitKeyword: SyntaxFactory.makeIdentifier(awaitKeyword),
+      expression: expression
+    )
+  }
+}
+
 extension DeclNameArguments {
   public init(
     leftParen: TokenSyntax = Tokens.`leftParen`,
@@ -48,6 +60,54 @@ extension SequenceExpr {
   ) {
     self.init(
       elements: elementsBuilder()
+    )
+  }
+}
+
+extension SymbolicReferenceExpr {
+  public init(
+    identifier: String,
+    genericArgumentClause: GenericArgumentClause? = nil
+  ) {
+    self.init(
+      identifier: SyntaxFactory.makeIdentifier(identifier),
+      genericArgumentClause: genericArgumentClause
+    )
+  }
+}
+
+extension PrefixOperatorExpr {
+  public init(
+    operatorToken: String?,
+    postfixExpression: ExprBuildable
+  ) {
+    self.init(
+      operatorToken: operatorToken.map(Tokens.prefixOperator),
+      postfixExpression: postfixExpression
+    )
+  }
+}
+
+extension ArrowExpr {
+  public init(
+    asyncKeyword: String?,
+    throwsToken: TokenSyntax? = nil,
+    arrowToken: TokenSyntax = Tokens.`arrow`
+  ) {
+    self.init(
+      asyncKeyword: asyncKeyword.map({ SyntaxFactory.makeIdentifier($0) }),
+      throwsToken: throwsToken,
+      arrowToken: arrowToken
+    )
+  }
+}
+
+extension FloatLiteralExpr {
+  public init(
+    floatingDigits: String
+  ) {
+    self.init(
+      floatingDigits: Tokens.floatingLiteral(floatingDigits)
     )
   }
 }
@@ -76,6 +136,16 @@ extension ArrayExpr {
       leftSquare: leftSquare,
       elements: elementsBuilder(),
       rightSquare: rightSquare
+    )
+  }
+}
+
+extension IntegerLiteralExpr {
+  public init(
+    digits: String
+  ) {
+    self.init(
+      digits: Tokens.integerLiteral(digits)
     )
   }
 }
@@ -190,6 +260,28 @@ extension SubscriptExpr {
   }
 }
 
+extension PostfixUnaryExpr {
+  public init(
+    expression: ExprBuildable,
+    operatorToken: String
+  ) {
+    self.init(
+      expression: expression,
+      operatorToken: Tokens.postfixOperator(operatorToken)
+    )
+  }
+}
+
+extension StringSegment {
+  public init(
+    content: String
+  ) {
+    self.init(
+      content: Tokens.stringSegment(content)
+    )
+  }
+}
+
 extension ExpressionSegment {
   public init(
     backslash: TokenSyntax = Tokens.`backslash`,
@@ -226,6 +318,18 @@ extension StringLiteralExpr {
   }
 }
 
+extension ObjcNamePiece {
+  public init(
+    name: String,
+    dot: TokenSyntax? = nil
+  ) {
+    self.init(
+      name: SyntaxFactory.makeIdentifier(name),
+      dot: dot
+    )
+  }
+}
+
 extension ObjcKeyPathExpr {
   public init(
     keyPath: TokenSyntax = Tokens.`poundKeyPath`,
@@ -238,6 +342,36 @@ extension ObjcKeyPathExpr {
       leftParen: leftParen,
       name: nameBuilder(),
       rightParen: rightParen
+    )
+  }
+}
+
+extension ObjcSelectorExpr {
+  public init(
+    poundSelector: TokenSyntax = Tokens.`poundSelector`,
+    leftParen: TokenSyntax = Tokens.`leftParen`,
+    kind: String?,
+    colon: TokenSyntax? = nil,
+    name: ExprBuildable,
+    rightParen: TokenSyntax = Tokens.`rightParen`
+  ) {
+    self.init(
+      poundSelector: poundSelector,
+      leftParen: leftParen,
+      kind: kind.map(Tokens.contextualKeyword),
+      colon: colon,
+      name: name,
+      rightParen: rightParen
+    )
+  }
+}
+
+extension EditorPlaceholderExpr {
+  public init(
+    identifier: String
+  ) {
+    self.init(
+      identifier: SyntaxFactory.makeIdentifier(identifier)
     )
   }
 }
@@ -316,6 +450,22 @@ extension ParameterClause {
   }
 }
 
+extension FunctionSignature {
+  public init(
+    input: ParameterClause,
+    asyncOrReasyncKeyword: String?,
+    throwsOrRethrowsKeyword: TokenSyntax? = nil,
+    output: ReturnClause? = nil
+  ) {
+    self.init(
+      input: input,
+      asyncOrReasyncKeyword: asyncOrReasyncKeyword.map({ SyntaxFactory.makeIdentifier($0) }),
+      throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
+      output: output
+    )
+  }
+}
+
 extension IfConfigDecl {
   public init(
     @IfConfigClauseListBuilder clausesBuilder: () -> IfConfigClauseList = { .empty },
@@ -324,6 +474,44 @@ extension IfConfigDecl {
     self.init(
       clauses: clausesBuilder(),
       poundEndif: poundEndif
+    )
+  }
+}
+
+extension PoundSourceLocationArgs {
+  public init(
+    fileArgLabel: String,
+    fileArgColon: TokenSyntax = Tokens.`colon`,
+    fileName: String,
+    comma: TokenSyntax = Tokens.`comma`,
+    lineArgLabel: String,
+    lineArgColon: TokenSyntax = Tokens.`colon`,
+    lineNumber: String
+  ) {
+    self.init(
+      fileArgLabel: SyntaxFactory.makeIdentifier(fileArgLabel),
+      fileArgColon: fileArgColon,
+      fileName: Tokens.stringLiteral(fileName),
+      comma: comma,
+      lineArgLabel: SyntaxFactory.makeIdentifier(lineArgLabel),
+      lineArgColon: lineArgColon,
+      lineNumber: Tokens.integerLiteral(lineNumber)
+    )
+  }
+}
+
+extension DeclModifier {
+  public init(
+    name: TokenSyntax,
+    detailLeftParen: TokenSyntax? = nil,
+    detail: String?,
+    detailRightParen: TokenSyntax? = nil
+  ) {
+    self.init(
+      name: name,
+      detailLeftParen: detailLeftParen,
+      detail: detail.map({ SyntaxFactory.makeIdentifier($0) }),
+      detailRightParen: detailRightParen
     )
   }
 }
@@ -572,6 +760,34 @@ extension SubscriptDecl {
   }
 }
 
+extension AccessLevelModifier {
+  public init(
+    name: String,
+    leftParen: TokenSyntax? = nil,
+    modifier: String?,
+    rightParen: TokenSyntax? = nil
+  ) {
+    self.init(
+      name: SyntaxFactory.makeIdentifier(name),
+      leftParen: leftParen,
+      modifier: modifier.map({ SyntaxFactory.makeIdentifier($0) }),
+      rightParen: rightParen
+    )
+  }
+}
+
+extension AccessPathComponent {
+  public init(
+    name: String,
+    trailingDot: TokenSyntax? = nil
+  ) {
+    self.init(
+      name: SyntaxFactory.makeIdentifier(name),
+      trailingDot: trailingDot
+    )
+  }
+}
+
 extension ImportDecl {
   public init(
     @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
@@ -586,6 +802,20 @@ extension ImportDecl {
       importTok: importTok,
       importKind: importKind,
       path: pathBuilder()
+    )
+  }
+}
+
+extension AccessorParameter {
+  public init(
+    leftParen: TokenSyntax = Tokens.`leftParen`,
+    name: String,
+    rightParen: TokenSyntax = Tokens.`rightParen`
+  ) {
+    self.init(
+      leftParen: leftParen,
+      name: SyntaxFactory.makeIdentifier(name),
+      rightParen: rightParen
     )
   }
 }
@@ -638,6 +868,22 @@ extension VariableDecl {
       modifiers: modifiersBuilder(),
       letOrVarKeyword: letOrVarKeyword,
       bindings: bindingsBuilder()
+    )
+  }
+}
+
+extension EnumCaseElement {
+  public init(
+    identifier: String,
+    associatedValue: ParameterClause? = nil,
+    rawValue: InitializerClause? = nil,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.init(
+      identifier: SyntaxFactory.makeIdentifier(identifier),
+      associatedValue: associatedValue,
+      rawValue: rawValue,
+      trailingComma: trailingComma
     )
   }
 }
@@ -748,6 +994,46 @@ extension PrecedenceGroupRelation {
   }
 }
 
+extension PrecedenceGroupNameElement {
+  public init(
+    name: String,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.init(
+      name: SyntaxFactory.makeIdentifier(name),
+      trailingComma: trailingComma
+    )
+  }
+}
+
+extension PrecedenceGroupAssignment {
+  public init(
+    assignmentKeyword: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    flag: TokenSyntax
+  ) {
+    self.init(
+      assignmentKeyword: SyntaxFactory.makeIdentifier(assignmentKeyword),
+      colon: colon,
+      flag: flag
+    )
+  }
+}
+
+extension PrecedenceGroupAssociativity {
+  public init(
+    associativityKeyword: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    value: String
+  ) {
+    self.init(
+      associativityKeyword: SyntaxFactory.makeIdentifier(associativityKeyword),
+      colon: colon,
+      value: SyntaxFactory.makeIdentifier(value)
+    )
+  }
+}
+
 extension CustomAttribute {
   public init(
     atSignToken: TokenSyntax = Tokens.`atSign`,
@@ -786,6 +1072,82 @@ extension Attribute {
   }
 }
 
+extension LabeledSpecializeEntry {
+  public init(
+    label: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    value: TokenSyntax,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.init(
+      label: SyntaxFactory.makeIdentifier(label),
+      colon: colon,
+      value: value,
+      trailingComma: trailingComma
+    )
+  }
+}
+
+extension TargetFunctionEntry {
+  public init(
+    label: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    delcname: DeclName,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.init(
+      label: SyntaxFactory.makeIdentifier(label),
+      colon: colon,
+      delcname: delcname,
+      trailingComma: trailingComma
+    )
+  }
+}
+
+extension ObjCSelectorPiece {
+  public init(
+    name: String?,
+    colon: TokenSyntax? = nil
+  ) {
+    self.init(
+      name: name.map({ SyntaxFactory.makeIdentifier($0) }),
+      colon: colon
+    )
+  }
+}
+
+extension DifferentiableAttributeArguments {
+  public init(
+    diffKind: String?,
+    diffKindComma: TokenSyntax? = nil,
+    diffParams: DifferentiabilityParamsClause? = nil,
+    diffParamsComma: TokenSyntax? = nil,
+    whereClause: GenericWhereClause? = nil
+  ) {
+    self.init(
+      diffKind: diffKind.map({ SyntaxFactory.makeIdentifier($0) }),
+      diffKindComma: diffKindComma,
+      diffParams: diffParams,
+      diffParamsComma: diffParamsComma,
+      whereClause: whereClause
+    )
+  }
+}
+
+extension DifferentiabilityParamsClause {
+  public init(
+    wrtLabel: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    parameters: SyntaxBuildable
+  ) {
+    self.init(
+      wrtLabel: SyntaxFactory.makeIdentifier(wrtLabel),
+      colon: colon,
+      parameters: parameters
+    )
+  }
+}
+
 extension DifferentiabilityParams {
   public init(
     leftParen: TokenSyntax = Tokens.`leftParen`,
@@ -796,6 +1158,40 @@ extension DifferentiabilityParams {
       leftParen: leftParen,
       diffParams: diffParamsBuilder(),
       rightParen: rightParen
+    )
+  }
+}
+
+extension DerivativeRegistrationAttributeArguments {
+  public init(
+    ofLabel: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    originalDeclName: QualifiedDeclName,
+    period: TokenSyntax? = nil,
+    accessorKind: String?,
+    comma: TokenSyntax? = nil,
+    diffParams: DifferentiabilityParamsClause? = nil
+  ) {
+    self.init(
+      ofLabel: SyntaxFactory.makeIdentifier(ofLabel),
+      colon: colon,
+      originalDeclName: originalDeclName,
+      period: period,
+      accessorKind: accessorKind.map({ SyntaxFactory.makeIdentifier($0) }),
+      comma: comma,
+      diffParams: diffParams
+    )
+  }
+}
+
+extension ContinueStmt {
+  public init(
+    continueKeyword: TokenSyntax = Tokens.`continue`,
+    label: String?
+  ) {
+    self.init(
+      continueKeyword: continueKeyword,
+      label: label.map({ SyntaxFactory.makeIdentifier($0) })
     )
   }
 }
@@ -818,6 +1214,26 @@ extension WhileStmt {
   }
 }
 
+extension RepeatWhileStmt {
+  public init(
+    labelName: String?,
+    labelColon: TokenSyntax? = nil,
+    repeatKeyword: TokenSyntax = Tokens.`repeat`,
+    body: CodeBlock,
+    whileKeyword: TokenSyntax = Tokens.`while`,
+    condition: ExprBuildable
+  ) {
+    self.init(
+      labelName: labelName.map({ SyntaxFactory.makeIdentifier($0) }),
+      labelColon: labelColon,
+      repeatKeyword: repeatKeyword,
+      body: body,
+      whileKeyword: whileKeyword,
+      condition: condition
+    )
+  }
+}
+
 extension GuardStmt {
   public init(
     guardKeyword: TokenSyntax = Tokens.`guard`,
@@ -829,6 +1245,38 @@ extension GuardStmt {
       guardKeyword: guardKeyword,
       conditions: conditionsBuilder(),
       elseKeyword: elseKeyword,
+      body: body
+    )
+  }
+}
+
+extension ForInStmt {
+  public init(
+    labelName: String?,
+    labelColon: TokenSyntax? = nil,
+    forKeyword: TokenSyntax = Tokens.`for`,
+    tryKeyword: TokenSyntax? = nil,
+    awaitKeyword: String?,
+    caseKeyword: TokenSyntax? = nil,
+    pattern: PatternBuildable,
+    typeAnnotation: TypeAnnotation? = nil,
+    inKeyword: TokenSyntax = Tokens.`in`,
+    sequenceExpr: ExprBuildable,
+    whereClause: WhereClause? = nil,
+    body: CodeBlock
+  ) {
+    self.init(
+      labelName: labelName.map({ SyntaxFactory.makeIdentifier($0) }),
+      labelColon: labelColon,
+      forKeyword: forKeyword,
+      tryKeyword: tryKeyword,
+      awaitKeyword: awaitKeyword.map({ SyntaxFactory.makeIdentifier($0) }),
+      caseKeyword: caseKeyword,
+      pattern: pattern,
+      typeAnnotation: typeAnnotation,
+      inKeyword: inKeyword,
+      sequenceExpr: sequenceExpr,
+      whereClause: whereClause,
       body: body
     )
   }
@@ -886,6 +1334,18 @@ extension YieldList {
       elementList: elementListBuilder(),
       trailingComma: trailingComma,
       rightParen: rightParen
+    )
+  }
+}
+
+extension BreakStmt {
+  public init(
+    breakKeyword: TokenSyntax = Tokens.`break`,
+    label: String?
+  ) {
+    self.init(
+      breakKeyword: breakKeyword,
+      label: label.map({ SyntaxFactory.makeIdentifier($0) })
     )
   }
 }
@@ -970,6 +1430,26 @@ extension CatchClause {
   }
 }
 
+extension PoundAssertStmt {
+  public init(
+    poundAssert: TokenSyntax = Tokens.`poundAssert`,
+    leftParen: TokenSyntax = Tokens.`leftParen`,
+    condition: ExprBuildable,
+    comma: TokenSyntax? = nil,
+    message: String?,
+    rightParen: TokenSyntax = Tokens.`rightParen`
+  ) {
+    self.init(
+      poundAssert: poundAssert,
+      leftParen: leftParen,
+      condition: condition,
+      comma: comma,
+      message: message.map(Tokens.stringLiteral),
+      rightParen: rightParen
+    )
+  }
+}
+
 extension GenericWhereClause {
   public init(
     whereKeyword: TokenSyntax = Tokens.`where`,
@@ -1010,6 +1490,32 @@ extension GenericParameterClause {
       leftAngleBracket: leftAngleBracket,
       genericParameterList: genericParameterListBuilder(),
       rightAngleBracket: rightAngleBracket
+    )
+  }
+}
+
+extension MetatypeType {
+  public init(
+    baseType: TypeBuildable,
+    period: TokenSyntax = Tokens.`period`,
+    typeOrProtocol: String
+  ) {
+    self.init(
+      baseType: baseType,
+      period: period,
+      typeOrProtocol: SyntaxFactory.makeIdentifier(typeOrProtocol)
+    )
+  }
+}
+
+extension SomeType {
+  public init(
+    someSpecifier: String,
+    baseType: TypeBuildable
+  ) {
+    self.init(
+      someSpecifier: SyntaxFactory.makeIdentifier(someSpecifier),
+      baseType: baseType
     )
   }
 }
@@ -1088,6 +1594,22 @@ extension GenericArgumentClause {
   }
 }
 
+extension EnumCasePattern {
+  public init(
+    type: TypeBuildable? = nil,
+    period: TokenSyntax = Tokens.`period`,
+    caseName: String,
+    associatedTuple: TuplePattern? = nil
+  ) {
+    self.init(
+      type: type,
+      period: period,
+      caseName: SyntaxFactory.makeIdentifier(caseName),
+      associatedTuple: associatedTuple
+    )
+  }
+}
+
 extension TuplePattern {
   public init(
     leftParen: TokenSyntax = Tokens.`leftParen`,
@@ -1098,6 +1620,62 @@ extension TuplePattern {
       leftParen: leftParen,
       elements: elementsBuilder(),
       rightParen: rightParen
+    )
+  }
+}
+
+extension TuplePatternElement {
+  public init(
+    labelName: String?,
+    labelColon: TokenSyntax? = nil,
+    pattern: PatternBuildable,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.init(
+      labelName: labelName.map({ SyntaxFactory.makeIdentifier($0) }),
+      labelColon: labelColon,
+      pattern: pattern,
+      trailingComma: trailingComma
+    )
+  }
+}
+
+extension AvailabilityLabeledArgument {
+  public init(
+    label: String,
+    colon: TokenSyntax = Tokens.`colon`,
+    value: SyntaxBuildable
+  ) {
+    self.init(
+      label: SyntaxFactory.makeIdentifier(label),
+      colon: colon,
+      value: value
+    )
+  }
+}
+
+extension AvailabilityVersionRestriction {
+  public init(
+    platform: String,
+    version: VersionTuple? = nil
+  ) {
+    self.init(
+      platform: SyntaxFactory.makeIdentifier(platform),
+      version: version
+    )
+  }
+}
+
+extension VersionTuple {
+  public init(
+    majorMinor: SyntaxBuildable,
+    patchPeriod: TokenSyntax? = nil,
+    patchVersion: String?
+  ) {
+    self.init(
+      majorMinor: majorMinor,
+      patchPeriod: patchPeriod,
+      patchVersion: patchVersion.map(Tokens.integerLiteral)
     )
   }
 }

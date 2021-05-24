@@ -1,0 +1,27 @@
+import XCTest
+import SwiftSyntax
+
+import SwiftSyntaxBuilder
+
+final class FloatLiteralTests: XCTestCase {
+  func testFloatLiteral() {
+    let leadingTrivia = Trivia.garbageText("␣")
+
+    let testCases: [UInt: (FloatLiteralExpr, String)] = [
+      #line: (FloatLiteralExpr(floatingDigits: Tokens.floatingLiteral(String(123.321))), "␣123.321"),
+      #line: (FloatLiteralExpr(floatingDigits: Tokens.floatingLiteral(String(-123.321))), "␣-123.321"),
+      #line: (FloatLiteralExpr(floatingDigits: "2_123.321"), "␣2_123.321"),
+      #line: (FloatLiteralExpr(floatingDigits: "-2_123.321"), "␣-2_123.321")
+    ]
+
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+
+      var text = ""
+      syntax.write(to: &text)
+
+      XCTAssertEqual(text, expected, line: line)
+    }
+  }
+}

@@ -112,6 +112,28 @@ extension ClosureCaptureSignature {
   }
 }
 
+extension ClosureSignature {
+  public init(
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    capture: ClosureCaptureSignature? = nil,
+    input: SyntaxBuildable? = nil,
+    asyncKeyword: String?,
+    throwsTok: TokenSyntax? = nil,
+    output: ReturnClause? = nil,
+    inTok: TokenSyntax = Tokens.`in`
+  ) {
+    self.init(
+      attributes: attributesBuilder(),
+      capture: capture,
+      input: input,
+      asyncKeyword: asyncKeyword.map({ SyntaxFactory.makeIdentifier($0) }),
+      throwsTok: throwsTok,
+      output: output,
+      inTok: inTok
+    )
+  }
+}
+
 extension ClosureExpr {
   public init(
     leftBrace: TokenSyntax = Tokens.`leftBrace`,

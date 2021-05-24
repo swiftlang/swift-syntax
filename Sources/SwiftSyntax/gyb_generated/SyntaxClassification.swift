@@ -69,7 +69,7 @@ extension SyntaxClassification {
         return (.keyword, false)
       case (.arrowExpr, 0):
         return (.keyword, false)
-      case (.closureSignature, 2):
+      case (.closureSignature, 3):
         return (.keyword, false)
       case (.expressionSegment, 2):
         return (.stringInterpolationAnchor, true)

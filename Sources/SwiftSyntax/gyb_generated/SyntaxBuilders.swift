@@ -1917,9 +1917,20 @@ extension ClosureParamSyntax {
 
 public struct ClosureSignatureSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+    Array<RawSyntax?>(repeating: nil, count: 7)
 
   internal init() {}
+
+  public mutating func addAttribute(_ elt: Syntax) {
+    let idx = ClosureSignatureSyntax.Cursor.attributes.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
 
   public mutating func useCapture(_ node: ClosureCaptureSignatureSyntax) {
     let idx = ClosureSignatureSyntax.Cursor.capture.rawValue
@@ -1952,8 +1963,8 @@ public struct ClosureSignatureSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.inKeyword)
+    if (layout[6] == nil) {
+      layout[6] = RawSyntax.missingToken(TokenKind.inKeyword)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .closureSignature,

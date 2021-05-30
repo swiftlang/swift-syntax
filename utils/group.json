@@ -23,6 +23,7 @@
     "SyntaxTypeNodes.swift",
   ],
   "Utils": [
+    "DLHandle.swift",
     "SyntaxAnyVisitor.swift",
     "SyntaxBuilders.swift",
     "SyntaxClassifier.swift",
@@ -48,6 +49,7 @@
   ],
   "Parse": [
     "IncrementalParseTransition.swift",
+    "InternalSwiftSyntaxParser.swift",
     "SyntaxParser.swift",
   ],
   "Internal": [

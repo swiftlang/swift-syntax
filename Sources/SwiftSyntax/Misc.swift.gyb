@@ -19,7 +19,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_implementationOnly import _InternalSwiftSyntaxParser
+@_implementationOnly import _CSwiftSyntax
 
 extension SyntaxNode {
   public var isUnknown: Bool { return raw.kind.isUnknown }
@@ -65,8 +65,8 @@ extension Syntax {
 }
 
 extension SyntaxParser {
-  static func verifyNodeDeclarationHash() -> Bool {
-    return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
+  static func verifyNodeDeclarationHash(parserLibrary: InternalSwiftSyntaxParser) -> Bool {
+    return String(cString: parserLibrary.api.swiftparse_syntax_structure_versioning_identifier()!) ==
       "${calculate_node_hash()}"
   }
 }

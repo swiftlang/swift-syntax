@@ -2,7 +2,7 @@
   from gyb_syntax_support import *
   from gyb_syntax_support.kinds import lowercase_first_word
   from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
-  from gyb_syntax_support.kinds import syntax_buildable_child_type
+  from gyb_syntax_support.kinds import syntax_buildable_child_type, syntax_buildable_default_init_value
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -103,8 +103,9 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
   public init(
 %     init_parameters = []
 %     for child in node.children:
+%       child_token = SYNTAX_TOKEN_MAP.get(child.syntax_kind)
 %       param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
-%       default_value = " = nil" if child.is_optional else ""
+%       default_value = syntax_buildable_default_init_value(child, child_token)
 %       init_parameters.append("%s: %s%s" % (child.swift_name, param_type, default_value))
 %     end
     ${',\n    '.join(init_parameters)}

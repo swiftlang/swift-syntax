@@ -9,7 +9,7 @@ final class VariableTests: XCTestCase {
 
     let buildable = VariableDecl(letOrVarKeyword: Tokens.let) {
         PatternBinding(pattern: IdentifierPattern(identifier: SyntaxFactory.makeIdentifier("color")),
-                       typeAnnotation: TypeAnnotation(colon: Tokens.colon, type: SimpleTypeIdentifier("UIColor")))
+                       typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("UIColor")))
     }
 
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
@@ -27,8 +27,8 @@ final class VariableTests: XCTestCase {
 
     let buildable = VariableDecl(letOrVarKeyword: Tokens.var) {
         PatternBinding(pattern: IdentifierPattern(identifier: SyntaxFactory.makeIdentifier("number")),
-                       typeAnnotation: TypeAnnotation(colon: Tokens.colon, type: SimpleTypeIdentifier("Int")),
-                       initializer: InitializerClause(equal: Tokens.equal, value: IntegerLiteralExpr(digits: Tokens.integerLiteral("123"))))
+                       typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("Int")),
+                       initializer: InitializerClause(value: IntegerLiteralExpr(digits: Tokens.integerLiteral("123"))))
     }
 
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)

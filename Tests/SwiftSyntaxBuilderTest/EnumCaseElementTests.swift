@@ -13,8 +13,7 @@ final class EnumCaseElementTests: XCTestCase {
                                                              segments: segments,
                                                              closeQuote: Tokens.stringQuote)
 
-    let initializerClause = InitializerClause(equal: Tokens.equal,
-                                              value: stringLiteralExpr)
+    let initializerClause = InitializerClause(value: stringLiteralExpr)
 
     let enumCase = EnumCaseElement(identifier: SyntaxFactory.makeIdentifier("TestEnum"),
                                    rawValue: initializerClause)

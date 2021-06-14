@@ -11,7 +11,11 @@ final class IntegerLiteralTests: XCTestCase {
       #line: (IntegerLiteralExpr(digits: Tokens.integerLiteral(String(123))), "␣123"),
       #line: (IntegerLiteralExpr(digits: Tokens.integerLiteral(String(-123))), "␣-123"),
       #line: (IntegerLiteralExpr(digits: "1_000"), "␣1_000"),
-      #line: (IntegerLiteralExpr(digits: "-1_000"), "␣-1_000")
+      #line: (IntegerLiteralExpr(digits: "-1_000"), "␣-1_000"),
+      #line: (IntegerLiteralExpr(1_000), "␣1000"),
+      #line: (IntegerLiteralExpr(-1_000), "␣-1000"),
+      #line: (1_000, "␣1000"),
+      #line: (-1_000, "␣-1000")
     ]
 
     for (line, testCase) in testCases {

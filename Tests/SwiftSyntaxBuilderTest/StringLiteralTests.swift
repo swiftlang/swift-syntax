@@ -8,7 +8,7 @@ final class StringLiteralTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
     let testCases: [UInt: (String, String)] = [
       #line: ("", #"␣"""#),
-      #line: ("asdf", #"␣"asdf""#),
+      #line: ("asdf", #"␣"asdf""#)
     ]
 
     for (line, testCase) in testCases {
@@ -18,6 +18,27 @@ final class StringLiteralTests: XCTestCase {
       let builder = StringLiteralExpr(openQuote: Tokens.stringQuote,
                                       segments: StringLiteralSegments([segment]),
                                       closeQuote: Tokens.stringQuote)
+      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+
+      var text = ""
+      syntax.write(to: &text)
+
+      XCTAssertEqual(text, expected, line: line)
+    }
+  }
+
+  func testStringLiteralConvenienceInitializers() {
+    let leadingTrivia = Trivia.garbageText("␣")
+    let testCases: [UInt: (StringLiteralExpr, String)] = [
+      #line: (StringLiteralExpr(""), #"␣"""#),
+      #line: (StringLiteralExpr("asdf"), #"␣"asdf""#),
+      #line: ("", #"␣"""#),
+      #line: ("asdf", #"␣"asdf""#),
+    ]
+
+    for (line, testCase) in testCases {
+      let (builder, expected) = testCase
+
       let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
       var text = ""

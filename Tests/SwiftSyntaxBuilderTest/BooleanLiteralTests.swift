@@ -9,7 +9,11 @@ final class BooleanLiteralTests: XCTestCase {
 
     let testCases: [UInt: (BooleanLiteralExpr, String)] = [
       #line: (BooleanLiteralExpr(booleanLiteral: Tokens.true), "␣true "),
-      #line: (BooleanLiteralExpr(booleanLiteral: Tokens.false), "␣false ")
+      #line: (BooleanLiteralExpr(booleanLiteral: Tokens.false), "␣false "),
+      #line: (BooleanLiteralExpr(true), "␣true "),
+      #line: (BooleanLiteralExpr(false), "␣false "),
+      #line: (true, "␣true "),
+      #line: (false, "␣false ")
     ]
 
     for (line, testCase) in testCases {

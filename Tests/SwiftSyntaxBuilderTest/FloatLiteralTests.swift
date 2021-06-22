@@ -11,7 +11,11 @@ final class FloatLiteralTests: XCTestCase {
       #line: (FloatLiteralExpr(floatingDigits: Tokens.floatingLiteral(String(123.321))), "␣123.321"),
       #line: (FloatLiteralExpr(floatingDigits: Tokens.floatingLiteral(String(-123.321))), "␣-123.321"),
       #line: (FloatLiteralExpr(floatingDigits: "2_123.321"), "␣2_123.321"),
-      #line: (FloatLiteralExpr(floatingDigits: "-2_123.321"), "␣-2_123.321")
+      #line: (FloatLiteralExpr(floatingDigits: "-2_123.321"), "␣-2_123.321"),
+      #line: (FloatLiteralExpr(2_123.321), "␣2123.321"),
+      #line: (FloatLiteralExpr(-2_123.321), "␣-2123.321"),
+      #line: (2_123.321, "␣2123.321"),
+      #line: (-2_123.321, "␣-2123.321")
     ]
 
     for (line, testCase) in testCases {

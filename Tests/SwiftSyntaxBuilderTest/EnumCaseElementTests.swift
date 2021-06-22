@@ -9,9 +9,9 @@ final class EnumCaseElementTests: XCTestCase {
     let segment = StringSegment(content: string)
     let segments = StringLiteralSegments([segment])
 
-    let stringLiteralExpr: ExprBuildable = StringLiteralExpr(openQuote: Tokens.stringQuote,
+    let stringLiteralExpr: ExprBuildable = StringLiteralExpr(openQuote: .stringQuote,
                                                              segments: segments,
-                                                             closeQuote: Tokens.stringQuote)
+                                                             closeQuote: .stringQuote)
 
     let initializerClause = InitializerClause(value: stringLiteralExpr)
 

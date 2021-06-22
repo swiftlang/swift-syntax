@@ -7,7 +7,7 @@ final class VariableTests: XCTestCase {
   func testVariableDecl() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: Tokens.let) {
+    let buildable = VariableDecl(letOrVarKeyword: .let) {
         PatternBinding(pattern: IdentifierPattern(identifier: SyntaxFactory.makeIdentifier("color")),
                        typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("UIColor")))
     }
@@ -25,10 +25,10 @@ final class VariableTests: XCTestCase {
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: Tokens.var) {
+    let buildable = VariableDecl(letOrVarKeyword: .var) {
         PatternBinding(pattern: IdentifierPattern(identifier: SyntaxFactory.makeIdentifier("number")),
                        typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("Int")),
-                       initializer: InitializerClause(value: IntegerLiteralExpr(digits: Tokens.integerLiteral("123"))))
+                       initializer: InitializerClause(value: IntegerLiteralExpr(digits: .integerLiteral("123"))))
     }
 
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)

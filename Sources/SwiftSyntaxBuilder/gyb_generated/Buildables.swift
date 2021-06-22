@@ -362,9 +362,9 @@ public struct CodeBlock: SyntaxBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: TokenSyntax = Tokens.`leftBrace`,
+    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     statements: CodeBlockItemList,
-    rightBrace: TokenSyntax = Tokens.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
     self.statements = statements
@@ -397,7 +397,7 @@ public struct InOutExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    ampersand: TokenSyntax = Tokens.`prefixAmpersand`,
+    ampersand: TokenSyntax = TokenSyntax.`prefixAmpersand`,
     expression: ExprBuildable
   ) {
     self.ampersand = ampersand
@@ -428,7 +428,7 @@ public struct PoundColumnExpr: ExprBuildable {
   let poundColumn: TokenSyntax
 
   public init(
-    poundColumn: TokenSyntax = Tokens.`poundColumn`
+    poundColumn: TokenSyntax = TokenSyntax.`poundColumn`
   ) {
     self.poundColumn = poundColumn
   }
@@ -570,7 +570,7 @@ public struct TryExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    tryKeyword: TokenSyntax = Tokens.`try`,
+    tryKeyword: TokenSyntax = TokenSyntax.`try`,
     questionOrExclamationMark: TokenSyntax? = nil,
     expression: ExprBuildable
   ) {
@@ -638,7 +638,7 @@ public struct DeclNameArgument: SyntaxBuildable {
 
   public init(
     name: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`
+    colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.name = name
     self.colon = colon
@@ -698,9 +698,9 @@ public struct DeclNameArguments: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     arguments: DeclNameArgumentList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.arguments = arguments
@@ -764,7 +764,7 @@ public struct SuperRefExpr: ExprBuildable {
   let superKeyword: TokenSyntax
 
   public init(
-    superKeyword: TokenSyntax = Tokens.`super`
+    superKeyword: TokenSyntax = TokenSyntax.`super`
   ) {
     self.superKeyword = superKeyword
   }
@@ -792,7 +792,7 @@ public struct NilLiteralExpr: ExprBuildable {
   let nilKeyword: TokenSyntax
 
   public init(
-    nilKeyword: TokenSyntax = Tokens.`nil`
+    nilKeyword: TokenSyntax = TokenSyntax.`nil`
   ) {
     self.nilKeyword = nilKeyword
   }
@@ -820,7 +820,7 @@ public struct DiscardAssignmentExpr: ExprBuildable {
   let wildcard: TokenSyntax
 
   public init(
-    wildcard: TokenSyntax = Tokens.`wildcard`
+    wildcard: TokenSyntax = TokenSyntax.`wildcard`
   ) {
     self.wildcard = wildcard
   }
@@ -848,7 +848,7 @@ public struct AssignmentExpr: ExprBuildable {
   let assignToken: TokenSyntax
 
   public init(
-    assignToken: TokenSyntax = Tokens.`equal`
+    assignToken: TokenSyntax = TokenSyntax.`equal`
   ) {
     self.assignToken = assignToken
   }
@@ -934,7 +934,7 @@ public struct PoundLineExpr: ExprBuildable {
   let poundLine: TokenSyntax
 
   public init(
-    poundLine: TokenSyntax = Tokens.`poundLine`
+    poundLine: TokenSyntax = TokenSyntax.`poundLine`
   ) {
     self.poundLine = poundLine
   }
@@ -962,7 +962,7 @@ public struct PoundFileExpr: ExprBuildable {
   let poundFile: TokenSyntax
 
   public init(
-    poundFile: TokenSyntax = Tokens.`poundFile`
+    poundFile: TokenSyntax = TokenSyntax.`poundFile`
   ) {
     self.poundFile = poundFile
   }
@@ -990,7 +990,7 @@ public struct PoundFileIDExpr: ExprBuildable {
   let poundFileID: TokenSyntax
 
   public init(
-    poundFileID: TokenSyntax = Tokens.`poundFileID`
+    poundFileID: TokenSyntax = TokenSyntax.`poundFileID`
   ) {
     self.poundFileID = poundFileID
   }
@@ -1018,7 +1018,7 @@ public struct PoundFilePathExpr: ExprBuildable {
   let poundFilePath: TokenSyntax
 
   public init(
-    poundFilePath: TokenSyntax = Tokens.`poundFilePath`
+    poundFilePath: TokenSyntax = TokenSyntax.`poundFilePath`
   ) {
     self.poundFilePath = poundFilePath
   }
@@ -1046,7 +1046,7 @@ public struct PoundFunctionExpr: ExprBuildable {
   let poundFunction: TokenSyntax
 
   public init(
-    poundFunction: TokenSyntax = Tokens.`poundFunction`
+    poundFunction: TokenSyntax = TokenSyntax.`poundFunction`
   ) {
     self.poundFunction = poundFunction
   }
@@ -1074,7 +1074,7 @@ public struct PoundDsohandleExpr: ExprBuildable {
   let poundDsohandle: TokenSyntax
 
   public init(
-    poundDsohandle: TokenSyntax = Tokens.`poundDsohandle`
+    poundDsohandle: TokenSyntax = TokenSyntax.`poundDsohandle`
   ) {
     self.poundDsohandle = poundDsohandle
   }
@@ -1198,7 +1198,7 @@ public struct ArrowExpr: ExprBuildable {
   public init(
     asyncKeyword: TokenSyntax? = nil,
     throwsToken: TokenSyntax? = nil,
-    arrowToken: TokenSyntax = Tokens.`arrow`
+    arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
     self.asyncKeyword = asyncKeyword
     self.throwsToken = throwsToken
@@ -1260,9 +1260,9 @@ public struct TupleExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elementList: TupleExprElementList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.elementList = elementList
@@ -1296,9 +1296,9 @@ public struct ArrayExpr: ExprBuildable {
   let rightSquare: TokenSyntax
 
   public init(
-    leftSquare: TokenSyntax = Tokens.`leftSquareBracket`,
+    leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     elements: ArrayElementList,
-    rightSquare: TokenSyntax = Tokens.`rightSquareBracket`
+    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare
     self.elements = elements
@@ -1332,9 +1332,9 @@ public struct DictionaryExpr: ExprBuildable {
   let rightSquare: TokenSyntax
 
   public init(
-    leftSquare: TokenSyntax = Tokens.`leftSquareBracket`,
+    leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     content: SyntaxBuildable,
-    rightSquare: TokenSyntax = Tokens.`rightSquareBracket`
+    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare
     self.content = content
@@ -1442,7 +1442,7 @@ public struct DictionaryElement: SyntaxBuildable {
 
   public init(
     keyExpression: ExprBuildable,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     valueExpression: ExprBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
@@ -1539,9 +1539,9 @@ public struct TernaryExpr: ExprBuildable {
 
   public init(
     conditionExpression: ExprBuildable,
-    questionMark: TokenSyntax = Tokens.`infixQuestionMark`,
+    questionMark: TokenSyntax = TokenSyntax.`infixQuestionMark`,
     firstChoice: ExprBuildable,
-    colonMark: TokenSyntax = Tokens.`colon`,
+    colonMark: TokenSyntax = TokenSyntax.`colon`,
     secondChoice: ExprBuildable
   ) {
     self.conditionExpression = conditionExpression
@@ -1619,7 +1619,7 @@ public struct IsExpr: ExprBuildable {
   let typeName: TypeBuildable
 
   public init(
-    isTok: TokenSyntax = Tokens.`is`,
+    isTok: TokenSyntax = TokenSyntax.`is`,
     typeName: TypeBuildable
   ) {
     self.isTok = isTok
@@ -1652,7 +1652,7 @@ public struct AsExpr: ExprBuildable {
   let typeName: TypeBuildable
 
   public init(
-    asTok: TokenSyntax = Tokens.`as`,
+    asTok: TokenSyntax = TokenSyntax.`as`,
     questionOrExclamationMark: TokenSyntax? = nil,
     typeName: TypeBuildable
   ) {
@@ -1788,9 +1788,9 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
   let rightSquare: TokenSyntax
 
   public init(
-    leftSquare: TokenSyntax = Tokens.`leftSquareBracket`,
+    leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     items: ClosureCaptureItemList? = nil,
-    rightSquare: TokenSyntax = Tokens.`rightSquareBracket`
+    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare
     self.items = items
@@ -1894,7 +1894,7 @@ public struct ClosureSignature: SyntaxBuildable {
     asyncKeyword: TokenSyntax? = nil,
     throwsTok: TokenSyntax? = nil,
     output: ReturnClause? = nil,
-    inTok: TokenSyntax = Tokens.`in`
+    inTok: TokenSyntax = TokenSyntax.`in`
   ) {
     self.attributes = attributes
     self.capture = capture
@@ -1937,10 +1937,10 @@ public struct ClosureExpr: ExprBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: TokenSyntax = Tokens.`leftBrace`,
+    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     signature: ClosureSignature? = nil,
     statements: CodeBlockItemList,
-    rightBrace: TokenSyntax = Tokens.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
     self.signature = signature
@@ -2005,7 +2005,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
 
   public init(
     label: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     closure: ClosureExpr
   ) {
     self.label = label
@@ -2120,9 +2120,9 @@ public struct SubscriptExpr: ExprBuildable {
 
   public init(
     calledExpression: ExprBuildable,
-    leftBracket: TokenSyntax = Tokens.`leftSquareBracket`,
+    leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     argumentList: TupleExprElementList,
-    rightBracket: TokenSyntax = Tokens.`rightSquareBracket`,
+    rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     trailingClosure: ClosureExpr? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementList? = nil
   ) {
@@ -2164,7 +2164,7 @@ public struct OptionalChainingExpr: ExprBuildable {
 
   public init(
     expression: ExprBuildable,
-    questionMark: TokenSyntax = Tokens.`postfixQuestionMark`
+    questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.expression = expression
     self.questionMark = questionMark
@@ -2196,7 +2196,7 @@ public struct ForcedValueExpr: ExprBuildable {
 
   public init(
     expression: ExprBuildable,
-    exclamationMark: TokenSyntax = Tokens.`exclamationMark`
+    exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`
   ) {
     self.expression = expression
     self.exclamationMark = exclamationMark
@@ -2322,11 +2322,11 @@ public struct ExpressionSegment: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    backslash: TokenSyntax = Tokens.`backslash`,
+    backslash: TokenSyntax = TokenSyntax.`backslash`,
     delimiter: TokenSyntax? = nil,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     expressions: TupleExprElementList,
-    rightParen: TokenSyntax = Tokens.`stringInterpolationAnchor`
+    rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`
   ) {
     self.backslash = backslash
     self.delimiter = delimiter
@@ -2408,7 +2408,7 @@ public struct KeyPathExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    backslash: TokenSyntax = Tokens.`backslash`,
+    backslash: TokenSyntax = TokenSyntax.`backslash`,
     rootExpr: ExprBuildable? = nil,
     expression: ExprBuildable
   ) {
@@ -2442,7 +2442,7 @@ public struct KeyPathBaseExpr: ExprBuildable {
   let period: TokenSyntax
 
   public init(
-    period: TokenSyntax = Tokens.`period`
+    period: TokenSyntax = TokenSyntax.`period`
   ) {
     self.period = period
   }
@@ -2533,10 +2533,10 @@ public struct ObjcKeyPathExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    keyPath: TokenSyntax = Tokens.`poundKeyPath`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    keyPath: TokenSyntax = TokenSyntax.`poundKeyPath`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     name: ObjcName,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.keyPath = keyPath
     self.leftParen = leftParen
@@ -2575,12 +2575,12 @@ public struct ObjcSelectorExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundSelector: TokenSyntax = Tokens.`poundSelector`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    poundSelector: TokenSyntax = TokenSyntax.`poundSelector`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     kind: TokenSyntax? = nil,
     colon: TokenSyntax? = nil,
     name: ExprBuildable,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundSelector = poundSelector
     self.leftParen = leftParen
@@ -2682,9 +2682,9 @@ public struct ObjectLiteralExpr: ExprBuildable {
 
   public init(
     identifier: TokenSyntax,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     arguments: TupleExprElementList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.identifier = identifier
     self.leftParen = leftParen
@@ -2719,7 +2719,7 @@ public struct TypeInitializerClause: SyntaxBuildable {
   let value: TypeBuildable
 
   public init(
-    equal: TokenSyntax = Tokens.`equal`,
+    equal: TokenSyntax = TokenSyntax.`equal`,
     value: TypeBuildable
   ) {
     self.equal = equal
@@ -2758,7 +2758,7 @@ public struct TypealiasDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    typealiasKeyword: TokenSyntax = Tokens.`typealias`,
+    typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
     identifier: TokenSyntax,
     genericParameterClause: GenericParameterClause? = nil,
     initializer: TypeInitializerClause? = nil,
@@ -2810,7 +2810,7 @@ public struct AssociatedtypeDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    associatedtypeKeyword: TokenSyntax = Tokens.`associatedtype`,
+    associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
     identifier: TokenSyntax,
     inheritanceClause: TypeInheritanceClause? = nil,
     initializer: TypeInitializerClause? = nil,
@@ -2884,9 +2884,9 @@ public struct ParameterClause: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     parameterList: FunctionParameterList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.parameterList = parameterList
@@ -2919,7 +2919,7 @@ public struct ReturnClause: SyntaxBuildable {
   let returnType: TypeBuildable
 
   public init(
-    arrow: TokenSyntax = Tokens.`arrow`,
+    arrow: TokenSyntax = TokenSyntax.`arrow`,
     returnType: TypeBuildable
   ) {
     self.arrow = arrow
@@ -3056,7 +3056,7 @@ public struct IfConfigDecl: DeclBuildable {
 
   public init(
     clauses: IfConfigClauseList,
-    poundEndif: TokenSyntax = Tokens.`poundEndif`
+    poundEndif: TokenSyntax = TokenSyntax.`poundEndif`
   ) {
     self.clauses = clauses
     self.poundEndif = poundEndif
@@ -3089,10 +3089,10 @@ public struct PoundErrorDecl: DeclBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundError: TokenSyntax = Tokens.`poundError`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    poundError: TokenSyntax = TokenSyntax.`poundError`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     message: StringLiteralExpr,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundError = poundError
     self.leftParen = leftParen
@@ -3129,10 +3129,10 @@ public struct PoundWarningDecl: DeclBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundWarning: TokenSyntax = Tokens.`poundWarning`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    poundWarning: TokenSyntax = TokenSyntax.`poundWarning`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     message: StringLiteralExpr,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundWarning = poundWarning
     self.leftParen = leftParen
@@ -3169,10 +3169,10 @@ public struct PoundSourceLocation: DeclBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundSourceLocation: TokenSyntax = Tokens.`poundSourceLocation`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    poundSourceLocation: TokenSyntax = TokenSyntax.`poundSourceLocation`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     args: PoundSourceLocationArgs? = nil,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundSourceLocation = poundSourceLocation
     self.leftParen = leftParen
@@ -3213,11 +3213,11 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
 
   public init(
     fileArgLabel: TokenSyntax,
-    fileArgColon: TokenSyntax = Tokens.`colon`,
+    fileArgColon: TokenSyntax = TokenSyntax.`colon`,
     fileName: TokenSyntax,
-    comma: TokenSyntax = Tokens.`comma`,
+    comma: TokenSyntax = TokenSyntax.`comma`,
     lineArgLabel: TokenSyntax,
-    lineArgColon: TokenSyntax = Tokens.`colon`,
+    lineArgColon: TokenSyntax = TokenSyntax.`colon`,
     lineNumber: TokenSyntax
   ) {
     self.fileArgLabel = fileArgLabel
@@ -3359,7 +3359,7 @@ public struct TypeInheritanceClause: SyntaxBuildable {
   let inheritedTypeCollection: InheritedTypeList
 
   public init(
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     inheritedTypeCollection: InheritedTypeList
   ) {
     self.colon = colon
@@ -3455,7 +3455,7 @@ public struct StructDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    structKeyword: TokenSyntax = Tokens.`struct`,
+    structKeyword: TokenSyntax = TokenSyntax.`struct`,
     identifier: TokenSyntax,
     genericParameterClause: GenericParameterClause? = nil,
     inheritanceClause: TypeInheritanceClause? = nil,
@@ -3510,7 +3510,7 @@ public struct ProtocolDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    protocolKeyword: TokenSyntax = Tokens.`protocol`,
+    protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
     identifier: TokenSyntax,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
@@ -3562,7 +3562,7 @@ public struct ExtensionDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    extensionKeyword: TokenSyntax = Tokens.`extension`,
+    extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
     extendedType: TypeBuildable,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
@@ -3608,9 +3608,9 @@ public struct MemberDeclBlock: SyntaxBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: TokenSyntax = Tokens.`leftBrace`,
+    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     members: MemberDeclList,
-    rightBrace: TokenSyntax = Tokens.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
     self.members = members
@@ -3739,7 +3739,7 @@ public struct InitializerClause: SyntaxBuildable {
   let value: ExprBuildable
 
   public init(
-    equal: TokenSyntax = Tokens.`equal`,
+    equal: TokenSyntax = TokenSyntax.`equal`,
     value: ExprBuildable
   ) {
     self.equal = equal
@@ -3863,7 +3863,7 @@ public struct FunctionDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    funcKeyword: TokenSyntax = Tokens.`func`,
+    funcKeyword: TokenSyntax = TokenSyntax.`func`,
     identifier: TokenSyntax,
     genericParameterClause: GenericParameterClause? = nil,
     signature: FunctionSignature,
@@ -3920,7 +3920,7 @@ public struct InitializerDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    initKeyword: TokenSyntax = Tokens.`init`,
+    initKeyword: TokenSyntax = TokenSyntax.`init`,
     optionalMark: TokenSyntax? = nil,
     genericParameterClause: GenericParameterClause? = nil,
     parameters: ParameterClause,
@@ -3975,7 +3975,7 @@ public struct DeinitializerDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    deinitKeyword: TokenSyntax = Tokens.`deinit`,
+    deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
     body: CodeBlock
   ) {
     self.attributes = attributes
@@ -4019,7 +4019,7 @@ public struct SubscriptDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    subscriptKeyword: TokenSyntax = Tokens.`subscript`,
+    subscriptKeyword: TokenSyntax = TokenSyntax.`subscript`,
     genericParameterClause: GenericParameterClause? = nil,
     indices: ParameterClause,
     result: ReturnClause,
@@ -4172,7 +4172,7 @@ public struct ImportDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    importTok: TokenSyntax = Tokens.`import`,
+    importTok: TokenSyntax = TokenSyntax.`import`,
     importKind: TokenSyntax? = nil,
     path: AccessPath
   ) {
@@ -4212,9 +4212,9 @@ public struct AccessorParameter: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     name: TokenSyntax,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.name = name
@@ -4328,9 +4328,9 @@ public struct AccessorBlock: SyntaxBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: TokenSyntax = Tokens.`leftBrace`,
+    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     accessors: AccessorList,
-    rightBrace: TokenSyntax = Tokens.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
     self.accessors = accessors
@@ -4555,7 +4555,7 @@ public struct EnumCaseDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    caseKeyword: TokenSyntax = Tokens.`case`,
+    caseKeyword: TokenSyntax = TokenSyntax.`case`,
     elements: EnumCaseElementList
   ) {
     self.attributes = attributes
@@ -4600,7 +4600,7 @@ public struct EnumDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    enumKeyword: TokenSyntax = Tokens.`enum`,
+    enumKeyword: TokenSyntax = TokenSyntax.`enum`,
     identifier: TokenSyntax,
     genericParameters: GenericParameterClause? = nil,
     inheritanceClause: TypeInheritanceClause? = nil,
@@ -4654,7 +4654,7 @@ public struct OperatorDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    operatorKeyword: TokenSyntax = Tokens.`operator`,
+    operatorKeyword: TokenSyntax = TokenSyntax.`operator`,
     identifier: TokenSyntax,
     operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes? = nil
   ) {
@@ -4722,7 +4722,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   let precedenceGroupAndDesignatedTypes: IdentifierList
 
   public init(
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     precedenceGroupAndDesignatedTypes: IdentifierList
   ) {
     self.colon = colon
@@ -4762,11 +4762,11 @@ public struct PrecedenceGroupDecl: DeclBuildable {
   public init(
     attributes: AttributeList? = nil,
     modifiers: ModifierList? = nil,
-    precedencegroupKeyword: TokenSyntax = Tokens.`precedencegroup`,
+    precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
     identifier: TokenSyntax,
-    leftBrace: TokenSyntax = Tokens.`leftBrace`,
+    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     groupAttributes: PrecedenceGroupAttributeList,
-    rightBrace: TokenSyntax = Tokens.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.attributes = attributes
     self.modifiers = modifiers
@@ -4841,7 +4841,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
 
   public init(
     higherThanOrLowerThan: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     otherNames: PrecedenceGroupNameList
   ) {
     self.higherThanOrLowerThan = higherThanOrLowerThan
@@ -4941,7 +4941,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
 
   public init(
     assignmentKeyword: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     flag: TokenSyntax
   ) {
     self.assignmentKeyword = assignmentKeyword
@@ -4981,7 +4981,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
 
   public init(
     associativityKeyword: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     value: TokenSyntax
   ) {
     self.associativityKeyword = associativityKeyword
@@ -5073,7 +5073,7 @@ public struct CustomAttribute: SyntaxBuildable {
   let rightParen: TokenSyntax?
 
   public init(
-    atSignToken: TokenSyntax = Tokens.`atSign`,
+    atSignToken: TokenSyntax = TokenSyntax.`atSign`,
     attributeName: TypeBuildable,
     leftParen: TokenSyntax? = nil,
     argumentList: TupleExprElementList? = nil,
@@ -5121,7 +5121,7 @@ public struct Attribute: SyntaxBuildable {
   let tokenList: TokenList?
 
   public init(
-    atSignToken: TokenSyntax = Tokens.`atSign`,
+    atSignToken: TokenSyntax = TokenSyntax.`atSign`,
     attributeName: TokenSyntax,
     leftParen: TokenSyntax? = nil,
     argument: SyntaxBuildable? = nil,
@@ -5229,7 +5229,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
 
   public init(
     label: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     value: TokenSyntax,
     trailingComma: TokenSyntax? = nil
   ) {
@@ -5274,7 +5274,7 @@ public struct TargetFunctionEntry: SyntaxBuildable {
 
   public init(
     label: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     delcname: DeclName,
     trailingComma: TokenSyntax? = nil
   ) {
@@ -5318,7 +5318,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
 
   public init(
     nameTok: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     stringOrDeclname: SyntaxBuildable
   ) {
     self.nameTok = nameTok
@@ -5391,7 +5391,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
 
   public init(
     type: SimpleTypeIdentifier,
-    comma: TokenSyntax = Tokens.`comma`,
+    comma: TokenSyntax = TokenSyntax.`comma`,
     declBaseName: SyntaxBuildable,
     declNameArguments: DeclNameArguments? = nil
   ) {
@@ -5545,7 +5545,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
 
   public init(
     wrtLabel: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     parameters: SyntaxBuildable
   ) {
     self.wrtLabel = wrtLabel
@@ -5581,9 +5581,9 @@ public struct DifferentiabilityParams: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     diffParams: DifferentiabilityParamList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.diffParams = diffParams
@@ -5691,7 +5691,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
 
   public init(
     ofLabel: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     originalDeclName: QualifiedDeclName,
     period: TokenSyntax? = nil,
     accessorKind: TokenSyntax? = nil,
@@ -5814,7 +5814,7 @@ public struct ContinueStmt: StmtBuildable {
   let label: TokenSyntax?
 
   public init(
-    continueKeyword: TokenSyntax = Tokens.`continue`,
+    continueKeyword: TokenSyntax = TokenSyntax.`continue`,
     label: TokenSyntax? = nil
   ) {
     self.continueKeyword = continueKeyword
@@ -5851,7 +5851,7 @@ public struct WhileStmt: StmtBuildable {
   public init(
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
-    whileKeyword: TokenSyntax = Tokens.`while`,
+    whileKeyword: TokenSyntax = TokenSyntax.`while`,
     conditions: ConditionElementList,
     body: CodeBlock
   ) {
@@ -5890,7 +5890,7 @@ public struct DeferStmt: StmtBuildable {
   let body: CodeBlock
 
   public init(
-    deferKeyword: TokenSyntax = Tokens.`defer`,
+    deferKeyword: TokenSyntax = TokenSyntax.`defer`,
     body: CodeBlock
   ) {
     self.deferKeyword = deferKeyword
@@ -5984,9 +5984,9 @@ public struct RepeatWhileStmt: StmtBuildable {
   public init(
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
-    repeatKeyword: TokenSyntax = Tokens.`repeat`,
+    repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
     body: CodeBlock,
-    whileKeyword: TokenSyntax = Tokens.`while`,
+    whileKeyword: TokenSyntax = TokenSyntax.`while`,
     condition: ExprBuildable
   ) {
     self.labelName = labelName
@@ -6028,9 +6028,9 @@ public struct GuardStmt: StmtBuildable {
   let body: CodeBlock
 
   public init(
-    guardKeyword: TokenSyntax = Tokens.`guard`,
+    guardKeyword: TokenSyntax = TokenSyntax.`guard`,
     conditions: ConditionElementList,
-    elseKeyword: TokenSyntax = Tokens.`else`,
+    elseKeyword: TokenSyntax = TokenSyntax.`else`,
     body: CodeBlock
   ) {
     self.guardKeyword = guardKeyword
@@ -6066,7 +6066,7 @@ public struct WhereClause: SyntaxBuildable {
   let guardResult: ExprBuildable
 
   public init(
-    whereKeyword: TokenSyntax = Tokens.`where`,
+    whereKeyword: TokenSyntax = TokenSyntax.`where`,
     guardResult: ExprBuildable
   ) {
     self.whereKeyword = whereKeyword
@@ -6110,13 +6110,13 @@ public struct ForInStmt: StmtBuildable {
   public init(
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
-    forKeyword: TokenSyntax = Tokens.`for`,
+    forKeyword: TokenSyntax = TokenSyntax.`for`,
     tryKeyword: TokenSyntax? = nil,
     awaitKeyword: TokenSyntax? = nil,
     caseKeyword: TokenSyntax? = nil,
     pattern: PatternBuildable,
     typeAnnotation: TypeAnnotation? = nil,
-    inKeyword: TokenSyntax = Tokens.`in`,
+    inKeyword: TokenSyntax = TokenSyntax.`in`,
     sequenceExpr: ExprBuildable,
     whereClause: WhereClause? = nil,
     body: CodeBlock
@@ -6177,11 +6177,11 @@ public struct SwitchStmt: StmtBuildable {
   public init(
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
-    switchKeyword: TokenSyntax = Tokens.`switch`,
+    switchKeyword: TokenSyntax = TokenSyntax.`switch`,
     expression: ExprBuildable,
-    leftBrace: TokenSyntax = Tokens.`leftBrace`,
+    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     cases: SwitchCaseList,
-    rightBrace: TokenSyntax = Tokens.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
@@ -6255,7 +6255,7 @@ public struct DoStmt: StmtBuildable {
   public init(
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
-    doKeyword: TokenSyntax = Tokens.`do`,
+    doKeyword: TokenSyntax = TokenSyntax.`do`,
     body: CodeBlock,
     catchClauses: CatchClauseList? = nil
   ) {
@@ -6294,7 +6294,7 @@ public struct ReturnStmt: StmtBuildable {
   let expression: ExprBuildable?
 
   public init(
-    returnKeyword: TokenSyntax = Tokens.`return`,
+    returnKeyword: TokenSyntax = TokenSyntax.`return`,
     expression: ExprBuildable? = nil
   ) {
     self.returnKeyword = returnKeyword
@@ -6326,7 +6326,7 @@ public struct YieldStmt: StmtBuildable {
   let yields: SyntaxBuildable
 
   public init(
-    yieldKeyword: TokenSyntax = Tokens.`yield`,
+    yieldKeyword: TokenSyntax = TokenSyntax.`yield`,
     yields: SyntaxBuildable
   ) {
     self.yieldKeyword = yieldKeyword
@@ -6360,10 +6360,10 @@ public struct YieldList: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elementList: ExprList,
     trailingComma: TokenSyntax? = nil,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.elementList = elementList
@@ -6397,7 +6397,7 @@ public struct FallthroughStmt: StmtBuildable {
   let fallthroughKeyword: TokenSyntax
 
   public init(
-    fallthroughKeyword: TokenSyntax = Tokens.`fallthrough`
+    fallthroughKeyword: TokenSyntax = TokenSyntax.`fallthrough`
   ) {
     self.fallthroughKeyword = fallthroughKeyword
   }
@@ -6426,7 +6426,7 @@ public struct BreakStmt: StmtBuildable {
   let label: TokenSyntax?
 
   public init(
-    breakKeyword: TokenSyntax = Tokens.`break`,
+    breakKeyword: TokenSyntax = TokenSyntax.`break`,
     label: TokenSyntax? = nil
   ) {
     self.breakKeyword = breakKeyword
@@ -6548,10 +6548,10 @@ public struct AvailabilityCondition: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundAvailableKeyword: TokenSyntax = Tokens.`poundAvailable`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    poundAvailableKeyword: TokenSyntax = TokenSyntax.`poundAvailable`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     availabilitySpec: AvailabilitySpecList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundAvailableKeyword = poundAvailableKeyword
     self.leftParen = leftParen
@@ -6588,7 +6588,7 @@ public struct MatchingPatternCondition: SyntaxBuildable {
   let initializer: InitializerClause
 
   public init(
-    caseKeyword: TokenSyntax = Tokens.`case`,
+    caseKeyword: TokenSyntax = TokenSyntax.`case`,
     pattern: PatternBuildable,
     typeAnnotation: TypeAnnotation? = nil,
     initializer: InitializerClause
@@ -6722,7 +6722,7 @@ public struct ThrowStmt: StmtBuildable {
   let expression: ExprBuildable
 
   public init(
-    throwKeyword: TokenSyntax = Tokens.`throw`,
+    throwKeyword: TokenSyntax = TokenSyntax.`throw`,
     expression: ExprBuildable
   ) {
     self.throwKeyword = throwKeyword
@@ -6761,7 +6761,7 @@ public struct IfStmt: StmtBuildable {
   public init(
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
-    ifKeyword: TokenSyntax = Tokens.`if`,
+    ifKeyword: TokenSyntax = TokenSyntax.`if`,
     conditions: ConditionElementList,
     body: CodeBlock,
     elseKeyword: TokenSyntax? = nil,
@@ -6834,7 +6834,7 @@ public struct ElseBlock: SyntaxBuildable {
   let body: CodeBlock
 
   public init(
-    elseKeyword: TokenSyntax = Tokens.`else`,
+    elseKeyword: TokenSyntax = TokenSyntax.`else`,
     body: CodeBlock
   ) {
     self.elseKeyword = elseKeyword
@@ -6902,8 +6902,8 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
   let colon: TokenSyntax
 
   public init(
-    defaultKeyword: TokenSyntax = Tokens.`default`,
-    colon: TokenSyntax = Tokens.`colon`
+    defaultKeyword: TokenSyntax = TokenSyntax.`default`,
+    colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.defaultKeyword = defaultKeyword
     self.colon = colon
@@ -7007,9 +7007,9 @@ public struct SwitchCaseLabel: SyntaxBuildable {
   let colon: TokenSyntax
 
   public init(
-    caseKeyword: TokenSyntax = Tokens.`case`,
+    caseKeyword: TokenSyntax = TokenSyntax.`case`,
     caseItems: CaseItemList,
-    colon: TokenSyntax = Tokens.`colon`
+    colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.caseKeyword = caseKeyword
     self.caseItems = caseItems
@@ -7043,7 +7043,7 @@ public struct CatchClause: SyntaxBuildable {
   let body: CodeBlock
 
   public init(
-    catchKeyword: TokenSyntax = Tokens.`catch`,
+    catchKeyword: TokenSyntax = TokenSyntax.`catch`,
     catchItems: CatchItemList? = nil,
     body: CodeBlock
   ) {
@@ -7082,12 +7082,12 @@ public struct PoundAssertStmt: StmtBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundAssert: TokenSyntax = Tokens.`poundAssert`,
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    poundAssert: TokenSyntax = TokenSyntax.`poundAssert`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     condition: ExprBuildable,
     comma: TokenSyntax? = nil,
     message: TokenSyntax? = nil,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundAssert = poundAssert
     self.leftParen = leftParen
@@ -7126,7 +7126,7 @@ public struct GenericWhereClause: SyntaxBuildable {
   let requirementList: GenericRequirementList
 
   public init(
-    whereKeyword: TokenSyntax = Tokens.`where`,
+    whereKeyword: TokenSyntax = TokenSyntax.`where`,
     requirementList: GenericRequirementList
   ) {
     self.whereKeyword = whereKeyword
@@ -7327,9 +7327,9 @@ public struct GenericParameterClause: SyntaxBuildable {
   let rightAngleBracket: TokenSyntax
 
   public init(
-    leftAngleBracket: TokenSyntax = Tokens.`leftAngle`,
+    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     genericParameterList: GenericParameterList,
-    rightAngleBracket: TokenSyntax = Tokens.`rightAngle`
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leftAngleBracket = leftAngleBracket
     self.genericParameterList = genericParameterList
@@ -7364,7 +7364,7 @@ public struct ConformanceRequirement: SyntaxBuildable {
 
   public init(
     leftTypeIdentifier: TypeBuildable,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     rightTypeIdentifier: TypeBuildable
   ) {
     self.leftTypeIdentifier = leftTypeIdentifier
@@ -7469,7 +7469,7 @@ public struct ClassRestrictionType: TypeBuildable {
   let classKeyword: TokenSyntax
 
   public init(
-    classKeyword: TokenSyntax = Tokens.`class`
+    classKeyword: TokenSyntax = TokenSyntax.`class`
   ) {
     self.classKeyword = classKeyword
   }
@@ -7499,9 +7499,9 @@ public struct ArrayType: TypeBuildable {
   let rightSquareBracket: TokenSyntax
 
   public init(
-    leftSquareBracket: TokenSyntax = Tokens.`leftSquareBracket`,
+    leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     elementType: TypeBuildable,
-    rightSquareBracket: TokenSyntax = Tokens.`rightSquareBracket`
+    rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquareBracket = leftSquareBracket
     self.elementType = elementType
@@ -7537,11 +7537,11 @@ public struct DictionaryType: TypeBuildable {
   let rightSquareBracket: TokenSyntax
 
   public init(
-    leftSquareBracket: TokenSyntax = Tokens.`leftSquareBracket`,
+    leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     keyType: TypeBuildable,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     valueType: TypeBuildable,
-    rightSquareBracket: TokenSyntax = Tokens.`rightSquareBracket`
+    rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquareBracket = leftSquareBracket
     self.keyType = keyType
@@ -7580,7 +7580,7 @@ public struct MetatypeType: TypeBuildable {
 
   public init(
     baseType: TypeBuildable,
-    period: TokenSyntax = Tokens.`period`,
+    period: TokenSyntax = TokenSyntax.`period`,
     typeOrProtocol: TokenSyntax
   ) {
     self.baseType = baseType
@@ -7615,7 +7615,7 @@ public struct OptionalType: TypeBuildable {
 
   public init(
     wrappedType: TypeBuildable,
-    questionMark: TokenSyntax = Tokens.`postfixQuestionMark`
+    questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.wrappedType = wrappedType
     self.questionMark = questionMark
@@ -7679,7 +7679,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
 
   public init(
     wrappedType: TypeBuildable,
-    exclamationMark: TokenSyntax = Tokens.`exclamationMark`
+    exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`
   ) {
     self.wrappedType = wrappedType
     self.exclamationMark = exclamationMark
@@ -7883,9 +7883,9 @@ public struct TupleType: TypeBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elements: TupleTypeElementList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.elements = elements
@@ -7923,12 +7923,12 @@ public struct FunctionType: TypeBuildable {
   let returnType: TypeBuildable
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     arguments: TupleTypeElementList,
-    rightParen: TokenSyntax = Tokens.`rightParen`,
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     asyncKeyword: TokenSyntax? = nil,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
-    arrow: TokenSyntax = Tokens.`arrow`,
+    arrow: TokenSyntax = TokenSyntax.`arrow`,
     returnType: TypeBuildable
   ) {
     self.leftParen = leftParen
@@ -8067,9 +8067,9 @@ public struct GenericArgumentClause: SyntaxBuildable {
   let rightAngleBracket: TokenSyntax
 
   public init(
-    leftAngleBracket: TokenSyntax = Tokens.`leftAngle`,
+    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     arguments: GenericArgumentList,
-    rightAngleBracket: TokenSyntax = Tokens.`rightAngle`
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leftAngleBracket = leftAngleBracket
     self.arguments = arguments
@@ -8102,7 +8102,7 @@ public struct TypeAnnotation: SyntaxBuildable {
   let type: TypeBuildable
 
   public init(
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     type: TypeBuildable
   ) {
     self.colon = colon
@@ -8137,7 +8137,7 @@ public struct EnumCasePattern: PatternBuildable {
 
   public init(
     type: TypeBuildable? = nil,
-    period: TokenSyntax = Tokens.`period`,
+    period: TokenSyntax = TokenSyntax.`period`,
     caseName: TokenSyntax,
     associatedTuple: TuplePattern? = nil
   ) {
@@ -8174,7 +8174,7 @@ public struct IsTypePattern: PatternBuildable {
   let type: TypeBuildable
 
   public init(
-    isKeyword: TokenSyntax = Tokens.`is`,
+    isKeyword: TokenSyntax = TokenSyntax.`is`,
     type: TypeBuildable
   ) {
     self.isKeyword = isKeyword
@@ -8207,7 +8207,7 @@ public struct OptionalPattern: PatternBuildable {
 
   public init(
     subPattern: PatternBuildable,
-    questionMark: TokenSyntax = Tokens.`postfixQuestionMark`
+    questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.subPattern = subPattern
     self.questionMark = questionMark
@@ -8268,7 +8268,7 @@ public struct AsTypePattern: PatternBuildable {
 
   public init(
     pattern: PatternBuildable,
-    asKeyword: TokenSyntax = Tokens.`as`,
+    asKeyword: TokenSyntax = TokenSyntax.`as`,
     type: TypeBuildable
   ) {
     self.pattern = pattern
@@ -8303,9 +8303,9 @@ public struct TuplePattern: PatternBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: TokenSyntax = Tokens.`leftParen`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elements: TuplePatternElementList,
-    rightParen: TokenSyntax = Tokens.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
     self.elements = elements
@@ -8338,7 +8338,7 @@ public struct WildcardPattern: PatternBuildable {
   let typeAnnotation: TypeAnnotation?
 
   public init(
-    wildcard: TokenSyntax = Tokens.`wildcard`,
+    wildcard: TokenSyntax = TokenSyntax.`wildcard`,
     typeAnnotation: TypeAnnotation? = nil
   ) {
     self.wildcard = wildcard
@@ -8568,7 +8568,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
 
   public init(
     label: TokenSyntax,
-    colon: TokenSyntax = Tokens.`colon`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
     value: SyntaxBuildable
   ) {
     self.label = label

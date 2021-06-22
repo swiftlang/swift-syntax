@@ -18,9 +18,9 @@ extension StringLiteralExpr {
     let segment = StringSegment(content: content)
     let segments = StringLiteralSegments([segment])
 
-    self.init(openQuote: Tokens.stringQuote,
+    self.init(openQuote: .stringQuote,
               segments: segments,
-              closeQuote: Tokens.stringQuote)
+              closeQuote: .stringQuote)
   }
 }
 

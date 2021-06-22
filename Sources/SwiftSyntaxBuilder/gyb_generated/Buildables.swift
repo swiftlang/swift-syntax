@@ -1878,6 +1878,7 @@ public struct ClosureParamList: SyntaxBuildable {
 }
 
 public struct ClosureSignature: SyntaxBuildable {
+  let attributes: AttributeList?
   let capture: ClosureCaptureSignature?
   let input: SyntaxBuildable?
   let asyncKeyword: TokenSyntax?
@@ -1886,6 +1887,7 @@ public struct ClosureSignature: SyntaxBuildable {
   let inTok: TokenSyntax
 
   public init(
+    attributes: AttributeList? = nil,
     capture: ClosureCaptureSignature? = nil,
     input: SyntaxBuildable? = nil,
     asyncKeyword: TokenSyntax? = nil,
@@ -1893,6 +1895,7 @@ public struct ClosureSignature: SyntaxBuildable {
     output: ReturnClause? = nil,
     inTok: TokenSyntax
   ) {
+    self.attributes = attributes
     self.capture = capture
     self.input = input
     self.asyncKeyword = asyncKeyword
@@ -1903,6 +1906,7 @@ public struct ClosureSignature: SyntaxBuildable {
   
   func buildClosureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
     let closureSignature = SyntaxFactory.makeClosureSignature(
+      attributes: attributes?.buildAttributeList(format: format),
       capture: capture?.buildClosureCaptureSignature(format: format),
       input: input?.buildSyntax(format: format),
       asyncKeyword: asyncKeyword,

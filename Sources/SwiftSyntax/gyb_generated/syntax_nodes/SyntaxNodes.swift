@@ -1503,6 +1503,7 @@ extension ClosureParamSyntax: CustomReflectable {
 
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
+    case attributes
     case capture
     case input
     case asyncKeyword
@@ -1530,6 +1531,47 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 
   public var syntaxNodeType: SyntaxProtocol.Type {
     return Swift.type(of: self)
+  }
+
+  public var attributes: AttributeListSyntax? {
+    get {
+      let childData = data.child(at: Cursor.attributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
+  }
+
+  /// Adds the provided `Attribute` to the node's `attributes`
+  /// collection.
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  public func addAttribute(_ element: Syntax) -> ClosureSignatureSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.attributes] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.attributes)
+    return ClosureSignatureSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `attributes` replaced.
+  /// - param newChild: The new `attributes` to replace the node's
+  ///                   current `attributes`, if present.
+  public func withAttributes(
+    _ newChild: AttributeListSyntax?) -> ClosureSignatureSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return ClosureSignatureSyntax(newData)
   }
 
   public var capture: ClosureCaptureSignatureSyntax? {
@@ -1666,30 +1708,30 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 6)
-    // Check child #0 child is ClosureCaptureSignatureSyntax or missing
+    assert(rawChildren.count == 7)
+    // Check child #0 child is AttributeListSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ClosureCaptureSignatureSyntax.self))
+      assert(syntaxChild.is(AttributeListSyntax.self))
     }
-    // Check child #1 child is Syntax or missing
+    // Check child #1 child is ClosureCaptureSignatureSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(Syntax.self))
+      assert(syntaxChild.is(ClosureCaptureSignatureSyntax.self))
     }
-    // Check child #2 child is TokenSyntax or missing
+    // Check child #2 child is Syntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(Syntax.self))
     }
     // Check child #3 child is TokenSyntax or missing
     if let raw = rawChildren[3].raw {
@@ -1699,18 +1741,26 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is ReturnClauseSyntax or missing
+    // Check child #4 child is TokenSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(ReturnClauseSyntax.self))
+      assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
+    // Check child #5 child is ReturnClauseSyntax or missing
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(ReturnClauseSyntax.self))
+    }
+    // Check child #6 child is TokenSyntax 
+    assert(rawChildren[6].raw != nil)
+    if let raw = rawChildren[6].raw {
+      let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -1722,6 +1772,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 extension ClosureSignatureSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "capture": capture.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "input": input.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,

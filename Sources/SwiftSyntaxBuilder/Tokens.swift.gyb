@@ -21,11 +21,11 @@
 import SwiftSyntax
 
 /// Namespace for commonly used tokens with default trivia.
-public enum Tokens {
+public extension TokenSyntax {
 % for token in SYNTAX_TOKENS:
 %   if token.is_keyword:
   /// The `${token.text.encode('utf-8').decode('unicode_escape')}` keyword
-  public static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Keyword()
+  static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Keyword()
 %   if token.requires_leading_space:
     .withLeadingTrivia(.spaces(1))
 %   end
@@ -34,7 +34,7 @@ public enum Tokens {
 %   end
 %   elif token.text:
   /// The `${token.text.encode('utf-8').decode('unicode_escape')}` token
-  public static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Token()
+  static let `${lowercase_first_word(token.name)}` = SyntaxFactory.make${token.name}Token()
 %   if token.requires_leading_space:
     .withLeadingTrivia(.spaces(1))
 %   end
@@ -42,7 +42,7 @@ public enum Tokens {
     .withTrailingTrivia(.spaces(1))
 %   end
 %   else:
-  public static func `${lowercase_first_word(token.name)}`(_ text: String) -> TokenSyntax {
+  static func `${lowercase_first_word(token.name)}`(_ text: String) -> TokenSyntax {
     SyntaxFactory.make${token.name}(text)
 %   if token.requires_leading_space:
     .withLeadingTrivia(.spaces(1))

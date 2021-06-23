@@ -72,9 +72,9 @@ extension ${node.syntax_kind} {
 %         end
 %       elif token and not token.text:
 %         if child.is_optional:
-%           init_parameters.append("%s: %s.map(Tokens.%s)" % (child.swift_name, child.swift_name, lowercase_first_word(token.name)))
+%           init_parameters.append("%s: %s.map(TokenSyntax.%s)" % (child.swift_name, child.swift_name, lowercase_first_word(token.name)))
 %         else:
-%           init_parameters.append("%s: Tokens.%s(%s)" % (child.swift_name, lowercase_first_word(token.name), child.swift_name))
+%           init_parameters.append("%s: TokenSyntax.%s(%s)" % (child.swift_name, lowercase_first_word(token.name), child.swift_name))
 %         end
 %       else:
 %         init_parameters.append("%s: %s" % (child.swift_name, child.swift_name))

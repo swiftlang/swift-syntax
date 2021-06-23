@@ -14,7 +14,7 @@ import SwiftSyntax
 
 extension BooleanLiteralExpr {
   public init(_ value: Bool) {
-    self.init(booleanLiteral: value ? Tokens.true : Tokens.false)
+    self.init(booleanLiteral: value ? .true : .false)
   }
 }
 

@@ -8,8 +8,8 @@ final class IntegerLiteralTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (IntegerLiteralExpr, String)] = [
-      #line: (IntegerLiteralExpr(digits: Tokens.integerLiteral(String(123))), "␣123"),
-      #line: (IntegerLiteralExpr(digits: Tokens.integerLiteral(String(-123))), "␣-123"),
+      #line: (IntegerLiteralExpr(digits: .integerLiteral(String(123))), "␣123"),
+      #line: (IntegerLiteralExpr(digits: .integerLiteral(String(-123))), "␣-123"),
       #line: (IntegerLiteralExpr(digits: "1_000"), "␣1_000"),
       #line: (IntegerLiteralExpr(digits: "-1_000"), "␣-1_000"),
       #line: (IntegerLiteralExpr(1_000), "␣1000"),

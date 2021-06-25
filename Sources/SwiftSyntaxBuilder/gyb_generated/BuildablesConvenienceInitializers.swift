@@ -17,8 +17,8 @@ import SwiftSyntax
 extension CodeBlock {
   public init(
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemList = { .empty },
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
+    @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemList = { .empty }
   ) {
     self.init(
       leftBrace: leftBrace,
@@ -43,8 +43,8 @@ extension AwaitExpr {
 extension DeclNameArguments {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @DeclNameArgumentListBuilder argumentsBuilder: () -> DeclNameArgumentList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @DeclNameArgumentListBuilder argumentsBuilder: () -> DeclNameArgumentList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -115,8 +115,8 @@ extension FloatLiteralExpr {
 extension TupleExpr {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @TupleExprElementListBuilder elementListBuilder: () -> TupleExprElementList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @TupleExprElementListBuilder elementListBuilder: () -> TupleExprElementList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -129,8 +129,8 @@ extension TupleExpr {
 extension ArrayExpr {
   public init(
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
-    @ArrayElementListBuilder elementsBuilder: () -> ArrayElementList = { .empty },
-    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
+    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
+    @ArrayElementListBuilder elementsBuilder: () -> ArrayElementList = { .empty }
   ) {
     self.init(
       leftSquare: leftSquare,
@@ -152,11 +152,11 @@ extension IntegerLiteralExpr {
 
 extension ClosureCaptureItem {
   public init(
-    @TokenListBuilder specifierBuilder: () -> TokenList? = { nil },
     name: String?,
     assignToken: TokenSyntax? = nil,
     expression: ExprBuildable,
-    trailingComma: TokenSyntax? = nil
+    trailingComma: TokenSyntax? = nil,
+    @TokenListBuilder specifierBuilder: () -> TokenList? = { nil }
   ) {
     self.init(
       specifier: specifierBuilder(),
@@ -171,8 +171,8 @@ extension ClosureCaptureItem {
 extension ClosureCaptureSignature {
   public init(
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
-    @ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList? = { nil },
-    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
+    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
+    @ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList? = { nil }
   ) {
     self.init(
       leftSquare: leftSquare,
@@ -184,13 +184,13 @@ extension ClosureCaptureSignature {
 
 extension ClosureSignature {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
     capture: ClosureCaptureSignature? = nil,
     input: SyntaxBuildable? = nil,
     asyncKeyword: String?,
     throwsTok: TokenSyntax? = nil,
     output: ReturnClause? = nil,
-    inTok: TokenSyntax = TokenSyntax.`in`
+    inTok: TokenSyntax = TokenSyntax.`in`,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -208,8 +208,8 @@ extension ClosureExpr {
   public init(
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     signature: ClosureSignature? = nil,
-    @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemList = { .empty },
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
+    @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemList = { .empty }
   ) {
     self.init(
       leftBrace: leftBrace,
@@ -224,9 +224,9 @@ extension FunctionCallExpr {
   public init(
     calledExpression: ExprBuildable,
     leftParen: TokenSyntax? = nil,
-    @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList = { .empty },
     rightParen: TokenSyntax? = nil,
     trailingClosure: ClosureExpr? = nil,
+    @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList = { .empty },
     @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }
   ) {
     self.init(
@@ -244,9 +244,9 @@ extension SubscriptExpr {
   public init(
     calledExpression: ExprBuildable,
     leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
-    @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList = { .empty },
     rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     trailingClosure: ClosureExpr? = nil,
+    @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList = { .empty },
     @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }
   ) {
     self.init(
@@ -287,8 +287,8 @@ extension ExpressionSegment {
     backslash: TokenSyntax = TokenSyntax.`backslash`,
     delimiter: String?,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @TupleExprElementListBuilder expressionsBuilder: () -> TupleExprElementList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`
+    rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`,
+    @TupleExprElementListBuilder expressionsBuilder: () -> TupleExprElementList = { .empty }
   ) {
     self.init(
       backslash: backslash,
@@ -304,9 +304,9 @@ extension StringLiteralExpr {
   public init(
     openDelimiter: String?,
     openQuote: TokenSyntax,
-    @StringLiteralSegmentsBuilder segmentsBuilder: () -> StringLiteralSegments = { .empty },
     closeQuote: TokenSyntax,
-    closeDelimiter: String?
+    closeDelimiter: String?,
+    @StringLiteralSegmentsBuilder segmentsBuilder: () -> StringLiteralSegments = { .empty }
   ) {
     self.init(
       openDelimiter: openDelimiter.map(TokenSyntax.rawStringDelimiter),
@@ -334,8 +334,8 @@ extension ObjcKeyPathExpr {
   public init(
     keyPath: TokenSyntax = TokenSyntax.`poundKeyPath`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @ObjcNameBuilder nameBuilder: () -> ObjcName = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @ObjcNameBuilder nameBuilder: () -> ObjcName = { .empty }
   ) {
     self.init(
       keyPath: keyPath,
@@ -380,8 +380,8 @@ extension ObjectLiteralExpr {
   public init(
     identifier: TokenSyntax,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @TupleExprElementListBuilder argumentsBuilder: () -> TupleExprElementList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @TupleExprElementListBuilder argumentsBuilder: () -> TupleExprElementList = { .empty }
   ) {
     self.init(
       identifier: identifier,
@@ -394,13 +394,13 @@ extension ObjectLiteralExpr {
 
 extension TypealiasDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
     identifier: String,
     genericParameterClause: GenericParameterClause? = nil,
     initializer: TypeInitializerClause? = nil,
-    genericWhereClause: GenericWhereClause? = nil
+    genericWhereClause: GenericWhereClause? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -416,13 +416,13 @@ extension TypealiasDecl {
 
 extension AssociatedtypeDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
     identifier: String,
     inheritanceClause: TypeInheritanceClause? = nil,
     initializer: TypeInitializerClause? = nil,
-    genericWhereClause: GenericWhereClause? = nil
+    genericWhereClause: GenericWhereClause? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -439,8 +439,8 @@ extension AssociatedtypeDecl {
 extension ParameterClause {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @FunctionParameterListBuilder parameterListBuilder: () -> FunctionParameterList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @FunctionParameterListBuilder parameterListBuilder: () -> FunctionParameterList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -468,8 +468,8 @@ extension FunctionSignature {
 
 extension IfConfigDecl {
   public init(
-    @IfConfigClauseListBuilder clausesBuilder: () -> IfConfigClauseList = { .empty },
-    poundEndif: TokenSyntax = TokenSyntax.`poundEndif`
+    poundEndif: TokenSyntax = TokenSyntax.`poundEndif`,
+    @IfConfigClauseListBuilder clausesBuilder: () -> IfConfigClauseList = { .empty }
   ) {
     self.init(
       clauses: clausesBuilder(),
@@ -530,14 +530,14 @@ extension TypeInheritanceClause {
 
 extension ClassDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     classOrActorKeyword: TokenSyntax,
     identifier: String,
     genericParameterClause: GenericParameterClause? = nil,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
-    members: MemberDeclBlock
+    members: MemberDeclBlock,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -554,14 +554,14 @@ extension ClassDecl {
 
 extension StructDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     structKeyword: TokenSyntax = TokenSyntax.`struct`,
     identifier: String,
     genericParameterClause: GenericParameterClause? = nil,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
-    members: MemberDeclBlock
+    members: MemberDeclBlock,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -578,13 +578,13 @@ extension StructDecl {
 
 extension ProtocolDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
     identifier: String,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
-    members: MemberDeclBlock
+    members: MemberDeclBlock,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -600,13 +600,13 @@ extension ProtocolDecl {
 
 extension ExtensionDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
     extendedType: TypeBuildable,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
-    members: MemberDeclBlock
+    members: MemberDeclBlock,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -623,8 +623,8 @@ extension ExtensionDecl {
 extension MemberDeclBlock {
   public init(
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    @MemberDeclListBuilder membersBuilder: () -> MemberDeclList = { .empty },
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
+    @MemberDeclListBuilder membersBuilder: () -> MemberDeclList = { .empty }
   ) {
     self.init(
       leftBrace: leftBrace,
@@ -636,8 +636,8 @@ extension MemberDeclBlock {
 
 extension SourceFile {
   public init(
-    @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemList = { .empty },
-    eofToken: TokenSyntax
+    eofToken: TokenSyntax,
+    @CodeBlockItemListBuilder statementsBuilder: () -> CodeBlockItemList = { .empty }
   ) {
     self.init(
       statements: statementsBuilder(),
@@ -648,14 +648,14 @@ extension SourceFile {
 
 extension FunctionParameter {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
     firstName: TokenSyntax? = nil,
     secondName: TokenSyntax? = nil,
     colon: TokenSyntax? = nil,
     type: TypeBuildable? = nil,
     ellipsis: TokenSyntax? = nil,
     defaultArgument: InitializerClause? = nil,
-    trailingComma: TokenSyntax? = nil
+    trailingComma: TokenSyntax? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -672,14 +672,14 @@ extension FunctionParameter {
 
 extension FunctionDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
     identifier: TokenSyntax,
     genericParameterClause: GenericParameterClause? = nil,
     signature: FunctionSignature,
     genericWhereClause: GenericWhereClause? = nil,
-    body: CodeBlock? = nil
+    body: CodeBlock? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -696,15 +696,15 @@ extension FunctionDecl {
 
 extension InitializerDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     initKeyword: TokenSyntax = TokenSyntax.`init`,
     optionalMark: TokenSyntax? = nil,
     genericParameterClause: GenericParameterClause? = nil,
     parameters: ParameterClause,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
     genericWhereClause: GenericWhereClause? = nil,
-    body: CodeBlock? = nil
+    body: CodeBlock? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -722,10 +722,10 @@ extension InitializerDecl {
 
 extension DeinitializerDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
-    body: CodeBlock
+    body: CodeBlock,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -738,14 +738,14 @@ extension DeinitializerDecl {
 
 extension SubscriptDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     subscriptKeyword: TokenSyntax = TokenSyntax.`subscript`,
     genericParameterClause: GenericParameterClause? = nil,
     indices: ParameterClause,
     result: ReturnClause,
     genericWhereClause: GenericWhereClause? = nil,
-    accessor: SyntaxBuildable? = nil
+    accessor: SyntaxBuildable? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -790,10 +790,10 @@ extension AccessPathComponent {
 
 extension ImportDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     importTok: TokenSyntax = TokenSyntax.`import`,
     importKind: TokenSyntax? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     @AccessPathBuilder pathBuilder: () -> AccessPath = { .empty }
   ) {
     self.init(
@@ -822,13 +822,13 @@ extension AccessorParameter {
 
 extension AccessorDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
     modifier: DeclModifier? = nil,
     accessorKind: TokenSyntax,
     parameter: AccessorParameter? = nil,
     asyncKeyword: String?,
     throwsKeyword: TokenSyntax? = nil,
-    body: CodeBlock? = nil
+    body: CodeBlock? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -845,8 +845,8 @@ extension AccessorDecl {
 extension AccessorBlock {
   public init(
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    @AccessorListBuilder accessorsBuilder: () -> AccessorList = { .empty },
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
+    @AccessorListBuilder accessorsBuilder: () -> AccessorList = { .empty }
   ) {
     self.init(
       leftBrace: leftBrace,
@@ -858,9 +858,9 @@ extension AccessorBlock {
 
 extension VariableDecl {
   public init(
+    letOrVarKeyword: TokenSyntax,
     @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
     @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
-    letOrVarKeyword: TokenSyntax,
     @PatternBindingListBuilder bindingsBuilder: () -> PatternBindingList = { .empty }
   ) {
     self.init(
@@ -890,9 +890,9 @@ extension EnumCaseElement {
 
 extension EnumCaseDecl {
   public init(
+    caseKeyword: TokenSyntax = TokenSyntax.`case`,
     @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
     @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
-    caseKeyword: TokenSyntax = TokenSyntax.`case`,
     @EnumCaseElementListBuilder elementsBuilder: () -> EnumCaseElementList = { .empty }
   ) {
     self.init(
@@ -906,14 +906,14 @@ extension EnumCaseDecl {
 
 extension EnumDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
     identifier: String,
     genericParameters: GenericParameterClause? = nil,
     inheritanceClause: TypeInheritanceClause? = nil,
     genericWhereClause: GenericWhereClause? = nil,
-    members: MemberDeclBlock
+    members: MemberDeclBlock,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -930,11 +930,11 @@ extension EnumDecl {
 
 extension OperatorDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     operatorKeyword: TokenSyntax = TokenSyntax.`operator`,
     identifier: TokenSyntax,
-    operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes? = nil
+    operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -960,13 +960,13 @@ extension OperatorPrecedenceAndTypes {
 
 extension PrecedenceGroupDecl {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
     precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
     identifier: String,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    @PrecedenceGroupAttributeListBuilder groupAttributesBuilder: () -> PrecedenceGroupAttributeList = { .empty },
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
+    @ModifierListBuilder modifiersBuilder: () -> ModifierList? = { nil },
+    @PrecedenceGroupAttributeListBuilder groupAttributesBuilder: () -> PrecedenceGroupAttributeList = { .empty }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -1039,8 +1039,8 @@ extension CustomAttribute {
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
     attributeName: TypeBuildable,
     leftParen: TokenSyntax? = nil,
-    @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList? = { nil },
-    rightParen: TokenSyntax? = nil
+    rightParen: TokenSyntax? = nil,
+    @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList? = { nil }
   ) {
     self.init(
       atSignToken: atSignToken,
@@ -1151,8 +1151,8 @@ extension DifferentiabilityParamsClause {
 extension DifferentiabilityParams {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @DifferentiabilityParamListBuilder diffParamsBuilder: () -> DifferentiabilityParamList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @DifferentiabilityParamListBuilder diffParamsBuilder: () -> DifferentiabilityParamList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -1201,8 +1201,8 @@ extension WhileStmt {
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
-    @ConditionElementListBuilder conditionsBuilder: () -> ConditionElementList = { .empty },
-    body: CodeBlock
+    body: CodeBlock,
+    @ConditionElementListBuilder conditionsBuilder: () -> ConditionElementList = { .empty }
   ) {
     self.init(
       labelName: labelName.map({ SyntaxFactory.makeIdentifier($0) }),
@@ -1237,9 +1237,9 @@ extension RepeatWhileStmt {
 extension GuardStmt {
   public init(
     guardKeyword: TokenSyntax = TokenSyntax.`guard`,
-    @ConditionElementListBuilder conditionsBuilder: () -> ConditionElementList = { .empty },
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
-    body: CodeBlock
+    body: CodeBlock,
+    @ConditionElementListBuilder conditionsBuilder: () -> ConditionElementList = { .empty }
   ) {
     self.init(
       guardKeyword: guardKeyword,
@@ -1289,8 +1289,8 @@ extension SwitchStmt {
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
     expression: ExprBuildable,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    @SwitchCaseListBuilder casesBuilder: () -> SwitchCaseList = { .empty },
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
+    @SwitchCaseListBuilder casesBuilder: () -> SwitchCaseList = { .empty }
   ) {
     self.init(
       labelName: labelName.map({ SyntaxFactory.makeIdentifier($0) }),
@@ -1325,9 +1325,9 @@ extension DoStmt {
 extension YieldList {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @ExprListBuilder elementListBuilder: () -> ExprList = { .empty },
     trailingComma: TokenSyntax? = nil,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @ExprListBuilder elementListBuilder: () -> ExprList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -1354,8 +1354,8 @@ extension AvailabilityCondition {
   public init(
     poundAvailableKeyword: TokenSyntax = TokenSyntax.`poundAvailable`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @AvailabilitySpecListBuilder availabilitySpecBuilder: () -> AvailabilitySpecList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @AvailabilitySpecListBuilder availabilitySpecBuilder: () -> AvailabilitySpecList = { .empty }
   ) {
     self.init(
       poundAvailableKeyword: poundAvailableKeyword,
@@ -1371,10 +1371,10 @@ extension IfStmt {
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
-    @ConditionElementListBuilder conditionsBuilder: () -> ConditionElementList = { .empty },
     body: CodeBlock,
     elseKeyword: TokenSyntax? = nil,
-    elseBody: SyntaxBuildable? = nil
+    elseBody: SyntaxBuildable? = nil,
+    @ConditionElementListBuilder conditionsBuilder: () -> ConditionElementList = { .empty }
   ) {
     self.init(
       labelName: labelName.map({ SyntaxFactory.makeIdentifier($0) }),
@@ -1405,8 +1405,8 @@ extension SwitchCase {
 extension SwitchCaseLabel {
   public init(
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
-    @CaseItemListBuilder caseItemsBuilder: () -> CaseItemList = { .empty },
-    colon: TokenSyntax = TokenSyntax.`colon`
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    @CaseItemListBuilder caseItemsBuilder: () -> CaseItemList = { .empty }
   ) {
     self.init(
       caseKeyword: caseKeyword,
@@ -1419,8 +1419,8 @@ extension SwitchCaseLabel {
 extension CatchClause {
   public init(
     catchKeyword: TokenSyntax = TokenSyntax.`catch`,
-    @CatchItemListBuilder catchItemsBuilder: () -> CatchItemList? = { nil },
-    body: CodeBlock
+    body: CodeBlock,
+    @CatchItemListBuilder catchItemsBuilder: () -> CatchItemList? = { nil }
   ) {
     self.init(
       catchKeyword: catchKeyword,
@@ -1464,11 +1464,11 @@ extension GenericWhereClause {
 
 extension GenericParameter {
   public init(
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
     name: String,
     colon: TokenSyntax? = nil,
     inheritedType: TypeBuildable? = nil,
-    trailingComma: TokenSyntax? = nil
+    trailingComma: TokenSyntax? = nil,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil }
   ) {
     self.init(
       attributes: attributesBuilder(),
@@ -1483,8 +1483,8 @@ extension GenericParameter {
 extension GenericParameterClause {
   public init(
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
-    @GenericParameterListBuilder genericParameterListBuilder: () -> GenericParameterList = { .empty },
-    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
+    @GenericParameterListBuilder genericParameterListBuilder: () -> GenericParameterList = { .empty }
   ) {
     self.init(
       leftAngleBracket: leftAngleBracket,
@@ -1533,8 +1533,8 @@ extension CompositionType {
 extension TupleType {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @TupleTypeElementListBuilder elementsBuilder: () -> TupleTypeElementList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @TupleTypeElementListBuilder elementsBuilder: () -> TupleTypeElementList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -1547,12 +1547,12 @@ extension TupleType {
 extension FunctionType {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @TupleTypeElementListBuilder argumentsBuilder: () -> TupleTypeElementList = { .empty },
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     asyncKeyword: String?,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
     arrow: TokenSyntax = TokenSyntax.`arrow`,
-    returnType: TypeBuildable
+    returnType: TypeBuildable,
+    @TupleTypeElementListBuilder argumentsBuilder: () -> TupleTypeElementList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,
@@ -1569,8 +1569,8 @@ extension FunctionType {
 extension AttributedType {
   public init(
     specifier: TokenSyntax? = nil,
-    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil },
-    baseType: TypeBuildable
+    baseType: TypeBuildable,
+    @AttributeListBuilder attributesBuilder: () -> AttributeList? = { nil }
   ) {
     self.init(
       specifier: specifier,
@@ -1583,8 +1583,8 @@ extension AttributedType {
 extension GenericArgumentClause {
   public init(
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
-    @GenericArgumentListBuilder argumentsBuilder: () -> GenericArgumentList = { .empty },
-    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
+    @GenericArgumentListBuilder argumentsBuilder: () -> GenericArgumentList = { .empty }
   ) {
     self.init(
       leftAngleBracket: leftAngleBracket,
@@ -1613,8 +1613,8 @@ extension EnumCasePattern {
 extension TuplePattern {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    @TuplePatternElementListBuilder elementsBuilder: () -> TuplePatternElementList = { .empty },
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @TuplePatternElementListBuilder elementsBuilder: () -> TuplePatternElementList = { .empty }
   ) {
     self.init(
       leftParen: leftParen,

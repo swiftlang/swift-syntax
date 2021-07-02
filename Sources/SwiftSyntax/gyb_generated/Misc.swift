@@ -1101,6 +1101,12 @@ extension SyntaxNode {
     return OptionalBindingConditionSyntax(asSyntaxData)
   }
 
+  public var isUnavailabilityCondition: Bool { return raw.kind == .unavailabilityCondition }
+  public var asUnavailabilityCondition: UnavailabilityConditionSyntax? {
+    guard isUnavailabilityCondition else { return nil }
+    return UnavailabilityConditionSyntax(asSyntaxData)
+  }
+
   public var isConditionElementList: Bool { return raw.kind == .conditionElementList }
   public var asConditionElementList: ConditionElementListSyntax? {
     guard isConditionElementList else { return nil }
@@ -1837,6 +1843,8 @@ extension Syntax {
       return node
     case .optionalBindingCondition(let node):
       return node
+    case .unavailabilityCondition(let node):
+      return node
     case .conditionElementList(let node):
       return node
     case .declarationStmt(let node):
@@ -1960,6 +1968,6 @@ extension Syntax {
 extension SyntaxParser {
   static func verifyNodeDeclarationHash() -> Bool {
     return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "a66df9d44b9128aee3da17e9b0d2aed27ce7ec61"
+      "0b9cec009c8c03b20b21615c4b4386bb21ea5a01"
   }
 }

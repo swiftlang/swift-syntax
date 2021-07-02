@@ -1366,6 +1366,22 @@ extension AvailabilityCondition {
   }
 }
 
+extension UnavailabilityCondition {
+  public init(
+    poundUnavailableKeyword: TokenSyntax = TokenSyntax.`poundUnavailable`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @AvailabilitySpecListBuilder availabilitySpecBuilder: () -> AvailabilitySpecList = { .empty }
+  ) {
+    self.init(
+      poundUnavailableKeyword: poundUnavailableKeyword,
+      leftParen: leftParen,
+      availabilitySpec: availabilitySpecBuilder(),
+      rightParen: rightParen
+    )
+  }
+}
+
 extension IfStmt {
   public init(
     labelName: String?,

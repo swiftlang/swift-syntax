@@ -1283,6 +1283,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `UnavailabilityConditionSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnavailabilityConditionSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `ConditionElementListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3581,6 +3588,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplUnavailabilityConditionSyntax(_ data: SyntaxData) -> Syntax {
+      let node = UnavailabilityConditionSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConditionElementListSyntax(_ data: SyntaxData) -> Syntax {
       let node = ConditionElementListSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4582,6 +4599,8 @@ open class SyntaxRewriter {
       return visitImplMatchingPatternConditionSyntax
     case .optionalBindingCondition:
       return visitImplOptionalBindingConditionSyntax
+    case .unavailabilityCondition:
+      return visitImplUnavailabilityConditionSyntax
     case .conditionElementList:
       return visitImplConditionElementListSyntax
     case .declarationStmt:
@@ -5083,6 +5102,8 @@ open class SyntaxRewriter {
       return visitImplMatchingPatternConditionSyntax(data)
     case .optionalBindingCondition:
       return visitImplOptionalBindingConditionSyntax(data)
+    case .unavailabilityCondition:
+      return visitImplUnavailabilityConditionSyntax(data)
     case .conditionElementList:
       return visitImplConditionElementListSyntax(data)
     case .declarationStmt:

@@ -3653,6 +3653,29 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return OptionalBindingConditionSyntax(data)
   }
+  public static func makeUnavailabilityCondition(poundUnavailableKeyword: TokenSyntax, leftParen: TokenSyntax, availabilitySpec: AvailabilitySpecListSyntax, rightParen: TokenSyntax) -> UnavailabilityConditionSyntax {
+    let layout: [RawSyntax?] = [
+      poundUnavailableKeyword.raw,
+      leftParen.raw,
+      availabilitySpec.raw,
+      rightParen.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unavailabilityCondition,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return UnavailabilityConditionSyntax(data)
+  }
+
+  public static func makeBlankUnavailabilityCondition() -> UnavailabilityConditionSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unavailabilityCondition,
+      layout: [
+      RawSyntax.missingToken(TokenKind.poundUnavailableKeyword),
+      RawSyntax.missingToken(TokenKind.leftParen),
+      RawSyntax.missing(SyntaxKind.availabilitySpecList),
+      RawSyntax.missingToken(TokenKind.rightParen),
+    ], length: .zero, presence: .present))
+    return UnavailabilityConditionSyntax(data)
+  }
   public static func makeConditionElementList(
     _ elements: [ConditionElementSyntax]) -> ConditionElementListSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElementList,
@@ -5425,6 +5448,12 @@ public enum SyntaxFactory {
   public static func makePoundAvailableKeyword(leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeToken(.poundAvailableKeyword, presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+  public static func makePoundUnavailableKeyword(leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.poundUnavailableKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

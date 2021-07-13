@@ -119,6 +119,7 @@ public enum TokenKind {
   case poundElseifKeyword
   case poundEndifKeyword
   case poundAvailableKeyword
+  case poundUnavailableKeyword
   case poundFileLiteralKeyword
   case poundImageLiteralKeyword
   case poundColorLiteralKeyword
@@ -246,6 +247,7 @@ public enum TokenKind {
     case .poundElseifKeyword: return "#elseif"
     case .poundEndifKeyword: return "#endif"
     case .poundAvailableKeyword: return "#available"
+    case .poundUnavailableKeyword: return "#unavailable"
     case .poundFileLiteralKeyword: return "#fileLiteral"
     case .poundImageLiteralKeyword: return "#imageLiteral"
     case .poundColorLiteralKeyword: return "#colorLiteral"
@@ -374,6 +376,7 @@ public enum TokenKind {
     case .poundElseifKeyword: return true
     case .poundEndifKeyword: return true
     case .poundAvailableKeyword: return true
+    case .poundUnavailableKeyword: return true
     case .poundFileLiteralKeyword: return true
     case .poundImageLiteralKeyword: return true
     case .poundColorLiteralKeyword: return true
@@ -502,6 +505,7 @@ public enum TokenKind {
     case .poundElseifKeyword: return "pound_elseif"
     case .poundEndifKeyword: return "pound_endif"
     case .poundAvailableKeyword: return "pound_available"
+    case .poundUnavailableKeyword: return "pound_unavailable"
     case .poundFileLiteralKeyword: return "pound_fileLiteral"
     case .poundImageLiteralKeyword: return "pound_imageLiteral"
     case .poundColorLiteralKeyword: return "pound_colorLiteral"
@@ -630,6 +634,7 @@ public enum TokenKind {
     case .poundElseifKeyword: return SourceLength(utf8Length: 7)
     case .poundEndifKeyword: return SourceLength(utf8Length: 6)
     case .poundAvailableKeyword: return SourceLength(utf8Length: 10)
+    case .poundUnavailableKeyword: return SourceLength(utf8Length: 12)
     case .poundFileLiteralKeyword: return SourceLength(utf8Length: 12)
     case .poundImageLiteralKeyword: return SourceLength(utf8Length: 13)
     case .poundColorLiteralKeyword: return SourceLength(utf8Length: 13)
@@ -760,6 +765,7 @@ extension TokenKind: Equatable {
     case (.poundElseifKeyword, .poundElseifKeyword): return true
     case (.poundEndifKeyword, .poundEndifKeyword): return true
     case (.poundAvailableKeyword, .poundAvailableKeyword): return true
+    case (.poundUnavailableKeyword, .poundUnavailableKeyword): return true
     case (.poundFileLiteralKeyword, .poundFileLiteralKeyword): return true
     case (.poundImageLiteralKeyword, .poundImageLiteralKeyword): return true
     case (.poundColorLiteralKeyword, .poundColorLiteralKeyword): return true
@@ -1009,6 +1015,8 @@ extension TokenKind {
       return .poundEndifKeyword
     case 60:
       return .poundAvailableKeyword
+    case 123:
+      return .poundUnavailableKeyword
     case 76:
       return .poundFileLiteralKeyword
     case 77:
@@ -1269,6 +1277,8 @@ extension TokenKind {
       return false
     case 60:
       return false
+    case 123:
+      return false
     case 76:
       return false
     case 77:
@@ -1418,6 +1428,7 @@ internal enum RawTokenKind: CTokenKind {
   case poundElseifKeyword = 63
   case poundEndifKeyword = 61
   case poundAvailableKeyword = 60
+  case poundUnavailableKeyword = 123
   case poundFileLiteralKeyword = 76
   case poundImageLiteralKeyword = 77
   case poundColorLiteralKeyword = 75
@@ -1761,6 +1772,9 @@ extension TokenKind {
     case .poundAvailableKeyword:
       let length = 10
       return body(.init(kind: .poundAvailableKeyword, length: length))
+    case .poundUnavailableKeyword:
+      let length = 12
+      return body(.init(kind: .poundUnavailableKeyword, length: length))
     case .poundFileLiteralKeyword:
       let length = 12
       return body(.init(kind: .poundFileLiteralKeyword, length: length))

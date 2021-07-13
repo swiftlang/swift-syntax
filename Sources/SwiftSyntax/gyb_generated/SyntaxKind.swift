@@ -201,6 +201,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case availabilityCondition = 138
   case matchingPatternCondition = 139
   case optionalBindingCondition = 140
+  case unavailabilityCondition = 251
   case conditionElementList = 193
   case declarationStmt = 84
   case throwStmt = 85

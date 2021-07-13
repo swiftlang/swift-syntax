@@ -328,6 +328,8 @@ extension RawTokenKind {
       return .poundDirectiveKeyword
     case .poundAvailableKeyword:
       return .keyword
+    case .poundUnavailableKeyword:
+      return .keyword
     case .poundFileLiteralKeyword:
       return .objectLiteral
     case .poundImageLiteralKeyword:

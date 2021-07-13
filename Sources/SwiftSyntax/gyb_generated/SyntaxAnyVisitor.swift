@@ -1324,6 +1324,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: OptionalBindingConditionSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: UnavailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: UnavailabilityConditionSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

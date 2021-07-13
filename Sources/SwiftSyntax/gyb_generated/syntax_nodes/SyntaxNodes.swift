@@ -9640,6 +9640,194 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
   }
 }
 
+// MARK: - UnavailabilityConditionSyntax
+
+public struct UnavailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case poundUnavailableKeyword
+    case leftParen
+    case availabilitySpec
+    case rightParen
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `UnavailabilityConditionSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .unavailabilityCondition else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `UnavailabilityConditionSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .unavailabilityCondition)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var poundUnavailableKeyword: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.poundUnavailableKeyword,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withPoundUnavailableKeyword(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `poundUnavailableKeyword` replaced.
+  /// - param newChild: The new `poundUnavailableKeyword` to replace the node's
+  ///                   current `poundUnavailableKeyword`, if present.
+  public func withPoundUnavailableKeyword(
+    _ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.poundUnavailableKeyword)
+    let newData = data.replacingChild(raw, at: Cursor.poundUnavailableKeyword)
+    return UnavailabilityConditionSyntax(newData)
+  }
+
+  public var leftParen: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.leftParen,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(
+    _ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    return UnavailabilityConditionSyntax(newData)
+  }
+
+  public var availabilitySpec: AvailabilitySpecListSyntax {
+    get {
+      let childData = data.child(at: Cursor.availabilitySpec,
+                                 parent: Syntax(self))
+      return AvailabilitySpecListSyntax(childData!)
+    }
+    set(value) {
+      self = withAvailabilitySpec(value)
+    }
+  }
+
+  /// Adds the provided `AvailabilityArgument` to the node's `availabilitySpec`
+  /// collection.
+  /// - param element: The new `AvailabilityArgument` to add to the node's
+  ///                  `availabilitySpec` collection.
+  /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
+  ///            appended to its `availabilitySpec` collection.
+  public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> UnavailabilityConditionSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.availabilitySpec] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.availabilitySpec)
+    return UnavailabilityConditionSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `availabilitySpec` replaced.
+  /// - param newChild: The new `availabilitySpec` to replace the node's
+  ///                   current `availabilitySpec`, if present.
+  public func withAvailabilitySpec(
+    _ newChild: AvailabilitySpecListSyntax?) -> UnavailabilityConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    let newData = data.replacingChild(raw, at: Cursor.availabilitySpec)
+    return UnavailabilityConditionSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.rightParen,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(
+    _ newChild: TokenSyntax?) -> UnavailabilityConditionSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    return UnavailabilityConditionSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 4)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is AvailabilitySpecListSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(AvailabilitySpecListSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax 
+    assert(rawChildren[3].raw != nil)
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension UnavailabilityConditionSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "poundUnavailableKeyword": Syntax(poundUnavailableKeyword).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "availabilitySpec": Syntax(availabilitySpec).asProtocol(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - ElseIfContinuationSyntax
 
 public struct ElseIfContinuationSyntax: SyntaxProtocol, SyntaxHashable {

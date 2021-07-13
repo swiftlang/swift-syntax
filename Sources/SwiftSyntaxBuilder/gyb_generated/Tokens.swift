@@ -416,6 +416,10 @@ public extension TokenSyntax {
   static let `poundAvailable` = SyntaxFactory.makePoundAvailableKeyword()
     .withTrailingTrivia(.spaces(1))
 
+  /// The `#unavailable` keyword
+  static let `poundUnavailable` = SyntaxFactory.makePoundUnavailableKeyword()
+    .withTrailingTrivia(.spaces(1))
+
   /// The `#fileLiteral` keyword
   static let `poundFileLiteral` = SyntaxFactory.makePoundFileLiteralKeyword()
     .withTrailingTrivia(.spaces(1))

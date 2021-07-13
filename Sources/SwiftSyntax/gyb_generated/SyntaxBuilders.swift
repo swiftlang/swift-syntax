@@ -8049,6 +8049,74 @@ extension OptionalBindingConditionSyntax {
   }
 }
 
+public struct UnavailabilityConditionSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 4)
+
+  internal init() {}
+
+  public mutating func usePoundUnavailableKeyword(_ node: TokenSyntax) {
+    let idx = UnavailabilityConditionSyntax.Cursor.poundUnavailableKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useLeftParen(_ node: TokenSyntax) {
+    let idx = UnavailabilityConditionSyntax.Cursor.leftParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func addAvailabilityArgument(_ elt: AvailabilityArgumentSyntax) {
+    let idx = UnavailabilityConditionSyntax.Cursor.availabilitySpec.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func useRightParen(_ node: TokenSyntax) {
+    let idx = UnavailabilityConditionSyntax.Cursor.rightParen.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.poundUnavailableKeyword)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .unavailabilityCondition,
+      layout: layout, presence: .present))
+  }
+}
+
+extension UnavailabilityConditionSyntax {
+  /// Creates a `UnavailabilityConditionSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `UnavailabilityConditionSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `UnavailabilityConditionSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout UnavailabilityConditionSyntaxBuilder) -> Void) {
+    var builder = UnavailabilityConditionSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct DeclarationStmtSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 1)

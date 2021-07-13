@@ -6661,6 +6661,46 @@ public struct OptionalBindingCondition: SyntaxBuildable {
   }
 }
 
+public struct UnavailabilityCondition: SyntaxBuildable {
+  let poundUnavailableKeyword: TokenSyntax
+  let leftParen: TokenSyntax
+  let availabilitySpec: AvailabilitySpecList
+  let rightParen: TokenSyntax
+
+  public init(
+    poundUnavailableKeyword: TokenSyntax = TokenSyntax.`poundUnavailable`,
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    availabilitySpec: AvailabilitySpecList,
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`
+  ) {
+    self.poundUnavailableKeyword = poundUnavailableKeyword
+    self.leftParen = leftParen
+    self.availabilitySpec = availabilitySpec
+    self.rightParen = rightParen
+  }
+  
+  func buildUnavailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
+    let unavailabilityCondition = SyntaxFactory.makeUnavailabilityCondition(
+      poundUnavailableKeyword: poundUnavailableKeyword,
+      leftParen: leftParen,
+      availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format),
+      rightParen: rightParen
+    )
+    
+    if let leadingTrivia = leadingTrivia {
+      return unavailabilityCondition.withLeadingTrivia(leadingTrivia)
+    }
+
+    return unavailabilityCondition
+  }
+
+  /// Conformance for `UnavailabilityCondition` to the `SyntaxBuildable` protocol.
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let unavailabilityCondition = buildUnavailabilityCondition(format: format, leadingTrivia: leadingTrivia)
+    return Syntax(unavailabilityCondition)
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ConditionElementList` represents a collection of 

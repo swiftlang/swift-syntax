@@ -1418,9 +1418,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return ObjcSelectorExprSyntax(data)
   }
-  public static func makePostfixIfConfigExpr(base: ExprSyntax, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
+  public static func makePostfixIfConfigExpr(base: ExprSyntax?, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
     let layout: [RawSyntax?] = [
-      base.raw,
+      base?.raw,
       config.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixIfConfigExpr,
@@ -1432,7 +1432,7 @@ public enum SyntaxFactory {
   public static func makeBlankPostfixIfConfigExpr() -> PostfixIfConfigExprSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .postfixIfConfigExpr,
       layout: [
-      RawSyntax.missing(SyntaxKind.expr),
+      nil,
       RawSyntax.missing(SyntaxKind.ifConfigDecl),
     ], length: .zero, presence: .present))
     return PostfixIfConfigExprSyntax(data)

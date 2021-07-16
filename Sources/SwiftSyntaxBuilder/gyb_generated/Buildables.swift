@@ -2615,11 +2615,11 @@ public struct ObjcSelectorExpr: ExprBuildable {
 }
 
 public struct PostfixIfConfigExpr: ExprBuildable {
-  let base: ExprBuildable
+  let base: ExprBuildable?
   let config: IfConfigDecl
 
   public init(
-    base: ExprBuildable,
+    base: ExprBuildable? = nil,
     config: IfConfigDecl
   ) {
     self.base = base
@@ -2628,7 +2628,7 @@ public struct PostfixIfConfigExpr: ExprBuildable {
   
   func buildPostfixIfConfigExpr(format: Format, leadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
     let postfixIfConfigExpr = SyntaxFactory.makePostfixIfConfigExpr(
-      base: base.buildExpr(format: format),
+      base: base?.buildExpr(format: format),
       config: config.buildIfConfigDecl(format: format)
     )
     

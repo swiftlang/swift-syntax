@@ -5275,10 +5275,11 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var base: ExprSyntax {
+  public var base: ExprSyntax? {
     get {
       let childData = data.child(at: Cursor.base,
                                  parent: Syntax(self))
+      if childData == nil { return nil }
       return ExprSyntax(childData!)
     }
     set(value) {
@@ -5291,7 +5292,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `base`, if present.
   public func withBase(
     _ newChild: ExprSyntax?) -> PostfixIfConfigExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.base)
     return PostfixIfConfigExprSyntax(newData)
   }
@@ -5321,8 +5322,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
     assert(rawChildren.count == 2)
-    // Check child #0 child is ExprSyntax 
-    assert(rawChildren[0].raw != nil)
+    // Check child #0 child is ExprSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -5345,7 +5345,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 extension PostfixIfConfigExprSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "base": Syntax(base).asProtocol(SyntaxProtocol.self),
+      "base": base.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "config": Syntax(config).asProtocol(SyntaxProtocol.self),
     ])
   }

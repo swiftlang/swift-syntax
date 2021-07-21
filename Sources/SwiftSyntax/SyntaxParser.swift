@@ -192,8 +192,14 @@ public enum SyntaxParser {
       swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
     }
 
-    let c_top = source.withCString { buf in
-      swiftparse_parse_string(c_parser, buf, source.utf8.count)
+    let c_top = source.withCString { (buf: (UnsafePointer<Int8>)) -> swiftparse_client_node_t in
+      // It appears that under certain circumstances the Swift parser is modifying its source buffer (rdar://72848263).
+      // To prevent it from modifying the contents of `source`, create a new memory buffer with the contents of `source` and pass that one to the Swift parser. 
+      let stringLength = source.utf8.count
+      let copiedBufferLength = stringLength + 1 // add a byte for the null character
+      let copiedBuffer = UnsafeMutableBufferPointer<Int8>.allocate(capacity: copiedBufferLength)
+      memcpy(copiedBuffer.baseAddress!, buf, copiedBufferLength)
+      return swiftparse_parse_string(c_parser, copiedBuffer.baseAddress, stringLength)
     }
 
     // Get ownership back from the C parser.

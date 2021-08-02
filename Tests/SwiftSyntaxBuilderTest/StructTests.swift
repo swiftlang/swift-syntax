@@ -23,7 +23,8 @@ final class StructTests: XCTestCase {
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
     let emptyMembers = MemberDeclBlock(members: MemberDeclList([]))
-    let nestedStruct = StructDecl(identifier: "NestedStruct",
+    let nestedStruct = StructDecl(structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
+                                  identifier: "NestedStruct",
                                   members: emptyMembers)
     let members = MemberDeclBlock(members: MemberDeclList([MemberDeclListItem(decl: nestedStruct)]))
     let testStruct = StructDecl(identifier: "TestStruct",
@@ -33,9 +34,11 @@ final class StructTests: XCTestCase {
     var text = ""
     syntax.write(to: &text)
 
+    // FIXME: We should indent the nested struct by adding the indentation after every newline in the leading trivia.
     XCTAssertEqual(text, """
     ␣struct TestStruct{
-        struct NestedStruct{
+        /// A nested struct
+    struct NestedStruct{
         }
     }
     """)

@@ -120,7 +120,7 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
 %     for child in node.children:
 %       param_expr = child.swift_name
 %       if child.is_token() and child.requires_leading_newline:
-%         param_expr = param_expr + '.withLeadingTrivia(.newlines(1) + format._makeIndent())'
+%         param_expr = param_expr + '.withLeadingTrivia(.newlines(1) + format._makeIndent() + (' + param_expr + '.leadingTrivia ?? []))'
 %       elif child.syntax_kind in SYNTAX_BASE_KINDS or not child.is_token():
 %         if child.is_optional:
 %           param_expr = param_expr + "?"
@@ -138,7 +138,7 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return ${node.swift_syntax_kind}.withLeadingTrivia(leadingTrivia)
+      return ${node.swift_syntax_kind}.withLeadingTrivia(leadingTrivia + (${node.swift_syntax_kind}.leadingTrivia ?? []))
     }
 
     return ${node.swift_syntax_kind}
@@ -189,7 +189,7 @@ public struct ${node.syntax_kind}: SyntaxBuildable {
     let ${node.swift_syntax_kind} = build${node.syntax_kind}(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(${node.swift_syntax_kind}).withLeadingTrivia(leadingTrivia)
+      return Syntax(${node.swift_syntax_kind}).withLeadingTrivia(leadingTrivia + (${node.swift_syntax_kind}.leadingTrivia ?? []))
     }
 
     return Syntax(${node.swift_syntax_kind})

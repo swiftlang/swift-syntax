@@ -315,7 +315,7 @@ public struct CodeBlockItem: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return codeBlockItem.withLeadingTrivia(leadingTrivia)
+      return codeBlockItem.withLeadingTrivia(leadingTrivia + (codeBlockItem.leadingTrivia ?? []))
     }
 
     return codeBlockItem
@@ -349,7 +349,7 @@ public struct CodeBlockItemList: SyntaxBuildable {
     let codeBlockItemList = buildCodeBlockItemList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(codeBlockItemList).withLeadingTrivia(leadingTrivia)
+      return Syntax(codeBlockItemList).withLeadingTrivia(leadingTrivia + (codeBlockItemList.leadingTrivia ?? []))
     }
 
     return Syntax(codeBlockItemList)
@@ -375,11 +375,11 @@ public struct CodeBlock: SyntaxBuildable {
     let codeBlock = SyntaxFactory.makeCodeBlock(
       leftBrace: leftBrace,
       statements: statements.buildCodeBlockItemList(format: format._indented()),
-      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent())
+      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     
     if let leadingTrivia = leadingTrivia {
-      return codeBlock.withLeadingTrivia(leadingTrivia)
+      return codeBlock.withLeadingTrivia(leadingTrivia + (codeBlock.leadingTrivia ?? []))
     }
 
     return codeBlock
@@ -411,7 +411,7 @@ public struct InOutExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return inOutExpr.withLeadingTrivia(leadingTrivia)
+      return inOutExpr.withLeadingTrivia(leadingTrivia + (inOutExpr.leadingTrivia ?? []))
     }
 
     return inOutExpr
@@ -439,7 +439,7 @@ public struct PoundColumnExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundColumnExpr.withLeadingTrivia(leadingTrivia)
+      return poundColumnExpr.withLeadingTrivia(leadingTrivia + (poundColumnExpr.leadingTrivia ?? []))
     }
 
     return poundColumnExpr
@@ -473,7 +473,7 @@ public struct TupleExprElementList: SyntaxBuildable {
     let tupleExprElementList = buildTupleExprElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(tupleExprElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(tupleExprElementList).withLeadingTrivia(leadingTrivia + (tupleExprElementList.leadingTrivia ?? []))
     }
 
     return Syntax(tupleExprElementList)
@@ -501,7 +501,7 @@ public struct ArrayElementList: SyntaxBuildable {
     let arrayElementList = buildArrayElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(arrayElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(arrayElementList).withLeadingTrivia(leadingTrivia + (arrayElementList.leadingTrivia ?? []))
     }
 
     return Syntax(arrayElementList)
@@ -529,7 +529,7 @@ public struct DictionaryElementList: SyntaxBuildable {
     let dictionaryElementList = buildDictionaryElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(dictionaryElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(dictionaryElementList).withLeadingTrivia(leadingTrivia + (dictionaryElementList.leadingTrivia ?? []))
     }
 
     return Syntax(dictionaryElementList)
@@ -557,7 +557,7 @@ public struct StringLiteralSegments: SyntaxBuildable {
     let stringLiteralSegments = buildStringLiteralSegments(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(stringLiteralSegments).withLeadingTrivia(leadingTrivia)
+      return Syntax(stringLiteralSegments).withLeadingTrivia(leadingTrivia + (stringLiteralSegments.leadingTrivia ?? []))
     }
 
     return Syntax(stringLiteralSegments)
@@ -587,7 +587,7 @@ public struct TryExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tryExpr.withLeadingTrivia(leadingTrivia)
+      return tryExpr.withLeadingTrivia(leadingTrivia + (tryExpr.leadingTrivia ?? []))
     }
 
     return tryExpr
@@ -619,7 +619,7 @@ public struct AwaitExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return awaitExpr.withLeadingTrivia(leadingTrivia)
+      return awaitExpr.withLeadingTrivia(leadingTrivia + (awaitExpr.leadingTrivia ?? []))
     }
 
     return awaitExpr
@@ -651,7 +651,7 @@ public struct DeclNameArgument: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return declNameArgument.withLeadingTrivia(leadingTrivia)
+      return declNameArgument.withLeadingTrivia(leadingTrivia + (declNameArgument.leadingTrivia ?? []))
     }
 
     return declNameArgument
@@ -685,7 +685,7 @@ public struct DeclNameArgumentList: SyntaxBuildable {
     let declNameArgumentList = buildDeclNameArgumentList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(declNameArgumentList).withLeadingTrivia(leadingTrivia)
+      return Syntax(declNameArgumentList).withLeadingTrivia(leadingTrivia + (declNameArgumentList.leadingTrivia ?? []))
     }
 
     return Syntax(declNameArgumentList)
@@ -715,7 +715,7 @@ public struct DeclNameArguments: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return declNameArguments.withLeadingTrivia(leadingTrivia)
+      return declNameArguments.withLeadingTrivia(leadingTrivia + (declNameArguments.leadingTrivia ?? []))
     }
 
     return declNameArguments
@@ -747,7 +747,7 @@ public struct IdentifierExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return identifierExpr.withLeadingTrivia(leadingTrivia)
+      return identifierExpr.withLeadingTrivia(leadingTrivia + (identifierExpr.leadingTrivia ?? []))
     }
 
     return identifierExpr
@@ -775,7 +775,7 @@ public struct SuperRefExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return superRefExpr.withLeadingTrivia(leadingTrivia)
+      return superRefExpr.withLeadingTrivia(leadingTrivia + (superRefExpr.leadingTrivia ?? []))
     }
 
     return superRefExpr
@@ -803,7 +803,7 @@ public struct NilLiteralExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return nilLiteralExpr.withLeadingTrivia(leadingTrivia)
+      return nilLiteralExpr.withLeadingTrivia(leadingTrivia + (nilLiteralExpr.leadingTrivia ?? []))
     }
 
     return nilLiteralExpr
@@ -831,7 +831,7 @@ public struct DiscardAssignmentExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return discardAssignmentExpr.withLeadingTrivia(leadingTrivia)
+      return discardAssignmentExpr.withLeadingTrivia(leadingTrivia + (discardAssignmentExpr.leadingTrivia ?? []))
     }
 
     return discardAssignmentExpr
@@ -859,7 +859,7 @@ public struct AssignmentExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return assignmentExpr.withLeadingTrivia(leadingTrivia)
+      return assignmentExpr.withLeadingTrivia(leadingTrivia + (assignmentExpr.leadingTrivia ?? []))
     }
 
     return assignmentExpr
@@ -887,7 +887,7 @@ public struct SequenceExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return sequenceExpr.withLeadingTrivia(leadingTrivia)
+      return sequenceExpr.withLeadingTrivia(leadingTrivia + (sequenceExpr.leadingTrivia ?? []))
     }
 
     return sequenceExpr
@@ -923,7 +923,7 @@ public struct ExprList: SyntaxBuildable {
     let exprList = buildExprList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(exprList).withLeadingTrivia(leadingTrivia)
+      return Syntax(exprList).withLeadingTrivia(leadingTrivia + (exprList.leadingTrivia ?? []))
     }
 
     return Syntax(exprList)
@@ -945,7 +945,7 @@ public struct PoundLineExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundLineExpr.withLeadingTrivia(leadingTrivia)
+      return poundLineExpr.withLeadingTrivia(leadingTrivia + (poundLineExpr.leadingTrivia ?? []))
     }
 
     return poundLineExpr
@@ -973,7 +973,7 @@ public struct PoundFileExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundFileExpr.withLeadingTrivia(leadingTrivia)
+      return poundFileExpr.withLeadingTrivia(leadingTrivia + (poundFileExpr.leadingTrivia ?? []))
     }
 
     return poundFileExpr
@@ -1001,7 +1001,7 @@ public struct PoundFileIDExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundFileIDExpr.withLeadingTrivia(leadingTrivia)
+      return poundFileIDExpr.withLeadingTrivia(leadingTrivia + (poundFileIDExpr.leadingTrivia ?? []))
     }
 
     return poundFileIDExpr
@@ -1029,7 +1029,7 @@ public struct PoundFilePathExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundFilePathExpr.withLeadingTrivia(leadingTrivia)
+      return poundFilePathExpr.withLeadingTrivia(leadingTrivia + (poundFilePathExpr.leadingTrivia ?? []))
     }
 
     return poundFilePathExpr
@@ -1057,7 +1057,7 @@ public struct PoundFunctionExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundFunctionExpr.withLeadingTrivia(leadingTrivia)
+      return poundFunctionExpr.withLeadingTrivia(leadingTrivia + (poundFunctionExpr.leadingTrivia ?? []))
     }
 
     return poundFunctionExpr
@@ -1085,7 +1085,7 @@ public struct PoundDsohandleExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundDsohandleExpr.withLeadingTrivia(leadingTrivia)
+      return poundDsohandleExpr.withLeadingTrivia(leadingTrivia + (poundDsohandleExpr.leadingTrivia ?? []))
     }
 
     return poundDsohandleExpr
@@ -1117,7 +1117,7 @@ public struct SymbolicReferenceExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return symbolicReferenceExpr.withLeadingTrivia(leadingTrivia)
+      return symbolicReferenceExpr.withLeadingTrivia(leadingTrivia + (symbolicReferenceExpr.leadingTrivia ?? []))
     }
 
     return symbolicReferenceExpr
@@ -1149,7 +1149,7 @@ public struct PrefixOperatorExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return prefixOperatorExpr.withLeadingTrivia(leadingTrivia)
+      return prefixOperatorExpr.withLeadingTrivia(leadingTrivia + (prefixOperatorExpr.leadingTrivia ?? []))
     }
 
     return prefixOperatorExpr
@@ -1177,7 +1177,7 @@ public struct BinaryOperatorExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return binaryOperatorExpr.withLeadingTrivia(leadingTrivia)
+      return binaryOperatorExpr.withLeadingTrivia(leadingTrivia + (binaryOperatorExpr.leadingTrivia ?? []))
     }
 
     return binaryOperatorExpr
@@ -1213,7 +1213,7 @@ public struct ArrowExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return arrowExpr.withLeadingTrivia(leadingTrivia)
+      return arrowExpr.withLeadingTrivia(leadingTrivia + (arrowExpr.leadingTrivia ?? []))
     }
 
     return arrowExpr
@@ -1241,7 +1241,7 @@ public struct FloatLiteralExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return floatLiteralExpr.withLeadingTrivia(leadingTrivia)
+      return floatLiteralExpr.withLeadingTrivia(leadingTrivia + (floatLiteralExpr.leadingTrivia ?? []))
     }
 
     return floatLiteralExpr
@@ -1277,7 +1277,7 @@ public struct TupleExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tupleExpr.withLeadingTrivia(leadingTrivia)
+      return tupleExpr.withLeadingTrivia(leadingTrivia + (tupleExpr.leadingTrivia ?? []))
     }
 
     return tupleExpr
@@ -1313,7 +1313,7 @@ public struct ArrayExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return arrayExpr.withLeadingTrivia(leadingTrivia)
+      return arrayExpr.withLeadingTrivia(leadingTrivia + (arrayExpr.leadingTrivia ?? []))
     }
 
     return arrayExpr
@@ -1349,7 +1349,7 @@ public struct DictionaryExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return dictionaryExpr.withLeadingTrivia(leadingTrivia)
+      return dictionaryExpr.withLeadingTrivia(leadingTrivia + (dictionaryExpr.leadingTrivia ?? []))
     }
 
     return dictionaryExpr
@@ -1389,7 +1389,7 @@ public struct TupleExprElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tupleExprElement.withLeadingTrivia(leadingTrivia)
+      return tupleExprElement.withLeadingTrivia(leadingTrivia + (tupleExprElement.leadingTrivia ?? []))
     }
 
     return tupleExprElement
@@ -1421,7 +1421,7 @@ public struct ArrayElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return arrayElement.withLeadingTrivia(leadingTrivia)
+      return arrayElement.withLeadingTrivia(leadingTrivia + (arrayElement.leadingTrivia ?? []))
     }
 
     return arrayElement
@@ -1461,7 +1461,7 @@ public struct DictionaryElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return dictionaryElement.withLeadingTrivia(leadingTrivia)
+      return dictionaryElement.withLeadingTrivia(leadingTrivia + (dictionaryElement.leadingTrivia ?? []))
     }
 
     return dictionaryElement
@@ -1489,7 +1489,7 @@ public struct IntegerLiteralExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return integerLiteralExpr.withLeadingTrivia(leadingTrivia)
+      return integerLiteralExpr.withLeadingTrivia(leadingTrivia + (integerLiteralExpr.leadingTrivia ?? []))
     }
 
     return integerLiteralExpr
@@ -1517,7 +1517,7 @@ public struct BooleanLiteralExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return booleanLiteralExpr.withLeadingTrivia(leadingTrivia)
+      return booleanLiteralExpr.withLeadingTrivia(leadingTrivia + (booleanLiteralExpr.leadingTrivia ?? []))
     }
 
     return booleanLiteralExpr
@@ -1561,7 +1561,7 @@ public struct TernaryExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return ternaryExpr.withLeadingTrivia(leadingTrivia)
+      return ternaryExpr.withLeadingTrivia(leadingTrivia + (ternaryExpr.leadingTrivia ?? []))
     }
 
     return ternaryExpr
@@ -1601,7 +1601,7 @@ public struct MemberAccessExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return memberAccessExpr.withLeadingTrivia(leadingTrivia)
+      return memberAccessExpr.withLeadingTrivia(leadingTrivia + (memberAccessExpr.leadingTrivia ?? []))
     }
 
     return memberAccessExpr
@@ -1633,7 +1633,7 @@ public struct IsExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return isExpr.withLeadingTrivia(leadingTrivia)
+      return isExpr.withLeadingTrivia(leadingTrivia + (isExpr.leadingTrivia ?? []))
     }
 
     return isExpr
@@ -1669,7 +1669,7 @@ public struct AsExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return asExpr.withLeadingTrivia(leadingTrivia)
+      return asExpr.withLeadingTrivia(leadingTrivia + (asExpr.leadingTrivia ?? []))
     }
 
     return asExpr
@@ -1697,7 +1697,7 @@ public struct TypeExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return typeExpr.withLeadingTrivia(leadingTrivia)
+      return typeExpr.withLeadingTrivia(leadingTrivia + (typeExpr.leadingTrivia ?? []))
     }
 
     return typeExpr
@@ -1741,7 +1741,7 @@ public struct ClosureCaptureItem: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return closureCaptureItem.withLeadingTrivia(leadingTrivia)
+      return closureCaptureItem.withLeadingTrivia(leadingTrivia + (closureCaptureItem.leadingTrivia ?? []))
     }
 
     return closureCaptureItem
@@ -1775,7 +1775,7 @@ public struct ClosureCaptureItemList: SyntaxBuildable {
     let closureCaptureItemList = buildClosureCaptureItemList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(closureCaptureItemList).withLeadingTrivia(leadingTrivia)
+      return Syntax(closureCaptureItemList).withLeadingTrivia(leadingTrivia + (closureCaptureItemList.leadingTrivia ?? []))
     }
 
     return Syntax(closureCaptureItemList)
@@ -1805,7 +1805,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return closureCaptureSignature.withLeadingTrivia(leadingTrivia)
+      return closureCaptureSignature.withLeadingTrivia(leadingTrivia + (closureCaptureSignature.leadingTrivia ?? []))
     }
 
     return closureCaptureSignature
@@ -1837,7 +1837,7 @@ public struct ClosureParam: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return closureParam.withLeadingTrivia(leadingTrivia)
+      return closureParam.withLeadingTrivia(leadingTrivia + (closureParam.leadingTrivia ?? []))
     }
 
     return closureParam
@@ -1871,7 +1871,7 @@ public struct ClosureParamList: SyntaxBuildable {
     let closureParamList = buildClosureParamList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(closureParamList).withLeadingTrivia(leadingTrivia)
+      return Syntax(closureParamList).withLeadingTrivia(leadingTrivia + (closureParamList.leadingTrivia ?? []))
     }
 
     return Syntax(closureParamList)
@@ -1917,7 +1917,7 @@ public struct ClosureSignature: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return closureSignature.withLeadingTrivia(leadingTrivia)
+      return closureSignature.withLeadingTrivia(leadingTrivia + (closureSignature.leadingTrivia ?? []))
     }
 
     return closureSignature
@@ -1957,7 +1957,7 @@ public struct ClosureExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return closureExpr.withLeadingTrivia(leadingTrivia)
+      return closureExpr.withLeadingTrivia(leadingTrivia + (closureExpr.leadingTrivia ?? []))
     }
 
     return closureExpr
@@ -1985,7 +1985,7 @@ public struct UnresolvedPatternExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return unresolvedPatternExpr.withLeadingTrivia(leadingTrivia)
+      return unresolvedPatternExpr.withLeadingTrivia(leadingTrivia + (unresolvedPatternExpr.leadingTrivia ?? []))
     }
 
     return unresolvedPatternExpr
@@ -2021,7 +2021,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return multipleTrailingClosureElement.withLeadingTrivia(leadingTrivia)
+      return multipleTrailingClosureElement.withLeadingTrivia(leadingTrivia + (multipleTrailingClosureElement.leadingTrivia ?? []))
     }
 
     return multipleTrailingClosureElement
@@ -2055,7 +2055,7 @@ public struct MultipleTrailingClosureElementList: SyntaxBuildable {
     let multipleTrailingClosureElementList = buildMultipleTrailingClosureElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(multipleTrailingClosureElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(multipleTrailingClosureElementList).withLeadingTrivia(leadingTrivia + (multipleTrailingClosureElementList.leadingTrivia ?? []))
     }
 
     return Syntax(multipleTrailingClosureElementList)
@@ -2097,7 +2097,7 @@ public struct FunctionCallExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return functionCallExpr.withLeadingTrivia(leadingTrivia)
+      return functionCallExpr.withLeadingTrivia(leadingTrivia + (functionCallExpr.leadingTrivia ?? []))
     }
 
     return functionCallExpr
@@ -2145,7 +2145,7 @@ public struct SubscriptExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return subscriptExpr.withLeadingTrivia(leadingTrivia)
+      return subscriptExpr.withLeadingTrivia(leadingTrivia + (subscriptExpr.leadingTrivia ?? []))
     }
 
     return subscriptExpr
@@ -2177,7 +2177,7 @@ public struct OptionalChainingExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return optionalChainingExpr.withLeadingTrivia(leadingTrivia)
+      return optionalChainingExpr.withLeadingTrivia(leadingTrivia + (optionalChainingExpr.leadingTrivia ?? []))
     }
 
     return optionalChainingExpr
@@ -2209,7 +2209,7 @@ public struct ForcedValueExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return forcedValueExpr.withLeadingTrivia(leadingTrivia)
+      return forcedValueExpr.withLeadingTrivia(leadingTrivia + (forcedValueExpr.leadingTrivia ?? []))
     }
 
     return forcedValueExpr
@@ -2241,7 +2241,7 @@ public struct PostfixUnaryExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return postfixUnaryExpr.withLeadingTrivia(leadingTrivia)
+      return postfixUnaryExpr.withLeadingTrivia(leadingTrivia + (postfixUnaryExpr.leadingTrivia ?? []))
     }
 
     return postfixUnaryExpr
@@ -2273,7 +2273,7 @@ public struct SpecializeExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return specializeExpr.withLeadingTrivia(leadingTrivia)
+      return specializeExpr.withLeadingTrivia(leadingTrivia + (specializeExpr.leadingTrivia ?? []))
     }
 
     return specializeExpr
@@ -2301,7 +2301,7 @@ public struct StringSegment: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return stringSegment.withLeadingTrivia(leadingTrivia)
+      return stringSegment.withLeadingTrivia(leadingTrivia + (stringSegment.leadingTrivia ?? []))
     }
 
     return stringSegment
@@ -2345,7 +2345,7 @@ public struct ExpressionSegment: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return expressionSegment.withLeadingTrivia(leadingTrivia)
+      return expressionSegment.withLeadingTrivia(leadingTrivia + (expressionSegment.leadingTrivia ?? []))
     }
 
     return expressionSegment
@@ -2389,7 +2389,7 @@ public struct StringLiteralExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return stringLiteralExpr.withLeadingTrivia(leadingTrivia)
+      return stringLiteralExpr.withLeadingTrivia(leadingTrivia + (stringLiteralExpr.leadingTrivia ?? []))
     }
 
     return stringLiteralExpr
@@ -2425,7 +2425,7 @@ public struct KeyPathExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return keyPathExpr.withLeadingTrivia(leadingTrivia)
+      return keyPathExpr.withLeadingTrivia(leadingTrivia + (keyPathExpr.leadingTrivia ?? []))
     }
 
     return keyPathExpr
@@ -2453,7 +2453,7 @@ public struct KeyPathBaseExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return keyPathBaseExpr.withLeadingTrivia(leadingTrivia)
+      return keyPathBaseExpr.withLeadingTrivia(leadingTrivia + (keyPathBaseExpr.leadingTrivia ?? []))
     }
 
     return keyPathBaseExpr
@@ -2485,7 +2485,7 @@ public struct ObjcNamePiece: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return objcNamePiece.withLeadingTrivia(leadingTrivia)
+      return objcNamePiece.withLeadingTrivia(leadingTrivia + (objcNamePiece.leadingTrivia ?? []))
     }
 
     return objcNamePiece
@@ -2519,7 +2519,7 @@ public struct ObjcName: SyntaxBuildable {
     let objcName = buildObjcName(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(objcName).withLeadingTrivia(leadingTrivia)
+      return Syntax(objcName).withLeadingTrivia(leadingTrivia + (objcName.leadingTrivia ?? []))
     }
 
     return Syntax(objcName)
@@ -2553,7 +2553,7 @@ public struct ObjcKeyPathExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return objcKeyPathExpr.withLeadingTrivia(leadingTrivia)
+      return objcKeyPathExpr.withLeadingTrivia(leadingTrivia + (objcKeyPathExpr.leadingTrivia ?? []))
     }
 
     return objcKeyPathExpr
@@ -2601,7 +2601,7 @@ public struct ObjcSelectorExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return objcSelectorExpr.withLeadingTrivia(leadingTrivia)
+      return objcSelectorExpr.withLeadingTrivia(leadingTrivia + (objcSelectorExpr.leadingTrivia ?? []))
     }
 
     return objcSelectorExpr
@@ -2633,7 +2633,7 @@ public struct PostfixIfConfigExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return postfixIfConfigExpr.withLeadingTrivia(leadingTrivia)
+      return postfixIfConfigExpr.withLeadingTrivia(leadingTrivia + (postfixIfConfigExpr.leadingTrivia ?? []))
     }
 
     return postfixIfConfigExpr
@@ -2661,7 +2661,7 @@ public struct EditorPlaceholderExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return editorPlaceholderExpr.withLeadingTrivia(leadingTrivia)
+      return editorPlaceholderExpr.withLeadingTrivia(leadingTrivia + (editorPlaceholderExpr.leadingTrivia ?? []))
     }
 
     return editorPlaceholderExpr
@@ -2701,7 +2701,7 @@ public struct ObjectLiteralExpr: ExprBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return objectLiteralExpr.withLeadingTrivia(leadingTrivia)
+      return objectLiteralExpr.withLeadingTrivia(leadingTrivia + (objectLiteralExpr.leadingTrivia ?? []))
     }
 
     return objectLiteralExpr
@@ -2733,7 +2733,7 @@ public struct TypeInitializerClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return typeInitializerClause.withLeadingTrivia(leadingTrivia)
+      return typeInitializerClause.withLeadingTrivia(leadingTrivia + (typeInitializerClause.leadingTrivia ?? []))
     }
 
     return typeInitializerClause
@@ -2785,7 +2785,7 @@ public struct TypealiasDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return typealiasDecl.withLeadingTrivia(leadingTrivia)
+      return typealiasDecl.withLeadingTrivia(leadingTrivia + (typealiasDecl.leadingTrivia ?? []))
     }
 
     return typealiasDecl
@@ -2837,7 +2837,7 @@ public struct AssociatedtypeDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return associatedtypeDecl.withLeadingTrivia(leadingTrivia)
+      return associatedtypeDecl.withLeadingTrivia(leadingTrivia + (associatedtypeDecl.leadingTrivia ?? []))
     }
 
     return associatedtypeDecl
@@ -2871,7 +2871,7 @@ public struct FunctionParameterList: SyntaxBuildable {
     let functionParameterList = buildFunctionParameterList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(functionParameterList).withLeadingTrivia(leadingTrivia)
+      return Syntax(functionParameterList).withLeadingTrivia(leadingTrivia + (functionParameterList.leadingTrivia ?? []))
     }
 
     return Syntax(functionParameterList)
@@ -2901,7 +2901,7 @@ public struct ParameterClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return parameterClause.withLeadingTrivia(leadingTrivia)
+      return parameterClause.withLeadingTrivia(leadingTrivia + (parameterClause.leadingTrivia ?? []))
     }
 
     return parameterClause
@@ -2933,7 +2933,7 @@ public struct ReturnClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return returnClause.withLeadingTrivia(leadingTrivia)
+      return returnClause.withLeadingTrivia(leadingTrivia + (returnClause.leadingTrivia ?? []))
     }
 
     return returnClause
@@ -2973,7 +2973,7 @@ public struct FunctionSignature: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return functionSignature.withLeadingTrivia(leadingTrivia)
+      return functionSignature.withLeadingTrivia(leadingTrivia + (functionSignature.leadingTrivia ?? []))
     }
 
     return functionSignature
@@ -3009,7 +3009,7 @@ public struct IfConfigClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return ifConfigClause.withLeadingTrivia(leadingTrivia)
+      return ifConfigClause.withLeadingTrivia(leadingTrivia + (ifConfigClause.leadingTrivia ?? []))
     }
 
     return ifConfigClause
@@ -3043,7 +3043,7 @@ public struct IfConfigClauseList: SyntaxBuildable {
     let ifConfigClauseList = buildIfConfigClauseList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(ifConfigClauseList).withLeadingTrivia(leadingTrivia)
+      return Syntax(ifConfigClauseList).withLeadingTrivia(leadingTrivia + (ifConfigClauseList.leadingTrivia ?? []))
     }
 
     return Syntax(ifConfigClauseList)
@@ -3069,7 +3069,7 @@ public struct IfConfigDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return ifConfigDecl.withLeadingTrivia(leadingTrivia)
+      return ifConfigDecl.withLeadingTrivia(leadingTrivia + (ifConfigDecl.leadingTrivia ?? []))
     }
 
     return ifConfigDecl
@@ -3109,7 +3109,7 @@ public struct PoundErrorDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundErrorDecl.withLeadingTrivia(leadingTrivia)
+      return poundErrorDecl.withLeadingTrivia(leadingTrivia + (poundErrorDecl.leadingTrivia ?? []))
     }
 
     return poundErrorDecl
@@ -3149,7 +3149,7 @@ public struct PoundWarningDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundWarningDecl.withLeadingTrivia(leadingTrivia)
+      return poundWarningDecl.withLeadingTrivia(leadingTrivia + (poundWarningDecl.leadingTrivia ?? []))
     }
 
     return poundWarningDecl
@@ -3189,7 +3189,7 @@ public struct PoundSourceLocation: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundSourceLocation.withLeadingTrivia(leadingTrivia)
+      return poundSourceLocation.withLeadingTrivia(leadingTrivia + (poundSourceLocation.leadingTrivia ?? []))
     }
 
     return poundSourceLocation
@@ -3241,7 +3241,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundSourceLocationArgs.withLeadingTrivia(leadingTrivia)
+      return poundSourceLocationArgs.withLeadingTrivia(leadingTrivia + (poundSourceLocationArgs.leadingTrivia ?? []))
     }
 
     return poundSourceLocationArgs
@@ -3281,7 +3281,7 @@ public struct DeclModifier: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return declModifier.withLeadingTrivia(leadingTrivia)
+      return declModifier.withLeadingTrivia(leadingTrivia + (declModifier.leadingTrivia ?? []))
     }
 
     return declModifier
@@ -3313,7 +3313,7 @@ public struct InheritedType: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return inheritedType.withLeadingTrivia(leadingTrivia)
+      return inheritedType.withLeadingTrivia(leadingTrivia + (inheritedType.leadingTrivia ?? []))
     }
 
     return inheritedType
@@ -3347,7 +3347,7 @@ public struct InheritedTypeList: SyntaxBuildable {
     let inheritedTypeList = buildInheritedTypeList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(inheritedTypeList).withLeadingTrivia(leadingTrivia)
+      return Syntax(inheritedTypeList).withLeadingTrivia(leadingTrivia + (inheritedTypeList.leadingTrivia ?? []))
     }
 
     return Syntax(inheritedTypeList)
@@ -3373,7 +3373,7 @@ public struct TypeInheritanceClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return typeInheritanceClause.withLeadingTrivia(leadingTrivia)
+      return typeInheritanceClause.withLeadingTrivia(leadingTrivia + (typeInheritanceClause.leadingTrivia ?? []))
     }
 
     return typeInheritanceClause
@@ -3429,7 +3429,7 @@ public struct ClassDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return classDecl.withLeadingTrivia(leadingTrivia)
+      return classDecl.withLeadingTrivia(leadingTrivia + (classDecl.leadingTrivia ?? []))
     }
 
     return classDecl
@@ -3485,7 +3485,7 @@ public struct StructDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return structDecl.withLeadingTrivia(leadingTrivia)
+      return structDecl.withLeadingTrivia(leadingTrivia + (structDecl.leadingTrivia ?? []))
     }
 
     return structDecl
@@ -3537,7 +3537,7 @@ public struct ProtocolDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return protocolDecl.withLeadingTrivia(leadingTrivia)
+      return protocolDecl.withLeadingTrivia(leadingTrivia + (protocolDecl.leadingTrivia ?? []))
     }
 
     return protocolDecl
@@ -3589,7 +3589,7 @@ public struct ExtensionDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return extensionDecl.withLeadingTrivia(leadingTrivia)
+      return extensionDecl.withLeadingTrivia(leadingTrivia + (extensionDecl.leadingTrivia ?? []))
     }
 
     return extensionDecl
@@ -3621,11 +3621,11 @@ public struct MemberDeclBlock: SyntaxBuildable {
     let memberDeclBlock = SyntaxFactory.makeMemberDeclBlock(
       leftBrace: leftBrace,
       members: members.buildMemberDeclList(format: format._indented()),
-      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent())
+      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     
     if let leadingTrivia = leadingTrivia {
-      return memberDeclBlock.withLeadingTrivia(leadingTrivia)
+      return memberDeclBlock.withLeadingTrivia(leadingTrivia + (memberDeclBlock.leadingTrivia ?? []))
     }
 
     return memberDeclBlock
@@ -3659,7 +3659,7 @@ public struct MemberDeclList: SyntaxBuildable {
     let memberDeclList = buildMemberDeclList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(memberDeclList).withLeadingTrivia(leadingTrivia)
+      return Syntax(memberDeclList).withLeadingTrivia(leadingTrivia + (memberDeclList.leadingTrivia ?? []))
     }
 
     return Syntax(memberDeclList)
@@ -3689,7 +3689,7 @@ public struct MemberDeclListItem: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return memberDeclListItem.withLeadingTrivia(leadingTrivia)
+      return memberDeclListItem.withLeadingTrivia(leadingTrivia + (memberDeclListItem.leadingTrivia ?? []))
     }
 
     return memberDeclListItem
@@ -3721,7 +3721,7 @@ public struct SourceFile: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return sourceFile.withLeadingTrivia(leadingTrivia)
+      return sourceFile.withLeadingTrivia(leadingTrivia + (sourceFile.leadingTrivia ?? []))
     }
 
     return sourceFile
@@ -3753,7 +3753,7 @@ public struct InitializerClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return initializerClause.withLeadingTrivia(leadingTrivia)
+      return initializerClause.withLeadingTrivia(leadingTrivia + (initializerClause.leadingTrivia ?? []))
     }
 
     return initializerClause
@@ -3809,7 +3809,7 @@ public struct FunctionParameter: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return functionParameter.withLeadingTrivia(leadingTrivia)
+      return functionParameter.withLeadingTrivia(leadingTrivia + (functionParameter.leadingTrivia ?? []))
     }
 
     return functionParameter
@@ -3843,7 +3843,7 @@ public struct ModifierList: SyntaxBuildable {
     let modifierList = buildModifierList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(modifierList).withLeadingTrivia(leadingTrivia)
+      return Syntax(modifierList).withLeadingTrivia(leadingTrivia + (modifierList.leadingTrivia ?? []))
     }
 
     return Syntax(modifierList)
@@ -3893,7 +3893,7 @@ public struct FunctionDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return functionDecl.withLeadingTrivia(leadingTrivia)
+      return functionDecl.withLeadingTrivia(leadingTrivia + (functionDecl.leadingTrivia ?? []))
     }
 
     return functionDecl
@@ -3953,7 +3953,7 @@ public struct InitializerDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return initializerDecl.withLeadingTrivia(leadingTrivia)
+      return initializerDecl.withLeadingTrivia(leadingTrivia + (initializerDecl.leadingTrivia ?? []))
     }
 
     return initializerDecl
@@ -3993,7 +3993,7 @@ public struct DeinitializerDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return deinitializerDecl.withLeadingTrivia(leadingTrivia)
+      return deinitializerDecl.withLeadingTrivia(leadingTrivia + (deinitializerDecl.leadingTrivia ?? []))
     }
 
     return deinitializerDecl
@@ -4049,7 +4049,7 @@ public struct SubscriptDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return subscriptDecl.withLeadingTrivia(leadingTrivia)
+      return subscriptDecl.withLeadingTrivia(leadingTrivia + (subscriptDecl.leadingTrivia ?? []))
     }
 
     return subscriptDecl
@@ -4089,7 +4089,7 @@ public struct AccessLevelModifier: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return accessLevelModifier.withLeadingTrivia(leadingTrivia)
+      return accessLevelModifier.withLeadingTrivia(leadingTrivia + (accessLevelModifier.leadingTrivia ?? []))
     }
 
     return accessLevelModifier
@@ -4121,7 +4121,7 @@ public struct AccessPathComponent: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return accessPathComponent.withLeadingTrivia(leadingTrivia)
+      return accessPathComponent.withLeadingTrivia(leadingTrivia + (accessPathComponent.leadingTrivia ?? []))
     }
 
     return accessPathComponent
@@ -4155,7 +4155,7 @@ public struct AccessPath: SyntaxBuildable {
     let accessPath = buildAccessPath(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(accessPath).withLeadingTrivia(leadingTrivia)
+      return Syntax(accessPath).withLeadingTrivia(leadingTrivia + (accessPath.leadingTrivia ?? []))
     }
 
     return Syntax(accessPath)
@@ -4193,7 +4193,7 @@ public struct ImportDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return importDecl.withLeadingTrivia(leadingTrivia)
+      return importDecl.withLeadingTrivia(leadingTrivia + (importDecl.leadingTrivia ?? []))
     }
 
     return importDecl
@@ -4229,7 +4229,7 @@ public struct AccessorParameter: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return accessorParameter.withLeadingTrivia(leadingTrivia)
+      return accessorParameter.withLeadingTrivia(leadingTrivia + (accessorParameter.leadingTrivia ?? []))
     }
 
     return accessorParameter
@@ -4281,7 +4281,7 @@ public struct AccessorDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return accessorDecl.withLeadingTrivia(leadingTrivia)
+      return accessorDecl.withLeadingTrivia(leadingTrivia + (accessorDecl.leadingTrivia ?? []))
     }
 
     return accessorDecl
@@ -4315,7 +4315,7 @@ public struct AccessorList: SyntaxBuildable {
     let accessorList = buildAccessorList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(accessorList).withLeadingTrivia(leadingTrivia)
+      return Syntax(accessorList).withLeadingTrivia(leadingTrivia + (accessorList.leadingTrivia ?? []))
     }
 
     return Syntax(accessorList)
@@ -4345,7 +4345,7 @@ public struct AccessorBlock: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return accessorBlock.withLeadingTrivia(leadingTrivia)
+      return accessorBlock.withLeadingTrivia(leadingTrivia + (accessorBlock.leadingTrivia ?? []))
     }
 
     return accessorBlock
@@ -4389,7 +4389,7 @@ public struct PatternBinding: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return patternBinding.withLeadingTrivia(leadingTrivia)
+      return patternBinding.withLeadingTrivia(leadingTrivia + (patternBinding.leadingTrivia ?? []))
     }
 
     return patternBinding
@@ -4423,7 +4423,7 @@ public struct PatternBindingList: SyntaxBuildable {
     let patternBindingList = buildPatternBindingList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(patternBindingList).withLeadingTrivia(leadingTrivia)
+      return Syntax(patternBindingList).withLeadingTrivia(leadingTrivia + (patternBindingList.leadingTrivia ?? []))
     }
 
     return Syntax(patternBindingList)
@@ -4457,7 +4457,7 @@ public struct VariableDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return variableDecl.withLeadingTrivia(leadingTrivia)
+      return variableDecl.withLeadingTrivia(leadingTrivia + (variableDecl.leadingTrivia ?? []))
     }
 
     return variableDecl
@@ -4501,7 +4501,7 @@ public struct EnumCaseElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return enumCaseElement.withLeadingTrivia(leadingTrivia)
+      return enumCaseElement.withLeadingTrivia(leadingTrivia + (enumCaseElement.leadingTrivia ?? []))
     }
 
     return enumCaseElement
@@ -4534,7 +4534,7 @@ public struct EnumCaseElementList: SyntaxBuildable {
     let enumCaseElementList = buildEnumCaseElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(enumCaseElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(enumCaseElementList).withLeadingTrivia(leadingTrivia + (enumCaseElementList.leadingTrivia ?? []))
     }
 
     return Syntax(enumCaseElementList)
@@ -4573,7 +4573,7 @@ public struct EnumCaseDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return enumCaseDecl.withLeadingTrivia(leadingTrivia)
+      return enumCaseDecl.withLeadingTrivia(leadingTrivia + (enumCaseDecl.leadingTrivia ?? []))
     }
 
     return enumCaseDecl
@@ -4630,7 +4630,7 @@ public struct EnumDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return enumDecl.withLeadingTrivia(leadingTrivia)
+      return enumDecl.withLeadingTrivia(leadingTrivia + (enumDecl.leadingTrivia ?? []))
     }
 
     return enumDecl
@@ -4675,7 +4675,7 @@ public struct OperatorDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return operatorDecl.withLeadingTrivia(leadingTrivia)
+      return operatorDecl.withLeadingTrivia(leadingTrivia + (operatorDecl.leadingTrivia ?? []))
     }
 
     return operatorDecl
@@ -4707,7 +4707,7 @@ public struct IdentifierList: SyntaxBuildable {
     let identifierList = buildIdentifierList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(identifierList).withLeadingTrivia(leadingTrivia)
+      return Syntax(identifierList).withLeadingTrivia(leadingTrivia + (identifierList.leadingTrivia ?? []))
     }
 
     return Syntax(identifierList)
@@ -4736,7 +4736,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return operatorPrecedenceAndTypes.withLeadingTrivia(leadingTrivia)
+      return operatorPrecedenceAndTypes.withLeadingTrivia(leadingTrivia + (operatorPrecedenceAndTypes.leadingTrivia ?? []))
     }
 
     return operatorPrecedenceAndTypes
@@ -4789,7 +4789,7 @@ public struct PrecedenceGroupDecl: DeclBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return precedenceGroupDecl.withLeadingTrivia(leadingTrivia)
+      return precedenceGroupDecl.withLeadingTrivia(leadingTrivia + (precedenceGroupDecl.leadingTrivia ?? []))
     }
 
     return precedenceGroupDecl
@@ -4823,7 +4823,7 @@ public struct PrecedenceGroupAttributeList: SyntaxBuildable {
     let precedenceGroupAttributeList = buildPrecedenceGroupAttributeList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(precedenceGroupAttributeList).withLeadingTrivia(leadingTrivia)
+      return Syntax(precedenceGroupAttributeList).withLeadingTrivia(leadingTrivia + (precedenceGroupAttributeList.leadingTrivia ?? []))
     }
 
     return Syntax(precedenceGroupAttributeList)
@@ -4857,7 +4857,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return precedenceGroupRelation.withLeadingTrivia(leadingTrivia)
+      return precedenceGroupRelation.withLeadingTrivia(leadingTrivia + (precedenceGroupRelation.leadingTrivia ?? []))
     }
 
     return precedenceGroupRelation
@@ -4891,7 +4891,7 @@ public struct PrecedenceGroupNameList: SyntaxBuildable {
     let precedenceGroupNameList = buildPrecedenceGroupNameList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(precedenceGroupNameList).withLeadingTrivia(leadingTrivia)
+      return Syntax(precedenceGroupNameList).withLeadingTrivia(leadingTrivia + (precedenceGroupNameList.leadingTrivia ?? []))
     }
 
     return Syntax(precedenceGroupNameList)
@@ -4917,7 +4917,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return precedenceGroupNameElement.withLeadingTrivia(leadingTrivia)
+      return precedenceGroupNameElement.withLeadingTrivia(leadingTrivia + (precedenceGroupNameElement.leadingTrivia ?? []))
     }
 
     return precedenceGroupNameElement
@@ -4957,7 +4957,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return precedenceGroupAssignment.withLeadingTrivia(leadingTrivia)
+      return precedenceGroupAssignment.withLeadingTrivia(leadingTrivia + (precedenceGroupAssignment.leadingTrivia ?? []))
     }
 
     return precedenceGroupAssignment
@@ -4997,7 +4997,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return precedenceGroupAssociativity.withLeadingTrivia(leadingTrivia)
+      return precedenceGroupAssociativity.withLeadingTrivia(leadingTrivia + (precedenceGroupAssociativity.leadingTrivia ?? []))
     }
 
     return precedenceGroupAssociativity
@@ -5029,7 +5029,7 @@ public struct TokenList: SyntaxBuildable {
     let tokenList = buildTokenList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(tokenList).withLeadingTrivia(leadingTrivia)
+      return Syntax(tokenList).withLeadingTrivia(leadingTrivia + (tokenList.leadingTrivia ?? []))
     }
 
     return Syntax(tokenList)
@@ -5055,7 +5055,7 @@ public struct NonEmptyTokenList: SyntaxBuildable {
     let nonEmptyTokenList = buildNonEmptyTokenList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(nonEmptyTokenList).withLeadingTrivia(leadingTrivia)
+      return Syntax(nonEmptyTokenList).withLeadingTrivia(leadingTrivia + (nonEmptyTokenList.leadingTrivia ?? []))
     }
 
     return Syntax(nonEmptyTokenList)
@@ -5096,7 +5096,7 @@ public struct CustomAttribute: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return customAttribute.withLeadingTrivia(leadingTrivia)
+      return customAttribute.withLeadingTrivia(leadingTrivia + (customAttribute.leadingTrivia ?? []))
     }
 
     return customAttribute
@@ -5147,7 +5147,7 @@ public struct Attribute: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return attribute.withLeadingTrivia(leadingTrivia)
+      return attribute.withLeadingTrivia(leadingTrivia + (attribute.leadingTrivia ?? []))
     }
 
     return attribute
@@ -5181,7 +5181,7 @@ public struct AttributeList: SyntaxBuildable {
     let attributeList = buildAttributeList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(attributeList).withLeadingTrivia(leadingTrivia)
+      return Syntax(attributeList).withLeadingTrivia(leadingTrivia + (attributeList.leadingTrivia ?? []))
     }
 
     return Syntax(attributeList)
@@ -5210,7 +5210,7 @@ public struct SpecializeAttributeSpecList: SyntaxBuildable {
     let specializeAttributeSpecList = buildSpecializeAttributeSpecList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(specializeAttributeSpecList).withLeadingTrivia(leadingTrivia)
+      return Syntax(specializeAttributeSpecList).withLeadingTrivia(leadingTrivia + (specializeAttributeSpecList.leadingTrivia ?? []))
     }
 
     return Syntax(specializeAttributeSpecList)
@@ -5248,7 +5248,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return labeledSpecializeEntry.withLeadingTrivia(leadingTrivia)
+      return labeledSpecializeEntry.withLeadingTrivia(leadingTrivia + (labeledSpecializeEntry.leadingTrivia ?? []))
     }
 
     return labeledSpecializeEntry
@@ -5293,7 +5293,7 @@ public struct TargetFunctionEntry: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return targetFunctionEntry.withLeadingTrivia(leadingTrivia)
+      return targetFunctionEntry.withLeadingTrivia(leadingTrivia + (targetFunctionEntry.leadingTrivia ?? []))
     }
 
     return targetFunctionEntry
@@ -5334,7 +5334,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return namedAttributeStringArgument.withLeadingTrivia(leadingTrivia)
+      return namedAttributeStringArgument.withLeadingTrivia(leadingTrivia + (namedAttributeStringArgument.leadingTrivia ?? []))
     }
 
     return namedAttributeStringArgument
@@ -5366,7 +5366,7 @@ public struct DeclName: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return declName.withLeadingTrivia(leadingTrivia)
+      return declName.withLeadingTrivia(leadingTrivia + (declName.leadingTrivia ?? []))
     }
 
     return declName
@@ -5410,7 +5410,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return implementsAttributeArguments.withLeadingTrivia(leadingTrivia)
+      return implementsAttributeArguments.withLeadingTrivia(leadingTrivia + (implementsAttributeArguments.leadingTrivia ?? []))
     }
 
     return implementsAttributeArguments
@@ -5447,7 +5447,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return objCSelectorPiece.withLeadingTrivia(leadingTrivia)
+      return objCSelectorPiece.withLeadingTrivia(leadingTrivia + (objCSelectorPiece.leadingTrivia ?? []))
     }
 
     return objCSelectorPiece
@@ -5481,7 +5481,7 @@ public struct ObjCSelector: SyntaxBuildable {
     let objCSelector = buildObjCSelector(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(objCSelector).withLeadingTrivia(leadingTrivia)
+      return Syntax(objCSelector).withLeadingTrivia(leadingTrivia + (objCSelector.leadingTrivia ?? []))
     }
 
     return Syntax(objCSelector)
@@ -5524,7 +5524,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return differentiableAttributeArguments.withLeadingTrivia(leadingTrivia)
+      return differentiableAttributeArguments.withLeadingTrivia(leadingTrivia + (differentiableAttributeArguments.leadingTrivia ?? []))
     }
 
     return differentiableAttributeArguments
@@ -5561,7 +5561,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return differentiabilityParamsClause.withLeadingTrivia(leadingTrivia)
+      return differentiabilityParamsClause.withLeadingTrivia(leadingTrivia + (differentiabilityParamsClause.leadingTrivia ?? []))
     }
 
     return differentiabilityParamsClause
@@ -5598,7 +5598,7 @@ public struct DifferentiabilityParams: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return differentiabilityParams.withLeadingTrivia(leadingTrivia)
+      return differentiabilityParams.withLeadingTrivia(leadingTrivia + (differentiabilityParams.leadingTrivia ?? []))
     }
 
     return differentiabilityParams
@@ -5632,7 +5632,7 @@ public struct DifferentiabilityParamList: SyntaxBuildable {
     let differentiabilityParamList = buildDifferentiabilityParamList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(differentiabilityParamList).withLeadingTrivia(leadingTrivia)
+      return Syntax(differentiabilityParamList).withLeadingTrivia(leadingTrivia + (differentiabilityParamList.leadingTrivia ?? []))
     }
 
     return Syntax(differentiabilityParamList)
@@ -5662,7 +5662,7 @@ public struct DifferentiabilityParam: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return differentiabilityParam.withLeadingTrivia(leadingTrivia)
+      return differentiabilityParam.withLeadingTrivia(leadingTrivia + (differentiabilityParam.leadingTrivia ?? []))
     }
 
     return differentiabilityParam
@@ -5719,7 +5719,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return derivativeRegistrationAttributeArguments.withLeadingTrivia(leadingTrivia)
+      return derivativeRegistrationAttributeArguments.withLeadingTrivia(leadingTrivia + (derivativeRegistrationAttributeArguments.leadingTrivia ?? []))
     }
 
     return derivativeRegistrationAttributeArguments
@@ -5763,7 +5763,7 @@ public struct QualifiedDeclName: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return qualifiedDeclName.withLeadingTrivia(leadingTrivia)
+      return qualifiedDeclName.withLeadingTrivia(leadingTrivia + (qualifiedDeclName.leadingTrivia ?? []))
     }
 
     return qualifiedDeclName
@@ -5796,7 +5796,7 @@ public struct FunctionDeclName: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return functionDeclName.withLeadingTrivia(leadingTrivia)
+      return functionDeclName.withLeadingTrivia(leadingTrivia + (functionDeclName.leadingTrivia ?? []))
     }
 
     return functionDeclName
@@ -5828,7 +5828,7 @@ public struct ContinueStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return continueStmt.withLeadingTrivia(leadingTrivia)
+      return continueStmt.withLeadingTrivia(leadingTrivia + (continueStmt.leadingTrivia ?? []))
     }
 
     return continueStmt
@@ -5872,7 +5872,7 @@ public struct WhileStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return whileStmt.withLeadingTrivia(leadingTrivia)
+      return whileStmt.withLeadingTrivia(leadingTrivia + (whileStmt.leadingTrivia ?? []))
     }
 
     return whileStmt
@@ -5904,7 +5904,7 @@ public struct DeferStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return deferStmt.withLeadingTrivia(leadingTrivia)
+      return deferStmt.withLeadingTrivia(leadingTrivia + (deferStmt.leadingTrivia ?? []))
     }
 
     return deferStmt
@@ -5932,7 +5932,7 @@ public struct ExpressionStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return expressionStmt.withLeadingTrivia(leadingTrivia)
+      return expressionStmt.withLeadingTrivia(leadingTrivia + (expressionStmt.leadingTrivia ?? []))
     }
 
     return expressionStmt
@@ -5966,7 +5966,7 @@ public struct SwitchCaseList: SyntaxBuildable {
     let switchCaseList = buildSwitchCaseList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(switchCaseList).withLeadingTrivia(leadingTrivia)
+      return Syntax(switchCaseList).withLeadingTrivia(leadingTrivia + (switchCaseList.leadingTrivia ?? []))
     }
 
     return Syntax(switchCaseList)
@@ -6008,7 +6008,7 @@ public struct RepeatWhileStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return repeatWhileStmt.withLeadingTrivia(leadingTrivia)
+      return repeatWhileStmt.withLeadingTrivia(leadingTrivia + (repeatWhileStmt.leadingTrivia ?? []))
     }
 
     return repeatWhileStmt
@@ -6048,7 +6048,7 @@ public struct GuardStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return guardStmt.withLeadingTrivia(leadingTrivia)
+      return guardStmt.withLeadingTrivia(leadingTrivia + (guardStmt.leadingTrivia ?? []))
     }
 
     return guardStmt
@@ -6080,7 +6080,7 @@ public struct WhereClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return whereClause.withLeadingTrivia(leadingTrivia)
+      return whereClause.withLeadingTrivia(leadingTrivia + (whereClause.leadingTrivia ?? []))
     }
 
     return whereClause
@@ -6152,7 +6152,7 @@ public struct ForInStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return forInStmt.withLeadingTrivia(leadingTrivia)
+      return forInStmt.withLeadingTrivia(leadingTrivia + (forInStmt.leadingTrivia ?? []))
     }
 
     return forInStmt
@@ -6204,7 +6204,7 @@ public struct SwitchStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return switchStmt.withLeadingTrivia(leadingTrivia)
+      return switchStmt.withLeadingTrivia(leadingTrivia + (switchStmt.leadingTrivia ?? []))
     }
 
     return switchStmt
@@ -6238,7 +6238,7 @@ public struct CatchClauseList: SyntaxBuildable {
     let catchClauseList = buildCatchClauseList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(catchClauseList).withLeadingTrivia(leadingTrivia)
+      return Syntax(catchClauseList).withLeadingTrivia(leadingTrivia + (catchClauseList.leadingTrivia ?? []))
     }
 
     return Syntax(catchClauseList)
@@ -6276,7 +6276,7 @@ public struct DoStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return doStmt.withLeadingTrivia(leadingTrivia)
+      return doStmt.withLeadingTrivia(leadingTrivia + (doStmt.leadingTrivia ?? []))
     }
 
     return doStmt
@@ -6308,7 +6308,7 @@ public struct ReturnStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return returnStmt.withLeadingTrivia(leadingTrivia)
+      return returnStmt.withLeadingTrivia(leadingTrivia + (returnStmt.leadingTrivia ?? []))
     }
 
     return returnStmt
@@ -6340,7 +6340,7 @@ public struct YieldStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return yieldStmt.withLeadingTrivia(leadingTrivia)
+      return yieldStmt.withLeadingTrivia(leadingTrivia + (yieldStmt.leadingTrivia ?? []))
     }
 
     return yieldStmt
@@ -6380,7 +6380,7 @@ public struct YieldList: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return yieldList.withLeadingTrivia(leadingTrivia)
+      return yieldList.withLeadingTrivia(leadingTrivia + (yieldList.leadingTrivia ?? []))
     }
 
     return yieldList
@@ -6408,7 +6408,7 @@ public struct FallthroughStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return fallthroughStmt.withLeadingTrivia(leadingTrivia)
+      return fallthroughStmt.withLeadingTrivia(leadingTrivia + (fallthroughStmt.leadingTrivia ?? []))
     }
 
     return fallthroughStmt
@@ -6440,7 +6440,7 @@ public struct BreakStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return breakStmt.withLeadingTrivia(leadingTrivia)
+      return breakStmt.withLeadingTrivia(leadingTrivia + (breakStmt.leadingTrivia ?? []))
     }
 
     return breakStmt
@@ -6474,7 +6474,7 @@ public struct CaseItemList: SyntaxBuildable {
     let caseItemList = buildCaseItemList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(caseItemList).withLeadingTrivia(leadingTrivia)
+      return Syntax(caseItemList).withLeadingTrivia(leadingTrivia + (caseItemList.leadingTrivia ?? []))
     }
 
     return Syntax(caseItemList)
@@ -6502,7 +6502,7 @@ public struct CatchItemList: SyntaxBuildable {
     let catchItemList = buildCatchItemList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(catchItemList).withLeadingTrivia(leadingTrivia)
+      return Syntax(catchItemList).withLeadingTrivia(leadingTrivia + (catchItemList.leadingTrivia ?? []))
     }
 
     return Syntax(catchItemList)
@@ -6528,7 +6528,7 @@ public struct ConditionElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return conditionElement.withLeadingTrivia(leadingTrivia)
+      return conditionElement.withLeadingTrivia(leadingTrivia + (conditionElement.leadingTrivia ?? []))
     }
 
     return conditionElement
@@ -6568,7 +6568,7 @@ public struct AvailabilityCondition: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return availabilityCondition.withLeadingTrivia(leadingTrivia)
+      return availabilityCondition.withLeadingTrivia(leadingTrivia + (availabilityCondition.leadingTrivia ?? []))
     }
 
     return availabilityCondition
@@ -6608,7 +6608,7 @@ public struct MatchingPatternCondition: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return matchingPatternCondition.withLeadingTrivia(leadingTrivia)
+      return matchingPatternCondition.withLeadingTrivia(leadingTrivia + (matchingPatternCondition.leadingTrivia ?? []))
     }
 
     return matchingPatternCondition
@@ -6648,7 +6648,7 @@ public struct OptionalBindingCondition: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return optionalBindingCondition.withLeadingTrivia(leadingTrivia)
+      return optionalBindingCondition.withLeadingTrivia(leadingTrivia + (optionalBindingCondition.leadingTrivia ?? []))
     }
 
     return optionalBindingCondition
@@ -6688,7 +6688,7 @@ public struct UnavailabilityCondition: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return unavailabilityCondition.withLeadingTrivia(leadingTrivia)
+      return unavailabilityCondition.withLeadingTrivia(leadingTrivia + (unavailabilityCondition.leadingTrivia ?? []))
     }
 
     return unavailabilityCondition
@@ -6722,7 +6722,7 @@ public struct ConditionElementList: SyntaxBuildable {
     let conditionElementList = buildConditionElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(conditionElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(conditionElementList).withLeadingTrivia(leadingTrivia + (conditionElementList.leadingTrivia ?? []))
     }
 
     return Syntax(conditionElementList)
@@ -6744,7 +6744,7 @@ public struct DeclarationStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return declarationStmt.withLeadingTrivia(leadingTrivia)
+      return declarationStmt.withLeadingTrivia(leadingTrivia + (declarationStmt.leadingTrivia ?? []))
     }
 
     return declarationStmt
@@ -6776,7 +6776,7 @@ public struct ThrowStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return throwStmt.withLeadingTrivia(leadingTrivia)
+      return throwStmt.withLeadingTrivia(leadingTrivia + (throwStmt.leadingTrivia ?? []))
     }
 
     return throwStmt
@@ -6828,7 +6828,7 @@ public struct IfStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return ifStmt.withLeadingTrivia(leadingTrivia)
+      return ifStmt.withLeadingTrivia(leadingTrivia + (ifStmt.leadingTrivia ?? []))
     }
 
     return ifStmt
@@ -6856,7 +6856,7 @@ public struct ElseIfContinuation: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return elseIfContinuation.withLeadingTrivia(leadingTrivia)
+      return elseIfContinuation.withLeadingTrivia(leadingTrivia + (elseIfContinuation.leadingTrivia ?? []))
     }
 
     return elseIfContinuation
@@ -6888,7 +6888,7 @@ public struct ElseBlock: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return elseBlock.withLeadingTrivia(leadingTrivia)
+      return elseBlock.withLeadingTrivia(leadingTrivia + (elseBlock.leadingTrivia ?? []))
     }
 
     return elseBlock
@@ -6924,7 +6924,7 @@ public struct SwitchCase: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return switchCase.withLeadingTrivia(leadingTrivia)
+      return switchCase.withLeadingTrivia(leadingTrivia + (switchCase.leadingTrivia ?? []))
     }
 
     return switchCase
@@ -6956,7 +6956,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return switchDefaultLabel.withLeadingTrivia(leadingTrivia)
+      return switchDefaultLabel.withLeadingTrivia(leadingTrivia + (switchDefaultLabel.leadingTrivia ?? []))
     }
 
     return switchDefaultLabel
@@ -6992,7 +6992,7 @@ public struct CaseItem: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return caseItem.withLeadingTrivia(leadingTrivia)
+      return caseItem.withLeadingTrivia(leadingTrivia + (caseItem.leadingTrivia ?? []))
     }
 
     return caseItem
@@ -7028,7 +7028,7 @@ public struct CatchItem: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return catchItem.withLeadingTrivia(leadingTrivia)
+      return catchItem.withLeadingTrivia(leadingTrivia + (catchItem.leadingTrivia ?? []))
     }
 
     return catchItem
@@ -7064,7 +7064,7 @@ public struct SwitchCaseLabel: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return switchCaseLabel.withLeadingTrivia(leadingTrivia)
+      return switchCaseLabel.withLeadingTrivia(leadingTrivia + (switchCaseLabel.leadingTrivia ?? []))
     }
 
     return switchCaseLabel
@@ -7100,7 +7100,7 @@ public struct CatchClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return catchClause.withLeadingTrivia(leadingTrivia)
+      return catchClause.withLeadingTrivia(leadingTrivia + (catchClause.leadingTrivia ?? []))
     }
 
     return catchClause
@@ -7148,7 +7148,7 @@ public struct PoundAssertStmt: StmtBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return poundAssertStmt.withLeadingTrivia(leadingTrivia)
+      return poundAssertStmt.withLeadingTrivia(leadingTrivia + (poundAssertStmt.leadingTrivia ?? []))
     }
 
     return poundAssertStmt
@@ -7180,7 +7180,7 @@ public struct GenericWhereClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return genericWhereClause.withLeadingTrivia(leadingTrivia)
+      return genericWhereClause.withLeadingTrivia(leadingTrivia + (genericWhereClause.leadingTrivia ?? []))
     }
 
     return genericWhereClause
@@ -7214,7 +7214,7 @@ public struct GenericRequirementList: SyntaxBuildable {
     let genericRequirementList = buildGenericRequirementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(genericRequirementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(genericRequirementList).withLeadingTrivia(leadingTrivia + (genericRequirementList.leadingTrivia ?? []))
     }
 
     return Syntax(genericRequirementList)
@@ -7240,7 +7240,7 @@ public struct GenericRequirement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return genericRequirement.withLeadingTrivia(leadingTrivia)
+      return genericRequirement.withLeadingTrivia(leadingTrivia + (genericRequirement.leadingTrivia ?? []))
     }
 
     return genericRequirement
@@ -7276,7 +7276,7 @@ public struct SameTypeRequirement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return sameTypeRequirement.withLeadingTrivia(leadingTrivia)
+      return sameTypeRequirement.withLeadingTrivia(leadingTrivia + (sameTypeRequirement.leadingTrivia ?? []))
     }
 
     return sameTypeRequirement
@@ -7310,7 +7310,7 @@ public struct GenericParameterList: SyntaxBuildable {
     let genericParameterList = buildGenericParameterList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(genericParameterList).withLeadingTrivia(leadingTrivia)
+      return Syntax(genericParameterList).withLeadingTrivia(leadingTrivia + (genericParameterList.leadingTrivia ?? []))
     }
 
     return Syntax(genericParameterList)
@@ -7348,7 +7348,7 @@ public struct GenericParameter: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return genericParameter.withLeadingTrivia(leadingTrivia)
+      return genericParameter.withLeadingTrivia(leadingTrivia + (genericParameter.leadingTrivia ?? []))
     }
 
     return genericParameter
@@ -7384,7 +7384,7 @@ public struct GenericParameterClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return genericParameterClause.withLeadingTrivia(leadingTrivia)
+      return genericParameterClause.withLeadingTrivia(leadingTrivia + (genericParameterClause.leadingTrivia ?? []))
     }
 
     return genericParameterClause
@@ -7420,7 +7420,7 @@ public struct ConformanceRequirement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return conformanceRequirement.withLeadingTrivia(leadingTrivia)
+      return conformanceRequirement.withLeadingTrivia(leadingTrivia + (conformanceRequirement.leadingTrivia ?? []))
     }
 
     return conformanceRequirement
@@ -7452,7 +7452,7 @@ public struct SimpleTypeIdentifier: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return simpleTypeIdentifier.withLeadingTrivia(leadingTrivia)
+      return simpleTypeIdentifier.withLeadingTrivia(leadingTrivia + (simpleTypeIdentifier.leadingTrivia ?? []))
     }
 
     return simpleTypeIdentifier
@@ -7492,7 +7492,7 @@ public struct MemberTypeIdentifier: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return memberTypeIdentifier.withLeadingTrivia(leadingTrivia)
+      return memberTypeIdentifier.withLeadingTrivia(leadingTrivia + (memberTypeIdentifier.leadingTrivia ?? []))
     }
 
     return memberTypeIdentifier
@@ -7520,7 +7520,7 @@ public struct ClassRestrictionType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return classRestrictionType.withLeadingTrivia(leadingTrivia)
+      return classRestrictionType.withLeadingTrivia(leadingTrivia + (classRestrictionType.leadingTrivia ?? []))
     }
 
     return classRestrictionType
@@ -7556,7 +7556,7 @@ public struct ArrayType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return arrayType.withLeadingTrivia(leadingTrivia)
+      return arrayType.withLeadingTrivia(leadingTrivia + (arrayType.leadingTrivia ?? []))
     }
 
     return arrayType
@@ -7600,7 +7600,7 @@ public struct DictionaryType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return dictionaryType.withLeadingTrivia(leadingTrivia)
+      return dictionaryType.withLeadingTrivia(leadingTrivia + (dictionaryType.leadingTrivia ?? []))
     }
 
     return dictionaryType
@@ -7636,7 +7636,7 @@ public struct MetatypeType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return metatypeType.withLeadingTrivia(leadingTrivia)
+      return metatypeType.withLeadingTrivia(leadingTrivia + (metatypeType.leadingTrivia ?? []))
     }
 
     return metatypeType
@@ -7668,7 +7668,7 @@ public struct OptionalType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return optionalType.withLeadingTrivia(leadingTrivia)
+      return optionalType.withLeadingTrivia(leadingTrivia + (optionalType.leadingTrivia ?? []))
     }
 
     return optionalType
@@ -7700,7 +7700,7 @@ public struct SomeType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return someType.withLeadingTrivia(leadingTrivia)
+      return someType.withLeadingTrivia(leadingTrivia + (someType.leadingTrivia ?? []))
     }
 
     return someType
@@ -7732,7 +7732,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return implicitlyUnwrappedOptionalType.withLeadingTrivia(leadingTrivia)
+      return implicitlyUnwrappedOptionalType.withLeadingTrivia(leadingTrivia + (implicitlyUnwrappedOptionalType.leadingTrivia ?? []))
     }
 
     return implicitlyUnwrappedOptionalType
@@ -7764,7 +7764,7 @@ public struct CompositionTypeElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return compositionTypeElement.withLeadingTrivia(leadingTrivia)
+      return compositionTypeElement.withLeadingTrivia(leadingTrivia + (compositionTypeElement.leadingTrivia ?? []))
     }
 
     return compositionTypeElement
@@ -7798,7 +7798,7 @@ public struct CompositionTypeElementList: SyntaxBuildable {
     let compositionTypeElementList = buildCompositionTypeElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(compositionTypeElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(compositionTypeElementList).withLeadingTrivia(leadingTrivia + (compositionTypeElementList.leadingTrivia ?? []))
     }
 
     return Syntax(compositionTypeElementList)
@@ -7820,7 +7820,7 @@ public struct CompositionType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return compositionType.withLeadingTrivia(leadingTrivia)
+      return compositionType.withLeadingTrivia(leadingTrivia + (compositionType.leadingTrivia ?? []))
     }
 
     return compositionType
@@ -7876,7 +7876,7 @@ public struct TupleTypeElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tupleTypeElement.withLeadingTrivia(leadingTrivia)
+      return tupleTypeElement.withLeadingTrivia(leadingTrivia + (tupleTypeElement.leadingTrivia ?? []))
     }
 
     return tupleTypeElement
@@ -7910,7 +7910,7 @@ public struct TupleTypeElementList: SyntaxBuildable {
     let tupleTypeElementList = buildTupleTypeElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(tupleTypeElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(tupleTypeElementList).withLeadingTrivia(leadingTrivia + (tupleTypeElementList.leadingTrivia ?? []))
     }
 
     return Syntax(tupleTypeElementList)
@@ -7940,7 +7940,7 @@ public struct TupleType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tupleType.withLeadingTrivia(leadingTrivia)
+      return tupleType.withLeadingTrivia(leadingTrivia + (tupleType.leadingTrivia ?? []))
     }
 
     return tupleType
@@ -7992,7 +7992,7 @@ public struct FunctionType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return functionType.withLeadingTrivia(leadingTrivia)
+      return functionType.withLeadingTrivia(leadingTrivia + (functionType.leadingTrivia ?? []))
     }
 
     return functionType
@@ -8028,7 +8028,7 @@ public struct AttributedType: TypeBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return attributedType.withLeadingTrivia(leadingTrivia)
+      return attributedType.withLeadingTrivia(leadingTrivia + (attributedType.leadingTrivia ?? []))
     }
 
     return attributedType
@@ -8062,7 +8062,7 @@ public struct GenericArgumentList: SyntaxBuildable {
     let genericArgumentList = buildGenericArgumentList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(genericArgumentList).withLeadingTrivia(leadingTrivia)
+      return Syntax(genericArgumentList).withLeadingTrivia(leadingTrivia + (genericArgumentList.leadingTrivia ?? []))
     }
 
     return Syntax(genericArgumentList)
@@ -8088,7 +8088,7 @@ public struct GenericArgument: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return genericArgument.withLeadingTrivia(leadingTrivia)
+      return genericArgument.withLeadingTrivia(leadingTrivia + (genericArgument.leadingTrivia ?? []))
     }
 
     return genericArgument
@@ -8124,7 +8124,7 @@ public struct GenericArgumentClause: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return genericArgumentClause.withLeadingTrivia(leadingTrivia)
+      return genericArgumentClause.withLeadingTrivia(leadingTrivia + (genericArgumentClause.leadingTrivia ?? []))
     }
 
     return genericArgumentClause
@@ -8156,7 +8156,7 @@ public struct TypeAnnotation: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return typeAnnotation.withLeadingTrivia(leadingTrivia)
+      return typeAnnotation.withLeadingTrivia(leadingTrivia + (typeAnnotation.leadingTrivia ?? []))
     }
 
     return typeAnnotation
@@ -8196,7 +8196,7 @@ public struct EnumCasePattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return enumCasePattern.withLeadingTrivia(leadingTrivia)
+      return enumCasePattern.withLeadingTrivia(leadingTrivia + (enumCasePattern.leadingTrivia ?? []))
     }
 
     return enumCasePattern
@@ -8228,7 +8228,7 @@ public struct IsTypePattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return isTypePattern.withLeadingTrivia(leadingTrivia)
+      return isTypePattern.withLeadingTrivia(leadingTrivia + (isTypePattern.leadingTrivia ?? []))
     }
 
     return isTypePattern
@@ -8260,7 +8260,7 @@ public struct OptionalPattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return optionalPattern.withLeadingTrivia(leadingTrivia)
+      return optionalPattern.withLeadingTrivia(leadingTrivia + (optionalPattern.leadingTrivia ?? []))
     }
 
     return optionalPattern
@@ -8288,7 +8288,7 @@ public struct IdentifierPattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return identifierPattern.withLeadingTrivia(leadingTrivia)
+      return identifierPattern.withLeadingTrivia(leadingTrivia + (identifierPattern.leadingTrivia ?? []))
     }
 
     return identifierPattern
@@ -8324,7 +8324,7 @@ public struct AsTypePattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return asTypePattern.withLeadingTrivia(leadingTrivia)
+      return asTypePattern.withLeadingTrivia(leadingTrivia + (asTypePattern.leadingTrivia ?? []))
     }
 
     return asTypePattern
@@ -8360,7 +8360,7 @@ public struct TuplePattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tuplePattern.withLeadingTrivia(leadingTrivia)
+      return tuplePattern.withLeadingTrivia(leadingTrivia + (tuplePattern.leadingTrivia ?? []))
     }
 
     return tuplePattern
@@ -8392,7 +8392,7 @@ public struct WildcardPattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return wildcardPattern.withLeadingTrivia(leadingTrivia)
+      return wildcardPattern.withLeadingTrivia(leadingTrivia + (wildcardPattern.leadingTrivia ?? []))
     }
 
     return wildcardPattern
@@ -8432,7 +8432,7 @@ public struct TuplePatternElement: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return tuplePatternElement.withLeadingTrivia(leadingTrivia)
+      return tuplePatternElement.withLeadingTrivia(leadingTrivia + (tuplePatternElement.leadingTrivia ?? []))
     }
 
     return tuplePatternElement
@@ -8460,7 +8460,7 @@ public struct ExpressionPattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return expressionPattern.withLeadingTrivia(leadingTrivia)
+      return expressionPattern.withLeadingTrivia(leadingTrivia + (expressionPattern.leadingTrivia ?? []))
     }
 
     return expressionPattern
@@ -8494,7 +8494,7 @@ public struct TuplePatternElementList: SyntaxBuildable {
     let tuplePatternElementList = buildTuplePatternElementList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(tuplePatternElementList).withLeadingTrivia(leadingTrivia)
+      return Syntax(tuplePatternElementList).withLeadingTrivia(leadingTrivia + (tuplePatternElementList.leadingTrivia ?? []))
     }
 
     return Syntax(tuplePatternElementList)
@@ -8520,7 +8520,7 @@ public struct ValueBindingPattern: PatternBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return valueBindingPattern.withLeadingTrivia(leadingTrivia)
+      return valueBindingPattern.withLeadingTrivia(leadingTrivia + (valueBindingPattern.leadingTrivia ?? []))
     }
 
     return valueBindingPattern
@@ -8554,7 +8554,7 @@ public struct AvailabilitySpecList: SyntaxBuildable {
     let availabilitySpecList = buildAvailabilitySpecList(format: format)
 
     if let leadingTrivia = leadingTrivia {
-      return Syntax(availabilitySpecList).withLeadingTrivia(leadingTrivia)
+      return Syntax(availabilitySpecList).withLeadingTrivia(leadingTrivia + (availabilitySpecList.leadingTrivia ?? []))
     }
 
     return Syntax(availabilitySpecList)
@@ -8584,7 +8584,7 @@ public struct AvailabilityArgument: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return availabilityArgument.withLeadingTrivia(leadingTrivia)
+      return availabilityArgument.withLeadingTrivia(leadingTrivia + (availabilityArgument.leadingTrivia ?? []))
     }
 
     return availabilityArgument
@@ -8624,7 +8624,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return availabilityLabeledArgument.withLeadingTrivia(leadingTrivia)
+      return availabilityLabeledArgument.withLeadingTrivia(leadingTrivia + (availabilityLabeledArgument.leadingTrivia ?? []))
     }
 
     return availabilityLabeledArgument
@@ -8660,7 +8660,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return availabilityVersionRestriction.withLeadingTrivia(leadingTrivia)
+      return availabilityVersionRestriction.withLeadingTrivia(leadingTrivia + (availabilityVersionRestriction.leadingTrivia ?? []))
     }
 
     return availabilityVersionRestriction
@@ -8700,7 +8700,7 @@ public struct VersionTuple: SyntaxBuildable {
     )
     
     if let leadingTrivia = leadingTrivia {
-      return versionTuple.withLeadingTrivia(leadingTrivia)
+      return versionTuple.withLeadingTrivia(leadingTrivia + (versionTuple.leadingTrivia ?? []))
     }
 
     return versionTuple

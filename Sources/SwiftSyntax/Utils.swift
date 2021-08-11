@@ -49,14 +49,30 @@ public struct ByteSourceRange: Equatable {
   }
 }
 
-public struct SourceEdit {
+public struct SourceEdit: Equatable {
   /// The byte range of the original source buffer that the edit applies to.
   public let range: ByteSourceRange
   /// The length of the edit replacement in UTF8 bytes.
   public let replacementLength: Int
 
+  public var offset: Int { return range.offset }
+
+  public var length: Int { return range.length }
+
+  public var endOffset: Int { return range.endOffset }
+
+  /// After the edit has been applied the range of the replacement text.
+  public var replacementRange: ByteSourceRange {
+    return ByteSourceRange(offset: offset, length: replacementLength)
+  }
+
   public init(range: ByteSourceRange, replacementLength: Int) {
     self.range = range
+    self.replacementLength = replacementLength
+  }
+
+  public init(offset: Int, length: Int, replacementLength: Int) {
+    self.range = ByteSourceRange(offset: offset, length: length)
     self.replacementLength = replacementLength
   }
 

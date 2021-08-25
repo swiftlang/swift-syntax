@@ -16,8 +16,65 @@ import SwiftSyntax
 
 @resultBuilder
 public struct CodeBlockItemListBuilder {
-  public static func buildBlock(_ elements: CodeBlockItem...) -> CodeBlockItemList {
-    CodeBlockItemList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = CodeBlockItem
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [CodeBlockItem]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = CodeBlockItemList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -27,8 +84,65 @@ extension CodeBlockItemList {
 
 @resultBuilder
 public struct TupleExprElementListBuilder {
-  public static func buildBlock(_ elements: TupleExprElement...) -> TupleExprElementList {
-    TupleExprElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = TupleExprElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [TupleExprElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = TupleExprElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -38,8 +152,65 @@ extension TupleExprElementList {
 
 @resultBuilder
 public struct ArrayElementListBuilder {
-  public static func buildBlock(_ elements: ArrayElement...) -> ArrayElementList {
-    ArrayElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ArrayElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ArrayElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ArrayElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -49,8 +220,65 @@ extension ArrayElementList {
 
 @resultBuilder
 public struct DictionaryElementListBuilder {
-  public static func buildBlock(_ elements: DictionaryElement...) -> DictionaryElementList {
-    DictionaryElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = DictionaryElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [DictionaryElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = DictionaryElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -60,8 +288,65 @@ extension DictionaryElementList {
 
 @resultBuilder
 public struct StringLiteralSegmentsBuilder {
-  public static func buildBlock(_ elements: SyntaxBuildable...) -> StringLiteralSegments {
-    StringLiteralSegments(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = SyntaxBuildable
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [SyntaxBuildable]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = StringLiteralSegments
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -71,8 +356,65 @@ extension StringLiteralSegments {
 
 @resultBuilder
 public struct DeclNameArgumentListBuilder {
-  public static func buildBlock(_ elements: DeclNameArgument...) -> DeclNameArgumentList {
-    DeclNameArgumentList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = DeclNameArgument
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [DeclNameArgument]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = DeclNameArgumentList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -82,8 +424,65 @@ extension DeclNameArgumentList {
 
 @resultBuilder
 public struct ExprListBuilder {
-  public static func buildBlock(_ elements: ExprBuildable...) -> ExprList {
-    ExprList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ExprBuildable
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ExprBuildable]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ExprList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -93,8 +492,65 @@ extension ExprList {
 
 @resultBuilder
 public struct ClosureCaptureItemListBuilder {
-  public static func buildBlock(_ elements: ClosureCaptureItem...) -> ClosureCaptureItemList {
-    ClosureCaptureItemList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ClosureCaptureItem
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ClosureCaptureItem]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ClosureCaptureItemList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -104,8 +560,65 @@ extension ClosureCaptureItemList {
 
 @resultBuilder
 public struct ClosureParamListBuilder {
-  public static func buildBlock(_ elements: ClosureParam...) -> ClosureParamList {
-    ClosureParamList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ClosureParam
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ClosureParam]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ClosureParamList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -115,8 +628,65 @@ extension ClosureParamList {
 
 @resultBuilder
 public struct MultipleTrailingClosureElementListBuilder {
-  public static func buildBlock(_ elements: MultipleTrailingClosureElement...) -> MultipleTrailingClosureElementList {
-    MultipleTrailingClosureElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = MultipleTrailingClosureElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [MultipleTrailingClosureElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = MultipleTrailingClosureElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -126,8 +696,65 @@ extension MultipleTrailingClosureElementList {
 
 @resultBuilder
 public struct ObjcNameBuilder {
-  public static func buildBlock(_ elements: ObjcNamePiece...) -> ObjcName {
-    ObjcName(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ObjcNamePiece
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ObjcNamePiece]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ObjcName
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -137,8 +764,65 @@ extension ObjcName {
 
 @resultBuilder
 public struct FunctionParameterListBuilder {
-  public static func buildBlock(_ elements: FunctionParameter...) -> FunctionParameterList {
-    FunctionParameterList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = FunctionParameter
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [FunctionParameter]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = FunctionParameterList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -148,8 +832,65 @@ extension FunctionParameterList {
 
 @resultBuilder
 public struct IfConfigClauseListBuilder {
-  public static func buildBlock(_ elements: IfConfigClause...) -> IfConfigClauseList {
-    IfConfigClauseList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = IfConfigClause
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [IfConfigClause]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = IfConfigClauseList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -159,8 +900,65 @@ extension IfConfigClauseList {
 
 @resultBuilder
 public struct InheritedTypeListBuilder {
-  public static func buildBlock(_ elements: InheritedType...) -> InheritedTypeList {
-    InheritedTypeList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = InheritedType
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [InheritedType]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = InheritedTypeList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -170,8 +968,65 @@ extension InheritedTypeList {
 
 @resultBuilder
 public struct MemberDeclListBuilder {
-  public static func buildBlock(_ elements: MemberDeclListItem...) -> MemberDeclList {
-    MemberDeclList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = MemberDeclListItem
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [MemberDeclListItem]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = MemberDeclList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -181,8 +1036,65 @@ extension MemberDeclList {
 
 @resultBuilder
 public struct ModifierListBuilder {
-  public static func buildBlock(_ elements: DeclModifier...) -> ModifierList {
-    ModifierList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = DeclModifier
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [DeclModifier]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ModifierList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -192,8 +1104,65 @@ extension ModifierList {
 
 @resultBuilder
 public struct AccessPathBuilder {
-  public static func buildBlock(_ elements: AccessPathComponent...) -> AccessPath {
-    AccessPath(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = AccessPathComponent
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [AccessPathComponent]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = AccessPath
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -203,8 +1172,65 @@ extension AccessPath {
 
 @resultBuilder
 public struct AccessorListBuilder {
-  public static func buildBlock(_ elements: AccessorDecl...) -> AccessorList {
-    AccessorList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = AccessorDecl
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [AccessorDecl]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = AccessorList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -214,8 +1240,65 @@ extension AccessorList {
 
 @resultBuilder
 public struct PatternBindingListBuilder {
-  public static func buildBlock(_ elements: PatternBinding...) -> PatternBindingList {
-    PatternBindingList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = PatternBinding
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [PatternBinding]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = PatternBindingList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -225,8 +1308,65 @@ extension PatternBindingList {
 
 @resultBuilder
 public struct EnumCaseElementListBuilder {
-  public static func buildBlock(_ elements: EnumCaseElement...) -> EnumCaseElementList {
-    EnumCaseElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = EnumCaseElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [EnumCaseElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = EnumCaseElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -236,8 +1376,65 @@ extension EnumCaseElementList {
 
 @resultBuilder
 public struct IdentifierListBuilder {
-  public static func buildBlock(_ elements: TokenSyntax...) -> IdentifierList {
-    IdentifierList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = TokenSyntax
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [TokenSyntax]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = IdentifierList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -247,8 +1444,65 @@ extension IdentifierList {
 
 @resultBuilder
 public struct PrecedenceGroupAttributeListBuilder {
-  public static func buildBlock(_ elements: SyntaxBuildable...) -> PrecedenceGroupAttributeList {
-    PrecedenceGroupAttributeList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = SyntaxBuildable
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [SyntaxBuildable]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = PrecedenceGroupAttributeList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -258,8 +1512,65 @@ extension PrecedenceGroupAttributeList {
 
 @resultBuilder
 public struct PrecedenceGroupNameListBuilder {
-  public static func buildBlock(_ elements: PrecedenceGroupNameElement...) -> PrecedenceGroupNameList {
-    PrecedenceGroupNameList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = PrecedenceGroupNameElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [PrecedenceGroupNameElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = PrecedenceGroupNameList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -269,8 +1580,65 @@ extension PrecedenceGroupNameList {
 
 @resultBuilder
 public struct TokenListBuilder {
-  public static func buildBlock(_ elements: TokenSyntax...) -> TokenList {
-    TokenList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = TokenSyntax
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [TokenSyntax]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = TokenList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -280,8 +1648,65 @@ extension TokenList {
 
 @resultBuilder
 public struct NonEmptyTokenListBuilder {
-  public static func buildBlock(_ elements: TokenSyntax...) -> NonEmptyTokenList {
-    NonEmptyTokenList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = TokenSyntax
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [TokenSyntax]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = NonEmptyTokenList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -291,8 +1716,65 @@ extension NonEmptyTokenList {
 
 @resultBuilder
 public struct AttributeListBuilder {
-  public static func buildBlock(_ elements: SyntaxBuildable...) -> AttributeList {
-    AttributeList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = SyntaxBuildable
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [SyntaxBuildable]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = AttributeList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -302,8 +1784,65 @@ extension AttributeList {
 
 @resultBuilder
 public struct SpecializeAttributeSpecListBuilder {
-  public static func buildBlock(_ elements: SyntaxBuildable...) -> SpecializeAttributeSpecList {
-    SpecializeAttributeSpecList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = SyntaxBuildable
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [SyntaxBuildable]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = SpecializeAttributeSpecList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -313,8 +1852,65 @@ extension SpecializeAttributeSpecList {
 
 @resultBuilder
 public struct ObjCSelectorBuilder {
-  public static func buildBlock(_ elements: ObjCSelectorPiece...) -> ObjCSelector {
-    ObjCSelector(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ObjCSelectorPiece
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ObjCSelectorPiece]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ObjCSelector
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -324,8 +1920,65 @@ extension ObjCSelector {
 
 @resultBuilder
 public struct DifferentiabilityParamListBuilder {
-  public static func buildBlock(_ elements: DifferentiabilityParam...) -> DifferentiabilityParamList {
-    DifferentiabilityParamList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = DifferentiabilityParam
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [DifferentiabilityParam]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = DifferentiabilityParamList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -335,8 +1988,65 @@ extension DifferentiabilityParamList {
 
 @resultBuilder
 public struct SwitchCaseListBuilder {
-  public static func buildBlock(_ elements: SyntaxBuildable...) -> SwitchCaseList {
-    SwitchCaseList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = SyntaxBuildable
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [SyntaxBuildable]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = SwitchCaseList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -346,8 +2056,65 @@ extension SwitchCaseList {
 
 @resultBuilder
 public struct CatchClauseListBuilder {
-  public static func buildBlock(_ elements: CatchClause...) -> CatchClauseList {
-    CatchClauseList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = CatchClause
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [CatchClause]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = CatchClauseList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -357,8 +2124,65 @@ extension CatchClauseList {
 
 @resultBuilder
 public struct CaseItemListBuilder {
-  public static func buildBlock(_ elements: CaseItem...) -> CaseItemList {
-    CaseItemList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = CaseItem
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [CaseItem]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = CaseItemList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -368,8 +2192,65 @@ extension CaseItemList {
 
 @resultBuilder
 public struct CatchItemListBuilder {
-  public static func buildBlock(_ elements: CatchItem...) -> CatchItemList {
-    CatchItemList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = CatchItem
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [CatchItem]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = CatchItemList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -379,8 +2260,65 @@ extension CatchItemList {
 
 @resultBuilder
 public struct ConditionElementListBuilder {
-  public static func buildBlock(_ elements: ConditionElement...) -> ConditionElementList {
-    ConditionElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ConditionElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [ConditionElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ConditionElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -390,8 +2328,65 @@ extension ConditionElementList {
 
 @resultBuilder
 public struct GenericRequirementListBuilder {
-  public static func buildBlock(_ elements: GenericRequirement...) -> GenericRequirementList {
-    GenericRequirementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = GenericRequirement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [GenericRequirement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = GenericRequirementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -401,8 +2396,65 @@ extension GenericRequirementList {
 
 @resultBuilder
 public struct GenericParameterListBuilder {
-  public static func buildBlock(_ elements: GenericParameter...) -> GenericParameterList {
-    GenericParameterList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = GenericParameter
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [GenericParameter]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = GenericParameterList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -412,8 +2464,65 @@ extension GenericParameterList {
 
 @resultBuilder
 public struct CompositionTypeElementListBuilder {
-  public static func buildBlock(_ elements: CompositionTypeElement...) -> CompositionTypeElementList {
-    CompositionTypeElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = CompositionTypeElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [CompositionTypeElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = CompositionTypeElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -423,8 +2532,65 @@ extension CompositionTypeElementList {
 
 @resultBuilder
 public struct TupleTypeElementListBuilder {
-  public static func buildBlock(_ elements: TupleTypeElement...) -> TupleTypeElementList {
-    TupleTypeElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = TupleTypeElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [TupleTypeElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = TupleTypeElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -434,8 +2600,65 @@ extension TupleTypeElementList {
 
 @resultBuilder
 public struct GenericArgumentListBuilder {
-  public static func buildBlock(_ elements: GenericArgument...) -> GenericArgumentList {
-    GenericArgumentList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = GenericArgument
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [GenericArgument]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = GenericArgumentList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -445,8 +2668,65 @@ extension GenericArgumentList {
 
 @resultBuilder
 public struct TuplePatternElementListBuilder {
-  public static func buildBlock(_ elements: TuplePatternElement...) -> TuplePatternElementList {
-    TuplePatternElementList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = TuplePatternElement
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [TuplePatternElement]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = TuplePatternElementList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 
@@ -456,8 +2736,65 @@ extension TuplePatternElementList {
 
 @resultBuilder
 public struct AvailabilitySpecListBuilder {
-  public static func buildBlock(_ elements: AvailabilityArgument...) -> AvailabilitySpecList {
-    AvailabilitySpecList(elements)
+  
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = AvailabilityArgument
+
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [AvailabilityArgument]
+
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = AvailabilitySpecList
+
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Component...) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Expression) -> Component {
+    [expression]
+  }
+
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Component?) -> Component {
+    component ?? []
+  }
+
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Component) -> Component {
+    component
+  }
+
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Component) -> Component {
+    component
+  }
+
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Component]) -> Component {
+    components.flatMap { $0 }
+  }
+
+  /// If declared, this will be called on the partial result of an 'if
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
+    component
+  }
+
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    .init(component)
   }
 }
 

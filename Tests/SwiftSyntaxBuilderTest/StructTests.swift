@@ -43,4 +43,27 @@ final class StructTests: XCTestCase {
     }
     """)
   }
+
+  func testControlWithLoopAndIf() {
+    let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
+      for i in 0..<5 {
+        if i.isMultiple(of: 2) {
+          MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
+            PatternBinding(
+              pattern: IdentifierPattern(identifier: .identifier("var\(i)")),
+              typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("String"))
+            )
+          }))
+        }
+      }
+    }))
+    let syntax = myStruct.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, """
+    struct MyStruct{
+        let var0: String
+        let var2: String
+        let var4: String
+    }
+    """)
+  }
 }

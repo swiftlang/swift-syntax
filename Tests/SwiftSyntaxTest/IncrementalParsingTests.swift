@@ -10,7 +10,7 @@ public class IncrementalParsingTests: XCTestCase {
 
     var tree = try! SyntaxParser.parse(source: original)
     let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
-    let lookup = IncrementalParseTransition(previousTree: tree, edits: [sourceEdit])
+    let lookup = IncrementalParseTransition(previousTree: tree, edits: ConcurrentEdits(sourceEdit))
     tree = try! SyntaxParser.parse(source: step.0, parseTransition: lookup)
     XCTAssertEqual("\(tree)", step.0)
   }
@@ -23,7 +23,7 @@ public class IncrementalParsingTests: XCTestCase {
     let origTree = try! SyntaxParser.parse(source: original)
     let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
     let reusedNodeCollector = IncrementalParseReusedNodeCollector()
-    let transition = IncrementalParseTransition(previousTree: origTree, edits: [sourceEdit], reusedNodeDelegate: reusedNodeCollector)
+    let transition = IncrementalParseTransition(previousTree: origTree, edits: ConcurrentEdits(sourceEdit), reusedNodeDelegate: reusedNodeCollector)
     let newTree = try! SyntaxParser.parse(source: step.0, parseTransition: transition)
     XCTAssertEqual("\(newTree)", step.0)
 

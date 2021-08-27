@@ -19,11 +19,11 @@ public struct CodeBlockItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CodeBlockItem
+  public typealias Expression = ExpressibleAsCodeBlockItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [CodeBlockItem]
+  public typealias Component = [ExpressibleAsCodeBlockItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -74,7 +74,7 @@ public struct CodeBlockItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createCodeBlockItem() })
   }
 }
 
@@ -87,11 +87,11 @@ public struct TupleExprElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TupleExprElement
+  public typealias Expression = ExpressibleAsTupleExprElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TupleExprElement]
+  public typealias Component = [ExpressibleAsTupleExprElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -142,7 +142,7 @@ public struct TupleExprElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createTupleExprElement() })
   }
 }
 
@@ -155,11 +155,11 @@ public struct ArrayElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ArrayElement
+  public typealias Expression = ExpressibleAsArrayElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ArrayElement]
+  public typealias Component = [ExpressibleAsArrayElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -210,7 +210,7 @@ public struct ArrayElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createArrayElement() })
   }
 }
 
@@ -223,11 +223,11 @@ public struct DictionaryElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DictionaryElement
+  public typealias Expression = ExpressibleAsDictionaryElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [DictionaryElement]
+  public typealias Component = [ExpressibleAsDictionaryElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -278,7 +278,7 @@ public struct DictionaryElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createDictionaryElement() })
   }
 }
 
@@ -291,11 +291,11 @@ public struct StringLiteralSegmentsBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [SyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -346,7 +346,7 @@ public struct StringLiteralSegmentsBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 
@@ -359,11 +359,11 @@ public struct DeclNameArgumentListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DeclNameArgument
+  public typealias Expression = ExpressibleAsDeclNameArgument
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [DeclNameArgument]
+  public typealias Component = [ExpressibleAsDeclNameArgument]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -414,7 +414,7 @@ public struct DeclNameArgumentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createDeclNameArgument() })
   }
 }
 
@@ -427,11 +427,11 @@ public struct ExprListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExprBuildable
+  public typealias Expression = ExpressibleAsExprBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExprBuildable]
+  public typealias Component = [ExpressibleAsExprBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -482,7 +482,7 @@ public struct ExprListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createExprBuildable() })
   }
 }
 
@@ -495,11 +495,11 @@ public struct ClosureCaptureItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ClosureCaptureItem
+  public typealias Expression = ExpressibleAsClosureCaptureItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ClosureCaptureItem]
+  public typealias Component = [ExpressibleAsClosureCaptureItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -550,7 +550,7 @@ public struct ClosureCaptureItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createClosureCaptureItem() })
   }
 }
 
@@ -563,11 +563,11 @@ public struct ClosureParamListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ClosureParam
+  public typealias Expression = ExpressibleAsClosureParam
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ClosureParam]
+  public typealias Component = [ExpressibleAsClosureParam]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -618,7 +618,7 @@ public struct ClosureParamListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createClosureParam() })
   }
 }
 
@@ -631,11 +631,11 @@ public struct MultipleTrailingClosureElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = MultipleTrailingClosureElement
+  public typealias Expression = ExpressibleAsMultipleTrailingClosureElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [MultipleTrailingClosureElement]
+  public typealias Component = [ExpressibleAsMultipleTrailingClosureElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -686,7 +686,7 @@ public struct MultipleTrailingClosureElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createMultipleTrailingClosureElement() })
   }
 }
 
@@ -699,11 +699,11 @@ public struct ObjcNameBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ObjcNamePiece
+  public typealias Expression = ExpressibleAsObjcNamePiece
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ObjcNamePiece]
+  public typealias Component = [ExpressibleAsObjcNamePiece]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -754,7 +754,7 @@ public struct ObjcNameBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createObjcNamePiece() })
   }
 }
 
@@ -767,11 +767,11 @@ public struct FunctionParameterListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = FunctionParameter
+  public typealias Expression = ExpressibleAsFunctionParameter
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [FunctionParameter]
+  public typealias Component = [ExpressibleAsFunctionParameter]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -822,7 +822,7 @@ public struct FunctionParameterListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createFunctionParameter() })
   }
 }
 
@@ -835,11 +835,11 @@ public struct IfConfigClauseListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = IfConfigClause
+  public typealias Expression = ExpressibleAsIfConfigClause
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [IfConfigClause]
+  public typealias Component = [ExpressibleAsIfConfigClause]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -890,7 +890,7 @@ public struct IfConfigClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createIfConfigClause() })
   }
 }
 
@@ -903,11 +903,11 @@ public struct InheritedTypeListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = InheritedType
+  public typealias Expression = ExpressibleAsInheritedType
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [InheritedType]
+  public typealias Component = [ExpressibleAsInheritedType]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -958,7 +958,7 @@ public struct InheritedTypeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createInheritedType() })
   }
 }
 
@@ -971,11 +971,11 @@ public struct MemberDeclListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = MemberDeclListItem
+  public typealias Expression = ExpressibleAsMemberDeclListItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [MemberDeclListItem]
+  public typealias Component = [ExpressibleAsMemberDeclListItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1026,7 +1026,7 @@ public struct MemberDeclListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createMemberDeclListItem() })
   }
 }
 
@@ -1039,11 +1039,11 @@ public struct ModifierListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DeclModifier
+  public typealias Expression = ExpressibleAsDeclModifier
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [DeclModifier]
+  public typealias Component = [ExpressibleAsDeclModifier]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1094,7 +1094,7 @@ public struct ModifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createDeclModifier() })
   }
 }
 
@@ -1107,11 +1107,11 @@ public struct AccessPathBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AccessPathComponent
+  public typealias Expression = ExpressibleAsAccessPathComponent
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [AccessPathComponent]
+  public typealias Component = [ExpressibleAsAccessPathComponent]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1162,7 +1162,7 @@ public struct AccessPathBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createAccessPathComponent() })
   }
 }
 
@@ -1175,11 +1175,11 @@ public struct AccessorListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AccessorDecl
+  public typealias Expression = ExpressibleAsAccessorDecl
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [AccessorDecl]
+  public typealias Component = [ExpressibleAsAccessorDecl]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1230,7 +1230,7 @@ public struct AccessorListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createAccessorDecl() })
   }
 }
 
@@ -1243,11 +1243,11 @@ public struct PatternBindingListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PatternBinding
+  public typealias Expression = ExpressibleAsPatternBinding
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [PatternBinding]
+  public typealias Component = [ExpressibleAsPatternBinding]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1298,7 +1298,7 @@ public struct PatternBindingListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createPatternBinding() })
   }
 }
 
@@ -1311,11 +1311,11 @@ public struct EnumCaseElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = EnumCaseElement
+  public typealias Expression = ExpressibleAsEnumCaseElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [EnumCaseElement]
+  public typealias Component = [ExpressibleAsEnumCaseElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1366,7 +1366,7 @@ public struct EnumCaseElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createEnumCaseElement() })
   }
 }
 
@@ -1379,11 +1379,11 @@ public struct IdentifierListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TokenSyntax
+  public typealias Expression = ExpressibleAsTokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TokenSyntax]
+  public typealias Component = [ExpressibleAsTokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1434,7 +1434,7 @@ public struct IdentifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createTokenSyntax() })
   }
 }
 
@@ -1447,11 +1447,11 @@ public struct PrecedenceGroupAttributeListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [SyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1502,7 +1502,7 @@ public struct PrecedenceGroupAttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 
@@ -1515,11 +1515,11 @@ public struct PrecedenceGroupNameListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PrecedenceGroupNameElement
+  public typealias Expression = ExpressibleAsPrecedenceGroupNameElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [PrecedenceGroupNameElement]
+  public typealias Component = [ExpressibleAsPrecedenceGroupNameElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1570,7 +1570,7 @@ public struct PrecedenceGroupNameListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createPrecedenceGroupNameElement() })
   }
 }
 
@@ -1583,11 +1583,11 @@ public struct TokenListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TokenSyntax
+  public typealias Expression = ExpressibleAsTokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TokenSyntax]
+  public typealias Component = [ExpressibleAsTokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1638,7 +1638,7 @@ public struct TokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createTokenSyntax() })
   }
 }
 
@@ -1651,11 +1651,11 @@ public struct NonEmptyTokenListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TokenSyntax
+  public typealias Expression = ExpressibleAsTokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TokenSyntax]
+  public typealias Component = [ExpressibleAsTokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1706,7 +1706,7 @@ public struct NonEmptyTokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createTokenSyntax() })
   }
 }
 
@@ -1719,11 +1719,11 @@ public struct AttributeListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [SyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1774,7 +1774,7 @@ public struct AttributeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 
@@ -1787,11 +1787,11 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [SyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1842,7 +1842,7 @@ public struct SpecializeAttributeSpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 
@@ -1855,11 +1855,11 @@ public struct ObjCSelectorBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ObjCSelectorPiece
+  public typealias Expression = ExpressibleAsObjCSelectorPiece
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ObjCSelectorPiece]
+  public typealias Component = [ExpressibleAsObjCSelectorPiece]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1910,7 +1910,7 @@ public struct ObjCSelectorBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createObjCSelectorPiece() })
   }
 }
 
@@ -1923,11 +1923,11 @@ public struct DifferentiabilityParamListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DifferentiabilityParam
+  public typealias Expression = ExpressibleAsDifferentiabilityParam
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [DifferentiabilityParam]
+  public typealias Component = [ExpressibleAsDifferentiabilityParam]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1978,7 +1978,7 @@ public struct DifferentiabilityParamListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createDifferentiabilityParam() })
   }
 }
 
@@ -1991,11 +1991,11 @@ public struct SwitchCaseListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [SyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2046,7 +2046,7 @@ public struct SwitchCaseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 
@@ -2059,11 +2059,11 @@ public struct CatchClauseListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CatchClause
+  public typealias Expression = ExpressibleAsCatchClause
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [CatchClause]
+  public typealias Component = [ExpressibleAsCatchClause]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2114,7 +2114,7 @@ public struct CatchClauseListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createCatchClause() })
   }
 }
 
@@ -2127,11 +2127,11 @@ public struct CaseItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CaseItem
+  public typealias Expression = ExpressibleAsCaseItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [CaseItem]
+  public typealias Component = [ExpressibleAsCaseItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2182,7 +2182,7 @@ public struct CaseItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createCaseItem() })
   }
 }
 
@@ -2195,11 +2195,11 @@ public struct CatchItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CatchItem
+  public typealias Expression = ExpressibleAsCatchItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [CatchItem]
+  public typealias Component = [ExpressibleAsCatchItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2250,7 +2250,7 @@ public struct CatchItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createCatchItem() })
   }
 }
 
@@ -2263,11 +2263,11 @@ public struct ConditionElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ConditionElement
+  public typealias Expression = ExpressibleAsConditionElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ConditionElement]
+  public typealias Component = [ExpressibleAsConditionElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2318,7 +2318,7 @@ public struct ConditionElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createConditionElement() })
   }
 }
 
@@ -2331,11 +2331,11 @@ public struct GenericRequirementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = GenericRequirement
+  public typealias Expression = ExpressibleAsGenericRequirement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [GenericRequirement]
+  public typealias Component = [ExpressibleAsGenericRequirement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2386,7 +2386,7 @@ public struct GenericRequirementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createGenericRequirement() })
   }
 }
 
@@ -2399,11 +2399,11 @@ public struct GenericParameterListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = GenericParameter
+  public typealias Expression = ExpressibleAsGenericParameter
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [GenericParameter]
+  public typealias Component = [ExpressibleAsGenericParameter]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2454,7 +2454,7 @@ public struct GenericParameterListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createGenericParameter() })
   }
 }
 
@@ -2467,11 +2467,11 @@ public struct CompositionTypeElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CompositionTypeElement
+  public typealias Expression = ExpressibleAsCompositionTypeElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [CompositionTypeElement]
+  public typealias Component = [ExpressibleAsCompositionTypeElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2522,7 +2522,7 @@ public struct CompositionTypeElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createCompositionTypeElement() })
   }
 }
 
@@ -2535,11 +2535,11 @@ public struct TupleTypeElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TupleTypeElement
+  public typealias Expression = ExpressibleAsTupleTypeElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TupleTypeElement]
+  public typealias Component = [ExpressibleAsTupleTypeElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2590,7 +2590,7 @@ public struct TupleTypeElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createTupleTypeElement() })
   }
 }
 
@@ -2603,11 +2603,11 @@ public struct GenericArgumentListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = GenericArgument
+  public typealias Expression = ExpressibleAsGenericArgument
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [GenericArgument]
+  public typealias Component = [ExpressibleAsGenericArgument]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2658,7 +2658,7 @@ public struct GenericArgumentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createGenericArgument() })
   }
 }
 
@@ -2671,11 +2671,11 @@ public struct TuplePatternElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TuplePatternElement
+  public typealias Expression = ExpressibleAsTuplePatternElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [TuplePatternElement]
+  public typealias Component = [ExpressibleAsTuplePatternElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2726,7 +2726,7 @@ public struct TuplePatternElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createTuplePatternElement() })
   }
 }
 
@@ -2739,11 +2739,11 @@ public struct AvailabilitySpecListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AvailabilityArgument
+  public typealias Expression = ExpressibleAsAvailabilityArgument
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [AvailabilityArgument]
+  public typealias Component = [ExpressibleAsAvailabilityArgument]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2794,7 +2794,7 @@ public struct AvailabilitySpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.createAvailabilityArgument() })
   }
 }
 

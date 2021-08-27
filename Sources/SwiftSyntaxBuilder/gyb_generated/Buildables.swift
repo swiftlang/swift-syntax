@@ -24,12 +24,22 @@ public protocol DeclListBuildable: SyntaxListBuildable {
   func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
 }
 
-public protocol DeclBuildable: SyntaxBuildable, DeclListBuildable {
+public protocol ExpressibleAsDeclBuildable {
+  func createDeclBuildable() -> DeclBuildable
+}
+
+public protocol DeclBuildable: ExpressibleAsDeclBuildable, SyntaxBuildable, DeclListBuildable, ExpressibleAsMemberDeclListItem, ExpressibleAsCodeBlockItem {
   /// Builds a `DeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
   /// - Returns: A list of `DeclSyntax`.
   func buildDecl(format: Format, leadingTrivia: Trivia?) -> DeclSyntax
+}
+
+extension DeclBuildable {
+  public func createDeclBuildable() -> DeclBuildable {
+    self
+  }
 }
 
 extension DeclBuildable {
@@ -62,6 +72,18 @@ extension DeclBuildable {
   }
 }
 
+extension DeclBuildable {
+  public func createMemberDeclListItem() -> MemberDeclListItem { 
+    MemberDeclListItem(decl: self)
+  }
+}
+
+extension DeclBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem { 
+    CodeBlockItem(item: self)
+  }
+}
+
 public protocol ExprListBuildable: SyntaxListBuildable {
   /// Builds list of `ExprSyntax`s.
   /// - Parameter format: The `Format` to use.
@@ -70,12 +92,22 @@ public protocol ExprListBuildable: SyntaxListBuildable {
   func buildExprList(format: Format, leadingTrivia: Trivia?) -> [ExprSyntax]
 }
 
-public protocol ExprBuildable: SyntaxBuildable, ExprListBuildable {
+public protocol ExpressibleAsExprBuildable {
+  func createExprBuildable() -> ExprBuildable
+}
+
+public protocol ExprBuildable: ExpressibleAsExprBuildable, SyntaxBuildable, ExprListBuildable {
   /// Builds a `ExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
   /// - Returns: A list of `ExprSyntax`.
   func buildExpr(format: Format, leadingTrivia: Trivia?) -> ExprSyntax
+}
+
+extension ExprBuildable {
+  public func createExprBuildable() -> ExprBuildable {
+    self
+  }
 }
 
 extension ExprBuildable {
@@ -116,12 +148,22 @@ public protocol PatternListBuildable: SyntaxListBuildable {
   func buildPatternList(format: Format, leadingTrivia: Trivia?) -> [PatternSyntax]
 }
 
-public protocol PatternBuildable: SyntaxBuildable, PatternListBuildable {
+public protocol ExpressibleAsPatternBuildable {
+  func createPatternBuildable() -> PatternBuildable
+}
+
+public protocol PatternBuildable: ExpressibleAsPatternBuildable, SyntaxBuildable, PatternListBuildable {
   /// Builds a `PatternSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
   /// - Returns: A list of `PatternSyntax`.
   func buildPattern(format: Format, leadingTrivia: Trivia?) -> PatternSyntax
+}
+
+extension PatternBuildable {
+  public func createPatternBuildable() -> PatternBuildable {
+    self
+  }
 }
 
 extension PatternBuildable {
@@ -162,12 +204,22 @@ public protocol StmtListBuildable: SyntaxListBuildable {
   func buildStmtList(format: Format, leadingTrivia: Trivia?) -> [StmtSyntax]
 }
 
-public protocol StmtBuildable: SyntaxBuildable, StmtListBuildable {
+public protocol ExpressibleAsStmtBuildable {
+  func createStmtBuildable() -> StmtBuildable
+}
+
+public protocol StmtBuildable: ExpressibleAsStmtBuildable, SyntaxBuildable, StmtListBuildable, ExpressibleAsCodeBlockItem {
   /// Builds a `StmtSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
   /// - Returns: A list of `StmtSyntax`.
   func buildStmt(format: Format, leadingTrivia: Trivia?) -> StmtSyntax
+}
+
+extension StmtBuildable {
+  public func createStmtBuildable() -> StmtBuildable {
+    self
+  }
 }
 
 extension StmtBuildable {
@@ -200,6 +252,12 @@ extension StmtBuildable {
   }
 }
 
+extension StmtBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem { 
+    CodeBlockItem(item: self)
+  }
+}
+
 public protocol SyntaxListBuildable {
   /// Builds list of `Syntax`s.
   /// - Parameter format: The `Format` to use.
@@ -208,12 +266,22 @@ public protocol SyntaxListBuildable {
   func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
 }
 
-public protocol SyntaxBuildable: SyntaxListBuildable {
+public protocol ExpressibleAsSyntaxBuildable {
+  func createSyntaxBuildable() -> SyntaxBuildable
+}
+
+public protocol SyntaxBuildable: ExpressibleAsSyntaxBuildable, SyntaxListBuildable {
   /// Builds a `Syntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
   /// - Returns: A list of `Syntax`.
   func buildSyntax(format: Format, leadingTrivia: Trivia?) -> Syntax
+}
+
+extension SyntaxBuildable {
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    self
+  }
 }
 
 extension SyntaxBuildable {
@@ -248,12 +316,22 @@ public protocol TypeListBuildable: SyntaxListBuildable {
   func buildTypeList(format: Format, leadingTrivia: Trivia?) -> [TypeSyntax]
 }
 
-public protocol TypeBuildable: SyntaxBuildable, TypeListBuildable {
+public protocol ExpressibleAsTypeBuildable {
+  func createTypeBuildable() -> TypeBuildable
+}
+
+public protocol TypeBuildable: ExpressibleAsTypeBuildable, SyntaxBuildable, TypeListBuildable {
   /// Builds a `TypeSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
   /// - Returns: A list of `TypeSyntax`.
   func buildType(format: Format, leadingTrivia: Trivia?) -> TypeSyntax
+}
+
+extension TypeBuildable {
+  public func createTypeBuildable() -> TypeBuildable {
+    self
+  }
 }
 
 extension TypeBuildable {
@@ -328,6 +406,16 @@ public struct CodeBlockItem: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsCodeBlockItem {
+  func createCodeBlockItem() -> CodeBlockItem
+}
+
+extension CodeBlockItem: ExpressibleAsCodeBlockItem {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `CodeBlockItemList` represents a collection of 
@@ -353,6 +441,16 @@ public struct CodeBlockItemList: SyntaxBuildable {
     }
 
     return Syntax(codeBlockItemList)
+  }
+}
+
+public protocol ExpressibleAsCodeBlockItemList {
+  func createCodeBlockItemList() -> CodeBlockItemList
+}
+
+extension CodeBlockItemList: ExpressibleAsCodeBlockItemList {
+  public func createCodeBlockItemList() -> CodeBlockItemList {
+    self
   }
 }
 
@@ -392,6 +490,16 @@ public struct CodeBlock: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsCodeBlock {
+  func createCodeBlock() -> CodeBlock
+}
+
+extension CodeBlock: ExpressibleAsCodeBlock {
+  public func createCodeBlock() -> CodeBlock {
+    self
+  }
+}
+
 public struct InOutExpr: ExprBuildable {
   let ampersand: TokenSyntax
   let expression: ExprBuildable
@@ -424,6 +532,16 @@ public struct InOutExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsInOutExpr {
+  func createInOutExpr() -> InOutExpr
+}
+
+extension InOutExpr: ExpressibleAsInOutExpr {
+  public func createInOutExpr() -> InOutExpr {
+    self
+  }
+}
+
 public struct PoundColumnExpr: ExprBuildable {
   let poundColumn: TokenSyntax
 
@@ -449,6 +567,16 @@ public struct PoundColumnExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let poundColumnExpr = buildPoundColumnExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(poundColumnExpr)
+  }
+}
+
+public protocol ExpressibleAsPoundColumnExpr {
+  func createPoundColumnExpr() -> PoundColumnExpr
+}
+
+extension PoundColumnExpr: ExpressibleAsPoundColumnExpr {
+  public func createPoundColumnExpr() -> PoundColumnExpr {
+    self
   }
 }
 
@@ -480,6 +608,16 @@ public struct TupleExprElementList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsTupleExprElementList {
+  func createTupleExprElementList() -> TupleExprElementList
+}
+
+extension TupleExprElementList: ExpressibleAsTupleExprElementList {
+  public func createTupleExprElementList() -> TupleExprElementList {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ArrayElementList` represents a collection of 
@@ -505,6 +643,16 @@ public struct ArrayElementList: SyntaxBuildable {
     }
 
     return Syntax(arrayElementList)
+  }
+}
+
+public protocol ExpressibleAsArrayElementList {
+  func createArrayElementList() -> ArrayElementList
+}
+
+extension ArrayElementList: ExpressibleAsArrayElementList {
+  public func createArrayElementList() -> ArrayElementList {
+    self
   }
 }
 
@@ -536,6 +684,16 @@ public struct DictionaryElementList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDictionaryElementList {
+  func createDictionaryElementList() -> DictionaryElementList
+}
+
+extension DictionaryElementList: ExpressibleAsDictionaryElementList {
+  public func createDictionaryElementList() -> DictionaryElementList {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `StringLiteralSegments` represents a collection of 
@@ -561,6 +719,16 @@ public struct StringLiteralSegments: SyntaxBuildable {
     }
 
     return Syntax(stringLiteralSegments)
+  }
+}
+
+public protocol ExpressibleAsStringLiteralSegments {
+  func createStringLiteralSegments() -> StringLiteralSegments
+}
+
+extension StringLiteralSegments: ExpressibleAsStringLiteralSegments {
+  public func createStringLiteralSegments() -> StringLiteralSegments {
+    self
   }
 }
 
@@ -600,6 +768,16 @@ public struct TryExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsTryExpr {
+  func createTryExpr() -> TryExpr
+}
+
+extension TryExpr: ExpressibleAsTryExpr {
+  public func createTryExpr() -> TryExpr {
+    self
+  }
+}
+
 public struct AwaitExpr: ExprBuildable {
   let awaitKeyword: TokenSyntax
   let expression: ExprBuildable
@@ -629,6 +807,16 @@ public struct AwaitExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let awaitExpr = buildAwaitExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(awaitExpr)
+  }
+}
+
+public protocol ExpressibleAsAwaitExpr {
+  func createAwaitExpr() -> AwaitExpr
+}
+
+extension AwaitExpr: ExpressibleAsAwaitExpr {
+  public func createAwaitExpr() -> AwaitExpr {
+    self
   }
 }
 
@@ -664,6 +852,16 @@ public struct DeclNameArgument: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDeclNameArgument {
+  func createDeclNameArgument() -> DeclNameArgument
+}
+
+extension DeclNameArgument: ExpressibleAsDeclNameArgument {
+  public func createDeclNameArgument() -> DeclNameArgument {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `DeclNameArgumentList` represents a collection of 
@@ -689,6 +887,16 @@ public struct DeclNameArgumentList: SyntaxBuildable {
     }
 
     return Syntax(declNameArgumentList)
+  }
+}
+
+public protocol ExpressibleAsDeclNameArgumentList {
+  func createDeclNameArgumentList() -> DeclNameArgumentList
+}
+
+extension DeclNameArgumentList: ExpressibleAsDeclNameArgumentList {
+  public func createDeclNameArgumentList() -> DeclNameArgumentList {
+    self
   }
 }
 
@@ -728,6 +936,16 @@ public struct DeclNameArguments: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDeclNameArguments {
+  func createDeclNameArguments() -> DeclNameArguments
+}
+
+extension DeclNameArguments: ExpressibleAsDeclNameArguments {
+  public func createDeclNameArguments() -> DeclNameArguments {
+    self
+  }
+}
+
 public struct IdentifierExpr: ExprBuildable {
   let identifier: TokenSyntax
   let declNameArguments: DeclNameArguments?
@@ -760,6 +978,16 @@ public struct IdentifierExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsIdentifierExpr {
+  func createIdentifierExpr() -> IdentifierExpr
+}
+
+extension IdentifierExpr: ExpressibleAsIdentifierExpr {
+  public func createIdentifierExpr() -> IdentifierExpr {
+    self
+  }
+}
+
 public struct SuperRefExpr: ExprBuildable {
   let superKeyword: TokenSyntax
 
@@ -785,6 +1013,16 @@ public struct SuperRefExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let superRefExpr = buildSuperRefExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(superRefExpr)
+  }
+}
+
+public protocol ExpressibleAsSuperRefExpr {
+  func createSuperRefExpr() -> SuperRefExpr
+}
+
+extension SuperRefExpr: ExpressibleAsSuperRefExpr {
+  public func createSuperRefExpr() -> SuperRefExpr {
+    self
   }
 }
 
@@ -816,6 +1054,16 @@ public struct NilLiteralExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsNilLiteralExpr {
+  func createNilLiteralExpr() -> NilLiteralExpr
+}
+
+extension NilLiteralExpr: ExpressibleAsNilLiteralExpr {
+  public func createNilLiteralExpr() -> NilLiteralExpr {
+    self
+  }
+}
+
 public struct DiscardAssignmentExpr: ExprBuildable {
   let wildcard: TokenSyntax
 
@@ -841,6 +1089,16 @@ public struct DiscardAssignmentExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let discardAssignmentExpr = buildDiscardAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(discardAssignmentExpr)
+  }
+}
+
+public protocol ExpressibleAsDiscardAssignmentExpr {
+  func createDiscardAssignmentExpr() -> DiscardAssignmentExpr
+}
+
+extension DiscardAssignmentExpr: ExpressibleAsDiscardAssignmentExpr {
+  public func createDiscardAssignmentExpr() -> DiscardAssignmentExpr {
+    self
   }
 }
 
@@ -872,6 +1130,16 @@ public struct AssignmentExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsAssignmentExpr {
+  func createAssignmentExpr() -> AssignmentExpr
+}
+
+extension AssignmentExpr: ExpressibleAsAssignmentExpr {
+  public func createAssignmentExpr() -> AssignmentExpr {
+    self
+  }
+}
+
 public struct SequenceExpr: ExprBuildable {
   let elements: ExprList
 
@@ -897,6 +1165,16 @@ public struct SequenceExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let sequenceExpr = buildSequenceExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(sequenceExpr)
+  }
+}
+
+public protocol ExpressibleAsSequenceExpr {
+  func createSequenceExpr() -> SequenceExpr
+}
+
+extension SequenceExpr: ExpressibleAsSequenceExpr {
+  public func createSequenceExpr() -> SequenceExpr {
+    self
   }
 }
 
@@ -930,6 +1208,16 @@ public struct ExprList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsExprList {
+  func createExprList() -> ExprList
+}
+
+extension ExprList: ExpressibleAsExprList {
+  public func createExprList() -> ExprList {
+    self
+  }
+}
+
 public struct PoundLineExpr: ExprBuildable {
   let poundLine: TokenSyntax
 
@@ -955,6 +1243,16 @@ public struct PoundLineExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let poundLineExpr = buildPoundLineExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(poundLineExpr)
+  }
+}
+
+public protocol ExpressibleAsPoundLineExpr {
+  func createPoundLineExpr() -> PoundLineExpr
+}
+
+extension PoundLineExpr: ExpressibleAsPoundLineExpr {
+  public func createPoundLineExpr() -> PoundLineExpr {
+    self
   }
 }
 
@@ -986,6 +1284,16 @@ public struct PoundFileExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundFileExpr {
+  func createPoundFileExpr() -> PoundFileExpr
+}
+
+extension PoundFileExpr: ExpressibleAsPoundFileExpr {
+  public func createPoundFileExpr() -> PoundFileExpr {
+    self
+  }
+}
+
 public struct PoundFileIDExpr: ExprBuildable {
   let poundFileID: TokenSyntax
 
@@ -1011,6 +1319,16 @@ public struct PoundFileIDExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let poundFileIDExpr = buildPoundFileIDExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(poundFileIDExpr)
+  }
+}
+
+public protocol ExpressibleAsPoundFileIDExpr {
+  func createPoundFileIDExpr() -> PoundFileIDExpr
+}
+
+extension PoundFileIDExpr: ExpressibleAsPoundFileIDExpr {
+  public func createPoundFileIDExpr() -> PoundFileIDExpr {
+    self
   }
 }
 
@@ -1042,6 +1360,16 @@ public struct PoundFilePathExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundFilePathExpr {
+  func createPoundFilePathExpr() -> PoundFilePathExpr
+}
+
+extension PoundFilePathExpr: ExpressibleAsPoundFilePathExpr {
+  public func createPoundFilePathExpr() -> PoundFilePathExpr {
+    self
+  }
+}
+
 public struct PoundFunctionExpr: ExprBuildable {
   let poundFunction: TokenSyntax
 
@@ -1070,6 +1398,16 @@ public struct PoundFunctionExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundFunctionExpr {
+  func createPoundFunctionExpr() -> PoundFunctionExpr
+}
+
+extension PoundFunctionExpr: ExpressibleAsPoundFunctionExpr {
+  public func createPoundFunctionExpr() -> PoundFunctionExpr {
+    self
+  }
+}
+
 public struct PoundDsohandleExpr: ExprBuildable {
   let poundDsohandle: TokenSyntax
 
@@ -1095,6 +1433,16 @@ public struct PoundDsohandleExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let poundDsohandleExpr = buildPoundDsohandleExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(poundDsohandleExpr)
+  }
+}
+
+public protocol ExpressibleAsPoundDsohandleExpr {
+  func createPoundDsohandleExpr() -> PoundDsohandleExpr
+}
+
+extension PoundDsohandleExpr: ExpressibleAsPoundDsohandleExpr {
+  public func createPoundDsohandleExpr() -> PoundDsohandleExpr {
+    self
   }
 }
 
@@ -1130,6 +1478,16 @@ public struct SymbolicReferenceExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsSymbolicReferenceExpr {
+  func createSymbolicReferenceExpr() -> SymbolicReferenceExpr
+}
+
+extension SymbolicReferenceExpr: ExpressibleAsSymbolicReferenceExpr {
+  public func createSymbolicReferenceExpr() -> SymbolicReferenceExpr {
+    self
+  }
+}
+
 public struct PrefixOperatorExpr: ExprBuildable {
   let operatorToken: TokenSyntax?
   let postfixExpression: ExprBuildable
@@ -1162,6 +1520,16 @@ public struct PrefixOperatorExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsPrefixOperatorExpr {
+  func createPrefixOperatorExpr() -> PrefixOperatorExpr
+}
+
+extension PrefixOperatorExpr: ExpressibleAsPrefixOperatorExpr {
+  public func createPrefixOperatorExpr() -> PrefixOperatorExpr {
+    self
+  }
+}
+
 public struct BinaryOperatorExpr: ExprBuildable {
   let operatorToken: TokenSyntax
 
@@ -1187,6 +1555,16 @@ public struct BinaryOperatorExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let binaryOperatorExpr = buildBinaryOperatorExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(binaryOperatorExpr)
+  }
+}
+
+public protocol ExpressibleAsBinaryOperatorExpr {
+  func createBinaryOperatorExpr() -> BinaryOperatorExpr
+}
+
+extension BinaryOperatorExpr: ExpressibleAsBinaryOperatorExpr {
+  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
+    self
   }
 }
 
@@ -1226,6 +1604,16 @@ public struct ArrowExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsArrowExpr {
+  func createArrowExpr() -> ArrowExpr
+}
+
+extension ArrowExpr: ExpressibleAsArrowExpr {
+  public func createArrowExpr() -> ArrowExpr {
+    self
+  }
+}
+
 public struct FloatLiteralExpr: ExprBuildable {
   let floatingDigits: TokenSyntax
 
@@ -1251,6 +1639,16 @@ public struct FloatLiteralExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let floatLiteralExpr = buildFloatLiteralExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(floatLiteralExpr)
+  }
+}
+
+public protocol ExpressibleAsFloatLiteralExpr {
+  func createFloatLiteralExpr() -> FloatLiteralExpr
+}
+
+extension FloatLiteralExpr: ExpressibleAsFloatLiteralExpr {
+  public func createFloatLiteralExpr() -> FloatLiteralExpr {
+    self
   }
 }
 
@@ -1290,6 +1688,16 @@ public struct TupleExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsTupleExpr {
+  func createTupleExpr() -> TupleExpr
+}
+
+extension TupleExpr: ExpressibleAsTupleExpr {
+  public func createTupleExpr() -> TupleExpr {
+    self
+  }
+}
+
 public struct ArrayExpr: ExprBuildable {
   let leftSquare: TokenSyntax
   let elements: ArrayElementList
@@ -1326,6 +1734,16 @@ public struct ArrayExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsArrayExpr {
+  func createArrayExpr() -> ArrayExpr
+}
+
+extension ArrayExpr: ExpressibleAsArrayExpr {
+  public func createArrayExpr() -> ArrayExpr {
+    self
+  }
+}
+
 public struct DictionaryExpr: ExprBuildable {
   let leftSquare: TokenSyntax
   let content: SyntaxBuildable
@@ -1359,6 +1777,16 @@ public struct DictionaryExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let dictionaryExpr = buildDictionaryExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(dictionaryExpr)
+  }
+}
+
+public protocol ExpressibleAsDictionaryExpr {
+  func createDictionaryExpr() -> DictionaryExpr
+}
+
+extension DictionaryExpr: ExpressibleAsDictionaryExpr {
+  public func createDictionaryExpr() -> DictionaryExpr {
+    self
   }
 }
 
@@ -1402,6 +1830,16 @@ public struct TupleExprElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsTupleExprElement {
+  func createTupleExprElement() -> TupleExprElement
+}
+
+extension TupleExprElement: ExpressibleAsTupleExprElement {
+  public func createTupleExprElement() -> TupleExprElement {
+    self
+  }
+}
+
 public struct ArrayElement: SyntaxBuildable {
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
@@ -1431,6 +1869,16 @@ public struct ArrayElement: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let arrayElement = buildArrayElement(format: format, leadingTrivia: leadingTrivia)
     return Syntax(arrayElement)
+  }
+}
+
+public protocol ExpressibleAsArrayElement {
+  func createArrayElement() -> ArrayElement
+}
+
+extension ArrayElement: ExpressibleAsArrayElement {
+  public func createArrayElement() -> ArrayElement {
+    self
   }
 }
 
@@ -1474,6 +1922,16 @@ public struct DictionaryElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDictionaryElement {
+  func createDictionaryElement() -> DictionaryElement
+}
+
+extension DictionaryElement: ExpressibleAsDictionaryElement {
+  public func createDictionaryElement() -> DictionaryElement {
+    self
+  }
+}
+
 public struct IntegerLiteralExpr: ExprBuildable {
   let digits: TokenSyntax
 
@@ -1502,6 +1960,16 @@ public struct IntegerLiteralExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsIntegerLiteralExpr {
+  func createIntegerLiteralExpr() -> IntegerLiteralExpr
+}
+
+extension IntegerLiteralExpr: ExpressibleAsIntegerLiteralExpr {
+  public func createIntegerLiteralExpr() -> IntegerLiteralExpr {
+    self
+  }
+}
+
 public struct BooleanLiteralExpr: ExprBuildable {
   let booleanLiteral: TokenSyntax
 
@@ -1527,6 +1995,16 @@ public struct BooleanLiteralExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let booleanLiteralExpr = buildBooleanLiteralExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(booleanLiteralExpr)
+  }
+}
+
+public protocol ExpressibleAsBooleanLiteralExpr {
+  func createBooleanLiteralExpr() -> BooleanLiteralExpr
+}
+
+extension BooleanLiteralExpr: ExpressibleAsBooleanLiteralExpr {
+  public func createBooleanLiteralExpr() -> BooleanLiteralExpr {
+    self
   }
 }
 
@@ -1574,6 +2052,16 @@ public struct TernaryExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsTernaryExpr {
+  func createTernaryExpr() -> TernaryExpr
+}
+
+extension TernaryExpr: ExpressibleAsTernaryExpr {
+  public func createTernaryExpr() -> TernaryExpr {
+    self
+  }
+}
+
 public struct MemberAccessExpr: ExprBuildable {
   let base: ExprBuildable?
   let dot: TokenSyntax
@@ -1614,6 +2102,16 @@ public struct MemberAccessExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsMemberAccessExpr {
+  func createMemberAccessExpr() -> MemberAccessExpr
+}
+
+extension MemberAccessExpr: ExpressibleAsMemberAccessExpr {
+  public func createMemberAccessExpr() -> MemberAccessExpr {
+    self
+  }
+}
+
 public struct IsExpr: ExprBuildable {
   let isTok: TokenSyntax
   let typeName: TypeBuildable
@@ -1643,6 +2141,16 @@ public struct IsExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let isExpr = buildIsExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(isExpr)
+  }
+}
+
+public protocol ExpressibleAsIsExpr {
+  func createIsExpr() -> IsExpr
+}
+
+extension IsExpr: ExpressibleAsIsExpr {
+  public func createIsExpr() -> IsExpr {
+    self
   }
 }
 
@@ -1682,6 +2190,16 @@ public struct AsExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsAsExpr {
+  func createAsExpr() -> AsExpr
+}
+
+extension AsExpr: ExpressibleAsAsExpr {
+  public func createAsExpr() -> AsExpr {
+    self
+  }
+}
+
 public struct TypeExpr: ExprBuildable {
   let type: TypeBuildable
 
@@ -1707,6 +2225,16 @@ public struct TypeExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let typeExpr = buildTypeExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(typeExpr)
+  }
+}
+
+public protocol ExpressibleAsTypeExpr {
+  func createTypeExpr() -> TypeExpr
+}
+
+extension TypeExpr: ExpressibleAsTypeExpr {
+  public func createTypeExpr() -> TypeExpr {
+    self
   }
 }
 
@@ -1754,6 +2282,16 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsClosureCaptureItem {
+  func createClosureCaptureItem() -> ClosureCaptureItem
+}
+
+extension ClosureCaptureItem: ExpressibleAsClosureCaptureItem {
+  public func createClosureCaptureItem() -> ClosureCaptureItem {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ClosureCaptureItemList` represents a collection of 
@@ -1779,6 +2317,16 @@ public struct ClosureCaptureItemList: SyntaxBuildable {
     }
 
     return Syntax(closureCaptureItemList)
+  }
+}
+
+public protocol ExpressibleAsClosureCaptureItemList {
+  func createClosureCaptureItemList() -> ClosureCaptureItemList
+}
+
+extension ClosureCaptureItemList: ExpressibleAsClosureCaptureItemList {
+  public func createClosureCaptureItemList() -> ClosureCaptureItemList {
+    self
   }
 }
 
@@ -1818,6 +2366,16 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsClosureCaptureSignature {
+  func createClosureCaptureSignature() -> ClosureCaptureSignature
+}
+
+extension ClosureCaptureSignature: ExpressibleAsClosureCaptureSignature {
+  public func createClosureCaptureSignature() -> ClosureCaptureSignature {
+    self
+  }
+}
+
 public struct ClosureParam: SyntaxBuildable {
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
@@ -1850,6 +2408,16 @@ public struct ClosureParam: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsClosureParam {
+  func createClosureParam() -> ClosureParam
+}
+
+extension ClosureParam: ExpressibleAsClosureParam {
+  public func createClosureParam() -> ClosureParam {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ClosureParamList` represents a collection of 
@@ -1875,6 +2443,16 @@ public struct ClosureParamList: SyntaxBuildable {
     }
 
     return Syntax(closureParamList)
+  }
+}
+
+public protocol ExpressibleAsClosureParamList {
+  func createClosureParamList() -> ClosureParamList
+}
+
+extension ClosureParamList: ExpressibleAsClosureParamList {
+  public func createClosureParamList() -> ClosureParamList {
+    self
   }
 }
 
@@ -1930,6 +2508,16 @@ public struct ClosureSignature: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsClosureSignature {
+  func createClosureSignature() -> ClosureSignature
+}
+
+extension ClosureSignature: ExpressibleAsClosureSignature {
+  public func createClosureSignature() -> ClosureSignature {
+    self
+  }
+}
+
 public struct ClosureExpr: ExprBuildable {
   let leftBrace: TokenSyntax
   let signature: ClosureSignature?
@@ -1970,6 +2558,16 @@ public struct ClosureExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsClosureExpr {
+  func createClosureExpr() -> ClosureExpr
+}
+
+extension ClosureExpr: ExpressibleAsClosureExpr {
+  public func createClosureExpr() -> ClosureExpr {
+    self
+  }
+}
+
 public struct UnresolvedPatternExpr: ExprBuildable {
   let pattern: PatternBuildable
 
@@ -1995,6 +2593,16 @@ public struct UnresolvedPatternExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let unresolvedPatternExpr = buildUnresolvedPatternExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(unresolvedPatternExpr)
+  }
+}
+
+public protocol ExpressibleAsUnresolvedPatternExpr {
+  func createUnresolvedPatternExpr() -> UnresolvedPatternExpr
+}
+
+extension UnresolvedPatternExpr: ExpressibleAsUnresolvedPatternExpr {
+  public func createUnresolvedPatternExpr() -> UnresolvedPatternExpr {
+    self
   }
 }
 
@@ -2034,6 +2642,16 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsMultipleTrailingClosureElement {
+  func createMultipleTrailingClosureElement() -> MultipleTrailingClosureElement
+}
+
+extension MultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureElement {
+  public func createMultipleTrailingClosureElement() -> MultipleTrailingClosureElement {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `MultipleTrailingClosureElementList` represents a collection of 
@@ -2059,6 +2677,16 @@ public struct MultipleTrailingClosureElementList: SyntaxBuildable {
     }
 
     return Syntax(multipleTrailingClosureElementList)
+  }
+}
+
+public protocol ExpressibleAsMultipleTrailingClosureElementList {
+  func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList
+}
+
+extension MultipleTrailingClosureElementList: ExpressibleAsMultipleTrailingClosureElementList {
+  public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
+    self
   }
 }
 
@@ -2110,6 +2738,16 @@ public struct FunctionCallExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsFunctionCallExpr {
+  func createFunctionCallExpr() -> FunctionCallExpr
+}
+
+extension FunctionCallExpr: ExpressibleAsFunctionCallExpr {
+  public func createFunctionCallExpr() -> FunctionCallExpr {
+    self
+  }
+}
+
 public struct SubscriptExpr: ExprBuildable {
   let calledExpression: ExprBuildable
   let leftBracket: TokenSyntax
@@ -2158,6 +2796,16 @@ public struct SubscriptExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsSubscriptExpr {
+  func createSubscriptExpr() -> SubscriptExpr
+}
+
+extension SubscriptExpr: ExpressibleAsSubscriptExpr {
+  public func createSubscriptExpr() -> SubscriptExpr {
+    self
+  }
+}
+
 public struct OptionalChainingExpr: ExprBuildable {
   let expression: ExprBuildable
   let questionMark: TokenSyntax
@@ -2187,6 +2835,16 @@ public struct OptionalChainingExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let optionalChainingExpr = buildOptionalChainingExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(optionalChainingExpr)
+  }
+}
+
+public protocol ExpressibleAsOptionalChainingExpr {
+  func createOptionalChainingExpr() -> OptionalChainingExpr
+}
+
+extension OptionalChainingExpr: ExpressibleAsOptionalChainingExpr {
+  public func createOptionalChainingExpr() -> OptionalChainingExpr {
+    self
   }
 }
 
@@ -2222,6 +2880,16 @@ public struct ForcedValueExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsForcedValueExpr {
+  func createForcedValueExpr() -> ForcedValueExpr
+}
+
+extension ForcedValueExpr: ExpressibleAsForcedValueExpr {
+  public func createForcedValueExpr() -> ForcedValueExpr {
+    self
+  }
+}
+
 public struct PostfixUnaryExpr: ExprBuildable {
   let expression: ExprBuildable
   let operatorToken: TokenSyntax
@@ -2251,6 +2919,16 @@ public struct PostfixUnaryExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let postfixUnaryExpr = buildPostfixUnaryExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(postfixUnaryExpr)
+  }
+}
+
+public protocol ExpressibleAsPostfixUnaryExpr {
+  func createPostfixUnaryExpr() -> PostfixUnaryExpr
+}
+
+extension PostfixUnaryExpr: ExpressibleAsPostfixUnaryExpr {
+  public func createPostfixUnaryExpr() -> PostfixUnaryExpr {
+    self
   }
 }
 
@@ -2286,6 +2964,16 @@ public struct SpecializeExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsSpecializeExpr {
+  func createSpecializeExpr() -> SpecializeExpr
+}
+
+extension SpecializeExpr: ExpressibleAsSpecializeExpr {
+  public func createSpecializeExpr() -> SpecializeExpr {
+    self
+  }
+}
+
 public struct StringSegment: SyntaxBuildable {
   let content: TokenSyntax
 
@@ -2311,6 +2999,16 @@ public struct StringSegment: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let stringSegment = buildStringSegment(format: format, leadingTrivia: leadingTrivia)
     return Syntax(stringSegment)
+  }
+}
+
+public protocol ExpressibleAsStringSegment {
+  func createStringSegment() -> StringSegment
+}
+
+extension StringSegment: ExpressibleAsStringSegment {
+  public func createStringSegment() -> StringSegment {
+    self
   }
 }
 
@@ -2358,6 +3056,16 @@ public struct ExpressionSegment: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsExpressionSegment {
+  func createExpressionSegment() -> ExpressionSegment
+}
+
+extension ExpressionSegment: ExpressibleAsExpressionSegment {
+  public func createExpressionSegment() -> ExpressionSegment {
+    self
+  }
+}
+
 public struct StringLiteralExpr: ExprBuildable {
   let openDelimiter: TokenSyntax?
   let openQuote: TokenSyntax
@@ -2402,6 +3110,16 @@ public struct StringLiteralExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsStringLiteralExpr {
+  func createStringLiteralExpr() -> StringLiteralExpr
+}
+
+extension StringLiteralExpr: ExpressibleAsStringLiteralExpr {
+  public func createStringLiteralExpr() -> StringLiteralExpr {
+    self
+  }
+}
+
 public struct KeyPathExpr: ExprBuildable {
   let backslash: TokenSyntax
   let rootExpr: ExprBuildable?
@@ -2438,6 +3156,16 @@ public struct KeyPathExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsKeyPathExpr {
+  func createKeyPathExpr() -> KeyPathExpr
+}
+
+extension KeyPathExpr: ExpressibleAsKeyPathExpr {
+  public func createKeyPathExpr() -> KeyPathExpr {
+    self
+  }
+}
+
 public struct KeyPathBaseExpr: ExprBuildable {
   let period: TokenSyntax
 
@@ -2463,6 +3191,16 @@ public struct KeyPathBaseExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let keyPathBaseExpr = buildKeyPathBaseExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(keyPathBaseExpr)
+  }
+}
+
+public protocol ExpressibleAsKeyPathBaseExpr {
+  func createKeyPathBaseExpr() -> KeyPathBaseExpr
+}
+
+extension KeyPathBaseExpr: ExpressibleAsKeyPathBaseExpr {
+  public func createKeyPathBaseExpr() -> KeyPathBaseExpr {
+    self
   }
 }
 
@@ -2498,6 +3236,16 @@ public struct ObjcNamePiece: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsObjcNamePiece {
+  func createObjcNamePiece() -> ObjcNamePiece
+}
+
+extension ObjcNamePiece: ExpressibleAsObjcNamePiece {
+  public func createObjcNamePiece() -> ObjcNamePiece {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ObjcName` represents a collection of 
@@ -2523,6 +3271,16 @@ public struct ObjcName: SyntaxBuildable {
     }
 
     return Syntax(objcName)
+  }
+}
+
+public protocol ExpressibleAsObjcName {
+  func createObjcName() -> ObjcName
+}
+
+extension ObjcName: ExpressibleAsObjcName {
+  public func createObjcName() -> ObjcName {
+    self
   }
 }
 
@@ -2563,6 +3321,16 @@ public struct ObjcKeyPathExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let objcKeyPathExpr = buildObjcKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(objcKeyPathExpr)
+  }
+}
+
+public protocol ExpressibleAsObjcKeyPathExpr {
+  func createObjcKeyPathExpr() -> ObjcKeyPathExpr
+}
+
+extension ObjcKeyPathExpr: ExpressibleAsObjcKeyPathExpr {
+  public func createObjcKeyPathExpr() -> ObjcKeyPathExpr {
+    self
   }
 }
 
@@ -2614,6 +3382,16 @@ public struct ObjcSelectorExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsObjcSelectorExpr {
+  func createObjcSelectorExpr() -> ObjcSelectorExpr
+}
+
+extension ObjcSelectorExpr: ExpressibleAsObjcSelectorExpr {
+  public func createObjcSelectorExpr() -> ObjcSelectorExpr {
+    self
+  }
+}
+
 public struct PostfixIfConfigExpr: ExprBuildable {
   let base: ExprBuildable?
   let config: IfConfigDecl
@@ -2646,6 +3424,16 @@ public struct PostfixIfConfigExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsPostfixIfConfigExpr {
+  func createPostfixIfConfigExpr() -> PostfixIfConfigExpr
+}
+
+extension PostfixIfConfigExpr: ExpressibleAsPostfixIfConfigExpr {
+  public func createPostfixIfConfigExpr() -> PostfixIfConfigExpr {
+    self
+  }
+}
+
 public struct EditorPlaceholderExpr: ExprBuildable {
   let identifier: TokenSyntax
 
@@ -2671,6 +3459,16 @@ public struct EditorPlaceholderExpr: ExprBuildable {
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let editorPlaceholderExpr = buildEditorPlaceholderExpr(format: format, leadingTrivia: leadingTrivia)
     return ExprSyntax(editorPlaceholderExpr)
+  }
+}
+
+public protocol ExpressibleAsEditorPlaceholderExpr {
+  func createEditorPlaceholderExpr() -> EditorPlaceholderExpr
+}
+
+extension EditorPlaceholderExpr: ExpressibleAsEditorPlaceholderExpr {
+  public func createEditorPlaceholderExpr() -> EditorPlaceholderExpr {
+    self
   }
 }
 
@@ -2714,6 +3512,16 @@ public struct ObjectLiteralExpr: ExprBuildable {
   }
 }
 
+public protocol ExpressibleAsObjectLiteralExpr {
+  func createObjectLiteralExpr() -> ObjectLiteralExpr
+}
+
+extension ObjectLiteralExpr: ExpressibleAsObjectLiteralExpr {
+  public func createObjectLiteralExpr() -> ObjectLiteralExpr {
+    self
+  }
+}
+
 public struct TypeInitializerClause: SyntaxBuildable {
   let equal: TokenSyntax
   let value: TypeBuildable
@@ -2743,6 +3551,16 @@ public struct TypeInitializerClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let typeInitializerClause = buildTypeInitializerClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(typeInitializerClause)
+  }
+}
+
+public protocol ExpressibleAsTypeInitializerClause {
+  func createTypeInitializerClause() -> TypeInitializerClause
+}
+
+extension TypeInitializerClause: ExpressibleAsTypeInitializerClause {
+  public func createTypeInitializerClause() -> TypeInitializerClause {
+    self
   }
 }
 
@@ -2798,6 +3616,16 @@ public struct TypealiasDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsTypealiasDecl {
+  func createTypealiasDecl() -> TypealiasDecl
+}
+
+extension TypealiasDecl: ExpressibleAsTypealiasDecl {
+  public func createTypealiasDecl() -> TypealiasDecl {
+    self
+  }
+}
+
 public struct AssociatedtypeDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -2850,6 +3678,16 @@ public struct AssociatedtypeDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsAssociatedtypeDecl {
+  func createAssociatedtypeDecl() -> AssociatedtypeDecl
+}
+
+extension AssociatedtypeDecl: ExpressibleAsAssociatedtypeDecl {
+  public func createAssociatedtypeDecl() -> AssociatedtypeDecl {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `FunctionParameterList` represents a collection of 
@@ -2875,6 +3713,16 @@ public struct FunctionParameterList: SyntaxBuildable {
     }
 
     return Syntax(functionParameterList)
+  }
+}
+
+public protocol ExpressibleAsFunctionParameterList {
+  func createFunctionParameterList() -> FunctionParameterList
+}
+
+extension FunctionParameterList: ExpressibleAsFunctionParameterList {
+  public func createFunctionParameterList() -> FunctionParameterList {
+    self
   }
 }
 
@@ -2914,6 +3762,16 @@ public struct ParameterClause: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsParameterClause {
+  func createParameterClause() -> ParameterClause
+}
+
+extension ParameterClause: ExpressibleAsParameterClause {
+  public func createParameterClause() -> ParameterClause {
+    self
+  }
+}
+
 public struct ReturnClause: SyntaxBuildable {
   let arrow: TokenSyntax
   let returnType: TypeBuildable
@@ -2943,6 +3801,16 @@ public struct ReturnClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let returnClause = buildReturnClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(returnClause)
+  }
+}
+
+public protocol ExpressibleAsReturnClause {
+  func createReturnClause() -> ReturnClause
+}
+
+extension ReturnClause: ExpressibleAsReturnClause {
+  public func createReturnClause() -> ReturnClause {
+    self
   }
 }
 
@@ -2986,6 +3854,16 @@ public struct FunctionSignature: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsFunctionSignature {
+  func createFunctionSignature() -> FunctionSignature
+}
+
+extension FunctionSignature: ExpressibleAsFunctionSignature {
+  public func createFunctionSignature() -> FunctionSignature {
+    self
+  }
+}
+
 public struct IfConfigClause: SyntaxBuildable {
   let poundKeyword: TokenSyntax
   let condition: ExprBuildable?
@@ -3022,6 +3900,16 @@ public struct IfConfigClause: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsIfConfigClause {
+  func createIfConfigClause() -> IfConfigClause
+}
+
+extension IfConfigClause: ExpressibleAsIfConfigClause {
+  public func createIfConfigClause() -> IfConfigClause {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `IfConfigClauseList` represents a collection of 
@@ -3047,6 +3935,16 @@ public struct IfConfigClauseList: SyntaxBuildable {
     }
 
     return Syntax(ifConfigClauseList)
+  }
+}
+
+public protocol ExpressibleAsIfConfigClauseList {
+  func createIfConfigClauseList() -> IfConfigClauseList
+}
+
+extension IfConfigClauseList: ExpressibleAsIfConfigClauseList {
+  public func createIfConfigClauseList() -> IfConfigClauseList {
+    self
   }
 }
 
@@ -3079,6 +3977,16 @@ public struct IfConfigDecl: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let ifConfigDecl = buildIfConfigDecl(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(ifConfigDecl)
+  }
+}
+
+public protocol ExpressibleAsIfConfigDecl {
+  func createIfConfigDecl() -> IfConfigDecl
+}
+
+extension IfConfigDecl: ExpressibleAsIfConfigDecl {
+  public func createIfConfigDecl() -> IfConfigDecl {
+    self
   }
 }
 
@@ -3122,6 +4030,16 @@ public struct PoundErrorDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundErrorDecl {
+  func createPoundErrorDecl() -> PoundErrorDecl
+}
+
+extension PoundErrorDecl: ExpressibleAsPoundErrorDecl {
+  public func createPoundErrorDecl() -> PoundErrorDecl {
+    self
+  }
+}
+
 public struct PoundWarningDecl: DeclBuildable {
   let poundWarning: TokenSyntax
   let leftParen: TokenSyntax
@@ -3162,6 +4080,16 @@ public struct PoundWarningDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundWarningDecl {
+  func createPoundWarningDecl() -> PoundWarningDecl
+}
+
+extension PoundWarningDecl: ExpressibleAsPoundWarningDecl {
+  public func createPoundWarningDecl() -> PoundWarningDecl {
+    self
+  }
+}
+
 public struct PoundSourceLocation: DeclBuildable {
   let poundSourceLocation: TokenSyntax
   let leftParen: TokenSyntax
@@ -3199,6 +4127,16 @@ public struct PoundSourceLocation: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let poundSourceLocation = buildPoundSourceLocation(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(poundSourceLocation)
+  }
+}
+
+public protocol ExpressibleAsPoundSourceLocation {
+  func createPoundSourceLocation() -> PoundSourceLocation
+}
+
+extension PoundSourceLocation: ExpressibleAsPoundSourceLocation {
+  public func createPoundSourceLocation() -> PoundSourceLocation {
+    self
   }
 }
 
@@ -3254,6 +4192,16 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundSourceLocationArgs {
+  func createPoundSourceLocationArgs() -> PoundSourceLocationArgs
+}
+
+extension PoundSourceLocationArgs: ExpressibleAsPoundSourceLocationArgs {
+  public func createPoundSourceLocationArgs() -> PoundSourceLocationArgs {
+    self
+  }
+}
+
 public struct DeclModifier: SyntaxBuildable {
   let name: TokenSyntax
   let detailLeftParen: TokenSyntax?
@@ -3294,6 +4242,16 @@ public struct DeclModifier: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDeclModifier {
+  func createDeclModifier() -> DeclModifier
+}
+
+extension DeclModifier: ExpressibleAsDeclModifier {
+  public func createDeclModifier() -> DeclModifier {
+    self
+  }
+}
+
 public struct InheritedType: SyntaxBuildable {
   let typeName: TypeBuildable
   let trailingComma: TokenSyntax?
@@ -3326,6 +4284,16 @@ public struct InheritedType: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsInheritedType {
+  func createInheritedType() -> InheritedType
+}
+
+extension InheritedType: ExpressibleAsInheritedType {
+  public func createInheritedType() -> InheritedType {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `InheritedTypeList` represents a collection of 
@@ -3351,6 +4319,16 @@ public struct InheritedTypeList: SyntaxBuildable {
     }
 
     return Syntax(inheritedTypeList)
+  }
+}
+
+public protocol ExpressibleAsInheritedTypeList {
+  func createInheritedTypeList() -> InheritedTypeList
+}
+
+extension InheritedTypeList: ExpressibleAsInheritedTypeList {
+  public func createInheritedTypeList() -> InheritedTypeList {
+    self
   }
 }
 
@@ -3383,6 +4361,16 @@ public struct TypeInheritanceClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let typeInheritanceClause = buildTypeInheritanceClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(typeInheritanceClause)
+  }
+}
+
+public protocol ExpressibleAsTypeInheritanceClause {
+  func createTypeInheritanceClause() -> TypeInheritanceClause
+}
+
+extension TypeInheritanceClause: ExpressibleAsTypeInheritanceClause {
+  public func createTypeInheritanceClause() -> TypeInheritanceClause {
+    self
   }
 }
 
@@ -3442,6 +4430,16 @@ public struct ClassDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsClassDecl {
+  func createClassDecl() -> ClassDecl
+}
+
+extension ClassDecl: ExpressibleAsClassDecl {
+  public func createClassDecl() -> ClassDecl {
+    self
+  }
+}
+
 public struct StructDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -3498,6 +4496,16 @@ public struct StructDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsStructDecl {
+  func createStructDecl() -> StructDecl
+}
+
+extension StructDecl: ExpressibleAsStructDecl {
+  public func createStructDecl() -> StructDecl {
+    self
+  }
+}
+
 public struct ProtocolDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -3547,6 +4555,16 @@ public struct ProtocolDecl: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let protocolDecl = buildProtocolDecl(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(protocolDecl)
+  }
+}
+
+public protocol ExpressibleAsProtocolDecl {
+  func createProtocolDecl() -> ProtocolDecl
+}
+
+extension ProtocolDecl: ExpressibleAsProtocolDecl {
+  public func createProtocolDecl() -> ProtocolDecl {
+    self
   }
 }
 
@@ -3602,6 +4620,16 @@ public struct ExtensionDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsExtensionDecl {
+  func createExtensionDecl() -> ExtensionDecl
+}
+
+extension ExtensionDecl: ExpressibleAsExtensionDecl {
+  public func createExtensionDecl() -> ExtensionDecl {
+    self
+  }
+}
+
 public struct MemberDeclBlock: SyntaxBuildable {
   let leftBrace: TokenSyntax
   let members: MemberDeclList
@@ -3638,6 +4666,16 @@ public struct MemberDeclBlock: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsMemberDeclBlock {
+  func createMemberDeclBlock() -> MemberDeclBlock
+}
+
+extension MemberDeclBlock: ExpressibleAsMemberDeclBlock {
+  public func createMemberDeclBlock() -> MemberDeclBlock {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `MemberDeclList` represents a collection of 
@@ -3663,6 +4701,16 @@ public struct MemberDeclList: SyntaxBuildable {
     }
 
     return Syntax(memberDeclList)
+  }
+}
+
+public protocol ExpressibleAsMemberDeclList {
+  func createMemberDeclList() -> MemberDeclList
+}
+
+extension MemberDeclList: ExpressibleAsMemberDeclList {
+  public func createMemberDeclList() -> MemberDeclList {
+    self
   }
 }
 
@@ -3702,6 +4750,16 @@ public struct MemberDeclListItem: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsMemberDeclListItem {
+  func createMemberDeclListItem() -> MemberDeclListItem
+}
+
+extension MemberDeclListItem: ExpressibleAsMemberDeclListItem {
+  public func createMemberDeclListItem() -> MemberDeclListItem {
+    self
+  }
+}
+
 public struct SourceFile: SyntaxBuildable {
   let statements: CodeBlockItemList
   let eofToken: TokenSyntax
@@ -3734,6 +4792,16 @@ public struct SourceFile: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsSourceFile {
+  func createSourceFile() -> SourceFile
+}
+
+extension SourceFile: ExpressibleAsSourceFile {
+  public func createSourceFile() -> SourceFile {
+    self
+  }
+}
+
 public struct InitializerClause: SyntaxBuildable {
   let equal: TokenSyntax
   let value: ExprBuildable
@@ -3763,6 +4831,16 @@ public struct InitializerClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let initializerClause = buildInitializerClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(initializerClause)
+  }
+}
+
+public protocol ExpressibleAsInitializerClause {
+  func createInitializerClause() -> InitializerClause
+}
+
+extension InitializerClause: ExpressibleAsInitializerClause {
+  public func createInitializerClause() -> InitializerClause {
+    self
   }
 }
 
@@ -3822,6 +4900,16 @@ public struct FunctionParameter: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsFunctionParameter {
+  func createFunctionParameter() -> FunctionParameter
+}
+
+extension FunctionParameter: ExpressibleAsFunctionParameter {
+  public func createFunctionParameter() -> FunctionParameter {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ModifierList` represents a collection of 
@@ -3847,6 +4935,16 @@ public struct ModifierList: SyntaxBuildable {
     }
 
     return Syntax(modifierList)
+  }
+}
+
+public protocol ExpressibleAsModifierList {
+  func createModifierList() -> ModifierList
+}
+
+extension ModifierList: ExpressibleAsModifierList {
+  public func createModifierList() -> ModifierList {
+    self
   }
 }
 
@@ -3903,6 +5001,16 @@ public struct FunctionDecl: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let functionDecl = buildFunctionDecl(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(functionDecl)
+  }
+}
+
+public protocol ExpressibleAsFunctionDecl {
+  func createFunctionDecl() -> FunctionDecl
+}
+
+extension FunctionDecl: ExpressibleAsFunctionDecl {
+  public func createFunctionDecl() -> FunctionDecl {
+    self
   }
 }
 
@@ -3966,6 +5074,16 @@ public struct InitializerDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsInitializerDecl {
+  func createInitializerDecl() -> InitializerDecl
+}
+
+extension InitializerDecl: ExpressibleAsInitializerDecl {
+  public func createInitializerDecl() -> InitializerDecl {
+    self
+  }
+}
+
 public struct DeinitializerDecl: DeclBuildable {
   let attributes: AttributeList?
   let modifiers: ModifierList?
@@ -4003,6 +5121,16 @@ public struct DeinitializerDecl: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let deinitializerDecl = buildDeinitializerDecl(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(deinitializerDecl)
+  }
+}
+
+public protocol ExpressibleAsDeinitializerDecl {
+  func createDeinitializerDecl() -> DeinitializerDecl
+}
+
+extension DeinitializerDecl: ExpressibleAsDeinitializerDecl {
+  public func createDeinitializerDecl() -> DeinitializerDecl {
+    self
   }
 }
 
@@ -4062,6 +5190,16 @@ public struct SubscriptDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsSubscriptDecl {
+  func createSubscriptDecl() -> SubscriptDecl
+}
+
+extension SubscriptDecl: ExpressibleAsSubscriptDecl {
+  public func createSubscriptDecl() -> SubscriptDecl {
+    self
+  }
+}
+
 public struct AccessLevelModifier: SyntaxBuildable {
   let name: TokenSyntax
   let leftParen: TokenSyntax?
@@ -4102,6 +5240,16 @@ public struct AccessLevelModifier: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsAccessLevelModifier {
+  func createAccessLevelModifier() -> AccessLevelModifier
+}
+
+extension AccessLevelModifier: ExpressibleAsAccessLevelModifier {
+  public func createAccessLevelModifier() -> AccessLevelModifier {
+    self
+  }
+}
+
 public struct AccessPathComponent: SyntaxBuildable {
   let name: TokenSyntax
   let trailingDot: TokenSyntax?
@@ -4134,6 +5282,16 @@ public struct AccessPathComponent: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsAccessPathComponent {
+  func createAccessPathComponent() -> AccessPathComponent
+}
+
+extension AccessPathComponent: ExpressibleAsAccessPathComponent {
+  public func createAccessPathComponent() -> AccessPathComponent {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `AccessPath` represents a collection of 
@@ -4159,6 +5317,16 @@ public struct AccessPath: SyntaxBuildable {
     }
 
     return Syntax(accessPath)
+  }
+}
+
+public protocol ExpressibleAsAccessPath {
+  func createAccessPath() -> AccessPath
+}
+
+extension AccessPath: ExpressibleAsAccessPath {
+  public func createAccessPath() -> AccessPath {
+    self
   }
 }
 
@@ -4206,6 +5374,16 @@ public struct ImportDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsImportDecl {
+  func createImportDecl() -> ImportDecl
+}
+
+extension ImportDecl: ExpressibleAsImportDecl {
+  public func createImportDecl() -> ImportDecl {
+    self
+  }
+}
+
 public struct AccessorParameter: SyntaxBuildable {
   let leftParen: TokenSyntax
   let name: TokenSyntax
@@ -4239,6 +5417,16 @@ public struct AccessorParameter: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let accessorParameter = buildAccessorParameter(format: format, leadingTrivia: leadingTrivia)
     return Syntax(accessorParameter)
+  }
+}
+
+public protocol ExpressibleAsAccessorParameter {
+  func createAccessorParameter() -> AccessorParameter
+}
+
+extension AccessorParameter: ExpressibleAsAccessorParameter {
+  public func createAccessorParameter() -> AccessorParameter {
+    self
   }
 }
 
@@ -4294,6 +5482,16 @@ public struct AccessorDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsAccessorDecl {
+  func createAccessorDecl() -> AccessorDecl
+}
+
+extension AccessorDecl: ExpressibleAsAccessorDecl {
+  public func createAccessorDecl() -> AccessorDecl {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `AccessorList` represents a collection of 
@@ -4319,6 +5517,16 @@ public struct AccessorList: SyntaxBuildable {
     }
 
     return Syntax(accessorList)
+  }
+}
+
+public protocol ExpressibleAsAccessorList {
+  func createAccessorList() -> AccessorList
+}
+
+extension AccessorList: ExpressibleAsAccessorList {
+  public func createAccessorList() -> AccessorList {
+    self
   }
 }
 
@@ -4355,6 +5563,16 @@ public struct AccessorBlock: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let accessorBlock = buildAccessorBlock(format: format, leadingTrivia: leadingTrivia)
     return Syntax(accessorBlock)
+  }
+}
+
+public protocol ExpressibleAsAccessorBlock {
+  func createAccessorBlock() -> AccessorBlock
+}
+
+extension AccessorBlock: ExpressibleAsAccessorBlock {
+  public func createAccessorBlock() -> AccessorBlock {
+    self
   }
 }
 
@@ -4402,6 +5620,16 @@ public struct PatternBinding: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsPatternBinding {
+  func createPatternBinding() -> PatternBinding
+}
+
+extension PatternBinding: ExpressibleAsPatternBinding {
+  public func createPatternBinding() -> PatternBinding {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `PatternBindingList` represents a collection of 
@@ -4427,6 +5655,16 @@ public struct PatternBindingList: SyntaxBuildable {
     }
 
     return Syntax(patternBindingList)
+  }
+}
+
+public protocol ExpressibleAsPatternBindingList {
+  func createPatternBindingList() -> PatternBindingList
+}
+
+extension PatternBindingList: ExpressibleAsPatternBindingList {
+  public func createPatternBindingList() -> PatternBindingList {
+    self
   }
 }
 
@@ -4467,6 +5705,16 @@ public struct VariableDecl: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let variableDecl = buildVariableDecl(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(variableDecl)
+  }
+}
+
+public protocol ExpressibleAsVariableDecl {
+  func createVariableDecl() -> VariableDecl
+}
+
+extension VariableDecl: ExpressibleAsVariableDecl {
+  public func createVariableDecl() -> VariableDecl {
+    self
   }
 }
 
@@ -4514,6 +5762,16 @@ public struct EnumCaseElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsEnumCaseElement {
+  func createEnumCaseElement() -> EnumCaseElement
+}
+
+extension EnumCaseElement: ExpressibleAsEnumCaseElement {
+  public func createEnumCaseElement() -> EnumCaseElement {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// A collection of 0 or more `EnumCaseElement`s.
@@ -4538,6 +5796,16 @@ public struct EnumCaseElementList: SyntaxBuildable {
     }
 
     return Syntax(enumCaseElementList)
+  }
+}
+
+public protocol ExpressibleAsEnumCaseElementList {
+  func createEnumCaseElementList() -> EnumCaseElementList
+}
+
+extension EnumCaseElementList: ExpressibleAsEnumCaseElementList {
+  public func createEnumCaseElementList() -> EnumCaseElementList {
+    self
   }
 }
 
@@ -4583,6 +5851,16 @@ public struct EnumCaseDecl: DeclBuildable {
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let enumCaseDecl = buildEnumCaseDecl(format: format, leadingTrivia: leadingTrivia)
     return DeclSyntax(enumCaseDecl)
+  }
+}
+
+public protocol ExpressibleAsEnumCaseDecl {
+  func createEnumCaseDecl() -> EnumCaseDecl
+}
+
+extension EnumCaseDecl: ExpressibleAsEnumCaseDecl {
+  public func createEnumCaseDecl() -> EnumCaseDecl {
+    self
   }
 }
 
@@ -4643,6 +5921,16 @@ public struct EnumDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsEnumDecl {
+  func createEnumDecl() -> EnumDecl
+}
+
+extension EnumDecl: ExpressibleAsEnumDecl {
+  public func createEnumDecl() -> EnumDecl {
+    self
+  }
+}
+
 /// A Swift `operator` declaration.
 public struct OperatorDecl: DeclBuildable {
   let attributes: AttributeList?
@@ -4688,6 +5976,16 @@ public struct OperatorDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsOperatorDecl {
+  func createOperatorDecl() -> OperatorDecl
+}
+
+extension OperatorDecl: ExpressibleAsOperatorDecl {
+  public func createOperatorDecl() -> OperatorDecl {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `IdentifierList` represents a collection of 
@@ -4711,6 +6009,16 @@ public struct IdentifierList: SyntaxBuildable {
     }
 
     return Syntax(identifierList)
+  }
+}
+
+public protocol ExpressibleAsIdentifierList {
+  func createIdentifierList() -> IdentifierList
+}
+
+extension IdentifierList: ExpressibleAsIdentifierList {
+  public func createIdentifierList() -> IdentifierList {
+    self
   }
 }
 
@@ -4746,6 +6054,16 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let operatorPrecedenceAndTypes = buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: leadingTrivia)
     return Syntax(operatorPrecedenceAndTypes)
+  }
+}
+
+public protocol ExpressibleAsOperatorPrecedenceAndTypes {
+  func createOperatorPrecedenceAndTypes() -> OperatorPrecedenceAndTypes
+}
+
+extension OperatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes {
+  public func createOperatorPrecedenceAndTypes() -> OperatorPrecedenceAndTypes {
+    self
   }
 }
 
@@ -4802,6 +6120,16 @@ public struct PrecedenceGroupDecl: DeclBuildable {
   }
 }
 
+public protocol ExpressibleAsPrecedenceGroupDecl {
+  func createPrecedenceGroupDecl() -> PrecedenceGroupDecl
+}
+
+extension PrecedenceGroupDecl: ExpressibleAsPrecedenceGroupDecl {
+  public func createPrecedenceGroupDecl() -> PrecedenceGroupDecl {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `PrecedenceGroupAttributeList` represents a collection of 
@@ -4827,6 +6155,16 @@ public struct PrecedenceGroupAttributeList: SyntaxBuildable {
     }
 
     return Syntax(precedenceGroupAttributeList)
+  }
+}
+
+public protocol ExpressibleAsPrecedenceGroupAttributeList {
+  func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList
+}
+
+extension PrecedenceGroupAttributeList: ExpressibleAsPrecedenceGroupAttributeList {
+  public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
+    self
   }
 }
 
@@ -4870,6 +6208,16 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsPrecedenceGroupRelation {
+  func createPrecedenceGroupRelation() -> PrecedenceGroupRelation
+}
+
+extension PrecedenceGroupRelation: ExpressibleAsPrecedenceGroupRelation {
+  public func createPrecedenceGroupRelation() -> PrecedenceGroupRelation {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `PrecedenceGroupNameList` represents a collection of 
@@ -4895,6 +6243,16 @@ public struct PrecedenceGroupNameList: SyntaxBuildable {
     }
 
     return Syntax(precedenceGroupNameList)
+  }
+}
+
+public protocol ExpressibleAsPrecedenceGroupNameList {
+  func createPrecedenceGroupNameList() -> PrecedenceGroupNameList
+}
+
+extension PrecedenceGroupNameList: ExpressibleAsPrecedenceGroupNameList {
+  public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
+    self
   }
 }
 
@@ -4927,6 +6285,16 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let precedenceGroupNameElement = buildPrecedenceGroupNameElement(format: format, leadingTrivia: leadingTrivia)
     return Syntax(precedenceGroupNameElement)
+  }
+}
+
+public protocol ExpressibleAsPrecedenceGroupNameElement {
+  func createPrecedenceGroupNameElement() -> PrecedenceGroupNameElement
+}
+
+extension PrecedenceGroupNameElement: ExpressibleAsPrecedenceGroupNameElement {
+  public func createPrecedenceGroupNameElement() -> PrecedenceGroupNameElement {
+    self
   }
 }
 
@@ -4970,6 +6338,16 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsPrecedenceGroupAssignment {
+  func createPrecedenceGroupAssignment() -> PrecedenceGroupAssignment
+}
+
+extension PrecedenceGroupAssignment: ExpressibleAsPrecedenceGroupAssignment {
+  public func createPrecedenceGroupAssignment() -> PrecedenceGroupAssignment {
+    self
+  }
+}
+
 /// 
 /// Specifies how a sequence of operators with the same precedence level
 /// are grouped together in the absence of grouping parentheses.
@@ -5010,6 +6388,16 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsPrecedenceGroupAssociativity {
+  func createPrecedenceGroupAssociativity() -> PrecedenceGroupAssociativity
+}
+
+extension PrecedenceGroupAssociativity: ExpressibleAsPrecedenceGroupAssociativity {
+  public func createPrecedenceGroupAssociativity() -> PrecedenceGroupAssociativity {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `TokenList` represents a collection of 
@@ -5036,6 +6424,16 @@ public struct TokenList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsTokenList {
+  func createTokenList() -> TokenList
+}
+
+extension TokenList: ExpressibleAsTokenList {
+  public func createTokenList() -> TokenList {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `NonEmptyTokenList` represents a collection of 
@@ -5059,6 +6457,16 @@ public struct NonEmptyTokenList: SyntaxBuildable {
     }
 
     return Syntax(nonEmptyTokenList)
+  }
+}
+
+public protocol ExpressibleAsNonEmptyTokenList {
+  func createNonEmptyTokenList() -> NonEmptyTokenList
+}
+
+extension NonEmptyTokenList: ExpressibleAsNonEmptyTokenList {
+  public func createNonEmptyTokenList() -> NonEmptyTokenList {
+    self
   }
 }
 
@@ -5106,6 +6514,16 @@ public struct CustomAttribute: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let customAttribute = buildCustomAttribute(format: format, leadingTrivia: leadingTrivia)
     return Syntax(customAttribute)
+  }
+}
+
+public protocol ExpressibleAsCustomAttribute {
+  func createCustomAttribute() -> CustomAttribute
+}
+
+extension CustomAttribute: ExpressibleAsCustomAttribute {
+  public func createCustomAttribute() -> CustomAttribute {
+    self
   }
 }
 
@@ -5160,6 +6578,16 @@ public struct Attribute: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsAttribute {
+  func createAttribute() -> Attribute
+}
+
+extension Attribute: ExpressibleAsAttribute {
+  public func createAttribute() -> Attribute {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `AttributeList` represents a collection of 
@@ -5185,6 +6613,16 @@ public struct AttributeList: SyntaxBuildable {
     }
 
     return Syntax(attributeList)
+  }
+}
+
+public protocol ExpressibleAsAttributeList {
+  func createAttributeList() -> AttributeList
+}
+
+extension AttributeList: ExpressibleAsAttributeList {
+  public func createAttributeList() -> AttributeList {
+    self
   }
 }
 
@@ -5214,6 +6652,16 @@ public struct SpecializeAttributeSpecList: SyntaxBuildable {
     }
 
     return Syntax(specializeAttributeSpecList)
+  }
+}
+
+public protocol ExpressibleAsSpecializeAttributeSpecList {
+  func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList
+}
+
+extension SpecializeAttributeSpecList: ExpressibleAsSpecializeAttributeSpecList {
+  public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
+    self
   }
 }
 
@@ -5258,6 +6706,16 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let labeledSpecializeEntry = buildLabeledSpecializeEntry(format: format, leadingTrivia: leadingTrivia)
     return Syntax(labeledSpecializeEntry)
+  }
+}
+
+public protocol ExpressibleAsLabeledSpecializeEntry {
+  func createLabeledSpecializeEntry() -> LabeledSpecializeEntry
+}
+
+extension LabeledSpecializeEntry: ExpressibleAsLabeledSpecializeEntry {
+  public func createLabeledSpecializeEntry() -> LabeledSpecializeEntry {
+    self
   }
 }
 
@@ -5306,6 +6764,16 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsTargetFunctionEntry {
+  func createTargetFunctionEntry() -> TargetFunctionEntry
+}
+
+extension TargetFunctionEntry: ExpressibleAsTargetFunctionEntry {
+  public func createTargetFunctionEntry() -> TargetFunctionEntry {
+    self
+  }
+}
+
 /// 
 /// The argument for the `@_dynamic_replacement` or `@_private`
 /// attribute of the form `for: "function()"` or `sourceFile:
@@ -5347,6 +6815,16 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsNamedAttributeStringArgument {
+  func createNamedAttributeStringArgument() -> NamedAttributeStringArgument
+}
+
+extension NamedAttributeStringArgument: ExpressibleAsNamedAttributeStringArgument {
+  public func createNamedAttributeStringArgument() -> NamedAttributeStringArgument {
+    self
+  }
+}
+
 public struct DeclName: SyntaxBuildable {
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
@@ -5376,6 +6854,16 @@ public struct DeclName: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let declName = buildDeclName(format: format, leadingTrivia: leadingTrivia)
     return Syntax(declName)
+  }
+}
+
+public protocol ExpressibleAsDeclName {
+  func createDeclName() -> DeclName
+}
+
+extension DeclName: ExpressibleAsDeclName {
+  public func createDeclName() -> DeclName {
+    self
   }
 }
 
@@ -5423,6 +6911,16 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsImplementsAttributeArguments {
+  func createImplementsAttributeArguments() -> ImplementsAttributeArguments
+}
+
+extension ImplementsAttributeArguments: ExpressibleAsImplementsAttributeArguments {
+  public func createImplementsAttributeArguments() -> ImplementsAttributeArguments {
+    self
+  }
+}
+
 /// 
 /// A piece of an Objective-C selector. Either consisiting of just an
 /// identifier for a nullary selector, an identifier and a colon for a
@@ -5460,6 +6958,16 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsObjCSelectorPiece {
+  func createObjCSelectorPiece() -> ObjCSelectorPiece
+}
+
+extension ObjCSelectorPiece: ExpressibleAsObjCSelectorPiece {
+  public func createObjCSelectorPiece() -> ObjCSelectorPiece {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ObjCSelector` represents a collection of 
@@ -5485,6 +6993,16 @@ public struct ObjCSelector: SyntaxBuildable {
     }
 
     return Syntax(objCSelector)
+  }
+}
+
+public protocol ExpressibleAsObjCSelector {
+  func createObjCSelector() -> ObjCSelector
+}
+
+extension ObjCSelector: ExpressibleAsObjCSelector {
+  public func createObjCSelector() -> ObjCSelector {
+    self
   }
 }
 
@@ -5537,6 +7055,16 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDifferentiableAttributeArguments {
+  func createDifferentiableAttributeArguments() -> DifferentiableAttributeArguments
+}
+
+extension DifferentiableAttributeArguments: ExpressibleAsDifferentiableAttributeArguments {
+  public func createDifferentiableAttributeArguments() -> DifferentiableAttributeArguments {
+    self
+  }
+}
+
 /// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClause: SyntaxBuildable {
   let wrtLabel: TokenSyntax
@@ -5571,6 +7099,16 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let differentiabilityParamsClause = buildDifferentiabilityParamsClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(differentiabilityParamsClause)
+  }
+}
+
+public protocol ExpressibleAsDifferentiabilityParamsClause {
+  func createDifferentiabilityParamsClause() -> DifferentiabilityParamsClause
+}
+
+extension DifferentiabilityParamsClause: ExpressibleAsDifferentiabilityParamsClause {
+  public func createDifferentiabilityParamsClause() -> DifferentiabilityParamsClause {
+    self
   }
 }
 
@@ -5611,6 +7149,16 @@ public struct DifferentiabilityParams: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDifferentiabilityParams {
+  func createDifferentiabilityParams() -> DifferentiabilityParams
+}
+
+extension DifferentiabilityParams: ExpressibleAsDifferentiabilityParams {
+  public func createDifferentiabilityParams() -> DifferentiabilityParams {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `DifferentiabilityParamList` represents a collection of 
@@ -5636,6 +7184,16 @@ public struct DifferentiabilityParamList: SyntaxBuildable {
     }
 
     return Syntax(differentiabilityParamList)
+  }
+}
+
+public protocol ExpressibleAsDifferentiabilityParamList {
+  func createDifferentiabilityParamList() -> DifferentiabilityParamList
+}
+
+extension DifferentiabilityParamList: ExpressibleAsDifferentiabilityParamList {
+  public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
+    self
   }
 }
 
@@ -5672,6 +7230,16 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let differentiabilityParam = buildDifferentiabilityParam(format: format, leadingTrivia: leadingTrivia)
     return Syntax(differentiabilityParam)
+  }
+}
+
+public protocol ExpressibleAsDifferentiabilityParam {
+  func createDifferentiabilityParam() -> DifferentiabilityParam
+}
+
+extension DifferentiabilityParam: ExpressibleAsDifferentiabilityParam {
+  public func createDifferentiabilityParam() -> DifferentiabilityParam {
+    self
   }
 }
 
@@ -5732,6 +7300,16 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsDerivativeRegistrationAttributeArguments {
+  func createDerivativeRegistrationAttributeArguments() -> DerivativeRegistrationAttributeArguments
+}
+
+extension DerivativeRegistrationAttributeArguments: ExpressibleAsDerivativeRegistrationAttributeArguments {
+  public func createDerivativeRegistrationAttributeArguments() -> DerivativeRegistrationAttributeArguments {
+    self
+  }
+}
+
 /// 
 /// An optionally qualified function declaration name (e.g. `+(_:_:)`,
 /// `A.B.C.foo(_:_:)`).
@@ -5776,6 +7354,16 @@ public struct QualifiedDeclName: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsQualifiedDeclName {
+  func createQualifiedDeclName() -> QualifiedDeclName
+}
+
+extension QualifiedDeclName: ExpressibleAsQualifiedDeclName {
+  public func createQualifiedDeclName() -> QualifiedDeclName {
+    self
+  }
+}
+
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclName: SyntaxBuildable {
   let name: SyntaxBuildable
@@ -5809,6 +7397,16 @@ public struct FunctionDeclName: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsFunctionDeclName {
+  func createFunctionDeclName() -> FunctionDeclName
+}
+
+extension FunctionDeclName: ExpressibleAsFunctionDeclName {
+  public func createFunctionDeclName() -> FunctionDeclName {
+    self
+  }
+}
+
 public struct ContinueStmt: StmtBuildable {
   let continueKeyword: TokenSyntax
   let label: TokenSyntax?
@@ -5838,6 +7436,16 @@ public struct ContinueStmt: StmtBuildable {
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let continueStmt = buildContinueStmt(format: format, leadingTrivia: leadingTrivia)
     return StmtSyntax(continueStmt)
+  }
+}
+
+public protocol ExpressibleAsContinueStmt {
+  func createContinueStmt() -> ContinueStmt
+}
+
+extension ContinueStmt: ExpressibleAsContinueStmt {
+  public func createContinueStmt() -> ContinueStmt {
+    self
   }
 }
 
@@ -5885,6 +7493,16 @@ public struct WhileStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsWhileStmt {
+  func createWhileStmt() -> WhileStmt
+}
+
+extension WhileStmt: ExpressibleAsWhileStmt {
+  public func createWhileStmt() -> WhileStmt {
+    self
+  }
+}
+
 public struct DeferStmt: StmtBuildable {
   let deferKeyword: TokenSyntax
   let body: CodeBlock
@@ -5917,6 +7535,16 @@ public struct DeferStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsDeferStmt {
+  func createDeferStmt() -> DeferStmt
+}
+
+extension DeferStmt: ExpressibleAsDeferStmt {
+  public func createDeferStmt() -> DeferStmt {
+    self
+  }
+}
+
 public struct ExpressionStmt: StmtBuildable {
   let expression: ExprBuildable
 
@@ -5945,6 +7573,16 @@ public struct ExpressionStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsExpressionStmt {
+  func createExpressionStmt() -> ExpressionStmt
+}
+
+extension ExpressionStmt: ExpressibleAsExpressionStmt {
+  public func createExpressionStmt() -> ExpressionStmt {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `SwitchCaseList` represents a collection of 
@@ -5970,6 +7608,16 @@ public struct SwitchCaseList: SyntaxBuildable {
     }
 
     return Syntax(switchCaseList)
+  }
+}
+
+public protocol ExpressibleAsSwitchCaseList {
+  func createSwitchCaseList() -> SwitchCaseList
+}
+
+extension SwitchCaseList: ExpressibleAsSwitchCaseList {
+  public func createSwitchCaseList() -> SwitchCaseList {
+    self
   }
 }
 
@@ -6021,6 +7669,16 @@ public struct RepeatWhileStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsRepeatWhileStmt {
+  func createRepeatWhileStmt() -> RepeatWhileStmt
+}
+
+extension RepeatWhileStmt: ExpressibleAsRepeatWhileStmt {
+  public func createRepeatWhileStmt() -> RepeatWhileStmt {
+    self
+  }
+}
+
 public struct GuardStmt: StmtBuildable {
   let guardKeyword: TokenSyntax
   let conditions: ConditionElementList
@@ -6061,6 +7719,16 @@ public struct GuardStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsGuardStmt {
+  func createGuardStmt() -> GuardStmt
+}
+
+extension GuardStmt: ExpressibleAsGuardStmt {
+  public func createGuardStmt() -> GuardStmt {
+    self
+  }
+}
+
 public struct WhereClause: SyntaxBuildable {
   let whereKeyword: TokenSyntax
   let guardResult: ExprBuildable
@@ -6090,6 +7758,16 @@ public struct WhereClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let whereClause = buildWhereClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(whereClause)
+  }
+}
+
+public protocol ExpressibleAsWhereClause {
+  func createWhereClause() -> WhereClause
+}
+
+extension WhereClause: ExpressibleAsWhereClause {
+  public func createWhereClause() -> WhereClause {
+    self
   }
 }
 
@@ -6165,6 +7843,16 @@ public struct ForInStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsForInStmt {
+  func createForInStmt() -> ForInStmt
+}
+
+extension ForInStmt: ExpressibleAsForInStmt {
+  public func createForInStmt() -> ForInStmt {
+    self
+  }
+}
+
 public struct SwitchStmt: StmtBuildable {
   let labelName: TokenSyntax?
   let labelColon: TokenSyntax?
@@ -6217,6 +7905,16 @@ public struct SwitchStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsSwitchStmt {
+  func createSwitchStmt() -> SwitchStmt
+}
+
+extension SwitchStmt: ExpressibleAsSwitchStmt {
+  public func createSwitchStmt() -> SwitchStmt {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `CatchClauseList` represents a collection of 
@@ -6242,6 +7940,16 @@ public struct CatchClauseList: SyntaxBuildable {
     }
 
     return Syntax(catchClauseList)
+  }
+}
+
+public protocol ExpressibleAsCatchClauseList {
+  func createCatchClauseList() -> CatchClauseList
+}
+
+extension CatchClauseList: ExpressibleAsCatchClauseList {
+  public func createCatchClauseList() -> CatchClauseList {
+    self
   }
 }
 
@@ -6289,6 +7997,16 @@ public struct DoStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsDoStmt {
+  func createDoStmt() -> DoStmt
+}
+
+extension DoStmt: ExpressibleAsDoStmt {
+  public func createDoStmt() -> DoStmt {
+    self
+  }
+}
+
 public struct ReturnStmt: StmtBuildable {
   let returnKeyword: TokenSyntax
   let expression: ExprBuildable?
@@ -6321,6 +8039,16 @@ public struct ReturnStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsReturnStmt {
+  func createReturnStmt() -> ReturnStmt
+}
+
+extension ReturnStmt: ExpressibleAsReturnStmt {
+  public func createReturnStmt() -> ReturnStmt {
+    self
+  }
+}
+
 public struct YieldStmt: StmtBuildable {
   let yieldKeyword: TokenSyntax
   let yields: SyntaxBuildable
@@ -6350,6 +8078,16 @@ public struct YieldStmt: StmtBuildable {
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let yieldStmt = buildYieldStmt(format: format, leadingTrivia: leadingTrivia)
     return StmtSyntax(yieldStmt)
+  }
+}
+
+public protocol ExpressibleAsYieldStmt {
+  func createYieldStmt() -> YieldStmt
+}
+
+extension YieldStmt: ExpressibleAsYieldStmt {
+  public func createYieldStmt() -> YieldStmt {
+    self
   }
 }
 
@@ -6393,6 +8131,16 @@ public struct YieldList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsYieldList {
+  func createYieldList() -> YieldList
+}
+
+extension YieldList: ExpressibleAsYieldList {
+  public func createYieldList() -> YieldList {
+    self
+  }
+}
+
 public struct FallthroughStmt: StmtBuildable {
   let fallthroughKeyword: TokenSyntax
 
@@ -6418,6 +8166,16 @@ public struct FallthroughStmt: StmtBuildable {
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let fallthroughStmt = buildFallthroughStmt(format: format, leadingTrivia: leadingTrivia)
     return StmtSyntax(fallthroughStmt)
+  }
+}
+
+public protocol ExpressibleAsFallthroughStmt {
+  func createFallthroughStmt() -> FallthroughStmt
+}
+
+extension FallthroughStmt: ExpressibleAsFallthroughStmt {
+  public func createFallthroughStmt() -> FallthroughStmt {
+    self
   }
 }
 
@@ -6453,6 +8211,16 @@ public struct BreakStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsBreakStmt {
+  func createBreakStmt() -> BreakStmt
+}
+
+extension BreakStmt: ExpressibleAsBreakStmt {
+  public func createBreakStmt() -> BreakStmt {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `CaseItemList` represents a collection of 
@@ -6481,6 +8249,16 @@ public struct CaseItemList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsCaseItemList {
+  func createCaseItemList() -> CaseItemList
+}
+
+extension CaseItemList: ExpressibleAsCaseItemList {
+  public func createCaseItemList() -> CaseItemList {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `CatchItemList` represents a collection of 
@@ -6506,6 +8284,16 @@ public struct CatchItemList: SyntaxBuildable {
     }
 
     return Syntax(catchItemList)
+  }
+}
+
+public protocol ExpressibleAsCatchItemList {
+  func createCatchItemList() -> CatchItemList
+}
+
+extension CatchItemList: ExpressibleAsCatchItemList {
+  public func createCatchItemList() -> CatchItemList {
+    self
   }
 }
 
@@ -6538,6 +8326,16 @@ public struct ConditionElement: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let conditionElement = buildConditionElement(format: format, leadingTrivia: leadingTrivia)
     return Syntax(conditionElement)
+  }
+}
+
+public protocol ExpressibleAsConditionElement {
+  func createConditionElement() -> ConditionElement
+}
+
+extension ConditionElement: ExpressibleAsConditionElement {
+  public func createConditionElement() -> ConditionElement {
+    self
   }
 }
 
@@ -6581,6 +8379,16 @@ public struct AvailabilityCondition: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsAvailabilityCondition {
+  func createAvailabilityCondition() -> AvailabilityCondition
+}
+
+extension AvailabilityCondition: ExpressibleAsAvailabilityCondition {
+  public func createAvailabilityCondition() -> AvailabilityCondition {
+    self
+  }
+}
+
 public struct MatchingPatternCondition: SyntaxBuildable {
   let caseKeyword: TokenSyntax
   let pattern: PatternBuildable
@@ -6618,6 +8426,16 @@ public struct MatchingPatternCondition: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let matchingPatternCondition = buildMatchingPatternCondition(format: format, leadingTrivia: leadingTrivia)
     return Syntax(matchingPatternCondition)
+  }
+}
+
+public protocol ExpressibleAsMatchingPatternCondition {
+  func createMatchingPatternCondition() -> MatchingPatternCondition
+}
+
+extension MatchingPatternCondition: ExpressibleAsMatchingPatternCondition {
+  public func createMatchingPatternCondition() -> MatchingPatternCondition {
+    self
   }
 }
 
@@ -6661,6 +8479,16 @@ public struct OptionalBindingCondition: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsOptionalBindingCondition {
+  func createOptionalBindingCondition() -> OptionalBindingCondition
+}
+
+extension OptionalBindingCondition: ExpressibleAsOptionalBindingCondition {
+  public func createOptionalBindingCondition() -> OptionalBindingCondition {
+    self
+  }
+}
+
 public struct UnavailabilityCondition: SyntaxBuildable {
   let poundUnavailableKeyword: TokenSyntax
   let leftParen: TokenSyntax
@@ -6701,6 +8529,16 @@ public struct UnavailabilityCondition: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsUnavailabilityCondition {
+  func createUnavailabilityCondition() -> UnavailabilityCondition
+}
+
+extension UnavailabilityCondition: ExpressibleAsUnavailabilityCondition {
+  public func createUnavailabilityCondition() -> UnavailabilityCondition {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `ConditionElementList` represents a collection of 
@@ -6729,6 +8567,16 @@ public struct ConditionElementList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsConditionElementList {
+  func createConditionElementList() -> ConditionElementList
+}
+
+extension ConditionElementList: ExpressibleAsConditionElementList {
+  public func createConditionElementList() -> ConditionElementList {
+    self
+  }
+}
+
 public struct DeclarationStmt: StmtBuildable {
   let declaration: DeclBuildable
 
@@ -6754,6 +8602,16 @@ public struct DeclarationStmt: StmtBuildable {
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let declarationStmt = buildDeclarationStmt(format: format, leadingTrivia: leadingTrivia)
     return StmtSyntax(declarationStmt)
+  }
+}
+
+public protocol ExpressibleAsDeclarationStmt {
+  func createDeclarationStmt() -> DeclarationStmt
+}
+
+extension DeclarationStmt: ExpressibleAsDeclarationStmt {
+  public func createDeclarationStmt() -> DeclarationStmt {
+    self
   }
 }
 
@@ -6786,6 +8644,16 @@ public struct ThrowStmt: StmtBuildable {
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let throwStmt = buildThrowStmt(format: format, leadingTrivia: leadingTrivia)
     return StmtSyntax(throwStmt)
+  }
+}
+
+public protocol ExpressibleAsThrowStmt {
+  func createThrowStmt() -> ThrowStmt
+}
+
+extension ThrowStmt: ExpressibleAsThrowStmt {
+  public func createThrowStmt() -> ThrowStmt {
+    self
   }
 }
 
@@ -6841,6 +8709,16 @@ public struct IfStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsIfStmt {
+  func createIfStmt() -> IfStmt
+}
+
+extension IfStmt: ExpressibleAsIfStmt {
+  public func createIfStmt() -> IfStmt {
+    self
+  }
+}
+
 public struct ElseIfContinuation: SyntaxBuildable {
   let ifStatement: IfStmt
 
@@ -6866,6 +8744,16 @@ public struct ElseIfContinuation: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let elseIfContinuation = buildElseIfContinuation(format: format, leadingTrivia: leadingTrivia)
     return Syntax(elseIfContinuation)
+  }
+}
+
+public protocol ExpressibleAsElseIfContinuation {
+  func createElseIfContinuation() -> ElseIfContinuation
+}
+
+extension ElseIfContinuation: ExpressibleAsElseIfContinuation {
+  public func createElseIfContinuation() -> ElseIfContinuation {
+    self
   }
 }
 
@@ -6898,6 +8786,16 @@ public struct ElseBlock: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let elseBlock = buildElseBlock(format: format, leadingTrivia: leadingTrivia)
     return Syntax(elseBlock)
+  }
+}
+
+public protocol ExpressibleAsElseBlock {
+  func createElseBlock() -> ElseBlock
+}
+
+extension ElseBlock: ExpressibleAsElseBlock {
+  public func createElseBlock() -> ElseBlock {
+    self
   }
 }
 
@@ -6937,6 +8835,16 @@ public struct SwitchCase: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsSwitchCase {
+  func createSwitchCase() -> SwitchCase
+}
+
+extension SwitchCase: ExpressibleAsSwitchCase {
+  public func createSwitchCase() -> SwitchCase {
+    self
+  }
+}
+
 public struct SwitchDefaultLabel: SyntaxBuildable {
   let defaultKeyword: TokenSyntax
   let colon: TokenSyntax
@@ -6966,6 +8874,16 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let switchDefaultLabel = buildSwitchDefaultLabel(format: format, leadingTrivia: leadingTrivia)
     return Syntax(switchDefaultLabel)
+  }
+}
+
+public protocol ExpressibleAsSwitchDefaultLabel {
+  func createSwitchDefaultLabel() -> SwitchDefaultLabel
+}
+
+extension SwitchDefaultLabel: ExpressibleAsSwitchDefaultLabel {
+  public func createSwitchDefaultLabel() -> SwitchDefaultLabel {
+    self
   }
 }
 
@@ -7005,6 +8923,16 @@ public struct CaseItem: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsCaseItem {
+  func createCaseItem() -> CaseItem
+}
+
+extension CaseItem: ExpressibleAsCaseItem {
+  public func createCaseItem() -> CaseItem {
+    self
+  }
+}
+
 public struct CatchItem: SyntaxBuildable {
   let pattern: PatternBuildable?
   let whereClause: WhereClause?
@@ -7038,6 +8966,16 @@ public struct CatchItem: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let catchItem = buildCatchItem(format: format, leadingTrivia: leadingTrivia)
     return Syntax(catchItem)
+  }
+}
+
+public protocol ExpressibleAsCatchItem {
+  func createCatchItem() -> CatchItem
+}
+
+extension CatchItem: ExpressibleAsCatchItem {
+  public func createCatchItem() -> CatchItem {
+    self
   }
 }
 
@@ -7077,6 +9015,16 @@ public struct SwitchCaseLabel: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsSwitchCaseLabel {
+  func createSwitchCaseLabel() -> SwitchCaseLabel
+}
+
+extension SwitchCaseLabel: ExpressibleAsSwitchCaseLabel {
+  public func createSwitchCaseLabel() -> SwitchCaseLabel {
+    self
+  }
+}
+
 public struct CatchClause: SyntaxBuildable {
   let catchKeyword: TokenSyntax
   let catchItems: CatchItemList?
@@ -7110,6 +9058,16 @@ public struct CatchClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let catchClause = buildCatchClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(catchClause)
+  }
+}
+
+public protocol ExpressibleAsCatchClause {
+  func createCatchClause() -> CatchClause
+}
+
+extension CatchClause: ExpressibleAsCatchClause {
+  public func createCatchClause() -> CatchClause {
+    self
   }
 }
 
@@ -7161,6 +9119,16 @@ public struct PoundAssertStmt: StmtBuildable {
   }
 }
 
+public protocol ExpressibleAsPoundAssertStmt {
+  func createPoundAssertStmt() -> PoundAssertStmt
+}
+
+extension PoundAssertStmt: ExpressibleAsPoundAssertStmt {
+  public func createPoundAssertStmt() -> PoundAssertStmt {
+    self
+  }
+}
+
 public struct GenericWhereClause: SyntaxBuildable {
   let whereKeyword: TokenSyntax
   let requirementList: GenericRequirementList
@@ -7193,6 +9161,16 @@ public struct GenericWhereClause: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsGenericWhereClause {
+  func createGenericWhereClause() -> GenericWhereClause
+}
+
+extension GenericWhereClause: ExpressibleAsGenericWhereClause {
+  public func createGenericWhereClause() -> GenericWhereClause {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `GenericRequirementList` represents a collection of 
@@ -7218,6 +9196,16 @@ public struct GenericRequirementList: SyntaxBuildable {
     }
 
     return Syntax(genericRequirementList)
+  }
+}
+
+public protocol ExpressibleAsGenericRequirementList {
+  func createGenericRequirementList() -> GenericRequirementList
+}
+
+extension GenericRequirementList: ExpressibleAsGenericRequirementList {
+  public func createGenericRequirementList() -> GenericRequirementList {
+    self
   }
 }
 
@@ -7250,6 +9238,16 @@ public struct GenericRequirement: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let genericRequirement = buildGenericRequirement(format: format, leadingTrivia: leadingTrivia)
     return Syntax(genericRequirement)
+  }
+}
+
+public protocol ExpressibleAsGenericRequirement {
+  func createGenericRequirement() -> GenericRequirement
+}
+
+extension GenericRequirement: ExpressibleAsGenericRequirement {
+  public func createGenericRequirement() -> GenericRequirement {
+    self
   }
 }
 
@@ -7289,6 +9287,16 @@ public struct SameTypeRequirement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsSameTypeRequirement {
+  func createSameTypeRequirement() -> SameTypeRequirement
+}
+
+extension SameTypeRequirement: ExpressibleAsSameTypeRequirement {
+  public func createSameTypeRequirement() -> SameTypeRequirement {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `GenericParameterList` represents a collection of 
@@ -7314,6 +9322,16 @@ public struct GenericParameterList: SyntaxBuildable {
     }
 
     return Syntax(genericParameterList)
+  }
+}
+
+public protocol ExpressibleAsGenericParameterList {
+  func createGenericParameterList() -> GenericParameterList
+}
+
+extension GenericParameterList: ExpressibleAsGenericParameterList {
+  public func createGenericParameterList() -> GenericParameterList {
+    self
   }
 }
 
@@ -7361,6 +9379,16 @@ public struct GenericParameter: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsGenericParameter {
+  func createGenericParameter() -> GenericParameter
+}
+
+extension GenericParameter: ExpressibleAsGenericParameter {
+  public func createGenericParameter() -> GenericParameter {
+    self
+  }
+}
+
 public struct GenericParameterClause: SyntaxBuildable {
   let leftAngleBracket: TokenSyntax
   let genericParameterList: GenericParameterList
@@ -7394,6 +9422,16 @@ public struct GenericParameterClause: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let genericParameterClause = buildGenericParameterClause(format: format, leadingTrivia: leadingTrivia)
     return Syntax(genericParameterClause)
+  }
+}
+
+public protocol ExpressibleAsGenericParameterClause {
+  func createGenericParameterClause() -> GenericParameterClause
+}
+
+extension GenericParameterClause: ExpressibleAsGenericParameterClause {
+  public func createGenericParameterClause() -> GenericParameterClause {
+    self
   }
 }
 
@@ -7433,6 +9471,16 @@ public struct ConformanceRequirement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsConformanceRequirement {
+  func createConformanceRequirement() -> ConformanceRequirement
+}
+
+extension ConformanceRequirement: ExpressibleAsConformanceRequirement {
+  public func createConformanceRequirement() -> ConformanceRequirement {
+    self
+  }
+}
+
 public struct SimpleTypeIdentifier: TypeBuildable {
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
@@ -7462,6 +9510,16 @@ public struct SimpleTypeIdentifier: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let simpleTypeIdentifier = buildSimpleTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(simpleTypeIdentifier)
+  }
+}
+
+public protocol ExpressibleAsSimpleTypeIdentifier {
+  func createSimpleTypeIdentifier() -> SimpleTypeIdentifier
+}
+
+extension SimpleTypeIdentifier: ExpressibleAsSimpleTypeIdentifier {
+  public func createSimpleTypeIdentifier() -> SimpleTypeIdentifier {
+    self
   }
 }
 
@@ -7505,6 +9563,16 @@ public struct MemberTypeIdentifier: TypeBuildable {
   }
 }
 
+public protocol ExpressibleAsMemberTypeIdentifier {
+  func createMemberTypeIdentifier() -> MemberTypeIdentifier
+}
+
+extension MemberTypeIdentifier: ExpressibleAsMemberTypeIdentifier {
+  public func createMemberTypeIdentifier() -> MemberTypeIdentifier {
+    self
+  }
+}
+
 public struct ClassRestrictionType: TypeBuildable {
   let classKeyword: TokenSyntax
 
@@ -7530,6 +9598,16 @@ public struct ClassRestrictionType: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let classRestrictionType = buildClassRestrictionType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(classRestrictionType)
+  }
+}
+
+public protocol ExpressibleAsClassRestrictionType {
+  func createClassRestrictionType() -> ClassRestrictionType
+}
+
+extension ClassRestrictionType: ExpressibleAsClassRestrictionType {
+  public func createClassRestrictionType() -> ClassRestrictionType {
+    self
   }
 }
 
@@ -7566,6 +9644,16 @@ public struct ArrayType: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let arrayType = buildArrayType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(arrayType)
+  }
+}
+
+public protocol ExpressibleAsArrayType {
+  func createArrayType() -> ArrayType
+}
+
+extension ArrayType: ExpressibleAsArrayType {
+  public func createArrayType() -> ArrayType {
+    self
   }
 }
 
@@ -7613,6 +9701,16 @@ public struct DictionaryType: TypeBuildable {
   }
 }
 
+public protocol ExpressibleAsDictionaryType {
+  func createDictionaryType() -> DictionaryType
+}
+
+extension DictionaryType: ExpressibleAsDictionaryType {
+  public func createDictionaryType() -> DictionaryType {
+    self
+  }
+}
+
 public struct MetatypeType: TypeBuildable {
   let baseType: TypeBuildable
   let period: TokenSyntax
@@ -7649,6 +9747,16 @@ public struct MetatypeType: TypeBuildable {
   }
 }
 
+public protocol ExpressibleAsMetatypeType {
+  func createMetatypeType() -> MetatypeType
+}
+
+extension MetatypeType: ExpressibleAsMetatypeType {
+  public func createMetatypeType() -> MetatypeType {
+    self
+  }
+}
+
 public struct OptionalType: TypeBuildable {
   let wrappedType: TypeBuildable
   let questionMark: TokenSyntax
@@ -7678,6 +9786,16 @@ public struct OptionalType: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let optionalType = buildOptionalType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(optionalType)
+  }
+}
+
+public protocol ExpressibleAsOptionalType {
+  func createOptionalType() -> OptionalType
+}
+
+extension OptionalType: ExpressibleAsOptionalType {
+  public func createOptionalType() -> OptionalType {
+    self
   }
 }
 
@@ -7713,6 +9831,16 @@ public struct SomeType: TypeBuildable {
   }
 }
 
+public protocol ExpressibleAsSomeType {
+  func createSomeType() -> SomeType
+}
+
+extension SomeType: ExpressibleAsSomeType {
+  public func createSomeType() -> SomeType {
+    self
+  }
+}
+
 public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   let wrappedType: TypeBuildable
   let exclamationMark: TokenSyntax
@@ -7742,6 +9870,16 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let implicitlyUnwrappedOptionalType = buildImplicitlyUnwrappedOptionalType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(implicitlyUnwrappedOptionalType)
+  }
+}
+
+public protocol ExpressibleAsImplicitlyUnwrappedOptionalType {
+  func createImplicitlyUnwrappedOptionalType() -> ImplicitlyUnwrappedOptionalType
+}
+
+extension ImplicitlyUnwrappedOptionalType: ExpressibleAsImplicitlyUnwrappedOptionalType {
+  public func createImplicitlyUnwrappedOptionalType() -> ImplicitlyUnwrappedOptionalType {
+    self
   }
 }
 
@@ -7777,6 +9915,16 @@ public struct CompositionTypeElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsCompositionTypeElement {
+  func createCompositionTypeElement() -> CompositionTypeElement
+}
+
+extension CompositionTypeElement: ExpressibleAsCompositionTypeElement {
+  public func createCompositionTypeElement() -> CompositionTypeElement {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `CompositionTypeElementList` represents a collection of 
@@ -7805,6 +9953,16 @@ public struct CompositionTypeElementList: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsCompositionTypeElementList {
+  func createCompositionTypeElementList() -> CompositionTypeElementList
+}
+
+extension CompositionTypeElementList: ExpressibleAsCompositionTypeElementList {
+  public func createCompositionTypeElementList() -> CompositionTypeElementList {
+    self
+  }
+}
+
 public struct CompositionType: TypeBuildable {
   let elements: CompositionTypeElementList
 
@@ -7830,6 +9988,16 @@ public struct CompositionType: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let compositionType = buildCompositionType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(compositionType)
+  }
+}
+
+public protocol ExpressibleAsCompositionType {
+  func createCompositionType() -> CompositionType
+}
+
+extension CompositionType: ExpressibleAsCompositionType {
+  public func createCompositionType() -> CompositionType {
+    self
   }
 }
 
@@ -7889,6 +10057,16 @@ public struct TupleTypeElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsTupleTypeElement {
+  func createTupleTypeElement() -> TupleTypeElement
+}
+
+extension TupleTypeElement: ExpressibleAsTupleTypeElement {
+  public func createTupleTypeElement() -> TupleTypeElement {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `TupleTypeElementList` represents a collection of 
@@ -7914,6 +10092,16 @@ public struct TupleTypeElementList: SyntaxBuildable {
     }
 
     return Syntax(tupleTypeElementList)
+  }
+}
+
+public protocol ExpressibleAsTupleTypeElementList {
+  func createTupleTypeElementList() -> TupleTypeElementList
+}
+
+extension TupleTypeElementList: ExpressibleAsTupleTypeElementList {
+  public func createTupleTypeElementList() -> TupleTypeElementList {
+    self
   }
 }
 
@@ -7950,6 +10138,16 @@ public struct TupleType: TypeBuildable {
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let tupleType = buildTupleType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(tupleType)
+  }
+}
+
+public protocol ExpressibleAsTupleType {
+  func createTupleType() -> TupleType
+}
+
+extension TupleType: ExpressibleAsTupleType {
+  public func createTupleType() -> TupleType {
+    self
   }
 }
 
@@ -8005,6 +10203,16 @@ public struct FunctionType: TypeBuildable {
   }
 }
 
+public protocol ExpressibleAsFunctionType {
+  func createFunctionType() -> FunctionType
+}
+
+extension FunctionType: ExpressibleAsFunctionType {
+  public func createFunctionType() -> FunctionType {
+    self
+  }
+}
+
 public struct AttributedType: TypeBuildable {
   let specifier: TokenSyntax?
   let attributes: AttributeList?
@@ -8041,6 +10249,16 @@ public struct AttributedType: TypeBuildable {
   }
 }
 
+public protocol ExpressibleAsAttributedType {
+  func createAttributedType() -> AttributedType
+}
+
+extension AttributedType: ExpressibleAsAttributedType {
+  public func createAttributedType() -> AttributedType {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `GenericArgumentList` represents a collection of 
@@ -8066,6 +10284,16 @@ public struct GenericArgumentList: SyntaxBuildable {
     }
 
     return Syntax(genericArgumentList)
+  }
+}
+
+public protocol ExpressibleAsGenericArgumentList {
+  func createGenericArgumentList() -> GenericArgumentList
+}
+
+extension GenericArgumentList: ExpressibleAsGenericArgumentList {
+  public func createGenericArgumentList() -> GenericArgumentList {
+    self
   }
 }
 
@@ -8098,6 +10326,16 @@ public struct GenericArgument: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let genericArgument = buildGenericArgument(format: format, leadingTrivia: leadingTrivia)
     return Syntax(genericArgument)
+  }
+}
+
+public protocol ExpressibleAsGenericArgument {
+  func createGenericArgument() -> GenericArgument
+}
+
+extension GenericArgument: ExpressibleAsGenericArgument {
+  public func createGenericArgument() -> GenericArgument {
+    self
   }
 }
 
@@ -8137,6 +10375,16 @@ public struct GenericArgumentClause: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsGenericArgumentClause {
+  func createGenericArgumentClause() -> GenericArgumentClause
+}
+
+extension GenericArgumentClause: ExpressibleAsGenericArgumentClause {
+  public func createGenericArgumentClause() -> GenericArgumentClause {
+    self
+  }
+}
+
 public struct TypeAnnotation: SyntaxBuildable {
   let colon: TokenSyntax
   let type: TypeBuildable
@@ -8166,6 +10414,16 @@ public struct TypeAnnotation: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let typeAnnotation = buildTypeAnnotation(format: format, leadingTrivia: leadingTrivia)
     return Syntax(typeAnnotation)
+  }
+}
+
+public protocol ExpressibleAsTypeAnnotation {
+  func createTypeAnnotation() -> TypeAnnotation
+}
+
+extension TypeAnnotation: ExpressibleAsTypeAnnotation {
+  public func createTypeAnnotation() -> TypeAnnotation {
+    self
   }
 }
 
@@ -8209,6 +10467,16 @@ public struct EnumCasePattern: PatternBuildable {
   }
 }
 
+public protocol ExpressibleAsEnumCasePattern {
+  func createEnumCasePattern() -> EnumCasePattern
+}
+
+extension EnumCasePattern: ExpressibleAsEnumCasePattern {
+  public func createEnumCasePattern() -> EnumCasePattern {
+    self
+  }
+}
+
 public struct IsTypePattern: PatternBuildable {
   let isKeyword: TokenSyntax
   let type: TypeBuildable
@@ -8238,6 +10506,16 @@ public struct IsTypePattern: PatternBuildable {
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let isTypePattern = buildIsTypePattern(format: format, leadingTrivia: leadingTrivia)
     return PatternSyntax(isTypePattern)
+  }
+}
+
+public protocol ExpressibleAsIsTypePattern {
+  func createIsTypePattern() -> IsTypePattern
+}
+
+extension IsTypePattern: ExpressibleAsIsTypePattern {
+  public func createIsTypePattern() -> IsTypePattern {
+    self
   }
 }
 
@@ -8273,6 +10551,16 @@ public struct OptionalPattern: PatternBuildable {
   }
 }
 
+public protocol ExpressibleAsOptionalPattern {
+  func createOptionalPattern() -> OptionalPattern
+}
+
+extension OptionalPattern: ExpressibleAsOptionalPattern {
+  public func createOptionalPattern() -> OptionalPattern {
+    self
+  }
+}
+
 public struct IdentifierPattern: PatternBuildable {
   let identifier: TokenSyntax
 
@@ -8298,6 +10586,16 @@ public struct IdentifierPattern: PatternBuildable {
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let identifierPattern = buildIdentifierPattern(format: format, leadingTrivia: leadingTrivia)
     return PatternSyntax(identifierPattern)
+  }
+}
+
+public protocol ExpressibleAsIdentifierPattern {
+  func createIdentifierPattern() -> IdentifierPattern
+}
+
+extension IdentifierPattern: ExpressibleAsIdentifierPattern {
+  public func createIdentifierPattern() -> IdentifierPattern {
+    self
   }
 }
 
@@ -8337,6 +10635,16 @@ public struct AsTypePattern: PatternBuildable {
   }
 }
 
+public protocol ExpressibleAsAsTypePattern {
+  func createAsTypePattern() -> AsTypePattern
+}
+
+extension AsTypePattern: ExpressibleAsAsTypePattern {
+  public func createAsTypePattern() -> AsTypePattern {
+    self
+  }
+}
+
 public struct TuplePattern: PatternBuildable {
   let leftParen: TokenSyntax
   let elements: TuplePatternElementList
@@ -8373,6 +10681,16 @@ public struct TuplePattern: PatternBuildable {
   }
 }
 
+public protocol ExpressibleAsTuplePattern {
+  func createTuplePattern() -> TuplePattern
+}
+
+extension TuplePattern: ExpressibleAsTuplePattern {
+  public func createTuplePattern() -> TuplePattern {
+    self
+  }
+}
+
 public struct WildcardPattern: PatternBuildable {
   let wildcard: TokenSyntax
   let typeAnnotation: TypeAnnotation?
@@ -8402,6 +10720,16 @@ public struct WildcardPattern: PatternBuildable {
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let wildcardPattern = buildWildcardPattern(format: format, leadingTrivia: leadingTrivia)
     return PatternSyntax(wildcardPattern)
+  }
+}
+
+public protocol ExpressibleAsWildcardPattern {
+  func createWildcardPattern() -> WildcardPattern
+}
+
+extension WildcardPattern: ExpressibleAsWildcardPattern {
+  public func createWildcardPattern() -> WildcardPattern {
+    self
   }
 }
 
@@ -8445,6 +10773,16 @@ public struct TuplePatternElement: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsTuplePatternElement {
+  func createTuplePatternElement() -> TuplePatternElement
+}
+
+extension TuplePatternElement: ExpressibleAsTuplePatternElement {
+  public func createTuplePatternElement() -> TuplePatternElement {
+    self
+  }
+}
+
 public struct ExpressionPattern: PatternBuildable {
   let expression: ExprBuildable
 
@@ -8473,6 +10811,16 @@ public struct ExpressionPattern: PatternBuildable {
   }
 }
 
+public protocol ExpressibleAsExpressionPattern {
+  func createExpressionPattern() -> ExpressionPattern
+}
+
+extension ExpressionPattern: ExpressibleAsExpressionPattern {
+  public func createExpressionPattern() -> ExpressionPattern {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `TuplePatternElementList` represents a collection of 
@@ -8498,6 +10846,16 @@ public struct TuplePatternElementList: SyntaxBuildable {
     }
 
     return Syntax(tuplePatternElementList)
+  }
+}
+
+public protocol ExpressibleAsTuplePatternElementList {
+  func createTuplePatternElementList() -> TuplePatternElementList
+}
+
+extension TuplePatternElementList: ExpressibleAsTuplePatternElementList {
+  public func createTuplePatternElementList() -> TuplePatternElementList {
+    self
   }
 }
 
@@ -8533,6 +10891,16 @@ public struct ValueBindingPattern: PatternBuildable {
   }
 }
 
+public protocol ExpressibleAsValueBindingPattern {
+  func createValueBindingPattern() -> ValueBindingPattern
+}
+
+extension ValueBindingPattern: ExpressibleAsValueBindingPattern {
+  public func createValueBindingPattern() -> ValueBindingPattern {
+    self
+  }
+}
+
 // MARK: - Syntax collection
 
 /// `AvailabilitySpecList` represents a collection of 
@@ -8558,6 +10926,16 @@ public struct AvailabilitySpecList: SyntaxBuildable {
     }
 
     return Syntax(availabilitySpecList)
+  }
+}
+
+public protocol ExpressibleAsAvailabilitySpecList {
+  func createAvailabilitySpecList() -> AvailabilitySpecList
+}
+
+extension AvailabilitySpecList: ExpressibleAsAvailabilitySpecList {
+  public func createAvailabilitySpecList() -> AvailabilitySpecList {
+    self
   }
 }
 
@@ -8594,6 +10972,16 @@ public struct AvailabilityArgument: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let availabilityArgument = buildAvailabilityArgument(format: format, leadingTrivia: leadingTrivia)
     return Syntax(availabilityArgument)
+  }
+}
+
+public protocol ExpressibleAsAvailabilityArgument {
+  func createAvailabilityArgument() -> AvailabilityArgument
+}
+
+extension AvailabilityArgument: ExpressibleAsAvailabilityArgument {
+  public func createAvailabilityArgument() -> AvailabilityArgument {
+    self
   }
 }
 
@@ -8637,6 +11025,16 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsAvailabilityLabeledArgument {
+  func createAvailabilityLabeledArgument() -> AvailabilityLabeledArgument
+}
+
+extension AvailabilityLabeledArgument: ExpressibleAsAvailabilityLabeledArgument {
+  public func createAvailabilityLabeledArgument() -> AvailabilityLabeledArgument {
+    self
+  }
+}
+
 /// 
 /// An argument to `@available` that restricts the availability on a
 /// certain platform to a version, e.g. `iOS 10` or `swift 3.4`.
@@ -8670,6 +11068,16 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let availabilityVersionRestriction = buildAvailabilityVersionRestriction(format: format, leadingTrivia: leadingTrivia)
     return Syntax(availabilityVersionRestriction)
+  }
+}
+
+public protocol ExpressibleAsAvailabilityVersionRestriction {
+  func createAvailabilityVersionRestriction() -> AvailabilityVersionRestriction
+}
+
+extension AvailabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction {
+  public func createAvailabilityVersionRestriction() -> AvailabilityVersionRestriction {
+    self
   }
 }
 
@@ -8713,3 +11121,22 @@ public struct VersionTuple: SyntaxBuildable {
   }
 }
 
+public protocol ExpressibleAsVersionTuple {
+  func createVersionTuple() -> VersionTuple
+}
+
+extension VersionTuple: ExpressibleAsVersionTuple {
+  public func createVersionTuple() -> VersionTuple {
+    self
+  }
+}
+
+public protocol ExpressibleAsTokenSyntax {
+  func createTokenSyntax() -> TokenSyntax
+}
+
+extension TokenSyntax: ExpressibleAsTokenSyntax {
+  public func createTokenSyntax() -> TokenSyntax {
+    self
+  }
+}

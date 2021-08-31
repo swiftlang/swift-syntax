@@ -45,7 +45,7 @@ public final class IncrementalParseReusedNodeCollector:
 /// occurred since it was created.
 public final class IncrementalParseTransition {
   fileprivate let previousTree: SourceFileSyntax
-  fileprivate let edits: [SourceEdit]
+  fileprivate let edits: ConcurrentEdits
   fileprivate let reusedDelegate: IncrementalParseReusedNodeDelegate?
 
   /// - Parameters:
@@ -57,19 +57,122 @@ public final class IncrementalParseTransition {
   ///              2. should be in increasing source offset order.
   ///   - reusedNodeDelegate: Optional delegate to accept information about the
   ///                         reused regions and nodes.
+  @available(*, deprecated, message: "Use the initializer taking 'ConcurrentEdits' instead")
+  public convenience init(previousTree: SourceFileSyntax,
+                          edits: [SourceEdit],
+                          reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
+    self.init(
+      previousTree: previousTree,
+      edits: ConcurrentEdits(concurrent: edits),
+      reusedNodeDelegate: reusedNodeDelegate
+    )
+  }
+
+  /// - Parameters:
+  ///   - previousTree: The previous tree to do lookups on.
+  ///   - edits: The edits that have occurred since the last parse that resulted
+  ///            in the new source that is about to be parsed.
+  ///   - reusedNodeDelegate: Optional delegate to accept information about the
+  ///                         reused regions and nodes.
   public init(previousTree: SourceFileSyntax,
-              edits: [SourceEdit],
+              edits: ConcurrentEdits,
               reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
-    assert(IncrementalParseTransition.isEditArrayValid(edits))
     self.previousTree = previousTree
     self.edits = edits
     self.reusedDelegate = reusedNodeDelegate
   }
+}
 
-  /// Checks the requirements for the edits array to:
-  ///   1. not be overlapping.
-  ///   2. should be in increasing source offset order.
-  public static func isEditArrayValid(_ edits: [SourceEdit]) -> Bool {
+fileprivate extension Sequence where Element: Comparable {
+  var isSorted: Bool {
+    return zip(self, self.dropFirst()).allSatisfy({ $0.0 < $0.1 })
+  }
+}
+
+/// Edits that are applied **simultaneously**. That is, the offsets of all edits
+/// refer to the original string and are not shifted by previous edits. For
+/// example applying
+///  - insert 'x' at offset 0
+///  - insert 'y' at offset 1
+///  - insert 'z' at offset 2
+///  to '012345' results in 'x0y1z2345'.
+///
+/// The raw `edits` of this struct are guaranteed to
+///   1. not be overlapping.
+///   2. be in increasing source offset order.
+public struct ConcurrentEdits {
+  /// The raw concurrent edits. Are guaranteed to satisfy the requirements
+  /// stated above.
+  public let edits: [SourceEdit]
+
+  /// Initialize this struct from edits that are already in a concurrent form
+  /// and are guaranteed to satisfy the requirements posed above.
+  public init(concurrent: [SourceEdit]) {
+    precondition(Self.isValidConcurrentEditArray(concurrent))
+    self.edits = concurrent
+  }
+
+  /// Create concurrent from a set of sequential edits. Sequential edits are
+  /// applied one after the other. Applying the first edit results in an
+  /// intermediate string to which the second edit is applied etc. For example
+  /// applying
+  ///  - insert 'x' at offset 0
+  ///  - insert 'y' at offset 1
+  ///  - insert 'z' at offset 2
+  ///  to '012345' results in 'xyz012345'.
+
+  public init(fromSequential sequentialEdits: [SourceEdit]) {
+    self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
+  }
+
+  /// Construct a concurrent edits struct from a single edit. For a single edit,
+  /// there is no differentiation between being it being applied concurrently
+  /// or sequentially.
+  public init(_ single: SourceEdit) {
+    self.init(concurrent: [single])
+  }
+
+  private static func translateSequentialEditsToConcurrentEdits(
+    _ edits: [SourceEdit]
+  ) -> [SourceEdit] {
+    var concurrentEdits: [SourceEdit] = []
+    for editToAdd in edits {
+      var editToAdd = editToAdd
+      var editIndiciesMergedWithNewEdit: [Int] = []
+      for (index, existingEdit) in concurrentEdits.enumerated() {
+        if existingEdit.replacementRange.intersectsOrTouches(editToAdd.range) {
+          let intersectionLength =
+            existingEdit.replacementRange.intersected(editToAdd.range).length
+          editToAdd = SourceEdit(
+            offset: Swift.min(existingEdit.offset, editToAdd.offset),
+            length: existingEdit.length + editToAdd.length - intersectionLength,
+            replacementLength: existingEdit.replacementLength +
+              editToAdd.replacementLength - intersectionLength
+          )
+          editIndiciesMergedWithNewEdit.append(index)
+        } else if existingEdit.offset < editToAdd.endOffset {
+          editToAdd = SourceEdit(
+            offset: editToAdd.offset - existingEdit.replacementLength +
+              existingEdit.length,
+            length: editToAdd.length,
+            replacementLength: editToAdd.replacementLength
+          )
+        }
+      }
+      assert(editIndiciesMergedWithNewEdit.isSorted)
+      for indexToRemove in editIndiciesMergedWithNewEdit.reversed() {
+        concurrentEdits.remove(at: indexToRemove)
+      }
+      let insertPos = concurrentEdits.firstIndex(where: { edit in
+        editToAdd.endOffset <= edit.offset
+      }) ?? concurrentEdits.count
+      concurrentEdits.insert(editToAdd, at: insertPos)
+      assert(ConcurrentEdits.isValidConcurrentEditArray(concurrentEdits))
+    }
+    return concurrentEdits
+  }
+
+  private static func isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
     // Not quite sure if we should disallow creating an `IncrementalParseTransition`
     // object without edits but there doesn't seem to be much benefit if we do,
     // and there are 'lit' tests that want to test incremental re-parsing without edits.
@@ -87,6 +190,11 @@ public final class IncrementalParseTransition {
     }
     return true
   }
+
+  /// **Public for testing purposes only**
+  public static func _isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
+    return isValidConcurrentEditArray(edits)
+  }
 }
 
 /// Provides a mechanism for the parser to skip regions of an incrementally
@@ -100,7 +208,7 @@ internal struct IncrementalParseLookup {
     self.cursor = .init(root: transition.previousTree.data.absoluteRaw)
   }
 
-  fileprivate var edits: [SourceEdit] {
+  fileprivate var edits: ConcurrentEdits {
     return transition.edits
   }
 
@@ -160,7 +268,7 @@ internal struct IncrementalParseLookup {
 
     // Fast path check: if parser is past all the edits then any matching node
     // can be re-used.
-    if !edits.isEmpty && edits.last!.range.endOffset < node.position.utf8Offset {
+    if !edits.edits.isEmpty && edits.edits.last!.range.endOffset < node.position.utf8Offset {
       return true
     }
 
@@ -172,7 +280,7 @@ internal struct IncrementalParseLookup {
     if let nextSibling = cursor.nextSibling {
       // Fast path check: if next sibling is before all the edits then we can
       // re-use the node.
-      if !edits.isEmpty && edits.first!.range.offset > nextSibling.endPosition.utf8Offset {
+      if !edits.edits.isEmpty && edits.edits.first!.range.offset > nextSibling.endPosition.utf8Offset {
         return true
       }
       if let nextToken = nextSibling.raw.firstPresentToken {
@@ -182,7 +290,7 @@ internal struct IncrementalParseLookup {
     let nodeAffectRange = ByteSourceRange(offset: node.position.utf8Offset,
       length: (node.raw.totalLength + nextLeafNodeLength).utf8Length)
 
-    for edit in edits {
+    for edit in edits.edits {
       // Check if this node or the trivia of the next node has been edited. If
       // it has, we cannot reuse it.
       if edit.range.offset > nodeAffectRange.endOffset {
@@ -199,7 +307,7 @@ internal struct IncrementalParseLookup {
 
   fileprivate func translateToPreEditOffset(_ postEditOffset: Int) -> Int? {
     var offset = postEditOffset
-    for edit in edits {
+    for edit in edits.edits {
       if edit.range.offset > offset {
         // Remaining edits doesn't affect the position. (Edits are sorted)
         break

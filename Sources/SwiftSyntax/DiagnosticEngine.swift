@@ -95,7 +95,7 @@ public class DiagnosticEngine {
 
   /// Tells each consumer to finalize their diagnostic output.
   deinit {
-    for consumer in consumers {
+    for consumer in _consumers {
       consumer.finalize()
     }
   }

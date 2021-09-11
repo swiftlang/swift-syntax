@@ -10,14 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension FloatLiteralExpr {
-  public init(_ value: Float) {
-    self.init(floatingDigits: String(value))
-  }
-}
+import SwiftSyntax
 
-extension FloatLiteralExpr: ExpressibleByFloatLiteral {
-  public init(floatLiteral value: Float) {
-    self.init(value)
-  }
+extension VariableDecl {
+    public init(_ letOrVarKeyword: TokenSyntax, name: String, type: String) {
+        self.init(letOrVarKeyword: letOrVarKeyword, bindingsBuilder:  {
+            PatternBinding(pattern: IdentifierPattern(name),
+                           typeAnnotation: TypeAnnotation(type))
+        })
+    }
 }

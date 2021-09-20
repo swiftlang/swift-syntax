@@ -10,14 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension FloatLiteralExpr {
-  public init(_ value: Float) {
-    self.init(floatingDigits: String(value))
-  }
+extension IdentifierPattern {
+    init(_ identifier: String) {
+        self.init(identifier: .identifier(identifier))
+    }
 }
 
-extension FloatLiteralExpr: ExpressibleByFloatLiteral {
-  public init(floatLiteral value: Float) {
+extension IdentifierPattern: ExpressibleByStringLiteral {
+  public init(stringLiteral value: String) {
     self.init(value)
   }
 }

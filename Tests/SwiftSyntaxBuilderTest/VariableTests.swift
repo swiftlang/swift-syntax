@@ -40,4 +40,21 @@ final class VariableTests: XCTestCase {
     ␣var number: Int = 123
     """)
   }
+
+  func testConvenienceInitializer() {
+    let leadingTrivia = Trivia.garbageText("␣")
+
+    let testCases: [UInt: (TokenSyntax, String, String, String)] = [
+      #line: (TokenSyntax.let, "foo", "Int", "␣let foo: Int"),
+      #line: (TokenSyntax.var, "bar", "Baz", "␣var bar: Baz")
+    ]
+
+    for (line, testCase) in testCases {
+      let (keyword, name, type, expected) = testCase
+      let builder = VariableDecl(keyword, name: name, type: type)
+      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+
+      XCTAssertEqual(syntax.description, expected, line: line)
+    }
+  }
 }

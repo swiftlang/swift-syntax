@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-
 extension BooleanLiteralExpr {
   public init(_ value: Bool) {
     self.init(booleanLiteral: value ? .true : .false)

@@ -18,3 +18,9 @@ extension SimpleTypeIdentifier {
               genericArgumentClause: nil)
   }
 }
+
+extension SimpleTypeIdentifier: ExpressibleByStringLiteral {
+  public init(stringLiteral value: String) {
+    self.init(value)
+  }
+}

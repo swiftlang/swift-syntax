@@ -16,21 +16,7 @@
 
 @_implementationOnly import _InternalSwiftSyntaxParser
 import Foundation
-
-typealias CSyntaxNode = swiftparse_syntax_node_t
-typealias CTriviaPiece = swiftparse_trivia_piece_t
-typealias CSyntaxNodePtr = UnsafePointer<CSyntaxNode>
-typealias CTriviaPiecePtr = UnsafePointer<CTriviaPiece>
-typealias CSyntaxKind = swiftparse_syntax_kind_t
-typealias CTokenKind = swiftparse_token_kind_t
-typealias CTriviaKind = swiftparse_trivia_kind_t
-typealias CTokenData = swiftparse_token_data_t
-typealias CLayoutData = swiftparse_layout_data_t
-typealias CParseLookupResult = swiftparse_lookup_result_t
-typealias CClientNode = swiftparse_client_node_t
-typealias CDiagnostic = swiftparser_diagnostic_t
-typealias CFixit = swiftparse_diagnostic_fixit_t
-typealias CRange = swiftparse_range_t
+import SwiftSyntax
 
 /// A list of possible errors that could be encountered while parsing a
 /// Syntax tree.
@@ -64,6 +50,7 @@ public enum SyntaxParser {
   /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
   /// is from a toolchain that is not compatible with this version of SwiftSyntax.
   fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
+  fileprivate static var cnodeLayoutHashVerifyResult: Bool = verifyCNodeLayoutHash()
 
   /// Parses the string into a full-fidelity Syntax tree.
   ///
@@ -82,7 +69,7 @@ public enum SyntaxParser {
     filenameForDiagnostics: String = "",
     diagnosticEngine: DiagnosticEngine? = nil
   ) throws -> SourceFileSyntax {
-    guard nodeHashVerifyResult else {
+    guard nodeHashVerifyResult && cnodeLayoutHashVerifyResult else {
       throw ParserError.parserCompatibilityCheckFailed
     }
     // Get a native UTF8 string for efficient indexing with UTF8 byte offsets.
@@ -94,7 +81,7 @@ public enum SyntaxParser {
     let rawSyntax = parseRaw(utf8Source, parseTransition, filenameForDiagnostics,
                              diagnosticEngine)
 
-    let base = Syntax(SyntaxData.forRoot(rawSyntax))
+    let base = _SyntaxParserInterop.nodeFromRetainedOpaqueRawSyntax(rawSyntax)
     guard let file = base.as(SourceFileSyntax.self) else {
       throw ParserError.invalidSyntaxData
     }
@@ -115,7 +102,7 @@ public enum SyntaxParser {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     let fileData = try Data(contentsOf: url)
     let source = fileData.withUnsafeBytes { buf in
-      return String.fromBuffer(buf.bindMemory(to: UInt8.self))
+      return String(decoding: buf.bindMemory(to: UInt8.self), as: UTF8.self)
     }
     return try parse(source: source, filenameForDiagnostics: url.path,
                      diagnosticEngine: diagnosticEngine)
@@ -126,7 +113,7 @@ public enum SyntaxParser {
     _ parseTransition: IncrementalParseTransition?,
     _ filenameForDiagnostics: String,
     _ diagnosticEngine: DiagnosticEngine?
-  ) -> RawSyntax {
+  ) -> CClientNode {
     precondition(source.isContiguousUTF8)
     let c_parser = swiftparse_parser_create()
     defer {
@@ -134,11 +121,7 @@ public enum SyntaxParser {
     }
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
-      let node = RawSyntax.create(from: cnode, source: source)
-      // Transfer ownership of the object to the C parser. We get ownership back
-      // via `moveFromCRawNode()`.
-      let bits = Unmanaged.passRetained(node)
-      return bits.toOpaque()
+      return _SyntaxParserInterop.getRetainedOpaqueRawSyntax(cnode: cnode, source: source)
     }
     swiftparse_parser_set_node_handler(c_parser, nodeHandler);
 
@@ -147,12 +130,12 @@ public enum SyntaxParser {
       let nodeLookup = {
             (offset: Int, kind: CSyntaxKind) -> CParseLookupResult in
         guard let foundNode =
-            parseLookup.lookUp(offset, kind: .fromRawValue(kind)) else {
+            parseLookup.lookUp(offset, kind: kind) else {
           return CParseLookupResult(length: 0, node: nil)
         }
         let lengthToSkip = foundNode.byteSize
-        let bits = Unmanaged.passRetained(foundNode.raw)
-        return CParseLookupResult(length: lengthToSkip, node: bits.toOpaque())
+        let opaqueNode = _SyntaxParserInterop.getRetainedOpaqueRawSyntax(node: foundNode)
+        return CParseLookupResult(length: lengthToSkip, node: opaqueNode)
       }
       swiftparse_parser_set_node_lookup(c_parser, nodeLookup);
     }
@@ -196,8 +179,7 @@ public enum SyntaxParser {
       swiftparse_parse_string(c_parser, buf, source.utf8.count)
     }
 
-    // Get ownership back from the C parser.
-    return RawSyntax.moveFromOpaque(c_top)!
+    return c_top!
   }
 }
 
@@ -271,4 +253,8 @@ extension Diagnostic {
     self.init(message: diag.message, location: diag.location, notes: notes,
               highlights: diag.highlights, fixIts: diag.fixIts)
   }
+}
+
+fileprivate func verifyCNodeLayoutHash() -> Bool {
+  return cNodeLayoutHash() == SwiftSyntax.cNodeLayoutHash()
 }

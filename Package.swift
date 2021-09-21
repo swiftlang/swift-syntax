@@ -7,11 +7,13 @@ let package = Package(
   name: "SwiftSyntax",
   targets: [
     .target(name: "_CSwiftSyntax"),
-    .testTarget(name: "SwiftSyntaxTest", dependencies: ["SwiftSyntax"], exclude: ["Inputs"]),
+    .testTarget(name: "SwiftSyntaxTest", dependencies: ["SwiftSyntax"]),
     .target(name: "SwiftSyntaxBuilder", dependencies: ["SwiftSyntax"]),
     .testTarget(name: "SwiftSyntaxBuilderTest", dependencies: ["SwiftSyntaxBuilder"]),
-    .target(name: "lit-test-helper", dependencies: ["SwiftSyntax"]),
-    .testTarget(name: "PerformanceTest", dependencies: ["SwiftSyntax"])
+    .target(name: "SwiftSyntaxParser", dependencies: ["SwiftSyntax"]),
+    .testTarget(name: "SwiftSyntaxParserTest", dependencies: ["SwiftSyntaxParser"], exclude: ["Inputs"]),
+    .target(name: "lit-test-helper", dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]),
+    .testTarget(name: "PerformanceTest", dependencies: ["SwiftSyntax", "SwiftSyntaxParser"])
     // Also see targets added below
   ]
 )
@@ -52,4 +54,5 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
 }
 
 package.products.append(.library(name: "SwiftSyntax", type: libraryType, targets: ["SwiftSyntax"]))
+package.products.append(.library(name: "SwiftSyntaxParser", type: libraryType, targets: ["SwiftSyntaxParser"]))
 package.products.append(.library(name: "SwiftSyntaxBuilder", type: libraryType, targets: ["SwiftSyntaxBuilder"]))

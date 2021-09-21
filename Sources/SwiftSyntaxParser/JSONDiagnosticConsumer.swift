@@ -14,6 +14,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftSyntax
 
 public final class JSONDiagnosticConsumer: DiagnosticConsumer {
   /// Enumerates the possible places this consumer might output diagnostics.

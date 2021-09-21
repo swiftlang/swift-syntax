@@ -32,14 +32,6 @@
     "SyntaxVisitor.swift",
     "Misc.swift",
   ],
-  "Diagnostic": [
-    "Diagnostic.swift",
-    "DiagnosticConsumer.swift",
-    "DiagnosticEngine.swift",
-    "JSONDiagnosticConsumer.swift",
-    "PrintingDiagnosticConsumer.swift",
-    "SyntaxVerifier.swift",
-  ],
   "Position": [
     "AbsolutePosition.swift",
     "SourceLength.swift",
@@ -48,9 +40,11 @@
   ],
   "Parse": [
     "IncrementalParseTransition.swift",
-    "SyntaxParser.swift",
   ],
   "Internal": [
+    "_SyntaxParserInterop.swift",
+    "CNodes.swift",
     "AtomicCounter.swift",
+    "SyntaxVerifier.swift",
   ]
 }

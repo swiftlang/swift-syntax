@@ -1,5 +1,6 @@
 import XCTest
 import SwiftSyntax
+import SwiftSyntaxParser
 
 fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {

@@ -1,5 +1,6 @@
 import XCTest
 import SwiftSyntax
+import SwiftSyntaxParser
 
 public class IncrementalParsingTests: XCTestCase {
 

@@ -199,11 +199,11 @@ public struct ConcurrentEdits {
 
 /// Provides a mechanism for the parser to skip regions of an incrementally
 /// updated source that was already parsed during a previous parse invocation.
-internal struct IncrementalParseLookup {
+public struct IncrementalParseLookup {
   fileprivate let transition: IncrementalParseTransition
   fileprivate var cursor: SyntaxCursor
 
-  init(transition: IncrementalParseTransition) {
+  public init(transition: IncrementalParseTransition) {
     self.transition = transition
     self.cursor = .init(root: transition.previousTree.data.absoluteRaw)
   }
@@ -224,16 +224,16 @@ internal struct IncrementalParseLookup {
   ///
   /// - Parameters:
   ///   - offset: The byte offset of the source string that is currently parsed.
-  ///   - kind: The `SyntaxKind` that the parser expects at this position.
+  ///   - kind: The `CSyntaxKind` that the parser expects at this position.
   /// - Returns: A `SyntaxNode` node from the previous parse invocation,
   ///            representing the contents of this region, if it is still valid
   ///            to re-use. `nil` otherwise.
-  mutating func lookUp(_ newOffset: Int, kind: SyntaxKind) -> SyntaxNode? {
+  public mutating func lookUp(_ newOffset: Int, kind: CSyntaxKind) -> SyntaxNode? {
     guard let prevOffset = translateToPreEditOffset(newOffset) else {
       return nil
     }
     let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
-    let node = cursorLookup(prevPosition: prevPosition, kind: kind)
+    let node = cursorLookup(prevPosition: prevPosition, kind: .fromRawValue(kind))
     if let delegate = reusedDelegate, let node = node {
       delegate.parserReusedNode(
         range: ByteSourceRange(offset: newOffset, length: node.byteSize),

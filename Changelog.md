@@ -5,6 +5,9 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 ## `main`
 
 * To clarify that the edits passed to `IncrementalParseTransition` are applied concurrently, introduce a new `ConcurrentEdit` type that provides the guarantee and allows translation of sequentially applied edits to the expected concurrent form.
+* The `SwiftSyntaxParser` type and a few related types now live in their own module (also named `SwiftSyntaxParser`). This allows using `SwiftSyntax` for code generation purposes without having a compatible `_InternalSwiftSyntaxParser.dylib` around. 
+
+  `import SwiftSyntaxParser` where necessary.
 
 ## Swift 5.3
 

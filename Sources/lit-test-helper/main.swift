@@ -291,7 +291,7 @@ func performParseIncremental(args: CommandLineArguments) throws {
   let regionCollector = IncrementalParseReusedNodeCollector()
   let editTransition = IncrementalParseTransition(
     previousTree: preEditTree,
-    edits: ConcurrentEdits(concurrent: edits),
+    edits: try ConcurrentEdits(concurrent: edits),
     reusedNodeDelegate: regionCollector
   )
 

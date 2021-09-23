@@ -62,10 +62,18 @@ func verifySequentialToConcurrentTranslation(
   )
 }
 
-
 final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
   func testEmpty() throws {
     verifySequentialToConcurrentTranslation([], [])
+  }
+
+  func testCreatingConcurrentFailsIfEditsDoNotSatisfyConcurrentRequirements() {
+    XCTAssertThrowsError(try {
+      try ConcurrentEdits(concurrent: [
+        SourceEdit(offset: 5, length: 1, replacementLength: 0),
+        SourceEdit(offset: 5, length: 1, replacementLength: 0)
+      ])
+    }())
   }
 
   func testSingleEdit1() throws {

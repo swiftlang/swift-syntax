@@ -63,7 +63,7 @@ public final class IncrementalParseTransition {
                           reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil) {
     self.init(
       previousTree: previousTree,
-      edits: ConcurrentEdits(concurrent: edits),
+      edits: try! ConcurrentEdits(concurrent: edits),
       reusedNodeDelegate: reusedNodeDelegate
     )
   }
@@ -101,14 +101,27 @@ fileprivate extension Sequence where Element: Comparable {
 ///   1. not be overlapping.
 ///   2. be in increasing source offset order.
 public struct ConcurrentEdits {
+  enum ConcurrentEditsError: Error, CustomStringConvertible {
+    case editsNotConcurrent
+
+    var description: String {
+      switch self {
+      case .editsNotConcurrent:
+        return "Edits passed to ConcurrentEdits(concurrent:) does not satisfy the requirements posed by ConcurrentEdits"
+      }
+    }
+  }
+
   /// The raw concurrent edits. Are guaranteed to satisfy the requirements
   /// stated above.
   public let edits: [SourceEdit]
 
   /// Initialize this struct from edits that are already in a concurrent form
   /// and are guaranteed to satisfy the requirements posed above.
-  public init(concurrent: [SourceEdit]) {
-    precondition(Self.isValidConcurrentEditArray(concurrent))
+  public init(concurrent: [SourceEdit]) throws {
+    if !Self.isValidConcurrentEditArray(concurrent) {
+      throw ConcurrentEditsError.editsNotConcurrent
+    }
     self.edits = concurrent
   }
 
@@ -122,14 +135,22 @@ public struct ConcurrentEdits {
   ///  to '012345' results in 'xyz012345'.
 
   public init(fromSequential sequentialEdits: [SourceEdit]) {
-    self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
+    do {
+      try self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
+    } catch {
+      fatalError("ConcurrentEdits created by translateSequentialEditsToConcurrentEdits do not satisfy ConcurrentEdits requirements")
+    }
   }
 
   /// Construct a concurrent edits struct from a single edit. For a single edit,
   /// there is no differentiation between being it being applied concurrently
   /// or sequentially.
   public init(_ single: SourceEdit) {
-    self.init(concurrent: [single])
+    do {
+      try self.init(concurrent: [single])
+    } catch {
+      fatalError("A single edit doesn't satisfy the ConcurrentEdits requirements?")
+    }
   }
 
   private static func translateSequentialEditsToConcurrentEdits(

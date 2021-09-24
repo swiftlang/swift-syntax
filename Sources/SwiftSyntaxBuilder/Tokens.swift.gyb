@@ -54,4 +54,6 @@ public extension TokenSyntax {
 %   end
 
 % end
+  /// The `eof` token
+  static let eof = SyntaxFactory.makeToken(.eof, presence: .present)
 }

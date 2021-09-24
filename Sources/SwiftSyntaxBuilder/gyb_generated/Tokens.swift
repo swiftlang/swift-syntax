@@ -490,4 +490,6 @@ public extension TokenSyntax {
   /// The `yield` token
   static let `yield` = SyntaxFactory.makeYieldToken()
 
+  /// The `eof` token
+  static let eof = SyntaxFactory.makeToken(.eof, presence: .present)
 }

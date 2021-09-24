@@ -2,14 +2,14 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class IdentifierExprTests: XCTestCase {
+final class IdentifierPatternTests: XCTestCase {
   func testStringLiteral() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let testCases: [UInt: (IdentifierExpr, String)] = [
-      #line: (IdentifierExpr(identifier: .identifier("Test")), "␣Test"),
-      #line: (IdentifierExpr(stringLiteral: "Test"), "␣Test"),
-      #line: (IdentifierExpr("Test"), "␣Test"),
+    let testCases: [UInt: (IdentifierPattern, String)] = [
+      #line: (IdentifierPattern(identifier: .identifier("Test")), "␣Test"),
+      #line: (IdentifierPattern(stringLiteral: "Test"), "␣Test"),
+      #line: (IdentifierPattern("Test"), "␣Test"),
       #line: ("Test", "␣Test")
     ]
 

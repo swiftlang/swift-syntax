@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 extension IdentifierPattern {
-    init(_ identifier: String) {
-        self.init(identifier: .identifier(identifier))
-    }
+  public init(_ identifier: String) {
+    self.init(identifier: .identifier(identifier))
+  }
 }
 
 extension IdentifierPattern: ExpressibleByStringLiteral {

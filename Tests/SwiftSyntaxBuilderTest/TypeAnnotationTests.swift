@@ -2,15 +2,15 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class IdentifierExprTests: XCTestCase {
+final class TypeAnnotationTests: XCTestCase {
   func testStringLiteral() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let testCases: [UInt: (IdentifierExpr, String)] = [
-      #line: (IdentifierExpr(identifier: .identifier("Test")), "␣Test"),
-      #line: (IdentifierExpr(stringLiteral: "Test"), "␣Test"),
-      #line: (IdentifierExpr("Test"), "␣Test"),
-      #line: ("Test", "␣Test")
+    let testCases: [UInt: (TypeAnnotation, String)] = [
+      #line: (TypeAnnotation(type: SimpleTypeIdentifier("Test")), "␣: Test"),
+      #line: (TypeAnnotation(stringLiteral: "Test"), "␣: Test"),
+      #line: (TypeAnnotation("Test"), "␣: Test"),
+      #line: ("Test", "␣: Test")
     ]
 
     for (line, testCase) in testCases {

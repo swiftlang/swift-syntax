@@ -1,6 +1,5 @@
 import XCTest
 import SwiftSyntax
-
 import SwiftSyntaxBuilder
 
 final class StructTests: XCTestCase {

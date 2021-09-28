@@ -13,14 +13,14 @@
 import SwiftSyntax
 
 extension StringLiteralExpr {
-  public init(_ value: String) {
+  public init(_ value: String, openQuote: TokenSyntax = .stringQuote, closeQuote: TokenSyntax = .stringQuote) {
     let content = SyntaxFactory.makeToken(TokenKind.stringSegment(value), presence: .present)
     let segment = StringSegment(content: content)
     let segments = StringLiteralSegments([segment])
 
-    self.init(openQuote: .stringQuote,
+    self.init(openQuote: openQuote,
               segments: segments,
-              closeQuote: .stringQuote)
+              closeQuote: closeQuote)
   }
 }
 

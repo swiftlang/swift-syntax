@@ -39,10 +39,19 @@ public protocol ${kind}ListBuildable: SyntaxListBuildable {
   func build${kind}List(format: Format, leadingTrivia: Trivia?) -> [${build_kind}]
 }
 
+%     buildable_type = kind + 'Buildable'
+public protocol ExpressibleAs${buildable_type} {
+  func create${buildable_type}() -> ${buildable_type}
+}
+
 %     if kind == 'Syntax':
-public protocol ${kind}Buildable: ${kind}ListBuildable {
+public protocol ${buildable_type}: ExpressibleAs${buildable_type}, ${kind}ListBuildable {
+%     elif kind == 'Decl':
+public protocol ${buildable_type}: ExpressibleAs${buildable_type}, SyntaxBuildable, ${kind}ListBuildable, ExpressibleAsMemberDeclListItem, ExpressibleAsCodeBlockItem {
+%     elif kind == 'Stmt':
+public protocol ${buildable_type}: ExpressibleAs${buildable_type}, SyntaxBuildable, ${kind}ListBuildable, ExpressibleAsCodeBlockItem {
 %     else:
-public protocol ${kind}Buildable: SyntaxBuildable, ${kind}ListBuildable {
+public protocol ${buildable_type}: ExpressibleAs${buildable_type}, SyntaxBuildable, ${kind}ListBuildable {
 %     end
   /// Builds a `${build_kind}`.
   /// - Parameter format: The `Format` to use.
@@ -51,7 +60,13 @@ public protocol ${kind}Buildable: SyntaxBuildable, ${kind}ListBuildable {
   func build${kind}(format: Format, leadingTrivia: Trivia?) -> ${build_kind}
 }
 
-extension ${kind}Buildable {
+extension ${buildable_type} {
+  public func create${buildable_type}() -> ${buildable_type} {
+    self
+  }
+}
+
+extension ${buildable_type} {
 %     if kind != 'Syntax':
   /// Builds a `${build_kind}`.
   /// - Returns: A `${build_kind}`.
@@ -82,6 +97,22 @@ extension ${kind}Buildable {
     [build${kind}(format: format, leadingTrivia: leadingTrivia)]
   }
 }
+%     if kind == 'Decl':
+
+extension DeclBuildable {
+  public func createMemberDeclListItem() -> MemberDeclListItem { 
+    MemberDeclListItem(decl: self)
+  }
+}
+%     end
+%     if kind in ['Decl', 'Stmt']:
+
+extension ${kind}Buildable {
+  public func createCodeBlockItem() -> CodeBlockItem { 
+    CodeBlockItem(item: self)
+  }
+}
+%     end
 
 %   end
 % end
@@ -197,4 +228,25 @@ public struct ${node.syntax_kind}: SyntaxBuildable {
 }
 
 %   end
+%   if node.is_buildable() or node.is_syntax_collection():
+public protocol ExpressibleAs${node.syntax_kind} {
+  func create${node.syntax_kind}() -> ${node.syntax_kind}
+}
+
+extension ${node.syntax_kind}: ExpressibleAs${node.syntax_kind} {
+  public func create${node.syntax_kind}() -> ${node.syntax_kind} {
+    self
+  }
+}
+
+%   end
 % end
+public protocol ExpressibleAsTokenSyntax {
+  func createTokenSyntax() -> TokenSyntax
+}
+
+extension TokenSyntax: ExpressibleAsTokenSyntax {
+  public func createTokenSyntax() -> TokenSyntax {
+    self
+  }
+}

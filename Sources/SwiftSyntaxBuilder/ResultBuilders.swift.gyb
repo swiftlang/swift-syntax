@@ -29,11 +29,11 @@ public struct ${node.syntax_kind}Builder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ${element_type}
+  public typealias Expression = ExpressibleAs${element_type}
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [${element_type}]
+  public typealias Component = [ExpressibleAs${element_type}]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -84,7 +84,7 @@ public struct ${node.syntax_kind}Builder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component)
+    .init(component.map { $0.create${element_type}() })
   }
 }
 

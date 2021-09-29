@@ -14,6 +14,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftSyntax
 
 /// The DiagnosticEngine allows Swift tools to emit diagnostics.
 public class DiagnosticEngine {

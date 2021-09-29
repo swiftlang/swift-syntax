@@ -1,5 +1,6 @@
 import XCTest
 import SwiftSyntax
+import SwiftSyntaxParser
 
 fileprivate func loc(_ file: String = #file, line: Int = #line,
          column: Int = #line) -> SourceLocation {

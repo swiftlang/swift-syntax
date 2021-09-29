@@ -12,6 +12,8 @@
 // This file provides the Diagnostic, Note, and FixIt types.
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 /// A FixIt represents a change to source code in order to "correct" a
 /// diagnostic.
 public enum FixIt: Codable, CustomDebugStringConvertible {

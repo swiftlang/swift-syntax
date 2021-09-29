@@ -12,6 +12,7 @@
 
 
 import SwiftSyntax
+import SwiftSyntaxParser
 import Foundation
 
 /// Print the given message to stderr

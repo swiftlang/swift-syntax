@@ -12,8 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_implementationOnly import _InternalSwiftSyntaxParser
-
 extension SyntaxNode {
   public var isUnknown: Bool { return raw.kind.isUnknown }
   public var asUnknown: UnknownSyntax? {
@@ -1962,12 +1960,5 @@ extension Syntax {
     case .versionTuple(let node):
       return node
     }
-  }
-}
-
-extension SyntaxParser {
-  static func verifyNodeDeclarationHash() -> Bool {
-    return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "e9565bceebb81b9c3a69c442a8576b029d7eaf9c"
   }
 }

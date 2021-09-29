@@ -1216,12 +1216,12 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
 }
 
 extension RawSyntax {
+  static func moveFromOpaque(_ cn: CClientNode) -> RawSyntax {
+    return Unmanaged<RawSyntax>.fromOpaque(cn).takeRetainedValue()
+  }
+
   static func moveFromOpaque(_ cn: CClientNode?) -> RawSyntax? {
-    if let subnode = cn {
-      return Unmanaged<RawSyntax>.fromOpaque(subnode).takeRetainedValue()
-    } else {
-      return nil
-    }
+    return cn.map(moveFromOpaque)
   }
 
   static func getFromOpaque(_ cn: CClientNode?) -> RawSyntax? {

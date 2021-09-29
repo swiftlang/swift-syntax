@@ -1,5 +1,6 @@
 import XCTest
 import SwiftSyntax
+import SwiftSyntaxParser
 
 fileprivate struct Foo {
   public let x: Int

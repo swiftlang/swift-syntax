@@ -435,6 +435,12 @@ public struct CodeBlockItemList: SyntaxBuildable {
   }
 }
 
+extension CodeBlockItemList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsCodeBlockItem...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsCodeBlockItemList: ExpressibleAsCodeBlock {
   func createCodeBlockItemList() -> CodeBlockItemList
 }
@@ -618,6 +624,12 @@ public struct TupleExprElementList: SyntaxBuildable {
   }
 }
 
+extension TupleExprElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsTupleExprElement...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsTupleExprElementList {
   func createTupleExprElementList() -> TupleExprElementList
 }
@@ -656,6 +668,12 @@ public struct ArrayElementList: SyntaxBuildable {
     }
 
     return Syntax(arrayElementList)
+  }
+}
+
+extension ArrayElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsArrayElement...) {
+    self.init(elements)
   }
 }
 
@@ -700,6 +718,12 @@ public struct DictionaryElementList: SyntaxBuildable {
   }
 }
 
+extension DictionaryElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsDictionaryElement...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsDictionaryElementList {
   func createDictionaryElementList() -> DictionaryElementList
 }
@@ -738,6 +762,12 @@ public struct StringLiteralSegments: SyntaxBuildable {
     }
 
     return Syntax(stringLiteralSegments)
+  }
+}
+
+extension StringLiteralSegments: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+    self.init(elements)
   }
 }
 
@@ -926,6 +956,12 @@ public struct DeclNameArgumentList: SyntaxBuildable {
     }
 
     return Syntax(declNameArgumentList)
+  }
+}
+
+extension DeclNameArgumentList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsDeclNameArgument...) {
+    self.init(elements)
   }
 }
 
@@ -1277,6 +1313,12 @@ public struct ExprList: SyntaxBuildable {
     }
 
     return Syntax(exprList)
+  }
+}
+
+extension ExprList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsExprBuildable...) {
+    self.init(elements)
   }
 }
 
@@ -2530,6 +2572,12 @@ public struct ClosureCaptureItemList: SyntaxBuildable {
   }
 }
 
+extension ClosureCaptureItemList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsClosureCaptureItem...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsClosureCaptureItemList {
   func createClosureCaptureItemList() -> ClosureCaptureItemList
 }
@@ -2668,6 +2716,12 @@ public struct ClosureParamList: SyntaxBuildable {
     }
 
     return Syntax(closureParamList)
+  }
+}
+
+extension ClosureParamList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsClosureParam...) {
+    self.init(elements)
   }
 }
 
@@ -2934,6 +2988,12 @@ public struct MultipleTrailingClosureElementList: SyntaxBuildable {
     }
 
     return Syntax(multipleTrailingClosureElementList)
+  }
+}
+
+extension MultipleTrailingClosureElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsMultipleTrailingClosureElement...) {
+    self.init(elements)
   }
 }
 
@@ -3650,6 +3710,12 @@ public struct ObjcName: SyntaxBuildable {
   }
 }
 
+extension ObjcName: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsObjcNamePiece...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsObjcName {
   func createObjcName() -> ObjcName
 }
@@ -4158,6 +4224,12 @@ public struct FunctionParameterList: SyntaxBuildable {
   }
 }
 
+extension FunctionParameterList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsFunctionParameter...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsFunctionParameterList {
   func createFunctionParameterList() -> FunctionParameterList
 }
@@ -4406,6 +4478,12 @@ public struct IfConfigClauseList: SyntaxBuildable {
     }
 
     return Syntax(ifConfigClauseList)
+  }
+}
+
+extension IfConfigClauseList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsIfConfigClause...) {
+    self.init(elements)
   }
 }
 
@@ -4856,6 +4934,12 @@ public struct InheritedTypeList: SyntaxBuildable {
   }
 }
 
+extension InheritedTypeList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsInheritedType...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsInheritedTypeList {
   func createInheritedTypeList() -> InheritedTypeList
 }
@@ -5294,6 +5378,12 @@ public struct MemberDeclList: SyntaxBuildable {
   }
 }
 
+extension MemberDeclList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsMemberDeclListItem...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsMemberDeclList: ExpressibleAsMemberDeclBlock {
   func createMemberDeclList() -> MemberDeclList
 }
@@ -5555,6 +5645,12 @@ public struct ModifierList: SyntaxBuildable {
     }
 
     return Syntax(modifierList)
+  }
+}
+
+extension ModifierList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsDeclModifier...) {
+    self.init(elements)
   }
 }
 
@@ -5999,6 +6095,12 @@ public struct AccessPath: SyntaxBuildable {
   }
 }
 
+extension AccessPath: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsAccessPathComponent...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsAccessPath {
   func createAccessPath() -> AccessPath
 }
@@ -6230,6 +6332,12 @@ public struct AccessorList: SyntaxBuildable {
   }
 }
 
+extension AccessorList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsAccessorDecl...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsAccessorList: ExpressibleAsAccessorBlock {
   func createAccessorList() -> AccessorList
 }
@@ -6383,6 +6491,12 @@ public struct PatternBindingList: SyntaxBuildable {
     }
 
     return Syntax(patternBindingList)
+  }
+}
+
+extension PatternBindingList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsPatternBinding...) {
+    self.init(elements)
   }
 }
 
@@ -6541,6 +6655,12 @@ public struct EnumCaseElementList: SyntaxBuildable {
     }
 
     return Syntax(enumCaseElementList)
+  }
+}
+
+extension EnumCaseElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsEnumCaseElement...) {
+    self.init(elements)
   }
 }
 
@@ -6786,6 +6906,12 @@ public struct IdentifierList: SyntaxBuildable {
   }
 }
 
+extension IdentifierList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: TokenSyntax...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsIdentifierList {
   func createIdentifierList() -> IdentifierList
 }
@@ -6952,6 +7078,12 @@ public struct PrecedenceGroupAttributeList: SyntaxBuildable {
   }
 }
 
+extension PrecedenceGroupAttributeList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsPrecedenceGroupAttributeList {
   func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList
 }
@@ -7047,6 +7179,12 @@ public struct PrecedenceGroupNameList: SyntaxBuildable {
     }
 
     return Syntax(precedenceGroupNameList)
+  }
+}
+
+extension PrecedenceGroupNameList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsPrecedenceGroupNameElement...) {
+    self.init(elements)
   }
 }
 
@@ -7252,6 +7390,12 @@ public struct TokenList: SyntaxBuildable {
   }
 }
 
+extension TokenList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: TokenSyntax...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsTokenList {
   func createTokenList() -> TokenList
 }
@@ -7288,6 +7432,12 @@ public struct NonEmptyTokenList: SyntaxBuildable {
     }
 
     return Syntax(nonEmptyTokenList)
+  }
+}
+
+extension NonEmptyTokenList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: TokenSyntax...) {
+    self.init(elements)
   }
 }
 
@@ -7471,6 +7621,12 @@ public struct AttributeList: SyntaxBuildable {
   }
 }
 
+extension AttributeList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsAttributeList {
   func createAttributeList() -> AttributeList
 }
@@ -7510,6 +7666,12 @@ public struct SpecializeAttributeSpecList: SyntaxBuildable {
     }
 
     return Syntax(specializeAttributeSpecList)
+  }
+}
+
+extension SpecializeAttributeSpecList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+    self.init(elements)
   }
 }
 
@@ -7956,6 +8118,12 @@ public struct ObjCSelector: SyntaxBuildable {
   }
 }
 
+extension ObjCSelector: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsObjCSelectorPiece...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsObjCSelector {
   func createObjCSelector() -> ObjCSelector
 }
@@ -8171,6 +8339,12 @@ public struct DifferentiabilityParamList: SyntaxBuildable {
     }
 
     return Syntax(differentiabilityParamList)
+  }
+}
+
+extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsDifferentiabilityParam...) {
+    self.init(elements)
   }
 }
 
@@ -8653,6 +8827,12 @@ public struct SwitchCaseList: SyntaxBuildable {
   }
 }
 
+extension SwitchCaseList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsSwitchCaseList {
   func createSwitchCaseList() -> SwitchCaseList
 }
@@ -9045,6 +9225,12 @@ public struct CatchClauseList: SyntaxBuildable {
   }
 }
 
+extension CatchClauseList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsCatchClause...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsCatchClauseList {
   func createCatchClauseList() -> CatchClauseList
 }
@@ -9391,6 +9577,12 @@ public struct CaseItemList: SyntaxBuildable {
   }
 }
 
+extension CaseItemList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsCaseItem...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsCaseItemList {
   func createCaseItemList() -> CaseItemList
 }
@@ -9429,6 +9621,12 @@ public struct CatchItemList: SyntaxBuildable {
     }
 
     return Syntax(catchItemList)
+  }
+}
+
+extension CatchItemList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsCatchItem...) {
+    self.init(elements)
   }
 }
 
@@ -9749,6 +9947,12 @@ public struct ConditionElementList: SyntaxBuildable {
     }
 
     return Syntax(conditionElementList)
+  }
+}
+
+extension ConditionElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsConditionElement...) {
+    self.init(elements)
   }
 }
 
@@ -10468,6 +10672,12 @@ public struct GenericRequirementList: SyntaxBuildable {
   }
 }
 
+extension GenericRequirementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsGenericRequirement...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsGenericRequirementList {
   func createGenericRequirementList() -> GenericRequirementList
 }
@@ -10604,6 +10814,12 @@ public struct GenericParameterList: SyntaxBuildable {
     }
 
     return Syntax(genericParameterList)
+  }
+}
+
+extension GenericParameterList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsGenericParameter...) {
+    self.init(elements)
   }
 }
 
@@ -11319,6 +11535,12 @@ public struct CompositionTypeElementList: SyntaxBuildable {
   }
 }
 
+extension CompositionTypeElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsCompositionTypeElement...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsCompositionTypeElementList {
   func createCompositionTypeElementList() -> CompositionTypeElementList
 }
@@ -11478,6 +11700,12 @@ public struct TupleTypeElementList: SyntaxBuildable {
     }
 
     return Syntax(tupleTypeElementList)
+  }
+}
+
+extension TupleTypeElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsTupleTypeElement...) {
+    self.init(elements)
   }
 }
 
@@ -11700,6 +11928,12 @@ public struct GenericArgumentList: SyntaxBuildable {
     }
 
     return Syntax(genericArgumentList)
+  }
+}
+
+extension GenericArgumentList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsGenericArgument...) {
+    self.init(elements)
   }
 }
 
@@ -12334,6 +12568,12 @@ public struct TuplePatternElementList: SyntaxBuildable {
   }
 }
 
+extension TuplePatternElementList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsTuplePatternElement...) {
+    self.init(elements)
+  }
+}
+
 public protocol ExpressibleAsTuplePatternElementList {
   func createTuplePatternElementList() -> TuplePatternElementList
 }
@@ -12419,6 +12659,12 @@ public struct AvailabilitySpecList: SyntaxBuildable {
     }
 
     return Syntax(availabilitySpecList)
+  }
+}
+
+extension AvailabilitySpecList: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: ExpressibleAsAvailabilityArgument...) {
+    self.init(elements)
   }
 }
 

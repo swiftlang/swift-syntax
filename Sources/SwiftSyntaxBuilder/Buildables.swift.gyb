@@ -265,6 +265,13 @@ public struct ${node.syntax_kind}: SyntaxBuildable {
   }
 }
 
+extension ${node.syntax_kind}: ExpressibleByArrayLiteral {
+%   extension_protocol = element_type if element_type is 'TokenSyntax' else 'ExpressibleAs' + element_type
+  public init(arrayLiteral elements: ${extension_protocol}...) {
+    self.init(elements)
+  }
+}
+
 %   end
 %   if node.is_buildable() or node.is_syntax_collection():
 %     expressible_as_type = 'ExpressibleAs' + node.syntax_kind

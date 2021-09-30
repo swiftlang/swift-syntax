@@ -31,7 +31,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
     }
 
     func testExpressibleAsCodeBlockItem() {
-        let myCodeBlock = SourceFile(eofToken: SyntaxFactory.makeToken(.eof, presence: .present)) {
+        let myCodeBlock = SourceFile(eofToken: .eof) {
             StructDecl(identifier: "MyStruct1", members: MemberDeclBlock())
 
             StructDecl(identifier: "MyStruct2", members: MemberDeclBlock())

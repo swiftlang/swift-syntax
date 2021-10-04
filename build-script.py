@@ -325,8 +325,8 @@ def clear_gyb_files_from_previous_run(sources_dir, destination_dir, verbose):
 # Building SwiftSyntax
 
 
-def get_installed_dylib_name():
-    return "libSwiftSyntax.dylib"
+def get_installed_dylib_names():
+    return ["libSwiftSyntax.dylib", "libSwiftSyntaxParser.dylib"]
 
 
 def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file, release):
@@ -608,23 +608,23 @@ def check_and_sync(file_path, install_path):
 
 
 def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
-    dylib_name = get_installed_dylib_name()
+    for dylib_name in get_installed_dylib_names():
 
-    dylib_path = os.path.join(build_dir, dylib_name)
-    module_path = os.path.join(build_dir, "SwiftSyntax.swiftmodule")
-    doc_path = os.path.join(build_dir, "SwiftSyntax.swiftdoc")
+        dylib_path = os.path.join(build_dir, dylib_name)
+        
+        # users should find the dylib as if it's a part of stdlib.
+        change_id_rpath(os.path.join("@rpath", dylib_name), dylib_path)
 
-    # users should find the dylib as if it's a part of stdlib.
-    change_id_rpath(os.path.join("@rpath", dylib_name), dylib_path)
-
-    # we don't wanna hard-code the stdlib dylibs into rpath.
-    delete_rpath(stdlib_rpath, dylib_path)
-    check_and_sync(
-        file_path=dylib_path, install_path=os.path.join(dylib_dir, dylib_name)
-    )
+        # we don't wanna hard-code the stdlib dylibs into rpath.
+        delete_rpath(stdlib_rpath, dylib_path)
+        check_and_sync(
+            file_path=dylib_path, install_path=os.path.join(dylib_dir, dylib_name)
+        )
 
     # Optionally install .swiftmodule
     if swiftmodule_base_name:
+        module_path = os.path.join(build_dir, "SwiftSyntax.swiftmodule")
+        doc_path = os.path.join(build_dir, "SwiftSyntax.swiftdoc")
         module_dest = swiftmodule_base_name + ".swiftmodule"
         doc_dest = swiftmodule_base_name + ".swiftdoc"
         check_and_sync(file_path=module_path, install_path=module_dest)
@@ -797,9 +797,9 @@ def main():
 
     if args.install:
         if not args.dylib_dir:
-            fatal_error("Must specify directory to install")
+            fatal_error("Must specify directory to install (--dylib-dir)")
         if not args.build_dir:
-            fatal_error("Must specify build directory to copy from")
+            fatal_error("Must specify build directory to copy from (--build-dir)")
         if args.release:
             build_dir = os.path.join(args.build_dir, "release")
         else:
@@ -857,7 +857,10 @@ def main():
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
+        # Until rdar://53881101 is implemented, we cannot request a build of multiple
+        # targets simultaneously. For now, just build one product after the other.
         builder.build("SwiftSyntax", module_group_path=GROUP_INFO_PATH)
+        builder.build("SwiftSyntaxParser", module_group_path=GROUP_INFO_PATH)
 
         # Only build lit-test-helper if we are planning to run tests
         if args.test:

@@ -5,11 +5,11 @@ import SwiftSyntaxBuilder
 final class ExpressibleBuildablesTests: XCTestCase {
   func testExpressibleAsMemberDeclListItem() {
     let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
-      VariableDecl(.var, name: "myFirstVar", type: "Int")
+      VariableDecl(TokenSyntax.var, name: "myFirstVar", type: "Int")
 
       // We use `MemberDeclListItem` to ensure and show we can combine it with `ExpressibleAsMemberDeclListItem`
-      MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
-        PatternBinding(pattern: IdentifierPattern(identifier: .identifier("myOtherLet")),
+      MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
+        PatternBinding(pattern: IdentifierPattern(identifier: TokenSyntax.identifier("myOtherLet")),
                        typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("String")))
       })
       )
@@ -30,7 +30,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
   }
 
   func testExpressibleAsCodeBlockItem() {
-    let myCodeBlock = SourceFile(eofToken: .eof) {
+    let myCodeBlock = SourceFile(eofToken: TokenSyntax.eof) {
       StructDecl(identifier: "MyStruct1", members: MemberDeclBlock())
 
       StructDecl(identifier: "MyStruct2", members: MemberDeclBlock())
@@ -52,7 +52,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
     let switchStmt = SwitchStmt(labelName: nil,
                                 expression: expression,
-                                leftBrace: .leftBrace.withTrailingTrivia(.newlines(1)),
+                                leftBrace: TokenSyntax.leftBrace.withTrailingTrivia(.newlines(1)),
                                 rightBrace: .rightBrace.withLeadingTrivia(.newlines(1)),
                                 casesBuilder: {
       for (version, semVer) in versions {

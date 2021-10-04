@@ -15,422 +15,638 @@
 import SwiftSyntax
 
 /// Namespace for commonly used tokens with default trivia.
-public extension TokenSyntax {
+public extension ExpressibleAsTokenSyntax where Self == TokenSyntax {
   /// The `associatedtype` keyword
-  static let `associatedtype` = SyntaxFactory.makeAssociatedtypeKeyword()
+  static var `associatedtype`: TokenSyntax {
+    SyntaxFactory.makeAssociatedtypeKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `class` keyword
-  static let `class` = SyntaxFactory.makeClassKeyword()
+  static var `class`: TokenSyntax {
+    SyntaxFactory.makeClassKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `deinit` keyword
-  static let `deinit` = SyntaxFactory.makeDeinitKeyword()
+  static var `deinit`: TokenSyntax {
+    SyntaxFactory.makeDeinitKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `enum` keyword
-  static let `enum` = SyntaxFactory.makeEnumKeyword()
+  static var `enum`: TokenSyntax {
+    SyntaxFactory.makeEnumKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `extension` keyword
-  static let `extension` = SyntaxFactory.makeExtensionKeyword()
+  static var `extension`: TokenSyntax {
+    SyntaxFactory.makeExtensionKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `func` keyword
-  static let `func` = SyntaxFactory.makeFuncKeyword()
+  static var `func`: TokenSyntax {
+    SyntaxFactory.makeFuncKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `import` keyword
-  static let `import` = SyntaxFactory.makeImportKeyword()
+  static var `import`: TokenSyntax {
+    SyntaxFactory.makeImportKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `init` keyword
-  static let `init` = SyntaxFactory.makeInitKeyword()
+  static var `init`: TokenSyntax {
+    SyntaxFactory.makeInitKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `inout` keyword
-  static let `inout` = SyntaxFactory.makeInoutKeyword()
+  static var `inout`: TokenSyntax {
+    SyntaxFactory.makeInoutKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `let` keyword
-  static let `let` = SyntaxFactory.makeLetKeyword()
+  static var `let`: TokenSyntax {
+    SyntaxFactory.makeLetKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `operator` keyword
-  static let `operator` = SyntaxFactory.makeOperatorKeyword()
+  static var `operator`: TokenSyntax {
+    SyntaxFactory.makeOperatorKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `precedencegroup` keyword
-  static let `precedencegroup` = SyntaxFactory.makePrecedencegroupKeyword()
+  static var `precedencegroup`: TokenSyntax {
+    SyntaxFactory.makePrecedencegroupKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `protocol` keyword
-  static let `protocol` = SyntaxFactory.makeProtocolKeyword()
+  static var `protocol`: TokenSyntax {
+    SyntaxFactory.makeProtocolKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `struct` keyword
-  static let `struct` = SyntaxFactory.makeStructKeyword()
+  static var `struct`: TokenSyntax {
+    SyntaxFactory.makeStructKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `subscript` keyword
-  static let `subscript` = SyntaxFactory.makeSubscriptKeyword()
+  static var `subscript`: TokenSyntax {
+    SyntaxFactory.makeSubscriptKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `typealias` keyword
-  static let `typealias` = SyntaxFactory.makeTypealiasKeyword()
+  static var `typealias`: TokenSyntax {
+    SyntaxFactory.makeTypealiasKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `var` keyword
-  static let `var` = SyntaxFactory.makeVarKeyword()
+  static var `var`: TokenSyntax {
+    SyntaxFactory.makeVarKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `fileprivate` keyword
-  static let `fileprivate` = SyntaxFactory.makeFileprivateKeyword()
+  static var `fileprivate`: TokenSyntax {
+    SyntaxFactory.makeFileprivateKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `internal` keyword
-  static let `internal` = SyntaxFactory.makeInternalKeyword()
+  static var `internal`: TokenSyntax {
+    SyntaxFactory.makeInternalKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `private` keyword
-  static let `private` = SyntaxFactory.makePrivateKeyword()
+  static var `private`: TokenSyntax {
+    SyntaxFactory.makePrivateKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `public` keyword
-  static let `public` = SyntaxFactory.makePublicKeyword()
+  static var `public`: TokenSyntax {
+    SyntaxFactory.makePublicKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `static` keyword
-  static let `static` = SyntaxFactory.makeStaticKeyword()
+  static var `static`: TokenSyntax {
+    SyntaxFactory.makeStaticKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `defer` keyword
-  static let `defer` = SyntaxFactory.makeDeferKeyword()
+  static var `defer`: TokenSyntax {
+    SyntaxFactory.makeDeferKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `if` keyword
-  static let `if` = SyntaxFactory.makeIfKeyword()
+  static var `if`: TokenSyntax {
+    SyntaxFactory.makeIfKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `guard` keyword
-  static let `guard` = SyntaxFactory.makeGuardKeyword()
+  static var `guard`: TokenSyntax {
+    SyntaxFactory.makeGuardKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `do` keyword
-  static let `do` = SyntaxFactory.makeDoKeyword()
+  static var `do`: TokenSyntax {
+    SyntaxFactory.makeDoKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `repeat` keyword
-  static let `repeat` = SyntaxFactory.makeRepeatKeyword()
+  static var `repeat`: TokenSyntax {
+    SyntaxFactory.makeRepeatKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `else` keyword
-  static let `else` = SyntaxFactory.makeElseKeyword()
+  static var `else`: TokenSyntax {
+    SyntaxFactory.makeElseKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `for` keyword
-  static let `for` = SyntaxFactory.makeForKeyword()
+  static var `for`: TokenSyntax {
+    SyntaxFactory.makeForKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `in` keyword
-  static let `in` = SyntaxFactory.makeInKeyword()
+  static var `in`: TokenSyntax {
+    SyntaxFactory.makeInKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `while` keyword
-  static let `while` = SyntaxFactory.makeWhileKeyword()
+  static var `while`: TokenSyntax {
+    SyntaxFactory.makeWhileKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `return` keyword
-  static let `return` = SyntaxFactory.makeReturnKeyword()
+  static var `return`: TokenSyntax {
+    SyntaxFactory.makeReturnKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `break` keyword
-  static let `break` = SyntaxFactory.makeBreakKeyword()
+  static var `break`: TokenSyntax {
+    SyntaxFactory.makeBreakKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `continue` keyword
-  static let `continue` = SyntaxFactory.makeContinueKeyword()
+  static var `continue`: TokenSyntax {
+    SyntaxFactory.makeContinueKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `fallthrough` keyword
-  static let `fallthrough` = SyntaxFactory.makeFallthroughKeyword()
+  static var `fallthrough`: TokenSyntax {
+    SyntaxFactory.makeFallthroughKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `switch` keyword
-  static let `switch` = SyntaxFactory.makeSwitchKeyword()
+  static var `switch`: TokenSyntax {
+    SyntaxFactory.makeSwitchKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `case` keyword
-  static let `case` = SyntaxFactory.makeCaseKeyword()
+  static var `case`: TokenSyntax {
+    SyntaxFactory.makeCaseKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `default` keyword
-  static let `default` = SyntaxFactory.makeDefaultKeyword()
+  static var `default`: TokenSyntax {
+    SyntaxFactory.makeDefaultKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `where` keyword
-  static let `where` = SyntaxFactory.makeWhereKeyword()
+  static var `where`: TokenSyntax {
+    SyntaxFactory.makeWhereKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `catch` keyword
-  static let `catch` = SyntaxFactory.makeCatchKeyword()
+  static var `catch`: TokenSyntax {
+    SyntaxFactory.makeCatchKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `throw` keyword
-  static let `throw` = SyntaxFactory.makeThrowKeyword()
+  static var `throw`: TokenSyntax {
+    SyntaxFactory.makeThrowKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `as` keyword
-  static let `as` = SyntaxFactory.makeAsKeyword()
+  static var `as`: TokenSyntax {
+    SyntaxFactory.makeAsKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `Any` keyword
-  static let `any` = SyntaxFactory.makeAnyKeyword()
+  static var `any`: TokenSyntax {
+    SyntaxFactory.makeAnyKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `false` keyword
-  static let `false` = SyntaxFactory.makeFalseKeyword()
+  static var `false`: TokenSyntax {
+    SyntaxFactory.makeFalseKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `is` keyword
-  static let `is` = SyntaxFactory.makeIsKeyword()
+  static var `is`: TokenSyntax {
+    SyntaxFactory.makeIsKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `nil` keyword
-  static let `nil` = SyntaxFactory.makeNilKeyword()
+  static var `nil`: TokenSyntax {
+    SyntaxFactory.makeNilKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `rethrows` keyword
-  static let `rethrows` = SyntaxFactory.makeRethrowsKeyword()
+  static var `rethrows`: TokenSyntax {
+    SyntaxFactory.makeRethrowsKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `super` keyword
-  static let `super` = SyntaxFactory.makeSuperKeyword()
+  static var `super`: TokenSyntax {
+    SyntaxFactory.makeSuperKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `self` keyword
-  static let `self` = SyntaxFactory.makeSelfKeyword()
+  static var `self`: TokenSyntax {
+    SyntaxFactory.makeSelfKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `Self` keyword
-  static let `capitalSelf` = SyntaxFactory.makeCapitalSelfKeyword()
+  static var `capitalSelf`: TokenSyntax {
+    SyntaxFactory.makeCapitalSelfKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `true` keyword
-  static let `true` = SyntaxFactory.makeTrueKeyword()
+  static var `true`: TokenSyntax {
+    SyntaxFactory.makeTrueKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `try` keyword
-  static let `try` = SyntaxFactory.makeTryKeyword()
+  static var `try`: TokenSyntax {
+    SyntaxFactory.makeTryKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `throws` keyword
-  static let `throws` = SyntaxFactory.makeThrowsKeyword()
+  static var `throws`: TokenSyntax {
+    SyntaxFactory.makeThrowsKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `__FILE__` keyword
-  static let `__file__` = SyntaxFactory.make__FILE__Keyword()
+  static var `__file__`: TokenSyntax {
+    SyntaxFactory.make__FILE__Keyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `__LINE__` keyword
-  static let `__line__` = SyntaxFactory.make__LINE__Keyword()
+  static var `__line__`: TokenSyntax {
+    SyntaxFactory.make__LINE__Keyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `__COLUMN__` keyword
-  static let `__column__` = SyntaxFactory.make__COLUMN__Keyword()
+  static var `__column__`: TokenSyntax {
+    SyntaxFactory.make__COLUMN__Keyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `__FUNCTION__` keyword
-  static let `__function__` = SyntaxFactory.make__FUNCTION__Keyword()
+  static var `__function__`: TokenSyntax {
+    SyntaxFactory.make__FUNCTION__Keyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `__DSO_HANDLE__` keyword
-  static let `__dso_handle__` = SyntaxFactory.make__DSO_HANDLE__Keyword()
+  static var `__dso_handle__`: TokenSyntax {
+    SyntaxFactory.make__DSO_HANDLE__Keyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `_` keyword
-  static let `wildcard` = SyntaxFactory.makeWildcardKeyword()
+  static var `wildcard`: TokenSyntax {
+    SyntaxFactory.makeWildcardKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `(` token
-  static let `leftParen` = SyntaxFactory.makeLeftParenToken()
+  static var `leftParen`: TokenSyntax {
+    SyntaxFactory.makeLeftParenToken()
+  }
 
   /// The `)` token
-  static let `rightParen` = SyntaxFactory.makeRightParenToken()
+  static var `rightParen`: TokenSyntax {
+    SyntaxFactory.makeRightParenToken()
+  }
 
   /// The `{` token
-  static let `leftBrace` = SyntaxFactory.makeLeftBraceToken()
+  static var `leftBrace`: TokenSyntax {
+    SyntaxFactory.makeLeftBraceToken()
+  }
 
   /// The `}` token
-  static let `rightBrace` = SyntaxFactory.makeRightBraceToken()
+  static var `rightBrace`: TokenSyntax {
+    SyntaxFactory.makeRightBraceToken()
+  }
 
   /// The `[` token
-  static let `leftSquareBracket` = SyntaxFactory.makeLeftSquareBracketToken()
+  static var `leftSquareBracket`: TokenSyntax {
+    SyntaxFactory.makeLeftSquareBracketToken()
+  }
 
   /// The `]` token
-  static let `rightSquareBracket` = SyntaxFactory.makeRightSquareBracketToken()
+  static var `rightSquareBracket`: TokenSyntax {
+    SyntaxFactory.makeRightSquareBracketToken()
+  }
 
   /// The `<` token
-  static let `leftAngle` = SyntaxFactory.makeLeftAngleToken()
+  static var `leftAngle`: TokenSyntax {
+    SyntaxFactory.makeLeftAngleToken()
     .withLeadingTrivia(.spaces(1))
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `>` token
-  static let `rightAngle` = SyntaxFactory.makeRightAngleToken()
+  static var `rightAngle`: TokenSyntax {
+    SyntaxFactory.makeRightAngleToken()
     .withLeadingTrivia(.spaces(1))
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `.` token
-  static let `period` = SyntaxFactory.makePeriodToken()
+  static var `period`: TokenSyntax {
+    SyntaxFactory.makePeriodToken()
+  }
 
   /// The `.` token
-  static let `prefixPeriod` = SyntaxFactory.makePrefixPeriodToken()
+  static var `prefixPeriod`: TokenSyntax {
+    SyntaxFactory.makePrefixPeriodToken()
+  }
 
   /// The `,` token
-  static let `comma` = SyntaxFactory.makeCommaToken()
+  static var `comma`: TokenSyntax {
+    SyntaxFactory.makeCommaToken()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `...` token
-  static let `ellipsis` = SyntaxFactory.makeEllipsisToken()
+  static var `ellipsis`: TokenSyntax {
+    SyntaxFactory.makeEllipsisToken()
+  }
 
   /// The `:` token
-  static let `colon` = SyntaxFactory.makeColonToken()
+  static var `colon`: TokenSyntax {
+    SyntaxFactory.makeColonToken()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `;` token
-  static let `semicolon` = SyntaxFactory.makeSemicolonToken()
+  static var `semicolon`: TokenSyntax {
+    SyntaxFactory.makeSemicolonToken()
+  }
 
   /// The `=` token
-  static let `equal` = SyntaxFactory.makeEqualToken()
+  static var `equal`: TokenSyntax {
+    SyntaxFactory.makeEqualToken()
     .withLeadingTrivia(.spaces(1))
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `@` token
-  static let `atSign` = SyntaxFactory.makeAtSignToken()
+  static var `atSign`: TokenSyntax {
+    SyntaxFactory.makeAtSignToken()
+  }
 
   /// The `#` token
-  static let `pound` = SyntaxFactory.makePoundToken()
+  static var `pound`: TokenSyntax {
+    SyntaxFactory.makePoundToken()
+  }
 
   /// The `&` token
-  static let `prefixAmpersand` = SyntaxFactory.makePrefixAmpersandToken()
+  static var `prefixAmpersand`: TokenSyntax {
+    SyntaxFactory.makePrefixAmpersandToken()
     .withLeadingTrivia(.spaces(1))
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `->` token
-  static let `arrow` = SyntaxFactory.makeArrowToken()
+  static var `arrow`: TokenSyntax {
+    SyntaxFactory.makeArrowToken()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The ``` token
-  static let `backtick` = SyntaxFactory.makeBacktickToken()
+  static var `backtick`: TokenSyntax {
+    SyntaxFactory.makeBacktickToken()
+  }
 
   /// The `\` token
-  static let `backslash` = SyntaxFactory.makeBackslashToken()
+  static var `backslash`: TokenSyntax {
+    SyntaxFactory.makeBackslashToken()
+  }
 
   /// The `!` token
-  static let `exclamationMark` = SyntaxFactory.makeExclamationMarkToken()
+  static var `exclamationMark`: TokenSyntax {
+    SyntaxFactory.makeExclamationMarkToken()
+  }
 
   /// The `?` token
-  static let `postfixQuestionMark` = SyntaxFactory.makePostfixQuestionMarkToken()
+  static var `postfixQuestionMark`: TokenSyntax {
+    SyntaxFactory.makePostfixQuestionMarkToken()
+  }
 
   /// The `?` token
-  static let `infixQuestionMark` = SyntaxFactory.makeInfixQuestionMarkToken()
+  static var `infixQuestionMark`: TokenSyntax {
+    SyntaxFactory.makeInfixQuestionMarkToken()
+  }
 
   /// The `"` token
-  static let `stringQuote` = SyntaxFactory.makeStringQuoteToken()
+  static var `stringQuote`: TokenSyntax {
+    SyntaxFactory.makeStringQuoteToken()
+  }
 
   /// The `'` token
-  static let `singleQuote` = SyntaxFactory.makeSingleQuoteToken()
+  static var `singleQuote`: TokenSyntax {
+    SyntaxFactory.makeSingleQuoteToken()
+  }
 
   /// The `"""` token
-  static let `multilineStringQuote` = SyntaxFactory.makeMultilineStringQuoteToken()
+  static var `multilineStringQuote`: TokenSyntax {
+    SyntaxFactory.makeMultilineStringQuoteToken()
+  }
 
   /// The `#keyPath` keyword
-  static let `poundKeyPath` = SyntaxFactory.makePoundKeyPathKeyword()
+  static var `poundKeyPath`: TokenSyntax {
+    SyntaxFactory.makePoundKeyPathKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#line` keyword
-  static let `poundLine` = SyntaxFactory.makePoundLineKeyword()
+  static var `poundLine`: TokenSyntax {
+    SyntaxFactory.makePoundLineKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#selector` keyword
-  static let `poundSelector` = SyntaxFactory.makePoundSelectorKeyword()
+  static var `poundSelector`: TokenSyntax {
+    SyntaxFactory.makePoundSelectorKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#file` keyword
-  static let `poundFile` = SyntaxFactory.makePoundFileKeyword()
+  static var `poundFile`: TokenSyntax {
+    SyntaxFactory.makePoundFileKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#fileID` keyword
-  static let `poundFileID` = SyntaxFactory.makePoundFileIDKeyword()
+  static var `poundFileID`: TokenSyntax {
+    SyntaxFactory.makePoundFileIDKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#filePath` keyword
-  static let `poundFilePath` = SyntaxFactory.makePoundFilePathKeyword()
+  static var `poundFilePath`: TokenSyntax {
+    SyntaxFactory.makePoundFilePathKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#column` keyword
-  static let `poundColumn` = SyntaxFactory.makePoundColumnKeyword()
+  static var `poundColumn`: TokenSyntax {
+    SyntaxFactory.makePoundColumnKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#function` keyword
-  static let `poundFunction` = SyntaxFactory.makePoundFunctionKeyword()
+  static var `poundFunction`: TokenSyntax {
+    SyntaxFactory.makePoundFunctionKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#dsohandle` keyword
-  static let `poundDsohandle` = SyntaxFactory.makePoundDsohandleKeyword()
+  static var `poundDsohandle`: TokenSyntax {
+    SyntaxFactory.makePoundDsohandleKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#assert` keyword
-  static let `poundAssert` = SyntaxFactory.makePoundAssertKeyword()
+  static var `poundAssert`: TokenSyntax {
+    SyntaxFactory.makePoundAssertKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#sourceLocation` keyword
-  static let `poundSourceLocation` = SyntaxFactory.makePoundSourceLocationKeyword()
+  static var `poundSourceLocation`: TokenSyntax {
+    SyntaxFactory.makePoundSourceLocationKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#warning` keyword
-  static let `poundWarning` = SyntaxFactory.makePoundWarningKeyword()
+  static var `poundWarning`: TokenSyntax {
+    SyntaxFactory.makePoundWarningKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#error` keyword
-  static let `poundError` = SyntaxFactory.makePoundErrorKeyword()
+  static var `poundError`: TokenSyntax {
+    SyntaxFactory.makePoundErrorKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#if` keyword
-  static let `poundIf` = SyntaxFactory.makePoundIfKeyword()
+  static var `poundIf`: TokenSyntax {
+    SyntaxFactory.makePoundIfKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#else` keyword
-  static let `poundElse` = SyntaxFactory.makePoundElseKeyword()
+  static var `poundElse`: TokenSyntax {
+    SyntaxFactory.makePoundElseKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#elseif` keyword
-  static let `poundElseif` = SyntaxFactory.makePoundElseifKeyword()
+  static var `poundElseif`: TokenSyntax {
+    SyntaxFactory.makePoundElseifKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#endif` keyword
-  static let `poundEndif` = SyntaxFactory.makePoundEndifKeyword()
+  static var `poundEndif`: TokenSyntax {
+    SyntaxFactory.makePoundEndifKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#available` keyword
-  static let `poundAvailable` = SyntaxFactory.makePoundAvailableKeyword()
+  static var `poundAvailable`: TokenSyntax {
+    SyntaxFactory.makePoundAvailableKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#unavailable` keyword
-  static let `poundUnavailable` = SyntaxFactory.makePoundUnavailableKeyword()
+  static var `poundUnavailable`: TokenSyntax {
+    SyntaxFactory.makePoundUnavailableKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#fileLiteral` keyword
-  static let `poundFileLiteral` = SyntaxFactory.makePoundFileLiteralKeyword()
+  static var `poundFileLiteral`: TokenSyntax {
+    SyntaxFactory.makePoundFileLiteralKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#imageLiteral` keyword
-  static let `poundImageLiteral` = SyntaxFactory.makePoundImageLiteralKeyword()
+  static var `poundImageLiteral`: TokenSyntax {
+    SyntaxFactory.makePoundImageLiteralKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   /// The `#colorLiteral` keyword
-  static let `poundColorLiteral` = SyntaxFactory.makePoundColorLiteralKeyword()
+  static var `poundColorLiteral`: TokenSyntax {
+    SyntaxFactory.makePoundColorLiteralKeyword()
     .withTrailingTrivia(.spaces(1))
+  }
 
   static func `integerLiteral`(_ text: String) -> TokenSyntax {
     SyntaxFactory.makeIntegerLiteral(text)
@@ -485,11 +701,17 @@ public extension TokenSyntax {
   }
 
   /// The `)` token
-  static let `stringInterpolationAnchor` = SyntaxFactory.makeStringInterpolationAnchorToken()
+  static var `stringInterpolationAnchor`: TokenSyntax {
+    SyntaxFactory.makeStringInterpolationAnchorToken()
+  }
 
   /// The `yield` token
-  static let `yield` = SyntaxFactory.makeYieldToken()
+  static var `yield`: TokenSyntax {
+    SyntaxFactory.makeYieldToken()
+  }
 
   /// The `eof` token
-  static let eof = SyntaxFactory.makeToken(.eof, presence: .present)
+  static var eof: TokenSyntax {
+    SyntaxFactory.makeToken(.eof, presence: .present)
+  }
 }

@@ -12,8 +12,6 @@
 // This file provides the Diagnostic, Note, and FixIt types.
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-
 /// A FixIt represents a change to source code in order to "correct" a
 /// diagnostic.
 public enum FixIt: Codable, CustomDebugStringConvertible {
@@ -108,7 +106,7 @@ public struct Note: Codable {
   public let fixIts: [FixIt]
 
   /// Constructs a new Note from the constituent parts.
-  internal init(message: Diagnostic.Message, location: SourceLocation?,
+  public init(message: Diagnostic.Message, location: SourceLocation?,
                 highlights: [SourceRange], fixIts: [FixIt]) {
     precondition(message.severity == .note,
                  "notes can only have the `note` severity")

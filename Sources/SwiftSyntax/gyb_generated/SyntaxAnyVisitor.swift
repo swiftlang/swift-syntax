@@ -1058,6 +1058,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: AvailabilityEntrySyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: AvailabilityEntrySyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

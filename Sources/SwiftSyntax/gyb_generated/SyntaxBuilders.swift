@@ -6245,6 +6245,74 @@ extension AttributeSyntax {
   }
 }
 
+public struct AvailabilityEntrySyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 4)
+
+  internal init() {}
+
+  public mutating func useLabel(_ node: TokenSyntax) {
+    let idx = AvailabilityEntrySyntax.Cursor.label.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = AvailabilityEntrySyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func addAvailability(_ elt: AvailabilityArgumentSyntax) {
+    let idx = AvailabilityEntrySyntax.Cursor.availabilityList.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func useSemicolon(_ node: TokenSyntax) {
+    let idx = AvailabilityEntrySyntax.Cursor.semicolon.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missingToken(TokenKind.semicolon)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityEntry,
+      layout: layout, presence: .present))
+  }
+}
+
+extension AvailabilityEntrySyntax {
+  /// Creates a `AvailabilityEntrySyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `AvailabilityEntrySyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `AvailabilityEntrySyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout AvailabilityEntrySyntaxBuilder) -> Void) {
+    var builder = AvailabilityEntrySyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct LabeledSpecializeEntrySyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 4)

@@ -1452,6 +1452,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `SpecializeAttributeSpecListSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {}
+  /// Visiting `AvailabilityEntrySyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AvailabilityEntrySyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `AvailabilityEntrySyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AvailabilityEntrySyntax) {}
   /// Visiting `LabeledSpecializeEntrySyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4063,6 +4073,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityEntrySyntax(_ data: SyntaxData) {
+      let node = AvailabilityEntrySyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) {
       let node = LabeledSpecializeEntrySyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5443,6 +5464,8 @@ open class SyntaxVisitor {
       visitImplAttributeListSyntax(data)
     case .specializeAttributeSpecList:
       visitImplSpecializeAttributeSpecListSyntax(data)
+    case .availabilityEntry:
+      visitImplAvailabilityEntrySyntax(data)
     case .labeledSpecializeEntry:
       visitImplLabeledSpecializeEntrySyntax(data)
     case .targetFunctionEntry:

@@ -32,8 +32,6 @@ GYB_EXEC = os.path.join(SWIFT_DIR, "utils", "gyb")
 
 LIT_EXEC = os.path.join(LLVM_DIR, "utils", "lit", "lit.py")
 
-GROUP_INFO_PATH = os.path.join(PACKAGE_DIR, "utils", "group.json")
-
 BASE_KIND_FILES = {
     "Decl": "SyntaxDeclNodes.swift",
     "Expr": "SyntaxExprNodes.swift",
@@ -369,7 +367,7 @@ class Builder(object):
             self.swiftpm_call.extend(["--verbose"])
         self.verbose = verbose
 
-    def build(self, product_name, module_group_path=""):
+    def build(self, product_name):
         print("** Building " + product_name + " **")
         command = list(self.swiftpm_call)
         command.extend(["--product", product_name])
@@ -859,8 +857,8 @@ def main():
         )
         # Until rdar://53881101 is implemented, we cannot request a build of multiple
         # targets simultaneously. For now, just build one product after the other.
-        builder.build("SwiftSyntax", module_group_path=GROUP_INFO_PATH)
-        builder.build("SwiftSyntaxParser", module_group_path=GROUP_INFO_PATH)
+        builder.build("SwiftSyntax")
+        builder.build("SwiftSyntaxParser")
 
         # Only build lit-test-helper if we are planning to run tests
         if args.test:

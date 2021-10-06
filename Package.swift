@@ -23,16 +23,9 @@ let swiftSyntaxTarget: PackageDescription.Target
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
 if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
-  let groupFile = URL(fileURLWithPath: #file)
-    .deletingLastPathComponent()
-    .appendingPathComponent("utils")
-    .appendingPathComponent("group.json")
-
-  var swiftSyntaxUnsafeFlags = ["-Xfrontend", "-group-info-path",
-                                "-Xfrontend", groupFile.path]
   // Enforcing exclusivity increases compile time of release builds by 2 minutes.
   // Disable it when we're in a controlled CI environment.
-  swiftSyntaxUnsafeFlags += ["-enforce-exclusivity=unchecked"]
+  let swiftSyntaxUnsafeFlags = ["-enforce-exclusivity=unchecked"]
 
   swiftSyntaxTarget = .target(name: "SwiftSyntax", dependencies: ["_CSwiftSyntax"],
                               swiftSettings: [.unsafeFlags(swiftSyntaxUnsafeFlags)]

@@ -58,8 +58,8 @@ public enum SyntaxParser {
   ///   - source: The source string to parse.
   ///   - parseTransition: Optional mechanism for incremental re-parsing.
   ///   - filenameForDiagnostics: Optional file name used for SourceLocation.
-  ///   - diagnosticEngine: Optional diagnotic engine to where the parser will
-  ///       emit diagnostics
+  ///   - diagnosticHandler: Optional callback that will be called for all
+  ///       diagnostics the parser emits
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
@@ -67,7 +67,7 @@ public enum SyntaxParser {
     source: String,
     parseTransition: IncrementalParseTransition? = nil,
     filenameForDiagnostics: String = "",
-    diagnosticEngine: DiagnosticEngine? = nil
+    diagnosticHandler: ((Diagnostic) -> Void)? = nil
   ) throws -> SourceFileSyntax {
     guard nodeHashVerifyResult && cnodeLayoutHashVerifyResult else {
       throw ParserError.parserCompatibilityCheckFailed
@@ -79,7 +79,7 @@ public enum SyntaxParser {
     utf8Source.makeContiguousUTF8()
 
     let rawSyntax = parseRaw(utf8Source, parseTransition, filenameForDiagnostics,
-                             diagnosticEngine)
+                             diagnosticHandler)
 
     let base = _SyntaxParserInterop.nodeFromRetainedOpaqueRawSyntax(rawSyntax)
     guard let file = base.as(SourceFileSyntax.self) else {
@@ -92,27 +92,27 @@ public enum SyntaxParser {
   ///
   /// - Parameters:
   ///   - url: The file URL to parse.
-  ///   - diagnosticEngine: Optional diagnotic engine to where the parser will
-  ///       emit diagnostics
+  ///   - diagnosticHandler: Optional callback that will be called for all
+  ///       diagnostics the parser emits
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
   public static func parse(_ url: URL,
-      diagnosticEngine: DiagnosticEngine? = nil) throws -> SourceFileSyntax {
+      diagnosticHandler: ((Diagnostic) -> Void)? = nil) throws -> SourceFileSyntax {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     let fileData = try Data(contentsOf: url)
     let source = fileData.withUnsafeBytes { buf in
       return String(decoding: buf.bindMemory(to: UInt8.self), as: UTF8.self)
     }
     return try parse(source: source, filenameForDiagnostics: url.path,
-                     diagnosticEngine: diagnosticEngine)
+                     diagnosticHandler: diagnosticHandler)
   }
 
   private static func parseRaw(
     _ source: String,
     _ parseTransition: IncrementalParseTransition?,
     _ filenameForDiagnostics: String,
-    _ diagnosticEngine: DiagnosticEngine?
+    _ diagnosticHandler: ((Diagnostic) -> Void)?
   ) -> CClientNode {
     precondition(source.isContiguousUTF8)
     let c_parser = swiftparse_parser_create()
@@ -144,18 +144,15 @@ public enum SyntaxParser {
     var pendingNotes: [Note] = []
     defer {
       // Consume the pending diagnostic if  present
-      if let diagnosticEngine = diagnosticEngine {
+      if let diagnosticHandler = diagnosticHandler {
         if let pendingDiag = pendingDiag {
-          diagnosticEngine.diagnose(Diagnostic(pendingDiag, pendingNotes))
+          diagnosticHandler(Diagnostic(pendingDiag, pendingNotes))
         }
       }
     }
     // Set up diagnostics consumer if requested by the caller.
-    if let diagnosticEngine = diagnosticEngine {
-      // If requested, we should set up a source location converter to calculate
-      // line and column.
-      let converter = diagnosticEngine.needsLineColumn ?
-        SourceLocationConverter(file: filenameForDiagnostics, source: source) : nil
+    if let diagnosticHandler = diagnosticHandler {
+      let converter = SourceLocationConverter(file: filenameForDiagnostics, source: source)
       let diagHandler = { (diag: CDiagnostic!) in
         // If the coming diagnostic is a note, we cache the pending note
         if swiftparse_diagnostic_get_severity(diag) ==
@@ -164,7 +161,7 @@ public enum SyntaxParser {
         } else {
           // Cosume the pending diagnostic
           if let pendingDiag = pendingDiag {
-            diagnosticEngine.diagnose(Diagnostic(pendingDiag, pendingNotes))
+            diagnosticHandler(Diagnostic(pendingDiag, pendingNotes))
             // Clear pending notes
             pendingNotes = []
           }

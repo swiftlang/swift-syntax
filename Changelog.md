@@ -8,6 +8,7 @@ Note: This is in reverse chronological order, so newer entries are added to the 
 * The `SwiftSyntaxParser` type and a few related types now live in their own module (also named `SwiftSyntaxParser`). This allows using `SwiftSyntax` for code generation purposes without having a compatible `_InternalSwiftSyntaxParser.dylib` around. 
 
   `import SwiftSyntaxParser` where necessary.
+* `DiagnosticEngine` has been removed. Instead, `SyntaxParser` takes a closure through which it emits parser diagnostics. Depending on your needs, use the closure to handle the diagnostics or write + hook up your own diagnostics engine.
 
 ## Swift 5.3
 

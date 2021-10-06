@@ -2857,6 +2857,29 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return SpecializeAttributeSpecListSyntax(data)
   }
+  public static func makeAvailabilityEntry(label: TokenSyntax, colon: TokenSyntax, availabilityList: AvailabilitySpecListSyntax, semicolon: TokenSyntax) -> AvailabilityEntrySyntax {
+    let layout: [RawSyntax?] = [
+      label.raw,
+      colon.raw,
+      availabilityList.raw,
+      semicolon.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityEntry,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return AvailabilityEntrySyntax(data)
+  }
+
+  public static func makeBlankAvailabilityEntry() -> AvailabilityEntrySyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityEntry,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.availabilitySpecList),
+      RawSyntax.missingToken(TokenKind.semicolon),
+    ], length: .zero, presence: .present))
+    return AvailabilityEntrySyntax(data)
+  }
   public static func makeLabeledSpecializeEntry(label: TokenSyntax, colon: TokenSyntax, value: TokenSyntax, trailingComma: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
     let layout: [RawSyntax?] = [
       label.raw,

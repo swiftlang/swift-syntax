@@ -6666,6 +6666,59 @@ extension SpecializeAttributeSpecList: ExpressibleAsSpecializeAttributeSpecList 
 }
 
 /// 
+/// The availability argument for the _specialize attribute
+/// 
+public struct AvailabilityEntry: SyntaxBuildable {
+  let label: TokenSyntax
+  let colon: TokenSyntax
+  let availabilityList: AvailabilitySpecList
+  let semicolon: TokenSyntax
+
+  public init(
+    label: TokenSyntax,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    availabilityList: AvailabilitySpecList,
+    semicolon: TokenSyntax = TokenSyntax.`semicolon`
+  ) {
+    self.label = label
+    self.colon = colon
+    self.availabilityList = availabilityList
+    self.semicolon = semicolon
+  }
+  
+  func buildAvailabilityEntry(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
+    let availabilityEntry = SyntaxFactory.makeAvailabilityEntry(
+      label: label,
+      colon: colon,
+      availabilityList: availabilityList.buildAvailabilitySpecList(format: format),
+      semicolon: semicolon
+    )
+    
+    if let leadingTrivia = leadingTrivia {
+      return availabilityEntry.withLeadingTrivia(leadingTrivia + (availabilityEntry.leadingTrivia ?? []))
+    }
+
+    return availabilityEntry
+  }
+
+  /// Conformance for `AvailabilityEntry` to the `SyntaxBuildable` protocol.
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let availabilityEntry = buildAvailabilityEntry(format: format, leadingTrivia: leadingTrivia)
+    return Syntax(availabilityEntry)
+  }
+}
+
+public protocol ExpressibleAsAvailabilityEntry {
+  func createAvailabilityEntry() -> AvailabilityEntry
+}
+
+extension AvailabilityEntry: ExpressibleAsAvailabilityEntry {
+  public func createAvailabilityEntry() -> AvailabilityEntry {
+    self
+  }
+}
+
+/// 
 /// A labeled argument for the `@_specialize` attribute like
 /// `exported: true`
 /// 

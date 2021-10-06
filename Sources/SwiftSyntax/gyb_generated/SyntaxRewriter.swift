@@ -1017,6 +1017,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `AvailabilityEntrySyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: AvailabilityEntrySyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `LabeledSpecializeEntrySyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3208,6 +3215,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplAvailabilityEntrySyntax(_ data: SyntaxData) -> Syntax {
+      let node = AvailabilityEntrySyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) -> Syntax {
       let node = LabeledSpecializeEntrySyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4523,6 +4540,8 @@ open class SyntaxRewriter {
       return visitImplAttributeListSyntax
     case .specializeAttributeSpecList:
       return visitImplSpecializeAttributeSpecListSyntax
+    case .availabilityEntry:
+      return visitImplAvailabilityEntrySyntax
     case .labeledSpecializeEntry:
       return visitImplLabeledSpecializeEntrySyntax
     case .targetFunctionEntry:
@@ -5026,6 +5045,8 @@ open class SyntaxRewriter {
       return visitImplAttributeListSyntax(data)
     case .specializeAttributeSpecList:
       return visitImplSpecializeAttributeSpecListSyntax(data)
+    case .availabilityEntry:
+      return visitImplAvailabilityEntrySyntax(data)
     case .labeledSpecializeEntry:
       return visitImplLabeledSpecializeEntrySyntax(data)
     case .targetFunctionEntry:

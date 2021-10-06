@@ -6605,6 +6605,199 @@ extension AttributeSyntax: CustomReflectable {
   }
 }
 
+// MARK: - AvailabilityEntrySyntax
+
+/// 
+/// The availability argument for the _specialize attribute
+/// 
+public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case label
+    case colon
+    case availabilityList
+    case semicolon
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `AvailabilityEntrySyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .availabilityEntry else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `AvailabilityEntrySyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .availabilityEntry)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  /// The label of the argument
+  public var label: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.label,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLabel(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `label` replaced.
+  /// - param newChild: The new `label` to replace the node's
+  ///                   current `label`, if present.
+  public func withLabel(
+    _ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.label)
+    return AvailabilityEntrySyntax(newData)
+  }
+
+  /// The colon separating the label and the value
+  public var colon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return AvailabilityEntrySyntax(newData)
+  }
+
+  public var availabilityList: AvailabilitySpecListSyntax {
+    get {
+      let childData = data.child(at: Cursor.availabilityList,
+                                 parent: Syntax(self))
+      return AvailabilitySpecListSyntax(childData!)
+    }
+    set(value) {
+      self = withAvailabilityList(value)
+    }
+  }
+
+  /// Adds the provided `Availability` to the node's `availabilityList`
+  /// collection.
+  /// - param element: The new `Availability` to add to the node's
+  ///                  `availabilityList` collection.
+  /// - returns: A copy of the receiver with the provided `Availability`
+  ///            appended to its `availabilityList` collection.
+  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.availabilityList] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.availabilityList)
+    return AvailabilityEntrySyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `availabilityList` replaced.
+  /// - param newChild: The new `availabilityList` to replace the node's
+  ///                   current `availabilityList`, if present.
+  public func withAvailabilityList(
+    _ newChild: AvailabilitySpecListSyntax?) -> AvailabilityEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.availabilitySpecList)
+    let newData = data.replacingChild(raw, at: Cursor.availabilityList)
+    return AvailabilityEntrySyntax(newData)
+  }
+
+  public var semicolon: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.semicolon,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withSemicolon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `semicolon` replaced.
+  /// - param newChild: The new `semicolon` to replace the node's
+  ///                   current `semicolon`, if present.
+  public func withSemicolon(
+    _ newChild: TokenSyntax?) -> AvailabilityEntrySyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.semicolon)
+    let newData = data.replacingChild(raw, at: Cursor.semicolon)
+    return AvailabilityEntrySyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 4)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is AvailabilitySpecListSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(AvailabilitySpecListSyntax.self))
+    }
+    // Check child #3 child is TokenSyntax 
+    assert(rawChildren[3].raw != nil)
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension AvailabilityEntrySyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "label": Syntax(label).asProtocol(SyntaxProtocol.self),
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
+      "availabilityList": Syntax(availabilityList).asProtocol(SyntaxProtocol.self),
+      "semicolon": Syntax(semicolon).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - LabeledSpecializeEntrySyntax
 
 /// 

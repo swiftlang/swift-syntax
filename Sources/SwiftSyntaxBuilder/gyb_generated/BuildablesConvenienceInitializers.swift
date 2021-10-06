@@ -1072,6 +1072,22 @@ extension Attribute {
   }
 }
 
+extension AvailabilityEntry {
+  public init(
+    label: String,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    semicolon: TokenSyntax = TokenSyntax.`semicolon`,
+    @AvailabilitySpecListBuilder availabilityListBuilder: () -> AvailabilitySpecList = { .empty }
+  ) {
+    self.init(
+      label: SyntaxFactory.makeIdentifier(label),
+      colon: colon,
+      availabilityList: availabilityListBuilder(),
+      semicolon: semicolon
+    )
+  }
+}
+
 extension LabeledSpecializeEntry {
   public init(
     label: String,

@@ -871,6 +871,12 @@ extension SyntaxNode {
     return SpecializeAttributeSpecListSyntax(asSyntaxData)
   }
 
+  public var isAvailabilityEntry: Bool { return raw.kind == .availabilityEntry }
+  public var asAvailabilityEntry: AvailabilityEntrySyntax? {
+    guard isAvailabilityEntry else { return nil }
+    return AvailabilityEntrySyntax(asSyntaxData)
+  }
+
   public var isLabeledSpecializeEntry: Bool { return raw.kind == .labeledSpecializeEntry }
   public var asLabeledSpecializeEntry: LabeledSpecializeEntrySyntax? {
     guard isLabeledSpecializeEntry else { return nil }
@@ -1764,6 +1770,8 @@ extension Syntax {
     case .attributeList(let node):
       return node
     case .specializeAttributeSpecList(let node):
+      return node
+    case .availabilityEntry(let node):
       return node
     case .labeledSpecializeEntry(let node):
       return node

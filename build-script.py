@@ -369,7 +369,7 @@ class Builder(object):
             self.swiftpm_call.extend(["--verbose"])
         self.verbose = verbose
 
-    def build(self, product_name, module_group_path=""):
+    def build(self, product_name):
         print("** Building " + product_name + " **")
         command = list(self.swiftpm_call)
         command.extend(["--product", product_name])
@@ -607,7 +607,7 @@ def check_and_sync(file_path, install_path):
         fatal_error("install failed with exit status %d" % (result,))
 
 
-def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
+def install(build_dir, dylib_dir, stdlib_rpath):
     for dylib_name in get_installed_dylib_names():
 
         dylib_path = os.path.join(build_dir, dylib_name)
@@ -620,15 +620,6 @@ def install(build_dir, dylib_dir, swiftmodule_base_name, stdlib_rpath):
         check_and_sync(
             file_path=dylib_path, install_path=os.path.join(dylib_dir, dylib_name)
         )
-
-    # Optionally install .swiftmodule
-    if swiftmodule_base_name:
-        module_path = os.path.join(build_dir, "SwiftSyntax.swiftmodule")
-        doc_path = os.path.join(build_dir, "SwiftSyntax.swiftdoc")
-        module_dest = swiftmodule_base_name + ".swiftmodule"
-        doc_dest = swiftmodule_base_name + ".swiftdoc"
-        check_and_sync(file_path=module_path, install_path=module_dest)
-        check_and_sync(file_path=doc_path, install_path=doc_dest)
 
 
 # -----------------------------------------------------------------------------
@@ -651,17 +642,6 @@ The build script can also drive the test suite included in the SwiftSyntax
 repo. This requires a custom build of the compiler project since it accesses
 test utilities that are not shipped as part of the toolchains. See the Testing
 section for arguments that need to be specified for this.
-"""
-
-
-_SWIFTMODULE_BASE_NAME_HELP = """
-The name under which the Swift module should be installed. A .swiftdoc and
-.swiftmodule file extension will be added to this path and the corresponding
-files will be copied there.
-
-Example /path/to/SwiftSyntax.swiftmodule/x86_64 copies files to
-/path/to/SwiftSyntax.swiftmodule/x86_64.swiftmodule and
-/path/to/SwiftSyntax.swiftmodule/x86_64.swiftdoc
 """
 
 
@@ -751,10 +731,6 @@ def parse_args():
         "--dylib-dir", help="The directory to where the .dylib should be installed."
     )
 
-    install_group.add_argument(
-        "--swiftmodule-base-name", help=_SWIFTMODULE_BASE_NAME_HELP
-    )
-
     # -------------------------------------------------------------------------
     test_group = parser.add_argument_group("Test")
 
@@ -809,7 +785,6 @@ def main():
         install(
             build_dir=build_dir,
             dylib_dir=args.dylib_dir,
-            swiftmodule_base_name=args.swiftmodule_base_name,
             stdlib_rpath=stdlib_rpath,
         )
         sys.exit(0)
@@ -859,8 +834,8 @@ def main():
         )
         # Until rdar://53881101 is implemented, we cannot request a build of multiple
         # targets simultaneously. For now, just build one product after the other.
-        builder.build("SwiftSyntax", module_group_path=GROUP_INFO_PATH)
-        builder.build("SwiftSyntaxParser", module_group_path=GROUP_INFO_PATH)
+        builder.build("SwiftSyntax")
+        builder.build("SwiftSyntaxParser")
 
         # Only build lit-test-helper if we are planning to run tests
         if args.test:

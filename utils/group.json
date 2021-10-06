@@ -40,6 +40,11 @@
   ],
   "Parse": [
     "IncrementalParseTransition.swift",
+    "Diagnostic.swift",
+    "DiagnosticEngine.swift",
+    "DiagnosticConsumer.swift",
+    "JSONDiagnosticConsumer.swift",
+    "PrintingDiagnosticConsumer.swift"
   ],
   "Internal": [
     "_SyntaxParserInterop.swift",

@@ -14,7 +14,6 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftSyntax
 
 /// The DiagnosticEngine allows Swift tools to emit diagnostics.
 public class DiagnosticEngine {
@@ -56,7 +55,7 @@ public class DiagnosticEngine {
       }
   }
 
-  internal var needsLineColumn: Bool {
+  public var needsLineColumn: Bool {
     // Check if any consumer is interested in line and column.
     return consumers.first { $0.needsLineColumn } != nil
   }
@@ -71,7 +70,7 @@ public class DiagnosticEngine {
     }
   }
 
-  internal func diagnose(_ diagnostic: Diagnostic) {
+  public func diagnose(_ diagnostic: Diagnostic) {
     diagnostics.append(diagnostic)
     for consumer in consumers {
       consumer.handle(diagnostic)

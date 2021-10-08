@@ -425,55 +425,79 @@ func printSyntaxTree(args: CommandLineArguments) throws {
 
 func printParserDiags(args: CommandLineArguments) throws {
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  class ParserDiagPrinter: DiagnosticConsumer {
-    var counter : (error: Int, warning: Int, note: Int) = (0, 0, 0)
-    var calculateLineColumn: Bool { return true }
-    func finalize() {}
-    func handle(_ diag: Diagnostic) {
-      switch diag.message.severity {
-      case .error:
-        counter.error += 1
-        counter.note += diag.notes.count
-      case .warning:
-        counter.warning += 1
-        counter.note += diag.notes.count
-      case .note:
-        counter.note += 1
-      }
-      print(diag.debugDescription)
+
+  var diagCounter : (error: Int, warning: Int, note: Int) = (0, 0, 0)
+
+  func handleDiagnostic(diagnostic: Diagnostic) {
+    switch diagnostic.message.severity {
+    case .error:
+      diagCounter.error += 1
+      diagCounter.note += diagnostic.notes.count
+    case .warning:
+      diagCounter.warning += 1
+      diagCounter.note += diagnostic.notes.count
+    case .note:
+      diagCounter.note += 1
     }
-    deinit {
-      print("\(counter.error) error(s) \(counter.warning) warnings(s) \(counter.note) note(s)")
-    }
+    print(diagnostic.debugDescription)
   }
-  let diagEngine = DiagnosticEngine()
-  diagEngine.addConsumer(ParserDiagPrinter())
-  _ = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
+
+  _ = try SyntaxParser.parse(treeURL, diagnosticHandler: handleDiagnostic)
+
+  print("\(diagCounter.error) error(s) \(diagCounter.warning) warnings(s) \(diagCounter.note) note(s)")
+}
+
+/// Write the given string to stderr **without** appending a newline character.
+func writeToStderr(_ msg: String) {
+  FileHandle.standardError.write(msg.data(using: .utf8)!)
 }
 
 func diagnose(args: CommandLineArguments) throws {
+  func printDiagnostic(diagnostic: Diagnostic) {
+    if let loc = diagnostic.location {
+      writeToStderr("\(loc.file!):\(loc.line!):\(loc.column!): ")
+    } else {
+      writeToStderr("<unknown>:0:0: ")
+    }
+    switch diagnostic.message.severity {
+    case .note: writeToStderr("note: ")
+    case .warning: writeToStderr("warning: ")
+    case .error: writeToStderr("error: ")
+    }
+    writeToStderr(diagnostic.message.text)
+    writeToStderr("\n")
+
+    for note in diagnostic.notes {
+      printDiagnostic(diagnostic: note.asDiagnostic())
+    }
+  }
+
   let treeURL = URL(fileURLWithPath: try args.getRequired("-source-file"))
-  let diagEngine = DiagnosticEngine()
-  diagEngine.addConsumer(PrintingDiagnosticConsumer())
-  let tree = try SyntaxParser.parse(treeURL, diagnosticEngine: diagEngine)
+
+  let tree = try SyntaxParser.parse(treeURL, diagnosticHandler: printDiagnostic)
+
   class DiagnoseUnknown: SyntaxAnyVisitor {
-    let diagEngine: DiagnosticEngine
+    let diagnosticHandler: ((Diagnostic) -> Void)
     let converter: SourceLocationConverter
-    init(_ diagEngine: DiagnosticEngine, _ converter: SourceLocationConverter) {
-      self.diagEngine = diagEngine
+    init(diagnosticHandler: @escaping ((Diagnostic) -> Void), _ converter: SourceLocationConverter) {
+      self.diagnosticHandler = diagnosticHandler
       self.converter = converter
     }
     override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
       if node.isUnknown {
-        diagEngine.diagnose(Diagnostic.Message(.warning, "unknown syntax exists"),
-                            location: node.startLocation(converter: converter,
-                                                         afterLeadingTrivia: true))
+        diagnosticHandler(Diagnostic(
+          message: Diagnostic.Message(.warning, "unknown syntax exists"),
+          location: node.startLocation(converter: converter, afterLeadingTrivia: true),
+          actions: nil
+        ))
       }
       return .visitChildren
     }
   }
-  let visitor = DiagnoseUnknown(diagEngine,
-             SourceLocationConverter(file: treeURL.path, tree: tree))
+  let visitor = DiagnoseUnknown(
+    diagnosticHandler: printDiagnostic,
+    SourceLocationConverter(file: treeURL.path, tree: tree)
+  )
   visitor.walk(tree)
 }
 

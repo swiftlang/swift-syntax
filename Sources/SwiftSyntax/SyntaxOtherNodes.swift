@@ -38,7 +38,7 @@ public struct UnknownSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unknown)
+    swiftSyntaxAssert(data.raw.kind == .unknown)
     self._syntaxNode = Syntax(data)
   }
 }
@@ -66,7 +66,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .token)
+    swiftSyntaxAssert(data.raw.kind == .token)
     self._syntaxNode = Syntax(data)
   }
 

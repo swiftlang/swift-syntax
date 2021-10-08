@@ -286,7 +286,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
   var state: State
 
   init(_ token: AbsoluteNode) {
-    assert(token.raw.isToken)
+    swiftSyntaxAssert(token.raw.isToken)
     self.token = token
     self.offset = Int(token.position.offset)
     self.state = .atLeadingTrivia(0)

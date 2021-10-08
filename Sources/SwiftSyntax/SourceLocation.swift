@@ -35,7 +35,7 @@ struct ComputedLocation: Hashable, Codable, CustomDebugStringConvertible {
   }
   init(offset: Int, using converter: SourceLocationConverter) {
     let loc = converter.location(for: AbsolutePosition(utf8Offset: offset))
-    assert(loc.offset == offset)
+    swiftSyntaxAssert(loc.offset == offset)
     self.line = loc.line!
     self.column = loc.column!
     self.file = loc.file!
@@ -125,7 +125,7 @@ public final class SourceLocationConverter {
   public init(file: String, tree: SourceFileSyntax) {
     self.file = file
     (self.lines, endOfFile) = computeLines(tree: tree)
-    assert(tree.byteSize == endOfFile.utf8Offset)
+    swiftSyntaxAssert(tree.byteSize == endOfFile.utf8Offset)
   }
 
   /// - Parameters:
@@ -134,7 +134,7 @@ public final class SourceLocationConverter {
   public init(file: String, source: String) {
     self.file = file
     (self.lines, endOfFile) = computeLines(source)
-    assert(source.lengthOfBytes(using: .utf8) == endOfFile.utf8Offset)
+    swiftSyntaxAssert(source.lengthOfBytes(using: .utf8) == endOfFile.utf8Offset)
   }
 
   /// Convert a `AbsolutePosition` to a `SourceLocation`. If the position is
@@ -148,7 +148,7 @@ public final class SourceLocationConverter {
       return SourceLocation(line: 1, column: 1, offset: 0, file: self.file)
     }
 
-    assert(!lines.isEmpty)
+    swiftSyntaxAssert(!lines.isEmpty)
     var first = lines.startIndex
     var i: Int
     var step: Int
@@ -166,7 +166,7 @@ public final class SourceLocationConverter {
       }
     }
 
-    assert(first > 0)
+    swiftSyntaxAssert(first > 0)
     let lineIdx = first-1
     let lineStartOffset = lines[lineIdx].utf8Offset
     let colOffset = pos.utf8Offset - lineStartOffset
@@ -448,7 +448,7 @@ fileprivate extension TriviaPiece {
     case let .lineComment(text),
          let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
-      assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
+      swiftSyntaxAssert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
       lineLength += SourceLength(utf8Length: text.utf8.count)
     case let .blockComment(text),
          let .docBlockComment(text),

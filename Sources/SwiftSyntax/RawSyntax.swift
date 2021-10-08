@@ -26,12 +26,12 @@ fileprivate func readElement<T>(_ ptr: DataElementPtr) -> T {
 }
 
 fileprivate func castElementAs<T>(_ ptr: DataElementPtr) -> UnsafePointer<T> {
-  assert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
+  swiftSyntaxAssert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
   return UnsafePointer<T>(OpaquePointer(ptr))
 }
 
 fileprivate func castElementAs<T>(_ ptr: MutableDataElementPtr) -> UnsafeMutablePointer<T> {
-  assert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
+  swiftSyntaxAssert(MemoryLayout<T>.alignment <= MemoryLayout<RawSyntaxDataElement>.alignment)
   return UnsafeMutableRawPointer(ptr).assumingMemoryBound(to: T.self)
 }
 
@@ -102,7 +102,7 @@ fileprivate struct TokenData {
   static func dataAndExtraCapacity(
     for cnode: CSyntaxNode
   ) -> (RawSyntaxData, Int) {
-    assert(cnode.kind == 0)
+    swiftSyntaxAssert(cnode.kind == 0)
     let data = cnode.token_data
     let leadingTriviaCount = Int(data.leading_trivia_count)
     let trailingTriviaCount = Int(data.trailing_trivia_count)
@@ -140,14 +140,14 @@ fileprivate struct TokenData {
     let trailingTriviaCount = Int(data.trailing_trivia_count)
     var curPtr = extraPtr
     for i in 0..<leadingTriviaCount {
-      assert(MemoryLayout.size(ofValue: data.leading_trivia![i])
-              <= MemoryLayout<RawSyntaxDataElement>.size)
+      swiftSyntaxAssert(MemoryLayout.size(ofValue: data.leading_trivia![i])
+                         <= MemoryLayout<RawSyntaxDataElement>.size)
       initializeElement(curPtr, with: data.leading_trivia![i])
       curPtr = curPtr.successor()
     }
     for i in 0..<trailingTriviaCount {
-      assert(MemoryLayout.size(ofValue: data.trailing_trivia![i])
-              <= MemoryLayout<RawSyntaxDataElement>.size)
+      swiftSyntaxAssert(MemoryLayout.size(ofValue: data.trailing_trivia![i])
+                         <= MemoryLayout<RawSyntaxDataElement>.size)
       initializeElement(curPtr, with: data.trailing_trivia![i])
       curPtr = curPtr.successor()
     }
@@ -203,7 +203,7 @@ fileprivate struct TokenData {
   private func parsedData(
     length: UInt32, extraPtr: DataElementPtr
   ) -> UnsafeParsedTokenData {
-    assert(isParsed)
+    swiftSyntaxAssert(isParsed)
     let leadingTriviaCount = Int(self.leadingTriviaCount)
     let trailingTriviaCount = Int(self.trailingTriviaCount)
     var curPtr = extraPtr
@@ -520,7 +520,7 @@ fileprivate struct LayoutData {
     totalSubNodeCount: UInt32,
     isConstructed: Bool
   ) {
-    assert(kind != .token)
+    swiftSyntaxAssert(kind != .token)
     self.syntaxKind = kind
     self.nodeCount = nodeCount
     self.totalSubNodeCount = totalSubNodeCount
@@ -555,7 +555,7 @@ fileprivate struct LayoutData {
   ) {
     var curPtr = extraPtr
     for i in 0..<Int(data.nodes_count) {
-      assert(MemoryLayout.size(ofValue: data.nodes![i])
+      swiftSyntaxAssert(MemoryLayout.size(ofValue: data.nodes![i])
               <= MemoryLayout<RawSyntaxDataElement>.size)
       initializeElement(curPtr, with: data.nodes![i])
       curPtr = curPtr.successor()

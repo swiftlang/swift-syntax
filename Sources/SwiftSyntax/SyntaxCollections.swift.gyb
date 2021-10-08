@@ -51,7 +51,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .${node.swift_syntax_kind})
+    swiftSyntaxAssert(data.raw.kind == .${node.swift_syntax_kind})
     self._syntaxNode = Syntax(data)
   }
 
@@ -213,7 +213,7 @@ public struct ${node.name}: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(${node.collection_element_type}.self)
     })
   }

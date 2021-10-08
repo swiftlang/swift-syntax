@@ -36,7 +36,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .codeBlockItemList)
+    swiftSyntaxAssert(data.raw.kind == .codeBlockItemList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -198,7 +198,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(CodeBlockItemSyntax.self)
     })
   }
@@ -285,7 +285,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleExprElementList)
+    swiftSyntaxAssert(data.raw.kind == .tupleExprElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -447,7 +447,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(TupleExprElementSyntax.self)
     })
   }
@@ -534,7 +534,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .arrayElementList)
+    swiftSyntaxAssert(data.raw.kind == .arrayElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -696,7 +696,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ArrayElementSyntax.self)
     })
   }
@@ -783,7 +783,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .dictionaryElementList)
+    swiftSyntaxAssert(data.raw.kind == .dictionaryElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -945,7 +945,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(DictionaryElementSyntax.self)
     })
   }
@@ -1032,7 +1032,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .stringLiteralSegments)
+    swiftSyntaxAssert(data.raw.kind == .stringLiteralSegments)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1194,7 +1194,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(Syntax.self)
     })
   }
@@ -1281,7 +1281,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .declNameArgumentList)
+    swiftSyntaxAssert(data.raw.kind == .declNameArgumentList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1443,7 +1443,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(DeclNameArgumentSyntax.self)
     })
   }
@@ -1530,7 +1530,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .exprList)
+    swiftSyntaxAssert(data.raw.kind == .exprList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1692,7 +1692,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ExprSyntax.self)
     })
   }
@@ -1779,7 +1779,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureCaptureItemList)
+    swiftSyntaxAssert(data.raw.kind == .closureCaptureItemList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1941,7 +1941,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ClosureCaptureItemSyntax.self)
     })
   }
@@ -2028,7 +2028,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .closureParamList)
+    swiftSyntaxAssert(data.raw.kind == .closureParamList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -2190,7 +2190,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ClosureParamSyntax.self)
     })
   }
@@ -2277,7 +2277,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .multipleTrailingClosureElementList)
+    swiftSyntaxAssert(data.raw.kind == .multipleTrailingClosureElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -2439,7 +2439,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(MultipleTrailingClosureElementSyntax.self)
     })
   }
@@ -2526,7 +2526,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .objcName)
+    swiftSyntaxAssert(data.raw.kind == .objcName)
     self._syntaxNode = Syntax(data)
   }
 
@@ -2688,7 +2688,7 @@ public struct ObjcNameSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ObjcNamePieceSyntax.self)
     })
   }
@@ -2775,7 +2775,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionParameterList)
+    swiftSyntaxAssert(data.raw.kind == .functionParameterList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -2937,7 +2937,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(FunctionParameterSyntax.self)
     })
   }
@@ -3024,7 +3024,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .ifConfigClauseList)
+    swiftSyntaxAssert(data.raw.kind == .ifConfigClauseList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -3186,7 +3186,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(IfConfigClauseSyntax.self)
     })
   }
@@ -3273,7 +3273,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .inheritedTypeList)
+    swiftSyntaxAssert(data.raw.kind == .inheritedTypeList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -3435,7 +3435,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(InheritedTypeSyntax.self)
     })
   }
@@ -3522,7 +3522,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .memberDeclList)
+    swiftSyntaxAssert(data.raw.kind == .memberDeclList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -3684,7 +3684,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(MemberDeclListItemSyntax.self)
     })
   }
@@ -3771,7 +3771,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .modifierList)
+    swiftSyntaxAssert(data.raw.kind == .modifierList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -3933,7 +3933,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(DeclModifierSyntax.self)
     })
   }
@@ -4020,7 +4020,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessPath)
+    swiftSyntaxAssert(data.raw.kind == .accessPath)
     self._syntaxNode = Syntax(data)
   }
 
@@ -4182,7 +4182,7 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(AccessPathComponentSyntax.self)
     })
   }
@@ -4269,7 +4269,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .accessorList)
+    swiftSyntaxAssert(data.raw.kind == .accessorList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -4431,7 +4431,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(AccessorDeclSyntax.self)
     })
   }
@@ -4518,7 +4518,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .patternBindingList)
+    swiftSyntaxAssert(data.raw.kind == .patternBindingList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -4680,7 +4680,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(PatternBindingSyntax.self)
     })
   }
@@ -4764,7 +4764,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .enumCaseElementList)
+    swiftSyntaxAssert(data.raw.kind == .enumCaseElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -4926,7 +4926,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(EnumCaseElementSyntax.self)
     })
   }
@@ -5013,7 +5013,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .identifierList)
+    swiftSyntaxAssert(data.raw.kind == .identifierList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -5175,7 +5175,7 @@ public struct IdentifierListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(TokenSyntax.self)
     })
   }
@@ -5262,7 +5262,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupAttributeList)
+    swiftSyntaxAssert(data.raw.kind == .precedenceGroupAttributeList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -5424,7 +5424,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(Syntax.self)
     })
   }
@@ -5511,7 +5511,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .precedenceGroupNameList)
+    swiftSyntaxAssert(data.raw.kind == .precedenceGroupNameList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -5673,7 +5673,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(PrecedenceGroupNameElementSyntax.self)
     })
   }
@@ -5760,7 +5760,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tokenList)
+    swiftSyntaxAssert(data.raw.kind == .tokenList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -5922,7 +5922,7 @@ public struct TokenListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(TokenSyntax.self)
     })
   }
@@ -6009,7 +6009,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .nonEmptyTokenList)
+    swiftSyntaxAssert(data.raw.kind == .nonEmptyTokenList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -6171,7 +6171,7 @@ public struct NonEmptyTokenListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(TokenSyntax.self)
     })
   }
@@ -6258,7 +6258,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .attributeList)
+    swiftSyntaxAssert(data.raw.kind == .attributeList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -6420,7 +6420,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(Syntax.self)
     })
   }
@@ -6506,7 +6506,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .specializeAttributeSpecList)
+    swiftSyntaxAssert(data.raw.kind == .specializeAttributeSpecList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -6668,7 +6668,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(Syntax.self)
     })
   }
@@ -6755,7 +6755,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .objCSelector)
+    swiftSyntaxAssert(data.raw.kind == .objCSelector)
     self._syntaxNode = Syntax(data)
   }
 
@@ -6917,7 +6917,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ObjCSelectorPieceSyntax.self)
     })
   }
@@ -7004,7 +7004,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .differentiabilityParamList)
+    swiftSyntaxAssert(data.raw.kind == .differentiabilityParamList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -7166,7 +7166,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(DifferentiabilityParamSyntax.self)
     })
   }
@@ -7253,7 +7253,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .switchCaseList)
+    swiftSyntaxAssert(data.raw.kind == .switchCaseList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -7415,7 +7415,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(Syntax.self)
     })
   }
@@ -7502,7 +7502,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .catchClauseList)
+    swiftSyntaxAssert(data.raw.kind == .catchClauseList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -7664,7 +7664,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(CatchClauseSyntax.self)
     })
   }
@@ -7751,7 +7751,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .caseItemList)
+    swiftSyntaxAssert(data.raw.kind == .caseItemList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -7913,7 +7913,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(CaseItemSyntax.self)
     })
   }
@@ -8000,7 +8000,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .catchItemList)
+    swiftSyntaxAssert(data.raw.kind == .catchItemList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -8162,7 +8162,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(CatchItemSyntax.self)
     })
   }
@@ -8249,7 +8249,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .conditionElementList)
+    swiftSyntaxAssert(data.raw.kind == .conditionElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -8411,7 +8411,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(ConditionElementSyntax.self)
     })
   }
@@ -8498,7 +8498,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericRequirementList)
+    swiftSyntaxAssert(data.raw.kind == .genericRequirementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -8660,7 +8660,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(GenericRequirementSyntax.self)
     })
   }
@@ -8747,7 +8747,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericParameterList)
+    swiftSyntaxAssert(data.raw.kind == .genericParameterList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -8909,7 +8909,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(GenericParameterSyntax.self)
     })
   }
@@ -8996,7 +8996,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .compositionTypeElementList)
+    swiftSyntaxAssert(data.raw.kind == .compositionTypeElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -9158,7 +9158,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(CompositionTypeElementSyntax.self)
     })
   }
@@ -9245,7 +9245,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleTypeElementList)
+    swiftSyntaxAssert(data.raw.kind == .tupleTypeElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -9407,7 +9407,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(TupleTypeElementSyntax.self)
     })
   }
@@ -9494,7 +9494,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .genericArgumentList)
+    swiftSyntaxAssert(data.raw.kind == .genericArgumentList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -9656,7 +9656,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(GenericArgumentSyntax.self)
     })
   }
@@ -9743,7 +9743,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tuplePatternElementList)
+    swiftSyntaxAssert(data.raw.kind == .tuplePatternElementList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -9905,7 +9905,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(TuplePatternElementSyntax.self)
     })
   }
@@ -9992,7 +9992,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .availabilitySpecList)
+    swiftSyntaxAssert(data.raw.kind == .availabilitySpecList)
     self._syntaxNode = Syntax(data)
   }
 
@@ -10154,7 +10154,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
 
   public func _validateLayout() {
     // Check that all children match the expected element type
-    assert(self.allSatisfy { node in
+    swiftSyntaxAssert(self.allSatisfy { node in
       return Syntax(node).is(AvailabilityArgumentSyntax.self)
     })
   }

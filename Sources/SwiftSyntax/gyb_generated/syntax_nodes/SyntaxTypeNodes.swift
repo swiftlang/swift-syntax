@@ -30,7 +30,7 @@ public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unknownType)
+    swiftSyntaxAssert(data.raw.kind == .unknownType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -73,7 +73,7 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .simpleTypeIdentifier)
+    swiftSyntaxAssert(data.raw.kind == .simpleTypeIdentifier)
     self._syntaxNode = Syntax(data)
   }
 
@@ -127,15 +127,15 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
+    swiftSyntaxAssert(rawChildren.count == 2)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is GenericArgumentClauseSyntax or missing
     if let raw = rawChildren[1].raw {
@@ -143,7 +143,7 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericArgumentClauseSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(GenericArgumentClauseSyntax.self))
     }
   }
 }
@@ -180,7 +180,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .memberTypeIdentifier)
+    swiftSyntaxAssert(data.raw.kind == .memberTypeIdentifier)
     self._syntaxNode = Syntax(data)
   }
 
@@ -276,33 +276,33 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
+    swiftSyntaxAssert(rawChildren.count == 4)
     // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #3 child is GenericArgumentClauseSyntax or missing
     if let raw = rawChildren[3].raw {
@@ -310,7 +310,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericArgumentClauseSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(GenericArgumentClauseSyntax.self))
     }
   }
 }
@@ -346,7 +346,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .classRestrictionType)
+    swiftSyntaxAssert(data.raw.kind == .classRestrictionType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -378,15 +378,15 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 1)
+    swiftSyntaxAssert(rawChildren.count == 1)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -421,7 +421,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .arrayType)
+    swiftSyntaxAssert(data.raw.kind == .arrayType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -495,33 +495,33 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
+    swiftSyntaxAssert(rawChildren.count == 3)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is TypeSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -560,7 +560,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .dictionaryType)
+    swiftSyntaxAssert(data.raw.kind == .dictionaryType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -676,51 +676,51 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
+    swiftSyntaxAssert(rawChildren.count == 5)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is TypeSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #3 child is TypeSyntax 
-    assert(rawChildren[3].raw != nil)
+    swiftSyntaxAssert(rawChildren[3].raw != nil)
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #4 child is TokenSyntax 
-    assert(rawChildren[4].raw != nil)
+    swiftSyntaxAssert(rawChildren[4].raw != nil)
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -759,7 +759,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .metatypeType)
+    swiftSyntaxAssert(data.raw.kind == .metatypeType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -833,33 +833,33 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
+    swiftSyntaxAssert(rawChildren.count == 3)
     // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -895,7 +895,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .optionalType)
+    swiftSyntaxAssert(data.raw.kind == .optionalType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -948,24 +948,24 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
+    swiftSyntaxAssert(rawChildren.count == 2)
     // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -1000,7 +1000,7 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .someType)
+    swiftSyntaxAssert(data.raw.kind == .someType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1053,24 +1053,24 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
+    swiftSyntaxAssert(rawChildren.count == 2)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is TypeSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
   }
 }
@@ -1105,7 +1105,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .implicitlyUnwrappedOptionalType)
+    swiftSyntaxAssert(data.raw.kind == .implicitlyUnwrappedOptionalType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1158,24 +1158,24 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
+    swiftSyntaxAssert(rawChildren.count == 2)
     // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
     // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -1209,7 +1209,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .compositionType)
+    swiftSyntaxAssert(data.raw.kind == .compositionType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1260,15 +1260,15 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 1)
+    swiftSyntaxAssert(rawChildren.count == 1)
     // Check child #0 child is CompositionTypeElementListSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(CompositionTypeElementListSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(CompositionTypeElementListSyntax.self))
     }
   }
 }
@@ -1303,7 +1303,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleType)
+    swiftSyntaxAssert(data.raw.kind == .tupleType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1396,33 +1396,33 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
+    swiftSyntaxAssert(rawChildren.count == 3)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is TupleTypeElementListSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TupleTypeElementListSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TupleTypeElementListSyntax.self))
     }
     // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
   }
 }
@@ -1463,7 +1463,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionType)
+    swiftSyntaxAssert(data.raw.kind == .functionType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1642,33 +1642,33 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
+    swiftSyntaxAssert(rawChildren.count == 7)
     // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
+    swiftSyntaxAssert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is TupleTypeElementListSyntax 
-    assert(rawChildren[1].raw != nil)
+    swiftSyntaxAssert(rawChildren[1].raw != nil)
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TupleTypeElementListSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TupleTypeElementListSyntax.self))
     }
     // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #3 child is TokenSyntax or missing
     if let raw = rawChildren[3].raw {
@@ -1676,7 +1676,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #4 child is TokenSyntax or missing
     if let raw = rawChildren[4].raw {
@@ -1684,25 +1684,25 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
+    swiftSyntaxAssert(rawChildren[5].raw != nil)
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #6 child is TypeSyntax 
-    assert(rawChildren[6].raw != nil)
+    swiftSyntaxAssert(rawChildren[6].raw != nil)
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
   }
 }
@@ -1743,7 +1743,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .attributedType)
+    swiftSyntaxAssert(data.raw.kind == .attributedType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1838,14 +1838,14 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
+    swiftSyntaxAssert(rawChildren.count == 3)
     // Check child #0 child is TokenSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TokenSyntax.self))
     }
     // Check child #1 child is AttributeListSyntax or missing
     if let raw = rawChildren[1].raw {
@@ -1853,16 +1853,16 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(AttributeListSyntax.self))
     }
     // Check child #2 child is TypeSyntax 
-    assert(rawChildren[2].raw != nil)
+    swiftSyntaxAssert(rawChildren[2].raw != nil)
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
+      swiftSyntaxAssert(syntaxChild.is(TypeSyntax.self))
     }
   }
 }

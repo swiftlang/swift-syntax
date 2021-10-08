@@ -45,6 +45,7 @@
     "_SyntaxParserInterop.swift",
     "CNodes.swift",
     "AtomicCounter.swift",
-    "SyntaxVerifier.swift",
+    "SwiftSyntaxAssert.swift",
+    "SyntaxVerifier.swift"
   ]
 }

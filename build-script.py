@@ -325,10 +325,6 @@ def clear_gyb_files_from_previous_run(sources_dir, destination_dir, verbose):
 # Building SwiftSyntax
 
 
-def get_installed_dylib_names():
-    return ["libSwiftSyntax.dylib", "libSwiftSyntaxParser.dylib"]
-
-
 def get_swiftpm_invocation(toolchain, action, build_dir, multiroot_data_file, release):
     swift_exec = os.path.join(toolchain, "bin", "swift")
 
@@ -579,49 +575,6 @@ def run_xctests(toolchain, build_dir, multiroot_data_file, release, verbose):
     return call(swiftpm_call, env=env, verbose=verbose) == 0
 
 
-def delete_rpath(rpath, binary):
-    if platform.system() == "Darwin":
-        cmd = ["install_name_tool", "-delete_rpath", rpath, binary]
-        note("removing RPATH from %s: %s" % (binary, " ".join(cmd)))
-        subprocess.call(cmd)
-    else:
-        fatal_error("unable to remove RPATHs on this platform")
-
-
-def change_id_rpath(rpath, binary):
-    if platform.system() == "Darwin":
-        cmd = ["install_name_tool", "-id", rpath, binary]
-        note("changing id in %s: %s" % (binary, " ".join(cmd)))
-        result = subprocess.call(cmd)
-        if result != 0:
-            fatal_error("command failed with exit status %d" % (result,))
-    else:
-        fatal_error("unable to invoke install_name_tool on this platform")
-
-
-def check_and_sync(file_path, install_path):
-    cmd = ["rsync", "-a", file_path, install_path]
-    note("installing %s: %s" % (os.path.basename(file_path), " ".join(cmd)))
-    result = subprocess.check_call(cmd)
-    if result != 0:
-        fatal_error("install failed with exit status %d" % (result,))
-
-
-def install(build_dir, dylib_dir, stdlib_rpath):
-    for dylib_name in get_installed_dylib_names():
-
-        dylib_path = os.path.join(build_dir, dylib_name)
-        
-        # users should find the dylib as if it's a part of stdlib.
-        change_id_rpath(os.path.join("@rpath", dylib_name), dylib_path)
-
-        # we don't wanna hard-code the stdlib dylibs into rpath.
-        delete_rpath(stdlib_rpath, dylib_path)
-        check_and_sync(
-            file_path=dylib_path, install_path=os.path.join(dylib_dir, dylib_name)
-        )
-
-
 # -----------------------------------------------------------------------------
 # Arugment Parsing
 
@@ -718,20 +671,6 @@ def parse_args():
     )
 
     # -------------------------------------------------------------------------
-    install_group = parser.add_argument_group("Install")
-
-    install_group.add_argument(
-        "-i",
-        "--install",
-        action="store_true",
-        help="Install the build artifact to a specified toolchain directory.",
-    )
-
-    install_group.add_argument(
-        "--dylib-dir", help="The directory to where the .dylib should be installed."
-    )
-
-    # -------------------------------------------------------------------------
     test_group = parser.add_argument_group("Test")
 
     test_group.add_argument("-t", "--test", action="store_true", help="Run tests")
@@ -770,24 +709,6 @@ def parse_args():
 
 def main():
     args = parse_args()
-
-    if args.install:
-        if not args.dylib_dir:
-            fatal_error("Must specify directory to install (--dylib-dir)")
-        if not args.build_dir:
-            fatal_error("Must specify build directory to copy from (--build-dir)")
-        if args.release:
-            build_dir = os.path.join(args.build_dir, "release")
-        else:
-            # will this ever happen?
-            build_dir = os.path.join(args.build_dir, "debug")
-        stdlib_rpath = os.path.join(args.toolchain, "lib", "swift", "macosx")
-        install(
-            build_dir=build_dir,
-            dylib_dir=args.dylib_dir,
-            stdlib_rpath=stdlib_rpath,
-        )
-        sys.exit(0)
 
     try:
         if not args.verify_generated_files:

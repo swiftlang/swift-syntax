@@ -826,7 +826,7 @@ def main():
     try:
         builder = Builder(
             toolchain=args.toolchain,
-            build_dir=args.build_dir,
+            build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
             release=args.release,
             verbose=args.verbose,

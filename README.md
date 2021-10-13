@@ -2,10 +2,10 @@
 
 SwiftSyntax is a set of Swift bindings for the
 [libSyntax](https://github.com/apple/swift/tree/main/lib/Syntax) library. It
-allows for Swift tools to parse, inspect, generate, and transform Swift source
+allows Swift tools to parse, inspect, generate, and transform Swift source
 code.
 
-Its API is designed for performance critical applications. It uses value types almost exclusively and aims to avoid existential conversions where possible.
+Its API is designed for performance-critical applications. It uses value types almost exclusively and aims to avoid existential conversions where possible.
 
 > Note: SwiftSyntax is still in development, and the API is not guaranteed to
 > be stable. It's subject to change without warning.
@@ -54,7 +54,7 @@ Then, import `SwiftSyntax` in your Swift code.
 $ export TOOLCHAINS=swift
 ```
 
-3. To make sure everything is setup correctly, check the result of `xcrun --find swift`. It should point inside the OSS toolchain.
+3. To make sure everything is set up correctly, check the result of `xcrun --find swift`. It should point inside the OSS toolchain.
 
 4. Add this entry to the `Package.swift` manifest of your project:
 
@@ -73,7 +73,7 @@ let package = Package(
 )
 ```
 
-Tags will be created for every nightly build in the form of `swift-DEVELOPMENT-SNAPSHOT-<DATE>`. Revision field
+Tags will be created for every nightly build in the form of `swift-DEVELOPMENT-SNAPSHOT-<DATE>`. The revision field
 should be specified with the intended tag.
 
 Different from building SwiftSyntax from source, declaring SwiftSyntax as a SwiftPM dependency doesn't require
@@ -157,10 +157,10 @@ To build the `main` branch of SwiftSyntax, follow the following instructions:
 $ export TOOLCHAINS=swift
 ```
 
-4. To make sure everything is setup correctly, check the return statement of `xcrun --find swift`. It should point inside the latest installed trunk development toolchain. If it points inside an Xcode toolchain, check that you exported the `TOOLCHAINS` environment variable correctly. If it points inside a version specific toolchain (like Swift 5.0-dev), you'll need to remove that toolchain.
+4. To make sure everything is set up correctly, check the return statement of `xcrun --find swift`. It should point inside the latest installed trunk development toolchain. If it points inside an Xcode toolchain, check that you exported the `TOOLCHAINS` environment variable correctly. If it points inside a version-specific toolchain (like Swift 5.0-dev), you'll need to remove that toolchain.
 5. Run `swift-syntax/build-script.py`.
 
-If, despite following those instructions, you get compiler errors, the Swift toolchain might be too old to contain recent changes in Swift's SwiftSyntaxParser C library. In that case, you'll have to build the compiler and SwiftSyntax together with the following command:
+If despite following those instructions, you get compiler errors, the Swift toolchain might be too old to contain recent changes in Swift's SwiftSyntaxParser C library. In that case, you'll have to build the compiler and SwiftSyntax together with the following command:
 
 ```
 $ swift/utils/build-script --swiftsyntax --swiftpm --llbuild
@@ -168,7 +168,7 @@ $ swift/utils/build-script --swiftsyntax --swiftpm --llbuild
 
 Swift-CI will automatically run the code generation step whenever a new toolchain (development snapshot or release) is published. It should thus almost never be necessary to perform the above build yourself.
 
-Afterwards, SwiftPM can also generate an Xcode project to develop SwiftSyntax by running `swift package generate-xcodeproj`.
+Afterward, SwiftPM can also generate an Xcode project to develop SwiftSyntax by running `swift package generate-xcodeproj`.
 
 If you also want to run tests locally, read the section below as testing has additional requirements.
 
@@ -181,7 +181,7 @@ swift/utils/build-script --swiftsyntax --swiftpm --llbuild -t --skip-test-cmark 
 ```
 This command will build SwiftSyntax and all its dependencies, tell the build script to run tests, but skip all tests but the SwiftSyntax tests.
 
-Note that it is not currently supported to SwiftSyntax while building the Swift compiler using Xcode.
+Note that it is not currently supported by SwiftSyntax while building the Swift compiler using Xcode.
 
 ### CI Testing
 

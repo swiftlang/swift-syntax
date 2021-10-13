@@ -43,16 +43,6 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
 
 package.targets.append(swiftSyntaxTarget)
 
-let libraryType: Product.Library.LibraryType
-
-/// When we're in a build-script environment, we want to build a dylib instead
-/// of a static library since we install the dylib into the toolchain.
-if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
-  libraryType = .dynamic
-} else {
-  libraryType = .static
-}
-
-package.products.append(.library(name: "SwiftSyntax", type: libraryType, targets: ["SwiftSyntax"]))
-package.products.append(.library(name: "SwiftSyntaxParser", type: libraryType, targets: ["SwiftSyntaxParser"]))
-package.products.append(.library(name: "SwiftSyntaxBuilder", type: libraryType, targets: ["SwiftSyntaxBuilder"]))
+package.products.append(.library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]))
+package.products.append(.library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]))
+package.products.append(.library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]))

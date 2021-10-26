@@ -9,7 +9,7 @@ final class EnumCaseElementTests: XCTestCase {
     let segment = StringSegment(content: string)
     let segments = StringLiteralSegments([segment])
 
-    let stringLiteralExpr: ExprBuildable = StringLiteralExpr(openQuote: .stringQuote,
+    let stringLiteralExpr: ExprBuildable = StringLiteralExpr(openQuote: TokenSyntax.stringQuote,
                                                              segments: segments,
                                                              closeQuote: .stringQuote)
 

@@ -3,20 +3,17 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class FunctionTests: XCTestCase {
-  func testEmptyStruct() {
+  func testFibonacci() {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let input = ParameterClause(parameterListBuilder: {
       FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int", attributesBuilder: {})
     })
 
-    let ifCodeBlock = CodeBlock(statementsBuilder: {
-      ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
-    })
-
+    let ifCodeBlock = ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
+    
     let signature = FunctionSignature(input: input, output: "Int")
     
-
     let codeBlock = CodeBlock(statementsBuilder: {
       IfStmt(conditions: ExprList([
         IntegerLiteralExpr(digits: "n"),

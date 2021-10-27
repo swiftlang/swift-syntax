@@ -15,9 +15,3 @@ extension IdentifierExpr {
     self.init(identifier: .identifier(identifier))
   }
 }
-
-extension IdentifierExpr: ExpressibleByStringLiteral {
-  public init(stringLiteral value: String) {
-    self.init(value)
-  }
-}

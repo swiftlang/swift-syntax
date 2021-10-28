@@ -27,7 +27,7 @@ final class FunctionTests: XCTestCase {
       ]), body: ifCodeBlock)
 
       ReturnStmt(expression: SequenceExpr(elementsBuilder: {
-        FunctionCallExpr(calledExpression: IdentifierExpr(identifier: TokenSyntax.identifier("fibonacci")), leftParen: TokenSyntax.leftParen, rightParen: TokenSyntax.rightParen, argumentListBuilder: {
+        FunctionCallExpr(calledExpression: IdentifierExpr("fibonacci"), leftParen: TokenSyntax.leftParen, rightParen: TokenSyntax.rightParen, argumentListBuilder: {
           TupleExprElement(expression: SequenceExpr(elementsBuilder: {
             IntegerLiteralExpr(digits: "n")
 
@@ -39,7 +39,7 @@ final class FunctionTests: XCTestCase {
 
         BinaryOperatorExpr(operatorToken: TokenSyntax.spacedBinaryOperator("+"))
 
-        FunctionCallExpr(calledExpression: IdentifierExpr(identifier: TokenSyntax.identifier("fibonacci")), leftParen: TokenSyntax.leftParen, rightParen: TokenSyntax.rightParen, argumentListBuilder: {
+        FunctionCallExpr("fibonacci", leftParen: TokenSyntax.leftParen, rightParen: TokenSyntax.rightParen, argumentListBuilder: {
           TupleExprElement(expression: SequenceExpr(elementsBuilder: {
             IntegerLiteralExpr(digits: "n")
 

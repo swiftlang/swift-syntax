@@ -674,6 +674,8 @@ public extension ExpressibleAsTokenSyntax where Self == TokenSyntax {
 
   static func `spacedBinaryOperator`(_ text: String) -> TokenSyntax {
     SyntaxFactory.makeSpacedBinaryOperator(text)
+    .withLeadingTrivia(.spaces(1))
+    .withTrailingTrivia(.spaces(1))
   }
 
   static func `postfixOperator`(_ text: String) -> TokenSyntax {

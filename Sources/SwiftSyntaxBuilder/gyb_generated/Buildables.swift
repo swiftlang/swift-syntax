@@ -80,7 +80,7 @@ public protocol ExprListBuildable: SyntaxListBuildable {
   func buildExprList(format: Format, leadingTrivia: Trivia?) -> [ExprSyntax]
 }
 
-public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList {
+public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList, ExpressibleAsCodeBlockItem {
   func createExprBuildable() -> ExprBuildable
 }
 
@@ -248,7 +248,7 @@ public protocol SyntaxListBuildable {
   func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
 }
 
-public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
+public protocol ExpressibleAsSyntaxBuildable {
   func createSyntaxBuildable() -> SyntaxBuildable
 }
 
@@ -394,7 +394,7 @@ public struct CodeBlockItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlockItem: ExpressibleAsCodeBlockItemList {
+public protocol ExpressibleAsCodeBlockItem: ExpressibleAsSyntaxBuildable, ExpressibleAsCodeBlockItemList {
   func createCodeBlockItem() -> CodeBlockItem
 }
 
@@ -441,7 +441,7 @@ extension CodeBlockItemList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsCodeBlockItemList: ExpressibleAsCodeBlock {
+public protocol ExpressibleAsCodeBlockItemList: ExpressibleAsSyntaxBuildable, ExpressibleAsCodeBlock {
   func createCodeBlockItemList() -> CodeBlockItemList
 }
 
@@ -494,7 +494,7 @@ public struct CodeBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlock {
+public protocol ExpressibleAsCodeBlock: ExpressibleAsSyntaxBuildable {
   func createCodeBlock() -> CodeBlock
 }
 
@@ -541,7 +541,7 @@ public struct InOutExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsInOutExpr {
+public protocol ExpressibleAsInOutExpr: ExpressibleAsExprBuildable {
   func createInOutExpr() -> InOutExpr
 }
 
@@ -583,7 +583,7 @@ public struct PoundColumnExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundColumnExpr {
+public protocol ExpressibleAsPoundColumnExpr: ExpressibleAsExprBuildable {
   func createPoundColumnExpr() -> PoundColumnExpr
 }
 
@@ -630,7 +630,7 @@ extension TupleExprElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsTupleExprElementList {
+public protocol ExpressibleAsTupleExprElementList: ExpressibleAsSyntaxBuildable {
   func createTupleExprElementList() -> TupleExprElementList
 }
 
@@ -677,7 +677,7 @@ extension ArrayElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsArrayElementList {
+public protocol ExpressibleAsArrayElementList: ExpressibleAsSyntaxBuildable {
   func createArrayElementList() -> ArrayElementList
 }
 
@@ -724,7 +724,7 @@ extension DictionaryElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsDictionaryElementList {
+public protocol ExpressibleAsDictionaryElementList: ExpressibleAsSyntaxBuildable {
   func createDictionaryElementList() -> DictionaryElementList
 }
 
@@ -771,7 +771,7 @@ extension StringLiteralSegments: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsStringLiteralSegments {
+public protocol ExpressibleAsStringLiteralSegments: ExpressibleAsSyntaxBuildable {
   func createStringLiteralSegments() -> StringLiteralSegments
 }
 
@@ -824,7 +824,7 @@ public struct TryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTryExpr {
+public protocol ExpressibleAsTryExpr: ExpressibleAsExprBuildable {
   func createTryExpr() -> TryExpr
 }
 
@@ -871,7 +871,7 @@ public struct AwaitExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsAwaitExpr {
+public protocol ExpressibleAsAwaitExpr: ExpressibleAsExprBuildable {
   func createAwaitExpr() -> AwaitExpr
 }
 
@@ -918,7 +918,7 @@ public struct DeclNameArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclNameArgument: ExpressibleAsDeclNameArgumentList {
+public protocol ExpressibleAsDeclNameArgument: ExpressibleAsSyntaxBuildable, ExpressibleAsDeclNameArgumentList {
   func createDeclNameArgument() -> DeclNameArgument
 }
 
@@ -965,7 +965,7 @@ extension DeclNameArgumentList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsDeclNameArgumentList {
+public protocol ExpressibleAsDeclNameArgumentList: ExpressibleAsSyntaxBuildable {
   func createDeclNameArgumentList() -> DeclNameArgumentList
 }
 
@@ -1018,7 +1018,7 @@ public struct DeclNameArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclNameArguments {
+public protocol ExpressibleAsDeclNameArguments: ExpressibleAsSyntaxBuildable {
   func createDeclNameArguments() -> DeclNameArguments
 }
 
@@ -1064,7 +1064,7 @@ public struct IdentifierExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsIdentifierExpr {
+public protocol ExpressibleAsIdentifierExpr: ExpressibleAsExprBuildable {
   func createIdentifierExpr() -> IdentifierExpr
 }
 
@@ -1106,7 +1106,7 @@ public struct SuperRefExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSuperRefExpr {
+public protocol ExpressibleAsSuperRefExpr: ExpressibleAsExprBuildable {
   func createSuperRefExpr() -> SuperRefExpr
 }
 
@@ -1148,7 +1148,7 @@ public struct NilLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsNilLiteralExpr {
+public protocol ExpressibleAsNilLiteralExpr: ExpressibleAsExprBuildable {
   func createNilLiteralExpr() -> NilLiteralExpr
 }
 
@@ -1190,7 +1190,7 @@ public struct DiscardAssignmentExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsDiscardAssignmentExpr {
+public protocol ExpressibleAsDiscardAssignmentExpr: ExpressibleAsExprBuildable {
   func createDiscardAssignmentExpr() -> DiscardAssignmentExpr
 }
 
@@ -1232,7 +1232,7 @@ public struct AssignmentExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsAssignmentExpr {
+public protocol ExpressibleAsAssignmentExpr: ExpressibleAsExprBuildable {
   func createAssignmentExpr() -> AssignmentExpr
 }
 
@@ -1273,7 +1273,7 @@ public struct SequenceExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSequenceExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable, ExpressibleAsTupleExprElement {
+public protocol ExpressibleAsSequenceExpr: ExpressibleAsExprBuildable, ExpressibleAsTupleExprElement {
   func createSequenceExpr() -> SequenceExpr
 }
 
@@ -1322,7 +1322,7 @@ extension ExprList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsExprList: ExpressibleAsConditionElement, ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleAsExprList: ExpressibleAsSyntaxBuildable, ExpressibleAsConditionElement {
   func createExprList() -> ExprList
 }
 
@@ -1364,7 +1364,7 @@ public struct PoundLineExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundLineExpr {
+public protocol ExpressibleAsPoundLineExpr: ExpressibleAsExprBuildable {
   func createPoundLineExpr() -> PoundLineExpr
 }
 
@@ -1406,7 +1406,7 @@ public struct PoundFileExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFileExpr {
+public protocol ExpressibleAsPoundFileExpr: ExpressibleAsExprBuildable {
   func createPoundFileExpr() -> PoundFileExpr
 }
 
@@ -1448,7 +1448,7 @@ public struct PoundFileIDExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFileIDExpr {
+public protocol ExpressibleAsPoundFileIDExpr: ExpressibleAsExprBuildable {
   func createPoundFileIDExpr() -> PoundFileIDExpr
 }
 
@@ -1490,7 +1490,7 @@ public struct PoundFilePathExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFilePathExpr {
+public protocol ExpressibleAsPoundFilePathExpr: ExpressibleAsExprBuildable {
   func createPoundFilePathExpr() -> PoundFilePathExpr
 }
 
@@ -1532,7 +1532,7 @@ public struct PoundFunctionExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFunctionExpr {
+public protocol ExpressibleAsPoundFunctionExpr: ExpressibleAsExprBuildable {
   func createPoundFunctionExpr() -> PoundFunctionExpr
 }
 
@@ -1574,7 +1574,7 @@ public struct PoundDsohandleExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundDsohandleExpr {
+public protocol ExpressibleAsPoundDsohandleExpr: ExpressibleAsExprBuildable {
   func createPoundDsohandleExpr() -> PoundDsohandleExpr
 }
 
@@ -1620,7 +1620,7 @@ public struct SymbolicReferenceExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSymbolicReferenceExpr {
+public protocol ExpressibleAsSymbolicReferenceExpr: ExpressibleAsExprBuildable {
   func createSymbolicReferenceExpr() -> SymbolicReferenceExpr
 }
 
@@ -1666,7 +1666,7 @@ public struct PrefixOperatorExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPrefixOperatorExpr {
+public protocol ExpressibleAsPrefixOperatorExpr: ExpressibleAsExprBuildable {
   func createPrefixOperatorExpr() -> PrefixOperatorExpr
 }
 
@@ -1707,7 +1707,7 @@ public struct BinaryOperatorExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsBinaryOperatorExpr {
+public protocol ExpressibleAsBinaryOperatorExpr: ExpressibleAsExprBuildable {
   func createBinaryOperatorExpr() -> BinaryOperatorExpr
 }
 
@@ -1761,7 +1761,7 @@ public struct ArrowExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsArrowExpr {
+public protocol ExpressibleAsArrowExpr: ExpressibleAsExprBuildable {
   func createArrowExpr() -> ArrowExpr
 }
 
@@ -1802,7 +1802,7 @@ public struct FloatLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsFloatLiteralExpr {
+public protocol ExpressibleAsFloatLiteralExpr: ExpressibleAsExprBuildable {
   func createFloatLiteralExpr() -> FloatLiteralExpr
 }
 
@@ -1855,7 +1855,7 @@ public struct TupleExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleExpr {
+public protocol ExpressibleAsTupleExpr: ExpressibleAsExprBuildable {
   func createTupleExpr() -> TupleExpr
 }
 
@@ -1908,7 +1908,7 @@ public struct ArrayExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayExpr {
+public protocol ExpressibleAsArrayExpr: ExpressibleAsExprBuildable {
   func createArrayExpr() -> ArrayExpr
 }
 
@@ -1961,7 +1961,7 @@ public struct DictionaryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryExpr {
+public protocol ExpressibleAsDictionaryExpr: ExpressibleAsExprBuildable {
   func createDictionaryExpr() -> DictionaryExpr
 }
 
@@ -2019,7 +2019,7 @@ public struct TupleExprElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleExprElement: ExpressibleAsTupleExprElementList {
+public protocol ExpressibleAsTupleExprElement: ExpressibleAsSyntaxBuildable, ExpressibleAsTupleExprElementList {
   func createTupleExprElement() -> TupleExprElement
 }
 
@@ -2066,7 +2066,7 @@ public struct ArrayElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList {
+public protocol ExpressibleAsArrayElement: ExpressibleAsSyntaxBuildable, ExpressibleAsArrayElementList {
   func createArrayElement() -> ArrayElement
 }
 
@@ -2124,7 +2124,7 @@ public struct DictionaryElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryElement: ExpressibleAsDictionaryElementList {
+public protocol ExpressibleAsDictionaryElement: ExpressibleAsSyntaxBuildable, ExpressibleAsDictionaryElementList {
   func createDictionaryElement() -> DictionaryElement
 }
 
@@ -2165,7 +2165,7 @@ public struct IntegerLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsIntegerLiteralExpr {
+public protocol ExpressibleAsIntegerLiteralExpr: ExpressibleAsExprBuildable {
   func createIntegerLiteralExpr() -> IntegerLiteralExpr
 }
 
@@ -2207,7 +2207,7 @@ public struct BooleanLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsBooleanLiteralExpr {
+public protocol ExpressibleAsBooleanLiteralExpr: ExpressibleAsExprBuildable {
   func createBooleanLiteralExpr() -> BooleanLiteralExpr
 }
 
@@ -2270,7 +2270,7 @@ public struct TernaryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTernaryExpr {
+public protocol ExpressibleAsTernaryExpr: ExpressibleAsExprBuildable {
   func createTernaryExpr() -> TernaryExpr
 }
 
@@ -2327,7 +2327,7 @@ public struct MemberAccessExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberAccessExpr {
+public protocol ExpressibleAsMemberAccessExpr: ExpressibleAsExprBuildable {
   func createMemberAccessExpr() -> MemberAccessExpr
 }
 
@@ -2374,7 +2374,7 @@ public struct IsExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsIsExpr {
+public protocol ExpressibleAsIsExpr: ExpressibleAsExprBuildable {
   func createIsExpr() -> IsExpr
 }
 
@@ -2427,7 +2427,7 @@ public struct AsExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsAsExpr {
+public protocol ExpressibleAsAsExpr: ExpressibleAsExprBuildable {
   func createAsExpr() -> AsExpr
 }
 
@@ -2468,7 +2468,7 @@ public struct TypeExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeExpr {
+public protocol ExpressibleAsTypeExpr: ExpressibleAsExprBuildable {
   func createTypeExpr() -> TypeExpr
 }
 
@@ -2531,7 +2531,7 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureItem: ExpressibleAsClosureCaptureItemList {
+public protocol ExpressibleAsClosureCaptureItem: ExpressibleAsSyntaxBuildable, ExpressibleAsClosureCaptureItemList {
   func createClosureCaptureItem() -> ClosureCaptureItem
 }
 
@@ -2578,7 +2578,7 @@ extension ClosureCaptureItemList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureItemList {
+public protocol ExpressibleAsClosureCaptureItemList: ExpressibleAsSyntaxBuildable {
   func createClosureCaptureItemList() -> ClosureCaptureItemList
 }
 
@@ -2631,7 +2631,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureSignature {
+public protocol ExpressibleAsClosureCaptureSignature: ExpressibleAsSyntaxBuildable {
   func createClosureCaptureSignature() -> ClosureCaptureSignature
 }
 
@@ -2678,7 +2678,7 @@ public struct ClosureParam: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureParam: ExpressibleAsClosureParamList {
+public protocol ExpressibleAsClosureParam: ExpressibleAsSyntaxBuildable, ExpressibleAsClosureParamList {
   func createClosureParam() -> ClosureParam
 }
 
@@ -2725,7 +2725,7 @@ extension ClosureParamList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsClosureParamList {
+public protocol ExpressibleAsClosureParamList: ExpressibleAsSyntaxBuildable {
   func createClosureParamList() -> ClosureParamList
 }
 
@@ -2799,7 +2799,7 @@ public struct ClosureSignature: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureSignature {
+public protocol ExpressibleAsClosureSignature: ExpressibleAsSyntaxBuildable {
   func createClosureSignature() -> ClosureSignature
 }
 
@@ -2857,7 +2857,7 @@ public struct ClosureExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureExpr {
+public protocol ExpressibleAsClosureExpr: ExpressibleAsExprBuildable {
   func createClosureExpr() -> ClosureExpr
 }
 
@@ -2898,7 +2898,7 @@ public struct UnresolvedPatternExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsUnresolvedPatternExpr {
+public protocol ExpressibleAsUnresolvedPatternExpr: ExpressibleAsExprBuildable {
   func createUnresolvedPatternExpr() -> UnresolvedPatternExpr
 }
 
@@ -2950,7 +2950,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureElementList {
+public protocol ExpressibleAsMultipleTrailingClosureElement: ExpressibleAsSyntaxBuildable, ExpressibleAsMultipleTrailingClosureElementList {
   func createMultipleTrailingClosureElement() -> MultipleTrailingClosureElement
 }
 
@@ -2997,7 +2997,7 @@ extension MultipleTrailingClosureElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsMultipleTrailingClosureElementList {
+public protocol ExpressibleAsMultipleTrailingClosureElementList: ExpressibleAsSyntaxBuildable {
   func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList
 }
 
@@ -3065,7 +3065,7 @@ public struct FunctionCallExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable {
+public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsExprBuildable {
   func createFunctionCallExpr() -> FunctionCallExpr
 }
 
@@ -3133,7 +3133,7 @@ public struct SubscriptExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSubscriptExpr {
+public protocol ExpressibleAsSubscriptExpr: ExpressibleAsExprBuildable {
   func createSubscriptExpr() -> SubscriptExpr
 }
 
@@ -3180,7 +3180,7 @@ public struct OptionalChainingExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalChainingExpr {
+public protocol ExpressibleAsOptionalChainingExpr: ExpressibleAsExprBuildable {
   func createOptionalChainingExpr() -> OptionalChainingExpr
 }
 
@@ -3227,7 +3227,7 @@ public struct ForcedValueExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsForcedValueExpr {
+public protocol ExpressibleAsForcedValueExpr: ExpressibleAsExprBuildable {
   func createForcedValueExpr() -> ForcedValueExpr
 }
 
@@ -3273,7 +3273,7 @@ public struct PostfixUnaryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPostfixUnaryExpr {
+public protocol ExpressibleAsPostfixUnaryExpr: ExpressibleAsExprBuildable {
   func createPostfixUnaryExpr() -> PostfixUnaryExpr
 }
 
@@ -3319,7 +3319,7 @@ public struct SpecializeExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSpecializeExpr {
+public protocol ExpressibleAsSpecializeExpr: ExpressibleAsExprBuildable {
   func createSpecializeExpr() -> SpecializeExpr
 }
 
@@ -3360,7 +3360,7 @@ public struct StringSegment: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsStringSegment {
+public protocol ExpressibleAsStringSegment: ExpressibleAsSyntaxBuildable {
   func createStringSegment() -> StringSegment
 }
 
@@ -3424,7 +3424,7 @@ public struct ExpressionSegment: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsExpressionSegment {
+public protocol ExpressibleAsExpressionSegment: ExpressibleAsSyntaxBuildable {
   func createExpressionSegment() -> ExpressionSegment
 }
 
@@ -3487,7 +3487,7 @@ public struct StringLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsStringLiteralExpr {
+public protocol ExpressibleAsStringLiteralExpr: ExpressibleAsExprBuildable {
   func createStringLiteralExpr() -> StringLiteralExpr
 }
 
@@ -3528,7 +3528,7 @@ public struct RegexLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsRegexLiteralExpr {
+public protocol ExpressibleAsRegexLiteralExpr: ExpressibleAsExprBuildable {
   func createRegexLiteralExpr() -> RegexLiteralExpr
 }
 
@@ -3580,7 +3580,7 @@ public struct KeyPathExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsKeyPathExpr {
+public protocol ExpressibleAsKeyPathExpr: ExpressibleAsExprBuildable {
   func createKeyPathExpr() -> KeyPathExpr
 }
 
@@ -3622,7 +3622,7 @@ public struct KeyPathBaseExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsKeyPathBaseExpr {
+public protocol ExpressibleAsKeyPathBaseExpr: ExpressibleAsExprBuildable {
   func createKeyPathBaseExpr() -> KeyPathBaseExpr
 }
 
@@ -3669,7 +3669,7 @@ public struct ObjcNamePiece: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcNamePiece: ExpressibleAsObjcName {
+public protocol ExpressibleAsObjcNamePiece: ExpressibleAsSyntaxBuildable, ExpressibleAsObjcName {
   func createObjcNamePiece() -> ObjcNamePiece
 }
 
@@ -3716,7 +3716,7 @@ extension ObjcName: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsObjcName {
+public protocol ExpressibleAsObjcName: ExpressibleAsSyntaxBuildable {
   func createObjcName() -> ObjcName
 }
 
@@ -3775,7 +3775,7 @@ public struct ObjcKeyPathExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcKeyPathExpr {
+public protocol ExpressibleAsObjcKeyPathExpr: ExpressibleAsExprBuildable {
   func createObjcKeyPathExpr() -> ObjcKeyPathExpr
 }
 
@@ -3846,7 +3846,7 @@ public struct ObjcSelectorExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcSelectorExpr {
+public protocol ExpressibleAsObjcSelectorExpr: ExpressibleAsExprBuildable {
   func createObjcSelectorExpr() -> ObjcSelectorExpr
 }
 
@@ -3892,7 +3892,7 @@ public struct PostfixIfConfigExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPostfixIfConfigExpr {
+public protocol ExpressibleAsPostfixIfConfigExpr: ExpressibleAsExprBuildable {
   func createPostfixIfConfigExpr() -> PostfixIfConfigExpr
 }
 
@@ -3933,7 +3933,7 @@ public struct EditorPlaceholderExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsEditorPlaceholderExpr {
+public protocol ExpressibleAsEditorPlaceholderExpr: ExpressibleAsExprBuildable {
   func createEditorPlaceholderExpr() -> EditorPlaceholderExpr
 }
 
@@ -3992,7 +3992,7 @@ public struct ObjectLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsObjectLiteralExpr {
+public protocol ExpressibleAsObjectLiteralExpr: ExpressibleAsExprBuildable {
   func createObjectLiteralExpr() -> ObjectLiteralExpr
 }
 
@@ -4039,7 +4039,7 @@ public struct TypeInitializerClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeInitializerClause {
+public protocol ExpressibleAsTypeInitializerClause: ExpressibleAsSyntaxBuildable {
   func createTypeInitializerClause() -> TypeInitializerClause
 }
 
@@ -4111,7 +4111,7 @@ public struct TypealiasDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsTypealiasDecl {
+public protocol ExpressibleAsTypealiasDecl: ExpressibleAsDeclBuildable {
   func createTypealiasDecl() -> TypealiasDecl
 }
 
@@ -4183,7 +4183,7 @@ public struct AssociatedtypeDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsAssociatedtypeDecl {
+public protocol ExpressibleAsAssociatedtypeDecl: ExpressibleAsDeclBuildable {
   func createAssociatedtypeDecl() -> AssociatedtypeDecl
 }
 
@@ -4230,7 +4230,7 @@ extension FunctionParameterList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsFunctionParameterList {
+public protocol ExpressibleAsFunctionParameterList: ExpressibleAsSyntaxBuildable {
   func createFunctionParameterList() -> FunctionParameterList
 }
 
@@ -4283,7 +4283,7 @@ public struct ParameterClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsParameterClause {
+public protocol ExpressibleAsParameterClause: ExpressibleAsSyntaxBuildable {
   func createParameterClause() -> ParameterClause
 }
 
@@ -4330,7 +4330,7 @@ public struct ReturnClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsReturnClause {
+public protocol ExpressibleAsReturnClause: ExpressibleAsSyntaxBuildable {
   func createReturnClause() -> ReturnClause
 }
 
@@ -4388,7 +4388,7 @@ public struct FunctionSignature: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionSignature {
+public protocol ExpressibleAsFunctionSignature: ExpressibleAsSyntaxBuildable {
   func createFunctionSignature() -> FunctionSignature
 }
 
@@ -4440,7 +4440,7 @@ public struct IfConfigClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsIfConfigClause: ExpressibleAsIfConfigClauseList {
+public protocol ExpressibleAsIfConfigClause: ExpressibleAsSyntaxBuildable, ExpressibleAsIfConfigClauseList {
   func createIfConfigClause() -> IfConfigClause
 }
 
@@ -4487,7 +4487,7 @@ extension IfConfigClauseList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsIfConfigClauseList {
+public protocol ExpressibleAsIfConfigClauseList: ExpressibleAsSyntaxBuildable {
   func createIfConfigClauseList() -> IfConfigClauseList
 }
 
@@ -4534,7 +4534,7 @@ public struct IfConfigDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsIfConfigDecl {
+public protocol ExpressibleAsIfConfigDecl: ExpressibleAsDeclBuildable {
   func createIfConfigDecl() -> IfConfigDecl
 }
 
@@ -4593,7 +4593,7 @@ public struct PoundErrorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundErrorDecl {
+public protocol ExpressibleAsPoundErrorDecl: ExpressibleAsDeclBuildable {
   func createPoundErrorDecl() -> PoundErrorDecl
 }
 
@@ -4652,7 +4652,7 @@ public struct PoundWarningDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundWarningDecl {
+public protocol ExpressibleAsPoundWarningDecl: ExpressibleAsDeclBuildable {
   func createPoundWarningDecl() -> PoundWarningDecl
 }
 
@@ -4711,7 +4711,7 @@ public struct PoundSourceLocation: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundSourceLocation {
+public protocol ExpressibleAsPoundSourceLocation: ExpressibleAsDeclBuildable {
   func createPoundSourceLocation() -> PoundSourceLocation
 }
 
@@ -4787,7 +4787,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundSourceLocationArgs {
+public protocol ExpressibleAsPoundSourceLocationArgs: ExpressibleAsSyntaxBuildable {
   func createPoundSourceLocationArgs() -> PoundSourceLocationArgs
 }
 
@@ -4846,7 +4846,7 @@ public struct DeclModifier: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclModifier: ExpressibleAsModifierList {
+public protocol ExpressibleAsDeclModifier: ExpressibleAsSyntaxBuildable, ExpressibleAsModifierList {
   func createDeclModifier() -> DeclModifier
 }
 
@@ -4893,7 +4893,7 @@ public struct InheritedType: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsInheritedType: ExpressibleAsInheritedTypeList {
+public protocol ExpressibleAsInheritedType: ExpressibleAsSyntaxBuildable, ExpressibleAsInheritedTypeList {
   func createInheritedType() -> InheritedType
 }
 
@@ -4940,7 +4940,7 @@ extension InheritedTypeList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsInheritedTypeList {
+public protocol ExpressibleAsInheritedTypeList: ExpressibleAsSyntaxBuildable {
   func createInheritedTypeList() -> InheritedTypeList
 }
 
@@ -4987,7 +4987,7 @@ public struct TypeInheritanceClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeInheritanceClause {
+public protocol ExpressibleAsTypeInheritanceClause: ExpressibleAsSyntaxBuildable {
   func createTypeInheritanceClause() -> TypeInheritanceClause
 }
 
@@ -5063,7 +5063,7 @@ public struct ClassDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsClassDecl {
+public protocol ExpressibleAsClassDecl: ExpressibleAsDeclBuildable {
   func createClassDecl() -> ClassDecl
 }
 
@@ -5140,7 +5140,7 @@ public struct StructDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsStructDecl {
+public protocol ExpressibleAsStructDecl: ExpressibleAsDeclBuildable {
   func createStructDecl() -> StructDecl
 }
 
@@ -5212,7 +5212,7 @@ public struct ProtocolDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsProtocolDecl {
+public protocol ExpressibleAsProtocolDecl: ExpressibleAsDeclBuildable {
   func createProtocolDecl() -> ProtocolDecl
 }
 
@@ -5284,7 +5284,7 @@ public struct ExtensionDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsExtensionDecl {
+public protocol ExpressibleAsExtensionDecl: ExpressibleAsDeclBuildable {
   func createExtensionDecl() -> ExtensionDecl
 }
 
@@ -5337,7 +5337,7 @@ public struct MemberDeclBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclBlock {
+public protocol ExpressibleAsMemberDeclBlock: ExpressibleAsSyntaxBuildable {
   func createMemberDeclBlock() -> MemberDeclBlock
 }
 
@@ -5384,7 +5384,7 @@ extension MemberDeclList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsMemberDeclList: ExpressibleAsMemberDeclBlock {
+public protocol ExpressibleAsMemberDeclList: ExpressibleAsSyntaxBuildable, ExpressibleAsMemberDeclBlock {
   func createMemberDeclList() -> MemberDeclList
 }
 
@@ -5435,7 +5435,7 @@ public struct MemberDeclListItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclListItem: ExpressibleAsMemberDeclList {
+public protocol ExpressibleAsMemberDeclListItem: ExpressibleAsSyntaxBuildable, ExpressibleAsMemberDeclList {
   func createMemberDeclListItem() -> MemberDeclListItem
 }
 
@@ -5481,7 +5481,7 @@ public struct SourceFile: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSourceFile {
+public protocol ExpressibleAsSourceFile: ExpressibleAsSyntaxBuildable {
   func createSourceFile() -> SourceFile
 }
 
@@ -5528,7 +5528,7 @@ public struct InitializerClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsInitializerClause {
+public protocol ExpressibleAsInitializerClause: ExpressibleAsSyntaxBuildable {
   func createInitializerClause() -> InitializerClause
 }
 
@@ -5607,7 +5607,7 @@ public struct FunctionParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionParameter: ExpressibleAsFunctionParameterList {
+public protocol ExpressibleAsFunctionParameter: ExpressibleAsSyntaxBuildable, ExpressibleAsFunctionParameterList {
   func createFunctionParameter() -> FunctionParameter
 }
 
@@ -5654,7 +5654,7 @@ extension ModifierList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsModifierList {
+public protocol ExpressibleAsModifierList: ExpressibleAsSyntaxBuildable {
   func createModifierList() -> ModifierList
 }
 
@@ -5731,7 +5731,7 @@ public struct FunctionDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionDecl {
+public protocol ExpressibleAsFunctionDecl: ExpressibleAsDeclBuildable {
   func createFunctionDecl() -> FunctionDecl
 }
 
@@ -5815,7 +5815,7 @@ public struct InitializerDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsInitializerDecl {
+public protocol ExpressibleAsInitializerDecl: ExpressibleAsDeclBuildable {
   func createInitializerDecl() -> InitializerDecl
 }
 
@@ -5872,7 +5872,7 @@ public struct DeinitializerDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsDeinitializerDecl {
+public protocol ExpressibleAsDeinitializerDecl: ExpressibleAsDeclBuildable {
   func createDeinitializerDecl() -> DeinitializerDecl
 }
 
@@ -5949,7 +5949,7 @@ public struct SubscriptDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsSubscriptDecl {
+public protocol ExpressibleAsSubscriptDecl: ExpressibleAsDeclBuildable {
   func createSubscriptDecl() -> SubscriptDecl
 }
 
@@ -6007,7 +6007,7 @@ public struct AccessLevelModifier: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessLevelModifier {
+public protocol ExpressibleAsAccessLevelModifier: ExpressibleAsSyntaxBuildable {
   func createAccessLevelModifier() -> AccessLevelModifier
 }
 
@@ -6054,7 +6054,7 @@ public struct AccessPathComponent: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessPathComponent: ExpressibleAsAccessPath {
+public protocol ExpressibleAsAccessPathComponent: ExpressibleAsSyntaxBuildable, ExpressibleAsAccessPath {
   func createAccessPathComponent() -> AccessPathComponent
 }
 
@@ -6101,7 +6101,7 @@ extension AccessPath: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsAccessPath {
+public protocol ExpressibleAsAccessPath: ExpressibleAsSyntaxBuildable {
   func createAccessPath() -> AccessPath
 }
 
@@ -6164,7 +6164,7 @@ public struct ImportDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsImportDecl {
+public protocol ExpressibleAsImportDecl: ExpressibleAsDeclBuildable {
   func createImportDecl() -> ImportDecl
 }
 
@@ -6217,7 +6217,7 @@ public struct AccessorParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorParameter {
+public protocol ExpressibleAsAccessorParameter: ExpressibleAsSyntaxBuildable {
   func createAccessorParameter() -> AccessorParameter
 }
 
@@ -6291,7 +6291,7 @@ public struct AccessorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorDecl: ExpressibleAsAccessorList {
+public protocol ExpressibleAsAccessorDecl: ExpressibleAsDeclBuildable, ExpressibleAsAccessorList {
   func createAccessorDecl() -> AccessorDecl
 }
 
@@ -6338,7 +6338,7 @@ extension AccessorList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsAccessorList: ExpressibleAsAccessorBlock {
+public protocol ExpressibleAsAccessorList: ExpressibleAsSyntaxBuildable, ExpressibleAsAccessorBlock {
   func createAccessorList() -> AccessorList
 }
 
@@ -6391,7 +6391,7 @@ public struct AccessorBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorBlock {
+public protocol ExpressibleAsAccessorBlock: ExpressibleAsSyntaxBuildable {
   func createAccessorBlock() -> AccessorBlock
 }
 
@@ -6453,7 +6453,7 @@ public struct PatternBinding: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPatternBinding: ExpressibleAsPatternBindingList {
+public protocol ExpressibleAsPatternBinding: ExpressibleAsSyntaxBuildable, ExpressibleAsPatternBindingList {
   func createPatternBinding() -> PatternBinding
 }
 
@@ -6500,7 +6500,7 @@ extension PatternBindingList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsPatternBindingList {
+public protocol ExpressibleAsPatternBindingList: ExpressibleAsSyntaxBuildable {
   func createPatternBindingList() -> PatternBindingList
 }
 
@@ -6557,7 +6557,7 @@ public struct VariableDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsVariableDecl {
+public protocol ExpressibleAsVariableDecl: ExpressibleAsDeclBuildable {
   func createVariableDecl() -> VariableDecl
 }
 
@@ -6618,7 +6618,7 @@ public struct EnumCaseElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCaseElement: ExpressibleAsEnumCaseElementList {
+public protocol ExpressibleAsEnumCaseElement: ExpressibleAsSyntaxBuildable, ExpressibleAsEnumCaseElementList {
   func createEnumCaseElement() -> EnumCaseElement
 }
 
@@ -6664,7 +6664,7 @@ extension EnumCaseElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsEnumCaseElementList {
+public protocol ExpressibleAsEnumCaseElementList: ExpressibleAsSyntaxBuildable {
   func createEnumCaseElementList() -> EnumCaseElementList
 }
 
@@ -6726,7 +6726,7 @@ public struct EnumCaseDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCaseDecl {
+public protocol ExpressibleAsEnumCaseDecl: ExpressibleAsDeclBuildable {
   func createEnumCaseDecl() -> EnumCaseDecl
 }
 
@@ -6804,7 +6804,7 @@ public struct EnumDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumDecl {
+public protocol ExpressibleAsEnumDecl: ExpressibleAsDeclBuildable {
   func createEnumDecl() -> EnumDecl
 }
 
@@ -6867,7 +6867,7 @@ public struct OperatorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsOperatorDecl {
+public protocol ExpressibleAsOperatorDecl: ExpressibleAsDeclBuildable {
   func createOperatorDecl() -> OperatorDecl
 }
 
@@ -6912,7 +6912,7 @@ extension IdentifierList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsIdentifierList {
+public protocol ExpressibleAsIdentifierList: ExpressibleAsSyntaxBuildable {
   func createIdentifierList() -> IdentifierList
 }
 
@@ -6962,7 +6962,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsOperatorPrecedenceAndTypes {
+public protocol ExpressibleAsOperatorPrecedenceAndTypes: ExpressibleAsSyntaxBuildable {
   func createOperatorPrecedenceAndTypes() -> OperatorPrecedenceAndTypes
 }
 
@@ -7037,7 +7037,7 @@ public struct PrecedenceGroupDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupDecl {
+public protocol ExpressibleAsPrecedenceGroupDecl: ExpressibleAsDeclBuildable {
   func createPrecedenceGroupDecl() -> PrecedenceGroupDecl
 }
 
@@ -7084,7 +7084,7 @@ extension PrecedenceGroupAttributeList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupAttributeList {
+public protocol ExpressibleAsPrecedenceGroupAttributeList: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList
 }
 
@@ -7141,7 +7141,7 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupRelation {
+public protocol ExpressibleAsPrecedenceGroupRelation: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupRelation() -> PrecedenceGroupRelation
 }
 
@@ -7188,7 +7188,7 @@ extension PrecedenceGroupNameList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupNameList {
+public protocol ExpressibleAsPrecedenceGroupNameList: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupNameList() -> PrecedenceGroupNameList
 }
 
@@ -7235,7 +7235,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupNameElement: ExpressibleAsPrecedenceGroupNameList {
+public protocol ExpressibleAsPrecedenceGroupNameElement: ExpressibleAsSyntaxBuildable, ExpressibleAsPrecedenceGroupNameList {
   func createPrecedenceGroupNameElement() -> PrecedenceGroupNameElement
 }
 
@@ -7293,7 +7293,7 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupAssignment {
+public protocol ExpressibleAsPrecedenceGroupAssignment: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupAssignment() -> PrecedenceGroupAssignment
 }
 
@@ -7351,7 +7351,7 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupAssociativity {
+public protocol ExpressibleAsPrecedenceGroupAssociativity: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupAssociativity() -> PrecedenceGroupAssociativity
 }
 
@@ -7396,7 +7396,7 @@ extension TokenList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsTokenList {
+public protocol ExpressibleAsTokenList: ExpressibleAsSyntaxBuildable {
   func createTokenList() -> TokenList
 }
 
@@ -7441,7 +7441,7 @@ extension NonEmptyTokenList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsNonEmptyTokenList {
+public protocol ExpressibleAsNonEmptyTokenList: ExpressibleAsSyntaxBuildable {
   func createNonEmptyTokenList() -> NonEmptyTokenList
 }
 
@@ -7508,7 +7508,7 @@ public struct CustomAttribute: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCustomAttribute {
+public protocol ExpressibleAsCustomAttribute: ExpressibleAsSyntaxBuildable {
   func createCustomAttribute() -> CustomAttribute
 }
 
@@ -7580,7 +7580,7 @@ public struct Attribute: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAttribute {
+public protocol ExpressibleAsAttribute: ExpressibleAsSyntaxBuildable {
   func createAttribute() -> Attribute
 }
 
@@ -7627,7 +7627,7 @@ extension AttributeList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsAttributeList {
+public protocol ExpressibleAsAttributeList: ExpressibleAsSyntaxBuildable {
   func createAttributeList() -> AttributeList
 }
 
@@ -7675,7 +7675,7 @@ extension SpecializeAttributeSpecList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsSpecializeAttributeSpecList {
+public protocol ExpressibleAsSpecializeAttributeSpecList: ExpressibleAsSyntaxBuildable {
   func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList
 }
 
@@ -7736,7 +7736,7 @@ public struct AvailabilityEntry: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityEntry {
+public protocol ExpressibleAsAvailabilityEntry: ExpressibleAsSyntaxBuildable {
   func createAvailabilityEntry() -> AvailabilityEntry
 }
 
@@ -7798,7 +7798,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsLabeledSpecializeEntry {
+public protocol ExpressibleAsLabeledSpecializeEntry: ExpressibleAsSyntaxBuildable {
   func createLabeledSpecializeEntry() -> LabeledSpecializeEntry
 }
 
@@ -7861,7 +7861,7 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTargetFunctionEntry {
+public protocol ExpressibleAsTargetFunctionEntry: ExpressibleAsSyntaxBuildable {
   func createTargetFunctionEntry() -> TargetFunctionEntry
 }
 
@@ -7918,7 +7918,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsNamedAttributeStringArgument {
+public protocol ExpressibleAsNamedAttributeStringArgument: ExpressibleAsSyntaxBuildable {
   func createNamedAttributeStringArgument() -> NamedAttributeStringArgument
 }
 
@@ -7964,7 +7964,7 @@ public struct DeclName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclName {
+public protocol ExpressibleAsDeclName: ExpressibleAsSyntaxBuildable {
   func createDeclName() -> DeclName
 }
 
@@ -8025,7 +8025,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsImplementsAttributeArguments {
+public protocol ExpressibleAsImplementsAttributeArguments: ExpressibleAsSyntaxBuildable {
   func createImplementsAttributeArguments() -> ImplementsAttributeArguments
 }
 
@@ -8077,7 +8077,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjCSelectorPiece: ExpressibleAsObjCSelector {
+public protocol ExpressibleAsObjCSelectorPiece: ExpressibleAsSyntaxBuildable, ExpressibleAsObjCSelector {
   func createObjCSelectorPiece() -> ObjCSelectorPiece
 }
 
@@ -8124,7 +8124,7 @@ extension ObjCSelector: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsObjCSelector {
+public protocol ExpressibleAsObjCSelector: ExpressibleAsSyntaxBuildable {
   func createObjCSelector() -> ObjCSelector
 }
 
@@ -8193,7 +8193,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiableAttributeArguments {
+public protocol ExpressibleAsDifferentiableAttributeArguments: ExpressibleAsSyntaxBuildable {
   func createDifferentiableAttributeArguments() -> DifferentiableAttributeArguments
 }
 
@@ -8247,7 +8247,7 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParamsClause {
+public protocol ExpressibleAsDifferentiabilityParamsClause: ExpressibleAsSyntaxBuildable {
   func createDifferentiabilityParamsClause() -> DifferentiabilityParamsClause
 }
 
@@ -8301,7 +8301,7 @@ public struct DifferentiabilityParams: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParams {
+public protocol ExpressibleAsDifferentiabilityParams: ExpressibleAsSyntaxBuildable {
   func createDifferentiabilityParams() -> DifferentiabilityParams
 }
 
@@ -8348,7 +8348,7 @@ extension DifferentiabilityParamList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParamList {
+public protocol ExpressibleAsDifferentiabilityParamList: ExpressibleAsSyntaxBuildable {
   func createDifferentiabilityParamList() -> DifferentiabilityParamList
 }
 
@@ -8399,7 +8399,7 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParam: ExpressibleAsDifferentiabilityParamList {
+public protocol ExpressibleAsDifferentiabilityParam: ExpressibleAsSyntaxBuildable, ExpressibleAsDifferentiabilityParamList {
   func createDifferentiabilityParam() -> DifferentiabilityParam
 }
 
@@ -8480,7 +8480,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDerivativeRegistrationAttributeArguments {
+public protocol ExpressibleAsDerivativeRegistrationAttributeArguments: ExpressibleAsSyntaxBuildable {
   func createDerivativeRegistrationAttributeArguments() -> DerivativeRegistrationAttributeArguments
 }
 
@@ -8541,7 +8541,7 @@ public struct QualifiedDeclName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsQualifiedDeclName {
+public protocol ExpressibleAsQualifiedDeclName: ExpressibleAsSyntaxBuildable {
   func createQualifiedDeclName() -> QualifiedDeclName
 }
 
@@ -8588,7 +8588,7 @@ public struct FunctionDeclName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionDeclName {
+public protocol ExpressibleAsFunctionDeclName: ExpressibleAsSyntaxBuildable {
   func createFunctionDeclName() -> FunctionDeclName
 }
 
@@ -8635,7 +8635,7 @@ public struct ContinueStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsContinueStmt {
+public protocol ExpressibleAsContinueStmt: ExpressibleAsStmtBuildable {
   func createContinueStmt() -> ContinueStmt
 }
 
@@ -8698,7 +8698,7 @@ public struct WhileStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsWhileStmt {
+public protocol ExpressibleAsWhileStmt: ExpressibleAsStmtBuildable {
   func createWhileStmt() -> WhileStmt
 }
 
@@ -8745,7 +8745,7 @@ public struct DeferStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsDeferStmt {
+public protocol ExpressibleAsDeferStmt: ExpressibleAsStmtBuildable {
   func createDeferStmt() -> DeferStmt
 }
 
@@ -8786,7 +8786,7 @@ public struct ExpressionStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsExpressionStmt {
+public protocol ExpressibleAsExpressionStmt: ExpressibleAsStmtBuildable {
   func createExpressionStmt() -> ExpressionStmt
 }
 
@@ -8833,7 +8833,7 @@ extension SwitchCaseList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsSwitchCaseList {
+public protocol ExpressibleAsSwitchCaseList: ExpressibleAsSyntaxBuildable {
   func createSwitchCaseList() -> SwitchCaseList
 }
 
@@ -8902,7 +8902,7 @@ public struct RepeatWhileStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsRepeatWhileStmt {
+public protocol ExpressibleAsRepeatWhileStmt: ExpressibleAsStmtBuildable {
   func createRepeatWhileStmt() -> RepeatWhileStmt
 }
 
@@ -8960,7 +8960,7 @@ public struct GuardStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsGuardStmt {
+public protocol ExpressibleAsGuardStmt: ExpressibleAsStmtBuildable {
   func createGuardStmt() -> GuardStmt
 }
 
@@ -9007,7 +9007,7 @@ public struct WhereClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsWhereClause {
+public protocol ExpressibleAsWhereClause: ExpressibleAsSyntaxBuildable {
   func createWhereClause() -> WhereClause
 }
 
@@ -9109,7 +9109,7 @@ public struct ForInStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsForInStmt {
+public protocol ExpressibleAsForInStmt: ExpressibleAsStmtBuildable {
   func createForInStmt() -> ForInStmt
 }
 
@@ -9184,7 +9184,7 @@ public struct SwitchStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchStmt {
+public protocol ExpressibleAsSwitchStmt: ExpressibleAsStmtBuildable {
   func createSwitchStmt() -> SwitchStmt
 }
 
@@ -9231,7 +9231,7 @@ extension CatchClauseList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsCatchClauseList {
+public protocol ExpressibleAsCatchClauseList: ExpressibleAsSyntaxBuildable {
   func createCatchClauseList() -> CatchClauseList
 }
 
@@ -9294,7 +9294,7 @@ public struct DoStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsDoStmt {
+public protocol ExpressibleAsDoStmt: ExpressibleAsStmtBuildable {
   func createDoStmt() -> DoStmt
 }
 
@@ -9341,7 +9341,7 @@ public struct ReturnStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsReturnStmt {
+public protocol ExpressibleAsReturnStmt: ExpressibleAsStmtBuildable {
   func createReturnStmt() -> ReturnStmt
 }
 
@@ -9388,7 +9388,7 @@ public struct YieldStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsYieldStmt {
+public protocol ExpressibleAsYieldStmt: ExpressibleAsStmtBuildable {
   func createYieldStmt() -> YieldStmt
 }
 
@@ -9447,7 +9447,7 @@ public struct YieldList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsYieldList {
+public protocol ExpressibleAsYieldList: ExpressibleAsSyntaxBuildable {
   func createYieldList() -> YieldList
 }
 
@@ -9489,7 +9489,7 @@ public struct FallthroughStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsFallthroughStmt {
+public protocol ExpressibleAsFallthroughStmt: ExpressibleAsStmtBuildable {
   func createFallthroughStmt() -> FallthroughStmt
 }
 
@@ -9536,7 +9536,7 @@ public struct BreakStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsBreakStmt {
+public protocol ExpressibleAsBreakStmt: ExpressibleAsStmtBuildable {
   func createBreakStmt() -> BreakStmt
 }
 
@@ -9583,7 +9583,7 @@ extension CaseItemList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsCaseItemList {
+public protocol ExpressibleAsCaseItemList: ExpressibleAsSyntaxBuildable {
   func createCaseItemList() -> CaseItemList
 }
 
@@ -9630,7 +9630,7 @@ extension CatchItemList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsCatchItemList {
+public protocol ExpressibleAsCatchItemList: ExpressibleAsSyntaxBuildable {
   func createCatchItemList() -> CatchItemList
 }
 
@@ -9677,7 +9677,7 @@ public struct ConditionElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsConditionElement: ExpressibleAsConditionElementList {
+public protocol ExpressibleAsConditionElement: ExpressibleAsSyntaxBuildable, ExpressibleAsConditionElementList {
   func createConditionElement() -> ConditionElement
 }
 
@@ -9736,7 +9736,7 @@ public struct AvailabilityCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityCondition {
+public protocol ExpressibleAsAvailabilityCondition: ExpressibleAsSyntaxBuildable {
   func createAvailabilityCondition() -> AvailabilityCondition
 }
 
@@ -9793,7 +9793,7 @@ public struct MatchingPatternCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMatchingPatternCondition {
+public protocol ExpressibleAsMatchingPatternCondition: ExpressibleAsSyntaxBuildable {
   func createMatchingPatternCondition() -> MatchingPatternCondition
 }
 
@@ -9850,7 +9850,7 @@ public struct OptionalBindingCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalBindingCondition {
+public protocol ExpressibleAsOptionalBindingCondition: ExpressibleAsSyntaxBuildable {
   func createOptionalBindingCondition() -> OptionalBindingCondition
 }
 
@@ -9909,7 +9909,7 @@ public struct UnavailabilityCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsUnavailabilityCondition {
+public protocol ExpressibleAsUnavailabilityCondition: ExpressibleAsSyntaxBuildable {
   func createUnavailabilityCondition() -> UnavailabilityCondition
 }
 
@@ -9956,7 +9956,7 @@ extension ConditionElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsConditionElementList {
+public protocol ExpressibleAsConditionElementList: ExpressibleAsSyntaxBuildable {
   func createConditionElementList() -> ConditionElementList
 }
 
@@ -9997,7 +9997,7 @@ public struct DeclarationStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclarationStmt {
+public protocol ExpressibleAsDeclarationStmt: ExpressibleAsStmtBuildable {
   func createDeclarationStmt() -> DeclarationStmt
 }
 
@@ -10044,7 +10044,7 @@ public struct ThrowStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsThrowStmt {
+public protocol ExpressibleAsThrowStmt: ExpressibleAsStmtBuildable {
   func createThrowStmt() -> ThrowStmt
 }
 
@@ -10118,7 +10118,7 @@ public struct IfStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsIfStmt {
+public protocol ExpressibleAsIfStmt: ExpressibleAsStmtBuildable {
   func createIfStmt() -> IfStmt
 }
 
@@ -10159,7 +10159,7 @@ public struct ElseIfContinuation: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsElseIfContinuation {
+public protocol ExpressibleAsElseIfContinuation: ExpressibleAsSyntaxBuildable {
   func createElseIfContinuation() -> ElseIfContinuation
 }
 
@@ -10206,7 +10206,7 @@ public struct ElseBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsElseBlock {
+public protocol ExpressibleAsElseBlock: ExpressibleAsSyntaxBuildable {
   func createElseBlock() -> ElseBlock
 }
 
@@ -10257,7 +10257,7 @@ public struct SwitchCase: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchCase {
+public protocol ExpressibleAsSwitchCase: ExpressibleAsSyntaxBuildable {
   func createSwitchCase() -> SwitchCase
 }
 
@@ -10305,7 +10305,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchDefaultLabel {
+public protocol ExpressibleAsSwitchDefaultLabel: ExpressibleAsSyntaxBuildable {
   func createSwitchDefaultLabel() -> SwitchDefaultLabel
 }
 
@@ -10357,7 +10357,7 @@ public struct CaseItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCaseItem: ExpressibleAsCaseItemList {
+public protocol ExpressibleAsCaseItem: ExpressibleAsSyntaxBuildable, ExpressibleAsCaseItemList {
   func createCaseItem() -> CaseItem
 }
 
@@ -10409,7 +10409,7 @@ public struct CatchItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchItem: ExpressibleAsCatchItemList {
+public protocol ExpressibleAsCatchItem: ExpressibleAsSyntaxBuildable, ExpressibleAsCatchItemList {
   func createCatchItem() -> CatchItem
 }
 
@@ -10462,7 +10462,7 @@ public struct SwitchCaseLabel: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchCaseLabel {
+public protocol ExpressibleAsSwitchCaseLabel: ExpressibleAsSyntaxBuildable {
   func createSwitchCaseLabel() -> SwitchCaseLabel
 }
 
@@ -10514,7 +10514,7 @@ public struct CatchClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchClause: ExpressibleAsCatchClauseList {
+public protocol ExpressibleAsCatchClause: ExpressibleAsSyntaxBuildable, ExpressibleAsCatchClauseList {
   func createCatchClause() -> CatchClause
 }
 
@@ -10584,7 +10584,7 @@ public struct PoundAssertStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundAssertStmt {
+public protocol ExpressibleAsPoundAssertStmt: ExpressibleAsStmtBuildable {
   func createPoundAssertStmt() -> PoundAssertStmt
 }
 
@@ -10631,7 +10631,7 @@ public struct GenericWhereClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericWhereClause {
+public protocol ExpressibleAsGenericWhereClause: ExpressibleAsSyntaxBuildable {
   func createGenericWhereClause() -> GenericWhereClause
 }
 
@@ -10678,7 +10678,7 @@ extension GenericRequirementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsGenericRequirementList {
+public protocol ExpressibleAsGenericRequirementList: ExpressibleAsSyntaxBuildable {
   func createGenericRequirementList() -> GenericRequirementList
 }
 
@@ -10725,7 +10725,7 @@ public struct GenericRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericRequirement: ExpressibleAsGenericRequirementList {
+public protocol ExpressibleAsGenericRequirement: ExpressibleAsSyntaxBuildable, ExpressibleAsGenericRequirementList {
   func createGenericRequirement() -> GenericRequirement
 }
 
@@ -10776,7 +10776,7 @@ public struct SameTypeRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSameTypeRequirement {
+public protocol ExpressibleAsSameTypeRequirement: ExpressibleAsSyntaxBuildable {
   func createSameTypeRequirement() -> SameTypeRequirement
 }
 
@@ -10823,7 +10823,7 @@ extension GenericParameterList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsGenericParameterList {
+public protocol ExpressibleAsGenericParameterList: ExpressibleAsSyntaxBuildable {
   func createGenericParameterList() -> GenericParameterList
 }
 
@@ -10886,7 +10886,7 @@ public struct GenericParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericParameter: ExpressibleAsGenericParameterList {
+public protocol ExpressibleAsGenericParameter: ExpressibleAsSyntaxBuildable, ExpressibleAsGenericParameterList {
   func createGenericParameter() -> GenericParameter
 }
 
@@ -10939,7 +10939,7 @@ public struct GenericParameterClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericParameterClause {
+public protocol ExpressibleAsGenericParameterClause: ExpressibleAsSyntaxBuildable {
   func createGenericParameterClause() -> GenericParameterClause
 }
 
@@ -10991,7 +10991,7 @@ public struct ConformanceRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsConformanceRequirement {
+public protocol ExpressibleAsConformanceRequirement: ExpressibleAsSyntaxBuildable {
   func createConformanceRequirement() -> ConformanceRequirement
 }
 
@@ -11037,7 +11037,7 @@ public struct SimpleTypeIdentifier: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable, ExpressibleAsTypeExpr {
+public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeBuildable, ExpressibleAsTypeAnnotation, ExpressibleAsTypeExpr {
   func createSimpleTypeIdentifier() -> SimpleTypeIdentifier
 }
 
@@ -11094,7 +11094,7 @@ public struct MemberTypeIdentifier: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberTypeIdentifier {
+public protocol ExpressibleAsMemberTypeIdentifier: ExpressibleAsTypeBuildable {
   func createMemberTypeIdentifier() -> MemberTypeIdentifier
 }
 
@@ -11136,7 +11136,7 @@ public struct ClassRestrictionType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsClassRestrictionType {
+public protocol ExpressibleAsClassRestrictionType: ExpressibleAsTypeBuildable {
   func createClassRestrictionType() -> ClassRestrictionType
 }
 
@@ -11189,7 +11189,7 @@ public struct ArrayType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayType {
+public protocol ExpressibleAsArrayType: ExpressibleAsTypeBuildable {
   func createArrayType() -> ArrayType
 }
 
@@ -11253,7 +11253,7 @@ public struct DictionaryType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryType {
+public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeBuildable {
   func createDictionaryType() -> DictionaryType
 }
 
@@ -11306,7 +11306,7 @@ public struct MetatypeType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsMetatypeType {
+public protocol ExpressibleAsMetatypeType: ExpressibleAsTypeBuildable {
   func createMetatypeType() -> MetatypeType
 }
 
@@ -11353,7 +11353,7 @@ public struct OptionalType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalType {
+public protocol ExpressibleAsOptionalType: ExpressibleAsTypeBuildable {
   func createOptionalType() -> OptionalType
 }
 
@@ -11400,7 +11400,7 @@ public struct SomeType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsSomeType {
+public protocol ExpressibleAsSomeType: ExpressibleAsTypeBuildable {
   func createSomeType() -> SomeType
 }
 
@@ -11447,7 +11447,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsImplicitlyUnwrappedOptionalType {
+public protocol ExpressibleAsImplicitlyUnwrappedOptionalType: ExpressibleAsTypeBuildable {
   func createImplicitlyUnwrappedOptionalType() -> ImplicitlyUnwrappedOptionalType
 }
 
@@ -11494,7 +11494,7 @@ public struct CompositionTypeElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCompositionTypeElement: ExpressibleAsCompositionTypeElementList {
+public protocol ExpressibleAsCompositionTypeElement: ExpressibleAsSyntaxBuildable, ExpressibleAsCompositionTypeElementList {
   func createCompositionTypeElement() -> CompositionTypeElement
 }
 
@@ -11541,7 +11541,7 @@ extension CompositionTypeElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsCompositionTypeElementList {
+public protocol ExpressibleAsCompositionTypeElementList: ExpressibleAsSyntaxBuildable {
   func createCompositionTypeElementList() -> CompositionTypeElementList
 }
 
@@ -11582,7 +11582,7 @@ public struct CompositionType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsCompositionType {
+public protocol ExpressibleAsCompositionType: ExpressibleAsTypeBuildable {
   func createCompositionType() -> CompositionType
 }
 
@@ -11662,7 +11662,7 @@ public struct TupleTypeElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleTypeElement: ExpressibleAsTupleTypeElementList {
+public protocol ExpressibleAsTupleTypeElement: ExpressibleAsSyntaxBuildable, ExpressibleAsTupleTypeElementList {
   func createTupleTypeElement() -> TupleTypeElement
 }
 
@@ -11709,7 +11709,7 @@ extension TupleTypeElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsTupleTypeElementList {
+public protocol ExpressibleAsTupleTypeElementList: ExpressibleAsSyntaxBuildable {
   func createTupleTypeElementList() -> TupleTypeElementList
 }
 
@@ -11762,7 +11762,7 @@ public struct TupleType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleType {
+public protocol ExpressibleAsTupleType: ExpressibleAsTypeBuildable {
   func createTupleType() -> TupleType
 }
 
@@ -11838,7 +11838,7 @@ public struct FunctionType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionType {
+public protocol ExpressibleAsFunctionType: ExpressibleAsTypeBuildable {
   func createFunctionType() -> FunctionType
 }
 
@@ -11890,7 +11890,7 @@ public struct AttributedType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsAttributedType {
+public protocol ExpressibleAsAttributedType: ExpressibleAsTypeBuildable {
   func createAttributedType() -> AttributedType
 }
 
@@ -11937,7 +11937,7 @@ extension GenericArgumentList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsGenericArgumentList {
+public protocol ExpressibleAsGenericArgumentList: ExpressibleAsSyntaxBuildable {
   func createGenericArgumentList() -> GenericArgumentList
 }
 
@@ -11984,7 +11984,7 @@ public struct GenericArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericArgument: ExpressibleAsGenericArgumentList {
+public protocol ExpressibleAsGenericArgument: ExpressibleAsSyntaxBuildable, ExpressibleAsGenericArgumentList {
   func createGenericArgument() -> GenericArgument
 }
 
@@ -12037,7 +12037,7 @@ public struct GenericArgumentClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericArgumentClause {
+public protocol ExpressibleAsGenericArgumentClause: ExpressibleAsSyntaxBuildable {
   func createGenericArgumentClause() -> GenericArgumentClause
 }
 
@@ -12084,7 +12084,7 @@ public struct TypeAnnotation: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeAnnotation {
+public protocol ExpressibleAsTypeAnnotation: ExpressibleAsSyntaxBuildable {
   func createTypeAnnotation() -> TypeAnnotation
 }
 
@@ -12141,7 +12141,7 @@ public struct EnumCasePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCasePattern {
+public protocol ExpressibleAsEnumCasePattern: ExpressibleAsPatternBuildable {
   func createEnumCasePattern() -> EnumCasePattern
 }
 
@@ -12188,7 +12188,7 @@ public struct IsTypePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsIsTypePattern {
+public protocol ExpressibleAsIsTypePattern: ExpressibleAsPatternBuildable {
   func createIsTypePattern() -> IsTypePattern
 }
 
@@ -12235,7 +12235,7 @@ public struct OptionalPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalPattern {
+public protocol ExpressibleAsOptionalPattern: ExpressibleAsPatternBuildable {
   func createOptionalPattern() -> OptionalPattern
 }
 
@@ -12328,7 +12328,7 @@ public struct AsTypePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsAsTypePattern {
+public protocol ExpressibleAsAsTypePattern: ExpressibleAsPatternBuildable {
   func createAsTypePattern() -> AsTypePattern
 }
 
@@ -12381,7 +12381,7 @@ public struct TuplePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsTuplePattern {
+public protocol ExpressibleAsTuplePattern: ExpressibleAsPatternBuildable {
   func createTuplePattern() -> TuplePattern
 }
 
@@ -12428,7 +12428,7 @@ public struct WildcardPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsWildcardPattern {
+public protocol ExpressibleAsWildcardPattern: ExpressibleAsPatternBuildable {
   func createWildcardPattern() -> WildcardPattern
 }
 
@@ -12486,7 +12486,7 @@ public struct TuplePatternElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTuplePatternElement: ExpressibleAsTuplePatternElementList {
+public protocol ExpressibleAsTuplePatternElement: ExpressibleAsSyntaxBuildable, ExpressibleAsTuplePatternElementList {
   func createTuplePatternElement() -> TuplePatternElement
 }
 
@@ -12527,7 +12527,7 @@ public struct ExpressionPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsExpressionPattern {
+public protocol ExpressibleAsExpressionPattern: ExpressibleAsPatternBuildable {
   func createExpressionPattern() -> ExpressionPattern
 }
 
@@ -12574,7 +12574,7 @@ extension TuplePatternElementList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsTuplePatternElementList {
+public protocol ExpressibleAsTuplePatternElementList: ExpressibleAsSyntaxBuildable {
   func createTuplePatternElementList() -> TuplePatternElementList
 }
 
@@ -12621,7 +12621,7 @@ public struct ValueBindingPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsValueBindingPattern {
+public protocol ExpressibleAsValueBindingPattern: ExpressibleAsPatternBuildable {
   func createValueBindingPattern() -> ValueBindingPattern
 }
 
@@ -12668,7 +12668,7 @@ extension AvailabilitySpecList: ExpressibleByArrayLiteral {
   }
 }
 
-public protocol ExpressibleAsAvailabilitySpecList {
+public protocol ExpressibleAsAvailabilitySpecList: ExpressibleAsSyntaxBuildable {
   func createAvailabilitySpecList() -> AvailabilitySpecList
 }
 
@@ -12719,7 +12719,7 @@ public struct AvailabilityArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityArgument: ExpressibleAsAvailabilitySpecList {
+public protocol ExpressibleAsAvailabilityArgument: ExpressibleAsSyntaxBuildable, ExpressibleAsAvailabilitySpecList {
   func createAvailabilityArgument() -> AvailabilityArgument
 }
 
@@ -12775,7 +12775,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityLabeledArgument {
+public protocol ExpressibleAsAvailabilityLabeledArgument: ExpressibleAsSyntaxBuildable {
   func createAvailabilityLabeledArgument() -> AvailabilityLabeledArgument
 }
 
@@ -12825,7 +12825,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityVersionRestriction {
+public protocol ExpressibleAsAvailabilityVersionRestriction: ExpressibleAsSyntaxBuildable {
   func createAvailabilityVersionRestriction() -> AvailabilityVersionRestriction
 }
 
@@ -12881,7 +12881,7 @@ public struct VersionTuple: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsVersionTuple {
+public protocol ExpressibleAsVersionTuple: ExpressibleAsSyntaxBuildable {
   func createVersionTuple() -> VersionTuple
 }
 
@@ -12891,7 +12891,7 @@ extension VersionTuple: ExpressibleAsVersionTuple {
   }
 }
 
-extension TokenSyntax: ExpressibleAsIdentifierList, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList, ExpressibleAsBinaryOperatorExpr, ExpressibleAsDeclModifier {
+extension TokenSyntax: SyntaxBuildable, ExpressibleAsIdentifierList, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList, ExpressibleAsBinaryOperatorExpr, ExpressibleAsDeclModifier {
 }
 
 // MARK: - Syntax Collection buildable expressible as conformances
@@ -12959,36 +12959,6 @@ extension ExpressibleAsAccessorDecl {
 extension ExpressibleAsDeclModifier {
   public func createModifierList() -> ModifierList {
     ModifierList([self])
-  }
-}
-
-extension ExpressibleAsSyntaxBuildable {
-  public func createStringLiteralSegments() -> StringLiteralSegments {
-    StringLiteralSegments([self])
-  }
-}
-
-extension ExpressibleAsSyntaxBuildable {
-  public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
-    PrecedenceGroupAttributeList([self])
-  }
-}
-
-extension ExpressibleAsSyntaxBuildable {
-  public func createAttributeList() -> AttributeList {
-    AttributeList([self])
-  }
-}
-
-extension ExpressibleAsSyntaxBuildable {
-  public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
-    SpecializeAttributeSpecList([self])
-  }
-}
-
-extension ExpressibleAsSyntaxBuildable {
-  public func createSwitchCaseList() -> SwitchCaseList {
-    SwitchCaseList([self])
   }
 }
 
@@ -13144,7 +13114,19 @@ extension ExpressibleAsPrecedenceGroupNameElement {
 
 // MARK: - Syntax buildable expressible as conformances
 
-extension ExpressibleAsFunctionCallExpr {
+extension ExpressibleAsAccessorList {
+  public func createAccessorBlock() -> AccessorBlock {
+    AccessorBlock(accessors: self)
+  }
+}
+
+extension ExpressibleAsExprBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleAsStmtBuildable {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
   }
@@ -13153,48 +13135,6 @@ extension ExpressibleAsFunctionCallExpr {
 extension ExpressibleAsCodeBlockItemList {
   public func createCodeBlock() -> CodeBlock {
     CodeBlock(statements: self)
-  }
-}
-
-extension ExpressibleAsMemberDeclList {
-  public func createMemberDeclBlock() -> MemberDeclBlock {
-    MemberDeclBlock(members: self)
-  }
-}
-
-extension ExpressibleAsSequenceExpr {
-  public func createCodeBlockItem() -> CodeBlockItem {
-    CodeBlockItem(item: self)
-  }
-}
-
-extension ExpressibleAsSequenceExpr {
-  public func createTupleExprElement() -> TupleExprElement {
-    TupleExprElement(expression: self)
-  }
-}
-
-extension ExpressibleAsSimpleTypeIdentifier {
-  public func createTypeAnnotation() -> TypeAnnotation {
-    TypeAnnotation(type: self)
-  }
-}
-
-extension ExpressibleAsSimpleTypeIdentifier {
-  public func createTypeExpr() -> TypeExpr {
-    TypeExpr(type: self)
-  }
-}
-
-extension ExpressibleAsExprList {
-  public func createConditionElement() -> ConditionElement {
-    ConditionElement(condition: self)
-  }
-}
-
-extension ExpressibleAsStmtBuildable {
-  public func createCodeBlockItem() -> CodeBlockItem {
-    CodeBlockItem(item: self)
   }
 }
 
@@ -13210,9 +13150,33 @@ extension ExpressibleAsDeclBuildable {
   }
 }
 
-extension ExpressibleAsAccessorList {
-  public func createAccessorBlock() -> AccessorBlock {
-    AccessorBlock(accessors: self)
+extension ExpressibleAsSimpleTypeIdentifier {
+  public func createTypeAnnotation() -> TypeAnnotation {
+    TypeAnnotation(type: self)
+  }
+}
+
+extension ExpressibleAsSimpleTypeIdentifier {
+  public func createTypeExpr() -> TypeExpr {
+    TypeExpr(type: self)
+  }
+}
+
+extension ExpressibleAsMemberDeclList {
+  public func createMemberDeclBlock() -> MemberDeclBlock {
+    MemberDeclBlock(members: self)
+  }
+}
+
+extension ExpressibleAsExprList {
+  public func createConditionElement() -> ConditionElement {
+    ConditionElement(condition: self)
+  }
+}
+
+extension ExpressibleAsSequenceExpr {
+  public func createTupleExprElement() -> TupleExprElement {
+    TupleExprElement(expression: self)
   }
 }
 

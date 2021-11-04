@@ -275,12 +275,10 @@ extension ${node.syntax_kind}: ExpressibleByArrayLiteral {
 %   end
 %   if node.is_buildable() or node.is_syntax_collection():
 %     expressible_as_type = 'ExpressibleAs' + node.syntax_kind
-%     expressible_as_protocols = get_expressible_as_conformances(node.syntax_kind)
-%     if expressible_as_protocols:
+%     default_expressible_as_protocol = "SyntaxBuildable" if node.is_syntax_collection() else node.base_kind + "Buildable"
+%     expressible_as_protocols = ['ExpressibleAs' + default_expressible_as_protocol]
+%     expressible_as_protocols += get_expressible_as_conformances(node.syntax_kind)
 public protocol ${expressible_as_type}: ${', '.join(expressible_as_protocols)} {
-%     else:
-public protocol ${expressible_as_type} {
-%     end
   func create${node.syntax_kind}() -> ${node.syntax_kind}
 }
 
@@ -294,7 +292,7 @@ extension ${node.syntax_kind}: ${expressible_as_type} {
 % end
 % expressible_as_protocols = get_expressible_as_conformances('TokenSyntax')
 % if expressible_as_protocols:
-extension TokenSyntax: ${', '.join(expressible_as_protocols)} {
+extension TokenSyntax: SyntaxBuildable, ${', '.join(expressible_as_protocols)} {
 }
 % end
 

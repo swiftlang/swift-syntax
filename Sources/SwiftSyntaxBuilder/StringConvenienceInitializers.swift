@@ -49,13 +49,25 @@ extension String: ExpressibleAsReturnClause {
 /// Default conformance to `ExpressibleByTypeBuildable`
 extension String {
   public func createTypeBuildable() -> TypeBuildable {
-    SimpleTypeIdentifier(self)
+    createSimpleTypeIdentifier()
   }
 }
 
 /// Default conformance to `ExpressibleByPatternBuildable`
 extension String {
   public func createPatternBuildable() -> PatternBuildable {
-    IdentifierPattern(self)
+    createIdentifierPattern()
+  }
+}
+
+extension String {
+  public func createExprBuildable() -> ExprBuildable {
+    createStringLiteralExpr()
+  }
+}
+
+extension String {
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    fatalError()
   }
 }

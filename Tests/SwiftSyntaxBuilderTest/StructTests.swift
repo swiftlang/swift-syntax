@@ -49,8 +49,8 @@ final class StructTests: XCTestCase {
         if i.isMultiple(of: 2) {
           MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
             PatternBinding(
-              pattern: IdentifierPattern(identifier: TokenSyntax.identifier("var\(i)")),
-              typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("String"))
+              pattern: IdentifierPattern("var\(i)"),
+              typeAnnotation: "String"
             )
           }))
         }

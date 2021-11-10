@@ -301,4 +301,20 @@ extension ExpressibleAs${protocol} {
 }
 
 %   end
+%   if 'TypeAnnotation' in conformances:
+extension ExpressibleAs${protocol} {
+  public func createTypeAnnotation() -> TypeAnnotation {
+    TypeAnnotation(type: self)
+  }
+}
+
+%   end
+%   if 'TypeExpr' in conformances:
+ extension ExpressibleAs${protocol} {
+   public func createTypeExpr() -> TypeExpr {
+     TypeExpr(type: self)
+   }
+ }
+
+ %   end
 % end

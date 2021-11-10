@@ -7,14 +7,14 @@ final class FunctionTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let input = ParameterClause(parameterListBuilder: {
-      FunctionParameter(firstName: TokenSyntax.wildcard, secondName: TokenSyntax.identifier("n"), colon: TokenSyntax.colon, type: SimpleTypeIdentifier("Int"), attributesBuilder: {})
+      FunctionParameter(firstName: TokenSyntax.wildcard, secondName: TokenSyntax.identifier("n"), colon: TokenSyntax.colon, type: "Int", attributesBuilder: {})
     })
 
     let ifCodeBlock = CodeBlock(statementsBuilder: {
       ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
     })
 
-    let signature = FunctionSignature(input: input, output: ReturnClause(returnType: SimpleTypeIdentifier("Int")))
+    let signature = FunctionSignature(input: input, output: ReturnClause(returnType: "Int"))
     
 
     let codeBlock = CodeBlock(statementsBuilder: {

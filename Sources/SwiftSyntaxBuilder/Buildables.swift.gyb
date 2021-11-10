@@ -4,6 +4,7 @@
   from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
   from gyb_syntax_support.kinds import syntax_buildable_child_type, syntax_buildable_default_init_value
   from gyb_syntax_support.protocolsMap import SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES
+  SYNTAX_COLLECTION_EXPRESSIBLE_AS_CONFORMANCES = syntax_collection_element_to_collection_mapping()
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -42,7 +43,9 @@ public protocol ${kind}ListBuildable: SyntaxListBuildable {
 
 %     buildable_type = kind + 'Buildable'
 %     expressible_as_type = 'ExpressibleAs' + buildable_type
-%     expressible_as_protocols = SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.get(expressible_as_type)
+%     expressible_as_protocols = SYNTAX_COLLECTION_EXPRESSIBLE_AS_CONFORMANCES.get(buildable_type) or []
+%     expressible_as_protocols += SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.get(buildable_type) or []
+%     expressible_as_protocols = map(lambda x : 'ExpressibleAs' + x, expressible_as_protocols)
 %     if expressible_as_protocols:
 public protocol ${expressible_as_type}: ${', '.join(expressible_as_protocols)} {
 %     else:
@@ -220,7 +223,9 @@ public struct ${node.syntax_kind}: SyntaxBuildable {
 %   end
 %   if node.is_buildable() or node.is_syntax_collection():
 %     expressible_as_type = 'ExpressibleAs' + node.syntax_kind
-%     expressible_as_protocols = SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.get(expressible_as_type)
+%     expressible_as_protocols = SYNTAX_COLLECTION_EXPRESSIBLE_AS_CONFORMANCES.get(node.syntax_kind) or []
+%     expressible_as_protocols += SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.get(node.syntax_kind) or []
+%     expressible_as_protocols = map(lambda x : 'ExpressibleAs' + x, expressible_as_protocols)
 %     if expressible_as_protocols:
 public protocol ${expressible_as_type}: ${', '.join(expressible_as_protocols)} {
 %     else:
@@ -249,6 +254,17 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
 
 // MARK: - Syntax buildable expressible as conformances
 
+% for protocol, conformances in SYNTAX_COLLECTION_EXPRESSIBLE_AS_CONFORMANCES.items():
+ %   for conformance in conformances:
+ extension ExpressibleAs${protocol} {
+   public func create${conformance}() -> ${conformance} {
+     ${conformance}([self])
+   }
+ }
+
+ %   end
+ % end
+
 % for protocol, conformances in SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.items():
 %   if 'ExpressibleAsConditionElementList' in conformances:
 extension ${protocol} {
@@ -258,24 +274,27 @@ extension ${protocol} {
 }
 
 %   end
-%   if 'ExpressibleAsConditionElement' in conformances:
-extension ${protocol} {
+% end
+
+% for protocol, conformances in SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.items():
+%   if 'ConditionElement' in conformances:
+extension ExpressibleAs${protocol} {
   public func createConditionElement() -> ConditionElement {
     ConditionElement(condition: self)
   }
 }
 
 %   end
-%   if 'ExpressibleAsCodeBlockItem' in conformances:
-extension ${protocol} {
+%   if 'CodeBlockItem' in conformances:
+extension ExpressibleAs${protocol} {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
   }
 }
 
 %   end
-%   if 'ExpressibleAsMemberDeclListItem' in conformances:
-extension ${protocol} {
+%   if 'MemberDeclListItem' in conformances:
+extension ExpressibleAs${protocol} {
   public func createMemberDeclListItem() -> MemberDeclListItem {
     MemberDeclListItem(decl: self)
   }

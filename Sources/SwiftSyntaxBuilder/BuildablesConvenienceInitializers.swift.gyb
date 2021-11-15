@@ -44,7 +44,7 @@ extension ${node.syntax_kind} {
 %         if child_node and child_node.is_syntax_collection():
 %           # Allow initializing syntax collections with result builders
 %           default_value = "? = { nil }" if child.is_optional else " = { %s.empty }" % (child.syntax_kind)
-%           init_result_builder_parameters.append("@%sBuilder %sBuilder: () -> ExpressibleAs%s%s" % (child.syntax_kind, child.swift_name, child.syntax_kind, default_value))
+%           init_result_builder_parameters.append("@%sBuilder %sBuilder: () -> ExpressibleBy%s%s" % (child.syntax_kind, child.swift_name, child.syntax_kind, default_value))
 %         elif child_token and not child_token.text:
 %           # Allow initializing identifier or a token without a text with String value
 %           param_type = "String?" if child.is_optional else "String"
@@ -53,7 +53,7 @@ extension ${node.syntax_kind} {
 %           # When type is not handled above, use default value
 %           param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
 %           default_value = syntax_buildable_default_init_value(child, child_token)
-%           init_parameters.append("%s: ExpressibleAs%s%s" % (child.swift_name, param_type, default_value))
+%           init_parameters.append("%s: ExpressibleBy%s%s" % (child.swift_name, param_type, default_value))
 %         end
 %       end
     ${',\n    '.join(init_parameters + init_result_builder_parameters)}

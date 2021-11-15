@@ -16,9 +16,9 @@ import Foundation
 extension FunctionCallExpr {
   public init(
     _ calledExpression: IdentifierExpr,
-    leftParen: ExpressibleAsTokenSyntax? = nil,
-    rightParen: ExpressibleAsTokenSyntax? = nil,
-    trailingClosure: ExpressibleAsClosureExpr? = nil,
+    leftParen: ExpressibleByTokenSyntax? = nil,
+    rightParen: ExpressibleByTokenSyntax? = nil,
+    trailingClosure: ExpressibleByClosureExpr? = nil,
     @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList = { .empty },
     @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }
   ) {

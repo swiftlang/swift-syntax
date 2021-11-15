@@ -24,11 +24,11 @@ public protocol DeclListBuildable: SyntaxListBuildable {
   func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
 }
 
-public protocol ExpressibleAsDeclBuildable: ExpressibleAsCodeBlockItem, ExpressibleAsMemberDeclListItem, ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleByDeclBuildable: ExpressibleByCodeBlockItem, ExpressibleByMemberDeclListItem, ExpressibleBySyntaxBuildable {
   func createDeclBuildable() -> DeclBuildable
 }
 
-public protocol DeclBuildable: ExpressibleAsDeclBuildable, SyntaxBuildable, DeclListBuildable {
+public protocol DeclBuildable: ExpressibleByDeclBuildable, SyntaxBuildable, DeclListBuildable {
   /// Builds a `DeclSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
@@ -80,11 +80,11 @@ public protocol ExprListBuildable: SyntaxListBuildable {
   func buildExprList(format: Format, leadingTrivia: Trivia?) -> [ExprSyntax]
 }
 
-public protocol ExpressibleAsExprBuildable {
+public protocol ExpressibleByExprBuildable {
   func createExprBuildable() -> ExprBuildable
 }
 
-public protocol ExprBuildable: ExpressibleAsExprBuildable, SyntaxBuildable, ExprListBuildable {
+public protocol ExprBuildable: ExpressibleByExprBuildable, SyntaxBuildable, ExprListBuildable {
   /// Builds a `ExprSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
@@ -136,11 +136,11 @@ public protocol PatternListBuildable: SyntaxListBuildable {
   func buildPatternList(format: Format, leadingTrivia: Trivia?) -> [PatternSyntax]
 }
 
-public protocol ExpressibleAsPatternBuildable {
+public protocol ExpressibleByPatternBuildable {
   func createPatternBuildable() -> PatternBuildable
 }
 
-public protocol PatternBuildable: ExpressibleAsPatternBuildable, SyntaxBuildable, PatternListBuildable {
+public protocol PatternBuildable: ExpressibleByPatternBuildable, SyntaxBuildable, PatternListBuildable {
   /// Builds a `PatternSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
@@ -192,11 +192,11 @@ public protocol StmtListBuildable: SyntaxListBuildable {
   func buildStmtList(format: Format, leadingTrivia: Trivia?) -> [StmtSyntax]
 }
 
-public protocol ExpressibleAsStmtBuildable: ExpressibleAsCodeBlockItem, ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleByStmtBuildable: ExpressibleByCodeBlockItem, ExpressibleBySyntaxBuildable {
   func createStmtBuildable() -> StmtBuildable
 }
 
-public protocol StmtBuildable: ExpressibleAsStmtBuildable, SyntaxBuildable, StmtListBuildable {
+public protocol StmtBuildable: ExpressibleByStmtBuildable, SyntaxBuildable, StmtListBuildable {
   /// Builds a `StmtSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
@@ -248,11 +248,11 @@ public protocol SyntaxListBuildable {
   func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
 }
 
-public protocol ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleBySyntaxBuildable {
   func createSyntaxBuildable() -> SyntaxBuildable
 }
 
-public protocol SyntaxBuildable: ExpressibleAsSyntaxBuildable, SyntaxListBuildable {
+public protocol SyntaxBuildable: ExpressibleBySyntaxBuildable, SyntaxListBuildable {
   /// Builds a `Syntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
@@ -298,11 +298,11 @@ public protocol TypeListBuildable: SyntaxListBuildable {
   func buildTypeList(format: Format, leadingTrivia: Trivia?) -> [TypeSyntax]
 }
 
-public protocol ExpressibleAsTypeBuildable {
+public protocol ExpressibleByTypeBuildable {
   func createTypeBuildable() -> TypeBuildable
 }
 
-public protocol TypeBuildable: ExpressibleAsTypeBuildable, SyntaxBuildable, TypeListBuildable {
+public protocol TypeBuildable: ExpressibleByTypeBuildable, SyntaxBuildable, TypeListBuildable {
   /// Builds a `TypeSyntax`.
   /// - Parameter format: The `Format` to use.
   /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
@@ -358,9 +358,9 @@ public struct CodeBlockItem: SyntaxBuildable {
   let errorTokens: SyntaxBuildable?
 
   public init(
-    item: ExpressibleAsSyntaxBuildable,
-    semicolon: ExpressibleAsTokenSyntax? = nil,
-    errorTokens: ExpressibleAsSyntaxBuildable? = nil
+    item: ExpressibleBySyntaxBuildable,
+    semicolon: ExpressibleByTokenSyntax? = nil,
+    errorTokens: ExpressibleBySyntaxBuildable? = nil
   ) {
     self.item = item.createSyntaxBuildable()
     self.semicolon = semicolon?.createTokenSyntax()
@@ -388,11 +388,11 @@ public struct CodeBlockItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlockItem {
+public protocol ExpressibleByCodeBlockItem {
   func createCodeBlockItem() -> CodeBlockItem
 }
 
-extension CodeBlockItem: ExpressibleAsCodeBlockItem {
+extension CodeBlockItem: ExpressibleByCodeBlockItem {
   public func createCodeBlockItem() -> CodeBlockItem {
     self
   }
@@ -405,7 +405,7 @@ extension CodeBlockItem: ExpressibleAsCodeBlockItem {
 public struct CodeBlockItemList: SyntaxBuildable {
   let elements: [CodeBlockItem]
 
-  public init(_ elements: [ExpressibleAsCodeBlockItem]) {
+  public init(_ elements: [ExpressibleByCodeBlockItem]) {
     self.elements = elements.map { $0.createCodeBlockItem() }
   }
 
@@ -426,11 +426,11 @@ public struct CodeBlockItemList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlockItemList {
+public protocol ExpressibleByCodeBlockItemList {
   func createCodeBlockItemList() -> CodeBlockItemList
 }
 
-extension CodeBlockItemList: ExpressibleAsCodeBlockItemList {
+extension CodeBlockItemList: ExpressibleByCodeBlockItemList {
   public func createCodeBlockItemList() -> CodeBlockItemList {
     self
   }
@@ -442,9 +442,9 @@ public struct CodeBlock: SyntaxBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
-    statements: ExpressibleAsCodeBlockItemList,
-    rightBrace: ExpressibleAsTokenSyntax = TokenSyntax.`rightBrace`
+    leftBrace: ExpressibleByTokenSyntax = TokenSyntax.`leftBrace`,
+    statements: ExpressibleByCodeBlockItemList,
+    rightBrace: ExpressibleByTokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace.createTokenSyntax()
     self.statements = statements.createCodeBlockItemList()
@@ -472,11 +472,11 @@ public struct CodeBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlock {
+public protocol ExpressibleByCodeBlock {
   func createCodeBlock() -> CodeBlock
 }
 
-extension CodeBlock: ExpressibleAsCodeBlock {
+extension CodeBlock: ExpressibleByCodeBlock {
   public func createCodeBlock() -> CodeBlock {
     self
   }
@@ -487,8 +487,8 @@ public struct InOutExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    ampersand: ExpressibleAsTokenSyntax = TokenSyntax.`prefixAmpersand`,
-    expression: ExpressibleAsExprBuildable
+    ampersand: ExpressibleByTokenSyntax = TokenSyntax.`prefixAmpersand`,
+    expression: ExpressibleByExprBuildable
   ) {
     self.ampersand = ampersand.createTokenSyntax()
     self.expression = expression.createExprBuildable()
@@ -514,11 +514,11 @@ public struct InOutExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsInOutExpr {
+public protocol ExpressibleByInOutExpr {
   func createInOutExpr() -> InOutExpr
 }
 
-extension InOutExpr: ExpressibleAsInOutExpr {
+extension InOutExpr: ExpressibleByInOutExpr {
   public func createInOutExpr() -> InOutExpr {
     self
   }
@@ -528,7 +528,7 @@ public struct PoundColumnExpr: ExprBuildable {
   let poundColumn: TokenSyntax
 
   public init(
-    poundColumn: ExpressibleAsTokenSyntax = TokenSyntax.`poundColumn`
+    poundColumn: ExpressibleByTokenSyntax = TokenSyntax.`poundColumn`
   ) {
     self.poundColumn = poundColumn.createTokenSyntax()
   }
@@ -552,11 +552,11 @@ public struct PoundColumnExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundColumnExpr {
+public protocol ExpressibleByPoundColumnExpr {
   func createPoundColumnExpr() -> PoundColumnExpr
 }
 
-extension PoundColumnExpr: ExpressibleAsPoundColumnExpr {
+extension PoundColumnExpr: ExpressibleByPoundColumnExpr {
   public func createPoundColumnExpr() -> PoundColumnExpr {
     self
   }
@@ -569,7 +569,7 @@ extension PoundColumnExpr: ExpressibleAsPoundColumnExpr {
 public struct TupleExprElementList: SyntaxBuildable {
   let elements: [TupleExprElement]
 
-  public init(_ elements: [ExpressibleAsTupleExprElement]) {
+  public init(_ elements: [ExpressibleByTupleExprElement]) {
     self.elements = elements.map { $0.createTupleExprElement() }
   }
 
@@ -590,11 +590,11 @@ public struct TupleExprElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleExprElementList {
+public protocol ExpressibleByTupleExprElementList {
   func createTupleExprElementList() -> TupleExprElementList
 }
 
-extension TupleExprElementList: ExpressibleAsTupleExprElementList {
+extension TupleExprElementList: ExpressibleByTupleExprElementList {
   public func createTupleExprElementList() -> TupleExprElementList {
     self
   }
@@ -607,7 +607,7 @@ extension TupleExprElementList: ExpressibleAsTupleExprElementList {
 public struct ArrayElementList: SyntaxBuildable {
   let elements: [ArrayElement]
 
-  public init(_ elements: [ExpressibleAsArrayElement]) {
+  public init(_ elements: [ExpressibleByArrayElement]) {
     self.elements = elements.map { $0.createArrayElement() }
   }
 
@@ -628,11 +628,11 @@ public struct ArrayElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayElementList {
+public protocol ExpressibleByArrayElementList {
   func createArrayElementList() -> ArrayElementList
 }
 
-extension ArrayElementList: ExpressibleAsArrayElementList {
+extension ArrayElementList: ExpressibleByArrayElementList {
   public func createArrayElementList() -> ArrayElementList {
     self
   }
@@ -645,7 +645,7 @@ extension ArrayElementList: ExpressibleAsArrayElementList {
 public struct DictionaryElementList: SyntaxBuildable {
   let elements: [DictionaryElement]
 
-  public init(_ elements: [ExpressibleAsDictionaryElement]) {
+  public init(_ elements: [ExpressibleByDictionaryElement]) {
     self.elements = elements.map { $0.createDictionaryElement() }
   }
 
@@ -666,11 +666,11 @@ public struct DictionaryElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryElementList {
+public protocol ExpressibleByDictionaryElementList {
   func createDictionaryElementList() -> DictionaryElementList
 }
 
-extension DictionaryElementList: ExpressibleAsDictionaryElementList {
+extension DictionaryElementList: ExpressibleByDictionaryElementList {
   public func createDictionaryElementList() -> DictionaryElementList {
     self
   }
@@ -683,7 +683,7 @@ extension DictionaryElementList: ExpressibleAsDictionaryElementList {
 public struct StringLiteralSegments: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
-  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+  public init(_ elements: [ExpressibleBySyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
@@ -704,11 +704,11 @@ public struct StringLiteralSegments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsStringLiteralSegments {
+public protocol ExpressibleByStringLiteralSegments {
   func createStringLiteralSegments() -> StringLiteralSegments
 }
 
-extension StringLiteralSegments: ExpressibleAsStringLiteralSegments {
+extension StringLiteralSegments: ExpressibleByStringLiteralSegments {
   public func createStringLiteralSegments() -> StringLiteralSegments {
     self
   }
@@ -720,9 +720,9 @@ public struct TryExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    tryKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`try`,
-    questionOrExclamationMark: ExpressibleAsTokenSyntax? = nil,
-    expression: ExpressibleAsExprBuildable
+    tryKeyword: ExpressibleByTokenSyntax = TokenSyntax.`try`,
+    questionOrExclamationMark: ExpressibleByTokenSyntax? = nil,
+    expression: ExpressibleByExprBuildable
   ) {
     self.tryKeyword = tryKeyword.createTokenSyntax()
     self.questionOrExclamationMark = questionOrExclamationMark?.createTokenSyntax()
@@ -750,11 +750,11 @@ public struct TryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTryExpr {
+public protocol ExpressibleByTryExpr {
   func createTryExpr() -> TryExpr
 }
 
-extension TryExpr: ExpressibleAsTryExpr {
+extension TryExpr: ExpressibleByTryExpr {
   public func createTryExpr() -> TryExpr {
     self
   }
@@ -765,8 +765,8 @@ public struct AwaitExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    awaitKeyword: ExpressibleAsTokenSyntax,
-    expression: ExpressibleAsExprBuildable
+    awaitKeyword: ExpressibleByTokenSyntax,
+    expression: ExpressibleByExprBuildable
   ) {
     self.awaitKeyword = awaitKeyword.createTokenSyntax()
     self.expression = expression.createExprBuildable()
@@ -792,11 +792,11 @@ public struct AwaitExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsAwaitExpr {
+public protocol ExpressibleByAwaitExpr {
   func createAwaitExpr() -> AwaitExpr
 }
 
-extension AwaitExpr: ExpressibleAsAwaitExpr {
+extension AwaitExpr: ExpressibleByAwaitExpr {
   public func createAwaitExpr() -> AwaitExpr {
     self
   }
@@ -807,8 +807,8 @@ public struct DeclNameArgument: SyntaxBuildable {
   let colon: TokenSyntax
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`
+    name: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`
   ) {
     self.name = name.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -834,11 +834,11 @@ public struct DeclNameArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclNameArgument {
+public protocol ExpressibleByDeclNameArgument {
   func createDeclNameArgument() -> DeclNameArgument
 }
 
-extension DeclNameArgument: ExpressibleAsDeclNameArgument {
+extension DeclNameArgument: ExpressibleByDeclNameArgument {
   public func createDeclNameArgument() -> DeclNameArgument {
     self
   }
@@ -851,7 +851,7 @@ extension DeclNameArgument: ExpressibleAsDeclNameArgument {
 public struct DeclNameArgumentList: SyntaxBuildable {
   let elements: [DeclNameArgument]
 
-  public init(_ elements: [ExpressibleAsDeclNameArgument]) {
+  public init(_ elements: [ExpressibleByDeclNameArgument]) {
     self.elements = elements.map { $0.createDeclNameArgument() }
   }
 
@@ -872,11 +872,11 @@ public struct DeclNameArgumentList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclNameArgumentList {
+public protocol ExpressibleByDeclNameArgumentList {
   func createDeclNameArgumentList() -> DeclNameArgumentList
 }
 
-extension DeclNameArgumentList: ExpressibleAsDeclNameArgumentList {
+extension DeclNameArgumentList: ExpressibleByDeclNameArgumentList {
   public func createDeclNameArgumentList() -> DeclNameArgumentList {
     self
   }
@@ -888,9 +888,9 @@ public struct DeclNameArguments: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    arguments: ExpressibleAsDeclNameArgumentList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    arguments: ExpressibleByDeclNameArgumentList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.arguments = arguments.createDeclNameArgumentList()
@@ -918,11 +918,11 @@ public struct DeclNameArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclNameArguments {
+public protocol ExpressibleByDeclNameArguments {
   func createDeclNameArguments() -> DeclNameArguments
 }
 
-extension DeclNameArguments: ExpressibleAsDeclNameArguments {
+extension DeclNameArguments: ExpressibleByDeclNameArguments {
   public func createDeclNameArguments() -> DeclNameArguments {
     self
   }
@@ -933,8 +933,8 @@ public struct IdentifierExpr: ExprBuildable {
   let declNameArguments: DeclNameArguments?
 
   public init(
-    identifier: ExpressibleAsTokenSyntax,
-    declNameArguments: ExpressibleAsDeclNameArguments? = nil
+    identifier: ExpressibleByTokenSyntax,
+    declNameArguments: ExpressibleByDeclNameArguments? = nil
   ) {
     self.identifier = identifier.createTokenSyntax()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
@@ -960,11 +960,11 @@ public struct IdentifierExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsIdentifierExpr {
+public protocol ExpressibleByIdentifierExpr {
   func createIdentifierExpr() -> IdentifierExpr
 }
 
-extension IdentifierExpr: ExpressibleAsIdentifierExpr {
+extension IdentifierExpr: ExpressibleByIdentifierExpr {
   public func createIdentifierExpr() -> IdentifierExpr {
     self
   }
@@ -974,7 +974,7 @@ public struct SuperRefExpr: ExprBuildable {
   let superKeyword: TokenSyntax
 
   public init(
-    superKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`super`
+    superKeyword: ExpressibleByTokenSyntax = TokenSyntax.`super`
   ) {
     self.superKeyword = superKeyword.createTokenSyntax()
   }
@@ -998,11 +998,11 @@ public struct SuperRefExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSuperRefExpr {
+public protocol ExpressibleBySuperRefExpr {
   func createSuperRefExpr() -> SuperRefExpr
 }
 
-extension SuperRefExpr: ExpressibleAsSuperRefExpr {
+extension SuperRefExpr: ExpressibleBySuperRefExpr {
   public func createSuperRefExpr() -> SuperRefExpr {
     self
   }
@@ -1012,7 +1012,7 @@ public struct NilLiteralExpr: ExprBuildable {
   let nilKeyword: TokenSyntax
 
   public init(
-    nilKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`nil`
+    nilKeyword: ExpressibleByTokenSyntax = TokenSyntax.`nil`
   ) {
     self.nilKeyword = nilKeyword.createTokenSyntax()
   }
@@ -1036,11 +1036,11 @@ public struct NilLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsNilLiteralExpr {
+public protocol ExpressibleByNilLiteralExpr {
   func createNilLiteralExpr() -> NilLiteralExpr
 }
 
-extension NilLiteralExpr: ExpressibleAsNilLiteralExpr {
+extension NilLiteralExpr: ExpressibleByNilLiteralExpr {
   public func createNilLiteralExpr() -> NilLiteralExpr {
     self
   }
@@ -1050,7 +1050,7 @@ public struct DiscardAssignmentExpr: ExprBuildable {
   let wildcard: TokenSyntax
 
   public init(
-    wildcard: ExpressibleAsTokenSyntax = TokenSyntax.`wildcard`
+    wildcard: ExpressibleByTokenSyntax = TokenSyntax.`wildcard`
   ) {
     self.wildcard = wildcard.createTokenSyntax()
   }
@@ -1074,11 +1074,11 @@ public struct DiscardAssignmentExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsDiscardAssignmentExpr {
+public protocol ExpressibleByDiscardAssignmentExpr {
   func createDiscardAssignmentExpr() -> DiscardAssignmentExpr
 }
 
-extension DiscardAssignmentExpr: ExpressibleAsDiscardAssignmentExpr {
+extension DiscardAssignmentExpr: ExpressibleByDiscardAssignmentExpr {
   public func createDiscardAssignmentExpr() -> DiscardAssignmentExpr {
     self
   }
@@ -1088,7 +1088,7 @@ public struct AssignmentExpr: ExprBuildable {
   let assignToken: TokenSyntax
 
   public init(
-    assignToken: ExpressibleAsTokenSyntax = TokenSyntax.`equal`
+    assignToken: ExpressibleByTokenSyntax = TokenSyntax.`equal`
   ) {
     self.assignToken = assignToken.createTokenSyntax()
   }
@@ -1112,11 +1112,11 @@ public struct AssignmentExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsAssignmentExpr {
+public protocol ExpressibleByAssignmentExpr {
   func createAssignmentExpr() -> AssignmentExpr
 }
 
-extension AssignmentExpr: ExpressibleAsAssignmentExpr {
+extension AssignmentExpr: ExpressibleByAssignmentExpr {
   public func createAssignmentExpr() -> AssignmentExpr {
     self
   }
@@ -1126,7 +1126,7 @@ public struct SequenceExpr: ExprBuildable {
   let elements: ExprList
 
   public init(
-    elements: ExpressibleAsExprList
+    elements: ExpressibleByExprList
   ) {
     self.elements = elements.createExprList()
   }
@@ -1150,11 +1150,11 @@ public struct SequenceExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSequenceExpr {
+public protocol ExpressibleBySequenceExpr {
   func createSequenceExpr() -> SequenceExpr
 }
 
-extension SequenceExpr: ExpressibleAsSequenceExpr {
+extension SequenceExpr: ExpressibleBySequenceExpr {
   public func createSequenceExpr() -> SequenceExpr {
     self
   }
@@ -1169,7 +1169,7 @@ extension SequenceExpr: ExpressibleAsSequenceExpr {
 public struct ExprList: SyntaxBuildable {
   let elements: [ExprBuildable]
 
-  public init(_ elements: [ExpressibleAsExprBuildable]) {
+  public init(_ elements: [ExpressibleByExprBuildable]) {
     self.elements = elements.map { $0.createExprBuildable() }
   }
 
@@ -1190,11 +1190,11 @@ public struct ExprList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsExprList: ExpressibleAsConditionElement, ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleByExprList: ExpressibleByConditionElement, ExpressibleBySyntaxBuildable {
   func createExprList() -> ExprList
 }
 
-extension ExprList: ExpressibleAsExprList {
+extension ExprList: ExpressibleByExprList {
   public func createExprList() -> ExprList {
     self
   }
@@ -1204,7 +1204,7 @@ public struct PoundLineExpr: ExprBuildable {
   let poundLine: TokenSyntax
 
   public init(
-    poundLine: ExpressibleAsTokenSyntax = TokenSyntax.`poundLine`
+    poundLine: ExpressibleByTokenSyntax = TokenSyntax.`poundLine`
   ) {
     self.poundLine = poundLine.createTokenSyntax()
   }
@@ -1228,11 +1228,11 @@ public struct PoundLineExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundLineExpr {
+public protocol ExpressibleByPoundLineExpr {
   func createPoundLineExpr() -> PoundLineExpr
 }
 
-extension PoundLineExpr: ExpressibleAsPoundLineExpr {
+extension PoundLineExpr: ExpressibleByPoundLineExpr {
   public func createPoundLineExpr() -> PoundLineExpr {
     self
   }
@@ -1242,7 +1242,7 @@ public struct PoundFileExpr: ExprBuildable {
   let poundFile: TokenSyntax
 
   public init(
-    poundFile: ExpressibleAsTokenSyntax = TokenSyntax.`poundFile`
+    poundFile: ExpressibleByTokenSyntax = TokenSyntax.`poundFile`
   ) {
     self.poundFile = poundFile.createTokenSyntax()
   }
@@ -1266,11 +1266,11 @@ public struct PoundFileExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFileExpr {
+public protocol ExpressibleByPoundFileExpr {
   func createPoundFileExpr() -> PoundFileExpr
 }
 
-extension PoundFileExpr: ExpressibleAsPoundFileExpr {
+extension PoundFileExpr: ExpressibleByPoundFileExpr {
   public func createPoundFileExpr() -> PoundFileExpr {
     self
   }
@@ -1280,7 +1280,7 @@ public struct PoundFileIDExpr: ExprBuildable {
   let poundFileID: TokenSyntax
 
   public init(
-    poundFileID: ExpressibleAsTokenSyntax = TokenSyntax.`poundFileID`
+    poundFileID: ExpressibleByTokenSyntax = TokenSyntax.`poundFileID`
   ) {
     self.poundFileID = poundFileID.createTokenSyntax()
   }
@@ -1304,11 +1304,11 @@ public struct PoundFileIDExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFileIDExpr {
+public protocol ExpressibleByPoundFileIDExpr {
   func createPoundFileIDExpr() -> PoundFileIDExpr
 }
 
-extension PoundFileIDExpr: ExpressibleAsPoundFileIDExpr {
+extension PoundFileIDExpr: ExpressibleByPoundFileIDExpr {
   public func createPoundFileIDExpr() -> PoundFileIDExpr {
     self
   }
@@ -1318,7 +1318,7 @@ public struct PoundFilePathExpr: ExprBuildable {
   let poundFilePath: TokenSyntax
 
   public init(
-    poundFilePath: ExpressibleAsTokenSyntax = TokenSyntax.`poundFilePath`
+    poundFilePath: ExpressibleByTokenSyntax = TokenSyntax.`poundFilePath`
   ) {
     self.poundFilePath = poundFilePath.createTokenSyntax()
   }
@@ -1342,11 +1342,11 @@ public struct PoundFilePathExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFilePathExpr {
+public protocol ExpressibleByPoundFilePathExpr {
   func createPoundFilePathExpr() -> PoundFilePathExpr
 }
 
-extension PoundFilePathExpr: ExpressibleAsPoundFilePathExpr {
+extension PoundFilePathExpr: ExpressibleByPoundFilePathExpr {
   public func createPoundFilePathExpr() -> PoundFilePathExpr {
     self
   }
@@ -1356,7 +1356,7 @@ public struct PoundFunctionExpr: ExprBuildable {
   let poundFunction: TokenSyntax
 
   public init(
-    poundFunction: ExpressibleAsTokenSyntax = TokenSyntax.`poundFunction`
+    poundFunction: ExpressibleByTokenSyntax = TokenSyntax.`poundFunction`
   ) {
     self.poundFunction = poundFunction.createTokenSyntax()
   }
@@ -1380,11 +1380,11 @@ public struct PoundFunctionExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundFunctionExpr {
+public protocol ExpressibleByPoundFunctionExpr {
   func createPoundFunctionExpr() -> PoundFunctionExpr
 }
 
-extension PoundFunctionExpr: ExpressibleAsPoundFunctionExpr {
+extension PoundFunctionExpr: ExpressibleByPoundFunctionExpr {
   public func createPoundFunctionExpr() -> PoundFunctionExpr {
     self
   }
@@ -1394,7 +1394,7 @@ public struct PoundDsohandleExpr: ExprBuildable {
   let poundDsohandle: TokenSyntax
 
   public init(
-    poundDsohandle: ExpressibleAsTokenSyntax = TokenSyntax.`poundDsohandle`
+    poundDsohandle: ExpressibleByTokenSyntax = TokenSyntax.`poundDsohandle`
   ) {
     self.poundDsohandle = poundDsohandle.createTokenSyntax()
   }
@@ -1418,11 +1418,11 @@ public struct PoundDsohandleExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundDsohandleExpr {
+public protocol ExpressibleByPoundDsohandleExpr {
   func createPoundDsohandleExpr() -> PoundDsohandleExpr
 }
 
-extension PoundDsohandleExpr: ExpressibleAsPoundDsohandleExpr {
+extension PoundDsohandleExpr: ExpressibleByPoundDsohandleExpr {
   public func createPoundDsohandleExpr() -> PoundDsohandleExpr {
     self
   }
@@ -1433,8 +1433,8 @@ public struct SymbolicReferenceExpr: ExprBuildable {
   let genericArgumentClause: GenericArgumentClause?
 
   public init(
-    identifier: ExpressibleAsTokenSyntax,
-    genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
+    identifier: ExpressibleByTokenSyntax,
+    genericArgumentClause: ExpressibleByGenericArgumentClause? = nil
   ) {
     self.identifier = identifier.createTokenSyntax()
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
@@ -1460,11 +1460,11 @@ public struct SymbolicReferenceExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSymbolicReferenceExpr {
+public protocol ExpressibleBySymbolicReferenceExpr {
   func createSymbolicReferenceExpr() -> SymbolicReferenceExpr
 }
 
-extension SymbolicReferenceExpr: ExpressibleAsSymbolicReferenceExpr {
+extension SymbolicReferenceExpr: ExpressibleBySymbolicReferenceExpr {
   public func createSymbolicReferenceExpr() -> SymbolicReferenceExpr {
     self
   }
@@ -1475,8 +1475,8 @@ public struct PrefixOperatorExpr: ExprBuildable {
   let postfixExpression: ExprBuildable
 
   public init(
-    operatorToken: ExpressibleAsTokenSyntax? = nil,
-    postfixExpression: ExpressibleAsExprBuildable
+    operatorToken: ExpressibleByTokenSyntax? = nil,
+    postfixExpression: ExpressibleByExprBuildable
   ) {
     self.operatorToken = operatorToken?.createTokenSyntax()
     self.postfixExpression = postfixExpression.createExprBuildable()
@@ -1502,11 +1502,11 @@ public struct PrefixOperatorExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPrefixOperatorExpr {
+public protocol ExpressibleByPrefixOperatorExpr {
   func createPrefixOperatorExpr() -> PrefixOperatorExpr
 }
 
-extension PrefixOperatorExpr: ExpressibleAsPrefixOperatorExpr {
+extension PrefixOperatorExpr: ExpressibleByPrefixOperatorExpr {
   public func createPrefixOperatorExpr() -> PrefixOperatorExpr {
     self
   }
@@ -1516,7 +1516,7 @@ public struct BinaryOperatorExpr: ExprBuildable {
   let operatorToken: TokenSyntax
 
   public init(
-    operatorToken: ExpressibleAsTokenSyntax
+    operatorToken: ExpressibleByTokenSyntax
   ) {
     self.operatorToken = operatorToken.createTokenSyntax()
   }
@@ -1540,11 +1540,11 @@ public struct BinaryOperatorExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsBinaryOperatorExpr {
+public protocol ExpressibleByBinaryOperatorExpr {
   func createBinaryOperatorExpr() -> BinaryOperatorExpr
 }
 
-extension BinaryOperatorExpr: ExpressibleAsBinaryOperatorExpr {
+extension BinaryOperatorExpr: ExpressibleByBinaryOperatorExpr {
   public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
     self
   }
@@ -1556,9 +1556,9 @@ public struct ArrowExpr: ExprBuildable {
   let arrowToken: TokenSyntax
 
   public init(
-    asyncKeyword: ExpressibleAsTokenSyntax? = nil,
-    throwsToken: ExpressibleAsTokenSyntax? = nil,
-    arrowToken: ExpressibleAsTokenSyntax = TokenSyntax.`arrow`
+    asyncKeyword: ExpressibleByTokenSyntax? = nil,
+    throwsToken: ExpressibleByTokenSyntax? = nil,
+    arrowToken: ExpressibleByTokenSyntax = TokenSyntax.`arrow`
   ) {
     self.asyncKeyword = asyncKeyword?.createTokenSyntax()
     self.throwsToken = throwsToken?.createTokenSyntax()
@@ -1586,11 +1586,11 @@ public struct ArrowExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsArrowExpr {
+public protocol ExpressibleByArrowExpr {
   func createArrowExpr() -> ArrowExpr
 }
 
-extension ArrowExpr: ExpressibleAsArrowExpr {
+extension ArrowExpr: ExpressibleByArrowExpr {
   public func createArrowExpr() -> ArrowExpr {
     self
   }
@@ -1600,7 +1600,7 @@ public struct FloatLiteralExpr: ExprBuildable {
   let floatingDigits: TokenSyntax
 
   public init(
-    floatingDigits: ExpressibleAsTokenSyntax
+    floatingDigits: ExpressibleByTokenSyntax
   ) {
     self.floatingDigits = floatingDigits.createTokenSyntax()
   }
@@ -1624,11 +1624,11 @@ public struct FloatLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsFloatLiteralExpr {
+public protocol ExpressibleByFloatLiteralExpr {
   func createFloatLiteralExpr() -> FloatLiteralExpr
 }
 
-extension FloatLiteralExpr: ExpressibleAsFloatLiteralExpr {
+extension FloatLiteralExpr: ExpressibleByFloatLiteralExpr {
   public func createFloatLiteralExpr() -> FloatLiteralExpr {
     self
   }
@@ -1640,9 +1640,9 @@ public struct TupleExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    elementList: ExpressibleAsTupleExprElementList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    elementList: ExpressibleByTupleExprElementList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.elementList = elementList.createTupleExprElementList()
@@ -1670,11 +1670,11 @@ public struct TupleExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleExpr {
+public protocol ExpressibleByTupleExpr {
   func createTupleExpr() -> TupleExpr
 }
 
-extension TupleExpr: ExpressibleAsTupleExpr {
+extension TupleExpr: ExpressibleByTupleExpr {
   public func createTupleExpr() -> TupleExpr {
     self
   }
@@ -1686,9 +1686,9 @@ public struct ArrayExpr: ExprBuildable {
   let rightSquare: TokenSyntax
 
   public init(
-    leftSquare: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
-    elements: ExpressibleAsArrayElementList,
-    rightSquare: ExpressibleAsTokenSyntax = TokenSyntax.`rightSquareBracket`
+    leftSquare: ExpressibleByTokenSyntax = TokenSyntax.`leftSquareBracket`,
+    elements: ExpressibleByArrayElementList,
+    rightSquare: ExpressibleByTokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare.createTokenSyntax()
     self.elements = elements.createArrayElementList()
@@ -1716,11 +1716,11 @@ public struct ArrayExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayExpr {
+public protocol ExpressibleByArrayExpr {
   func createArrayExpr() -> ArrayExpr
 }
 
-extension ArrayExpr: ExpressibleAsArrayExpr {
+extension ArrayExpr: ExpressibleByArrayExpr {
   public func createArrayExpr() -> ArrayExpr {
     self
   }
@@ -1732,9 +1732,9 @@ public struct DictionaryExpr: ExprBuildable {
   let rightSquare: TokenSyntax
 
   public init(
-    leftSquare: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
-    content: ExpressibleAsSyntaxBuildable,
-    rightSquare: ExpressibleAsTokenSyntax = TokenSyntax.`rightSquareBracket`
+    leftSquare: ExpressibleByTokenSyntax = TokenSyntax.`leftSquareBracket`,
+    content: ExpressibleBySyntaxBuildable,
+    rightSquare: ExpressibleByTokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare.createTokenSyntax()
     self.content = content.createSyntaxBuildable()
@@ -1762,11 +1762,11 @@ public struct DictionaryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryExpr {
+public protocol ExpressibleByDictionaryExpr {
   func createDictionaryExpr() -> DictionaryExpr
 }
 
-extension DictionaryExpr: ExpressibleAsDictionaryExpr {
+extension DictionaryExpr: ExpressibleByDictionaryExpr {
   public func createDictionaryExpr() -> DictionaryExpr {
     self
   }
@@ -1779,10 +1779,10 @@ public struct TupleExprElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    label: ExpressibleAsTokenSyntax? = nil,
-    colon: ExpressibleAsTokenSyntax? = nil,
-    expression: ExpressibleAsExprBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    label: ExpressibleByTokenSyntax? = nil,
+    colon: ExpressibleByTokenSyntax? = nil,
+    expression: ExpressibleByExprBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.label = label?.createTokenSyntax()
     self.colon = colon?.createTokenSyntax()
@@ -1812,11 +1812,11 @@ public struct TupleExprElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleExprElement {
+public protocol ExpressibleByTupleExprElement {
   func createTupleExprElement() -> TupleExprElement
 }
 
-extension TupleExprElement: ExpressibleAsTupleExprElement {
+extension TupleExprElement: ExpressibleByTupleExprElement {
   public func createTupleExprElement() -> TupleExprElement {
     self
   }
@@ -1827,8 +1827,8 @@ public struct ArrayElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    expression: ExpressibleAsExprBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    expression: ExpressibleByExprBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.expression = expression.createExprBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -1854,11 +1854,11 @@ public struct ArrayElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayElement {
+public protocol ExpressibleByArrayElement {
   func createArrayElement() -> ArrayElement
 }
 
-extension ArrayElement: ExpressibleAsArrayElement {
+extension ArrayElement: ExpressibleByArrayElement {
   public func createArrayElement() -> ArrayElement {
     self
   }
@@ -1871,10 +1871,10 @@ public struct DictionaryElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    keyExpression: ExpressibleAsExprBuildable,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    valueExpression: ExpressibleAsExprBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    keyExpression: ExpressibleByExprBuildable,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    valueExpression: ExpressibleByExprBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.keyExpression = keyExpression.createExprBuildable()
     self.colon = colon.createTokenSyntax()
@@ -1904,11 +1904,11 @@ public struct DictionaryElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryElement {
+public protocol ExpressibleByDictionaryElement {
   func createDictionaryElement() -> DictionaryElement
 }
 
-extension DictionaryElement: ExpressibleAsDictionaryElement {
+extension DictionaryElement: ExpressibleByDictionaryElement {
   public func createDictionaryElement() -> DictionaryElement {
     self
   }
@@ -1918,7 +1918,7 @@ public struct IntegerLiteralExpr: ExprBuildable {
   let digits: TokenSyntax
 
   public init(
-    digits: ExpressibleAsTokenSyntax
+    digits: ExpressibleByTokenSyntax
   ) {
     self.digits = digits.createTokenSyntax()
   }
@@ -1942,11 +1942,11 @@ public struct IntegerLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsIntegerLiteralExpr {
+public protocol ExpressibleByIntegerLiteralExpr {
   func createIntegerLiteralExpr() -> IntegerLiteralExpr
 }
 
-extension IntegerLiteralExpr: ExpressibleAsIntegerLiteralExpr {
+extension IntegerLiteralExpr: ExpressibleByIntegerLiteralExpr {
   public func createIntegerLiteralExpr() -> IntegerLiteralExpr {
     self
   }
@@ -1956,7 +1956,7 @@ public struct BooleanLiteralExpr: ExprBuildable {
   let booleanLiteral: TokenSyntax
 
   public init(
-    booleanLiteral: ExpressibleAsTokenSyntax
+    booleanLiteral: ExpressibleByTokenSyntax
   ) {
     self.booleanLiteral = booleanLiteral.createTokenSyntax()
   }
@@ -1980,11 +1980,11 @@ public struct BooleanLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsBooleanLiteralExpr {
+public protocol ExpressibleByBooleanLiteralExpr {
   func createBooleanLiteralExpr() -> BooleanLiteralExpr
 }
 
-extension BooleanLiteralExpr: ExpressibleAsBooleanLiteralExpr {
+extension BooleanLiteralExpr: ExpressibleByBooleanLiteralExpr {
   public func createBooleanLiteralExpr() -> BooleanLiteralExpr {
     self
   }
@@ -1998,11 +1998,11 @@ public struct TernaryExpr: ExprBuildable {
   let secondChoice: ExprBuildable
 
   public init(
-    conditionExpression: ExpressibleAsExprBuildable,
-    questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`infixQuestionMark`,
-    firstChoice: ExpressibleAsExprBuildable,
-    colonMark: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    secondChoice: ExpressibleAsExprBuildable
+    conditionExpression: ExpressibleByExprBuildable,
+    questionMark: ExpressibleByTokenSyntax = TokenSyntax.`infixQuestionMark`,
+    firstChoice: ExpressibleByExprBuildable,
+    colonMark: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    secondChoice: ExpressibleByExprBuildable
   ) {
     self.conditionExpression = conditionExpression.createExprBuildable()
     self.questionMark = questionMark.createTokenSyntax()
@@ -2034,11 +2034,11 @@ public struct TernaryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTernaryExpr {
+public protocol ExpressibleByTernaryExpr {
   func createTernaryExpr() -> TernaryExpr
 }
 
-extension TernaryExpr: ExpressibleAsTernaryExpr {
+extension TernaryExpr: ExpressibleByTernaryExpr {
   public func createTernaryExpr() -> TernaryExpr {
     self
   }
@@ -2051,10 +2051,10 @@ public struct MemberAccessExpr: ExprBuildable {
   let declNameArguments: DeclNameArguments?
 
   public init(
-    base: ExpressibleAsExprBuildable? = nil,
-    dot: ExpressibleAsTokenSyntax,
-    name: ExpressibleAsTokenSyntax,
-    declNameArguments: ExpressibleAsDeclNameArguments? = nil
+    base: ExpressibleByExprBuildable? = nil,
+    dot: ExpressibleByTokenSyntax,
+    name: ExpressibleByTokenSyntax,
+    declNameArguments: ExpressibleByDeclNameArguments? = nil
   ) {
     self.base = base?.createExprBuildable()
     self.dot = dot.createTokenSyntax()
@@ -2084,11 +2084,11 @@ public struct MemberAccessExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberAccessExpr {
+public protocol ExpressibleByMemberAccessExpr {
   func createMemberAccessExpr() -> MemberAccessExpr
 }
 
-extension MemberAccessExpr: ExpressibleAsMemberAccessExpr {
+extension MemberAccessExpr: ExpressibleByMemberAccessExpr {
   public func createMemberAccessExpr() -> MemberAccessExpr {
     self
   }
@@ -2099,8 +2099,8 @@ public struct IsExpr: ExprBuildable {
   let typeName: TypeBuildable
 
   public init(
-    isTok: ExpressibleAsTokenSyntax = TokenSyntax.`is`,
-    typeName: ExpressibleAsTypeBuildable
+    isTok: ExpressibleByTokenSyntax = TokenSyntax.`is`,
+    typeName: ExpressibleByTypeBuildable
   ) {
     self.isTok = isTok.createTokenSyntax()
     self.typeName = typeName.createTypeBuildable()
@@ -2126,11 +2126,11 @@ public struct IsExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsIsExpr {
+public protocol ExpressibleByIsExpr {
   func createIsExpr() -> IsExpr
 }
 
-extension IsExpr: ExpressibleAsIsExpr {
+extension IsExpr: ExpressibleByIsExpr {
   public func createIsExpr() -> IsExpr {
     self
   }
@@ -2142,9 +2142,9 @@ public struct AsExpr: ExprBuildable {
   let typeName: TypeBuildable
 
   public init(
-    asTok: ExpressibleAsTokenSyntax = TokenSyntax.`as`,
-    questionOrExclamationMark: ExpressibleAsTokenSyntax? = nil,
-    typeName: ExpressibleAsTypeBuildable
+    asTok: ExpressibleByTokenSyntax = TokenSyntax.`as`,
+    questionOrExclamationMark: ExpressibleByTokenSyntax? = nil,
+    typeName: ExpressibleByTypeBuildable
   ) {
     self.asTok = asTok.createTokenSyntax()
     self.questionOrExclamationMark = questionOrExclamationMark?.createTokenSyntax()
@@ -2172,11 +2172,11 @@ public struct AsExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsAsExpr {
+public protocol ExpressibleByAsExpr {
   func createAsExpr() -> AsExpr
 }
 
-extension AsExpr: ExpressibleAsAsExpr {
+extension AsExpr: ExpressibleByAsExpr {
   public func createAsExpr() -> AsExpr {
     self
   }
@@ -2186,7 +2186,7 @@ public struct TypeExpr: ExprBuildable {
   let type: TypeBuildable
 
   public init(
-    type: ExpressibleAsTypeBuildable
+    type: ExpressibleByTypeBuildable
   ) {
     self.type = type.createTypeBuildable()
   }
@@ -2210,11 +2210,11 @@ public struct TypeExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeExpr {
+public protocol ExpressibleByTypeExpr {
   func createTypeExpr() -> TypeExpr
 }
 
-extension TypeExpr: ExpressibleAsTypeExpr {
+extension TypeExpr: ExpressibleByTypeExpr {
   public func createTypeExpr() -> TypeExpr {
     self
   }
@@ -2228,11 +2228,11 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    specifier: ExpressibleAsTokenList? = nil,
-    name: ExpressibleAsTokenSyntax? = nil,
-    assignToken: ExpressibleAsTokenSyntax? = nil,
-    expression: ExpressibleAsExprBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    specifier: ExpressibleByTokenList? = nil,
+    name: ExpressibleByTokenSyntax? = nil,
+    assignToken: ExpressibleByTokenSyntax? = nil,
+    expression: ExpressibleByExprBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.specifier = specifier?.createTokenList()
     self.name = name?.createTokenSyntax()
@@ -2264,11 +2264,11 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureItem {
+public protocol ExpressibleByClosureCaptureItem {
   func createClosureCaptureItem() -> ClosureCaptureItem
 }
 
-extension ClosureCaptureItem: ExpressibleAsClosureCaptureItem {
+extension ClosureCaptureItem: ExpressibleByClosureCaptureItem {
   public func createClosureCaptureItem() -> ClosureCaptureItem {
     self
   }
@@ -2281,7 +2281,7 @@ extension ClosureCaptureItem: ExpressibleAsClosureCaptureItem {
 public struct ClosureCaptureItemList: SyntaxBuildable {
   let elements: [ClosureCaptureItem]
 
-  public init(_ elements: [ExpressibleAsClosureCaptureItem]) {
+  public init(_ elements: [ExpressibleByClosureCaptureItem]) {
     self.elements = elements.map { $0.createClosureCaptureItem() }
   }
 
@@ -2302,11 +2302,11 @@ public struct ClosureCaptureItemList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureItemList {
+public protocol ExpressibleByClosureCaptureItemList {
   func createClosureCaptureItemList() -> ClosureCaptureItemList
 }
 
-extension ClosureCaptureItemList: ExpressibleAsClosureCaptureItemList {
+extension ClosureCaptureItemList: ExpressibleByClosureCaptureItemList {
   public func createClosureCaptureItemList() -> ClosureCaptureItemList {
     self
   }
@@ -2318,9 +2318,9 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
   let rightSquare: TokenSyntax
 
   public init(
-    leftSquare: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
-    items: ExpressibleAsClosureCaptureItemList? = nil,
-    rightSquare: ExpressibleAsTokenSyntax = TokenSyntax.`rightSquareBracket`
+    leftSquare: ExpressibleByTokenSyntax = TokenSyntax.`leftSquareBracket`,
+    items: ExpressibleByClosureCaptureItemList? = nil,
+    rightSquare: ExpressibleByTokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare.createTokenSyntax()
     self.items = items?.createClosureCaptureItemList()
@@ -2348,11 +2348,11 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureSignature {
+public protocol ExpressibleByClosureCaptureSignature {
   func createClosureCaptureSignature() -> ClosureCaptureSignature
 }
 
-extension ClosureCaptureSignature: ExpressibleAsClosureCaptureSignature {
+extension ClosureCaptureSignature: ExpressibleByClosureCaptureSignature {
   public func createClosureCaptureSignature() -> ClosureCaptureSignature {
     self
   }
@@ -2363,8 +2363,8 @@ public struct ClosureParam: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -2390,11 +2390,11 @@ public struct ClosureParam: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureParam {
+public protocol ExpressibleByClosureParam {
   func createClosureParam() -> ClosureParam
 }
 
-extension ClosureParam: ExpressibleAsClosureParam {
+extension ClosureParam: ExpressibleByClosureParam {
   public func createClosureParam() -> ClosureParam {
     self
   }
@@ -2407,7 +2407,7 @@ extension ClosureParam: ExpressibleAsClosureParam {
 public struct ClosureParamList: SyntaxBuildable {
   let elements: [ClosureParam]
 
-  public init(_ elements: [ExpressibleAsClosureParam]) {
+  public init(_ elements: [ExpressibleByClosureParam]) {
     self.elements = elements.map { $0.createClosureParam() }
   }
 
@@ -2428,11 +2428,11 @@ public struct ClosureParamList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureParamList {
+public protocol ExpressibleByClosureParamList {
   func createClosureParamList() -> ClosureParamList
 }
 
-extension ClosureParamList: ExpressibleAsClosureParamList {
+extension ClosureParamList: ExpressibleByClosureParamList {
   public func createClosureParamList() -> ClosureParamList {
     self
   }
@@ -2448,13 +2448,13 @@ public struct ClosureSignature: SyntaxBuildable {
   let inTok: TokenSyntax
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    capture: ExpressibleAsClosureCaptureSignature? = nil,
-    input: ExpressibleAsSyntaxBuildable? = nil,
-    asyncKeyword: ExpressibleAsTokenSyntax? = nil,
-    throwsTok: ExpressibleAsTokenSyntax? = nil,
-    output: ExpressibleAsReturnClause? = nil,
-    inTok: ExpressibleAsTokenSyntax = TokenSyntax.`in`
+    attributes: ExpressibleByAttributeList? = nil,
+    capture: ExpressibleByClosureCaptureSignature? = nil,
+    input: ExpressibleBySyntaxBuildable? = nil,
+    asyncKeyword: ExpressibleByTokenSyntax? = nil,
+    throwsTok: ExpressibleByTokenSyntax? = nil,
+    output: ExpressibleByReturnClause? = nil,
+    inTok: ExpressibleByTokenSyntax = TokenSyntax.`in`
   ) {
     self.attributes = attributes?.createAttributeList()
     self.capture = capture?.createClosureCaptureSignature()
@@ -2490,11 +2490,11 @@ public struct ClosureSignature: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureSignature {
+public protocol ExpressibleByClosureSignature {
   func createClosureSignature() -> ClosureSignature
 }
 
-extension ClosureSignature: ExpressibleAsClosureSignature {
+extension ClosureSignature: ExpressibleByClosureSignature {
   public func createClosureSignature() -> ClosureSignature {
     self
   }
@@ -2507,10 +2507,10 @@ public struct ClosureExpr: ExprBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
-    signature: ExpressibleAsClosureSignature? = nil,
-    statements: ExpressibleAsCodeBlockItemList,
-    rightBrace: ExpressibleAsTokenSyntax = TokenSyntax.`rightBrace`
+    leftBrace: ExpressibleByTokenSyntax = TokenSyntax.`leftBrace`,
+    signature: ExpressibleByClosureSignature? = nil,
+    statements: ExpressibleByCodeBlockItemList,
+    rightBrace: ExpressibleByTokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace.createTokenSyntax()
     self.signature = signature?.createClosureSignature()
@@ -2540,11 +2540,11 @@ public struct ClosureExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureExpr {
+public protocol ExpressibleByClosureExpr {
   func createClosureExpr() -> ClosureExpr
 }
 
-extension ClosureExpr: ExpressibleAsClosureExpr {
+extension ClosureExpr: ExpressibleByClosureExpr {
   public func createClosureExpr() -> ClosureExpr {
     self
   }
@@ -2554,7 +2554,7 @@ public struct UnresolvedPatternExpr: ExprBuildable {
   let pattern: PatternBuildable
 
   public init(
-    pattern: ExpressibleAsPatternBuildable
+    pattern: ExpressibleByPatternBuildable
   ) {
     self.pattern = pattern.createPatternBuildable()
   }
@@ -2578,11 +2578,11 @@ public struct UnresolvedPatternExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsUnresolvedPatternExpr {
+public protocol ExpressibleByUnresolvedPatternExpr {
   func createUnresolvedPatternExpr() -> UnresolvedPatternExpr
 }
 
-extension UnresolvedPatternExpr: ExpressibleAsUnresolvedPatternExpr {
+extension UnresolvedPatternExpr: ExpressibleByUnresolvedPatternExpr {
   public func createUnresolvedPatternExpr() -> UnresolvedPatternExpr {
     self
   }
@@ -2594,9 +2594,9 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   let closure: ClosureExpr
 
   public init(
-    label: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    closure: ExpressibleAsClosureExpr
+    label: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    closure: ExpressibleByClosureExpr
   ) {
     self.label = label.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -2624,11 +2624,11 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMultipleTrailingClosureElement {
+public protocol ExpressibleByMultipleTrailingClosureElement {
   func createMultipleTrailingClosureElement() -> MultipleTrailingClosureElement
 }
 
-extension MultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureElement {
+extension MultipleTrailingClosureElement: ExpressibleByMultipleTrailingClosureElement {
   public func createMultipleTrailingClosureElement() -> MultipleTrailingClosureElement {
     self
   }
@@ -2641,7 +2641,7 @@ extension MultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureEl
 public struct MultipleTrailingClosureElementList: SyntaxBuildable {
   let elements: [MultipleTrailingClosureElement]
 
-  public init(_ elements: [ExpressibleAsMultipleTrailingClosureElement]) {
+  public init(_ elements: [ExpressibleByMultipleTrailingClosureElement]) {
     self.elements = elements.map { $0.createMultipleTrailingClosureElement() }
   }
 
@@ -2662,11 +2662,11 @@ public struct MultipleTrailingClosureElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMultipleTrailingClosureElementList {
+public protocol ExpressibleByMultipleTrailingClosureElementList {
   func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList
 }
 
-extension MultipleTrailingClosureElementList: ExpressibleAsMultipleTrailingClosureElementList {
+extension MultipleTrailingClosureElementList: ExpressibleByMultipleTrailingClosureElementList {
   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
     self
   }
@@ -2681,12 +2681,12 @@ public struct FunctionCallExpr: ExprBuildable {
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
   public init(
-    calledExpression: ExpressibleAsExprBuildable,
-    leftParen: ExpressibleAsTokenSyntax? = nil,
-    argumentList: ExpressibleAsTupleExprElementList,
-    rightParen: ExpressibleAsTokenSyntax? = nil,
-    trailingClosure: ExpressibleAsClosureExpr? = nil,
-    additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil
+    calledExpression: ExpressibleByExprBuildable,
+    leftParen: ExpressibleByTokenSyntax? = nil,
+    argumentList: ExpressibleByTupleExprElementList,
+    rightParen: ExpressibleByTokenSyntax? = nil,
+    trailingClosure: ExpressibleByClosureExpr? = nil,
+    additionalTrailingClosures: ExpressibleByMultipleTrailingClosureElementList? = nil
   ) {
     self.calledExpression = calledExpression.createExprBuildable()
     self.leftParen = leftParen?.createTokenSyntax()
@@ -2720,11 +2720,11 @@ public struct FunctionCallExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionCallExpr {
+public protocol ExpressibleByFunctionCallExpr {
   func createFunctionCallExpr() -> FunctionCallExpr
 }
 
-extension FunctionCallExpr: ExpressibleAsFunctionCallExpr {
+extension FunctionCallExpr: ExpressibleByFunctionCallExpr {
   public func createFunctionCallExpr() -> FunctionCallExpr {
     self
   }
@@ -2739,12 +2739,12 @@ public struct SubscriptExpr: ExprBuildable {
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
   public init(
-    calledExpression: ExpressibleAsExprBuildable,
-    leftBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
-    argumentList: ExpressibleAsTupleExprElementList,
-    rightBracket: ExpressibleAsTokenSyntax = TokenSyntax.`rightSquareBracket`,
-    trailingClosure: ExpressibleAsClosureExpr? = nil,
-    additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil
+    calledExpression: ExpressibleByExprBuildable,
+    leftBracket: ExpressibleByTokenSyntax = TokenSyntax.`leftSquareBracket`,
+    argumentList: ExpressibleByTupleExprElementList,
+    rightBracket: ExpressibleByTokenSyntax = TokenSyntax.`rightSquareBracket`,
+    trailingClosure: ExpressibleByClosureExpr? = nil,
+    additionalTrailingClosures: ExpressibleByMultipleTrailingClosureElementList? = nil
   ) {
     self.calledExpression = calledExpression.createExprBuildable()
     self.leftBracket = leftBracket.createTokenSyntax()
@@ -2778,11 +2778,11 @@ public struct SubscriptExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSubscriptExpr {
+public protocol ExpressibleBySubscriptExpr {
   func createSubscriptExpr() -> SubscriptExpr
 }
 
-extension SubscriptExpr: ExpressibleAsSubscriptExpr {
+extension SubscriptExpr: ExpressibleBySubscriptExpr {
   public func createSubscriptExpr() -> SubscriptExpr {
     self
   }
@@ -2793,8 +2793,8 @@ public struct OptionalChainingExpr: ExprBuildable {
   let questionMark: TokenSyntax
 
   public init(
-    expression: ExpressibleAsExprBuildable,
-    questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`postfixQuestionMark`
+    expression: ExpressibleByExprBuildable,
+    questionMark: ExpressibleByTokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.expression = expression.createExprBuildable()
     self.questionMark = questionMark.createTokenSyntax()
@@ -2820,11 +2820,11 @@ public struct OptionalChainingExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalChainingExpr {
+public protocol ExpressibleByOptionalChainingExpr {
   func createOptionalChainingExpr() -> OptionalChainingExpr
 }
 
-extension OptionalChainingExpr: ExpressibleAsOptionalChainingExpr {
+extension OptionalChainingExpr: ExpressibleByOptionalChainingExpr {
   public func createOptionalChainingExpr() -> OptionalChainingExpr {
     self
   }
@@ -2835,8 +2835,8 @@ public struct ForcedValueExpr: ExprBuildable {
   let exclamationMark: TokenSyntax
 
   public init(
-    expression: ExpressibleAsExprBuildable,
-    exclamationMark: ExpressibleAsTokenSyntax = TokenSyntax.`exclamationMark`
+    expression: ExpressibleByExprBuildable,
+    exclamationMark: ExpressibleByTokenSyntax = TokenSyntax.`exclamationMark`
   ) {
     self.expression = expression.createExprBuildable()
     self.exclamationMark = exclamationMark.createTokenSyntax()
@@ -2862,11 +2862,11 @@ public struct ForcedValueExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsForcedValueExpr {
+public protocol ExpressibleByForcedValueExpr {
   func createForcedValueExpr() -> ForcedValueExpr
 }
 
-extension ForcedValueExpr: ExpressibleAsForcedValueExpr {
+extension ForcedValueExpr: ExpressibleByForcedValueExpr {
   public func createForcedValueExpr() -> ForcedValueExpr {
     self
   }
@@ -2877,8 +2877,8 @@ public struct PostfixUnaryExpr: ExprBuildable {
   let operatorToken: TokenSyntax
 
   public init(
-    expression: ExpressibleAsExprBuildable,
-    operatorToken: ExpressibleAsTokenSyntax
+    expression: ExpressibleByExprBuildable,
+    operatorToken: ExpressibleByTokenSyntax
   ) {
     self.expression = expression.createExprBuildable()
     self.operatorToken = operatorToken.createTokenSyntax()
@@ -2904,11 +2904,11 @@ public struct PostfixUnaryExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPostfixUnaryExpr {
+public protocol ExpressibleByPostfixUnaryExpr {
   func createPostfixUnaryExpr() -> PostfixUnaryExpr
 }
 
-extension PostfixUnaryExpr: ExpressibleAsPostfixUnaryExpr {
+extension PostfixUnaryExpr: ExpressibleByPostfixUnaryExpr {
   public func createPostfixUnaryExpr() -> PostfixUnaryExpr {
     self
   }
@@ -2919,8 +2919,8 @@ public struct SpecializeExpr: ExprBuildable {
   let genericArgumentClause: GenericArgumentClause
 
   public init(
-    expression: ExpressibleAsExprBuildable,
-    genericArgumentClause: ExpressibleAsGenericArgumentClause
+    expression: ExpressibleByExprBuildable,
+    genericArgumentClause: ExpressibleByGenericArgumentClause
   ) {
     self.expression = expression.createExprBuildable()
     self.genericArgumentClause = genericArgumentClause.createGenericArgumentClause()
@@ -2946,11 +2946,11 @@ public struct SpecializeExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSpecializeExpr {
+public protocol ExpressibleBySpecializeExpr {
   func createSpecializeExpr() -> SpecializeExpr
 }
 
-extension SpecializeExpr: ExpressibleAsSpecializeExpr {
+extension SpecializeExpr: ExpressibleBySpecializeExpr {
   public func createSpecializeExpr() -> SpecializeExpr {
     self
   }
@@ -2960,7 +2960,7 @@ public struct StringSegment: SyntaxBuildable {
   let content: TokenSyntax
 
   public init(
-    content: ExpressibleAsTokenSyntax
+    content: ExpressibleByTokenSyntax
   ) {
     self.content = content.createTokenSyntax()
   }
@@ -2984,11 +2984,11 @@ public struct StringSegment: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsStringSegment {
+public protocol ExpressibleByStringSegment {
   func createStringSegment() -> StringSegment
 }
 
-extension StringSegment: ExpressibleAsStringSegment {
+extension StringSegment: ExpressibleByStringSegment {
   public func createStringSegment() -> StringSegment {
     self
   }
@@ -3002,11 +3002,11 @@ public struct ExpressionSegment: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    backslash: ExpressibleAsTokenSyntax = TokenSyntax.`backslash`,
-    delimiter: ExpressibleAsTokenSyntax? = nil,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    expressions: ExpressibleAsTupleExprElementList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`stringInterpolationAnchor`
+    backslash: ExpressibleByTokenSyntax = TokenSyntax.`backslash`,
+    delimiter: ExpressibleByTokenSyntax? = nil,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    expressions: ExpressibleByTupleExprElementList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`stringInterpolationAnchor`
   ) {
     self.backslash = backslash.createTokenSyntax()
     self.delimiter = delimiter?.createTokenSyntax()
@@ -3038,11 +3038,11 @@ public struct ExpressionSegment: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsExpressionSegment {
+public protocol ExpressibleByExpressionSegment {
   func createExpressionSegment() -> ExpressionSegment
 }
 
-extension ExpressionSegment: ExpressibleAsExpressionSegment {
+extension ExpressionSegment: ExpressibleByExpressionSegment {
   public func createExpressionSegment() -> ExpressionSegment {
     self
   }
@@ -3056,11 +3056,11 @@ public struct StringLiteralExpr: ExprBuildable {
   let closeDelimiter: TokenSyntax?
 
   public init(
-    openDelimiter: ExpressibleAsTokenSyntax? = nil,
-    openQuote: ExpressibleAsTokenSyntax,
-    segments: ExpressibleAsStringLiteralSegments,
-    closeQuote: ExpressibleAsTokenSyntax,
-    closeDelimiter: ExpressibleAsTokenSyntax? = nil
+    openDelimiter: ExpressibleByTokenSyntax? = nil,
+    openQuote: ExpressibleByTokenSyntax,
+    segments: ExpressibleByStringLiteralSegments,
+    closeQuote: ExpressibleByTokenSyntax,
+    closeDelimiter: ExpressibleByTokenSyntax? = nil
   ) {
     self.openDelimiter = openDelimiter?.createTokenSyntax()
     self.openQuote = openQuote.createTokenSyntax()
@@ -3092,11 +3092,11 @@ public struct StringLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsStringLiteralExpr {
+public protocol ExpressibleByStringLiteralExpr {
   func createStringLiteralExpr() -> StringLiteralExpr
 }
 
-extension StringLiteralExpr: ExpressibleAsStringLiteralExpr {
+extension StringLiteralExpr: ExpressibleByStringLiteralExpr {
   public func createStringLiteralExpr() -> StringLiteralExpr {
     self
   }
@@ -3108,9 +3108,9 @@ public struct KeyPathExpr: ExprBuildable {
   let expression: ExprBuildable
 
   public init(
-    backslash: ExpressibleAsTokenSyntax = TokenSyntax.`backslash`,
-    rootExpr: ExpressibleAsExprBuildable? = nil,
-    expression: ExpressibleAsExprBuildable
+    backslash: ExpressibleByTokenSyntax = TokenSyntax.`backslash`,
+    rootExpr: ExpressibleByExprBuildable? = nil,
+    expression: ExpressibleByExprBuildable
   ) {
     self.backslash = backslash.createTokenSyntax()
     self.rootExpr = rootExpr?.createExprBuildable()
@@ -3138,11 +3138,11 @@ public struct KeyPathExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsKeyPathExpr {
+public protocol ExpressibleByKeyPathExpr {
   func createKeyPathExpr() -> KeyPathExpr
 }
 
-extension KeyPathExpr: ExpressibleAsKeyPathExpr {
+extension KeyPathExpr: ExpressibleByKeyPathExpr {
   public func createKeyPathExpr() -> KeyPathExpr {
     self
   }
@@ -3152,7 +3152,7 @@ public struct KeyPathBaseExpr: ExprBuildable {
   let period: TokenSyntax
 
   public init(
-    period: ExpressibleAsTokenSyntax = TokenSyntax.`period`
+    period: ExpressibleByTokenSyntax = TokenSyntax.`period`
   ) {
     self.period = period.createTokenSyntax()
   }
@@ -3176,11 +3176,11 @@ public struct KeyPathBaseExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsKeyPathBaseExpr {
+public protocol ExpressibleByKeyPathBaseExpr {
   func createKeyPathBaseExpr() -> KeyPathBaseExpr
 }
 
-extension KeyPathBaseExpr: ExpressibleAsKeyPathBaseExpr {
+extension KeyPathBaseExpr: ExpressibleByKeyPathBaseExpr {
   public func createKeyPathBaseExpr() -> KeyPathBaseExpr {
     self
   }
@@ -3191,8 +3191,8 @@ public struct ObjcNamePiece: SyntaxBuildable {
   let dot: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    dot: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax,
+    dot: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.dot = dot?.createTokenSyntax()
@@ -3218,11 +3218,11 @@ public struct ObjcNamePiece: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcNamePiece {
+public protocol ExpressibleByObjcNamePiece {
   func createObjcNamePiece() -> ObjcNamePiece
 }
 
-extension ObjcNamePiece: ExpressibleAsObjcNamePiece {
+extension ObjcNamePiece: ExpressibleByObjcNamePiece {
   public func createObjcNamePiece() -> ObjcNamePiece {
     self
   }
@@ -3235,7 +3235,7 @@ extension ObjcNamePiece: ExpressibleAsObjcNamePiece {
 public struct ObjcName: SyntaxBuildable {
   let elements: [ObjcNamePiece]
 
-  public init(_ elements: [ExpressibleAsObjcNamePiece]) {
+  public init(_ elements: [ExpressibleByObjcNamePiece]) {
     self.elements = elements.map { $0.createObjcNamePiece() }
   }
 
@@ -3256,11 +3256,11 @@ public struct ObjcName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcName {
+public protocol ExpressibleByObjcName {
   func createObjcName() -> ObjcName
 }
 
-extension ObjcName: ExpressibleAsObjcName {
+extension ObjcName: ExpressibleByObjcName {
   public func createObjcName() -> ObjcName {
     self
   }
@@ -3273,10 +3273,10 @@ public struct ObjcKeyPathExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    keyPath: ExpressibleAsTokenSyntax = TokenSyntax.`poundKeyPath`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    name: ExpressibleAsObjcName,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    keyPath: ExpressibleByTokenSyntax = TokenSyntax.`poundKeyPath`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    name: ExpressibleByObjcName,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.keyPath = keyPath.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -3306,11 +3306,11 @@ public struct ObjcKeyPathExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcKeyPathExpr {
+public protocol ExpressibleByObjcKeyPathExpr {
   func createObjcKeyPathExpr() -> ObjcKeyPathExpr
 }
 
-extension ObjcKeyPathExpr: ExpressibleAsObjcKeyPathExpr {
+extension ObjcKeyPathExpr: ExpressibleByObjcKeyPathExpr {
   public func createObjcKeyPathExpr() -> ObjcKeyPathExpr {
     self
   }
@@ -3325,12 +3325,12 @@ public struct ObjcSelectorExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundSelector: ExpressibleAsTokenSyntax = TokenSyntax.`poundSelector`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    kind: ExpressibleAsTokenSyntax? = nil,
-    colon: ExpressibleAsTokenSyntax? = nil,
-    name: ExpressibleAsExprBuildable,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundSelector: ExpressibleByTokenSyntax = TokenSyntax.`poundSelector`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    kind: ExpressibleByTokenSyntax? = nil,
+    colon: ExpressibleByTokenSyntax? = nil,
+    name: ExpressibleByExprBuildable,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundSelector = poundSelector.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -3364,11 +3364,11 @@ public struct ObjcSelectorExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcSelectorExpr {
+public protocol ExpressibleByObjcSelectorExpr {
   func createObjcSelectorExpr() -> ObjcSelectorExpr
 }
 
-extension ObjcSelectorExpr: ExpressibleAsObjcSelectorExpr {
+extension ObjcSelectorExpr: ExpressibleByObjcSelectorExpr {
   public func createObjcSelectorExpr() -> ObjcSelectorExpr {
     self
   }
@@ -3379,8 +3379,8 @@ public struct PostfixIfConfigExpr: ExprBuildable {
   let config: IfConfigDecl
 
   public init(
-    base: ExpressibleAsExprBuildable? = nil,
-    config: ExpressibleAsIfConfigDecl
+    base: ExpressibleByExprBuildable? = nil,
+    config: ExpressibleByIfConfigDecl
   ) {
     self.base = base?.createExprBuildable()
     self.config = config.createIfConfigDecl()
@@ -3406,11 +3406,11 @@ public struct PostfixIfConfigExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsPostfixIfConfigExpr {
+public protocol ExpressibleByPostfixIfConfigExpr {
   func createPostfixIfConfigExpr() -> PostfixIfConfigExpr
 }
 
-extension PostfixIfConfigExpr: ExpressibleAsPostfixIfConfigExpr {
+extension PostfixIfConfigExpr: ExpressibleByPostfixIfConfigExpr {
   public func createPostfixIfConfigExpr() -> PostfixIfConfigExpr {
     self
   }
@@ -3420,7 +3420,7 @@ public struct EditorPlaceholderExpr: ExprBuildable {
   let identifier: TokenSyntax
 
   public init(
-    identifier: ExpressibleAsTokenSyntax
+    identifier: ExpressibleByTokenSyntax
   ) {
     self.identifier = identifier.createTokenSyntax()
   }
@@ -3444,11 +3444,11 @@ public struct EditorPlaceholderExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsEditorPlaceholderExpr {
+public protocol ExpressibleByEditorPlaceholderExpr {
   func createEditorPlaceholderExpr() -> EditorPlaceholderExpr
 }
 
-extension EditorPlaceholderExpr: ExpressibleAsEditorPlaceholderExpr {
+extension EditorPlaceholderExpr: ExpressibleByEditorPlaceholderExpr {
   public func createEditorPlaceholderExpr() -> EditorPlaceholderExpr {
     self
   }
@@ -3461,10 +3461,10 @@ public struct ObjectLiteralExpr: ExprBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    identifier: ExpressibleAsTokenSyntax,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    arguments: ExpressibleAsTupleExprElementList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    identifier: ExpressibleByTokenSyntax,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    arguments: ExpressibleByTupleExprElementList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.identifier = identifier.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -3494,11 +3494,11 @@ public struct ObjectLiteralExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsObjectLiteralExpr {
+public protocol ExpressibleByObjectLiteralExpr {
   func createObjectLiteralExpr() -> ObjectLiteralExpr
 }
 
-extension ObjectLiteralExpr: ExpressibleAsObjectLiteralExpr {
+extension ObjectLiteralExpr: ExpressibleByObjectLiteralExpr {
   public func createObjectLiteralExpr() -> ObjectLiteralExpr {
     self
   }
@@ -3509,8 +3509,8 @@ public struct TypeInitializerClause: SyntaxBuildable {
   let value: TypeBuildable
 
   public init(
-    equal: ExpressibleAsTokenSyntax = TokenSyntax.`equal`,
-    value: ExpressibleAsTypeBuildable
+    equal: ExpressibleByTokenSyntax = TokenSyntax.`equal`,
+    value: ExpressibleByTypeBuildable
   ) {
     self.equal = equal.createTokenSyntax()
     self.value = value.createTypeBuildable()
@@ -3536,11 +3536,11 @@ public struct TypeInitializerClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeInitializerClause {
+public protocol ExpressibleByTypeInitializerClause {
   func createTypeInitializerClause() -> TypeInitializerClause
 }
 
-extension TypeInitializerClause: ExpressibleAsTypeInitializerClause {
+extension TypeInitializerClause: ExpressibleByTypeInitializerClause {
   public func createTypeInitializerClause() -> TypeInitializerClause {
     self
   }
@@ -3556,13 +3556,13 @@ public struct TypealiasDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    typealiasKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`typealias`,
-    identifier: ExpressibleAsTokenSyntax,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    initializer: ExpressibleAsTypeInitializerClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    typealiasKeyword: ExpressibleByTokenSyntax = TokenSyntax.`typealias`,
+    identifier: ExpressibleByTokenSyntax,
+    genericParameterClause: ExpressibleByGenericParameterClause? = nil,
+    initializer: ExpressibleByTypeInitializerClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -3598,11 +3598,11 @@ public struct TypealiasDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsTypealiasDecl {
+public protocol ExpressibleByTypealiasDecl {
   func createTypealiasDecl() -> TypealiasDecl
 }
 
-extension TypealiasDecl: ExpressibleAsTypealiasDecl {
+extension TypealiasDecl: ExpressibleByTypealiasDecl {
   public func createTypealiasDecl() -> TypealiasDecl {
     self
   }
@@ -3618,13 +3618,13 @@ public struct AssociatedtypeDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    associatedtypeKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`associatedtype`,
-    identifier: ExpressibleAsTokenSyntax,
-    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
-    initializer: ExpressibleAsTypeInitializerClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    associatedtypeKeyword: ExpressibleByTokenSyntax = TokenSyntax.`associatedtype`,
+    identifier: ExpressibleByTokenSyntax,
+    inheritanceClause: ExpressibleByTypeInheritanceClause? = nil,
+    initializer: ExpressibleByTypeInitializerClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -3660,11 +3660,11 @@ public struct AssociatedtypeDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsAssociatedtypeDecl {
+public protocol ExpressibleByAssociatedtypeDecl {
   func createAssociatedtypeDecl() -> AssociatedtypeDecl
 }
 
-extension AssociatedtypeDecl: ExpressibleAsAssociatedtypeDecl {
+extension AssociatedtypeDecl: ExpressibleByAssociatedtypeDecl {
   public func createAssociatedtypeDecl() -> AssociatedtypeDecl {
     self
   }
@@ -3677,7 +3677,7 @@ extension AssociatedtypeDecl: ExpressibleAsAssociatedtypeDecl {
 public struct FunctionParameterList: SyntaxBuildable {
   let elements: [FunctionParameter]
 
-  public init(_ elements: [ExpressibleAsFunctionParameter]) {
+  public init(_ elements: [ExpressibleByFunctionParameter]) {
     self.elements = elements.map { $0.createFunctionParameter() }
   }
 
@@ -3698,11 +3698,11 @@ public struct FunctionParameterList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionParameterList {
+public protocol ExpressibleByFunctionParameterList {
   func createFunctionParameterList() -> FunctionParameterList
 }
 
-extension FunctionParameterList: ExpressibleAsFunctionParameterList {
+extension FunctionParameterList: ExpressibleByFunctionParameterList {
   public func createFunctionParameterList() -> FunctionParameterList {
     self
   }
@@ -3714,9 +3714,9 @@ public struct ParameterClause: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    parameterList: ExpressibleAsFunctionParameterList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    parameterList: ExpressibleByFunctionParameterList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.parameterList = parameterList.createFunctionParameterList()
@@ -3744,11 +3744,11 @@ public struct ParameterClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsParameterClause {
+public protocol ExpressibleByParameterClause {
   func createParameterClause() -> ParameterClause
 }
 
-extension ParameterClause: ExpressibleAsParameterClause {
+extension ParameterClause: ExpressibleByParameterClause {
   public func createParameterClause() -> ParameterClause {
     self
   }
@@ -3759,8 +3759,8 @@ public struct ReturnClause: SyntaxBuildable {
   let returnType: TypeBuildable
 
   public init(
-    arrow: ExpressibleAsTokenSyntax = TokenSyntax.`arrow`,
-    returnType: ExpressibleAsTypeBuildable
+    arrow: ExpressibleByTokenSyntax = TokenSyntax.`arrow`,
+    returnType: ExpressibleByTypeBuildable
   ) {
     self.arrow = arrow.createTokenSyntax()
     self.returnType = returnType.createTypeBuildable()
@@ -3786,11 +3786,11 @@ public struct ReturnClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsReturnClause {
+public protocol ExpressibleByReturnClause {
   func createReturnClause() -> ReturnClause
 }
 
-extension ReturnClause: ExpressibleAsReturnClause {
+extension ReturnClause: ExpressibleByReturnClause {
   public func createReturnClause() -> ReturnClause {
     self
   }
@@ -3803,10 +3803,10 @@ public struct FunctionSignature: SyntaxBuildable {
   let output: ReturnClause?
 
   public init(
-    input: ExpressibleAsParameterClause,
-    asyncOrReasyncKeyword: ExpressibleAsTokenSyntax? = nil,
-    throwsOrRethrowsKeyword: ExpressibleAsTokenSyntax? = nil,
-    output: ExpressibleAsReturnClause? = nil
+    input: ExpressibleByParameterClause,
+    asyncOrReasyncKeyword: ExpressibleByTokenSyntax? = nil,
+    throwsOrRethrowsKeyword: ExpressibleByTokenSyntax? = nil,
+    output: ExpressibleByReturnClause? = nil
   ) {
     self.input = input.createParameterClause()
     self.asyncOrReasyncKeyword = asyncOrReasyncKeyword?.createTokenSyntax()
@@ -3836,11 +3836,11 @@ public struct FunctionSignature: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionSignature {
+public protocol ExpressibleByFunctionSignature {
   func createFunctionSignature() -> FunctionSignature
 }
 
-extension FunctionSignature: ExpressibleAsFunctionSignature {
+extension FunctionSignature: ExpressibleByFunctionSignature {
   public func createFunctionSignature() -> FunctionSignature {
     self
   }
@@ -3852,9 +3852,9 @@ public struct IfConfigClause: SyntaxBuildable {
   let elements: SyntaxBuildable
 
   public init(
-    poundKeyword: ExpressibleAsTokenSyntax,
-    condition: ExpressibleAsExprBuildable? = nil,
-    elements: ExpressibleAsSyntaxBuildable
+    poundKeyword: ExpressibleByTokenSyntax,
+    condition: ExpressibleByExprBuildable? = nil,
+    elements: ExpressibleBySyntaxBuildable
   ) {
     self.poundKeyword = poundKeyword.createTokenSyntax()
     self.condition = condition?.createExprBuildable()
@@ -3882,11 +3882,11 @@ public struct IfConfigClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsIfConfigClause {
+public protocol ExpressibleByIfConfigClause {
   func createIfConfigClause() -> IfConfigClause
 }
 
-extension IfConfigClause: ExpressibleAsIfConfigClause {
+extension IfConfigClause: ExpressibleByIfConfigClause {
   public func createIfConfigClause() -> IfConfigClause {
     self
   }
@@ -3899,7 +3899,7 @@ extension IfConfigClause: ExpressibleAsIfConfigClause {
 public struct IfConfigClauseList: SyntaxBuildable {
   let elements: [IfConfigClause]
 
-  public init(_ elements: [ExpressibleAsIfConfigClause]) {
+  public init(_ elements: [ExpressibleByIfConfigClause]) {
     self.elements = elements.map { $0.createIfConfigClause() }
   }
 
@@ -3920,11 +3920,11 @@ public struct IfConfigClauseList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsIfConfigClauseList {
+public protocol ExpressibleByIfConfigClauseList {
   func createIfConfigClauseList() -> IfConfigClauseList
 }
 
-extension IfConfigClauseList: ExpressibleAsIfConfigClauseList {
+extension IfConfigClauseList: ExpressibleByIfConfigClauseList {
   public func createIfConfigClauseList() -> IfConfigClauseList {
     self
   }
@@ -3935,8 +3935,8 @@ public struct IfConfigDecl: DeclBuildable {
   let poundEndif: TokenSyntax
 
   public init(
-    clauses: ExpressibleAsIfConfigClauseList,
-    poundEndif: ExpressibleAsTokenSyntax = TokenSyntax.`poundEndif`
+    clauses: ExpressibleByIfConfigClauseList,
+    poundEndif: ExpressibleByTokenSyntax = TokenSyntax.`poundEndif`
   ) {
     self.clauses = clauses.createIfConfigClauseList()
     self.poundEndif = poundEndif.createTokenSyntax()
@@ -3962,11 +3962,11 @@ public struct IfConfigDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsIfConfigDecl {
+public protocol ExpressibleByIfConfigDecl {
   func createIfConfigDecl() -> IfConfigDecl
 }
 
-extension IfConfigDecl: ExpressibleAsIfConfigDecl {
+extension IfConfigDecl: ExpressibleByIfConfigDecl {
   public func createIfConfigDecl() -> IfConfigDecl {
     self
   }
@@ -3979,10 +3979,10 @@ public struct PoundErrorDecl: DeclBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundError: ExpressibleAsTokenSyntax = TokenSyntax.`poundError`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    message: ExpressibleAsStringLiteralExpr,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundError: ExpressibleByTokenSyntax = TokenSyntax.`poundError`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    message: ExpressibleByStringLiteralExpr,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundError = poundError.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -4012,11 +4012,11 @@ public struct PoundErrorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundErrorDecl {
+public protocol ExpressibleByPoundErrorDecl {
   func createPoundErrorDecl() -> PoundErrorDecl
 }
 
-extension PoundErrorDecl: ExpressibleAsPoundErrorDecl {
+extension PoundErrorDecl: ExpressibleByPoundErrorDecl {
   public func createPoundErrorDecl() -> PoundErrorDecl {
     self
   }
@@ -4029,10 +4029,10 @@ public struct PoundWarningDecl: DeclBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundWarning: ExpressibleAsTokenSyntax = TokenSyntax.`poundWarning`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    message: ExpressibleAsStringLiteralExpr,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundWarning: ExpressibleByTokenSyntax = TokenSyntax.`poundWarning`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    message: ExpressibleByStringLiteralExpr,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundWarning = poundWarning.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -4062,11 +4062,11 @@ public struct PoundWarningDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundWarningDecl {
+public protocol ExpressibleByPoundWarningDecl {
   func createPoundWarningDecl() -> PoundWarningDecl
 }
 
-extension PoundWarningDecl: ExpressibleAsPoundWarningDecl {
+extension PoundWarningDecl: ExpressibleByPoundWarningDecl {
   public func createPoundWarningDecl() -> PoundWarningDecl {
     self
   }
@@ -4079,10 +4079,10 @@ public struct PoundSourceLocation: DeclBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundSourceLocation: ExpressibleAsTokenSyntax = TokenSyntax.`poundSourceLocation`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    args: ExpressibleAsPoundSourceLocationArgs? = nil,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundSourceLocation: ExpressibleByTokenSyntax = TokenSyntax.`poundSourceLocation`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    args: ExpressibleByPoundSourceLocationArgs? = nil,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundSourceLocation = poundSourceLocation.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -4112,11 +4112,11 @@ public struct PoundSourceLocation: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundSourceLocation {
+public protocol ExpressibleByPoundSourceLocation {
   func createPoundSourceLocation() -> PoundSourceLocation
 }
 
-extension PoundSourceLocation: ExpressibleAsPoundSourceLocation {
+extension PoundSourceLocation: ExpressibleByPoundSourceLocation {
   public func createPoundSourceLocation() -> PoundSourceLocation {
     self
   }
@@ -4132,13 +4132,13 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
   let lineNumber: TokenSyntax
 
   public init(
-    fileArgLabel: ExpressibleAsTokenSyntax,
-    fileArgColon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    fileName: ExpressibleAsTokenSyntax,
-    comma: ExpressibleAsTokenSyntax = TokenSyntax.`comma`,
-    lineArgLabel: ExpressibleAsTokenSyntax,
-    lineArgColon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    lineNumber: ExpressibleAsTokenSyntax
+    fileArgLabel: ExpressibleByTokenSyntax,
+    fileArgColon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    fileName: ExpressibleByTokenSyntax,
+    comma: ExpressibleByTokenSyntax = TokenSyntax.`comma`,
+    lineArgLabel: ExpressibleByTokenSyntax,
+    lineArgColon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    lineNumber: ExpressibleByTokenSyntax
   ) {
     self.fileArgLabel = fileArgLabel.createTokenSyntax()
     self.fileArgColon = fileArgColon.createTokenSyntax()
@@ -4174,11 +4174,11 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundSourceLocationArgs {
+public protocol ExpressibleByPoundSourceLocationArgs {
   func createPoundSourceLocationArgs() -> PoundSourceLocationArgs
 }
 
-extension PoundSourceLocationArgs: ExpressibleAsPoundSourceLocationArgs {
+extension PoundSourceLocationArgs: ExpressibleByPoundSourceLocationArgs {
   public func createPoundSourceLocationArgs() -> PoundSourceLocationArgs {
     self
   }
@@ -4191,10 +4191,10 @@ public struct DeclModifier: SyntaxBuildable {
   let detailRightParen: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    detailLeftParen: ExpressibleAsTokenSyntax? = nil,
-    detail: ExpressibleAsTokenSyntax? = nil,
-    detailRightParen: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax,
+    detailLeftParen: ExpressibleByTokenSyntax? = nil,
+    detail: ExpressibleByTokenSyntax? = nil,
+    detailRightParen: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.detailLeftParen = detailLeftParen?.createTokenSyntax()
@@ -4224,11 +4224,11 @@ public struct DeclModifier: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclModifier {
+public protocol ExpressibleByDeclModifier {
   func createDeclModifier() -> DeclModifier
 }
 
-extension DeclModifier: ExpressibleAsDeclModifier {
+extension DeclModifier: ExpressibleByDeclModifier {
   public func createDeclModifier() -> DeclModifier {
     self
   }
@@ -4239,8 +4239,8 @@ public struct InheritedType: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    typeName: ExpressibleAsTypeBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    typeName: ExpressibleByTypeBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.typeName = typeName.createTypeBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -4266,11 +4266,11 @@ public struct InheritedType: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsInheritedType {
+public protocol ExpressibleByInheritedType {
   func createInheritedType() -> InheritedType
 }
 
-extension InheritedType: ExpressibleAsInheritedType {
+extension InheritedType: ExpressibleByInheritedType {
   public func createInheritedType() -> InheritedType {
     self
   }
@@ -4283,7 +4283,7 @@ extension InheritedType: ExpressibleAsInheritedType {
 public struct InheritedTypeList: SyntaxBuildable {
   let elements: [InheritedType]
 
-  public init(_ elements: [ExpressibleAsInheritedType]) {
+  public init(_ elements: [ExpressibleByInheritedType]) {
     self.elements = elements.map { $0.createInheritedType() }
   }
 
@@ -4304,11 +4304,11 @@ public struct InheritedTypeList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsInheritedTypeList {
+public protocol ExpressibleByInheritedTypeList {
   func createInheritedTypeList() -> InheritedTypeList
 }
 
-extension InheritedTypeList: ExpressibleAsInheritedTypeList {
+extension InheritedTypeList: ExpressibleByInheritedTypeList {
   public func createInheritedTypeList() -> InheritedTypeList {
     self
   }
@@ -4319,8 +4319,8 @@ public struct TypeInheritanceClause: SyntaxBuildable {
   let inheritedTypeCollection: InheritedTypeList
 
   public init(
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    inheritedTypeCollection: ExpressibleAsInheritedTypeList
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    inheritedTypeCollection: ExpressibleByInheritedTypeList
   ) {
     self.colon = colon.createTokenSyntax()
     self.inheritedTypeCollection = inheritedTypeCollection.createInheritedTypeList()
@@ -4346,11 +4346,11 @@ public struct TypeInheritanceClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeInheritanceClause {
+public protocol ExpressibleByTypeInheritanceClause {
   func createTypeInheritanceClause() -> TypeInheritanceClause
 }
 
-extension TypeInheritanceClause: ExpressibleAsTypeInheritanceClause {
+extension TypeInheritanceClause: ExpressibleByTypeInheritanceClause {
   public func createTypeInheritanceClause() -> TypeInheritanceClause {
     self
   }
@@ -4367,14 +4367,14 @@ public struct ClassDecl: DeclBuildable {
   let members: MemberDeclBlock
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    classOrActorKeyword: ExpressibleAsTokenSyntax,
-    identifier: ExpressibleAsTokenSyntax,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    classOrActorKeyword: ExpressibleByTokenSyntax,
+    identifier: ExpressibleByTokenSyntax,
+    genericParameterClause: ExpressibleByGenericParameterClause? = nil,
+    inheritanceClause: ExpressibleByTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    members: ExpressibleByMemberDeclBlock
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -4412,11 +4412,11 @@ public struct ClassDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsClassDecl {
+public protocol ExpressibleByClassDecl {
   func createClassDecl() -> ClassDecl
 }
 
-extension ClassDecl: ExpressibleAsClassDecl {
+extension ClassDecl: ExpressibleByClassDecl {
   public func createClassDecl() -> ClassDecl {
     self
   }
@@ -4433,14 +4433,14 @@ public struct StructDecl: DeclBuildable {
   let members: MemberDeclBlock
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    structKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`struct`,
-    identifier: ExpressibleAsTokenSyntax,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    structKeyword: ExpressibleByTokenSyntax = TokenSyntax.`struct`,
+    identifier: ExpressibleByTokenSyntax,
+    genericParameterClause: ExpressibleByGenericParameterClause? = nil,
+    inheritanceClause: ExpressibleByTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    members: ExpressibleByMemberDeclBlock
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -4478,11 +4478,11 @@ public struct StructDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsStructDecl {
+public protocol ExpressibleByStructDecl {
   func createStructDecl() -> StructDecl
 }
 
-extension StructDecl: ExpressibleAsStructDecl {
+extension StructDecl: ExpressibleByStructDecl {
   public func createStructDecl() -> StructDecl {
     self
   }
@@ -4498,13 +4498,13 @@ public struct ProtocolDecl: DeclBuildable {
   let members: MemberDeclBlock
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    protocolKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`protocol`,
-    identifier: ExpressibleAsTokenSyntax,
-    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    protocolKeyword: ExpressibleByTokenSyntax = TokenSyntax.`protocol`,
+    identifier: ExpressibleByTokenSyntax,
+    inheritanceClause: ExpressibleByTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    members: ExpressibleByMemberDeclBlock
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -4540,11 +4540,11 @@ public struct ProtocolDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsProtocolDecl {
+public protocol ExpressibleByProtocolDecl {
   func createProtocolDecl() -> ProtocolDecl
 }
 
-extension ProtocolDecl: ExpressibleAsProtocolDecl {
+extension ProtocolDecl: ExpressibleByProtocolDecl {
   public func createProtocolDecl() -> ProtocolDecl {
     self
   }
@@ -4560,13 +4560,13 @@ public struct ExtensionDecl: DeclBuildable {
   let members: MemberDeclBlock
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    extensionKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`extension`,
-    extendedType: ExpressibleAsTypeBuildable,
-    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    extensionKeyword: ExpressibleByTokenSyntax = TokenSyntax.`extension`,
+    extendedType: ExpressibleByTypeBuildable,
+    inheritanceClause: ExpressibleByTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    members: ExpressibleByMemberDeclBlock
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -4602,11 +4602,11 @@ public struct ExtensionDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsExtensionDecl {
+public protocol ExpressibleByExtensionDecl {
   func createExtensionDecl() -> ExtensionDecl
 }
 
-extension ExtensionDecl: ExpressibleAsExtensionDecl {
+extension ExtensionDecl: ExpressibleByExtensionDecl {
   public func createExtensionDecl() -> ExtensionDecl {
     self
   }
@@ -4618,9 +4618,9 @@ public struct MemberDeclBlock: SyntaxBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
-    members: ExpressibleAsMemberDeclList,
-    rightBrace: ExpressibleAsTokenSyntax = TokenSyntax.`rightBrace`
+    leftBrace: ExpressibleByTokenSyntax = TokenSyntax.`leftBrace`,
+    members: ExpressibleByMemberDeclList,
+    rightBrace: ExpressibleByTokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace.createTokenSyntax()
     self.members = members.createMemberDeclList()
@@ -4648,11 +4648,11 @@ public struct MemberDeclBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclBlock {
+public protocol ExpressibleByMemberDeclBlock {
   func createMemberDeclBlock() -> MemberDeclBlock
 }
 
-extension MemberDeclBlock: ExpressibleAsMemberDeclBlock {
+extension MemberDeclBlock: ExpressibleByMemberDeclBlock {
   public func createMemberDeclBlock() -> MemberDeclBlock {
     self
   }
@@ -4665,7 +4665,7 @@ extension MemberDeclBlock: ExpressibleAsMemberDeclBlock {
 public struct MemberDeclList: SyntaxBuildable {
   let elements: [MemberDeclListItem]
 
-  public init(_ elements: [ExpressibleAsMemberDeclListItem]) {
+  public init(_ elements: [ExpressibleByMemberDeclListItem]) {
     self.elements = elements.map { $0.createMemberDeclListItem() }
   }
 
@@ -4686,11 +4686,11 @@ public struct MemberDeclList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclList {
+public protocol ExpressibleByMemberDeclList {
   func createMemberDeclList() -> MemberDeclList
 }
 
-extension MemberDeclList: ExpressibleAsMemberDeclList {
+extension MemberDeclList: ExpressibleByMemberDeclList {
   public func createMemberDeclList() -> MemberDeclList {
     self
   }
@@ -4705,8 +4705,8 @@ public struct MemberDeclListItem: SyntaxBuildable {
   let semicolon: TokenSyntax?
 
   public init(
-    decl: ExpressibleAsDeclBuildable,
-    semicolon: ExpressibleAsTokenSyntax? = nil
+    decl: ExpressibleByDeclBuildable,
+    semicolon: ExpressibleByTokenSyntax? = nil
   ) {
     self.decl = decl.createDeclBuildable()
     self.semicolon = semicolon?.createTokenSyntax()
@@ -4732,11 +4732,11 @@ public struct MemberDeclListItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclListItem {
+public protocol ExpressibleByMemberDeclListItem {
   func createMemberDeclListItem() -> MemberDeclListItem
 }
 
-extension MemberDeclListItem: ExpressibleAsMemberDeclListItem {
+extension MemberDeclListItem: ExpressibleByMemberDeclListItem {
   public func createMemberDeclListItem() -> MemberDeclListItem {
     self
   }
@@ -4747,8 +4747,8 @@ public struct SourceFile: SyntaxBuildable {
   let eofToken: TokenSyntax
 
   public init(
-    statements: ExpressibleAsCodeBlockItemList,
-    eofToken: ExpressibleAsTokenSyntax
+    statements: ExpressibleByCodeBlockItemList,
+    eofToken: ExpressibleByTokenSyntax
   ) {
     self.statements = statements.createCodeBlockItemList()
     self.eofToken = eofToken.createTokenSyntax()
@@ -4774,11 +4774,11 @@ public struct SourceFile: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSourceFile {
+public protocol ExpressibleBySourceFile {
   func createSourceFile() -> SourceFile
 }
 
-extension SourceFile: ExpressibleAsSourceFile {
+extension SourceFile: ExpressibleBySourceFile {
   public func createSourceFile() -> SourceFile {
     self
   }
@@ -4789,8 +4789,8 @@ public struct InitializerClause: SyntaxBuildable {
   let value: ExprBuildable
 
   public init(
-    equal: ExpressibleAsTokenSyntax = TokenSyntax.`equal`,
-    value: ExpressibleAsExprBuildable
+    equal: ExpressibleByTokenSyntax = TokenSyntax.`equal`,
+    value: ExpressibleByExprBuildable
   ) {
     self.equal = equal.createTokenSyntax()
     self.value = value.createExprBuildable()
@@ -4816,11 +4816,11 @@ public struct InitializerClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsInitializerClause {
+public protocol ExpressibleByInitializerClause {
   func createInitializerClause() -> InitializerClause
 }
 
-extension InitializerClause: ExpressibleAsInitializerClause {
+extension InitializerClause: ExpressibleByInitializerClause {
   public func createInitializerClause() -> InitializerClause {
     self
   }
@@ -4837,14 +4837,14 @@ public struct FunctionParameter: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    firstName: ExpressibleAsTokenSyntax? = nil,
-    secondName: ExpressibleAsTokenSyntax? = nil,
-    colon: ExpressibleAsTokenSyntax? = nil,
-    type: ExpressibleAsTypeBuildable? = nil,
-    ellipsis: ExpressibleAsTokenSyntax? = nil,
-    defaultArgument: ExpressibleAsInitializerClause? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    firstName: ExpressibleByTokenSyntax? = nil,
+    secondName: ExpressibleByTokenSyntax? = nil,
+    colon: ExpressibleByTokenSyntax? = nil,
+    type: ExpressibleByTypeBuildable? = nil,
+    ellipsis: ExpressibleByTokenSyntax? = nil,
+    defaultArgument: ExpressibleByInitializerClause? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.firstName = firstName?.createTokenSyntax()
@@ -4882,11 +4882,11 @@ public struct FunctionParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionParameter {
+public protocol ExpressibleByFunctionParameter {
   func createFunctionParameter() -> FunctionParameter
 }
 
-extension FunctionParameter: ExpressibleAsFunctionParameter {
+extension FunctionParameter: ExpressibleByFunctionParameter {
   public func createFunctionParameter() -> FunctionParameter {
     self
   }
@@ -4899,7 +4899,7 @@ extension FunctionParameter: ExpressibleAsFunctionParameter {
 public struct ModifierList: SyntaxBuildable {
   let elements: [DeclModifier]
 
-  public init(_ elements: [ExpressibleAsDeclModifier]) {
+  public init(_ elements: [ExpressibleByDeclModifier]) {
     self.elements = elements.map { $0.createDeclModifier() }
   }
 
@@ -4920,11 +4920,11 @@ public struct ModifierList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsModifierList {
+public protocol ExpressibleByModifierList {
   func createModifierList() -> ModifierList
 }
 
-extension ModifierList: ExpressibleAsModifierList {
+extension ModifierList: ExpressibleByModifierList {
   public func createModifierList() -> ModifierList {
     self
   }
@@ -4941,14 +4941,14 @@ public struct FunctionDecl: DeclBuildable {
   let body: CodeBlock?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    funcKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`func`,
-    identifier: ExpressibleAsTokenSyntax,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    signature: ExpressibleAsFunctionSignature,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    body: ExpressibleAsCodeBlock? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    funcKeyword: ExpressibleByTokenSyntax = TokenSyntax.`func`,
+    identifier: ExpressibleByTokenSyntax,
+    genericParameterClause: ExpressibleByGenericParameterClause? = nil,
+    signature: ExpressibleByFunctionSignature,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    body: ExpressibleByCodeBlock? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -4986,11 +4986,11 @@ public struct FunctionDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionDecl {
+public protocol ExpressibleByFunctionDecl {
   func createFunctionDecl() -> FunctionDecl
 }
 
-extension FunctionDecl: ExpressibleAsFunctionDecl {
+extension FunctionDecl: ExpressibleByFunctionDecl {
   public func createFunctionDecl() -> FunctionDecl {
     self
   }
@@ -5008,15 +5008,15 @@ public struct InitializerDecl: DeclBuildable {
   let body: CodeBlock?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    initKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`init`,
-    optionalMark: ExpressibleAsTokenSyntax? = nil,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    parameters: ExpressibleAsParameterClause,
-    throwsOrRethrowsKeyword: ExpressibleAsTokenSyntax? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    body: ExpressibleAsCodeBlock? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    initKeyword: ExpressibleByTokenSyntax = TokenSyntax.`init`,
+    optionalMark: ExpressibleByTokenSyntax? = nil,
+    genericParameterClause: ExpressibleByGenericParameterClause? = nil,
+    parameters: ExpressibleByParameterClause,
+    throwsOrRethrowsKeyword: ExpressibleByTokenSyntax? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    body: ExpressibleByCodeBlock? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5056,11 +5056,11 @@ public struct InitializerDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsInitializerDecl {
+public protocol ExpressibleByInitializerDecl {
   func createInitializerDecl() -> InitializerDecl
 }
 
-extension InitializerDecl: ExpressibleAsInitializerDecl {
+extension InitializerDecl: ExpressibleByInitializerDecl {
   public func createInitializerDecl() -> InitializerDecl {
     self
   }
@@ -5073,10 +5073,10 @@ public struct DeinitializerDecl: DeclBuildable {
   let body: CodeBlock
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    deinitKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`deinit`,
-    body: ExpressibleAsCodeBlock
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    deinitKeyword: ExpressibleByTokenSyntax = TokenSyntax.`deinit`,
+    body: ExpressibleByCodeBlock
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5106,11 +5106,11 @@ public struct DeinitializerDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsDeinitializerDecl {
+public protocol ExpressibleByDeinitializerDecl {
   func createDeinitializerDecl() -> DeinitializerDecl
 }
 
-extension DeinitializerDecl: ExpressibleAsDeinitializerDecl {
+extension DeinitializerDecl: ExpressibleByDeinitializerDecl {
   public func createDeinitializerDecl() -> DeinitializerDecl {
     self
   }
@@ -5127,14 +5127,14 @@ public struct SubscriptDecl: DeclBuildable {
   let accessor: SyntaxBuildable?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    subscriptKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`subscript`,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    indices: ExpressibleAsParameterClause,
-    result: ExpressibleAsReturnClause,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    accessor: ExpressibleAsSyntaxBuildable? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    subscriptKeyword: ExpressibleByTokenSyntax = TokenSyntax.`subscript`,
+    genericParameterClause: ExpressibleByGenericParameterClause? = nil,
+    indices: ExpressibleByParameterClause,
+    result: ExpressibleByReturnClause,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    accessor: ExpressibleBySyntaxBuildable? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5172,11 +5172,11 @@ public struct SubscriptDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsSubscriptDecl {
+public protocol ExpressibleBySubscriptDecl {
   func createSubscriptDecl() -> SubscriptDecl
 }
 
-extension SubscriptDecl: ExpressibleAsSubscriptDecl {
+extension SubscriptDecl: ExpressibleBySubscriptDecl {
   public func createSubscriptDecl() -> SubscriptDecl {
     self
   }
@@ -5189,10 +5189,10 @@ public struct AccessLevelModifier: SyntaxBuildable {
   let rightParen: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    leftParen: ExpressibleAsTokenSyntax? = nil,
-    modifier: ExpressibleAsTokenSyntax? = nil,
-    rightParen: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax,
+    leftParen: ExpressibleByTokenSyntax? = nil,
+    modifier: ExpressibleByTokenSyntax? = nil,
+    rightParen: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.leftParen = leftParen?.createTokenSyntax()
@@ -5222,11 +5222,11 @@ public struct AccessLevelModifier: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessLevelModifier {
+public protocol ExpressibleByAccessLevelModifier {
   func createAccessLevelModifier() -> AccessLevelModifier
 }
 
-extension AccessLevelModifier: ExpressibleAsAccessLevelModifier {
+extension AccessLevelModifier: ExpressibleByAccessLevelModifier {
   public func createAccessLevelModifier() -> AccessLevelModifier {
     self
   }
@@ -5237,8 +5237,8 @@ public struct AccessPathComponent: SyntaxBuildable {
   let trailingDot: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    trailingDot: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax,
+    trailingDot: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.trailingDot = trailingDot?.createTokenSyntax()
@@ -5264,11 +5264,11 @@ public struct AccessPathComponent: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessPathComponent {
+public protocol ExpressibleByAccessPathComponent {
   func createAccessPathComponent() -> AccessPathComponent
 }
 
-extension AccessPathComponent: ExpressibleAsAccessPathComponent {
+extension AccessPathComponent: ExpressibleByAccessPathComponent {
   public func createAccessPathComponent() -> AccessPathComponent {
     self
   }
@@ -5281,7 +5281,7 @@ extension AccessPathComponent: ExpressibleAsAccessPathComponent {
 public struct AccessPath: SyntaxBuildable {
   let elements: [AccessPathComponent]
 
-  public init(_ elements: [ExpressibleAsAccessPathComponent]) {
+  public init(_ elements: [ExpressibleByAccessPathComponent]) {
     self.elements = elements.map { $0.createAccessPathComponent() }
   }
 
@@ -5302,11 +5302,11 @@ public struct AccessPath: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessPath {
+public protocol ExpressibleByAccessPath {
   func createAccessPath() -> AccessPath
 }
 
-extension AccessPath: ExpressibleAsAccessPath {
+extension AccessPath: ExpressibleByAccessPath {
   public func createAccessPath() -> AccessPath {
     self
   }
@@ -5320,11 +5320,11 @@ public struct ImportDecl: DeclBuildable {
   let path: AccessPath
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    importTok: ExpressibleAsTokenSyntax = TokenSyntax.`import`,
-    importKind: ExpressibleAsTokenSyntax? = nil,
-    path: ExpressibleAsAccessPath
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    importTok: ExpressibleByTokenSyntax = TokenSyntax.`import`,
+    importKind: ExpressibleByTokenSyntax? = nil,
+    path: ExpressibleByAccessPath
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5356,11 +5356,11 @@ public struct ImportDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsImportDecl {
+public protocol ExpressibleByImportDecl {
   func createImportDecl() -> ImportDecl
 }
 
-extension ImportDecl: ExpressibleAsImportDecl {
+extension ImportDecl: ExpressibleByImportDecl {
   public func createImportDecl() -> ImportDecl {
     self
   }
@@ -5372,9 +5372,9 @@ public struct AccessorParameter: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    name: ExpressibleAsTokenSyntax,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    name: ExpressibleByTokenSyntax,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.name = name.createTokenSyntax()
@@ -5402,11 +5402,11 @@ public struct AccessorParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorParameter {
+public protocol ExpressibleByAccessorParameter {
   func createAccessorParameter() -> AccessorParameter
 }
 
-extension AccessorParameter: ExpressibleAsAccessorParameter {
+extension AccessorParameter: ExpressibleByAccessorParameter {
   public func createAccessorParameter() -> AccessorParameter {
     self
   }
@@ -5422,13 +5422,13 @@ public struct AccessorDecl: DeclBuildable {
   let body: CodeBlock?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifier: ExpressibleAsDeclModifier? = nil,
-    accessorKind: ExpressibleAsTokenSyntax,
-    parameter: ExpressibleAsAccessorParameter? = nil,
-    asyncKeyword: ExpressibleAsTokenSyntax? = nil,
-    throwsKeyword: ExpressibleAsTokenSyntax? = nil,
-    body: ExpressibleAsCodeBlock? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifier: ExpressibleByDeclModifier? = nil,
+    accessorKind: ExpressibleByTokenSyntax,
+    parameter: ExpressibleByAccessorParameter? = nil,
+    asyncKeyword: ExpressibleByTokenSyntax? = nil,
+    throwsKeyword: ExpressibleByTokenSyntax? = nil,
+    body: ExpressibleByCodeBlock? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifier = modifier?.createDeclModifier()
@@ -5464,11 +5464,11 @@ public struct AccessorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorDecl {
+public protocol ExpressibleByAccessorDecl {
   func createAccessorDecl() -> AccessorDecl
 }
 
-extension AccessorDecl: ExpressibleAsAccessorDecl {
+extension AccessorDecl: ExpressibleByAccessorDecl {
   public func createAccessorDecl() -> AccessorDecl {
     self
   }
@@ -5481,7 +5481,7 @@ extension AccessorDecl: ExpressibleAsAccessorDecl {
 public struct AccessorList: SyntaxBuildable {
   let elements: [AccessorDecl]
 
-  public init(_ elements: [ExpressibleAsAccessorDecl]) {
+  public init(_ elements: [ExpressibleByAccessorDecl]) {
     self.elements = elements.map { $0.createAccessorDecl() }
   }
 
@@ -5502,11 +5502,11 @@ public struct AccessorList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorList {
+public protocol ExpressibleByAccessorList {
   func createAccessorList() -> AccessorList
 }
 
-extension AccessorList: ExpressibleAsAccessorList {
+extension AccessorList: ExpressibleByAccessorList {
   public func createAccessorList() -> AccessorList {
     self
   }
@@ -5518,9 +5518,9 @@ public struct AccessorBlock: SyntaxBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
-    accessors: ExpressibleAsAccessorList,
-    rightBrace: ExpressibleAsTokenSyntax = TokenSyntax.`rightBrace`
+    leftBrace: ExpressibleByTokenSyntax = TokenSyntax.`leftBrace`,
+    accessors: ExpressibleByAccessorList,
+    rightBrace: ExpressibleByTokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace.createTokenSyntax()
     self.accessors = accessors.createAccessorList()
@@ -5548,11 +5548,11 @@ public struct AccessorBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorBlock {
+public protocol ExpressibleByAccessorBlock {
   func createAccessorBlock() -> AccessorBlock
 }
 
-extension AccessorBlock: ExpressibleAsAccessorBlock {
+extension AccessorBlock: ExpressibleByAccessorBlock {
   public func createAccessorBlock() -> AccessorBlock {
     self
   }
@@ -5566,11 +5566,11 @@ public struct PatternBinding: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    pattern: ExpressibleAsPatternBuildable,
-    typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
-    initializer: ExpressibleAsInitializerClause? = nil,
-    accessor: ExpressibleAsSyntaxBuildable? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    pattern: ExpressibleByPatternBuildable,
+    typeAnnotation: ExpressibleByTypeAnnotation? = nil,
+    initializer: ExpressibleByInitializerClause? = nil,
+    accessor: ExpressibleBySyntaxBuildable? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.pattern = pattern.createPatternBuildable()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
@@ -5602,11 +5602,11 @@ public struct PatternBinding: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPatternBinding {
+public protocol ExpressibleByPatternBinding {
   func createPatternBinding() -> PatternBinding
 }
 
-extension PatternBinding: ExpressibleAsPatternBinding {
+extension PatternBinding: ExpressibleByPatternBinding {
   public func createPatternBinding() -> PatternBinding {
     self
   }
@@ -5619,7 +5619,7 @@ extension PatternBinding: ExpressibleAsPatternBinding {
 public struct PatternBindingList: SyntaxBuildable {
   let elements: [PatternBinding]
 
-  public init(_ elements: [ExpressibleAsPatternBinding]) {
+  public init(_ elements: [ExpressibleByPatternBinding]) {
     self.elements = elements.map { $0.createPatternBinding() }
   }
 
@@ -5640,11 +5640,11 @@ public struct PatternBindingList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPatternBindingList {
+public protocol ExpressibleByPatternBindingList {
   func createPatternBindingList() -> PatternBindingList
 }
 
-extension PatternBindingList: ExpressibleAsPatternBindingList {
+extension PatternBindingList: ExpressibleByPatternBindingList {
   public func createPatternBindingList() -> PatternBindingList {
     self
   }
@@ -5657,10 +5657,10 @@ public struct VariableDecl: DeclBuildable {
   let bindings: PatternBindingList
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    letOrVarKeyword: ExpressibleAsTokenSyntax,
-    bindings: ExpressibleAsPatternBindingList
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    letOrVarKeyword: ExpressibleByTokenSyntax,
+    bindings: ExpressibleByPatternBindingList
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5690,11 +5690,11 @@ public struct VariableDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsVariableDecl {
+public protocol ExpressibleByVariableDecl {
   func createVariableDecl() -> VariableDecl
 }
 
-extension VariableDecl: ExpressibleAsVariableDecl {
+extension VariableDecl: ExpressibleByVariableDecl {
   public func createVariableDecl() -> VariableDecl {
     self
   }
@@ -5711,10 +5711,10 @@ public struct EnumCaseElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    identifier: ExpressibleAsTokenSyntax,
-    associatedValue: ExpressibleAsParameterClause? = nil,
-    rawValue: ExpressibleAsInitializerClause? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    identifier: ExpressibleByTokenSyntax,
+    associatedValue: ExpressibleByParameterClause? = nil,
+    rawValue: ExpressibleByInitializerClause? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.identifier = identifier.createTokenSyntax()
     self.associatedValue = associatedValue?.createParameterClause()
@@ -5744,11 +5744,11 @@ public struct EnumCaseElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCaseElement {
+public protocol ExpressibleByEnumCaseElement {
   func createEnumCaseElement() -> EnumCaseElement
 }
 
-extension EnumCaseElement: ExpressibleAsEnumCaseElement {
+extension EnumCaseElement: ExpressibleByEnumCaseElement {
   public func createEnumCaseElement() -> EnumCaseElement {
     self
   }
@@ -5760,7 +5760,7 @@ extension EnumCaseElement: ExpressibleAsEnumCaseElement {
 public struct EnumCaseElementList: SyntaxBuildable {
   let elements: [EnumCaseElement]
 
-  public init(_ elements: [ExpressibleAsEnumCaseElement]) {
+  public init(_ elements: [ExpressibleByEnumCaseElement]) {
     self.elements = elements.map { $0.createEnumCaseElement() }
   }
 
@@ -5781,11 +5781,11 @@ public struct EnumCaseElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCaseElementList {
+public protocol ExpressibleByEnumCaseElementList {
   func createEnumCaseElementList() -> EnumCaseElementList
 }
 
-extension EnumCaseElementList: ExpressibleAsEnumCaseElementList {
+extension EnumCaseElementList: ExpressibleByEnumCaseElementList {
   public func createEnumCaseElementList() -> EnumCaseElementList {
     self
   }
@@ -5803,10 +5803,10 @@ public struct EnumCaseDecl: DeclBuildable {
   let elements: EnumCaseElementList
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    caseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`case`,
-    elements: ExpressibleAsEnumCaseElementList
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    caseKeyword: ExpressibleByTokenSyntax = TokenSyntax.`case`,
+    elements: ExpressibleByEnumCaseElementList
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5836,11 +5836,11 @@ public struct EnumCaseDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCaseDecl {
+public protocol ExpressibleByEnumCaseDecl {
   func createEnumCaseDecl() -> EnumCaseDecl
 }
 
-extension EnumCaseDecl: ExpressibleAsEnumCaseDecl {
+extension EnumCaseDecl: ExpressibleByEnumCaseDecl {
   public func createEnumCaseDecl() -> EnumCaseDecl {
     self
   }
@@ -5858,14 +5858,14 @@ public struct EnumDecl: DeclBuildable {
   let members: MemberDeclBlock
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    enumKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`enum`,
-    identifier: ExpressibleAsTokenSyntax,
-    genericParameters: ExpressibleAsGenericParameterClause? = nil,
-    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    enumKeyword: ExpressibleByTokenSyntax = TokenSyntax.`enum`,
+    identifier: ExpressibleByTokenSyntax,
+    genericParameters: ExpressibleByGenericParameterClause? = nil,
+    inheritanceClause: ExpressibleByTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleByGenericWhereClause? = nil,
+    members: ExpressibleByMemberDeclBlock
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5903,11 +5903,11 @@ public struct EnumDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumDecl {
+public protocol ExpressibleByEnumDecl {
   func createEnumDecl() -> EnumDecl
 }
 
-extension EnumDecl: ExpressibleAsEnumDecl {
+extension EnumDecl: ExpressibleByEnumDecl {
   public func createEnumDecl() -> EnumDecl {
     self
   }
@@ -5922,11 +5922,11 @@ public struct OperatorDecl: DeclBuildable {
   let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    operatorKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`operator`,
-    identifier: ExpressibleAsTokenSyntax,
-    operatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    operatorKeyword: ExpressibleByTokenSyntax = TokenSyntax.`operator`,
+    identifier: ExpressibleByTokenSyntax,
+    operatorPrecedenceAndTypes: ExpressibleByOperatorPrecedenceAndTypes? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -5958,11 +5958,11 @@ public struct OperatorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsOperatorDecl {
+public protocol ExpressibleByOperatorDecl {
   func createOperatorDecl() -> OperatorDecl
 }
 
-extension OperatorDecl: ExpressibleAsOperatorDecl {
+extension OperatorDecl: ExpressibleByOperatorDecl {
   public func createOperatorDecl() -> OperatorDecl {
     self
   }
@@ -5975,7 +5975,7 @@ extension OperatorDecl: ExpressibleAsOperatorDecl {
 public struct IdentifierList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
-  public init(_ elements: [ExpressibleAsTokenSyntax]) {
+  public init(_ elements: [ExpressibleByTokenSyntax]) {
     self.elements = elements.map { $0.createTokenSyntax() }
   }
 
@@ -5994,11 +5994,11 @@ public struct IdentifierList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsIdentifierList {
+public protocol ExpressibleByIdentifierList {
   func createIdentifierList() -> IdentifierList
 }
 
-extension IdentifierList: ExpressibleAsIdentifierList {
+extension IdentifierList: ExpressibleByIdentifierList {
   public func createIdentifierList() -> IdentifierList {
     self
   }
@@ -6012,8 +6012,8 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   let precedenceGroupAndDesignatedTypes: IdentifierList
 
   public init(
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    precedenceGroupAndDesignatedTypes: ExpressibleByIdentifierList
   ) {
     self.colon = colon.createTokenSyntax()
     self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
@@ -6039,11 +6039,11 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsOperatorPrecedenceAndTypes {
+public protocol ExpressibleByOperatorPrecedenceAndTypes {
   func createOperatorPrecedenceAndTypes() -> OperatorPrecedenceAndTypes
 }
 
-extension OperatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes {
+extension OperatorPrecedenceAndTypes: ExpressibleByOperatorPrecedenceAndTypes {
   public func createOperatorPrecedenceAndTypes() -> OperatorPrecedenceAndTypes {
     self
   }
@@ -6060,13 +6060,13 @@ public struct PrecedenceGroupDecl: DeclBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    modifiers: ExpressibleAsModifierList? = nil,
-    precedencegroupKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`precedencegroup`,
-    identifier: ExpressibleAsTokenSyntax,
-    leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
-    groupAttributes: ExpressibleAsPrecedenceGroupAttributeList,
-    rightBrace: ExpressibleAsTokenSyntax = TokenSyntax.`rightBrace`
+    attributes: ExpressibleByAttributeList? = nil,
+    modifiers: ExpressibleByModifierList? = nil,
+    precedencegroupKeyword: ExpressibleByTokenSyntax = TokenSyntax.`precedencegroup`,
+    identifier: ExpressibleByTokenSyntax,
+    leftBrace: ExpressibleByTokenSyntax = TokenSyntax.`leftBrace`,
+    groupAttributes: ExpressibleByPrecedenceGroupAttributeList,
+    rightBrace: ExpressibleByTokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
@@ -6102,11 +6102,11 @@ public struct PrecedenceGroupDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupDecl {
+public protocol ExpressibleByPrecedenceGroupDecl {
   func createPrecedenceGroupDecl() -> PrecedenceGroupDecl
 }
 
-extension PrecedenceGroupDecl: ExpressibleAsPrecedenceGroupDecl {
+extension PrecedenceGroupDecl: ExpressibleByPrecedenceGroupDecl {
   public func createPrecedenceGroupDecl() -> PrecedenceGroupDecl {
     self
   }
@@ -6119,7 +6119,7 @@ extension PrecedenceGroupDecl: ExpressibleAsPrecedenceGroupDecl {
 public struct PrecedenceGroupAttributeList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
-  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+  public init(_ elements: [ExpressibleBySyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
@@ -6140,11 +6140,11 @@ public struct PrecedenceGroupAttributeList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupAttributeList {
+public protocol ExpressibleByPrecedenceGroupAttributeList {
   func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList
 }
 
-extension PrecedenceGroupAttributeList: ExpressibleAsPrecedenceGroupAttributeList {
+extension PrecedenceGroupAttributeList: ExpressibleByPrecedenceGroupAttributeList {
   public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
     self
   }
@@ -6160,9 +6160,9 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
   let otherNames: PrecedenceGroupNameList
 
   public init(
-    higherThanOrLowerThan: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    otherNames: ExpressibleAsPrecedenceGroupNameList
+    higherThanOrLowerThan: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    otherNames: ExpressibleByPrecedenceGroupNameList
   ) {
     self.higherThanOrLowerThan = higherThanOrLowerThan.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6190,11 +6190,11 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupRelation {
+public protocol ExpressibleByPrecedenceGroupRelation {
   func createPrecedenceGroupRelation() -> PrecedenceGroupRelation
 }
 
-extension PrecedenceGroupRelation: ExpressibleAsPrecedenceGroupRelation {
+extension PrecedenceGroupRelation: ExpressibleByPrecedenceGroupRelation {
   public func createPrecedenceGroupRelation() -> PrecedenceGroupRelation {
     self
   }
@@ -6207,7 +6207,7 @@ extension PrecedenceGroupRelation: ExpressibleAsPrecedenceGroupRelation {
 public struct PrecedenceGroupNameList: SyntaxBuildable {
   let elements: [PrecedenceGroupNameElement]
 
-  public init(_ elements: [ExpressibleAsPrecedenceGroupNameElement]) {
+  public init(_ elements: [ExpressibleByPrecedenceGroupNameElement]) {
     self.elements = elements.map { $0.createPrecedenceGroupNameElement() }
   }
 
@@ -6228,11 +6228,11 @@ public struct PrecedenceGroupNameList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupNameList {
+public protocol ExpressibleByPrecedenceGroupNameList {
   func createPrecedenceGroupNameList() -> PrecedenceGroupNameList
 }
 
-extension PrecedenceGroupNameList: ExpressibleAsPrecedenceGroupNameList {
+extension PrecedenceGroupNameList: ExpressibleByPrecedenceGroupNameList {
   public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
     self
   }
@@ -6243,8 +6243,8 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -6270,11 +6270,11 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupNameElement {
+public protocol ExpressibleByPrecedenceGroupNameElement {
   func createPrecedenceGroupNameElement() -> PrecedenceGroupNameElement
 }
 
-extension PrecedenceGroupNameElement: ExpressibleAsPrecedenceGroupNameElement {
+extension PrecedenceGroupNameElement: ExpressibleByPrecedenceGroupNameElement {
   public func createPrecedenceGroupNameElement() -> PrecedenceGroupNameElement {
     self
   }
@@ -6290,9 +6290,9 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
   let flag: TokenSyntax
 
   public init(
-    assignmentKeyword: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    flag: ExpressibleAsTokenSyntax
+    assignmentKeyword: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    flag: ExpressibleByTokenSyntax
   ) {
     self.assignmentKeyword = assignmentKeyword.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6320,11 +6320,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupAssignment {
+public protocol ExpressibleByPrecedenceGroupAssignment {
   func createPrecedenceGroupAssignment() -> PrecedenceGroupAssignment
 }
 
-extension PrecedenceGroupAssignment: ExpressibleAsPrecedenceGroupAssignment {
+extension PrecedenceGroupAssignment: ExpressibleByPrecedenceGroupAssignment {
   public func createPrecedenceGroupAssignment() -> PrecedenceGroupAssignment {
     self
   }
@@ -6340,9 +6340,9 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
   let value: TokenSyntax
 
   public init(
-    associativityKeyword: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    value: ExpressibleAsTokenSyntax
+    associativityKeyword: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    value: ExpressibleByTokenSyntax
   ) {
     self.associativityKeyword = associativityKeyword.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6370,11 +6370,11 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupAssociativity {
+public protocol ExpressibleByPrecedenceGroupAssociativity {
   func createPrecedenceGroupAssociativity() -> PrecedenceGroupAssociativity
 }
 
-extension PrecedenceGroupAssociativity: ExpressibleAsPrecedenceGroupAssociativity {
+extension PrecedenceGroupAssociativity: ExpressibleByPrecedenceGroupAssociativity {
   public func createPrecedenceGroupAssociativity() -> PrecedenceGroupAssociativity {
     self
   }
@@ -6387,7 +6387,7 @@ extension PrecedenceGroupAssociativity: ExpressibleAsPrecedenceGroupAssociativit
 public struct TokenList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
-  public init(_ elements: [ExpressibleAsTokenSyntax]) {
+  public init(_ elements: [ExpressibleByTokenSyntax]) {
     self.elements = elements.map { $0.createTokenSyntax() }
   }
 
@@ -6406,11 +6406,11 @@ public struct TokenList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTokenList {
+public protocol ExpressibleByTokenList {
   func createTokenList() -> TokenList
 }
 
-extension TokenList: ExpressibleAsTokenList {
+extension TokenList: ExpressibleByTokenList {
   public func createTokenList() -> TokenList {
     self
   }
@@ -6423,7 +6423,7 @@ extension TokenList: ExpressibleAsTokenList {
 public struct NonEmptyTokenList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
-  public init(_ elements: [ExpressibleAsTokenSyntax]) {
+  public init(_ elements: [ExpressibleByTokenSyntax]) {
     self.elements = elements.map { $0.createTokenSyntax() }
   }
 
@@ -6442,11 +6442,11 @@ public struct NonEmptyTokenList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsNonEmptyTokenList {
+public protocol ExpressibleByNonEmptyTokenList {
   func createNonEmptyTokenList() -> NonEmptyTokenList
 }
 
-extension NonEmptyTokenList: ExpressibleAsNonEmptyTokenList {
+extension NonEmptyTokenList: ExpressibleByNonEmptyTokenList {
   public func createNonEmptyTokenList() -> NonEmptyTokenList {
     self
   }
@@ -6463,11 +6463,11 @@ public struct CustomAttribute: SyntaxBuildable {
   let rightParen: TokenSyntax?
 
   public init(
-    atSignToken: ExpressibleAsTokenSyntax = TokenSyntax.`atSign`,
-    attributeName: ExpressibleAsTypeBuildable,
-    leftParen: ExpressibleAsTokenSyntax? = nil,
-    argumentList: ExpressibleAsTupleExprElementList? = nil,
-    rightParen: ExpressibleAsTokenSyntax? = nil
+    atSignToken: ExpressibleByTokenSyntax = TokenSyntax.`atSign`,
+    attributeName: ExpressibleByTypeBuildable,
+    leftParen: ExpressibleByTokenSyntax? = nil,
+    argumentList: ExpressibleByTupleExprElementList? = nil,
+    rightParen: ExpressibleByTokenSyntax? = nil
   ) {
     self.atSignToken = atSignToken.createTokenSyntax()
     self.attributeName = attributeName.createTypeBuildable()
@@ -6499,11 +6499,11 @@ public struct CustomAttribute: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCustomAttribute {
+public protocol ExpressibleByCustomAttribute {
   func createCustomAttribute() -> CustomAttribute
 }
 
-extension CustomAttribute: ExpressibleAsCustomAttribute {
+extension CustomAttribute: ExpressibleByCustomAttribute {
   public func createCustomAttribute() -> CustomAttribute {
     self
   }
@@ -6521,12 +6521,12 @@ public struct Attribute: SyntaxBuildable {
   let tokenList: TokenList?
 
   public init(
-    atSignToken: ExpressibleAsTokenSyntax = TokenSyntax.`atSign`,
-    attributeName: ExpressibleAsTokenSyntax,
-    leftParen: ExpressibleAsTokenSyntax? = nil,
-    argument: ExpressibleAsSyntaxBuildable? = nil,
-    rightParen: ExpressibleAsTokenSyntax? = nil,
-    tokenList: ExpressibleAsTokenList? = nil
+    atSignToken: ExpressibleByTokenSyntax = TokenSyntax.`atSign`,
+    attributeName: ExpressibleByTokenSyntax,
+    leftParen: ExpressibleByTokenSyntax? = nil,
+    argument: ExpressibleBySyntaxBuildable? = nil,
+    rightParen: ExpressibleByTokenSyntax? = nil,
+    tokenList: ExpressibleByTokenList? = nil
   ) {
     self.atSignToken = atSignToken.createTokenSyntax()
     self.attributeName = attributeName.createTokenSyntax()
@@ -6560,11 +6560,11 @@ public struct Attribute: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAttribute {
+public protocol ExpressibleByAttribute {
   func createAttribute() -> Attribute
 }
 
-extension Attribute: ExpressibleAsAttribute {
+extension Attribute: ExpressibleByAttribute {
   public func createAttribute() -> Attribute {
     self
   }
@@ -6577,7 +6577,7 @@ extension Attribute: ExpressibleAsAttribute {
 public struct AttributeList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
-  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+  public init(_ elements: [ExpressibleBySyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
@@ -6598,11 +6598,11 @@ public struct AttributeList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAttributeList {
+public protocol ExpressibleByAttributeList {
   func createAttributeList() -> AttributeList
 }
 
-extension AttributeList: ExpressibleAsAttributeList {
+extension AttributeList: ExpressibleByAttributeList {
   public func createAttributeList() -> AttributeList {
     self
   }
@@ -6616,7 +6616,7 @@ extension AttributeList: ExpressibleAsAttributeList {
 public struct SpecializeAttributeSpecList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
-  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+  public init(_ elements: [ExpressibleBySyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
@@ -6637,11 +6637,11 @@ public struct SpecializeAttributeSpecList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSpecializeAttributeSpecList {
+public protocol ExpressibleBySpecializeAttributeSpecList {
   func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList
 }
 
-extension SpecializeAttributeSpecList: ExpressibleAsSpecializeAttributeSpecList {
+extension SpecializeAttributeSpecList: ExpressibleBySpecializeAttributeSpecList {
   public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
     self
   }
@@ -6657,10 +6657,10 @@ public struct AvailabilityEntry: SyntaxBuildable {
   let semicolon: TokenSyntax
 
   public init(
-    label: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    availabilityList: ExpressibleAsAvailabilitySpecList,
-    semicolon: ExpressibleAsTokenSyntax = TokenSyntax.`semicolon`
+    label: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    availabilityList: ExpressibleByAvailabilitySpecList,
+    semicolon: ExpressibleByTokenSyntax = TokenSyntax.`semicolon`
   ) {
     self.label = label.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6690,11 +6690,11 @@ public struct AvailabilityEntry: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityEntry {
+public protocol ExpressibleByAvailabilityEntry {
   func createAvailabilityEntry() -> AvailabilityEntry
 }
 
-extension AvailabilityEntry: ExpressibleAsAvailabilityEntry {
+extension AvailabilityEntry: ExpressibleByAvailabilityEntry {
   public func createAvailabilityEntry() -> AvailabilityEntry {
     self
   }
@@ -6711,10 +6711,10 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    label: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    value: ExpressibleAsTokenSyntax,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    label: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    value: ExpressibleByTokenSyntax,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.label = label.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6744,11 +6744,11 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsLabeledSpecializeEntry {
+public protocol ExpressibleByLabeledSpecializeEntry {
   func createLabeledSpecializeEntry() -> LabeledSpecializeEntry
 }
 
-extension LabeledSpecializeEntry: ExpressibleAsLabeledSpecializeEntry {
+extension LabeledSpecializeEntry: ExpressibleByLabeledSpecializeEntry {
   public func createLabeledSpecializeEntry() -> LabeledSpecializeEntry {
     self
   }
@@ -6766,10 +6766,10 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    label: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    delcname: ExpressibleAsDeclName,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    label: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    delcname: ExpressibleByDeclName,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.label = label.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6799,11 +6799,11 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTargetFunctionEntry {
+public protocol ExpressibleByTargetFunctionEntry {
   func createTargetFunctionEntry() -> TargetFunctionEntry
 }
 
-extension TargetFunctionEntry: ExpressibleAsTargetFunctionEntry {
+extension TargetFunctionEntry: ExpressibleByTargetFunctionEntry {
   public func createTargetFunctionEntry() -> TargetFunctionEntry {
     self
   }
@@ -6820,9 +6820,9 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
   let stringOrDeclname: SyntaxBuildable
 
   public init(
-    nameTok: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    stringOrDeclname: ExpressibleAsSyntaxBuildable
+    nameTok: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    stringOrDeclname: ExpressibleBySyntaxBuildable
   ) {
     self.nameTok = nameTok.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -6850,11 +6850,11 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsNamedAttributeStringArgument {
+public protocol ExpressibleByNamedAttributeStringArgument {
   func createNamedAttributeStringArgument() -> NamedAttributeStringArgument
 }
 
-extension NamedAttributeStringArgument: ExpressibleAsNamedAttributeStringArgument {
+extension NamedAttributeStringArgument: ExpressibleByNamedAttributeStringArgument {
   public func createNamedAttributeStringArgument() -> NamedAttributeStringArgument {
     self
   }
@@ -6865,8 +6865,8 @@ public struct DeclName: SyntaxBuildable {
   let declNameArguments: DeclNameArguments?
 
   public init(
-    declBaseName: ExpressibleAsSyntaxBuildable,
-    declNameArguments: ExpressibleAsDeclNameArguments? = nil
+    declBaseName: ExpressibleBySyntaxBuildable,
+    declNameArguments: ExpressibleByDeclNameArguments? = nil
   ) {
     self.declBaseName = declBaseName.createSyntaxBuildable()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
@@ -6892,11 +6892,11 @@ public struct DeclName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclName {
+public protocol ExpressibleByDeclName {
   func createDeclName() -> DeclName
 }
 
-extension DeclName: ExpressibleAsDeclName {
+extension DeclName: ExpressibleByDeclName {
   public func createDeclName() -> DeclName {
     self
   }
@@ -6913,10 +6913,10 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   let declNameArguments: DeclNameArguments?
 
   public init(
-    type: ExpressibleAsSimpleTypeIdentifier,
-    comma: ExpressibleAsTokenSyntax = TokenSyntax.`comma`,
-    declBaseName: ExpressibleAsSyntaxBuildable,
-    declNameArguments: ExpressibleAsDeclNameArguments? = nil
+    type: ExpressibleBySimpleTypeIdentifier,
+    comma: ExpressibleByTokenSyntax = TokenSyntax.`comma`,
+    declBaseName: ExpressibleBySyntaxBuildable,
+    declNameArguments: ExpressibleByDeclNameArguments? = nil
   ) {
     self.type = type.createSimpleTypeIdentifier()
     self.comma = comma.createTokenSyntax()
@@ -6946,11 +6946,11 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsImplementsAttributeArguments {
+public protocol ExpressibleByImplementsAttributeArguments {
   func createImplementsAttributeArguments() -> ImplementsAttributeArguments
 }
 
-extension ImplementsAttributeArguments: ExpressibleAsImplementsAttributeArguments {
+extension ImplementsAttributeArguments: ExpressibleByImplementsAttributeArguments {
   public func createImplementsAttributeArguments() -> ImplementsAttributeArguments {
     self
   }
@@ -6966,8 +6966,8 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   let colon: TokenSyntax?
 
   public init(
-    name: ExpressibleAsTokenSyntax? = nil,
-    colon: ExpressibleAsTokenSyntax? = nil
+    name: ExpressibleByTokenSyntax? = nil,
+    colon: ExpressibleByTokenSyntax? = nil
   ) {
     self.name = name?.createTokenSyntax()
     self.colon = colon?.createTokenSyntax()
@@ -6993,11 +6993,11 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjCSelectorPiece {
+public protocol ExpressibleByObjCSelectorPiece {
   func createObjCSelectorPiece() -> ObjCSelectorPiece
 }
 
-extension ObjCSelectorPiece: ExpressibleAsObjCSelectorPiece {
+extension ObjCSelectorPiece: ExpressibleByObjCSelectorPiece {
   public func createObjCSelectorPiece() -> ObjCSelectorPiece {
     self
   }
@@ -7010,7 +7010,7 @@ extension ObjCSelectorPiece: ExpressibleAsObjCSelectorPiece {
 public struct ObjCSelector: SyntaxBuildable {
   let elements: [ObjCSelectorPiece]
 
-  public init(_ elements: [ExpressibleAsObjCSelectorPiece]) {
+  public init(_ elements: [ExpressibleByObjCSelectorPiece]) {
     self.elements = elements.map { $0.createObjCSelectorPiece() }
   }
 
@@ -7031,11 +7031,11 @@ public struct ObjCSelector: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjCSelector {
+public protocol ExpressibleByObjCSelector {
   func createObjCSelector() -> ObjCSelector
 }
 
-extension ObjCSelector: ExpressibleAsObjCSelector {
+extension ObjCSelector: ExpressibleByObjCSelector {
   public func createObjCSelector() -> ObjCSelector {
     self
   }
@@ -7054,11 +7054,11 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
   let whereClause: GenericWhereClause?
 
   public init(
-    diffKind: ExpressibleAsTokenSyntax? = nil,
-    diffKindComma: ExpressibleAsTokenSyntax? = nil,
-    diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil,
-    diffParamsComma: ExpressibleAsTokenSyntax? = nil,
-    whereClause: ExpressibleAsGenericWhereClause? = nil
+    diffKind: ExpressibleByTokenSyntax? = nil,
+    diffKindComma: ExpressibleByTokenSyntax? = nil,
+    diffParams: ExpressibleByDifferentiabilityParamsClause? = nil,
+    diffParamsComma: ExpressibleByTokenSyntax? = nil,
+    whereClause: ExpressibleByGenericWhereClause? = nil
   ) {
     self.diffKind = diffKind?.createTokenSyntax()
     self.diffKindComma = diffKindComma?.createTokenSyntax()
@@ -7090,11 +7090,11 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiableAttributeArguments {
+public protocol ExpressibleByDifferentiableAttributeArguments {
   func createDifferentiableAttributeArguments() -> DifferentiableAttributeArguments
 }
 
-extension DifferentiableAttributeArguments: ExpressibleAsDifferentiableAttributeArguments {
+extension DifferentiableAttributeArguments: ExpressibleByDifferentiableAttributeArguments {
   public func createDifferentiableAttributeArguments() -> DifferentiableAttributeArguments {
     self
   }
@@ -7107,9 +7107,9 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
   let parameters: SyntaxBuildable
 
   public init(
-    wrtLabel: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    parameters: ExpressibleAsSyntaxBuildable
+    wrtLabel: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    parameters: ExpressibleBySyntaxBuildable
   ) {
     self.wrtLabel = wrtLabel.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -7137,11 +7137,11 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParamsClause {
+public protocol ExpressibleByDifferentiabilityParamsClause {
   func createDifferentiabilityParamsClause() -> DifferentiabilityParamsClause
 }
 
-extension DifferentiabilityParamsClause: ExpressibleAsDifferentiabilityParamsClause {
+extension DifferentiabilityParamsClause: ExpressibleByDifferentiabilityParamsClause {
   public func createDifferentiabilityParamsClause() -> DifferentiabilityParamsClause {
     self
   }
@@ -7154,9 +7154,9 @@ public struct DifferentiabilityParams: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    diffParams: ExpressibleAsDifferentiabilityParamList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    diffParams: ExpressibleByDifferentiabilityParamList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.diffParams = diffParams.createDifferentiabilityParamList()
@@ -7184,11 +7184,11 @@ public struct DifferentiabilityParams: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParams {
+public protocol ExpressibleByDifferentiabilityParams {
   func createDifferentiabilityParams() -> DifferentiabilityParams
 }
 
-extension DifferentiabilityParams: ExpressibleAsDifferentiabilityParams {
+extension DifferentiabilityParams: ExpressibleByDifferentiabilityParams {
   public func createDifferentiabilityParams() -> DifferentiabilityParams {
     self
   }
@@ -7201,7 +7201,7 @@ extension DifferentiabilityParams: ExpressibleAsDifferentiabilityParams {
 public struct DifferentiabilityParamList: SyntaxBuildable {
   let elements: [DifferentiabilityParam]
 
-  public init(_ elements: [ExpressibleAsDifferentiabilityParam]) {
+  public init(_ elements: [ExpressibleByDifferentiabilityParam]) {
     self.elements = elements.map { $0.createDifferentiabilityParam() }
   }
 
@@ -7222,11 +7222,11 @@ public struct DifferentiabilityParamList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParamList {
+public protocol ExpressibleByDifferentiabilityParamList {
   func createDifferentiabilityParamList() -> DifferentiabilityParamList
 }
 
-extension DifferentiabilityParamList: ExpressibleAsDifferentiabilityParamList {
+extension DifferentiabilityParamList: ExpressibleByDifferentiabilityParamList {
   public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
     self
   }
@@ -7241,8 +7241,8 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    parameter: ExpressibleAsSyntaxBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    parameter: ExpressibleBySyntaxBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.parameter = parameter.createSyntaxBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -7268,11 +7268,11 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParam {
+public protocol ExpressibleByDifferentiabilityParam {
   func createDifferentiabilityParam() -> DifferentiabilityParam
 }
 
-extension DifferentiabilityParam: ExpressibleAsDifferentiabilityParam {
+extension DifferentiabilityParam: ExpressibleByDifferentiabilityParam {
   public func createDifferentiabilityParam() -> DifferentiabilityParam {
     self
   }
@@ -7293,13 +7293,13 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   let diffParams: DifferentiabilityParamsClause?
 
   public init(
-    ofLabel: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    originalDeclName: ExpressibleAsQualifiedDeclName,
-    period: ExpressibleAsTokenSyntax? = nil,
-    accessorKind: ExpressibleAsTokenSyntax? = nil,
-    comma: ExpressibleAsTokenSyntax? = nil,
-    diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil
+    ofLabel: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    originalDeclName: ExpressibleByQualifiedDeclName,
+    period: ExpressibleByTokenSyntax? = nil,
+    accessorKind: ExpressibleByTokenSyntax? = nil,
+    comma: ExpressibleByTokenSyntax? = nil,
+    diffParams: ExpressibleByDifferentiabilityParamsClause? = nil
   ) {
     self.ofLabel = ofLabel.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -7335,11 +7335,11 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDerivativeRegistrationAttributeArguments {
+public protocol ExpressibleByDerivativeRegistrationAttributeArguments {
   func createDerivativeRegistrationAttributeArguments() -> DerivativeRegistrationAttributeArguments
 }
 
-extension DerivativeRegistrationAttributeArguments: ExpressibleAsDerivativeRegistrationAttributeArguments {
+extension DerivativeRegistrationAttributeArguments: ExpressibleByDerivativeRegistrationAttributeArguments {
   public func createDerivativeRegistrationAttributeArguments() -> DerivativeRegistrationAttributeArguments {
     self
   }
@@ -7356,10 +7356,10 @@ public struct QualifiedDeclName: SyntaxBuildable {
   let arguments: DeclNameArguments?
 
   public init(
-    baseType: ExpressibleAsTypeBuildable? = nil,
-    dot: ExpressibleAsTokenSyntax? = nil,
-    name: ExpressibleAsTokenSyntax,
-    arguments: ExpressibleAsDeclNameArguments? = nil
+    baseType: ExpressibleByTypeBuildable? = nil,
+    dot: ExpressibleByTokenSyntax? = nil,
+    name: ExpressibleByTokenSyntax,
+    arguments: ExpressibleByDeclNameArguments? = nil
   ) {
     self.baseType = baseType?.createTypeBuildable()
     self.dot = dot?.createTokenSyntax()
@@ -7389,11 +7389,11 @@ public struct QualifiedDeclName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsQualifiedDeclName {
+public protocol ExpressibleByQualifiedDeclName {
   func createQualifiedDeclName() -> QualifiedDeclName
 }
 
-extension QualifiedDeclName: ExpressibleAsQualifiedDeclName {
+extension QualifiedDeclName: ExpressibleByQualifiedDeclName {
   public func createQualifiedDeclName() -> QualifiedDeclName {
     self
   }
@@ -7405,8 +7405,8 @@ public struct FunctionDeclName: SyntaxBuildable {
   let arguments: DeclNameArguments?
 
   public init(
-    name: ExpressibleAsSyntaxBuildable,
-    arguments: ExpressibleAsDeclNameArguments? = nil
+    name: ExpressibleBySyntaxBuildable,
+    arguments: ExpressibleByDeclNameArguments? = nil
   ) {
     self.name = name.createSyntaxBuildable()
     self.arguments = arguments?.createDeclNameArguments()
@@ -7432,11 +7432,11 @@ public struct FunctionDeclName: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionDeclName {
+public protocol ExpressibleByFunctionDeclName {
   func createFunctionDeclName() -> FunctionDeclName
 }
 
-extension FunctionDeclName: ExpressibleAsFunctionDeclName {
+extension FunctionDeclName: ExpressibleByFunctionDeclName {
   public func createFunctionDeclName() -> FunctionDeclName {
     self
   }
@@ -7447,8 +7447,8 @@ public struct ContinueStmt: StmtBuildable {
   let label: TokenSyntax?
 
   public init(
-    continueKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`continue`,
-    label: ExpressibleAsTokenSyntax? = nil
+    continueKeyword: ExpressibleByTokenSyntax = TokenSyntax.`continue`,
+    label: ExpressibleByTokenSyntax? = nil
   ) {
     self.continueKeyword = continueKeyword.createTokenSyntax()
     self.label = label?.createTokenSyntax()
@@ -7474,11 +7474,11 @@ public struct ContinueStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsContinueStmt {
+public protocol ExpressibleByContinueStmt {
   func createContinueStmt() -> ContinueStmt
 }
 
-extension ContinueStmt: ExpressibleAsContinueStmt {
+extension ContinueStmt: ExpressibleByContinueStmt {
   public func createContinueStmt() -> ContinueStmt {
     self
   }
@@ -7492,11 +7492,11 @@ public struct WhileStmt: StmtBuildable {
   let body: CodeBlock
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    whileKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`while`,
-    conditions: ExpressibleAsConditionElementList,
-    body: ExpressibleAsCodeBlock
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    whileKeyword: ExpressibleByTokenSyntax = TokenSyntax.`while`,
+    conditions: ExpressibleByConditionElementList,
+    body: ExpressibleByCodeBlock
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -7528,11 +7528,11 @@ public struct WhileStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsWhileStmt {
+public protocol ExpressibleByWhileStmt {
   func createWhileStmt() -> WhileStmt
 }
 
-extension WhileStmt: ExpressibleAsWhileStmt {
+extension WhileStmt: ExpressibleByWhileStmt {
   public func createWhileStmt() -> WhileStmt {
     self
   }
@@ -7543,8 +7543,8 @@ public struct DeferStmt: StmtBuildable {
   let body: CodeBlock
 
   public init(
-    deferKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`defer`,
-    body: ExpressibleAsCodeBlock
+    deferKeyword: ExpressibleByTokenSyntax = TokenSyntax.`defer`,
+    body: ExpressibleByCodeBlock
   ) {
     self.deferKeyword = deferKeyword.createTokenSyntax()
     self.body = body.createCodeBlock()
@@ -7570,11 +7570,11 @@ public struct DeferStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsDeferStmt {
+public protocol ExpressibleByDeferStmt {
   func createDeferStmt() -> DeferStmt
 }
 
-extension DeferStmt: ExpressibleAsDeferStmt {
+extension DeferStmt: ExpressibleByDeferStmt {
   public func createDeferStmt() -> DeferStmt {
     self
   }
@@ -7584,7 +7584,7 @@ public struct ExpressionStmt: StmtBuildable {
   let expression: ExprBuildable
 
   public init(
-    expression: ExpressibleAsExprBuildable
+    expression: ExpressibleByExprBuildable
   ) {
     self.expression = expression.createExprBuildable()
   }
@@ -7608,11 +7608,11 @@ public struct ExpressionStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsExpressionStmt {
+public protocol ExpressibleByExpressionStmt {
   func createExpressionStmt() -> ExpressionStmt
 }
 
-extension ExpressionStmt: ExpressibleAsExpressionStmt {
+extension ExpressionStmt: ExpressibleByExpressionStmt {
   public func createExpressionStmt() -> ExpressionStmt {
     self
   }
@@ -7625,7 +7625,7 @@ extension ExpressionStmt: ExpressibleAsExpressionStmt {
 public struct SwitchCaseList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
-  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+  public init(_ elements: [ExpressibleBySyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
@@ -7646,11 +7646,11 @@ public struct SwitchCaseList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchCaseList {
+public protocol ExpressibleBySwitchCaseList {
   func createSwitchCaseList() -> SwitchCaseList
 }
 
-extension SwitchCaseList: ExpressibleAsSwitchCaseList {
+extension SwitchCaseList: ExpressibleBySwitchCaseList {
   public func createSwitchCaseList() -> SwitchCaseList {
     self
   }
@@ -7665,12 +7665,12 @@ public struct RepeatWhileStmt: StmtBuildable {
   let condition: ExprBuildable
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    repeatKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`repeat`,
-    body: ExpressibleAsCodeBlock,
-    whileKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`while`,
-    condition: ExpressibleAsExprBuildable
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    repeatKeyword: ExpressibleByTokenSyntax = TokenSyntax.`repeat`,
+    body: ExpressibleByCodeBlock,
+    whileKeyword: ExpressibleByTokenSyntax = TokenSyntax.`while`,
+    condition: ExpressibleByExprBuildable
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -7704,11 +7704,11 @@ public struct RepeatWhileStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsRepeatWhileStmt {
+public protocol ExpressibleByRepeatWhileStmt {
   func createRepeatWhileStmt() -> RepeatWhileStmt
 }
 
-extension RepeatWhileStmt: ExpressibleAsRepeatWhileStmt {
+extension RepeatWhileStmt: ExpressibleByRepeatWhileStmt {
   public func createRepeatWhileStmt() -> RepeatWhileStmt {
     self
   }
@@ -7721,10 +7721,10 @@ public struct GuardStmt: StmtBuildable {
   let body: CodeBlock
 
   public init(
-    guardKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`guard`,
-    conditions: ExpressibleAsConditionElementList,
-    elseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`else`,
-    body: ExpressibleAsCodeBlock
+    guardKeyword: ExpressibleByTokenSyntax = TokenSyntax.`guard`,
+    conditions: ExpressibleByConditionElementList,
+    elseKeyword: ExpressibleByTokenSyntax = TokenSyntax.`else`,
+    body: ExpressibleByCodeBlock
   ) {
     self.guardKeyword = guardKeyword.createTokenSyntax()
     self.conditions = conditions.createConditionElementList()
@@ -7754,11 +7754,11 @@ public struct GuardStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsGuardStmt {
+public protocol ExpressibleByGuardStmt {
   func createGuardStmt() -> GuardStmt
 }
 
-extension GuardStmt: ExpressibleAsGuardStmt {
+extension GuardStmt: ExpressibleByGuardStmt {
   public func createGuardStmt() -> GuardStmt {
     self
   }
@@ -7769,8 +7769,8 @@ public struct WhereClause: SyntaxBuildable {
   let guardResult: ExprBuildable
 
   public init(
-    whereKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`where`,
-    guardResult: ExpressibleAsExprBuildable
+    whereKeyword: ExpressibleByTokenSyntax = TokenSyntax.`where`,
+    guardResult: ExpressibleByExprBuildable
   ) {
     self.whereKeyword = whereKeyword.createTokenSyntax()
     self.guardResult = guardResult.createExprBuildable()
@@ -7796,11 +7796,11 @@ public struct WhereClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsWhereClause {
+public protocol ExpressibleByWhereClause {
   func createWhereClause() -> WhereClause
 }
 
-extension WhereClause: ExpressibleAsWhereClause {
+extension WhereClause: ExpressibleByWhereClause {
   public func createWhereClause() -> WhereClause {
     self
   }
@@ -7821,18 +7821,18 @@ public struct ForInStmt: StmtBuildable {
   let body: CodeBlock
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    forKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`for`,
-    tryKeyword: ExpressibleAsTokenSyntax? = nil,
-    awaitKeyword: ExpressibleAsTokenSyntax? = nil,
-    caseKeyword: ExpressibleAsTokenSyntax? = nil,
-    pattern: ExpressibleAsPatternBuildable,
-    typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
-    inKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`in`,
-    sequenceExpr: ExpressibleAsExprBuildable,
-    whereClause: ExpressibleAsWhereClause? = nil,
-    body: ExpressibleAsCodeBlock
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    forKeyword: ExpressibleByTokenSyntax = TokenSyntax.`for`,
+    tryKeyword: ExpressibleByTokenSyntax? = nil,
+    awaitKeyword: ExpressibleByTokenSyntax? = nil,
+    caseKeyword: ExpressibleByTokenSyntax? = nil,
+    pattern: ExpressibleByPatternBuildable,
+    typeAnnotation: ExpressibleByTypeAnnotation? = nil,
+    inKeyword: ExpressibleByTokenSyntax = TokenSyntax.`in`,
+    sequenceExpr: ExpressibleByExprBuildable,
+    whereClause: ExpressibleByWhereClause? = nil,
+    body: ExpressibleByCodeBlock
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -7878,11 +7878,11 @@ public struct ForInStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsForInStmt {
+public protocol ExpressibleByForInStmt {
   func createForInStmt() -> ForInStmt
 }
 
-extension ForInStmt: ExpressibleAsForInStmt {
+extension ForInStmt: ExpressibleByForInStmt {
   public func createForInStmt() -> ForInStmt {
     self
   }
@@ -7898,13 +7898,13 @@ public struct SwitchStmt: StmtBuildable {
   let rightBrace: TokenSyntax
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    switchKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`switch`,
-    expression: ExpressibleAsExprBuildable,
-    leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
-    cases: ExpressibleAsSwitchCaseList,
-    rightBrace: ExpressibleAsTokenSyntax = TokenSyntax.`rightBrace`
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    switchKeyword: ExpressibleByTokenSyntax = TokenSyntax.`switch`,
+    expression: ExpressibleByExprBuildable,
+    leftBrace: ExpressibleByTokenSyntax = TokenSyntax.`leftBrace`,
+    cases: ExpressibleBySwitchCaseList,
+    rightBrace: ExpressibleByTokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -7940,11 +7940,11 @@ public struct SwitchStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchStmt {
+public protocol ExpressibleBySwitchStmt {
   func createSwitchStmt() -> SwitchStmt
 }
 
-extension SwitchStmt: ExpressibleAsSwitchStmt {
+extension SwitchStmt: ExpressibleBySwitchStmt {
   public func createSwitchStmt() -> SwitchStmt {
     self
   }
@@ -7957,7 +7957,7 @@ extension SwitchStmt: ExpressibleAsSwitchStmt {
 public struct CatchClauseList: SyntaxBuildable {
   let elements: [CatchClause]
 
-  public init(_ elements: [ExpressibleAsCatchClause]) {
+  public init(_ elements: [ExpressibleByCatchClause]) {
     self.elements = elements.map { $0.createCatchClause() }
   }
 
@@ -7978,11 +7978,11 @@ public struct CatchClauseList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchClauseList {
+public protocol ExpressibleByCatchClauseList {
   func createCatchClauseList() -> CatchClauseList
 }
 
-extension CatchClauseList: ExpressibleAsCatchClauseList {
+extension CatchClauseList: ExpressibleByCatchClauseList {
   public func createCatchClauseList() -> CatchClauseList {
     self
   }
@@ -7996,11 +7996,11 @@ public struct DoStmt: StmtBuildable {
   let catchClauses: CatchClauseList?
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    doKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`do`,
-    body: ExpressibleAsCodeBlock,
-    catchClauses: ExpressibleAsCatchClauseList? = nil
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    doKeyword: ExpressibleByTokenSyntax = TokenSyntax.`do`,
+    body: ExpressibleByCodeBlock,
+    catchClauses: ExpressibleByCatchClauseList? = nil
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -8032,11 +8032,11 @@ public struct DoStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsDoStmt {
+public protocol ExpressibleByDoStmt {
   func createDoStmt() -> DoStmt
 }
 
-extension DoStmt: ExpressibleAsDoStmt {
+extension DoStmt: ExpressibleByDoStmt {
   public func createDoStmt() -> DoStmt {
     self
   }
@@ -8047,8 +8047,8 @@ public struct ReturnStmt: StmtBuildable {
   let expression: ExprBuildable?
 
   public init(
-    returnKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`return`,
-    expression: ExpressibleAsExprBuildable? = nil
+    returnKeyword: ExpressibleByTokenSyntax = TokenSyntax.`return`,
+    expression: ExpressibleByExprBuildable? = nil
   ) {
     self.returnKeyword = returnKeyword.createTokenSyntax()
     self.expression = expression?.createExprBuildable()
@@ -8074,11 +8074,11 @@ public struct ReturnStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsReturnStmt {
+public protocol ExpressibleByReturnStmt {
   func createReturnStmt() -> ReturnStmt
 }
 
-extension ReturnStmt: ExpressibleAsReturnStmt {
+extension ReturnStmt: ExpressibleByReturnStmt {
   public func createReturnStmt() -> ReturnStmt {
     self
   }
@@ -8089,8 +8089,8 @@ public struct YieldStmt: StmtBuildable {
   let yields: SyntaxBuildable
 
   public init(
-    yieldKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`yield`,
-    yields: ExpressibleAsSyntaxBuildable
+    yieldKeyword: ExpressibleByTokenSyntax = TokenSyntax.`yield`,
+    yields: ExpressibleBySyntaxBuildable
   ) {
     self.yieldKeyword = yieldKeyword.createTokenSyntax()
     self.yields = yields.createSyntaxBuildable()
@@ -8116,11 +8116,11 @@ public struct YieldStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsYieldStmt {
+public protocol ExpressibleByYieldStmt {
   func createYieldStmt() -> YieldStmt
 }
 
-extension YieldStmt: ExpressibleAsYieldStmt {
+extension YieldStmt: ExpressibleByYieldStmt {
   public func createYieldStmt() -> YieldStmt {
     self
   }
@@ -8133,10 +8133,10 @@ public struct YieldList: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    elementList: ExpressibleAsExprList,
-    trailingComma: ExpressibleAsTokenSyntax? = nil,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    elementList: ExpressibleByExprList,
+    trailingComma: ExpressibleByTokenSyntax? = nil,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.elementList = elementList.createExprList()
@@ -8166,11 +8166,11 @@ public struct YieldList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsYieldList {
+public protocol ExpressibleByYieldList {
   func createYieldList() -> YieldList
 }
 
-extension YieldList: ExpressibleAsYieldList {
+extension YieldList: ExpressibleByYieldList {
   public func createYieldList() -> YieldList {
     self
   }
@@ -8180,7 +8180,7 @@ public struct FallthroughStmt: StmtBuildable {
   let fallthroughKeyword: TokenSyntax
 
   public init(
-    fallthroughKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`fallthrough`
+    fallthroughKeyword: ExpressibleByTokenSyntax = TokenSyntax.`fallthrough`
   ) {
     self.fallthroughKeyword = fallthroughKeyword.createTokenSyntax()
   }
@@ -8204,11 +8204,11 @@ public struct FallthroughStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsFallthroughStmt {
+public protocol ExpressibleByFallthroughStmt {
   func createFallthroughStmt() -> FallthroughStmt
 }
 
-extension FallthroughStmt: ExpressibleAsFallthroughStmt {
+extension FallthroughStmt: ExpressibleByFallthroughStmt {
   public func createFallthroughStmt() -> FallthroughStmt {
     self
   }
@@ -8219,8 +8219,8 @@ public struct BreakStmt: StmtBuildable {
   let label: TokenSyntax?
 
   public init(
-    breakKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`break`,
-    label: ExpressibleAsTokenSyntax? = nil
+    breakKeyword: ExpressibleByTokenSyntax = TokenSyntax.`break`,
+    label: ExpressibleByTokenSyntax? = nil
   ) {
     self.breakKeyword = breakKeyword.createTokenSyntax()
     self.label = label?.createTokenSyntax()
@@ -8246,11 +8246,11 @@ public struct BreakStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsBreakStmt {
+public protocol ExpressibleByBreakStmt {
   func createBreakStmt() -> BreakStmt
 }
 
-extension BreakStmt: ExpressibleAsBreakStmt {
+extension BreakStmt: ExpressibleByBreakStmt {
   public func createBreakStmt() -> BreakStmt {
     self
   }
@@ -8263,7 +8263,7 @@ extension BreakStmt: ExpressibleAsBreakStmt {
 public struct CaseItemList: SyntaxBuildable {
   let elements: [CaseItem]
 
-  public init(_ elements: [ExpressibleAsCaseItem]) {
+  public init(_ elements: [ExpressibleByCaseItem]) {
     self.elements = elements.map { $0.createCaseItem() }
   }
 
@@ -8284,11 +8284,11 @@ public struct CaseItemList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCaseItemList {
+public protocol ExpressibleByCaseItemList {
   func createCaseItemList() -> CaseItemList
 }
 
-extension CaseItemList: ExpressibleAsCaseItemList {
+extension CaseItemList: ExpressibleByCaseItemList {
   public func createCaseItemList() -> CaseItemList {
     self
   }
@@ -8301,7 +8301,7 @@ extension CaseItemList: ExpressibleAsCaseItemList {
 public struct CatchItemList: SyntaxBuildable {
   let elements: [CatchItem]
 
-  public init(_ elements: [ExpressibleAsCatchItem]) {
+  public init(_ elements: [ExpressibleByCatchItem]) {
     self.elements = elements.map { $0.createCatchItem() }
   }
 
@@ -8322,11 +8322,11 @@ public struct CatchItemList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchItemList {
+public protocol ExpressibleByCatchItemList {
   func createCatchItemList() -> CatchItemList
 }
 
-extension CatchItemList: ExpressibleAsCatchItemList {
+extension CatchItemList: ExpressibleByCatchItemList {
   public func createCatchItemList() -> CatchItemList {
     self
   }
@@ -8337,8 +8337,8 @@ public struct ConditionElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    condition: ExpressibleAsSyntaxBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    condition: ExpressibleBySyntaxBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.condition = condition.createSyntaxBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -8364,11 +8364,11 @@ public struct ConditionElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsConditionElement: ExpressibleAsConditionElementList {
+public protocol ExpressibleByConditionElement: ExpressibleByConditionElementList {
   func createConditionElement() -> ConditionElement
 }
 
-extension ConditionElement: ExpressibleAsConditionElement {
+extension ConditionElement: ExpressibleByConditionElement {
   public func createConditionElement() -> ConditionElement {
     self
   }
@@ -8381,10 +8381,10 @@ public struct AvailabilityCondition: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundAvailableKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`poundAvailable`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    availabilitySpec: ExpressibleAsAvailabilitySpecList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundAvailableKeyword: ExpressibleByTokenSyntax = TokenSyntax.`poundAvailable`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    availabilitySpec: ExpressibleByAvailabilitySpecList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundAvailableKeyword = poundAvailableKeyword.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -8414,11 +8414,11 @@ public struct AvailabilityCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityCondition {
+public protocol ExpressibleByAvailabilityCondition {
   func createAvailabilityCondition() -> AvailabilityCondition
 }
 
-extension AvailabilityCondition: ExpressibleAsAvailabilityCondition {
+extension AvailabilityCondition: ExpressibleByAvailabilityCondition {
   public func createAvailabilityCondition() -> AvailabilityCondition {
     self
   }
@@ -8431,10 +8431,10 @@ public struct MatchingPatternCondition: SyntaxBuildable {
   let initializer: InitializerClause
 
   public init(
-    caseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`case`,
-    pattern: ExpressibleAsPatternBuildable,
-    typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
-    initializer: ExpressibleAsInitializerClause
+    caseKeyword: ExpressibleByTokenSyntax = TokenSyntax.`case`,
+    pattern: ExpressibleByPatternBuildable,
+    typeAnnotation: ExpressibleByTypeAnnotation? = nil,
+    initializer: ExpressibleByInitializerClause
   ) {
     self.caseKeyword = caseKeyword.createTokenSyntax()
     self.pattern = pattern.createPatternBuildable()
@@ -8464,11 +8464,11 @@ public struct MatchingPatternCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMatchingPatternCondition {
+public protocol ExpressibleByMatchingPatternCondition {
   func createMatchingPatternCondition() -> MatchingPatternCondition
 }
 
-extension MatchingPatternCondition: ExpressibleAsMatchingPatternCondition {
+extension MatchingPatternCondition: ExpressibleByMatchingPatternCondition {
   public func createMatchingPatternCondition() -> MatchingPatternCondition {
     self
   }
@@ -8481,10 +8481,10 @@ public struct OptionalBindingCondition: SyntaxBuildable {
   let initializer: InitializerClause
 
   public init(
-    letOrVarKeyword: ExpressibleAsTokenSyntax,
-    pattern: ExpressibleAsPatternBuildable,
-    typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
-    initializer: ExpressibleAsInitializerClause
+    letOrVarKeyword: ExpressibleByTokenSyntax,
+    pattern: ExpressibleByPatternBuildable,
+    typeAnnotation: ExpressibleByTypeAnnotation? = nil,
+    initializer: ExpressibleByInitializerClause
   ) {
     self.letOrVarKeyword = letOrVarKeyword.createTokenSyntax()
     self.pattern = pattern.createPatternBuildable()
@@ -8514,11 +8514,11 @@ public struct OptionalBindingCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalBindingCondition {
+public protocol ExpressibleByOptionalBindingCondition {
   func createOptionalBindingCondition() -> OptionalBindingCondition
 }
 
-extension OptionalBindingCondition: ExpressibleAsOptionalBindingCondition {
+extension OptionalBindingCondition: ExpressibleByOptionalBindingCondition {
   public func createOptionalBindingCondition() -> OptionalBindingCondition {
     self
   }
@@ -8531,10 +8531,10 @@ public struct UnavailabilityCondition: SyntaxBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundUnavailableKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`poundUnavailable`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    availabilitySpec: ExpressibleAsAvailabilitySpecList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundUnavailableKeyword: ExpressibleByTokenSyntax = TokenSyntax.`poundUnavailable`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    availabilitySpec: ExpressibleByAvailabilitySpecList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundUnavailableKeyword = poundUnavailableKeyword.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -8564,11 +8564,11 @@ public struct UnavailabilityCondition: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsUnavailabilityCondition {
+public protocol ExpressibleByUnavailabilityCondition {
   func createUnavailabilityCondition() -> UnavailabilityCondition
 }
 
-extension UnavailabilityCondition: ExpressibleAsUnavailabilityCondition {
+extension UnavailabilityCondition: ExpressibleByUnavailabilityCondition {
   public func createUnavailabilityCondition() -> UnavailabilityCondition {
     self
   }
@@ -8581,7 +8581,7 @@ extension UnavailabilityCondition: ExpressibleAsUnavailabilityCondition {
 public struct ConditionElementList: SyntaxBuildable {
   let elements: [ConditionElement]
 
-  public init(_ elements: [ExpressibleAsConditionElement]) {
+  public init(_ elements: [ExpressibleByConditionElement]) {
     self.elements = elements.map { $0.createConditionElement() }
   }
 
@@ -8602,11 +8602,11 @@ public struct ConditionElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsConditionElementList {
+public protocol ExpressibleByConditionElementList {
   func createConditionElementList() -> ConditionElementList
 }
 
-extension ConditionElementList: ExpressibleAsConditionElementList {
+extension ConditionElementList: ExpressibleByConditionElementList {
   public func createConditionElementList() -> ConditionElementList {
     self
   }
@@ -8616,7 +8616,7 @@ public struct DeclarationStmt: StmtBuildable {
   let declaration: DeclBuildable
 
   public init(
-    declaration: ExpressibleAsDeclBuildable
+    declaration: ExpressibleByDeclBuildable
   ) {
     self.declaration = declaration.createDeclBuildable()
   }
@@ -8640,11 +8640,11 @@ public struct DeclarationStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclarationStmt {
+public protocol ExpressibleByDeclarationStmt {
   func createDeclarationStmt() -> DeclarationStmt
 }
 
-extension DeclarationStmt: ExpressibleAsDeclarationStmt {
+extension DeclarationStmt: ExpressibleByDeclarationStmt {
   public func createDeclarationStmt() -> DeclarationStmt {
     self
   }
@@ -8655,8 +8655,8 @@ public struct ThrowStmt: StmtBuildable {
   let expression: ExprBuildable
 
   public init(
-    throwKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`throw`,
-    expression: ExpressibleAsExprBuildable
+    throwKeyword: ExpressibleByTokenSyntax = TokenSyntax.`throw`,
+    expression: ExpressibleByExprBuildable
   ) {
     self.throwKeyword = throwKeyword.createTokenSyntax()
     self.expression = expression.createExprBuildable()
@@ -8682,11 +8682,11 @@ public struct ThrowStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsThrowStmt {
+public protocol ExpressibleByThrowStmt {
   func createThrowStmt() -> ThrowStmt
 }
 
-extension ThrowStmt: ExpressibleAsThrowStmt {
+extension ThrowStmt: ExpressibleByThrowStmt {
   public func createThrowStmt() -> ThrowStmt {
     self
   }
@@ -8702,13 +8702,13 @@ public struct IfStmt: StmtBuildable {
   let elseBody: SyntaxBuildable?
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    ifKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`if`,
-    conditions: ExpressibleAsConditionElementList,
-    body: ExpressibleAsCodeBlock,
-    elseKeyword: ExpressibleAsTokenSyntax? = nil,
-    elseBody: ExpressibleAsSyntaxBuildable? = nil
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    ifKeyword: ExpressibleByTokenSyntax = TokenSyntax.`if`,
+    conditions: ExpressibleByConditionElementList,
+    body: ExpressibleByCodeBlock,
+    elseKeyword: ExpressibleByTokenSyntax? = nil,
+    elseBody: ExpressibleBySyntaxBuildable? = nil
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -8744,11 +8744,11 @@ public struct IfStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsIfStmt {
+public protocol ExpressibleByIfStmt {
   func createIfStmt() -> IfStmt
 }
 
-extension IfStmt: ExpressibleAsIfStmt {
+extension IfStmt: ExpressibleByIfStmt {
   public func createIfStmt() -> IfStmt {
     self
   }
@@ -8758,7 +8758,7 @@ public struct ElseIfContinuation: SyntaxBuildable {
   let ifStatement: IfStmt
 
   public init(
-    ifStatement: ExpressibleAsIfStmt
+    ifStatement: ExpressibleByIfStmt
   ) {
     self.ifStatement = ifStatement.createIfStmt()
   }
@@ -8782,11 +8782,11 @@ public struct ElseIfContinuation: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsElseIfContinuation {
+public protocol ExpressibleByElseIfContinuation {
   func createElseIfContinuation() -> ElseIfContinuation
 }
 
-extension ElseIfContinuation: ExpressibleAsElseIfContinuation {
+extension ElseIfContinuation: ExpressibleByElseIfContinuation {
   public func createElseIfContinuation() -> ElseIfContinuation {
     self
   }
@@ -8797,8 +8797,8 @@ public struct ElseBlock: SyntaxBuildable {
   let body: CodeBlock
 
   public init(
-    elseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`else`,
-    body: ExpressibleAsCodeBlock
+    elseKeyword: ExpressibleByTokenSyntax = TokenSyntax.`else`,
+    body: ExpressibleByCodeBlock
   ) {
     self.elseKeyword = elseKeyword.createTokenSyntax()
     self.body = body.createCodeBlock()
@@ -8824,11 +8824,11 @@ public struct ElseBlock: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsElseBlock {
+public protocol ExpressibleByElseBlock {
   func createElseBlock() -> ElseBlock
 }
 
-extension ElseBlock: ExpressibleAsElseBlock {
+extension ElseBlock: ExpressibleByElseBlock {
   public func createElseBlock() -> ElseBlock {
     self
   }
@@ -8840,9 +8840,9 @@ public struct SwitchCase: SyntaxBuildable {
   let statements: CodeBlockItemList
 
   public init(
-    unknownAttr: ExpressibleAsAttribute? = nil,
-    label: ExpressibleAsSyntaxBuildable,
-    statements: ExpressibleAsCodeBlockItemList
+    unknownAttr: ExpressibleByAttribute? = nil,
+    label: ExpressibleBySyntaxBuildable,
+    statements: ExpressibleByCodeBlockItemList
   ) {
     self.unknownAttr = unknownAttr?.createAttribute()
     self.label = label.createSyntaxBuildable()
@@ -8870,11 +8870,11 @@ public struct SwitchCase: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchCase {
+public protocol ExpressibleBySwitchCase {
   func createSwitchCase() -> SwitchCase
 }
 
-extension SwitchCase: ExpressibleAsSwitchCase {
+extension SwitchCase: ExpressibleBySwitchCase {
   public func createSwitchCase() -> SwitchCase {
     self
   }
@@ -8885,8 +8885,8 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
   let colon: TokenSyntax
 
   public init(
-    defaultKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`default`,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`
+    defaultKeyword: ExpressibleByTokenSyntax = TokenSyntax.`default`,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`
   ) {
     self.defaultKeyword = defaultKeyword.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -8912,11 +8912,11 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchDefaultLabel {
+public protocol ExpressibleBySwitchDefaultLabel {
   func createSwitchDefaultLabel() -> SwitchDefaultLabel
 }
 
-extension SwitchDefaultLabel: ExpressibleAsSwitchDefaultLabel {
+extension SwitchDefaultLabel: ExpressibleBySwitchDefaultLabel {
   public func createSwitchDefaultLabel() -> SwitchDefaultLabel {
     self
   }
@@ -8928,9 +8928,9 @@ public struct CaseItem: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    pattern: ExpressibleAsPatternBuildable,
-    whereClause: ExpressibleAsWhereClause? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    pattern: ExpressibleByPatternBuildable,
+    whereClause: ExpressibleByWhereClause? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.pattern = pattern.createPatternBuildable()
     self.whereClause = whereClause?.createWhereClause()
@@ -8958,11 +8958,11 @@ public struct CaseItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCaseItem {
+public protocol ExpressibleByCaseItem {
   func createCaseItem() -> CaseItem
 }
 
-extension CaseItem: ExpressibleAsCaseItem {
+extension CaseItem: ExpressibleByCaseItem {
   public func createCaseItem() -> CaseItem {
     self
   }
@@ -8974,9 +8974,9 @@ public struct CatchItem: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    pattern: ExpressibleAsPatternBuildable? = nil,
-    whereClause: ExpressibleAsWhereClause? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    pattern: ExpressibleByPatternBuildable? = nil,
+    whereClause: ExpressibleByWhereClause? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.pattern = pattern?.createPatternBuildable()
     self.whereClause = whereClause?.createWhereClause()
@@ -9004,11 +9004,11 @@ public struct CatchItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchItem {
+public protocol ExpressibleByCatchItem {
   func createCatchItem() -> CatchItem
 }
 
-extension CatchItem: ExpressibleAsCatchItem {
+extension CatchItem: ExpressibleByCatchItem {
   public func createCatchItem() -> CatchItem {
     self
   }
@@ -9020,9 +9020,9 @@ public struct SwitchCaseLabel: SyntaxBuildable {
   let colon: TokenSyntax
 
   public init(
-    caseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`case`,
-    caseItems: ExpressibleAsCaseItemList,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`
+    caseKeyword: ExpressibleByTokenSyntax = TokenSyntax.`case`,
+    caseItems: ExpressibleByCaseItemList,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`
   ) {
     self.caseKeyword = caseKeyword.createTokenSyntax()
     self.caseItems = caseItems.createCaseItemList()
@@ -9050,11 +9050,11 @@ public struct SwitchCaseLabel: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSwitchCaseLabel {
+public protocol ExpressibleBySwitchCaseLabel {
   func createSwitchCaseLabel() -> SwitchCaseLabel
 }
 
-extension SwitchCaseLabel: ExpressibleAsSwitchCaseLabel {
+extension SwitchCaseLabel: ExpressibleBySwitchCaseLabel {
   public func createSwitchCaseLabel() -> SwitchCaseLabel {
     self
   }
@@ -9066,9 +9066,9 @@ public struct CatchClause: SyntaxBuildable {
   let body: CodeBlock
 
   public init(
-    catchKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`catch`,
-    catchItems: ExpressibleAsCatchItemList? = nil,
-    body: ExpressibleAsCodeBlock
+    catchKeyword: ExpressibleByTokenSyntax = TokenSyntax.`catch`,
+    catchItems: ExpressibleByCatchItemList? = nil,
+    body: ExpressibleByCodeBlock
   ) {
     self.catchKeyword = catchKeyword.createTokenSyntax()
     self.catchItems = catchItems?.createCatchItemList()
@@ -9096,11 +9096,11 @@ public struct CatchClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchClause {
+public protocol ExpressibleByCatchClause {
   func createCatchClause() -> CatchClause
 }
 
-extension CatchClause: ExpressibleAsCatchClause {
+extension CatchClause: ExpressibleByCatchClause {
   public func createCatchClause() -> CatchClause {
     self
   }
@@ -9115,12 +9115,12 @@ public struct PoundAssertStmt: StmtBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    poundAssert: ExpressibleAsTokenSyntax = TokenSyntax.`poundAssert`,
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    condition: ExpressibleAsExprBuildable,
-    comma: ExpressibleAsTokenSyntax? = nil,
-    message: ExpressibleAsTokenSyntax? = nil,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    poundAssert: ExpressibleByTokenSyntax = TokenSyntax.`poundAssert`,
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    condition: ExpressibleByExprBuildable,
+    comma: ExpressibleByTokenSyntax? = nil,
+    message: ExpressibleByTokenSyntax? = nil,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundAssert = poundAssert.createTokenSyntax()
     self.leftParen = leftParen.createTokenSyntax()
@@ -9154,11 +9154,11 @@ public struct PoundAssertStmt: StmtBuildable {
   }
 }
 
-public protocol ExpressibleAsPoundAssertStmt {
+public protocol ExpressibleByPoundAssertStmt {
   func createPoundAssertStmt() -> PoundAssertStmt
 }
 
-extension PoundAssertStmt: ExpressibleAsPoundAssertStmt {
+extension PoundAssertStmt: ExpressibleByPoundAssertStmt {
   public func createPoundAssertStmt() -> PoundAssertStmt {
     self
   }
@@ -9169,8 +9169,8 @@ public struct GenericWhereClause: SyntaxBuildable {
   let requirementList: GenericRequirementList
 
   public init(
-    whereKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`where`,
-    requirementList: ExpressibleAsGenericRequirementList
+    whereKeyword: ExpressibleByTokenSyntax = TokenSyntax.`where`,
+    requirementList: ExpressibleByGenericRequirementList
   ) {
     self.whereKeyword = whereKeyword.createTokenSyntax()
     self.requirementList = requirementList.createGenericRequirementList()
@@ -9196,11 +9196,11 @@ public struct GenericWhereClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericWhereClause {
+public protocol ExpressibleByGenericWhereClause {
   func createGenericWhereClause() -> GenericWhereClause
 }
 
-extension GenericWhereClause: ExpressibleAsGenericWhereClause {
+extension GenericWhereClause: ExpressibleByGenericWhereClause {
   public func createGenericWhereClause() -> GenericWhereClause {
     self
   }
@@ -9213,7 +9213,7 @@ extension GenericWhereClause: ExpressibleAsGenericWhereClause {
 public struct GenericRequirementList: SyntaxBuildable {
   let elements: [GenericRequirement]
 
-  public init(_ elements: [ExpressibleAsGenericRequirement]) {
+  public init(_ elements: [ExpressibleByGenericRequirement]) {
     self.elements = elements.map { $0.createGenericRequirement() }
   }
 
@@ -9234,11 +9234,11 @@ public struct GenericRequirementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericRequirementList {
+public protocol ExpressibleByGenericRequirementList {
   func createGenericRequirementList() -> GenericRequirementList
 }
 
-extension GenericRequirementList: ExpressibleAsGenericRequirementList {
+extension GenericRequirementList: ExpressibleByGenericRequirementList {
   public func createGenericRequirementList() -> GenericRequirementList {
     self
   }
@@ -9249,8 +9249,8 @@ public struct GenericRequirement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    body: ExpressibleAsSyntaxBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    body: ExpressibleBySyntaxBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.body = body.createSyntaxBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -9276,11 +9276,11 @@ public struct GenericRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericRequirement {
+public protocol ExpressibleByGenericRequirement {
   func createGenericRequirement() -> GenericRequirement
 }
 
-extension GenericRequirement: ExpressibleAsGenericRequirement {
+extension GenericRequirement: ExpressibleByGenericRequirement {
   public func createGenericRequirement() -> GenericRequirement {
     self
   }
@@ -9292,9 +9292,9 @@ public struct SameTypeRequirement: SyntaxBuildable {
   let rightTypeIdentifier: TypeBuildable
 
   public init(
-    leftTypeIdentifier: ExpressibleAsTypeBuildable,
-    equalityToken: ExpressibleAsTokenSyntax,
-    rightTypeIdentifier: ExpressibleAsTypeBuildable
+    leftTypeIdentifier: ExpressibleByTypeBuildable,
+    equalityToken: ExpressibleByTokenSyntax,
+    rightTypeIdentifier: ExpressibleByTypeBuildable
   ) {
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
     self.equalityToken = equalityToken.createTokenSyntax()
@@ -9322,11 +9322,11 @@ public struct SameTypeRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsSameTypeRequirement {
+public protocol ExpressibleBySameTypeRequirement {
   func createSameTypeRequirement() -> SameTypeRequirement
 }
 
-extension SameTypeRequirement: ExpressibleAsSameTypeRequirement {
+extension SameTypeRequirement: ExpressibleBySameTypeRequirement {
   public func createSameTypeRequirement() -> SameTypeRequirement {
     self
   }
@@ -9339,7 +9339,7 @@ extension SameTypeRequirement: ExpressibleAsSameTypeRequirement {
 public struct GenericParameterList: SyntaxBuildable {
   let elements: [GenericParameter]
 
-  public init(_ elements: [ExpressibleAsGenericParameter]) {
+  public init(_ elements: [ExpressibleByGenericParameter]) {
     self.elements = elements.map { $0.createGenericParameter() }
   }
 
@@ -9360,11 +9360,11 @@ public struct GenericParameterList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericParameterList {
+public protocol ExpressibleByGenericParameterList {
   func createGenericParameterList() -> GenericParameterList
 }
 
-extension GenericParameterList: ExpressibleAsGenericParameterList {
+extension GenericParameterList: ExpressibleByGenericParameterList {
   public func createGenericParameterList() -> GenericParameterList {
     self
   }
@@ -9378,11 +9378,11 @@ public struct GenericParameter: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    attributes: ExpressibleAsAttributeList? = nil,
-    name: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax? = nil,
-    inheritedType: ExpressibleAsTypeBuildable? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    attributes: ExpressibleByAttributeList? = nil,
+    name: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax? = nil,
+    inheritedType: ExpressibleByTypeBuildable? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.attributes = attributes?.createAttributeList()
     self.name = name.createTokenSyntax()
@@ -9414,11 +9414,11 @@ public struct GenericParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericParameter {
+public protocol ExpressibleByGenericParameter {
   func createGenericParameter() -> GenericParameter
 }
 
-extension GenericParameter: ExpressibleAsGenericParameter {
+extension GenericParameter: ExpressibleByGenericParameter {
   public func createGenericParameter() -> GenericParameter {
     self
   }
@@ -9430,9 +9430,9 @@ public struct GenericParameterClause: SyntaxBuildable {
   let rightAngleBracket: TokenSyntax
 
   public init(
-    leftAngleBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftAngle`,
-    genericParameterList: ExpressibleAsGenericParameterList,
-    rightAngleBracket: ExpressibleAsTokenSyntax = TokenSyntax.`rightAngle`
+    leftAngleBracket: ExpressibleByTokenSyntax = TokenSyntax.`leftAngle`,
+    genericParameterList: ExpressibleByGenericParameterList,
+    rightAngleBracket: ExpressibleByTokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leftAngleBracket = leftAngleBracket.createTokenSyntax()
     self.genericParameterList = genericParameterList.createGenericParameterList()
@@ -9460,11 +9460,11 @@ public struct GenericParameterClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericParameterClause {
+public protocol ExpressibleByGenericParameterClause {
   func createGenericParameterClause() -> GenericParameterClause
 }
 
-extension GenericParameterClause: ExpressibleAsGenericParameterClause {
+extension GenericParameterClause: ExpressibleByGenericParameterClause {
   public func createGenericParameterClause() -> GenericParameterClause {
     self
   }
@@ -9476,9 +9476,9 @@ public struct ConformanceRequirement: SyntaxBuildable {
   let rightTypeIdentifier: TypeBuildable
 
   public init(
-    leftTypeIdentifier: ExpressibleAsTypeBuildable,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    rightTypeIdentifier: ExpressibleAsTypeBuildable
+    leftTypeIdentifier: ExpressibleByTypeBuildable,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    rightTypeIdentifier: ExpressibleByTypeBuildable
   ) {
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
     self.colon = colon.createTokenSyntax()
@@ -9506,11 +9506,11 @@ public struct ConformanceRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsConformanceRequirement {
+public protocol ExpressibleByConformanceRequirement {
   func createConformanceRequirement() -> ConformanceRequirement
 }
 
-extension ConformanceRequirement: ExpressibleAsConformanceRequirement {
+extension ConformanceRequirement: ExpressibleByConformanceRequirement {
   public func createConformanceRequirement() -> ConformanceRequirement {
     self
   }
@@ -9521,8 +9521,8 @@ public struct SimpleTypeIdentifier: TypeBuildable {
   let genericArgumentClause: GenericArgumentClause?
 
   public init(
-    name: ExpressibleAsTokenSyntax,
-    genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
+    name: ExpressibleByTokenSyntax,
+    genericArgumentClause: ExpressibleByGenericArgumentClause? = nil
   ) {
     self.name = name.createTokenSyntax()
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
@@ -9548,11 +9548,11 @@ public struct SimpleTypeIdentifier: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsSimpleTypeIdentifier {
+public protocol ExpressibleBySimpleTypeIdentifier {
   func createSimpleTypeIdentifier() -> SimpleTypeIdentifier
 }
 
-extension SimpleTypeIdentifier: ExpressibleAsSimpleTypeIdentifier {
+extension SimpleTypeIdentifier: ExpressibleBySimpleTypeIdentifier {
   public func createSimpleTypeIdentifier() -> SimpleTypeIdentifier {
     self
   }
@@ -9565,10 +9565,10 @@ public struct MemberTypeIdentifier: TypeBuildable {
   let genericArgumentClause: GenericArgumentClause?
 
   public init(
-    baseType: ExpressibleAsTypeBuildable,
-    period: ExpressibleAsTokenSyntax,
-    name: ExpressibleAsTokenSyntax,
-    genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
+    baseType: ExpressibleByTypeBuildable,
+    period: ExpressibleByTokenSyntax,
+    name: ExpressibleByTokenSyntax,
+    genericArgumentClause: ExpressibleByGenericArgumentClause? = nil
   ) {
     self.baseType = baseType.createTypeBuildable()
     self.period = period.createTokenSyntax()
@@ -9598,11 +9598,11 @@ public struct MemberTypeIdentifier: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberTypeIdentifier {
+public protocol ExpressibleByMemberTypeIdentifier {
   func createMemberTypeIdentifier() -> MemberTypeIdentifier
 }
 
-extension MemberTypeIdentifier: ExpressibleAsMemberTypeIdentifier {
+extension MemberTypeIdentifier: ExpressibleByMemberTypeIdentifier {
   public func createMemberTypeIdentifier() -> MemberTypeIdentifier {
     self
   }
@@ -9612,7 +9612,7 @@ public struct ClassRestrictionType: TypeBuildable {
   let classKeyword: TokenSyntax
 
   public init(
-    classKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`class`
+    classKeyword: ExpressibleByTokenSyntax = TokenSyntax.`class`
   ) {
     self.classKeyword = classKeyword.createTokenSyntax()
   }
@@ -9636,11 +9636,11 @@ public struct ClassRestrictionType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsClassRestrictionType {
+public protocol ExpressibleByClassRestrictionType {
   func createClassRestrictionType() -> ClassRestrictionType
 }
 
-extension ClassRestrictionType: ExpressibleAsClassRestrictionType {
+extension ClassRestrictionType: ExpressibleByClassRestrictionType {
   public func createClassRestrictionType() -> ClassRestrictionType {
     self
   }
@@ -9652,9 +9652,9 @@ public struct ArrayType: TypeBuildable {
   let rightSquareBracket: TokenSyntax
 
   public init(
-    leftSquareBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
-    elementType: ExpressibleAsTypeBuildable,
-    rightSquareBracket: ExpressibleAsTokenSyntax = TokenSyntax.`rightSquareBracket`
+    leftSquareBracket: ExpressibleByTokenSyntax = TokenSyntax.`leftSquareBracket`,
+    elementType: ExpressibleByTypeBuildable,
+    rightSquareBracket: ExpressibleByTokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquareBracket = leftSquareBracket.createTokenSyntax()
     self.elementType = elementType.createTypeBuildable()
@@ -9682,11 +9682,11 @@ public struct ArrayType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayType {
+public protocol ExpressibleByArrayType {
   func createArrayType() -> ArrayType
 }
 
-extension ArrayType: ExpressibleAsArrayType {
+extension ArrayType: ExpressibleByArrayType {
   public func createArrayType() -> ArrayType {
     self
   }
@@ -9700,11 +9700,11 @@ public struct DictionaryType: TypeBuildable {
   let rightSquareBracket: TokenSyntax
 
   public init(
-    leftSquareBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
-    keyType: ExpressibleAsTypeBuildable,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    valueType: ExpressibleAsTypeBuildable,
-    rightSquareBracket: ExpressibleAsTokenSyntax = TokenSyntax.`rightSquareBracket`
+    leftSquareBracket: ExpressibleByTokenSyntax = TokenSyntax.`leftSquareBracket`,
+    keyType: ExpressibleByTypeBuildable,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    valueType: ExpressibleByTypeBuildable,
+    rightSquareBracket: ExpressibleByTokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquareBracket = leftSquareBracket.createTokenSyntax()
     self.keyType = keyType.createTypeBuildable()
@@ -9736,11 +9736,11 @@ public struct DictionaryType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryType {
+public protocol ExpressibleByDictionaryType {
   func createDictionaryType() -> DictionaryType
 }
 
-extension DictionaryType: ExpressibleAsDictionaryType {
+extension DictionaryType: ExpressibleByDictionaryType {
   public func createDictionaryType() -> DictionaryType {
     self
   }
@@ -9752,9 +9752,9 @@ public struct MetatypeType: TypeBuildable {
   let typeOrProtocol: TokenSyntax
 
   public init(
-    baseType: ExpressibleAsTypeBuildable,
-    period: ExpressibleAsTokenSyntax = TokenSyntax.`period`,
-    typeOrProtocol: ExpressibleAsTokenSyntax
+    baseType: ExpressibleByTypeBuildable,
+    period: ExpressibleByTokenSyntax = TokenSyntax.`period`,
+    typeOrProtocol: ExpressibleByTokenSyntax
   ) {
     self.baseType = baseType.createTypeBuildable()
     self.period = period.createTokenSyntax()
@@ -9782,11 +9782,11 @@ public struct MetatypeType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsMetatypeType {
+public protocol ExpressibleByMetatypeType {
   func createMetatypeType() -> MetatypeType
 }
 
-extension MetatypeType: ExpressibleAsMetatypeType {
+extension MetatypeType: ExpressibleByMetatypeType {
   public func createMetatypeType() -> MetatypeType {
     self
   }
@@ -9797,8 +9797,8 @@ public struct OptionalType: TypeBuildable {
   let questionMark: TokenSyntax
 
   public init(
-    wrappedType: ExpressibleAsTypeBuildable,
-    questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`postfixQuestionMark`
+    wrappedType: ExpressibleByTypeBuildable,
+    questionMark: ExpressibleByTokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.wrappedType = wrappedType.createTypeBuildable()
     self.questionMark = questionMark.createTokenSyntax()
@@ -9824,11 +9824,11 @@ public struct OptionalType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalType {
+public protocol ExpressibleByOptionalType {
   func createOptionalType() -> OptionalType
 }
 
-extension OptionalType: ExpressibleAsOptionalType {
+extension OptionalType: ExpressibleByOptionalType {
   public func createOptionalType() -> OptionalType {
     self
   }
@@ -9839,8 +9839,8 @@ public struct SomeType: TypeBuildable {
   let baseType: TypeBuildable
 
   public init(
-    someSpecifier: ExpressibleAsTokenSyntax,
-    baseType: ExpressibleAsTypeBuildable
+    someSpecifier: ExpressibleByTokenSyntax,
+    baseType: ExpressibleByTypeBuildable
   ) {
     self.someSpecifier = someSpecifier.createTokenSyntax()
     self.baseType = baseType.createTypeBuildable()
@@ -9866,11 +9866,11 @@ public struct SomeType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsSomeType {
+public protocol ExpressibleBySomeType {
   func createSomeType() -> SomeType
 }
 
-extension SomeType: ExpressibleAsSomeType {
+extension SomeType: ExpressibleBySomeType {
   public func createSomeType() -> SomeType {
     self
   }
@@ -9881,8 +9881,8 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   let exclamationMark: TokenSyntax
 
   public init(
-    wrappedType: ExpressibleAsTypeBuildable,
-    exclamationMark: ExpressibleAsTokenSyntax = TokenSyntax.`exclamationMark`
+    wrappedType: ExpressibleByTypeBuildable,
+    exclamationMark: ExpressibleByTokenSyntax = TokenSyntax.`exclamationMark`
   ) {
     self.wrappedType = wrappedType.createTypeBuildable()
     self.exclamationMark = exclamationMark.createTokenSyntax()
@@ -9908,11 +9908,11 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsImplicitlyUnwrappedOptionalType {
+public protocol ExpressibleByImplicitlyUnwrappedOptionalType {
   func createImplicitlyUnwrappedOptionalType() -> ImplicitlyUnwrappedOptionalType
 }
 
-extension ImplicitlyUnwrappedOptionalType: ExpressibleAsImplicitlyUnwrappedOptionalType {
+extension ImplicitlyUnwrappedOptionalType: ExpressibleByImplicitlyUnwrappedOptionalType {
   public func createImplicitlyUnwrappedOptionalType() -> ImplicitlyUnwrappedOptionalType {
     self
   }
@@ -9923,8 +9923,8 @@ public struct CompositionTypeElement: SyntaxBuildable {
   let ampersand: TokenSyntax?
 
   public init(
-    type: ExpressibleAsTypeBuildable,
-    ampersand: ExpressibleAsTokenSyntax? = nil
+    type: ExpressibleByTypeBuildable,
+    ampersand: ExpressibleByTokenSyntax? = nil
   ) {
     self.type = type.createTypeBuildable()
     self.ampersand = ampersand?.createTokenSyntax()
@@ -9950,11 +9950,11 @@ public struct CompositionTypeElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCompositionTypeElement {
+public protocol ExpressibleByCompositionTypeElement {
   func createCompositionTypeElement() -> CompositionTypeElement
 }
 
-extension CompositionTypeElement: ExpressibleAsCompositionTypeElement {
+extension CompositionTypeElement: ExpressibleByCompositionTypeElement {
   public func createCompositionTypeElement() -> CompositionTypeElement {
     self
   }
@@ -9967,7 +9967,7 @@ extension CompositionTypeElement: ExpressibleAsCompositionTypeElement {
 public struct CompositionTypeElementList: SyntaxBuildable {
   let elements: [CompositionTypeElement]
 
-  public init(_ elements: [ExpressibleAsCompositionTypeElement]) {
+  public init(_ elements: [ExpressibleByCompositionTypeElement]) {
     self.elements = elements.map { $0.createCompositionTypeElement() }
   }
 
@@ -9988,11 +9988,11 @@ public struct CompositionTypeElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCompositionTypeElementList {
+public protocol ExpressibleByCompositionTypeElementList {
   func createCompositionTypeElementList() -> CompositionTypeElementList
 }
 
-extension CompositionTypeElementList: ExpressibleAsCompositionTypeElementList {
+extension CompositionTypeElementList: ExpressibleByCompositionTypeElementList {
   public func createCompositionTypeElementList() -> CompositionTypeElementList {
     self
   }
@@ -10002,7 +10002,7 @@ public struct CompositionType: TypeBuildable {
   let elements: CompositionTypeElementList
 
   public init(
-    elements: ExpressibleAsCompositionTypeElementList
+    elements: ExpressibleByCompositionTypeElementList
   ) {
     self.elements = elements.createCompositionTypeElementList()
   }
@@ -10026,11 +10026,11 @@ public struct CompositionType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsCompositionType {
+public protocol ExpressibleByCompositionType {
   func createCompositionType() -> CompositionType
 }
 
-extension CompositionType: ExpressibleAsCompositionType {
+extension CompositionType: ExpressibleByCompositionType {
   public func createCompositionType() -> CompositionType {
     self
   }
@@ -10047,14 +10047,14 @@ public struct TupleTypeElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    inOut: ExpressibleAsTokenSyntax? = nil,
-    name: ExpressibleAsTokenSyntax? = nil,
-    secondName: ExpressibleAsTokenSyntax? = nil,
-    colon: ExpressibleAsTokenSyntax? = nil,
-    type: ExpressibleAsTypeBuildable,
-    ellipsis: ExpressibleAsTokenSyntax? = nil,
-    initializer: ExpressibleAsInitializerClause? = nil,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    inOut: ExpressibleByTokenSyntax? = nil,
+    name: ExpressibleByTokenSyntax? = nil,
+    secondName: ExpressibleByTokenSyntax? = nil,
+    colon: ExpressibleByTokenSyntax? = nil,
+    type: ExpressibleByTypeBuildable,
+    ellipsis: ExpressibleByTokenSyntax? = nil,
+    initializer: ExpressibleByInitializerClause? = nil,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.inOut = inOut?.createTokenSyntax()
     self.name = name?.createTokenSyntax()
@@ -10092,11 +10092,11 @@ public struct TupleTypeElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleTypeElement {
+public protocol ExpressibleByTupleTypeElement {
   func createTupleTypeElement() -> TupleTypeElement
 }
 
-extension TupleTypeElement: ExpressibleAsTupleTypeElement {
+extension TupleTypeElement: ExpressibleByTupleTypeElement {
   public func createTupleTypeElement() -> TupleTypeElement {
     self
   }
@@ -10109,7 +10109,7 @@ extension TupleTypeElement: ExpressibleAsTupleTypeElement {
 public struct TupleTypeElementList: SyntaxBuildable {
   let elements: [TupleTypeElement]
 
-  public init(_ elements: [ExpressibleAsTupleTypeElement]) {
+  public init(_ elements: [ExpressibleByTupleTypeElement]) {
     self.elements = elements.map { $0.createTupleTypeElement() }
   }
 
@@ -10130,11 +10130,11 @@ public struct TupleTypeElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleTypeElementList {
+public protocol ExpressibleByTupleTypeElementList {
   func createTupleTypeElementList() -> TupleTypeElementList
 }
 
-extension TupleTypeElementList: ExpressibleAsTupleTypeElementList {
+extension TupleTypeElementList: ExpressibleByTupleTypeElementList {
   public func createTupleTypeElementList() -> TupleTypeElementList {
     self
   }
@@ -10146,9 +10146,9 @@ public struct TupleType: TypeBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    elements: ExpressibleAsTupleTypeElementList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    elements: ExpressibleByTupleTypeElementList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.elements = elements.createTupleTypeElementList()
@@ -10176,11 +10176,11 @@ public struct TupleType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleType {
+public protocol ExpressibleByTupleType {
   func createTupleType() -> TupleType
 }
 
-extension TupleType: ExpressibleAsTupleType {
+extension TupleType: ExpressibleByTupleType {
   public func createTupleType() -> TupleType {
     self
   }
@@ -10196,13 +10196,13 @@ public struct FunctionType: TypeBuildable {
   let returnType: TypeBuildable
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    arguments: ExpressibleAsTupleTypeElementList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`,
-    asyncKeyword: ExpressibleAsTokenSyntax? = nil,
-    throwsOrRethrowsKeyword: ExpressibleAsTokenSyntax? = nil,
-    arrow: ExpressibleAsTokenSyntax = TokenSyntax.`arrow`,
-    returnType: ExpressibleAsTypeBuildable
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    arguments: ExpressibleByTupleTypeElementList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`,
+    asyncKeyword: ExpressibleByTokenSyntax? = nil,
+    throwsOrRethrowsKeyword: ExpressibleByTokenSyntax? = nil,
+    arrow: ExpressibleByTokenSyntax = TokenSyntax.`arrow`,
+    returnType: ExpressibleByTypeBuildable
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.arguments = arguments.createTupleTypeElementList()
@@ -10238,11 +10238,11 @@ public struct FunctionType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionType {
+public protocol ExpressibleByFunctionType {
   func createFunctionType() -> FunctionType
 }
 
-extension FunctionType: ExpressibleAsFunctionType {
+extension FunctionType: ExpressibleByFunctionType {
   public func createFunctionType() -> FunctionType {
     self
   }
@@ -10254,9 +10254,9 @@ public struct AttributedType: TypeBuildable {
   let baseType: TypeBuildable
 
   public init(
-    specifier: ExpressibleAsTokenSyntax? = nil,
-    attributes: ExpressibleAsAttributeList? = nil,
-    baseType: ExpressibleAsTypeBuildable
+    specifier: ExpressibleByTokenSyntax? = nil,
+    attributes: ExpressibleByAttributeList? = nil,
+    baseType: ExpressibleByTypeBuildable
   ) {
     self.specifier = specifier?.createTokenSyntax()
     self.attributes = attributes?.createAttributeList()
@@ -10284,11 +10284,11 @@ public struct AttributedType: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsAttributedType {
+public protocol ExpressibleByAttributedType {
   func createAttributedType() -> AttributedType
 }
 
-extension AttributedType: ExpressibleAsAttributedType {
+extension AttributedType: ExpressibleByAttributedType {
   public func createAttributedType() -> AttributedType {
     self
   }
@@ -10301,7 +10301,7 @@ extension AttributedType: ExpressibleAsAttributedType {
 public struct GenericArgumentList: SyntaxBuildable {
   let elements: [GenericArgument]
 
-  public init(_ elements: [ExpressibleAsGenericArgument]) {
+  public init(_ elements: [ExpressibleByGenericArgument]) {
     self.elements = elements.map { $0.createGenericArgument() }
   }
 
@@ -10322,11 +10322,11 @@ public struct GenericArgumentList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericArgumentList {
+public protocol ExpressibleByGenericArgumentList {
   func createGenericArgumentList() -> GenericArgumentList
 }
 
-extension GenericArgumentList: ExpressibleAsGenericArgumentList {
+extension GenericArgumentList: ExpressibleByGenericArgumentList {
   public func createGenericArgumentList() -> GenericArgumentList {
     self
   }
@@ -10337,8 +10337,8 @@ public struct GenericArgument: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    argumentType: ExpressibleAsTypeBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    argumentType: ExpressibleByTypeBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.argumentType = argumentType.createTypeBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -10364,11 +10364,11 @@ public struct GenericArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericArgument {
+public protocol ExpressibleByGenericArgument {
   func createGenericArgument() -> GenericArgument
 }
 
-extension GenericArgument: ExpressibleAsGenericArgument {
+extension GenericArgument: ExpressibleByGenericArgument {
   public func createGenericArgument() -> GenericArgument {
     self
   }
@@ -10380,9 +10380,9 @@ public struct GenericArgumentClause: SyntaxBuildable {
   let rightAngleBracket: TokenSyntax
 
   public init(
-    leftAngleBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftAngle`,
-    arguments: ExpressibleAsGenericArgumentList,
-    rightAngleBracket: ExpressibleAsTokenSyntax = TokenSyntax.`rightAngle`
+    leftAngleBracket: ExpressibleByTokenSyntax = TokenSyntax.`leftAngle`,
+    arguments: ExpressibleByGenericArgumentList,
+    rightAngleBracket: ExpressibleByTokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leftAngleBracket = leftAngleBracket.createTokenSyntax()
     self.arguments = arguments.createGenericArgumentList()
@@ -10410,11 +10410,11 @@ public struct GenericArgumentClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericArgumentClause {
+public protocol ExpressibleByGenericArgumentClause {
   func createGenericArgumentClause() -> GenericArgumentClause
 }
 
-extension GenericArgumentClause: ExpressibleAsGenericArgumentClause {
+extension GenericArgumentClause: ExpressibleByGenericArgumentClause {
   public func createGenericArgumentClause() -> GenericArgumentClause {
     self
   }
@@ -10425,8 +10425,8 @@ public struct TypeAnnotation: SyntaxBuildable {
   let type: TypeBuildable
 
   public init(
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    type: ExpressibleAsTypeBuildable
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    type: ExpressibleByTypeBuildable
   ) {
     self.colon = colon.createTokenSyntax()
     self.type = type.createTypeBuildable()
@@ -10452,11 +10452,11 @@ public struct TypeAnnotation: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeAnnotation {
+public protocol ExpressibleByTypeAnnotation {
   func createTypeAnnotation() -> TypeAnnotation
 }
 
-extension TypeAnnotation: ExpressibleAsTypeAnnotation {
+extension TypeAnnotation: ExpressibleByTypeAnnotation {
   public func createTypeAnnotation() -> TypeAnnotation {
     self
   }
@@ -10469,10 +10469,10 @@ public struct EnumCasePattern: PatternBuildable {
   let associatedTuple: TuplePattern?
 
   public init(
-    type: ExpressibleAsTypeBuildable? = nil,
-    period: ExpressibleAsTokenSyntax = TokenSyntax.`period`,
-    caseName: ExpressibleAsTokenSyntax,
-    associatedTuple: ExpressibleAsTuplePattern? = nil
+    type: ExpressibleByTypeBuildable? = nil,
+    period: ExpressibleByTokenSyntax = TokenSyntax.`period`,
+    caseName: ExpressibleByTokenSyntax,
+    associatedTuple: ExpressibleByTuplePattern? = nil
   ) {
     self.type = type?.createTypeBuildable()
     self.period = period.createTokenSyntax()
@@ -10502,11 +10502,11 @@ public struct EnumCasePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCasePattern {
+public protocol ExpressibleByEnumCasePattern {
   func createEnumCasePattern() -> EnumCasePattern
 }
 
-extension EnumCasePattern: ExpressibleAsEnumCasePattern {
+extension EnumCasePattern: ExpressibleByEnumCasePattern {
   public func createEnumCasePattern() -> EnumCasePattern {
     self
   }
@@ -10517,8 +10517,8 @@ public struct IsTypePattern: PatternBuildable {
   let type: TypeBuildable
 
   public init(
-    isKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`is`,
-    type: ExpressibleAsTypeBuildable
+    isKeyword: ExpressibleByTokenSyntax = TokenSyntax.`is`,
+    type: ExpressibleByTypeBuildable
   ) {
     self.isKeyword = isKeyword.createTokenSyntax()
     self.type = type.createTypeBuildable()
@@ -10544,11 +10544,11 @@ public struct IsTypePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsIsTypePattern {
+public protocol ExpressibleByIsTypePattern {
   func createIsTypePattern() -> IsTypePattern
 }
 
-extension IsTypePattern: ExpressibleAsIsTypePattern {
+extension IsTypePattern: ExpressibleByIsTypePattern {
   public func createIsTypePattern() -> IsTypePattern {
     self
   }
@@ -10559,8 +10559,8 @@ public struct OptionalPattern: PatternBuildable {
   let questionMark: TokenSyntax
 
   public init(
-    subPattern: ExpressibleAsPatternBuildable,
-    questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`postfixQuestionMark`
+    subPattern: ExpressibleByPatternBuildable,
+    questionMark: ExpressibleByTokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
     self.subPattern = subPattern.createPatternBuildable()
     self.questionMark = questionMark.createTokenSyntax()
@@ -10586,11 +10586,11 @@ public struct OptionalPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsOptionalPattern {
+public protocol ExpressibleByOptionalPattern {
   func createOptionalPattern() -> OptionalPattern
 }
 
-extension OptionalPattern: ExpressibleAsOptionalPattern {
+extension OptionalPattern: ExpressibleByOptionalPattern {
   public func createOptionalPattern() -> OptionalPattern {
     self
   }
@@ -10600,7 +10600,7 @@ public struct IdentifierPattern: PatternBuildable {
   let identifier: TokenSyntax
 
   public init(
-    identifier: ExpressibleAsTokenSyntax
+    identifier: ExpressibleByTokenSyntax
   ) {
     self.identifier = identifier.createTokenSyntax()
   }
@@ -10624,11 +10624,11 @@ public struct IdentifierPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsIdentifierPattern {
+public protocol ExpressibleByIdentifierPattern {
   func createIdentifierPattern() -> IdentifierPattern
 }
 
-extension IdentifierPattern: ExpressibleAsIdentifierPattern {
+extension IdentifierPattern: ExpressibleByIdentifierPattern {
   public func createIdentifierPattern() -> IdentifierPattern {
     self
   }
@@ -10640,9 +10640,9 @@ public struct AsTypePattern: PatternBuildable {
   let type: TypeBuildable
 
   public init(
-    pattern: ExpressibleAsPatternBuildable,
-    asKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`as`,
-    type: ExpressibleAsTypeBuildable
+    pattern: ExpressibleByPatternBuildable,
+    asKeyword: ExpressibleByTokenSyntax = TokenSyntax.`as`,
+    type: ExpressibleByTypeBuildable
   ) {
     self.pattern = pattern.createPatternBuildable()
     self.asKeyword = asKeyword.createTokenSyntax()
@@ -10670,11 +10670,11 @@ public struct AsTypePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsAsTypePattern {
+public protocol ExpressibleByAsTypePattern {
   func createAsTypePattern() -> AsTypePattern
 }
 
-extension AsTypePattern: ExpressibleAsAsTypePattern {
+extension AsTypePattern: ExpressibleByAsTypePattern {
   public func createAsTypePattern() -> AsTypePattern {
     self
   }
@@ -10686,9 +10686,9 @@ public struct TuplePattern: PatternBuildable {
   let rightParen: TokenSyntax
 
   public init(
-    leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
-    elements: ExpressibleAsTuplePatternElementList,
-    rightParen: ExpressibleAsTokenSyntax = TokenSyntax.`rightParen`
+    leftParen: ExpressibleByTokenSyntax = TokenSyntax.`leftParen`,
+    elements: ExpressibleByTuplePatternElementList,
+    rightParen: ExpressibleByTokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen.createTokenSyntax()
     self.elements = elements.createTuplePatternElementList()
@@ -10716,11 +10716,11 @@ public struct TuplePattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsTuplePattern {
+public protocol ExpressibleByTuplePattern {
   func createTuplePattern() -> TuplePattern
 }
 
-extension TuplePattern: ExpressibleAsTuplePattern {
+extension TuplePattern: ExpressibleByTuplePattern {
   public func createTuplePattern() -> TuplePattern {
     self
   }
@@ -10731,8 +10731,8 @@ public struct WildcardPattern: PatternBuildable {
   let typeAnnotation: TypeAnnotation?
 
   public init(
-    wildcard: ExpressibleAsTokenSyntax = TokenSyntax.`wildcard`,
-    typeAnnotation: ExpressibleAsTypeAnnotation? = nil
+    wildcard: ExpressibleByTokenSyntax = TokenSyntax.`wildcard`,
+    typeAnnotation: ExpressibleByTypeAnnotation? = nil
   ) {
     self.wildcard = wildcard.createTokenSyntax()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
@@ -10758,11 +10758,11 @@ public struct WildcardPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsWildcardPattern {
+public protocol ExpressibleByWildcardPattern {
   func createWildcardPattern() -> WildcardPattern
 }
 
-extension WildcardPattern: ExpressibleAsWildcardPattern {
+extension WildcardPattern: ExpressibleByWildcardPattern {
   public func createWildcardPattern() -> WildcardPattern {
     self
   }
@@ -10775,10 +10775,10 @@ public struct TuplePatternElement: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    labelName: ExpressibleAsTokenSyntax? = nil,
-    labelColon: ExpressibleAsTokenSyntax? = nil,
-    pattern: ExpressibleAsPatternBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    labelName: ExpressibleByTokenSyntax? = nil,
+    labelColon: ExpressibleByTokenSyntax? = nil,
+    pattern: ExpressibleByPatternBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.labelName = labelName?.createTokenSyntax()
     self.labelColon = labelColon?.createTokenSyntax()
@@ -10808,11 +10808,11 @@ public struct TuplePatternElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTuplePatternElement {
+public protocol ExpressibleByTuplePatternElement {
   func createTuplePatternElement() -> TuplePatternElement
 }
 
-extension TuplePatternElement: ExpressibleAsTuplePatternElement {
+extension TuplePatternElement: ExpressibleByTuplePatternElement {
   public func createTuplePatternElement() -> TuplePatternElement {
     self
   }
@@ -10822,7 +10822,7 @@ public struct ExpressionPattern: PatternBuildable {
   let expression: ExprBuildable
 
   public init(
-    expression: ExpressibleAsExprBuildable
+    expression: ExpressibleByExprBuildable
   ) {
     self.expression = expression.createExprBuildable()
   }
@@ -10846,11 +10846,11 @@ public struct ExpressionPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsExpressionPattern {
+public protocol ExpressibleByExpressionPattern {
   func createExpressionPattern() -> ExpressionPattern
 }
 
-extension ExpressionPattern: ExpressibleAsExpressionPattern {
+extension ExpressionPattern: ExpressibleByExpressionPattern {
   public func createExpressionPattern() -> ExpressionPattern {
     self
   }
@@ -10863,7 +10863,7 @@ extension ExpressionPattern: ExpressibleAsExpressionPattern {
 public struct TuplePatternElementList: SyntaxBuildable {
   let elements: [TuplePatternElement]
 
-  public init(_ elements: [ExpressibleAsTuplePatternElement]) {
+  public init(_ elements: [ExpressibleByTuplePatternElement]) {
     self.elements = elements.map { $0.createTuplePatternElement() }
   }
 
@@ -10884,11 +10884,11 @@ public struct TuplePatternElementList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTuplePatternElementList {
+public protocol ExpressibleByTuplePatternElementList {
   func createTuplePatternElementList() -> TuplePatternElementList
 }
 
-extension TuplePatternElementList: ExpressibleAsTuplePatternElementList {
+extension TuplePatternElementList: ExpressibleByTuplePatternElementList {
   public func createTuplePatternElementList() -> TuplePatternElementList {
     self
   }
@@ -10899,8 +10899,8 @@ public struct ValueBindingPattern: PatternBuildable {
   let valuePattern: PatternBuildable
 
   public init(
-    letOrVarKeyword: ExpressibleAsTokenSyntax,
-    valuePattern: ExpressibleAsPatternBuildable
+    letOrVarKeyword: ExpressibleByTokenSyntax,
+    valuePattern: ExpressibleByPatternBuildable
   ) {
     self.letOrVarKeyword = letOrVarKeyword.createTokenSyntax()
     self.valuePattern = valuePattern.createPatternBuildable()
@@ -10926,11 +10926,11 @@ public struct ValueBindingPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsValueBindingPattern {
+public protocol ExpressibleByValueBindingPattern {
   func createValueBindingPattern() -> ValueBindingPattern
 }
 
-extension ValueBindingPattern: ExpressibleAsValueBindingPattern {
+extension ValueBindingPattern: ExpressibleByValueBindingPattern {
   public func createValueBindingPattern() -> ValueBindingPattern {
     self
   }
@@ -10943,7 +10943,7 @@ extension ValueBindingPattern: ExpressibleAsValueBindingPattern {
 public struct AvailabilitySpecList: SyntaxBuildable {
   let elements: [AvailabilityArgument]
 
-  public init(_ elements: [ExpressibleAsAvailabilityArgument]) {
+  public init(_ elements: [ExpressibleByAvailabilityArgument]) {
     self.elements = elements.map { $0.createAvailabilityArgument() }
   }
 
@@ -10964,11 +10964,11 @@ public struct AvailabilitySpecList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilitySpecList {
+public protocol ExpressibleByAvailabilitySpecList {
   func createAvailabilitySpecList() -> AvailabilitySpecList
 }
 
-extension AvailabilitySpecList: ExpressibleAsAvailabilitySpecList {
+extension AvailabilitySpecList: ExpressibleByAvailabilitySpecList {
   public func createAvailabilitySpecList() -> AvailabilitySpecList {
     self
   }
@@ -10983,8 +10983,8 @@ public struct AvailabilityArgument: SyntaxBuildable {
   let trailingComma: TokenSyntax?
 
   public init(
-    entry: ExpressibleAsSyntaxBuildable,
-    trailingComma: ExpressibleAsTokenSyntax? = nil
+    entry: ExpressibleBySyntaxBuildable,
+    trailingComma: ExpressibleByTokenSyntax? = nil
   ) {
     self.entry = entry.createSyntaxBuildable()
     self.trailingComma = trailingComma?.createTokenSyntax()
@@ -11010,11 +11010,11 @@ public struct AvailabilityArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityArgument {
+public protocol ExpressibleByAvailabilityArgument {
   func createAvailabilityArgument() -> AvailabilityArgument
 }
 
-extension AvailabilityArgument: ExpressibleAsAvailabilityArgument {
+extension AvailabilityArgument: ExpressibleByAvailabilityArgument {
   public func createAvailabilityArgument() -> AvailabilityArgument {
     self
   }
@@ -11030,9 +11030,9 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   let value: SyntaxBuildable
 
   public init(
-    label: ExpressibleAsTokenSyntax,
-    colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
-    value: ExpressibleAsSyntaxBuildable
+    label: ExpressibleByTokenSyntax,
+    colon: ExpressibleByTokenSyntax = TokenSyntax.`colon`,
+    value: ExpressibleBySyntaxBuildable
   ) {
     self.label = label.createTokenSyntax()
     self.colon = colon.createTokenSyntax()
@@ -11060,11 +11060,11 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityLabeledArgument {
+public protocol ExpressibleByAvailabilityLabeledArgument {
   func createAvailabilityLabeledArgument() -> AvailabilityLabeledArgument
 }
 
-extension AvailabilityLabeledArgument: ExpressibleAsAvailabilityLabeledArgument {
+extension AvailabilityLabeledArgument: ExpressibleByAvailabilityLabeledArgument {
   public func createAvailabilityLabeledArgument() -> AvailabilityLabeledArgument {
     self
   }
@@ -11079,8 +11079,8 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
   let version: VersionTuple?
 
   public init(
-    platform: ExpressibleAsTokenSyntax,
-    version: ExpressibleAsVersionTuple? = nil
+    platform: ExpressibleByTokenSyntax,
+    version: ExpressibleByVersionTuple? = nil
   ) {
     self.platform = platform.createTokenSyntax()
     self.version = version?.createVersionTuple()
@@ -11106,11 +11106,11 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityVersionRestriction {
+public protocol ExpressibleByAvailabilityVersionRestriction {
   func createAvailabilityVersionRestriction() -> AvailabilityVersionRestriction
 }
 
-extension AvailabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction {
+extension AvailabilityVersionRestriction: ExpressibleByAvailabilityVersionRestriction {
   public func createAvailabilityVersionRestriction() -> AvailabilityVersionRestriction {
     self
   }
@@ -11126,9 +11126,9 @@ public struct VersionTuple: SyntaxBuildable {
   let patchVersion: TokenSyntax?
 
   public init(
-    majorMinor: ExpressibleAsSyntaxBuildable,
-    patchPeriod: ExpressibleAsTokenSyntax? = nil,
-    patchVersion: ExpressibleAsTokenSyntax? = nil
+    majorMinor: ExpressibleBySyntaxBuildable,
+    patchPeriod: ExpressibleByTokenSyntax? = nil,
+    patchVersion: ExpressibleByTokenSyntax? = nil
   ) {
     self.majorMinor = majorMinor.createSyntaxBuildable()
     self.patchPeriod = patchPeriod?.createTokenSyntax()
@@ -11156,55 +11156,55 @@ public struct VersionTuple: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsVersionTuple {
+public protocol ExpressibleByVersionTuple {
   func createVersionTuple() -> VersionTuple
 }
 
-extension VersionTuple: ExpressibleAsVersionTuple {
+extension VersionTuple: ExpressibleByVersionTuple {
   public func createVersionTuple() -> VersionTuple {
     self
   }
 }
 
-public protocol ExpressibleAsTokenSyntax {
+public protocol ExpressibleByTokenSyntax {
   func createTokenSyntax() -> TokenSyntax
 }
 
-extension TokenSyntax: ExpressibleAsTokenSyntax {
+extension TokenSyntax: ExpressibleByTokenSyntax {
   public func createTokenSyntax() -> TokenSyntax {
     self
   }
 }
 
-// MARK: - Syntax buildable expressible as conformances
+// MARK: - Syntax buildable expressible by conformances
 
-extension ExpressibleAsStmtBuildable {
+extension ExpressibleByDeclBuildable {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
   }
 }
 
-extension ExpressibleAsExprList {
-  public func createConditionElement() -> ConditionElement {
-    ConditionElement(condition: self)
-  }
-}
-
-extension ExpressibleAsDeclBuildable {
-  public func createCodeBlockItem() -> CodeBlockItem {
-    CodeBlockItem(item: self)
-  }
-}
-
-extension ExpressibleAsDeclBuildable {
+extension ExpressibleByDeclBuildable {
   public func createMemberDeclListItem() -> MemberDeclListItem {
     MemberDeclListItem(decl: self)
   }
 }
 
-extension ExpressibleAsConditionElement {
+extension ExpressibleByConditionElement {
   public func createConditionElementList() -> ConditionElementList {
     ConditionElementList([self])
+  }
+}
+
+extension ExpressibleByStmtBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleByExprList {
+  public func createConditionElement() -> ConditionElement {
+    ConditionElement(condition: self)
   }
 }
 

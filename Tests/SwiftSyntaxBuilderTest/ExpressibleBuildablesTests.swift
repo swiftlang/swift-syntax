@@ -3,11 +3,11 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class ExpressibleBuildablesTests: XCTestCase {
-  func testExpressibleByMemberDeclListItem() {
+  func testExpressibleAsMemberDeclListItem() {
     let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
       VariableDecl(TokenSyntax.var, name: "myFirstVar", type: "Int")
 
-      // We use `MemberDeclListItem` to ensure and show we can combine it with `ExpressibleByMemberDeclListItem`
+      // We use `MemberDeclListItem` to ensure and show we can combine it with `ExpressibleAsMemberDeclListItem`
       MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
         PatternBinding(pattern: IdentifierPattern(identifier: TokenSyntax.identifier("myOtherLet")),
                        typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("String")))
@@ -29,7 +29,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
     """)
   }
 
-  func testExpressibleByCodeBlockItem() {
+  func testExpressibleAsCodeBlockItem() {
     let myCodeBlock = SourceFile(eofToken: TokenSyntax.eof) {
       StructDecl(identifier: "MyStruct1", members: MemberDeclBlock())
 
@@ -46,7 +46,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
     """)
   }
 
-  func testExpressibleBySwitchStmt() {
+  func testExpressibleAsSwitchStmt() {
     let versions = [("version_1", "1.0.0"), ("version_2", "2.0.0"), ("version_3", "3.0.0"), ("version_3_1", "3.1.0")]
     let expression = IdentifierExpr(identifier: SyntaxFactory.makeIdentifier("version"))
 

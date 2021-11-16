@@ -19,11 +19,11 @@ public struct CodeBlockItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByCodeBlockItem
+  public typealias Expression = ExpressibleAsCodeBlockItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByCodeBlockItem]
+  public typealias Component = [ExpressibleAsCodeBlockItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -87,11 +87,11 @@ public struct TupleExprElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByTupleExprElement
+  public typealias Expression = ExpressibleAsTupleExprElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByTupleExprElement]
+  public typealias Component = [ExpressibleAsTupleExprElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -155,11 +155,11 @@ public struct ArrayElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByArrayElement
+  public typealias Expression = ExpressibleAsArrayElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByArrayElement]
+  public typealias Component = [ExpressibleAsArrayElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -223,11 +223,11 @@ public struct DictionaryElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByDictionaryElement
+  public typealias Expression = ExpressibleAsDictionaryElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByDictionaryElement]
+  public typealias Component = [ExpressibleAsDictionaryElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -291,11 +291,11 @@ public struct StringLiteralSegmentsBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleBySyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleBySyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -359,11 +359,11 @@ public struct DeclNameArgumentListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByDeclNameArgument
+  public typealias Expression = ExpressibleAsDeclNameArgument
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByDeclNameArgument]
+  public typealias Component = [ExpressibleAsDeclNameArgument]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -427,11 +427,11 @@ public struct ExprListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByExprBuildable
+  public typealias Expression = ExpressibleAsExprBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByExprBuildable]
+  public typealias Component = [ExpressibleAsExprBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -495,11 +495,11 @@ public struct ClosureCaptureItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByClosureCaptureItem
+  public typealias Expression = ExpressibleAsClosureCaptureItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByClosureCaptureItem]
+  public typealias Component = [ExpressibleAsClosureCaptureItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -563,11 +563,11 @@ public struct ClosureParamListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByClosureParam
+  public typealias Expression = ExpressibleAsClosureParam
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByClosureParam]
+  public typealias Component = [ExpressibleAsClosureParam]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -631,11 +631,11 @@ public struct MultipleTrailingClosureElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByMultipleTrailingClosureElement
+  public typealias Expression = ExpressibleAsMultipleTrailingClosureElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByMultipleTrailingClosureElement]
+  public typealias Component = [ExpressibleAsMultipleTrailingClosureElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -699,11 +699,11 @@ public struct ObjcNameBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByObjcNamePiece
+  public typealias Expression = ExpressibleAsObjcNamePiece
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByObjcNamePiece]
+  public typealias Component = [ExpressibleAsObjcNamePiece]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -767,11 +767,11 @@ public struct FunctionParameterListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByFunctionParameter
+  public typealias Expression = ExpressibleAsFunctionParameter
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByFunctionParameter]
+  public typealias Component = [ExpressibleAsFunctionParameter]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -835,11 +835,11 @@ public struct IfConfigClauseListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByIfConfigClause
+  public typealias Expression = ExpressibleAsIfConfigClause
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByIfConfigClause]
+  public typealias Component = [ExpressibleAsIfConfigClause]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -903,11 +903,11 @@ public struct InheritedTypeListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByInheritedType
+  public typealias Expression = ExpressibleAsInheritedType
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByInheritedType]
+  public typealias Component = [ExpressibleAsInheritedType]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -971,11 +971,11 @@ public struct MemberDeclListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByMemberDeclListItem
+  public typealias Expression = ExpressibleAsMemberDeclListItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByMemberDeclListItem]
+  public typealias Component = [ExpressibleAsMemberDeclListItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1039,11 +1039,11 @@ public struct ModifierListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByDeclModifier
+  public typealias Expression = ExpressibleAsDeclModifier
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByDeclModifier]
+  public typealias Component = [ExpressibleAsDeclModifier]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1107,11 +1107,11 @@ public struct AccessPathBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByAccessPathComponent
+  public typealias Expression = ExpressibleAsAccessPathComponent
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByAccessPathComponent]
+  public typealias Component = [ExpressibleAsAccessPathComponent]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1175,11 +1175,11 @@ public struct AccessorListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByAccessorDecl
+  public typealias Expression = ExpressibleAsAccessorDecl
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByAccessorDecl]
+  public typealias Component = [ExpressibleAsAccessorDecl]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1243,11 +1243,11 @@ public struct PatternBindingListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByPatternBinding
+  public typealias Expression = ExpressibleAsPatternBinding
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByPatternBinding]
+  public typealias Component = [ExpressibleAsPatternBinding]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1311,11 +1311,11 @@ public struct EnumCaseElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByEnumCaseElement
+  public typealias Expression = ExpressibleAsEnumCaseElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByEnumCaseElement]
+  public typealias Component = [ExpressibleAsEnumCaseElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1379,11 +1379,11 @@ public struct IdentifierListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByTokenSyntax
+  public typealias Expression = ExpressibleAsTokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByTokenSyntax]
+  public typealias Component = [ExpressibleAsTokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1447,11 +1447,11 @@ public struct PrecedenceGroupAttributeListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleBySyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleBySyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1515,11 +1515,11 @@ public struct PrecedenceGroupNameListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByPrecedenceGroupNameElement
+  public typealias Expression = ExpressibleAsPrecedenceGroupNameElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByPrecedenceGroupNameElement]
+  public typealias Component = [ExpressibleAsPrecedenceGroupNameElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1583,11 +1583,11 @@ public struct TokenListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByTokenSyntax
+  public typealias Expression = ExpressibleAsTokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByTokenSyntax]
+  public typealias Component = [ExpressibleAsTokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1651,11 +1651,11 @@ public struct NonEmptyTokenListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByTokenSyntax
+  public typealias Expression = ExpressibleAsTokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByTokenSyntax]
+  public typealias Component = [ExpressibleAsTokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1719,11 +1719,11 @@ public struct AttributeListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleBySyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleBySyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1787,11 +1787,11 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleBySyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleBySyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1855,11 +1855,11 @@ public struct ObjCSelectorBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByObjCSelectorPiece
+  public typealias Expression = ExpressibleAsObjCSelectorPiece
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByObjCSelectorPiece]
+  public typealias Component = [ExpressibleAsObjCSelectorPiece]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1923,11 +1923,11 @@ public struct DifferentiabilityParamListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByDifferentiabilityParam
+  public typealias Expression = ExpressibleAsDifferentiabilityParam
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByDifferentiabilityParam]
+  public typealias Component = [ExpressibleAsDifferentiabilityParam]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1991,11 +1991,11 @@ public struct SwitchCaseListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleBySyntaxBuildable
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleBySyntaxBuildable]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2059,11 +2059,11 @@ public struct CatchClauseListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByCatchClause
+  public typealias Expression = ExpressibleAsCatchClause
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByCatchClause]
+  public typealias Component = [ExpressibleAsCatchClause]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2127,11 +2127,11 @@ public struct CaseItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByCaseItem
+  public typealias Expression = ExpressibleAsCaseItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByCaseItem]
+  public typealias Component = [ExpressibleAsCaseItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2195,11 +2195,11 @@ public struct CatchItemListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByCatchItem
+  public typealias Expression = ExpressibleAsCatchItem
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByCatchItem]
+  public typealias Component = [ExpressibleAsCatchItem]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2263,11 +2263,11 @@ public struct ConditionElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByConditionElement
+  public typealias Expression = ExpressibleAsConditionElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByConditionElement]
+  public typealias Component = [ExpressibleAsConditionElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2331,11 +2331,11 @@ public struct GenericRequirementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByGenericRequirement
+  public typealias Expression = ExpressibleAsGenericRequirement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByGenericRequirement]
+  public typealias Component = [ExpressibleAsGenericRequirement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2399,11 +2399,11 @@ public struct GenericParameterListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByGenericParameter
+  public typealias Expression = ExpressibleAsGenericParameter
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByGenericParameter]
+  public typealias Component = [ExpressibleAsGenericParameter]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2467,11 +2467,11 @@ public struct CompositionTypeElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByCompositionTypeElement
+  public typealias Expression = ExpressibleAsCompositionTypeElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByCompositionTypeElement]
+  public typealias Component = [ExpressibleAsCompositionTypeElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2535,11 +2535,11 @@ public struct TupleTypeElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByTupleTypeElement
+  public typealias Expression = ExpressibleAsTupleTypeElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByTupleTypeElement]
+  public typealias Component = [ExpressibleAsTupleTypeElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2603,11 +2603,11 @@ public struct GenericArgumentListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByGenericArgument
+  public typealias Expression = ExpressibleAsGenericArgument
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByGenericArgument]
+  public typealias Component = [ExpressibleAsGenericArgument]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2671,11 +2671,11 @@ public struct TuplePatternElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByTuplePatternElement
+  public typealias Expression = ExpressibleAsTuplePatternElement
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByTuplePatternElement]
+  public typealias Component = [ExpressibleAsTuplePatternElement]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -2739,11 +2739,11 @@ public struct AvailabilitySpecListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleByAvailabilityArgument
+  public typealias Expression = ExpressibleAsAvailabilityArgument
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleByAvailabilityArgument]
+  public typealias Component = [ExpressibleAsAvailabilityArgument]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.

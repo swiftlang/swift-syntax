@@ -80,7 +80,7 @@ public protocol ExprListBuildable: SyntaxListBuildable {
   func buildExprList(format: Format, leadingTrivia: Trivia?) -> [ExprSyntax]
 }
 
-public protocol ExpressibleAsExprBuildable {
+public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList {
   func createExprBuildable() -> ExprBuildable
 }
 
@@ -248,7 +248,7 @@ public protocol SyntaxListBuildable {
   func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
 }
 
-public protocol ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
   func createSyntaxBuildable() -> SyntaxBuildable
 }
 
@@ -388,7 +388,7 @@ public struct CodeBlockItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlockItem {
+public protocol ExpressibleAsCodeBlockItem: ExpressibleAsCodeBlockItemList {
   func createCodeBlockItem() -> CodeBlockItem
 }
 
@@ -834,7 +834,7 @@ public struct DeclNameArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclNameArgument {
+public protocol ExpressibleAsDeclNameArgument: ExpressibleAsDeclNameArgumentList {
   func createDeclNameArgument() -> DeclNameArgument
 }
 
@@ -1812,7 +1812,7 @@ public struct TupleExprElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleExprElement {
+public protocol ExpressibleAsTupleExprElement: ExpressibleAsTupleExprElementList {
   func createTupleExprElement() -> TupleExprElement
 }
 
@@ -1854,7 +1854,7 @@ public struct ArrayElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayElement {
+public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList {
   func createArrayElement() -> ArrayElement
 }
 
@@ -1904,7 +1904,7 @@ public struct DictionaryElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryElement {
+public protocol ExpressibleAsDictionaryElement: ExpressibleAsDictionaryElementList {
   func createDictionaryElement() -> DictionaryElement
 }
 
@@ -2264,7 +2264,7 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureCaptureItem {
+public protocol ExpressibleAsClosureCaptureItem: ExpressibleAsClosureCaptureItemList {
   func createClosureCaptureItem() -> ClosureCaptureItem
 }
 
@@ -2390,7 +2390,7 @@ public struct ClosureParam: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsClosureParam {
+public protocol ExpressibleAsClosureParam: ExpressibleAsClosureParamList {
   func createClosureParam() -> ClosureParam
 }
 
@@ -2624,7 +2624,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMultipleTrailingClosureElement {
+public protocol ExpressibleAsMultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureElementList {
   func createMultipleTrailingClosureElement() -> MultipleTrailingClosureElement
 }
 
@@ -3218,7 +3218,7 @@ public struct ObjcNamePiece: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjcNamePiece {
+public protocol ExpressibleAsObjcNamePiece: ExpressibleAsObjcName {
   func createObjcNamePiece() -> ObjcNamePiece
 }
 
@@ -3882,7 +3882,7 @@ public struct IfConfigClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsIfConfigClause {
+public protocol ExpressibleAsIfConfigClause: ExpressibleAsIfConfigClauseList {
   func createIfConfigClause() -> IfConfigClause
 }
 
@@ -4224,7 +4224,7 @@ public struct DeclModifier: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDeclModifier {
+public protocol ExpressibleAsDeclModifier: ExpressibleAsModifierList {
   func createDeclModifier() -> DeclModifier
 }
 
@@ -4266,7 +4266,7 @@ public struct InheritedType: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsInheritedType {
+public protocol ExpressibleAsInheritedType: ExpressibleAsInheritedTypeList {
   func createInheritedType() -> InheritedType
 }
 
@@ -4732,7 +4732,7 @@ public struct MemberDeclListItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclListItem {
+public protocol ExpressibleAsMemberDeclListItem: ExpressibleAsMemberDeclList {
   func createMemberDeclListItem() -> MemberDeclListItem
 }
 
@@ -4882,7 +4882,7 @@ public struct FunctionParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionParameter {
+public protocol ExpressibleAsFunctionParameter: ExpressibleAsFunctionParameterList {
   func createFunctionParameter() -> FunctionParameter
 }
 
@@ -5264,7 +5264,7 @@ public struct AccessPathComponent: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessPathComponent {
+public protocol ExpressibleAsAccessPathComponent: ExpressibleAsAccessPath {
   func createAccessPathComponent() -> AccessPathComponent
 }
 
@@ -5464,7 +5464,7 @@ public struct AccessorDecl: DeclBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorDecl {
+public protocol ExpressibleAsAccessorDecl: ExpressibleAsAccessorList {
   func createAccessorDecl() -> AccessorDecl
 }
 
@@ -5602,7 +5602,7 @@ public struct PatternBinding: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPatternBinding {
+public protocol ExpressibleAsPatternBinding: ExpressibleAsPatternBindingList {
   func createPatternBinding() -> PatternBinding
 }
 
@@ -5744,7 +5744,7 @@ public struct EnumCaseElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsEnumCaseElement {
+public protocol ExpressibleAsEnumCaseElement: ExpressibleAsEnumCaseElementList {
   func createEnumCaseElement() -> EnumCaseElement
 }
 
@@ -6270,7 +6270,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsPrecedenceGroupNameElement {
+public protocol ExpressibleAsPrecedenceGroupNameElement: ExpressibleAsPrecedenceGroupNameList {
   func createPrecedenceGroupNameElement() -> PrecedenceGroupNameElement
 }
 
@@ -6993,7 +6993,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsObjCSelectorPiece {
+public protocol ExpressibleAsObjCSelectorPiece: ExpressibleAsObjCSelector {
   func createObjCSelectorPiece() -> ObjCSelectorPiece
 }
 
@@ -7268,7 +7268,7 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDifferentiabilityParam {
+public protocol ExpressibleAsDifferentiabilityParam: ExpressibleAsDifferentiabilityParamList {
   func createDifferentiabilityParam() -> DifferentiabilityParam
 }
 
@@ -8958,7 +8958,7 @@ public struct CaseItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCaseItem {
+public protocol ExpressibleAsCaseItem: ExpressibleAsCaseItemList {
   func createCaseItem() -> CaseItem
 }
 
@@ -9004,7 +9004,7 @@ public struct CatchItem: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchItem {
+public protocol ExpressibleAsCatchItem: ExpressibleAsCatchItemList {
   func createCatchItem() -> CatchItem
 }
 
@@ -9096,7 +9096,7 @@ public struct CatchClause: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCatchClause {
+public protocol ExpressibleAsCatchClause: ExpressibleAsCatchClauseList {
   func createCatchClause() -> CatchClause
 }
 
@@ -9276,7 +9276,7 @@ public struct GenericRequirement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericRequirement {
+public protocol ExpressibleAsGenericRequirement: ExpressibleAsGenericRequirementList {
   func createGenericRequirement() -> GenericRequirement
 }
 
@@ -9414,7 +9414,7 @@ public struct GenericParameter: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericParameter {
+public protocol ExpressibleAsGenericParameter: ExpressibleAsGenericParameterList {
   func createGenericParameter() -> GenericParameter
 }
 
@@ -9950,7 +9950,7 @@ public struct CompositionTypeElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCompositionTypeElement {
+public protocol ExpressibleAsCompositionTypeElement: ExpressibleAsCompositionTypeElementList {
   func createCompositionTypeElement() -> CompositionTypeElement
 }
 
@@ -10092,7 +10092,7 @@ public struct TupleTypeElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTupleTypeElement {
+public protocol ExpressibleAsTupleTypeElement: ExpressibleAsTupleTypeElementList {
   func createTupleTypeElement() -> TupleTypeElement
 }
 
@@ -10364,7 +10364,7 @@ public struct GenericArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsGenericArgument {
+public protocol ExpressibleAsGenericArgument: ExpressibleAsGenericArgumentList {
   func createGenericArgument() -> GenericArgument
 }
 
@@ -10808,7 +10808,7 @@ public struct TuplePatternElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTuplePatternElement {
+public protocol ExpressibleAsTuplePatternElement: ExpressibleAsTuplePatternElementList {
   func createTuplePatternElement() -> TuplePatternElement
 }
 
@@ -11010,7 +11010,7 @@ public struct AvailabilityArgument: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAvailabilityArgument {
+public protocol ExpressibleAsAvailabilityArgument: ExpressibleAsAvailabilitySpecList {
   func createAvailabilityArgument() -> AvailabilityArgument
 }
 
@@ -11178,17 +11178,253 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
 
 // MARK: - Syntax buildable expressible as conformances
 
-extension ExpressibleAsStmtBuildable {
-  public func createCodeBlockItem() -> CodeBlockItem {
-    CodeBlockItem(item: self)
-  }
-}
+ extension ExpressibleAsTupleExprElement {
+   public func createTupleExprElementList() -> TupleExprElementList {
+     TupleExprElementList([self])
+   }
+ }
 
-extension ExpressibleAsExprList {
-  public func createConditionElement() -> ConditionElement {
-    ConditionElement(condition: self)
-  }
-}
+ extension ExpressibleAsDifferentiabilityParam {
+   public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
+     DifferentiabilityParamList([self])
+   }
+ }
+
+ extension ExpressibleAsAvailabilityArgument {
+   public func createAvailabilitySpecList() -> AvailabilitySpecList {
+     AvailabilitySpecList([self])
+   }
+ }
+
+ extension ExpressibleAsGenericArgument {
+   public func createGenericArgumentList() -> GenericArgumentList {
+     GenericArgumentList([self])
+   }
+ }
+
+ extension ExpressibleAsEnumCaseElement {
+   public func createEnumCaseElementList() -> EnumCaseElementList {
+     EnumCaseElementList([self])
+   }
+ }
+
+ extension ExpressibleAsCatchItem {
+   public func createCatchItemList() -> CatchItemList {
+     CatchItemList([self])
+   }
+ }
+
+ extension ExpressibleAsClosureCaptureItem {
+   public func createClosureCaptureItemList() -> ClosureCaptureItemList {
+     ClosureCaptureItemList([self])
+   }
+ }
+
+ extension ExpressibleAsMultipleTrailingClosureElement {
+   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
+     MultipleTrailingClosureElementList([self])
+   }
+ }
+
+ extension ExpressibleAsTupleTypeElement {
+   public func createTupleTypeElementList() -> TupleTypeElementList {
+     TupleTypeElementList([self])
+   }
+ }
+
+ extension ExpressibleAsAccessorDecl {
+   public func createAccessorList() -> AccessorList {
+     AccessorList([self])
+   }
+ }
+
+ extension ExpressibleAsDeclModifier {
+   public func createModifierList() -> ModifierList {
+     ModifierList([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createStringLiteralSegments() -> StringLiteralSegments {
+     StringLiteralSegments([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
+     PrecedenceGroupAttributeList([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createAttributeList() -> AttributeList {
+     AttributeList([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
+     SpecializeAttributeSpecList([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createSwitchCaseList() -> SwitchCaseList {
+     SwitchCaseList([self])
+   }
+ }
+
+ extension ExpressibleAsIfConfigClause {
+   public func createIfConfigClauseList() -> IfConfigClauseList {
+     IfConfigClauseList([self])
+   }
+ }
+
+ extension ExpressibleAsAccessPathComponent {
+   public func createAccessPath() -> AccessPath {
+     AccessPath([self])
+   }
+ }
+
+ extension ExpressibleAsArrayElement {
+   public func createArrayElementList() -> ArrayElementList {
+     ArrayElementList([self])
+   }
+ }
+
+ extension ExpressibleAsCatchClause {
+   public func createCatchClauseList() -> CatchClauseList {
+     CatchClauseList([self])
+   }
+ }
+
+ extension ExpressibleAsGenericRequirement {
+   public func createGenericRequirementList() -> GenericRequirementList {
+     GenericRequirementList([self])
+   }
+ }
+
+ extension ExpressibleAsInheritedType {
+   public func createInheritedTypeList() -> InheritedTypeList {
+     InheritedTypeList([self])
+   }
+ }
+
+ extension ExpressibleAsMemberDeclListItem {
+   public func createMemberDeclList() -> MemberDeclList {
+     MemberDeclList([self])
+   }
+ }
+
+ extension ExpressibleAsGenericParameter {
+   public func createGenericParameterList() -> GenericParameterList {
+     GenericParameterList([self])
+   }
+ }
+
+ extension ExpressibleAsDeclNameArgument {
+   public func createDeclNameArgumentList() -> DeclNameArgumentList {
+     DeclNameArgumentList([self])
+   }
+ }
+
+ extension ExpressibleAsTokenSyntax {
+   public func createIdentifierList() -> IdentifierList {
+     IdentifierList([self])
+   }
+ }
+
+ extension ExpressibleAsTokenSyntax {
+   public func createTokenList() -> TokenList {
+     TokenList([self])
+   }
+ }
+
+ extension ExpressibleAsTokenSyntax {
+   public func createNonEmptyTokenList() -> NonEmptyTokenList {
+     NonEmptyTokenList([self])
+   }
+ }
+
+ extension ExpressibleAsDictionaryElement {
+   public func createDictionaryElementList() -> DictionaryElementList {
+     DictionaryElementList([self])
+   }
+ }
+
+ extension ExpressibleAsCompositionTypeElement {
+   public func createCompositionTypeElementList() -> CompositionTypeElementList {
+     CompositionTypeElementList([self])
+   }
+ }
+
+ extension ExpressibleAsFunctionParameter {
+   public func createFunctionParameterList() -> FunctionParameterList {
+     FunctionParameterList([self])
+   }
+ }
+
+ extension ExpressibleAsConditionElement {
+   public func createConditionElementList() -> ConditionElementList {
+     ConditionElementList([self])
+   }
+ }
+
+ extension ExpressibleAsObjCSelectorPiece {
+   public func createObjCSelector() -> ObjCSelector {
+     ObjCSelector([self])
+   }
+ }
+
+ extension ExpressibleAsCaseItem {
+   public func createCaseItemList() -> CaseItemList {
+     CaseItemList([self])
+   }
+ }
+
+ extension ExpressibleAsTuplePatternElement {
+   public func createTuplePatternElementList() -> TuplePatternElementList {
+     TuplePatternElementList([self])
+   }
+ }
+
+ extension ExpressibleAsCodeBlockItem {
+   public func createCodeBlockItemList() -> CodeBlockItemList {
+     CodeBlockItemList([self])
+   }
+ }
+
+ extension ExpressibleAsExprBuildable {
+   public func createExprList() -> ExprList {
+     ExprList([self])
+   }
+ }
+
+ extension ExpressibleAsPatternBinding {
+   public func createPatternBindingList() -> PatternBindingList {
+     PatternBindingList([self])
+   }
+ }
+
+ extension ExpressibleAsObjcNamePiece {
+   public func createObjcName() -> ObjcName {
+     ObjcName([self])
+   }
+ }
+
+ extension ExpressibleAsClosureParam {
+   public func createClosureParamList() -> ClosureParamList {
+     ClosureParamList([self])
+   }
+ }
+
+ extension ExpressibleAsPrecedenceGroupNameElement {
+   public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
+     PrecedenceGroupNameList([self])
+   }
+ }
+
+
 
 extension ExpressibleAsDeclBuildable {
   public func createCodeBlockItem() -> CodeBlockItem {
@@ -11202,9 +11438,15 @@ extension ExpressibleAsDeclBuildable {
   }
 }
 
-extension ExpressibleAsConditionElement {
-  public func createConditionElementList() -> ConditionElementList {
-    ConditionElementList([self])
+extension ExpressibleAsStmtBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleAsExprList {
+  public func createConditionElement() -> ConditionElement {
+    ConditionElement(condition: self)
   }
 }
 

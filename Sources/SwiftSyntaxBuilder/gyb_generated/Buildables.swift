@@ -9548,7 +9548,7 @@ public struct SimpleTypeIdentifier: TypeBuildable {
   }
 }
 
-public protocol ExpressibleAsSimpleTypeIdentifier {
+public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable, ExpressibleAsTypeExpr {
   func createSimpleTypeIdentifier() -> SimpleTypeIdentifier
 }
 
@@ -10624,7 +10624,7 @@ public struct IdentifierPattern: PatternBuildable {
   }
 }
 
-public protocol ExpressibleAsIdentifierPattern {
+public protocol ExpressibleAsIdentifierPattern: ExpressibleAsPatternBuildable {
   func createIdentifierPattern() -> IdentifierPattern
 }
 
@@ -11449,4 +11449,16 @@ extension ExpressibleAsExprList {
     ConditionElement(condition: self)
   }
 }
+
+extension ExpressibleAsSimpleTypeIdentifier {
+  public func createTypeAnnotation() -> TypeAnnotation {
+    TypeAnnotation(type: self)
+  }
+}
+
+ extension ExpressibleAsSimpleTypeIdentifier {
+   public func createTypeExpr() -> TypeExpr {
+     TypeExpr(type: self)
+   }
+ }
 

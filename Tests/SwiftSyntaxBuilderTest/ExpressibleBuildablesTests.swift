@@ -9,8 +9,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
       // We use `MemberDeclListItem` to ensure and show we can combine it with `ExpressibleAsMemberDeclListItem`
       MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
-        PatternBinding(pattern: IdentifierPattern(identifier: TokenSyntax.identifier("myOtherLet")),
-                       typeAnnotation: TypeAnnotation(type: SimpleTypeIdentifier("String")))
+        PatternBinding(pattern: "myOtherLet", typeAnnotation: "String")
       })
       )
 
@@ -48,7 +47,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
   func testExpressibleAsSwitchStmt() {
     let versions = [("version_1", "1.0.0"), ("version_2", "2.0.0"), ("version_3", "3.0.0"), ("version_3_1", "3.1.0")]
-    let expression = IdentifierExpr(identifier: SyntaxFactory.makeIdentifier("version"))
+    let expression = IdentifierExpr("version")
 
     let switchStmt = SwitchStmt(labelName: nil,
                                 expression: expression,

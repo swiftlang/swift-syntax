@@ -28,7 +28,7 @@ final class StringLiteralTests: XCTestCase {
 
   func testStringLiteralConvenienceInitializers() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let testCases: [UInt: (StringLiteralExpr, String)] = [
+    let testCases: [UInt: (ExpressibleAsStringLiteralExpr, String)] = [
       #line: (StringLiteralExpr(""), #"␣"""#),
       #line: (StringLiteralExpr("asdf"), #"␣"asdf""#),
       #line: ("", #"␣"""#),
@@ -37,8 +37,8 @@ final class StringLiteralTests: XCTestCase {
 
     for (line, testCase) in testCases {
       let (builder, expected) = testCase
-
-      let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+      let stringLiteralExpr = builder.createStringLiteralExpr()
+      let syntax = stringLiteralExpr.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
       var text = ""
       syntax.write(to: &text)

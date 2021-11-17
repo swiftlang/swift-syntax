@@ -15,7 +15,7 @@ final class EnumCaseElementTests: XCTestCase {
 
     let initializerClause = InitializerClause(value: stringLiteralExpr)
 
-    let enumCase = EnumCaseElement(identifier: SyntaxFactory.makeIdentifier("TestEnum"),
+    let enumCase = EnumCaseElement(identifier: "TestEnum",
                                    rawValue: initializerClause)
 
     let test = enumCase.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)

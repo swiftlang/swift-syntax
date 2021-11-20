@@ -7,7 +7,7 @@ final class FunctionTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let input = ParameterClause(parameterListBuilder: {
-      FunctionParameter(firstName: TokenSyntax.wildcard, secondName: TokenSyntax.identifier("n"), colon: TokenSyntax.colon, type: "Int", attributesBuilder: {})
+      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int", attributesBuilder: {})
     })
 
     let ifCodeBlock = CodeBlock(statementsBuilder: {
@@ -21,29 +21,29 @@ final class FunctionTests: XCTestCase {
       IfStmt(conditions: ExprList([
         IntegerLiteralExpr(digits: "n"),
 
-        BinaryOperatorExpr(operatorToken: TokenSyntax.unspacedBinaryOperator("<=")),
+        BinaryOperatorExpr(operatorToken: .unspacedBinaryOperator("<=")),
 
         IntegerLiteralExpr(1)
       ]), body: ifCodeBlock)
 
       ReturnStmt(expression: SequenceExpr(elementsBuilder: {
-        FunctionCallExpr(calledExpression: IdentifierExpr("fibonacci"), leftParen: TokenSyntax.leftParen, rightParen: TokenSyntax.rightParen, argumentListBuilder: {
+        FunctionCallExpr(calledExpression: IdentifierExpr("fibonacci"), leftParen: .leftParen, rightParen: .rightParen, argumentListBuilder: {
           TupleExprElement(expression: SequenceExpr(elementsBuilder: {
             IntegerLiteralExpr(digits: "n")
 
-            BinaryOperatorExpr(operatorToken: TokenSyntax.unspacedBinaryOperator("-"))
+            BinaryOperatorExpr(operatorToken: .unspacedBinaryOperator("-"))
 
             IntegerLiteralExpr(1)
           }))
         })
 
-        BinaryOperatorExpr(operatorToken: TokenSyntax.spacedBinaryOperator("+"))
+        BinaryOperatorExpr(operatorToken: .spacedBinaryOperator("+"))
 
-        FunctionCallExpr("fibonacci", leftParen: TokenSyntax.leftParen, rightParen: TokenSyntax.rightParen, argumentListBuilder: {
+        FunctionCallExpr("fibonacci", leftParen: .leftParen, rightParen: .rightParen, argumentListBuilder: {
           TupleExprElement(expression: SequenceExpr(elementsBuilder: {
             IntegerLiteralExpr(digits: "n")
 
-            BinaryOperatorExpr(operatorToken: TokenSyntax.unspacedBinaryOperator("-"))
+            BinaryOperatorExpr(operatorToken: .unspacedBinaryOperator("-"))
 
             IntegerLiteralExpr(2)
           }))
@@ -51,7 +51,7 @@ final class FunctionTests: XCTestCase {
       }))
     })
 
-    let buildable = FunctionDecl(identifier: TokenSyntax.identifier("fibonacci"), signature: signature, body: codeBlock, attributesBuilder: {})
+    let buildable = FunctionDecl(identifier: .identifier("fibonacci"), signature: signature, body: codeBlock, attributesBuilder: {})
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     XCTAssertEqual(syntax.description, """

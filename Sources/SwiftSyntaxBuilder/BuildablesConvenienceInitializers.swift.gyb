@@ -52,8 +52,9 @@ extension ${node.syntax_kind} {
 %         else:
 %           # When type is not handled above, use default value
 %           param_type = syntax_buildable_child_type(child.type_name, child.syntax_kind, child.is_token(), child.is_optional)
+%           param_type = param_type if child.is_token() else "ExpressibleAs" + param_type
 %           default_value = syntax_buildable_default_init_value(child, child_token)
-%           init_parameters.append("%s: ExpressibleAs%s%s" % (child.swift_name, param_type, default_value))
+%           init_parameters.append("%s: %s%s" % (child.swift_name, param_type, default_value))
 %         end
 %       end
     ${',\n    '.join(init_parameters + init_result_builder_parameters)}

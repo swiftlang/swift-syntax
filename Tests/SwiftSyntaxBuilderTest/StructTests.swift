@@ -22,7 +22,7 @@ final class StructTests: XCTestCase {
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
     let emptyMembers = MemberDeclList([])
-    let nestedStruct = StructDecl(structKeyword: TokenSyntax.struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
+    let nestedStruct = StructDecl(structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
                                   identifier: "NestedStruct",
                                   members: emptyMembers)
     let members = MemberDeclListItem(decl: nestedStruct)
@@ -47,7 +47,7 @@ final class StructTests: XCTestCase {
     let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
-           VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
+           VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
             PatternBinding(
               pattern: IdentifierPattern("var\(i)"),
               typeAnnotation: "String"

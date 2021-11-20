@@ -26,14 +26,15 @@ import SwiftSyntax
 @resultBuilder
 public struct ${node.syntax_kind}Builder {
 %     element_type = syntax_buildable_child_type(node.collection_element_type, node.collection_element, node.is_token())
-  
+%     component_type = element_type if node.is_token() else 'ExpressibleAs' + element_type
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleAs${element_type}
+  public typealias Expression = ${component_type}
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleAs${element_type}]
+  public typealias Component = [${component_type}]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -84,7 +85,11 @@ public struct ${node.syntax_kind}Builder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
+%     if node.is_token():
+    .init(component)
+%     else:
     .init(component.map { $0.create${element_type}() })
+%     end
   }
 }
 

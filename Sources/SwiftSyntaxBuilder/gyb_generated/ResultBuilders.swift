@@ -16,7 +16,7 @@ import SwiftSyntax
 
 @resultBuilder
 public struct CodeBlockItemListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsCodeBlockItem
@@ -84,7 +84,7 @@ extension CodeBlockItemList {
 
 @resultBuilder
 public struct TupleExprElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsTupleExprElement
@@ -152,7 +152,7 @@ extension TupleExprElementList {
 
 @resultBuilder
 public struct ArrayElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsArrayElement
@@ -220,7 +220,7 @@ extension ArrayElementList {
 
 @resultBuilder
 public struct DictionaryElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsDictionaryElement
@@ -288,7 +288,7 @@ extension DictionaryElementList {
 
 @resultBuilder
 public struct StringLiteralSegmentsBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsSyntaxBuildable
@@ -356,7 +356,7 @@ extension StringLiteralSegments {
 
 @resultBuilder
 public struct DeclNameArgumentListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsDeclNameArgument
@@ -424,7 +424,7 @@ extension DeclNameArgumentList {
 
 @resultBuilder
 public struct ExprListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsExprBuildable
@@ -492,7 +492,7 @@ extension ExprList {
 
 @resultBuilder
 public struct ClosureCaptureItemListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsClosureCaptureItem
@@ -560,7 +560,7 @@ extension ClosureCaptureItemList {
 
 @resultBuilder
 public struct ClosureParamListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsClosureParam
@@ -628,7 +628,7 @@ extension ClosureParamList {
 
 @resultBuilder
 public struct MultipleTrailingClosureElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsMultipleTrailingClosureElement
@@ -696,7 +696,7 @@ extension MultipleTrailingClosureElementList {
 
 @resultBuilder
 public struct ObjcNameBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsObjcNamePiece
@@ -764,7 +764,7 @@ extension ObjcName {
 
 @resultBuilder
 public struct FunctionParameterListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsFunctionParameter
@@ -832,7 +832,7 @@ extension FunctionParameterList {
 
 @resultBuilder
 public struct IfConfigClauseListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsIfConfigClause
@@ -900,7 +900,7 @@ extension IfConfigClauseList {
 
 @resultBuilder
 public struct InheritedTypeListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsInheritedType
@@ -968,7 +968,7 @@ extension InheritedTypeList {
 
 @resultBuilder
 public struct MemberDeclListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsMemberDeclListItem
@@ -1036,7 +1036,7 @@ extension MemberDeclList {
 
 @resultBuilder
 public struct ModifierListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsDeclModifier
@@ -1104,7 +1104,7 @@ extension ModifierList {
 
 @resultBuilder
 public struct AccessPathBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsAccessPathComponent
@@ -1172,7 +1172,7 @@ extension AccessPath {
 
 @resultBuilder
 public struct AccessorListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsAccessorDecl
@@ -1240,7 +1240,7 @@ extension AccessorList {
 
 @resultBuilder
 public struct PatternBindingListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsPatternBinding
@@ -1308,7 +1308,7 @@ extension PatternBindingList {
 
 @resultBuilder
 public struct EnumCaseElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsEnumCaseElement
@@ -1376,14 +1376,14 @@ extension EnumCaseElementList {
 
 @resultBuilder
 public struct IdentifierListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleAsTokenSyntax
+  public typealias Expression = TokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleAsTokenSyntax]
+  public typealias Component = [TokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1434,7 +1434,7 @@ public struct IdentifierListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component.map { $0.createTokenSyntax() })
+    .init(component)
   }
 }
 
@@ -1444,7 +1444,7 @@ extension IdentifierList {
 
 @resultBuilder
 public struct PrecedenceGroupAttributeListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsSyntaxBuildable
@@ -1512,7 +1512,7 @@ extension PrecedenceGroupAttributeList {
 
 @resultBuilder
 public struct PrecedenceGroupNameListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsPrecedenceGroupNameElement
@@ -1580,14 +1580,14 @@ extension PrecedenceGroupNameList {
 
 @resultBuilder
 public struct TokenListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleAsTokenSyntax
+  public typealias Expression = TokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleAsTokenSyntax]
+  public typealias Component = [TokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1638,7 +1638,7 @@ public struct TokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component.map { $0.createTokenSyntax() })
+    .init(component)
   }
 }
 
@@ -1648,14 +1648,14 @@ extension TokenList {
 
 @resultBuilder
 public struct NonEmptyTokenListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleAsTokenSyntax
+  public typealias Expression = TokenSyntax
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleAsTokenSyntax]
+  public typealias Component = [TokenSyntax]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -1706,7 +1706,7 @@ public struct NonEmptyTokenListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component.map { $0.createTokenSyntax() })
+    .init(component)
   }
 }
 
@@ -1716,7 +1716,7 @@ extension NonEmptyTokenList {
 
 @resultBuilder
 public struct AttributeListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsSyntaxBuildable
@@ -1784,7 +1784,7 @@ extension AttributeList {
 
 @resultBuilder
 public struct SpecializeAttributeSpecListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsSyntaxBuildable
@@ -1852,7 +1852,7 @@ extension SpecializeAttributeSpecList {
 
 @resultBuilder
 public struct ObjCSelectorBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsObjCSelectorPiece
@@ -1920,7 +1920,7 @@ extension ObjCSelector {
 
 @resultBuilder
 public struct DifferentiabilityParamListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsDifferentiabilityParam
@@ -1988,7 +1988,7 @@ extension DifferentiabilityParamList {
 
 @resultBuilder
 public struct SwitchCaseListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsSyntaxBuildable
@@ -2056,7 +2056,7 @@ extension SwitchCaseList {
 
 @resultBuilder
 public struct CatchClauseListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsCatchClause
@@ -2124,7 +2124,7 @@ extension CatchClauseList {
 
 @resultBuilder
 public struct CaseItemListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsCaseItem
@@ -2192,7 +2192,7 @@ extension CaseItemList {
 
 @resultBuilder
 public struct CatchItemListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsCatchItem
@@ -2260,7 +2260,7 @@ extension CatchItemList {
 
 @resultBuilder
 public struct ConditionElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsConditionElement
@@ -2328,7 +2328,7 @@ extension ConditionElementList {
 
 @resultBuilder
 public struct GenericRequirementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsGenericRequirement
@@ -2396,7 +2396,7 @@ extension GenericRequirementList {
 
 @resultBuilder
 public struct GenericParameterListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsGenericParameter
@@ -2464,7 +2464,7 @@ extension GenericParameterList {
 
 @resultBuilder
 public struct CompositionTypeElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsCompositionTypeElement
@@ -2532,7 +2532,7 @@ extension CompositionTypeElementList {
 
 @resultBuilder
 public struct TupleTypeElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsTupleTypeElement
@@ -2600,7 +2600,7 @@ extension TupleTypeElementList {
 
 @resultBuilder
 public struct GenericArgumentListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsGenericArgument
@@ -2668,7 +2668,7 @@ extension GenericArgumentList {
 
 @resultBuilder
 public struct TuplePatternElementListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsTuplePatternElement
@@ -2736,7 +2736,7 @@ extension TuplePatternElementList {
 
 @resultBuilder
 public struct AvailabilitySpecListBuilder {
-  
+
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ExpressibleAsAvailabilityArgument

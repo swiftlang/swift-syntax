@@ -5,10 +5,10 @@ import SwiftSyntaxBuilder
 final class ExpressibleBuildablesTests: XCTestCase {
   func testExpressibleAsMemberDeclListItem() {
     let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
-      VariableDecl(TokenSyntax.var, name: "myFirstVar", type: "Int")
+      VariableDecl(.var, name: "myFirstVar", type: "Int")
 
       // We use `MemberDeclListItem` to ensure and show we can combine it with `ExpressibleAsMemberDeclListItem`
-      MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
+      MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
         PatternBinding(pattern: "myOtherLet", typeAnnotation: "String")
       })
       )
@@ -29,7 +29,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
   }
 
   func testExpressibleAsCodeBlockItem() {
-    let myCodeBlock = SourceFile(eofToken: TokenSyntax.eof) {
+    let myCodeBlock = SourceFile(eofToken: .eof) {
       StructDecl(identifier: "MyStruct1", members: MemberDeclBlock())
 
       StructDecl(identifier: "MyStruct2", members: MemberDeclBlock())
@@ -51,7 +51,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
     let switchStmt = SwitchStmt(labelName: nil,
                                 expression: expression,
-                                leftBrace: TokenSyntax.leftBrace.withTrailingTrivia(.newlines(1)),
+                                leftBrace: .leftBrace.withTrailingTrivia(.newlines(1)),
                                 rightBrace: .rightBrace.withLeadingTrivia(.newlines(1)),
                                 casesBuilder: {
       for (version, semVer) in versions {

@@ -34,6 +34,12 @@ extension String: ExpressibleAsStringLiteralExpr {
   }
 }
 
+extension String: ExpressibleAsBinaryOperatorExpr {
+  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
+    BinaryOperatorExpr(self)
+  }
+}
+
 /// Default conformance to `ExpressibleByTypeBuildable`
 extension String {
   public func createTypeBuildable() -> TypeBuildable {

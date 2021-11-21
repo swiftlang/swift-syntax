@@ -5141,7 +5141,7 @@ public struct MemberDeclList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsMemberDeclList {
+public protocol ExpressibleAsMemberDeclList: ExpressibleAsMemberDeclBlock {
   func createMemberDeclList() -> MemberDeclList
 }
 
@@ -12576,6 +12576,18 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
    }
  }
 
+extension ExpressibleAsStmtBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleAsMemberDeclList {
+  public func createMemberDeclBlock() -> MemberDeclBlock {
+    MemberDeclBlock(members: self)
+  }
+}
+
 extension ExpressibleAsDeclBuildable {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
@@ -12588,18 +12600,6 @@ extension ExpressibleAsDeclBuildable {
   }
 }
 
-extension ExpressibleAsStmtBuildable {
-  public func createCodeBlockItem() -> CodeBlockItem {
-    CodeBlockItem(item: self)
-  }
-}
-
-extension ExpressibleAsExprList {
-  public func createConditionElement() -> ConditionElement {
-    ConditionElement(condition: self)
-  }
-}
-
 extension ExpressibleAsSimpleTypeIdentifier {
   public func createTypeAnnotation() -> TypeAnnotation {
     TypeAnnotation(type: self)
@@ -12609,6 +12609,12 @@ extension ExpressibleAsSimpleTypeIdentifier {
 extension ExpressibleAsSimpleTypeIdentifier {
   public func createTypeExpr() -> TypeExpr {
     TypeExpr(type: self)
+  }
+}
+
+extension ExpressibleAsExprList {
+  public func createConditionElement() -> ConditionElement {
+    ConditionElement(condition: self)
   }
 }
 

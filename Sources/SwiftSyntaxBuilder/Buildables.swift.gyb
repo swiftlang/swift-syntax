@@ -159,6 +159,20 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
 %       else:
     self.${child.swift_name} = ${child.swift_name}${create_method_dot}create${param_type}()
 %       end
+%       assert_choices = []
+%       if child.text_choices:
+%         assert_choices = child.text_choices
+%       elif child.token_choices:
+%         assert_choices = map(lambda x : SYNTAX_TOKEN_MAP.get(x.name + 'Token').text, child.token_choices)
+%         # If a Token has `None` as `text`, it can contain arbitrary text.
+%         # If any of the token choices may contain arbitrary text, set assert_choices to [] so we don’t assert on the token’s text below.
+%         assert_choices = [] if None in assert_choices else assert_choices
+%       end
+%       if assert_choices:
+%         optional_condition = child.swift_name + ' == nil || ' if child.is_optional else ""
+%         unwrap = "!" if child.is_optional else ""
+    assert(${optional_condition}[${', '.join(map(lambda x : '"' + x + '"', assert_choices))}].contains(self.${child.swift_name}${unwrap}.text))
+%       end
 %     end
   }
   

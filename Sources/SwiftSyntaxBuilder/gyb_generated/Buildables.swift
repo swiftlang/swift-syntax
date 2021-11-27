@@ -357,6 +357,11 @@ public struct CodeBlockItem: SyntaxBuildable {
   let semicolon: TokenSyntax?
   let errorTokens: SyntaxBuildable?
 
+  /// Creates a `CodeBlockItem` using the provided parameters.
+  /// - Parameters:
+  ///   - item: The underlying node inside the code block.
+  ///   - semicolon: If present, the trailing semicolon at the end of the item.
+  ///   - errorTokens: 
   public init(
     item: ExpressibleAsSyntaxBuildable,
     semicolon: ExpressibleAsTokenSyntax? = nil,
@@ -405,6 +410,9 @@ extension CodeBlockItem: ExpressibleAsCodeBlockItem {
 public struct CodeBlockItemList: SyntaxBuildable {
   let elements: [CodeBlockItem]
 
+  /// Creates a `CodeBlockItemList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsCodeBlockItem`
   public init(_ elements: [ExpressibleAsCodeBlockItem]) {
     self.elements = elements.map { $0.createCodeBlockItem() }
   }
@@ -441,6 +449,11 @@ public struct CodeBlock: SyntaxBuildable {
   let statements: CodeBlockItemList
   let rightBrace: TokenSyntax
 
+  /// Creates a `CodeBlock` using the provided parameters.
+  /// - Parameters:
+  ///   - leftBrace: 
+  ///   - statements: 
+  ///   - rightBrace: 
   public init(
     leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
     statements: ExpressibleAsCodeBlockItemList,
@@ -486,6 +499,10 @@ public struct InOutExpr: ExprBuildable {
   let ampersand: TokenSyntax
   let expression: ExprBuildable
 
+  /// Creates a `InOutExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - ampersand: 
+  ///   - expression: 
   public init(
     ampersand: ExpressibleAsTokenSyntax = TokenSyntax.`prefixAmpersand`,
     expression: ExpressibleAsExprBuildable
@@ -527,6 +544,9 @@ extension InOutExpr: ExpressibleAsInOutExpr {
 public struct PoundColumnExpr: ExprBuildable {
   let poundColumn: TokenSyntax
 
+  /// Creates a `PoundColumnExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundColumn: 
   public init(
     poundColumn: ExpressibleAsTokenSyntax = TokenSyntax.`poundColumn`
   ) {
@@ -569,6 +589,9 @@ extension PoundColumnExpr: ExpressibleAsPoundColumnExpr {
 public struct TupleExprElementList: SyntaxBuildable {
   let elements: [TupleExprElement]
 
+  /// Creates a `TupleExprElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsTupleExprElement`
   public init(_ elements: [ExpressibleAsTupleExprElement]) {
     self.elements = elements.map { $0.createTupleExprElement() }
   }
@@ -607,6 +630,9 @@ extension TupleExprElementList: ExpressibleAsTupleExprElementList {
 public struct ArrayElementList: SyntaxBuildable {
   let elements: [ArrayElement]
 
+  /// Creates a `ArrayElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsArrayElement`
   public init(_ elements: [ExpressibleAsArrayElement]) {
     self.elements = elements.map { $0.createArrayElement() }
   }
@@ -645,6 +671,9 @@ extension ArrayElementList: ExpressibleAsArrayElementList {
 public struct DictionaryElementList: SyntaxBuildable {
   let elements: [DictionaryElement]
 
+  /// Creates a `DictionaryElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsDictionaryElement`
   public init(_ elements: [ExpressibleAsDictionaryElement]) {
     self.elements = elements.map { $0.createDictionaryElement() }
   }
@@ -683,6 +712,9 @@ extension DictionaryElementList: ExpressibleAsDictionaryElementList {
 public struct StringLiteralSegments: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
+  /// Creates a `StringLiteralSegments` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
@@ -719,6 +751,11 @@ public struct TryExpr: ExprBuildable {
   let questionOrExclamationMark: TokenSyntax?
   let expression: ExprBuildable
 
+  /// Creates a `TryExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - tryKeyword: 
+  ///   - questionOrExclamationMark: 
+  ///   - expression: 
   public init(
     tryKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`try`,
     questionOrExclamationMark: ExpressibleAsTokenSyntax? = nil,
@@ -764,6 +801,10 @@ public struct AwaitExpr: ExprBuildable {
   let awaitKeyword: TokenSyntax
   let expression: ExprBuildable
 
+  /// Creates a `AwaitExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - awaitKeyword: 
+  ///   - expression: 
   public init(
     awaitKeyword: ExpressibleAsTokenSyntax,
     expression: ExpressibleAsExprBuildable
@@ -806,6 +847,10 @@ public struct DeclNameArgument: SyntaxBuildable {
   let name: TokenSyntax
   let colon: TokenSyntax
 
+  /// Creates a `DeclNameArgument` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - colon: 
   public init(
     name: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`
@@ -851,6 +896,9 @@ extension DeclNameArgument: ExpressibleAsDeclNameArgument {
 public struct DeclNameArgumentList: SyntaxBuildable {
   let elements: [DeclNameArgument]
 
+  /// Creates a `DeclNameArgumentList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsDeclNameArgument`
   public init(_ elements: [ExpressibleAsDeclNameArgument]) {
     self.elements = elements.map { $0.createDeclNameArgument() }
   }
@@ -887,6 +935,11 @@ public struct DeclNameArguments: SyntaxBuildable {
   let arguments: DeclNameArgumentList
   let rightParen: TokenSyntax
 
+  /// Creates a `DeclNameArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - arguments: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     arguments: ExpressibleAsDeclNameArgumentList,
@@ -932,6 +985,10 @@ public struct IdentifierExpr: ExprBuildable {
   let identifier: TokenSyntax
   let declNameArguments: DeclNameArguments?
 
+  /// Creates a `IdentifierExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - identifier: 
+  ///   - declNameArguments: 
   public init(
     identifier: ExpressibleAsTokenSyntax,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
@@ -973,6 +1030,9 @@ extension IdentifierExpr: ExpressibleAsIdentifierExpr {
 public struct SuperRefExpr: ExprBuildable {
   let superKeyword: TokenSyntax
 
+  /// Creates a `SuperRefExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - superKeyword: 
   public init(
     superKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`super`
   ) {
@@ -1011,6 +1071,9 @@ extension SuperRefExpr: ExpressibleAsSuperRefExpr {
 public struct NilLiteralExpr: ExprBuildable {
   let nilKeyword: TokenSyntax
 
+  /// Creates a `NilLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - nilKeyword: 
   public init(
     nilKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`nil`
   ) {
@@ -1049,6 +1112,9 @@ extension NilLiteralExpr: ExpressibleAsNilLiteralExpr {
 public struct DiscardAssignmentExpr: ExprBuildable {
   let wildcard: TokenSyntax
 
+  /// Creates a `DiscardAssignmentExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - wildcard: 
   public init(
     wildcard: ExpressibleAsTokenSyntax = TokenSyntax.`wildcard`
   ) {
@@ -1087,6 +1153,9 @@ extension DiscardAssignmentExpr: ExpressibleAsDiscardAssignmentExpr {
 public struct AssignmentExpr: ExprBuildable {
   let assignToken: TokenSyntax
 
+  /// Creates a `AssignmentExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - assignToken: 
   public init(
     assignToken: ExpressibleAsTokenSyntax = TokenSyntax.`equal`
   ) {
@@ -1125,6 +1194,9 @@ extension AssignmentExpr: ExpressibleAsAssignmentExpr {
 public struct SequenceExpr: ExprBuildable {
   let elements: ExprList
 
+  /// Creates a `SequenceExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - elements: 
   public init(
     elements: ExpressibleAsExprList
   ) {
@@ -1169,6 +1241,9 @@ extension SequenceExpr: ExpressibleAsSequenceExpr {
 public struct ExprList: SyntaxBuildable {
   let elements: [ExprBuildable]
 
+  /// Creates a `ExprList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsExprBuildable`
   public init(_ elements: [ExpressibleAsExprBuildable]) {
     self.elements = elements.map { $0.createExprBuildable() }
   }
@@ -1203,6 +1278,9 @@ extension ExprList: ExpressibleAsExprList {
 public struct PoundLineExpr: ExprBuildable {
   let poundLine: TokenSyntax
 
+  /// Creates a `PoundLineExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundLine: 
   public init(
     poundLine: ExpressibleAsTokenSyntax = TokenSyntax.`poundLine`
   ) {
@@ -1241,6 +1319,9 @@ extension PoundLineExpr: ExpressibleAsPoundLineExpr {
 public struct PoundFileExpr: ExprBuildable {
   let poundFile: TokenSyntax
 
+  /// Creates a `PoundFileExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundFile: 
   public init(
     poundFile: ExpressibleAsTokenSyntax = TokenSyntax.`poundFile`
   ) {
@@ -1279,6 +1360,9 @@ extension PoundFileExpr: ExpressibleAsPoundFileExpr {
 public struct PoundFileIDExpr: ExprBuildable {
   let poundFileID: TokenSyntax
 
+  /// Creates a `PoundFileIDExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundFileID: 
   public init(
     poundFileID: ExpressibleAsTokenSyntax = TokenSyntax.`poundFileID`
   ) {
@@ -1317,6 +1401,9 @@ extension PoundFileIDExpr: ExpressibleAsPoundFileIDExpr {
 public struct PoundFilePathExpr: ExprBuildable {
   let poundFilePath: TokenSyntax
 
+  /// Creates a `PoundFilePathExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundFilePath: 
   public init(
     poundFilePath: ExpressibleAsTokenSyntax = TokenSyntax.`poundFilePath`
   ) {
@@ -1355,6 +1442,9 @@ extension PoundFilePathExpr: ExpressibleAsPoundFilePathExpr {
 public struct PoundFunctionExpr: ExprBuildable {
   let poundFunction: TokenSyntax
 
+  /// Creates a `PoundFunctionExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundFunction: 
   public init(
     poundFunction: ExpressibleAsTokenSyntax = TokenSyntax.`poundFunction`
   ) {
@@ -1393,6 +1483,9 @@ extension PoundFunctionExpr: ExpressibleAsPoundFunctionExpr {
 public struct PoundDsohandleExpr: ExprBuildable {
   let poundDsohandle: TokenSyntax
 
+  /// Creates a `PoundDsohandleExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundDsohandle: 
   public init(
     poundDsohandle: ExpressibleAsTokenSyntax = TokenSyntax.`poundDsohandle`
   ) {
@@ -1432,6 +1525,10 @@ public struct SymbolicReferenceExpr: ExprBuildable {
   let identifier: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
 
+  /// Creates a `SymbolicReferenceExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - identifier: 
+  ///   - genericArgumentClause: 
   public init(
     identifier: ExpressibleAsTokenSyntax,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
@@ -1474,6 +1571,10 @@ public struct PrefixOperatorExpr: ExprBuildable {
   let operatorToken: TokenSyntax?
   let postfixExpression: ExprBuildable
 
+  /// Creates a `PrefixOperatorExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - operatorToken: 
+  ///   - postfixExpression: 
   public init(
     operatorToken: ExpressibleAsTokenSyntax? = nil,
     postfixExpression: ExpressibleAsExprBuildable
@@ -1515,6 +1616,9 @@ extension PrefixOperatorExpr: ExpressibleAsPrefixOperatorExpr {
 public struct BinaryOperatorExpr: ExprBuildable {
   let operatorToken: TokenSyntax
 
+  /// Creates a `BinaryOperatorExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - operatorToken: 
   public init(
     operatorToken: ExpressibleAsTokenSyntax
   ) {
@@ -1555,6 +1659,11 @@ public struct ArrowExpr: ExprBuildable {
   let throwsToken: TokenSyntax?
   let arrowToken: TokenSyntax
 
+  /// Creates a `ArrowExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - asyncKeyword: 
+  ///   - throwsToken: 
+  ///   - arrowToken: 
   public init(
     asyncKeyword: ExpressibleAsTokenSyntax? = nil,
     throwsToken: ExpressibleAsTokenSyntax? = nil,
@@ -1599,6 +1708,9 @@ extension ArrowExpr: ExpressibleAsArrowExpr {
 public struct FloatLiteralExpr: ExprBuildable {
   let floatingDigits: TokenSyntax
 
+  /// Creates a `FloatLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - floatingDigits: 
   public init(
     floatingDigits: ExpressibleAsTokenSyntax
   ) {
@@ -1639,6 +1751,11 @@ public struct TupleExpr: ExprBuildable {
   let elementList: TupleExprElementList
   let rightParen: TokenSyntax
 
+  /// Creates a `TupleExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - elementList: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     elementList: ExpressibleAsTupleExprElementList,
@@ -1685,6 +1802,11 @@ public struct ArrayExpr: ExprBuildable {
   let elements: ArrayElementList
   let rightSquare: TokenSyntax
 
+  /// Creates a `ArrayExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - leftSquare: 
+  ///   - elements: 
+  ///   - rightSquare: 
   public init(
     leftSquare: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
     elements: ExpressibleAsArrayElementList,
@@ -1731,6 +1853,11 @@ public struct DictionaryExpr: ExprBuildable {
   let content: SyntaxBuildable
   let rightSquare: TokenSyntax
 
+  /// Creates a `DictionaryExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - leftSquare: 
+  ///   - content: 
+  ///   - rightSquare: 
   public init(
     leftSquare: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
     content: ExpressibleAsSyntaxBuildable,
@@ -1778,6 +1905,12 @@ public struct TupleExprElement: SyntaxBuildable {
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `TupleExprElement` using the provided parameters.
+  /// - Parameters:
+  ///   - label: 
+  ///   - colon: 
+  ///   - expression: 
+  ///   - trailingComma: 
   public init(
     label: ExpressibleAsTokenSyntax? = nil,
     colon: ExpressibleAsTokenSyntax? = nil,
@@ -1826,6 +1959,10 @@ public struct ArrayElement: SyntaxBuildable {
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `ArrayElement` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
+  ///   - trailingComma: 
   public init(
     expression: ExpressibleAsExprBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -1870,6 +2007,12 @@ public struct DictionaryElement: SyntaxBuildable {
   let valueExpression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `DictionaryElement` using the provided parameters.
+  /// - Parameters:
+  ///   - keyExpression: 
+  ///   - colon: 
+  ///   - valueExpression: 
+  ///   - trailingComma: 
   public init(
     keyExpression: ExpressibleAsExprBuildable,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -1917,6 +2060,9 @@ extension DictionaryElement: ExpressibleAsDictionaryElement {
 public struct IntegerLiteralExpr: ExprBuildable {
   let digits: TokenSyntax
 
+  /// Creates a `IntegerLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - digits: 
   public init(
     digits: ExpressibleAsTokenSyntax
   ) {
@@ -1955,6 +2101,9 @@ extension IntegerLiteralExpr: ExpressibleAsIntegerLiteralExpr {
 public struct BooleanLiteralExpr: ExprBuildable {
   let booleanLiteral: TokenSyntax
 
+  /// Creates a `BooleanLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - booleanLiteral: 
   public init(
     booleanLiteral: ExpressibleAsTokenSyntax
   ) {
@@ -1997,6 +2146,13 @@ public struct TernaryExpr: ExprBuildable {
   let colonMark: TokenSyntax
   let secondChoice: ExprBuildable
 
+  /// Creates a `TernaryExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - conditionExpression: 
+  ///   - questionMark: 
+  ///   - firstChoice: 
+  ///   - colonMark: 
+  ///   - secondChoice: 
   public init(
     conditionExpression: ExpressibleAsExprBuildable,
     questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`infixQuestionMark`,
@@ -2050,6 +2206,12 @@ public struct MemberAccessExpr: ExprBuildable {
   let name: TokenSyntax
   let declNameArguments: DeclNameArguments?
 
+  /// Creates a `MemberAccessExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - base: 
+  ///   - dot: 
+  ///   - name: 
+  ///   - declNameArguments: 
   public init(
     base: ExpressibleAsExprBuildable? = nil,
     dot: ExpressibleAsTokenSyntax,
@@ -2098,6 +2260,10 @@ public struct IsExpr: ExprBuildable {
   let isTok: TokenSyntax
   let typeName: TypeBuildable
 
+  /// Creates a `IsExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - isTok: 
+  ///   - typeName: 
   public init(
     isTok: ExpressibleAsTokenSyntax = TokenSyntax.`is`,
     typeName: ExpressibleAsTypeBuildable
@@ -2141,6 +2307,11 @@ public struct AsExpr: ExprBuildable {
   let questionOrExclamationMark: TokenSyntax?
   let typeName: TypeBuildable
 
+  /// Creates a `AsExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - asTok: 
+  ///   - questionOrExclamationMark: 
+  ///   - typeName: 
   public init(
     asTok: ExpressibleAsTokenSyntax = TokenSyntax.`as`,
     questionOrExclamationMark: ExpressibleAsTokenSyntax? = nil,
@@ -2185,6 +2356,9 @@ extension AsExpr: ExpressibleAsAsExpr {
 public struct TypeExpr: ExprBuildable {
   let type: TypeBuildable
 
+  /// Creates a `TypeExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - type: 
   public init(
     type: ExpressibleAsTypeBuildable
   ) {
@@ -2227,6 +2401,13 @@ public struct ClosureCaptureItem: SyntaxBuildable {
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `ClosureCaptureItem` using the provided parameters.
+  /// - Parameters:
+  ///   - specifier: 
+  ///   - name: 
+  ///   - assignToken: 
+  ///   - expression: 
+  ///   - trailingComma: 
   public init(
     specifier: ExpressibleAsTokenList? = nil,
     name: ExpressibleAsTokenSyntax? = nil,
@@ -2281,6 +2462,9 @@ extension ClosureCaptureItem: ExpressibleAsClosureCaptureItem {
 public struct ClosureCaptureItemList: SyntaxBuildable {
   let elements: [ClosureCaptureItem]
 
+  /// Creates a `ClosureCaptureItemList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsClosureCaptureItem`
   public init(_ elements: [ExpressibleAsClosureCaptureItem]) {
     self.elements = elements.map { $0.createClosureCaptureItem() }
   }
@@ -2317,6 +2501,11 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
   let items: ClosureCaptureItemList?
   let rightSquare: TokenSyntax
 
+  /// Creates a `ClosureCaptureSignature` using the provided parameters.
+  /// - Parameters:
+  ///   - leftSquare: 
+  ///   - items: 
+  ///   - rightSquare: 
   public init(
     leftSquare: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
     items: ExpressibleAsClosureCaptureItemList? = nil,
@@ -2362,6 +2551,10 @@ public struct ClosureParam: SyntaxBuildable {
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
 
+  /// Creates a `ClosureParam` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - trailingComma: 
   public init(
     name: ExpressibleAsTokenSyntax,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -2407,6 +2600,9 @@ extension ClosureParam: ExpressibleAsClosureParam {
 public struct ClosureParamList: SyntaxBuildable {
   let elements: [ClosureParam]
 
+  /// Creates a `ClosureParamList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsClosureParam`
   public init(_ elements: [ExpressibleAsClosureParam]) {
     self.elements = elements.map { $0.createClosureParam() }
   }
@@ -2447,6 +2643,15 @@ public struct ClosureSignature: SyntaxBuildable {
   let output: ReturnClause?
   let inTok: TokenSyntax
 
+  /// Creates a `ClosureSignature` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - capture: 
+  ///   - input: 
+  ///   - asyncKeyword: 
+  ///   - throwsTok: 
+  ///   - output: 
+  ///   - inTok: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     capture: ExpressibleAsClosureCaptureSignature? = nil,
@@ -2506,6 +2711,12 @@ public struct ClosureExpr: ExprBuildable {
   let statements: CodeBlockItemList
   let rightBrace: TokenSyntax
 
+  /// Creates a `ClosureExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - leftBrace: 
+  ///   - signature: 
+  ///   - statements: 
+  ///   - rightBrace: 
   public init(
     leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
     signature: ExpressibleAsClosureSignature? = nil,
@@ -2553,6 +2764,9 @@ extension ClosureExpr: ExpressibleAsClosureExpr {
 public struct UnresolvedPatternExpr: ExprBuildable {
   let pattern: PatternBuildable
 
+  /// Creates a `UnresolvedPatternExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - pattern: 
   public init(
     pattern: ExpressibleAsPatternBuildable
   ) {
@@ -2593,6 +2807,11 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   let colon: TokenSyntax
   let closure: ClosureExpr
 
+  /// Creates a `MultipleTrailingClosureElement` using the provided parameters.
+  /// - Parameters:
+  ///   - label: 
+  ///   - colon: 
+  ///   - closure: 
   public init(
     label: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -2641,6 +2860,9 @@ extension MultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureEl
 public struct MultipleTrailingClosureElementList: SyntaxBuildable {
   let elements: [MultipleTrailingClosureElement]
 
+  /// Creates a `MultipleTrailingClosureElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsMultipleTrailingClosureElement`
   public init(_ elements: [ExpressibleAsMultipleTrailingClosureElement]) {
     self.elements = elements.map { $0.createMultipleTrailingClosureElement() }
   }
@@ -2680,6 +2902,14 @@ public struct FunctionCallExpr: ExprBuildable {
   let trailingClosure: ClosureExpr?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
+  /// Creates a `FunctionCallExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - calledExpression: 
+  ///   - leftParen: 
+  ///   - argumentList: 
+  ///   - rightParen: 
+  ///   - trailingClosure: 
+  ///   - additionalTrailingClosures: 
   public init(
     calledExpression: ExpressibleAsExprBuildable,
     leftParen: ExpressibleAsTokenSyntax? = nil,
@@ -2738,6 +2968,14 @@ public struct SubscriptExpr: ExprBuildable {
   let trailingClosure: ClosureExpr?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
+  /// Creates a `SubscriptExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - calledExpression: 
+  ///   - leftBracket: 
+  ///   - argumentList: 
+  ///   - rightBracket: 
+  ///   - trailingClosure: 
+  ///   - additionalTrailingClosures: 
   public init(
     calledExpression: ExpressibleAsExprBuildable,
     leftBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
@@ -2792,6 +3030,10 @@ public struct OptionalChainingExpr: ExprBuildable {
   let expression: ExprBuildable
   let questionMark: TokenSyntax
 
+  /// Creates a `OptionalChainingExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
+  ///   - questionMark: 
   public init(
     expression: ExpressibleAsExprBuildable,
     questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`postfixQuestionMark`
@@ -2834,6 +3076,10 @@ public struct ForcedValueExpr: ExprBuildable {
   let expression: ExprBuildable
   let exclamationMark: TokenSyntax
 
+  /// Creates a `ForcedValueExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
+  ///   - exclamationMark: 
   public init(
     expression: ExpressibleAsExprBuildable,
     exclamationMark: ExpressibleAsTokenSyntax = TokenSyntax.`exclamationMark`
@@ -2876,6 +3122,10 @@ public struct PostfixUnaryExpr: ExprBuildable {
   let expression: ExprBuildable
   let operatorToken: TokenSyntax
 
+  /// Creates a `PostfixUnaryExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
+  ///   - operatorToken: 
   public init(
     expression: ExpressibleAsExprBuildable,
     operatorToken: ExpressibleAsTokenSyntax
@@ -2918,6 +3168,10 @@ public struct SpecializeExpr: ExprBuildable {
   let expression: ExprBuildable
   let genericArgumentClause: GenericArgumentClause
 
+  /// Creates a `SpecializeExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
+  ///   - genericArgumentClause: 
   public init(
     expression: ExpressibleAsExprBuildable,
     genericArgumentClause: ExpressibleAsGenericArgumentClause
@@ -2959,6 +3213,9 @@ extension SpecializeExpr: ExpressibleAsSpecializeExpr {
 public struct StringSegment: SyntaxBuildable {
   let content: TokenSyntax
 
+  /// Creates a `StringSegment` using the provided parameters.
+  /// - Parameters:
+  ///   - content: 
   public init(
     content: ExpressibleAsTokenSyntax
   ) {
@@ -3001,6 +3258,13 @@ public struct ExpressionSegment: SyntaxBuildable {
   let expressions: TupleExprElementList
   let rightParen: TokenSyntax
 
+  /// Creates a `ExpressionSegment` using the provided parameters.
+  /// - Parameters:
+  ///   - backslash: 
+  ///   - delimiter: 
+  ///   - leftParen: 
+  ///   - expressions: 
+  ///   - rightParen: 
   public init(
     backslash: ExpressibleAsTokenSyntax = TokenSyntax.`backslash`,
     delimiter: ExpressibleAsTokenSyntax? = nil,
@@ -3055,6 +3319,13 @@ public struct StringLiteralExpr: ExprBuildable {
   let closeQuote: TokenSyntax
   let closeDelimiter: TokenSyntax?
 
+  /// Creates a `StringLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - openDelimiter: 
+  ///   - openQuote: 
+  ///   - segments: 
+  ///   - closeQuote: 
+  ///   - closeDelimiter: 
   public init(
     openDelimiter: ExpressibleAsTokenSyntax? = nil,
     openQuote: ExpressibleAsTokenSyntax,
@@ -3107,6 +3378,11 @@ public struct KeyPathExpr: ExprBuildable {
   let rootExpr: ExprBuildable?
   let expression: ExprBuildable
 
+  /// Creates a `KeyPathExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - backslash: 
+  ///   - rootExpr: 
+  ///   - expression: 
   public init(
     backslash: ExpressibleAsTokenSyntax = TokenSyntax.`backslash`,
     rootExpr: ExpressibleAsExprBuildable? = nil,
@@ -3151,6 +3427,9 @@ extension KeyPathExpr: ExpressibleAsKeyPathExpr {
 public struct KeyPathBaseExpr: ExprBuildable {
   let period: TokenSyntax
 
+  /// Creates a `KeyPathBaseExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - period: 
   public init(
     period: ExpressibleAsTokenSyntax = TokenSyntax.`period`
   ) {
@@ -3190,6 +3469,10 @@ public struct ObjcNamePiece: SyntaxBuildable {
   let name: TokenSyntax
   let dot: TokenSyntax?
 
+  /// Creates a `ObjcNamePiece` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - dot: 
   public init(
     name: ExpressibleAsTokenSyntax,
     dot: ExpressibleAsTokenSyntax? = nil
@@ -3235,6 +3518,9 @@ extension ObjcNamePiece: ExpressibleAsObjcNamePiece {
 public struct ObjcName: SyntaxBuildable {
   let elements: [ObjcNamePiece]
 
+  /// Creates a `ObjcName` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsObjcNamePiece`
   public init(_ elements: [ExpressibleAsObjcNamePiece]) {
     self.elements = elements.map { $0.createObjcNamePiece() }
   }
@@ -3272,6 +3558,12 @@ public struct ObjcKeyPathExpr: ExprBuildable {
   let name: ObjcName
   let rightParen: TokenSyntax
 
+  /// Creates a `ObjcKeyPathExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - keyPath: 
+  ///   - leftParen: 
+  ///   - name: 
+  ///   - rightParen: 
   public init(
     keyPath: ExpressibleAsTokenSyntax = TokenSyntax.`poundKeyPath`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -3324,6 +3616,14 @@ public struct ObjcSelectorExpr: ExprBuildable {
   let name: ExprBuildable
   let rightParen: TokenSyntax
 
+  /// Creates a `ObjcSelectorExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - poundSelector: 
+  ///   - leftParen: 
+  ///   - kind: 
+  ///   - colon: 
+  ///   - name: 
+  ///   - rightParen: 
   public init(
     poundSelector: ExpressibleAsTokenSyntax = TokenSyntax.`poundSelector`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -3378,6 +3678,10 @@ public struct PostfixIfConfigExpr: ExprBuildable {
   let base: ExprBuildable?
   let config: IfConfigDecl
 
+  /// Creates a `PostfixIfConfigExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - base: 
+  ///   - config: 
   public init(
     base: ExpressibleAsExprBuildable? = nil,
     config: ExpressibleAsIfConfigDecl
@@ -3419,6 +3723,9 @@ extension PostfixIfConfigExpr: ExpressibleAsPostfixIfConfigExpr {
 public struct EditorPlaceholderExpr: ExprBuildable {
   let identifier: TokenSyntax
 
+  /// Creates a `EditorPlaceholderExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - identifier: 
   public init(
     identifier: ExpressibleAsTokenSyntax
   ) {
@@ -3460,6 +3767,12 @@ public struct ObjectLiteralExpr: ExprBuildable {
   let arguments: TupleExprElementList
   let rightParen: TokenSyntax
 
+  /// Creates a `ObjectLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - identifier: 
+  ///   - leftParen: 
+  ///   - arguments: 
+  ///   - rightParen: 
   public init(
     identifier: ExpressibleAsTokenSyntax,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -3508,6 +3821,10 @@ public struct TypeInitializerClause: SyntaxBuildable {
   let equal: TokenSyntax
   let value: TypeBuildable
 
+  /// Creates a `TypeInitializerClause` using the provided parameters.
+  /// - Parameters:
+  ///   - equal: 
+  ///   - value: 
   public init(
     equal: ExpressibleAsTokenSyntax = TokenSyntax.`equal`,
     value: ExpressibleAsTypeBuildable
@@ -3555,6 +3872,15 @@ public struct TypealiasDecl: DeclBuildable {
   let initializer: TypeInitializerClause?
   let genericWhereClause: GenericWhereClause?
 
+  /// Creates a `TypealiasDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - typealiasKeyword: 
+  ///   - identifier: 
+  ///   - genericParameterClause: 
+  ///   - initializer: 
+  ///   - genericWhereClause: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -3617,6 +3943,15 @@ public struct AssociatedtypeDecl: DeclBuildable {
   let initializer: TypeInitializerClause?
   let genericWhereClause: GenericWhereClause?
 
+  /// Creates a `AssociatedtypeDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - associatedtypeKeyword: 
+  ///   - identifier: 
+  ///   - inheritanceClause: 
+  ///   - initializer: 
+  ///   - genericWhereClause: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -3677,6 +4012,9 @@ extension AssociatedtypeDecl: ExpressibleAsAssociatedtypeDecl {
 public struct FunctionParameterList: SyntaxBuildable {
   let elements: [FunctionParameter]
 
+  /// Creates a `FunctionParameterList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsFunctionParameter`
   public init(_ elements: [ExpressibleAsFunctionParameter]) {
     self.elements = elements.map { $0.createFunctionParameter() }
   }
@@ -3713,6 +4051,11 @@ public struct ParameterClause: SyntaxBuildable {
   let parameterList: FunctionParameterList
   let rightParen: TokenSyntax
 
+  /// Creates a `ParameterClause` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - parameterList: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     parameterList: ExpressibleAsFunctionParameterList,
@@ -3758,6 +4101,10 @@ public struct ReturnClause: SyntaxBuildable {
   let arrow: TokenSyntax
   let returnType: TypeBuildable
 
+  /// Creates a `ReturnClause` using the provided parameters.
+  /// - Parameters:
+  ///   - arrow: 
+  ///   - returnType: 
   public init(
     arrow: ExpressibleAsTokenSyntax = TokenSyntax.`arrow`,
     returnType: ExpressibleAsTypeBuildable
@@ -3802,6 +4149,12 @@ public struct FunctionSignature: SyntaxBuildable {
   let throwsOrRethrowsKeyword: TokenSyntax?
   let output: ReturnClause?
 
+  /// Creates a `FunctionSignature` using the provided parameters.
+  /// - Parameters:
+  ///   - input: 
+  ///   - asyncOrReasyncKeyword: 
+  ///   - throwsOrRethrowsKeyword: 
+  ///   - output: 
   public init(
     input: ExpressibleAsParameterClause,
     asyncOrReasyncKeyword: ExpressibleAsTokenSyntax? = nil,
@@ -3851,6 +4204,11 @@ public struct IfConfigClause: SyntaxBuildable {
   let condition: ExprBuildable?
   let elements: SyntaxBuildable
 
+  /// Creates a `IfConfigClause` using the provided parameters.
+  /// - Parameters:
+  ///   - poundKeyword: 
+  ///   - condition: 
+  ///   - elements: 
   public init(
     poundKeyword: ExpressibleAsTokenSyntax,
     condition: ExpressibleAsExprBuildable? = nil,
@@ -3899,6 +4257,9 @@ extension IfConfigClause: ExpressibleAsIfConfigClause {
 public struct IfConfigClauseList: SyntaxBuildable {
   let elements: [IfConfigClause]
 
+  /// Creates a `IfConfigClauseList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsIfConfigClause`
   public init(_ elements: [ExpressibleAsIfConfigClause]) {
     self.elements = elements.map { $0.createIfConfigClause() }
   }
@@ -3934,6 +4295,10 @@ public struct IfConfigDecl: DeclBuildable {
   let clauses: IfConfigClauseList
   let poundEndif: TokenSyntax
 
+  /// Creates a `IfConfigDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - clauses: 
+  ///   - poundEndif: 
   public init(
     clauses: ExpressibleAsIfConfigClauseList,
     poundEndif: ExpressibleAsTokenSyntax = TokenSyntax.`poundEndif`
@@ -3978,6 +4343,12 @@ public struct PoundErrorDecl: DeclBuildable {
   let message: StringLiteralExpr
   let rightParen: TokenSyntax
 
+  /// Creates a `PoundErrorDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - poundError: 
+  ///   - leftParen: 
+  ///   - message: 
+  ///   - rightParen: 
   public init(
     poundError: ExpressibleAsTokenSyntax = TokenSyntax.`poundError`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -4028,6 +4399,12 @@ public struct PoundWarningDecl: DeclBuildable {
   let message: StringLiteralExpr
   let rightParen: TokenSyntax
 
+  /// Creates a `PoundWarningDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - poundWarning: 
+  ///   - leftParen: 
+  ///   - message: 
+  ///   - rightParen: 
   public init(
     poundWarning: ExpressibleAsTokenSyntax = TokenSyntax.`poundWarning`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -4078,6 +4455,12 @@ public struct PoundSourceLocation: DeclBuildable {
   let args: PoundSourceLocationArgs?
   let rightParen: TokenSyntax
 
+  /// Creates a `PoundSourceLocation` using the provided parameters.
+  /// - Parameters:
+  ///   - poundSourceLocation: 
+  ///   - leftParen: 
+  ///   - args: 
+  ///   - rightParen: 
   public init(
     poundSourceLocation: ExpressibleAsTokenSyntax = TokenSyntax.`poundSourceLocation`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -4131,6 +4514,15 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
   let lineArgColon: TokenSyntax
   let lineNumber: TokenSyntax
 
+  /// Creates a `PoundSourceLocationArgs` using the provided parameters.
+  /// - Parameters:
+  ///   - fileArgLabel: 
+  ///   - fileArgColon: 
+  ///   - fileName: 
+  ///   - comma: 
+  ///   - lineArgLabel: 
+  ///   - lineArgColon: 
+  ///   - lineNumber: 
   public init(
     fileArgLabel: ExpressibleAsTokenSyntax,
     fileArgColon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -4190,6 +4582,12 @@ public struct DeclModifier: SyntaxBuildable {
   let detail: TokenSyntax?
   let detailRightParen: TokenSyntax?
 
+  /// Creates a `DeclModifier` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - detailLeftParen: 
+  ///   - detail: 
+  ///   - detailRightParen: 
   public init(
     name: ExpressibleAsTokenSyntax,
     detailLeftParen: ExpressibleAsTokenSyntax? = nil,
@@ -4238,6 +4636,10 @@ public struct InheritedType: SyntaxBuildable {
   let typeName: TypeBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `InheritedType` using the provided parameters.
+  /// - Parameters:
+  ///   - typeName: 
+  ///   - trailingComma: 
   public init(
     typeName: ExpressibleAsTypeBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -4283,6 +4685,9 @@ extension InheritedType: ExpressibleAsInheritedType {
 public struct InheritedTypeList: SyntaxBuildable {
   let elements: [InheritedType]
 
+  /// Creates a `InheritedTypeList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsInheritedType`
   public init(_ elements: [ExpressibleAsInheritedType]) {
     self.elements = elements.map { $0.createInheritedType() }
   }
@@ -4318,6 +4723,10 @@ public struct TypeInheritanceClause: SyntaxBuildable {
   let colon: TokenSyntax
   let inheritedTypeCollection: InheritedTypeList
 
+  /// Creates a `TypeInheritanceClause` using the provided parameters.
+  /// - Parameters:
+  ///   - colon: 
+  ///   - inheritedTypeCollection: 
   public init(
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
     inheritedTypeCollection: ExpressibleAsInheritedTypeList
@@ -4366,6 +4775,16 @@ public struct ClassDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// Creates a `ClassDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - classOrActorKeyword: 
+  ///   - identifier: 
+  ///   - genericParameterClause: 
+  ///   - inheritanceClause: 
+  ///   - genericWhereClause: 
+  ///   - members: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -4432,6 +4851,16 @@ public struct StructDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// Creates a `StructDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - structKeyword: 
+  ///   - identifier: 
+  ///   - genericParameterClause: 
+  ///   - inheritanceClause: 
+  ///   - genericWhereClause: 
+  ///   - members: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -4497,6 +4926,15 @@ public struct ProtocolDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// Creates a `ProtocolDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - protocolKeyword: 
+  ///   - identifier: 
+  ///   - inheritanceClause: 
+  ///   - genericWhereClause: 
+  ///   - members: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -4559,6 +4997,15 @@ public struct ExtensionDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// Creates a `ExtensionDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - extensionKeyword: 
+  ///   - extendedType: 
+  ///   - inheritanceClause: 
+  ///   - genericWhereClause: 
+  ///   - members: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -4617,6 +5064,11 @@ public struct MemberDeclBlock: SyntaxBuildable {
   let members: MemberDeclList
   let rightBrace: TokenSyntax
 
+  /// Creates a `MemberDeclBlock` using the provided parameters.
+  /// - Parameters:
+  ///   - leftBrace: 
+  ///   - members: 
+  ///   - rightBrace: 
   public init(
     leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
     members: ExpressibleAsMemberDeclList,
@@ -4665,6 +5117,9 @@ extension MemberDeclBlock: ExpressibleAsMemberDeclBlock {
 public struct MemberDeclList: SyntaxBuildable {
   let elements: [MemberDeclListItem]
 
+  /// Creates a `MemberDeclList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsMemberDeclListItem`
   public init(_ elements: [ExpressibleAsMemberDeclListItem]) {
     self.elements = elements.map { $0.createMemberDeclListItem() }
   }
@@ -4704,6 +5159,10 @@ public struct MemberDeclListItem: SyntaxBuildable {
   let decl: DeclBuildable
   let semicolon: TokenSyntax?
 
+  /// Creates a `MemberDeclListItem` using the provided parameters.
+  /// - Parameters:
+  ///   - decl: The declaration of the type member.
+  ///   - semicolon: An optional trailing semicolon.
   public init(
     decl: ExpressibleAsDeclBuildable,
     semicolon: ExpressibleAsTokenSyntax? = nil
@@ -4746,6 +5205,10 @@ public struct SourceFile: SyntaxBuildable {
   let statements: CodeBlockItemList
   let eofToken: TokenSyntax
 
+  /// Creates a `SourceFile` using the provided parameters.
+  /// - Parameters:
+  ///   - statements: 
+  ///   - eofToken: 
   public init(
     statements: ExpressibleAsCodeBlockItemList,
     eofToken: ExpressibleAsTokenSyntax
@@ -4788,6 +5251,10 @@ public struct InitializerClause: SyntaxBuildable {
   let equal: TokenSyntax
   let value: ExprBuildable
 
+  /// Creates a `InitializerClause` using the provided parameters.
+  /// - Parameters:
+  ///   - equal: 
+  ///   - value: 
   public init(
     equal: ExpressibleAsTokenSyntax = TokenSyntax.`equal`,
     value: ExpressibleAsExprBuildable
@@ -4836,6 +5303,16 @@ public struct FunctionParameter: SyntaxBuildable {
   let defaultArgument: InitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `FunctionParameter` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - firstName: 
+  ///   - secondName: 
+  ///   - colon: 
+  ///   - type: 
+  ///   - ellipsis: 
+  ///   - defaultArgument: 
+  ///   - trailingComma: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     firstName: ExpressibleAsTokenSyntax? = nil,
@@ -4899,6 +5376,9 @@ extension FunctionParameter: ExpressibleAsFunctionParameter {
 public struct ModifierList: SyntaxBuildable {
   let elements: [DeclModifier]
 
+  /// Creates a `ModifierList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsDeclModifier`
   public init(_ elements: [ExpressibleAsDeclModifier]) {
     self.elements = elements.map { $0.createDeclModifier() }
   }
@@ -4940,6 +5420,16 @@ public struct FunctionDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let body: CodeBlock?
 
+  /// Creates a `FunctionDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - funcKeyword: 
+  ///   - identifier: 
+  ///   - genericParameterClause: 
+  ///   - signature: 
+  ///   - genericWhereClause: 
+  ///   - body: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5007,6 +5497,17 @@ public struct InitializerDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let body: CodeBlock?
 
+  /// Creates a `InitializerDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - initKeyword: 
+  ///   - optionalMark: 
+  ///   - genericParameterClause: 
+  ///   - parameters: 
+  ///   - throwsOrRethrowsKeyword: 
+  ///   - genericWhereClause: 
+  ///   - body: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5072,6 +5573,12 @@ public struct DeinitializerDecl: DeclBuildable {
   let deinitKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// Creates a `DeinitializerDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - deinitKeyword: 
+  ///   - body: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5126,6 +5633,16 @@ public struct SubscriptDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let accessor: SyntaxBuildable?
 
+  /// Creates a `SubscriptDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - subscriptKeyword: 
+  ///   - genericParameterClause: 
+  ///   - indices: 
+  ///   - result: 
+  ///   - genericWhereClause: 
+  ///   - accessor: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5188,6 +5705,12 @@ public struct AccessLevelModifier: SyntaxBuildable {
   let modifier: TokenSyntax?
   let rightParen: TokenSyntax?
 
+  /// Creates a `AccessLevelModifier` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - leftParen: 
+  ///   - modifier: 
+  ///   - rightParen: 
   public init(
     name: ExpressibleAsTokenSyntax,
     leftParen: ExpressibleAsTokenSyntax? = nil,
@@ -5236,6 +5759,10 @@ public struct AccessPathComponent: SyntaxBuildable {
   let name: TokenSyntax
   let trailingDot: TokenSyntax?
 
+  /// Creates a `AccessPathComponent` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - trailingDot: 
   public init(
     name: ExpressibleAsTokenSyntax,
     trailingDot: ExpressibleAsTokenSyntax? = nil
@@ -5281,6 +5808,9 @@ extension AccessPathComponent: ExpressibleAsAccessPathComponent {
 public struct AccessPath: SyntaxBuildable {
   let elements: [AccessPathComponent]
 
+  /// Creates a `AccessPath` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsAccessPathComponent`
   public init(_ elements: [ExpressibleAsAccessPathComponent]) {
     self.elements = elements.map { $0.createAccessPathComponent() }
   }
@@ -5319,6 +5849,13 @@ public struct ImportDecl: DeclBuildable {
   let importKind: TokenSyntax?
   let path: AccessPath
 
+  /// Creates a `ImportDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - importTok: 
+  ///   - importKind: 
+  ///   - path: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5371,6 +5908,11 @@ public struct AccessorParameter: SyntaxBuildable {
   let name: TokenSyntax
   let rightParen: TokenSyntax
 
+  /// Creates a `AccessorParameter` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - name: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     name: ExpressibleAsTokenSyntax,
@@ -5421,6 +5963,15 @@ public struct AccessorDecl: DeclBuildable {
   let throwsKeyword: TokenSyntax?
   let body: CodeBlock?
 
+  /// Creates a `AccessorDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifier: 
+  ///   - accessorKind: 
+  ///   - parameter: 
+  ///   - asyncKeyword: 
+  ///   - throwsKeyword: 
+  ///   - body: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifier: ExpressibleAsDeclModifier? = nil,
@@ -5481,6 +6032,9 @@ extension AccessorDecl: ExpressibleAsAccessorDecl {
 public struct AccessorList: SyntaxBuildable {
   let elements: [AccessorDecl]
 
+  /// Creates a `AccessorList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsAccessorDecl`
   public init(_ elements: [ExpressibleAsAccessorDecl]) {
     self.elements = elements.map { $0.createAccessorDecl() }
   }
@@ -5517,6 +6071,11 @@ public struct AccessorBlock: SyntaxBuildable {
   let accessors: AccessorList
   let rightBrace: TokenSyntax
 
+  /// Creates a `AccessorBlock` using the provided parameters.
+  /// - Parameters:
+  ///   - leftBrace: 
+  ///   - accessors: 
+  ///   - rightBrace: 
   public init(
     leftBrace: ExpressibleAsTokenSyntax = TokenSyntax.`leftBrace`,
     accessors: ExpressibleAsAccessorList,
@@ -5565,6 +6124,13 @@ public struct PatternBinding: SyntaxBuildable {
   let accessor: SyntaxBuildable?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `PatternBinding` using the provided parameters.
+  /// - Parameters:
+  ///   - pattern: 
+  ///   - typeAnnotation: 
+  ///   - initializer: 
+  ///   - accessor: 
+  ///   - trailingComma: 
   public init(
     pattern: ExpressibleAsPatternBuildable,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
@@ -5619,6 +6185,9 @@ extension PatternBinding: ExpressibleAsPatternBinding {
 public struct PatternBindingList: SyntaxBuildable {
   let elements: [PatternBinding]
 
+  /// Creates a `PatternBindingList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsPatternBinding`
   public init(_ elements: [ExpressibleAsPatternBinding]) {
     self.elements = elements.map { $0.createPatternBinding() }
   }
@@ -5656,6 +6225,12 @@ public struct VariableDecl: DeclBuildable {
   let letOrVarKeyword: TokenSyntax
   let bindings: PatternBindingList
 
+  /// Creates a `VariableDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - letOrVarKeyword: 
+  ///   - bindings: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5710,6 +6285,12 @@ public struct EnumCaseElement: SyntaxBuildable {
   let rawValue: InitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `EnumCaseElement` using the provided parameters.
+  /// - Parameters:
+  ///   - identifier: The name of this case.
+  ///   - associatedValue: The set of associated values of the case.
+  ///   - rawValue: The raw value of this enum element, if present.
+  ///   - trailingComma: The trailing comma of this element, if the case hasmultiple elements.
   public init(
     identifier: ExpressibleAsTokenSyntax,
     associatedValue: ExpressibleAsParameterClause? = nil,
@@ -5760,6 +6341,9 @@ extension EnumCaseElement: ExpressibleAsEnumCaseElement {
 public struct EnumCaseElementList: SyntaxBuildable {
   let elements: [EnumCaseElement]
 
+  /// Creates a `EnumCaseElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsEnumCaseElement`
   public init(_ elements: [ExpressibleAsEnumCaseElement]) {
     self.elements = elements.map { $0.createEnumCaseElement() }
   }
@@ -5802,6 +6386,12 @@ public struct EnumCaseDecl: DeclBuildable {
   let caseKeyword: TokenSyntax
   let elements: EnumCaseElementList
 
+  /// Creates a `EnumCaseDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: The attributes applied to the case declaration.
+  ///   - modifiers: The declaration modifiers applied to the case declaration.
+  ///   - caseKeyword: The `case` keyword for this case.
+  ///   - elements: The elements this case declares.
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5857,6 +6447,16 @@ public struct EnumDecl: DeclBuildable {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// Creates a `EnumDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: The attributes applied to the enum declaration.
+  ///   - modifiers: The declaration modifiers applied to the enum declaration.
+  ///   - enumKeyword: The `enum` keyword for this declaration.
+  ///   - identifier: The name of this enum.
+  ///   - genericParameters: The generic parameters, if any, for this enum.
+  ///   - inheritanceClause: The inheritance clause describing conformances or rawvalues for this enum.
+  ///   - genericWhereClause: The `where` clause that applies to the generic parameters ofthis enum.
+  ///   - members: The cases and other members of this enum.
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5921,6 +6521,13 @@ public struct OperatorDecl: DeclBuildable {
   let identifier: TokenSyntax
   let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
 
+  /// Creates a `OperatorDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: The attributes applied to the 'operator' declaration.
+  ///   - modifiers: The declaration modifiers applied to the 'operator'declaration.
+  ///   - operatorKeyword: 
+  ///   - identifier: 
+  ///   - operatorPrecedenceAndTypes: Optionally specify a precedence group and designated types.
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -5975,6 +6582,9 @@ extension OperatorDecl: ExpressibleAsOperatorDecl {
 public struct IdentifierList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
+  /// Creates a `IdentifierList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsTokenSyntax`
   public init(_ elements: [ExpressibleAsTokenSyntax]) {
     self.elements = elements.map { $0.createTokenSyntax() }
   }
@@ -6011,6 +6621,10 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
   let colon: TokenSyntax
   let precedenceGroupAndDesignatedTypes: IdentifierList
 
+  /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
+  /// - Parameters:
+  ///   - colon: 
+  ///   - precedenceGroupAndDesignatedTypes: The precedence group and designated types for this operator
   public init(
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
     precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList
@@ -6059,6 +6673,15 @@ public struct PrecedenceGroupDecl: DeclBuildable {
   let groupAttributes: PrecedenceGroupAttributeList
   let rightBrace: TokenSyntax
 
+  /// Creates a `PrecedenceGroupDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: The attributes applied to the 'precedencegroup' declaration.
+  ///   - modifiers: The declaration modifiers applied to the 'precedencegroup'declaration.
+  ///   - precedencegroupKeyword: 
+  ///   - identifier: The name of this precedence group.
+  ///   - leftBrace: 
+  ///   - groupAttributes: The characteristics of this precedence group.
+  ///   - rightBrace: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
@@ -6119,6 +6742,9 @@ extension PrecedenceGroupDecl: ExpressibleAsPrecedenceGroupDecl {
 public struct PrecedenceGroupAttributeList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
+  /// Creates a `PrecedenceGroupAttributeList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
@@ -6159,6 +6785,11 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
   let colon: TokenSyntax
   let otherNames: PrecedenceGroupNameList
 
+  /// Creates a `PrecedenceGroupRelation` using the provided parameters.
+  /// - Parameters:
+  ///   - higherThanOrLowerThan: The relation to specified other precedence groups.
+  ///   - colon: 
+  ///   - otherNames: The name of other precedence group to which this precedencegroup relates.
   public init(
     higherThanOrLowerThan: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6207,6 +6838,9 @@ extension PrecedenceGroupRelation: ExpressibleAsPrecedenceGroupRelation {
 public struct PrecedenceGroupNameList: SyntaxBuildable {
   let elements: [PrecedenceGroupNameElement]
 
+  /// Creates a `PrecedenceGroupNameList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsPrecedenceGroupNameElement`
   public init(_ elements: [ExpressibleAsPrecedenceGroupNameElement]) {
     self.elements = elements.map { $0.createPrecedenceGroupNameElement() }
   }
@@ -6242,6 +6876,10 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
 
+  /// Creates a `PrecedenceGroupNameElement` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - trailingComma: 
   public init(
     name: ExpressibleAsTokenSyntax,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -6289,6 +6927,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
   let colon: TokenSyntax
   let flag: TokenSyntax
 
+  /// Creates a `PrecedenceGroupAssignment` using the provided parameters.
+  /// - Parameters:
+  ///   - assignmentKeyword: 
+  ///   - colon: 
+  ///   - flag: When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.
   public init(
     assignmentKeyword: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6339,6 +6982,11 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
   let colon: TokenSyntax
   let value: TokenSyntax
 
+  /// Creates a `PrecedenceGroupAssociativity` using the provided parameters.
+  /// - Parameters:
+  ///   - associativityKeyword: 
+  ///   - colon: 
+  ///   - value: Operators that are `left`-associative group left-to-right.Operators that are `right`-associative group right-to-left.Operators that are specified with an associativity of `none`don't associate at all
   public init(
     associativityKeyword: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6387,6 +7035,9 @@ extension PrecedenceGroupAssociativity: ExpressibleAsPrecedenceGroupAssociativit
 public struct TokenList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
+  /// Creates a `TokenList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsTokenSyntax`
   public init(_ elements: [ExpressibleAsTokenSyntax]) {
     self.elements = elements.map { $0.createTokenSyntax() }
   }
@@ -6423,6 +7074,9 @@ extension TokenList: ExpressibleAsTokenList {
 public struct NonEmptyTokenList: SyntaxBuildable {
   let elements: [TokenSyntax]
 
+  /// Creates a `NonEmptyTokenList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsTokenSyntax`
   public init(_ elements: [ExpressibleAsTokenSyntax]) {
     self.elements = elements.map { $0.createTokenSyntax() }
   }
@@ -6462,6 +7116,13 @@ public struct CustomAttribute: SyntaxBuildable {
   let argumentList: TupleExprElementList?
   let rightParen: TokenSyntax?
 
+  /// Creates a `CustomAttribute` using the provided parameters.
+  /// - Parameters:
+  ///   - atSignToken: The `@` sign.
+  ///   - attributeName: The name of the attribute.
+  ///   - leftParen: 
+  ///   - argumentList: 
+  ///   - rightParen: 
   public init(
     atSignToken: ExpressibleAsTokenSyntax = TokenSyntax.`atSign`,
     attributeName: ExpressibleAsTypeBuildable,
@@ -6520,6 +7181,14 @@ public struct Attribute: SyntaxBuildable {
   let rightParen: TokenSyntax?
   let tokenList: TokenList?
 
+  /// Creates a `Attribute` using the provided parameters.
+  /// - Parameters:
+  ///   - atSignToken: The `@` sign.
+  ///   - attributeName: The name of the attribute.
+  ///   - leftParen: If the attribute takes arguments, the opening parenthesis.
+  ///   - argument: The arguments of the attribute. In case the attributetakes multiple arguments, they are gather in theappropriate takes first.
+  ///   - rightParen: If the attribute takes arguments, the closing parenthesis.
+  ///   - tokenList: 
   public init(
     atSignToken: ExpressibleAsTokenSyntax = TokenSyntax.`atSign`,
     attributeName: ExpressibleAsTokenSyntax,
@@ -6577,6 +7246,9 @@ extension Attribute: ExpressibleAsAttribute {
 public struct AttributeList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
+  /// Creates a `AttributeList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
@@ -6616,6 +7288,9 @@ extension AttributeList: ExpressibleAsAttributeList {
 public struct SpecializeAttributeSpecList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
+  /// Creates a `SpecializeAttributeSpecList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
@@ -6656,6 +7331,12 @@ public struct AvailabilityEntry: SyntaxBuildable {
   let availabilityList: AvailabilitySpecList
   let semicolon: TokenSyntax
 
+  /// Creates a `AvailabilityEntry` using the provided parameters.
+  /// - Parameters:
+  ///   - label: The label of the argument
+  ///   - colon: The colon separating the label and the value
+  ///   - availabilityList: 
+  ///   - semicolon: 
   public init(
     label: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6710,6 +7391,12 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   let value: TokenSyntax
   let trailingComma: TokenSyntax?
 
+  /// Creates a `LabeledSpecializeEntry` using the provided parameters.
+  /// - Parameters:
+  ///   - label: The label of the argument
+  ///   - colon: The colon separating the label and the value
+  ///   - value: The value for this argument
+  ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
     label: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6765,6 +7452,12 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   let delcname: DeclName
   let trailingComma: TokenSyntax?
 
+  /// Creates a `TargetFunctionEntry` using the provided parameters.
+  /// - Parameters:
+  ///   - label: The label of the argument
+  ///   - colon: The colon separating the label and the value
+  ///   - delcname: The value for this argument
+  ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
     label: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6819,6 +7512,11 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
   let colon: TokenSyntax
   let stringOrDeclname: SyntaxBuildable
 
+  /// Creates a `NamedAttributeStringArgument` using the provided parameters.
+  /// - Parameters:
+  ///   - nameTok: The label of the argument
+  ///   - colon: The colon separating the label and the value
+  ///   - stringOrDeclname: 
   public init(
     nameTok: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -6864,6 +7562,10 @@ public struct DeclName: SyntaxBuildable {
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
 
+  /// Creates a `DeclName` using the provided parameters.
+  /// - Parameters:
+  ///   - declBaseName: The base name of the protocol's requirement.
+  ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
   public init(
     declBaseName: ExpressibleAsSyntaxBuildable,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
@@ -6912,6 +7614,12 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
 
+  /// Creates a `ImplementsAttributeArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - type: The type for which the method with this attributeimplements a requirement.
+  ///   - comma: The comma separating the type and method name
+  ///   - declBaseName: The base name of the protocol's requirement.
+  ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
   public init(
     type: ExpressibleAsSimpleTypeIdentifier,
     comma: ExpressibleAsTokenSyntax = TokenSyntax.`comma`,
@@ -6965,6 +7673,10 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   let name: TokenSyntax?
   let colon: TokenSyntax?
 
+  /// Creates a `ObjCSelectorPiece` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - colon: 
   public init(
     name: ExpressibleAsTokenSyntax? = nil,
     colon: ExpressibleAsTokenSyntax? = nil
@@ -7010,6 +7722,9 @@ extension ObjCSelectorPiece: ExpressibleAsObjCSelectorPiece {
 public struct ObjCSelector: SyntaxBuildable {
   let elements: [ObjCSelectorPiece]
 
+  /// Creates a `ObjCSelector` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsObjCSelectorPiece`
   public init(_ elements: [ExpressibleAsObjCSelectorPiece]) {
     self.elements = elements.map { $0.createObjCSelectorPiece() }
   }
@@ -7053,6 +7768,13 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
   let diffParamsComma: TokenSyntax?
   let whereClause: GenericWhereClause?
 
+  /// Creates a `DifferentiableAttributeArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - diffKind: 
+  ///   - diffKindComma: The comma following the differentiability kind, if it exists.
+  ///   - diffParams: 
+  ///   - diffParamsComma: The comma following the differentiability parameters clause,if it exists.
+  ///   - whereClause: 
   public init(
     diffKind: ExpressibleAsTokenSyntax? = nil,
     diffKindComma: ExpressibleAsTokenSyntax? = nil,
@@ -7106,6 +7828,11 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
   let colon: TokenSyntax
   let parameters: SyntaxBuildable
 
+  /// Creates a `DifferentiabilityParamsClause` using the provided parameters.
+  /// - Parameters:
+  ///   - wrtLabel: The "wrt" label.
+  ///   - colon: The colon separating "wrt" and the parameter list.
+  ///   - parameters: 
   public init(
     wrtLabel: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -7153,6 +7880,11 @@ public struct DifferentiabilityParams: SyntaxBuildable {
   let diffParams: DifferentiabilityParamList
   let rightParen: TokenSyntax
 
+  /// Creates a `DifferentiabilityParams` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - diffParams: The parameters for differentiation.
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     diffParams: ExpressibleAsDifferentiabilityParamList,
@@ -7201,6 +7933,9 @@ extension DifferentiabilityParams: ExpressibleAsDifferentiabilityParams {
 public struct DifferentiabilityParamList: SyntaxBuildable {
   let elements: [DifferentiabilityParam]
 
+  /// Creates a `DifferentiabilityParamList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsDifferentiabilityParam`
   public init(_ elements: [ExpressibleAsDifferentiabilityParam]) {
     self.elements = elements.map { $0.createDifferentiabilityParam() }
   }
@@ -7240,6 +7975,10 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   let parameter: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `DifferentiabilityParam` using the provided parameters.
+  /// - Parameters:
+  ///   - parameter: 
+  ///   - trailingComma: 
   public init(
     parameter: ExpressibleAsSyntaxBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -7292,6 +8031,15 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
   let comma: TokenSyntax?
   let diffParams: DifferentiabilityParamsClause?
 
+  /// Creates a `DerivativeRegistrationAttributeArguments` using the provided parameters.
+  /// - Parameters:
+  ///   - ofLabel: The "of" label.
+  ///   - colon: The colon separating the "of" label and the originaldeclaration name.
+  ///   - originalDeclName: The referenced original declaration name.
+  ///   - period: The period separating the original declaration name and theaccessor name.
+  ///   - accessorKind: The accessor name.
+  ///   - comma: 
+  ///   - diffParams: 
   public init(
     ofLabel: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -7355,6 +8103,12 @@ public struct QualifiedDeclName: SyntaxBuildable {
   let name: TokenSyntax
   let arguments: DeclNameArguments?
 
+  /// Creates a `QualifiedDeclName` using the provided parameters.
+  /// - Parameters:
+  ///   - baseType: The base type of the qualified name, optionally specified.
+  ///   - dot: 
+  ///   - name: The base name of the referenced function.
+  ///   - arguments: The argument labels of the referenced function, optionallyspecified.
   public init(
     baseType: ExpressibleAsTypeBuildable? = nil,
     dot: ExpressibleAsTokenSyntax? = nil,
@@ -7404,6 +8158,10 @@ public struct FunctionDeclName: SyntaxBuildable {
   let name: SyntaxBuildable
   let arguments: DeclNameArguments?
 
+  /// Creates a `FunctionDeclName` using the provided parameters.
+  /// - Parameters:
+  ///   - name: The base name of the referenced function.
+  ///   - arguments: The argument labels of the referenced function, optionallyspecified.
   public init(
     name: ExpressibleAsSyntaxBuildable,
     arguments: ExpressibleAsDeclNameArguments? = nil
@@ -7446,6 +8204,10 @@ public struct ContinueStmt: StmtBuildable {
   let continueKeyword: TokenSyntax
   let label: TokenSyntax?
 
+  /// Creates a `ContinueStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - continueKeyword: 
+  ///   - label: 
   public init(
     continueKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`continue`,
     label: ExpressibleAsTokenSyntax? = nil
@@ -7491,6 +8253,13 @@ public struct WhileStmt: StmtBuildable {
   let conditions: ConditionElementList
   let body: CodeBlock
 
+  /// Creates a `WhileStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - whileKeyword: 
+  ///   - conditions: 
+  ///   - body: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -7542,6 +8311,10 @@ public struct DeferStmt: StmtBuildable {
   let deferKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// Creates a `DeferStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - deferKeyword: 
+  ///   - body: 
   public init(
     deferKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`defer`,
     body: ExpressibleAsCodeBlock
@@ -7583,6 +8356,9 @@ extension DeferStmt: ExpressibleAsDeferStmt {
 public struct ExpressionStmt: StmtBuildable {
   let expression: ExprBuildable
 
+  /// Creates a `ExpressionStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
   public init(
     expression: ExpressibleAsExprBuildable
   ) {
@@ -7625,6 +8401,9 @@ extension ExpressionStmt: ExpressibleAsExpressionStmt {
 public struct SwitchCaseList: SyntaxBuildable {
   let elements: [SyntaxBuildable]
 
+  /// Creates a `SwitchCaseList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
@@ -7664,6 +8443,14 @@ public struct RepeatWhileStmt: StmtBuildable {
   let whileKeyword: TokenSyntax
   let condition: ExprBuildable
 
+  /// Creates a `RepeatWhileStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - repeatKeyword: 
+  ///   - body: 
+  ///   - whileKeyword: 
+  ///   - condition: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -7720,6 +8507,12 @@ public struct GuardStmt: StmtBuildable {
   let elseKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// Creates a `GuardStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - guardKeyword: 
+  ///   - conditions: 
+  ///   - elseKeyword: 
+  ///   - body: 
   public init(
     guardKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`guard`,
     conditions: ExpressibleAsConditionElementList,
@@ -7768,6 +8561,10 @@ public struct WhereClause: SyntaxBuildable {
   let whereKeyword: TokenSyntax
   let guardResult: ExprBuildable
 
+  /// Creates a `WhereClause` using the provided parameters.
+  /// - Parameters:
+  ///   - whereKeyword: 
+  ///   - guardResult: 
   public init(
     whereKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`where`,
     guardResult: ExpressibleAsExprBuildable
@@ -7820,6 +8617,20 @@ public struct ForInStmt: StmtBuildable {
   let whereClause: WhereClause?
   let body: CodeBlock
 
+  /// Creates a `ForInStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - forKeyword: 
+  ///   - tryKeyword: 
+  ///   - awaitKeyword: 
+  ///   - caseKeyword: 
+  ///   - pattern: 
+  ///   - typeAnnotation: 
+  ///   - inKeyword: 
+  ///   - sequenceExpr: 
+  ///   - whereClause: 
+  ///   - body: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -7897,6 +8708,15 @@ public struct SwitchStmt: StmtBuildable {
   let cases: SwitchCaseList
   let rightBrace: TokenSyntax
 
+  /// Creates a `SwitchStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - switchKeyword: 
+  ///   - expression: 
+  ///   - leftBrace: 
+  ///   - cases: 
+  ///   - rightBrace: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -7957,6 +8777,9 @@ extension SwitchStmt: ExpressibleAsSwitchStmt {
 public struct CatchClauseList: SyntaxBuildable {
   let elements: [CatchClause]
 
+  /// Creates a `CatchClauseList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsCatchClause`
   public init(_ elements: [ExpressibleAsCatchClause]) {
     self.elements = elements.map { $0.createCatchClause() }
   }
@@ -7995,6 +8818,13 @@ public struct DoStmt: StmtBuildable {
   let body: CodeBlock
   let catchClauses: CatchClauseList?
 
+  /// Creates a `DoStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - doKeyword: 
+  ///   - body: 
+  ///   - catchClauses: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -8046,6 +8876,10 @@ public struct ReturnStmt: StmtBuildable {
   let returnKeyword: TokenSyntax
   let expression: ExprBuildable?
 
+  /// Creates a `ReturnStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - returnKeyword: 
+  ///   - expression: 
   public init(
     returnKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`return`,
     expression: ExpressibleAsExprBuildable? = nil
@@ -8088,6 +8922,10 @@ public struct YieldStmt: StmtBuildable {
   let yieldKeyword: TokenSyntax
   let yields: SyntaxBuildable
 
+  /// Creates a `YieldStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - yieldKeyword: 
+  ///   - yields: 
   public init(
     yieldKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`yield`,
     yields: ExpressibleAsSyntaxBuildable
@@ -8132,6 +8970,12 @@ public struct YieldList: SyntaxBuildable {
   let trailingComma: TokenSyntax?
   let rightParen: TokenSyntax
 
+  /// Creates a `YieldList` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - elementList: 
+  ///   - trailingComma: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     elementList: ExpressibleAsExprList,
@@ -8179,6 +9023,9 @@ extension YieldList: ExpressibleAsYieldList {
 public struct FallthroughStmt: StmtBuildable {
   let fallthroughKeyword: TokenSyntax
 
+  /// Creates a `FallthroughStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - fallthroughKeyword: 
   public init(
     fallthroughKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`fallthrough`
   ) {
@@ -8218,6 +9065,10 @@ public struct BreakStmt: StmtBuildable {
   let breakKeyword: TokenSyntax
   let label: TokenSyntax?
 
+  /// Creates a `BreakStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - breakKeyword: 
+  ///   - label: 
   public init(
     breakKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`break`,
     label: ExpressibleAsTokenSyntax? = nil
@@ -8263,6 +9114,9 @@ extension BreakStmt: ExpressibleAsBreakStmt {
 public struct CaseItemList: SyntaxBuildable {
   let elements: [CaseItem]
 
+  /// Creates a `CaseItemList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsCaseItem`
   public init(_ elements: [ExpressibleAsCaseItem]) {
     self.elements = elements.map { $0.createCaseItem() }
   }
@@ -8301,6 +9155,9 @@ extension CaseItemList: ExpressibleAsCaseItemList {
 public struct CatchItemList: SyntaxBuildable {
   let elements: [CatchItem]
 
+  /// Creates a `CatchItemList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsCatchItem`
   public init(_ elements: [ExpressibleAsCatchItem]) {
     self.elements = elements.map { $0.createCatchItem() }
   }
@@ -8336,6 +9193,10 @@ public struct ConditionElement: SyntaxBuildable {
   let condition: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `ConditionElement` using the provided parameters.
+  /// - Parameters:
+  ///   - condition: 
+  ///   - trailingComma: 
   public init(
     condition: ExpressibleAsSyntaxBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -8380,6 +9241,12 @@ public struct AvailabilityCondition: SyntaxBuildable {
   let availabilitySpec: AvailabilitySpecList
   let rightParen: TokenSyntax
 
+  /// Creates a `AvailabilityCondition` using the provided parameters.
+  /// - Parameters:
+  ///   - poundAvailableKeyword: 
+  ///   - leftParen: 
+  ///   - availabilitySpec: 
+  ///   - rightParen: 
   public init(
     poundAvailableKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`poundAvailable`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -8430,6 +9297,12 @@ public struct MatchingPatternCondition: SyntaxBuildable {
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause
 
+  /// Creates a `MatchingPatternCondition` using the provided parameters.
+  /// - Parameters:
+  ///   - caseKeyword: 
+  ///   - pattern: 
+  ///   - typeAnnotation: 
+  ///   - initializer: 
   public init(
     caseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`case`,
     pattern: ExpressibleAsPatternBuildable,
@@ -8480,6 +9353,12 @@ public struct OptionalBindingCondition: SyntaxBuildable {
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause
 
+  /// Creates a `OptionalBindingCondition` using the provided parameters.
+  /// - Parameters:
+  ///   - letOrVarKeyword: 
+  ///   - pattern: 
+  ///   - typeAnnotation: 
+  ///   - initializer: 
   public init(
     letOrVarKeyword: ExpressibleAsTokenSyntax,
     pattern: ExpressibleAsPatternBuildable,
@@ -8530,6 +9409,12 @@ public struct UnavailabilityCondition: SyntaxBuildable {
   let availabilitySpec: AvailabilitySpecList
   let rightParen: TokenSyntax
 
+  /// Creates a `UnavailabilityCondition` using the provided parameters.
+  /// - Parameters:
+  ///   - poundUnavailableKeyword: 
+  ///   - leftParen: 
+  ///   - availabilitySpec: 
+  ///   - rightParen: 
   public init(
     poundUnavailableKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`poundUnavailable`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -8581,6 +9466,9 @@ extension UnavailabilityCondition: ExpressibleAsUnavailabilityCondition {
 public struct ConditionElementList: SyntaxBuildable {
   let elements: [ConditionElement]
 
+  /// Creates a `ConditionElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsConditionElement`
   public init(_ elements: [ExpressibleAsConditionElement]) {
     self.elements = elements.map { $0.createConditionElement() }
   }
@@ -8615,6 +9503,9 @@ extension ConditionElementList: ExpressibleAsConditionElementList {
 public struct DeclarationStmt: StmtBuildable {
   let declaration: DeclBuildable
 
+  /// Creates a `DeclarationStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - declaration: 
   public init(
     declaration: ExpressibleAsDeclBuildable
   ) {
@@ -8654,6 +9545,10 @@ public struct ThrowStmt: StmtBuildable {
   let throwKeyword: TokenSyntax
   let expression: ExprBuildable
 
+  /// Creates a `ThrowStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - throwKeyword: 
+  ///   - expression: 
   public init(
     throwKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`throw`,
     expression: ExpressibleAsExprBuildable
@@ -8701,6 +9596,15 @@ public struct IfStmt: StmtBuildable {
   let elseKeyword: TokenSyntax?
   let elseBody: SyntaxBuildable?
 
+  /// Creates a `IfStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - ifKeyword: 
+  ///   - conditions: 
+  ///   - body: 
+  ///   - elseKeyword: 
+  ///   - elseBody: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -8757,6 +9661,9 @@ extension IfStmt: ExpressibleAsIfStmt {
 public struct ElseIfContinuation: SyntaxBuildable {
   let ifStatement: IfStmt
 
+  /// Creates a `ElseIfContinuation` using the provided parameters.
+  /// - Parameters:
+  ///   - ifStatement: 
   public init(
     ifStatement: ExpressibleAsIfStmt
   ) {
@@ -8796,6 +9703,10 @@ public struct ElseBlock: SyntaxBuildable {
   let elseKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// Creates a `ElseBlock` using the provided parameters.
+  /// - Parameters:
+  ///   - elseKeyword: 
+  ///   - body: 
   public init(
     elseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`else`,
     body: ExpressibleAsCodeBlock
@@ -8839,6 +9750,11 @@ public struct SwitchCase: SyntaxBuildable {
   let label: SyntaxBuildable
   let statements: CodeBlockItemList
 
+  /// Creates a `SwitchCase` using the provided parameters.
+  /// - Parameters:
+  ///   - unknownAttr: 
+  ///   - label: 
+  ///   - statements: 
   public init(
     unknownAttr: ExpressibleAsAttribute? = nil,
     label: ExpressibleAsSyntaxBuildable,
@@ -8884,6 +9800,10 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
   let defaultKeyword: TokenSyntax
   let colon: TokenSyntax
 
+  /// Creates a `SwitchDefaultLabel` using the provided parameters.
+  /// - Parameters:
+  ///   - defaultKeyword: 
+  ///   - colon: 
   public init(
     defaultKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`default`,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`
@@ -8927,6 +9847,11 @@ public struct CaseItem: SyntaxBuildable {
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `CaseItem` using the provided parameters.
+  /// - Parameters:
+  ///   - pattern: 
+  ///   - whereClause: 
+  ///   - trailingComma: 
   public init(
     pattern: ExpressibleAsPatternBuildable,
     whereClause: ExpressibleAsWhereClause? = nil,
@@ -8973,6 +9898,11 @@ public struct CatchItem: SyntaxBuildable {
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `CatchItem` using the provided parameters.
+  /// - Parameters:
+  ///   - pattern: 
+  ///   - whereClause: 
+  ///   - trailingComma: 
   public init(
     pattern: ExpressibleAsPatternBuildable? = nil,
     whereClause: ExpressibleAsWhereClause? = nil,
@@ -9019,6 +9949,11 @@ public struct SwitchCaseLabel: SyntaxBuildable {
   let caseItems: CaseItemList
   let colon: TokenSyntax
 
+  /// Creates a `SwitchCaseLabel` using the provided parameters.
+  /// - Parameters:
+  ///   - caseKeyword: 
+  ///   - caseItems: 
+  ///   - colon: 
   public init(
     caseKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`case`,
     caseItems: ExpressibleAsCaseItemList,
@@ -9065,6 +10000,11 @@ public struct CatchClause: SyntaxBuildable {
   let catchItems: CatchItemList?
   let body: CodeBlock
 
+  /// Creates a `CatchClause` using the provided parameters.
+  /// - Parameters:
+  ///   - catchKeyword: 
+  ///   - catchItems: 
+  ///   - body: 
   public init(
     catchKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`catch`,
     catchItems: ExpressibleAsCatchItemList? = nil,
@@ -9114,6 +10054,14 @@ public struct PoundAssertStmt: StmtBuildable {
   let message: TokenSyntax?
   let rightParen: TokenSyntax
 
+  /// Creates a `PoundAssertStmt` using the provided parameters.
+  /// - Parameters:
+  ///   - poundAssert: 
+  ///   - leftParen: 
+  ///   - condition: The assertion condition.
+  ///   - comma: The comma after the assertion condition.
+  ///   - message: The assertion message.
+  ///   - rightParen: 
   public init(
     poundAssert: ExpressibleAsTokenSyntax = TokenSyntax.`poundAssert`,
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
@@ -9168,6 +10116,10 @@ public struct GenericWhereClause: SyntaxBuildable {
   let whereKeyword: TokenSyntax
   let requirementList: GenericRequirementList
 
+  /// Creates a `GenericWhereClause` using the provided parameters.
+  /// - Parameters:
+  ///   - whereKeyword: 
+  ///   - requirementList: 
   public init(
     whereKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`where`,
     requirementList: ExpressibleAsGenericRequirementList
@@ -9213,6 +10165,9 @@ extension GenericWhereClause: ExpressibleAsGenericWhereClause {
 public struct GenericRequirementList: SyntaxBuildable {
   let elements: [GenericRequirement]
 
+  /// Creates a `GenericRequirementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsGenericRequirement`
   public init(_ elements: [ExpressibleAsGenericRequirement]) {
     self.elements = elements.map { $0.createGenericRequirement() }
   }
@@ -9248,6 +10203,10 @@ public struct GenericRequirement: SyntaxBuildable {
   let body: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `GenericRequirement` using the provided parameters.
+  /// - Parameters:
+  ///   - body: 
+  ///   - trailingComma: 
   public init(
     body: ExpressibleAsSyntaxBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -9291,6 +10250,11 @@ public struct SameTypeRequirement: SyntaxBuildable {
   let equalityToken: TokenSyntax
   let rightTypeIdentifier: TypeBuildable
 
+  /// Creates a `SameTypeRequirement` using the provided parameters.
+  /// - Parameters:
+  ///   - leftTypeIdentifier: 
+  ///   - equalityToken: 
+  ///   - rightTypeIdentifier: 
   public init(
     leftTypeIdentifier: ExpressibleAsTypeBuildable,
     equalityToken: ExpressibleAsTokenSyntax,
@@ -9339,6 +10303,9 @@ extension SameTypeRequirement: ExpressibleAsSameTypeRequirement {
 public struct GenericParameterList: SyntaxBuildable {
   let elements: [GenericParameter]
 
+  /// Creates a `GenericParameterList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsGenericParameter`
   public init(_ elements: [ExpressibleAsGenericParameter]) {
     self.elements = elements.map { $0.createGenericParameter() }
   }
@@ -9377,6 +10344,13 @@ public struct GenericParameter: SyntaxBuildable {
   let inheritedType: TypeBuildable?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `GenericParameter` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - name: 
+  ///   - colon: 
+  ///   - inheritedType: 
+  ///   - trailingComma: 
   public init(
     attributes: ExpressibleAsAttributeList? = nil,
     name: ExpressibleAsTokenSyntax,
@@ -9429,6 +10403,11 @@ public struct GenericParameterClause: SyntaxBuildable {
   let genericParameterList: GenericParameterList
   let rightAngleBracket: TokenSyntax
 
+  /// Creates a `GenericParameterClause` using the provided parameters.
+  /// - Parameters:
+  ///   - leftAngleBracket: 
+  ///   - genericParameterList: 
+  ///   - rightAngleBracket: 
   public init(
     leftAngleBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftAngle`,
     genericParameterList: ExpressibleAsGenericParameterList,
@@ -9475,6 +10454,11 @@ public struct ConformanceRequirement: SyntaxBuildable {
   let colon: TokenSyntax
   let rightTypeIdentifier: TypeBuildable
 
+  /// Creates a `ConformanceRequirement` using the provided parameters.
+  /// - Parameters:
+  ///   - leftTypeIdentifier: 
+  ///   - colon: 
+  ///   - rightTypeIdentifier: 
   public init(
     leftTypeIdentifier: ExpressibleAsTypeBuildable,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -9520,6 +10504,10 @@ public struct SimpleTypeIdentifier: TypeBuildable {
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
 
+  /// Creates a `SimpleTypeIdentifier` using the provided parameters.
+  /// - Parameters:
+  ///   - name: 
+  ///   - genericArgumentClause: 
   public init(
     name: ExpressibleAsTokenSyntax,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
@@ -9564,6 +10552,12 @@ public struct MemberTypeIdentifier: TypeBuildable {
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
 
+  /// Creates a `MemberTypeIdentifier` using the provided parameters.
+  /// - Parameters:
+  ///   - baseType: 
+  ///   - period: 
+  ///   - name: 
+  ///   - genericArgumentClause: 
   public init(
     baseType: ExpressibleAsTypeBuildable,
     period: ExpressibleAsTokenSyntax,
@@ -9611,6 +10605,9 @@ extension MemberTypeIdentifier: ExpressibleAsMemberTypeIdentifier {
 public struct ClassRestrictionType: TypeBuildable {
   let classKeyword: TokenSyntax
 
+  /// Creates a `ClassRestrictionType` using the provided parameters.
+  /// - Parameters:
+  ///   - classKeyword: 
   public init(
     classKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`class`
   ) {
@@ -9651,6 +10648,11 @@ public struct ArrayType: TypeBuildable {
   let elementType: TypeBuildable
   let rightSquareBracket: TokenSyntax
 
+  /// Creates a `ArrayType` using the provided parameters.
+  /// - Parameters:
+  ///   - leftSquareBracket: 
+  ///   - elementType: 
+  ///   - rightSquareBracket: 
   public init(
     leftSquareBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
     elementType: ExpressibleAsTypeBuildable,
@@ -9699,6 +10701,13 @@ public struct DictionaryType: TypeBuildable {
   let valueType: TypeBuildable
   let rightSquareBracket: TokenSyntax
 
+  /// Creates a `DictionaryType` using the provided parameters.
+  /// - Parameters:
+  ///   - leftSquareBracket: 
+  ///   - keyType: 
+  ///   - colon: 
+  ///   - valueType: 
+  ///   - rightSquareBracket: 
   public init(
     leftSquareBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftSquareBracket`,
     keyType: ExpressibleAsTypeBuildable,
@@ -9751,6 +10760,11 @@ public struct MetatypeType: TypeBuildable {
   let period: TokenSyntax
   let typeOrProtocol: TokenSyntax
 
+  /// Creates a `MetatypeType` using the provided parameters.
+  /// - Parameters:
+  ///   - baseType: 
+  ///   - period: 
+  ///   - typeOrProtocol: 
   public init(
     baseType: ExpressibleAsTypeBuildable,
     period: ExpressibleAsTokenSyntax = TokenSyntax.`period`,
@@ -9796,6 +10810,10 @@ public struct OptionalType: TypeBuildable {
   let wrappedType: TypeBuildable
   let questionMark: TokenSyntax
 
+  /// Creates a `OptionalType` using the provided parameters.
+  /// - Parameters:
+  ///   - wrappedType: 
+  ///   - questionMark: 
   public init(
     wrappedType: ExpressibleAsTypeBuildable,
     questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`postfixQuestionMark`
@@ -9838,6 +10856,10 @@ public struct SomeType: TypeBuildable {
   let someSpecifier: TokenSyntax
   let baseType: TypeBuildable
 
+  /// Creates a `SomeType` using the provided parameters.
+  /// - Parameters:
+  ///   - someSpecifier: 
+  ///   - baseType: 
   public init(
     someSpecifier: ExpressibleAsTokenSyntax,
     baseType: ExpressibleAsTypeBuildable
@@ -9880,6 +10902,10 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   let wrappedType: TypeBuildable
   let exclamationMark: TokenSyntax
 
+  /// Creates a `ImplicitlyUnwrappedOptionalType` using the provided parameters.
+  /// - Parameters:
+  ///   - wrappedType: 
+  ///   - exclamationMark: 
   public init(
     wrappedType: ExpressibleAsTypeBuildable,
     exclamationMark: ExpressibleAsTokenSyntax = TokenSyntax.`exclamationMark`
@@ -9922,6 +10948,10 @@ public struct CompositionTypeElement: SyntaxBuildable {
   let type: TypeBuildable
   let ampersand: TokenSyntax?
 
+  /// Creates a `CompositionTypeElement` using the provided parameters.
+  /// - Parameters:
+  ///   - type: 
+  ///   - ampersand: 
   public init(
     type: ExpressibleAsTypeBuildable,
     ampersand: ExpressibleAsTokenSyntax? = nil
@@ -9967,6 +10997,9 @@ extension CompositionTypeElement: ExpressibleAsCompositionTypeElement {
 public struct CompositionTypeElementList: SyntaxBuildable {
   let elements: [CompositionTypeElement]
 
+  /// Creates a `CompositionTypeElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsCompositionTypeElement`
   public init(_ elements: [ExpressibleAsCompositionTypeElement]) {
     self.elements = elements.map { $0.createCompositionTypeElement() }
   }
@@ -10001,6 +11034,9 @@ extension CompositionTypeElementList: ExpressibleAsCompositionTypeElementList {
 public struct CompositionType: TypeBuildable {
   let elements: CompositionTypeElementList
 
+  /// Creates a `CompositionType` using the provided parameters.
+  /// - Parameters:
+  ///   - elements: 
   public init(
     elements: ExpressibleAsCompositionTypeElementList
   ) {
@@ -10046,6 +11082,16 @@ public struct TupleTypeElement: SyntaxBuildable {
   let initializer: InitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// Creates a `TupleTypeElement` using the provided parameters.
+  /// - Parameters:
+  ///   - inOut: 
+  ///   - name: 
+  ///   - secondName: 
+  ///   - colon: 
+  ///   - type: 
+  ///   - ellipsis: 
+  ///   - initializer: 
+  ///   - trailingComma: 
   public init(
     inOut: ExpressibleAsTokenSyntax? = nil,
     name: ExpressibleAsTokenSyntax? = nil,
@@ -10109,6 +11155,9 @@ extension TupleTypeElement: ExpressibleAsTupleTypeElement {
 public struct TupleTypeElementList: SyntaxBuildable {
   let elements: [TupleTypeElement]
 
+  /// Creates a `TupleTypeElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsTupleTypeElement`
   public init(_ elements: [ExpressibleAsTupleTypeElement]) {
     self.elements = elements.map { $0.createTupleTypeElement() }
   }
@@ -10145,6 +11194,11 @@ public struct TupleType: TypeBuildable {
   let elements: TupleTypeElementList
   let rightParen: TokenSyntax
 
+  /// Creates a `TupleType` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - elements: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     elements: ExpressibleAsTupleTypeElementList,
@@ -10195,6 +11249,15 @@ public struct FunctionType: TypeBuildable {
   let arrow: TokenSyntax
   let returnType: TypeBuildable
 
+  /// Creates a `FunctionType` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - arguments: 
+  ///   - rightParen: 
+  ///   - asyncKeyword: 
+  ///   - throwsOrRethrowsKeyword: 
+  ///   - arrow: 
+  ///   - returnType: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     arguments: ExpressibleAsTupleTypeElementList,
@@ -10253,6 +11316,11 @@ public struct AttributedType: TypeBuildable {
   let attributes: AttributeList?
   let baseType: TypeBuildable
 
+  /// Creates a `AttributedType` using the provided parameters.
+  /// - Parameters:
+  ///   - specifier: 
+  ///   - attributes: 
+  ///   - baseType: 
   public init(
     specifier: ExpressibleAsTokenSyntax? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
@@ -10301,6 +11369,9 @@ extension AttributedType: ExpressibleAsAttributedType {
 public struct GenericArgumentList: SyntaxBuildable {
   let elements: [GenericArgument]
 
+  /// Creates a `GenericArgumentList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsGenericArgument`
   public init(_ elements: [ExpressibleAsGenericArgument]) {
     self.elements = elements.map { $0.createGenericArgument() }
   }
@@ -10336,6 +11407,10 @@ public struct GenericArgument: SyntaxBuildable {
   let argumentType: TypeBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `GenericArgument` using the provided parameters.
+  /// - Parameters:
+  ///   - argumentType: 
+  ///   - trailingComma: 
   public init(
     argumentType: ExpressibleAsTypeBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -10379,6 +11454,11 @@ public struct GenericArgumentClause: SyntaxBuildable {
   let arguments: GenericArgumentList
   let rightAngleBracket: TokenSyntax
 
+  /// Creates a `GenericArgumentClause` using the provided parameters.
+  /// - Parameters:
+  ///   - leftAngleBracket: 
+  ///   - arguments: 
+  ///   - rightAngleBracket: 
   public init(
     leftAngleBracket: ExpressibleAsTokenSyntax = TokenSyntax.`leftAngle`,
     arguments: ExpressibleAsGenericArgumentList,
@@ -10424,6 +11504,10 @@ public struct TypeAnnotation: SyntaxBuildable {
   let colon: TokenSyntax
   let type: TypeBuildable
 
+  /// Creates a `TypeAnnotation` using the provided parameters.
+  /// - Parameters:
+  ///   - colon: 
+  ///   - type: 
   public init(
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
     type: ExpressibleAsTypeBuildable
@@ -10468,6 +11552,12 @@ public struct EnumCasePattern: PatternBuildable {
   let caseName: TokenSyntax
   let associatedTuple: TuplePattern?
 
+  /// Creates a `EnumCasePattern` using the provided parameters.
+  /// - Parameters:
+  ///   - type: 
+  ///   - period: 
+  ///   - caseName: 
+  ///   - associatedTuple: 
   public init(
     type: ExpressibleAsTypeBuildable? = nil,
     period: ExpressibleAsTokenSyntax = TokenSyntax.`period`,
@@ -10516,6 +11606,10 @@ public struct IsTypePattern: PatternBuildable {
   let isKeyword: TokenSyntax
   let type: TypeBuildable
 
+  /// Creates a `IsTypePattern` using the provided parameters.
+  /// - Parameters:
+  ///   - isKeyword: 
+  ///   - type: 
   public init(
     isKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`is`,
     type: ExpressibleAsTypeBuildable
@@ -10558,6 +11652,10 @@ public struct OptionalPattern: PatternBuildable {
   let subPattern: PatternBuildable
   let questionMark: TokenSyntax
 
+  /// Creates a `OptionalPattern` using the provided parameters.
+  /// - Parameters:
+  ///   - subPattern: 
+  ///   - questionMark: 
   public init(
     subPattern: ExpressibleAsPatternBuildable,
     questionMark: ExpressibleAsTokenSyntax = TokenSyntax.`postfixQuestionMark`
@@ -10599,6 +11697,9 @@ extension OptionalPattern: ExpressibleAsOptionalPattern {
 public struct IdentifierPattern: PatternBuildable {
   let identifier: TokenSyntax
 
+  /// Creates a `IdentifierPattern` using the provided parameters.
+  /// - Parameters:
+  ///   - identifier: 
   public init(
     identifier: ExpressibleAsTokenSyntax
   ) {
@@ -10639,6 +11740,11 @@ public struct AsTypePattern: PatternBuildable {
   let asKeyword: TokenSyntax
   let type: TypeBuildable
 
+  /// Creates a `AsTypePattern` using the provided parameters.
+  /// - Parameters:
+  ///   - pattern: 
+  ///   - asKeyword: 
+  ///   - type: 
   public init(
     pattern: ExpressibleAsPatternBuildable,
     asKeyword: ExpressibleAsTokenSyntax = TokenSyntax.`as`,
@@ -10685,6 +11791,11 @@ public struct TuplePattern: PatternBuildable {
   let elements: TuplePatternElementList
   let rightParen: TokenSyntax
 
+  /// Creates a `TuplePattern` using the provided parameters.
+  /// - Parameters:
+  ///   - leftParen: 
+  ///   - elements: 
+  ///   - rightParen: 
   public init(
     leftParen: ExpressibleAsTokenSyntax = TokenSyntax.`leftParen`,
     elements: ExpressibleAsTuplePatternElementList,
@@ -10730,6 +11841,10 @@ public struct WildcardPattern: PatternBuildable {
   let wildcard: TokenSyntax
   let typeAnnotation: TypeAnnotation?
 
+  /// Creates a `WildcardPattern` using the provided parameters.
+  /// - Parameters:
+  ///   - wildcard: 
+  ///   - typeAnnotation: 
   public init(
     wildcard: ExpressibleAsTokenSyntax = TokenSyntax.`wildcard`,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil
@@ -10774,6 +11889,12 @@ public struct TuplePatternElement: SyntaxBuildable {
   let pattern: PatternBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `TuplePatternElement` using the provided parameters.
+  /// - Parameters:
+  ///   - labelName: 
+  ///   - labelColon: 
+  ///   - pattern: 
+  ///   - trailingComma: 
   public init(
     labelName: ExpressibleAsTokenSyntax? = nil,
     labelColon: ExpressibleAsTokenSyntax? = nil,
@@ -10821,6 +11942,9 @@ extension TuplePatternElement: ExpressibleAsTuplePatternElement {
 public struct ExpressionPattern: PatternBuildable {
   let expression: ExprBuildable
 
+  /// Creates a `ExpressionPattern` using the provided parameters.
+  /// - Parameters:
+  ///   - expression: 
   public init(
     expression: ExpressibleAsExprBuildable
   ) {
@@ -10863,6 +11987,9 @@ extension ExpressionPattern: ExpressibleAsExpressionPattern {
 public struct TuplePatternElementList: SyntaxBuildable {
   let elements: [TuplePatternElement]
 
+  /// Creates a `TuplePatternElementList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsTuplePatternElement`
   public init(_ elements: [ExpressibleAsTuplePatternElement]) {
     self.elements = elements.map { $0.createTuplePatternElement() }
   }
@@ -10898,6 +12025,10 @@ public struct ValueBindingPattern: PatternBuildable {
   let letOrVarKeyword: TokenSyntax
   let valuePattern: PatternBuildable
 
+  /// Creates a `ValueBindingPattern` using the provided parameters.
+  /// - Parameters:
+  ///   - letOrVarKeyword: 
+  ///   - valuePattern: 
   public init(
     letOrVarKeyword: ExpressibleAsTokenSyntax,
     valuePattern: ExpressibleAsPatternBuildable
@@ -10943,6 +12074,9 @@ extension ValueBindingPattern: ExpressibleAsValueBindingPattern {
 public struct AvailabilitySpecList: SyntaxBuildable {
   let elements: [AvailabilityArgument]
 
+  /// Creates a `AvailabilitySpecList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsAvailabilityArgument`
   public init(_ elements: [ExpressibleAsAvailabilityArgument]) {
     self.elements = elements.map { $0.createAvailabilityArgument() }
   }
@@ -10982,6 +12116,10 @@ public struct AvailabilityArgument: SyntaxBuildable {
   let entry: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// Creates a `AvailabilityArgument` using the provided parameters.
+  /// - Parameters:
+  ///   - entry: The actual argument
+  ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
   public init(
     entry: ExpressibleAsSyntaxBuildable,
     trailingComma: ExpressibleAsTokenSyntax? = nil
@@ -11029,6 +12167,11 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   let colon: TokenSyntax
   let value: SyntaxBuildable
 
+  /// Creates a `AvailabilityLabeledArgument` using the provided parameters.
+  /// - Parameters:
+  ///   - label: The label of the argument
+  ///   - colon: The colon separating label and value
+  ///   - value: The value of this labeled argument
   public init(
     label: ExpressibleAsTokenSyntax,
     colon: ExpressibleAsTokenSyntax = TokenSyntax.`colon`,
@@ -11078,6 +12221,10 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable {
   let platform: TokenSyntax
   let version: VersionTuple?
 
+  /// Creates a `AvailabilityVersionRestriction` using the provided parameters.
+  /// - Parameters:
+  ///   - platform: The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.
+  ///   - version: 
   public init(
     platform: ExpressibleAsTokenSyntax,
     version: ExpressibleAsVersionTuple? = nil
@@ -11125,6 +12272,11 @@ public struct VersionTuple: SyntaxBuildable {
   let patchPeriod: TokenSyntax?
   let patchVersion: TokenSyntax?
 
+  /// Creates a `VersionTuple` using the provided parameters.
+  /// - Parameters:
+  ///   - majorMinor: In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version.
+  ///   - patchPeriod: If the version contains a patch number, the periodseparating the minor from the patch number.
+  ///   - patchVersion: The patch version if specified.
   public init(
     majorMinor: ExpressibleAsSyntaxBuildable,
     patchPeriod: ExpressibleAsTokenSyntax? = nil,

@@ -5,7 +5,7 @@ import SwiftSyntaxBuilder
 final class StructTests: XCTestCase {
   func testEmptyStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let members = MemberDeclBlock(members: MemberDeclList([]))
+    let members = MemberDeclList([])
     let buildable = StructDecl(identifier: "TestStruct",
                                members: members)
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
@@ -21,11 +21,11 @@ final class StructTests: XCTestCase {
 
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let emptyMembers = MemberDeclBlock(members: MemberDeclList([]))
+    let emptyMembers = MemberDeclList([])
     let nestedStruct = StructDecl(structKeyword: TokenSyntax.struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
                                   identifier: "NestedStruct",
                                   members: emptyMembers)
-    let members = MemberDeclBlock(members: MemberDeclList([MemberDeclListItem(decl: nestedStruct)]))
+    let members = MemberDeclListItem(decl: nestedStruct)
     let testStruct = StructDecl(identifier: "TestStruct",
                                 members: members)
     let syntax = testStruct.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
@@ -47,12 +47,12 @@ final class StructTests: XCTestCase {
     let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
-          MemberDeclListItem(decl: VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
+           VariableDecl(letOrVarKeyword: TokenSyntax.let, bindingsBuilder: {
             PatternBinding(
               pattern: IdentifierPattern("var\(i)"),
               typeAnnotation: "String"
             )
-          }))
+          })
         }
       }
     }))

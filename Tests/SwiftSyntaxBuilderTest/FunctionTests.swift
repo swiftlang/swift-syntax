@@ -14,7 +14,7 @@ final class FunctionTests: XCTestCase {
       ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
     })
 
-    let signature = FunctionSignature(input: input, output: ReturnClause(returnType: "Int"))
+    let signature = FunctionSignature(input: input, output: "Int")
     
 
     let codeBlock = CodeBlock(statementsBuilder: {

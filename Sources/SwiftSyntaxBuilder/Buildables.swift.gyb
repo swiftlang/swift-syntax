@@ -122,6 +122,18 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
   let ${"%s: %s" % (child.swift_name, param_type)}
 %     end
 
+  /// Creates a `${node.syntax_kind}` using the provided parameters.
+  /// - Parameters:
+%     for child in node.children:
+%       description = ""
+%       if child.description:
+%         for line in dedented_lines(child.description):
+%           description += line
+%         end
+%       end
+%       description = description.replace("\n", " ").strip()
+  ///   - ${lowercase_first_word(child.name)}: ${description}
+%     end
   public init(
 %     init_parameters = []
 %     for child in node.children:
@@ -192,6 +204,9 @@ public struct ${node.syntax_kind}: ${node.base_kind}Buildable {
 public struct ${node.syntax_kind}: SyntaxBuildable {
   let elements: [${element_type}]
 
+  /// Creates a `${node.syntax_kind}` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAs${element_type}`
   public init(_ elements: [ExpressibleAs${element_type}]) {
     self.elements = elements.map { $0.create${element_type}() }
   }

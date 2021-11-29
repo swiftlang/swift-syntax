@@ -5,6 +5,7 @@
   from gyb_syntax_support.kinds import syntax_buildable_child_type, syntax_buildable_default_init_value
   from gyb_syntax_support.protocolsMap import SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES
   SYNTAX_COLLECTION_EXPRESSIBLE_AS_CONFORMANCES = syntax_collection_element_to_collection_mapping()
+  NODE_MAP = create_node_map()
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -264,57 +265,19 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
 
  %   end
  % end
-
 % for protocol, conformances in SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.items():
-%   if 'ExpressibleAsConditionElementList' in conformances:
-extension ${protocol} {
-  public func createConditionElementList() -> ConditionElementList {
-    ConditionElementList([self])
-  }
-}
-
-%   end
-% end
-
-% for protocol, conformances in SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES.items():
-%   if 'ConditionElement' in conformances:
+%   for conformance in conformances:
+%     node = NODE_MAP.get(conformance)
+%     if node and node.children:
+%       non_defaulted_params = filter(lambda child : syntax_buildable_default_init_value(child, SYNTAX_TOKEN_MAP.get(child.syntax_kind)) == "", node.children)
+%       assert len(non_defaulted_params) == 1, "ExpressibleAs conformances expects the conforming type to have an initializer with a single non-optional child"
+%       param = non_defaulted_params[0].swift_name
 extension ExpressibleAs${protocol} {
-  public func createConditionElement() -> ConditionElement {
-    ConditionElement(condition: self)
+  public func create${conformance}() -> ${conformance} {
+    ${conformance}(${param}: self)
   }
 }
 
+%     end
 %   end
-%   if 'CodeBlockItem' in conformances:
-extension ExpressibleAs${protocol} {
-  public func createCodeBlockItem() -> CodeBlockItem {
-    CodeBlockItem(item: self)
-  }
-}
-
-%   end
-%   if 'MemberDeclListItem' in conformances:
-extension ExpressibleAs${protocol} {
-  public func createMemberDeclListItem() -> MemberDeclListItem {
-    MemberDeclListItem(decl: self)
-  }
-}
-
-%   end
-%   if 'TypeAnnotation' in conformances:
-extension ExpressibleAs${protocol} {
-  public func createTypeAnnotation() -> TypeAnnotation {
-    TypeAnnotation(type: self)
-  }
-}
-
-%   end
-%   if 'TypeExpr' in conformances:
- extension ExpressibleAs${protocol} {
-   public func createTypeExpr() -> TypeExpr {
-     TypeExpr(type: self)
-   }
- }
-
- %   end
 % end

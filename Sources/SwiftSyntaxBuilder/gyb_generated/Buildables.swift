@@ -11424,8 +11424,6 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
    }
  }
 
-
-
 extension ExpressibleAsDeclBuildable {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
@@ -11456,9 +11454,9 @@ extension ExpressibleAsSimpleTypeIdentifier {
   }
 }
 
- extension ExpressibleAsSimpleTypeIdentifier {
-   public func createTypeExpr() -> TypeExpr {
-     TypeExpr(type: self)
-   }
- }
+extension ExpressibleAsSimpleTypeIdentifier {
+  public func createTypeExpr() -> TypeExpr {
+    TypeExpr(type: self)
+  }
+}
 

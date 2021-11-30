@@ -155,11 +155,11 @@ public struct ArrayElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleAsArrayElement
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleAsArrayElement]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -210,7 +210,7 @@ public struct ArrayElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component.map { $0.createArrayElement() })
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 
@@ -223,11 +223,11 @@ public struct DictionaryElementListBuilder {
   
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ExpressibleAsDictionaryElement
+  public typealias Expression = ExpressibleAsSyntaxBuildable
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [ExpressibleAsDictionaryElement]
+  public typealias Component = [ExpressibleAsSyntaxBuildable]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
@@ -278,7 +278,7 @@ public struct DictionaryElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    .init(component.map { $0.createDictionaryElement() })
+    .init(component.map { $0.createSyntaxBuildable() })
   }
 }
 

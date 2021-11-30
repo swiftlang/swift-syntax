@@ -248,7 +248,7 @@ public protocol SyntaxListBuildable {
   func buildSyntaxList(format: Format, leadingTrivia: Trivia?) -> [Syntax]
 }
 
-public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
+public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsArrayElementList, ExpressibleAsDictionaryElementList, ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
   func createSyntaxBuildable() -> SyntaxBuildable
 }
 
@@ -626,20 +626,20 @@ extension TupleExprElementList: ExpressibleAsTupleExprElementList {
 // MARK: - Syntax collection
 
 /// `ArrayElementList` represents a collection of 
-/// `ArrayElement`s.
+/// `SyntaxBuildable`s.
 public struct ArrayElementList: SyntaxBuildable {
-  let elements: [ArrayElement]
+  let elements: [SyntaxBuildable]
 
   /// Creates a `ArrayElementList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsArrayElement`
-  public init(_ elements: [ExpressibleAsArrayElement]) {
-    self.elements = elements.map { $0.createArrayElement() }
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
   public func buildArrayElementList(format: Format) -> ArrayElementListSyntax {
     return SyntaxFactory.makeArrayElementList(elements.map {
-      $0.buildArrayElement(format: format, leadingTrivia: nil)
+      $0.buildSyntax(format: format, leadingTrivia: nil)
     })
   }
 
@@ -667,20 +667,20 @@ extension ArrayElementList: ExpressibleAsArrayElementList {
 // MARK: - Syntax collection
 
 /// `DictionaryElementList` represents a collection of 
-/// `DictionaryElement`s.
+/// `SyntaxBuildable`s.
 public struct DictionaryElementList: SyntaxBuildable {
-  let elements: [DictionaryElement]
+  let elements: [SyntaxBuildable]
 
   /// Creates a `DictionaryElementList` with the provided list of elements.
   /// - Parameters:
-  ///   - elements: A list of `ExpressibleAsDictionaryElement`
-  public init(_ elements: [ExpressibleAsDictionaryElement]) {
-    self.elements = elements.map { $0.createDictionaryElement() }
+  ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
+  public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
+    self.elements = elements.map { $0.createSyntaxBuildable() }
   }
 
   public func buildDictionaryElementList(format: Format) -> DictionaryElementListSyntax {
     return SyntaxFactory.makeDictionaryElementList(elements.map {
-      $0.buildDictionaryElement(format: format, leadingTrivia: nil)
+      $0.buildSyntax(format: format, leadingTrivia: nil)
     })
   }
 
@@ -1991,7 +1991,7 @@ public struct ArrayElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList {
+public protocol ExpressibleAsArrayElement {
   func createArrayElement() -> ArrayElement
 }
 
@@ -2047,7 +2047,7 @@ public struct DictionaryElement: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsDictionaryElement: ExpressibleAsDictionaryElementList {
+public protocol ExpressibleAsDictionaryElement {
   func createDictionaryElement() -> DictionaryElement
 }
 
@@ -12372,9 +12372,9 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
    }
  }
 
- extension ExpressibleAsMultipleTrailingClosureElement {
-   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
-     MultipleTrailingClosureElementList([self])
+ extension ExpressibleAsPatternBinding {
+   public func createPatternBindingList() -> PatternBindingList {
+     PatternBindingList([self])
    }
  }
 
@@ -12393,6 +12393,18 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
  extension ExpressibleAsDeclModifier {
    public func createModifierList() -> ModifierList {
      ModifierList([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createArrayElementList() -> ArrayElementList {
+     ArrayElementList([self])
+   }
+ }
+
+ extension ExpressibleAsSyntaxBuildable {
+   public func createDictionaryElementList() -> DictionaryElementList {
+     DictionaryElementList([self])
    }
  }
 
@@ -12435,12 +12447,6 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
  extension ExpressibleAsAccessPathComponent {
    public func createAccessPath() -> AccessPath {
      AccessPath([self])
-   }
- }
-
- extension ExpressibleAsArrayElement {
-   public func createArrayElementList() -> ArrayElementList {
-     ArrayElementList([self])
    }
  }
 
@@ -12498,12 +12504,6 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
    }
  }
 
- extension ExpressibleAsDictionaryElement {
-   public func createDictionaryElementList() -> DictionaryElementList {
-     DictionaryElementList([self])
-   }
- }
-
  extension ExpressibleAsCompositionTypeElement {
    public func createCompositionTypeElementList() -> CompositionTypeElementList {
      CompositionTypeElementList([self])
@@ -12552,9 +12552,9 @@ extension TokenSyntax: ExpressibleAsTokenSyntax {
    }
  }
 
- extension ExpressibleAsPatternBinding {
-   public func createPatternBindingList() -> PatternBindingList {
-     PatternBindingList([self])
+ extension ExpressibleAsMultipleTrailingClosureElement {
+   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
+     MultipleTrailingClosureElementList([self])
    }
  }
 

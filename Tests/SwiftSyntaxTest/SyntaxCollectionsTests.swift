@@ -1,11 +1,11 @@
 import XCTest
 import SwiftSyntax
 
-fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
+fileprivate func integerLiteralElement(_ int: Int) -> Syntax {
     let literal = SyntaxFactory.makeIntegerLiteral("\(int)")
-    return SyntaxFactory.makeArrayElement(
+    return Syntax(SyntaxFactory.makeArrayElement(
         expression: ExprSyntax(SyntaxFactory.makeIntegerLiteralExpr(digits: literal)),
-        trailingComma: nil)
+        trailingComma: nil))
 }
 
 public class SyntaxCollectionsTests: XCTestCase {

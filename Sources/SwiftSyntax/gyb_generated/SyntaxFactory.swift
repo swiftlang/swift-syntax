@@ -188,7 +188,7 @@ public enum SyntaxFactory {
     return TupleExprElementListSyntax(data)
   }
   public static func makeArrayElementList(
-    _ elements: [ArrayElementSyntax]) -> ArrayElementListSyntax {
+    _ elements: [Syntax]) -> ArrayElementListSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElementList,
       layout: elements.map { $0.raw }, presence: SourcePresence.present)
     let data = SyntaxData.forRoot(raw)
@@ -202,7 +202,7 @@ public enum SyntaxFactory {
     return ArrayElementListSyntax(data)
   }
   public static func makeDictionaryElementList(
-    _ elements: [DictionaryElementSyntax]) -> DictionaryElementListSyntax {
+    _ elements: [Syntax]) -> DictionaryElementListSyntax {
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElementList,
       layout: elements.map { $0.raw }, presence: SourcePresence.present)
     let data = SyntaxData.forRoot(raw)

@@ -1156,7 +1156,7 @@ public struct ArrayExprSyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func addElement(_ elt: ArrayElementSyntax) {
+  public mutating func addElement(_ elt: Syntax) {
     let idx = ArrayExprSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
       layout[idx] = list.appending(elt.raw)

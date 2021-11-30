@@ -2116,7 +2116,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
-  public func addElement(_ element: ArrayElementSyntax) -> ArrayExprSyntax {
+  public func addElement(_ element: Syntax) -> ArrayExprSyntax {
     var collection: RawSyntax
     if let col = raw[Cursor.elements] {
       collection = col.appending(element.raw)

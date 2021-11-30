@@ -517,7 +517,7 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
 }
 
 /// `ArrayElementListSyntax` represents a collection of one or more
-/// `ArrayElementSyntax` nodes. ArrayElementListSyntax behaves
+/// `Syntax` nodes. ArrayElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -564,7 +564,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter syntax: The element to append.
   /// - Returns: A new `ArrayElementListSyntax` with that element appended to the end.
   public func appending(
-    _ syntax: ArrayElementSyntax) -> ArrayElementListSyntax {
+    _ syntax: Syntax) -> ArrayElementListSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
@@ -577,7 +577,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `ArrayElementListSyntax` with that element prepended to the
   ///            beginning.
   public func prepending(
-    _ syntax: ArrayElementSyntax) -> ArrayElementListSyntax {
+    _ syntax: Syntax) -> ArrayElementListSyntax {
     return inserting(syntax, at: 0)
   }
 
@@ -589,7 +589,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///   - index: The index at which to insert the element in the collection.
   ///
   /// - Returns: A new `ArrayElementListSyntax` with that element appended to the end.
-  public func inserting(_ syntax: ArrayElementSyntax,
+  public func inserting(_ syntax: Syntax,
                         at index: Int) -> ArrayElementListSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -608,7 +608,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `ArrayElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
-                        with syntax: ArrayElementSyntax) -> ArrayElementListSyntax {
+                        with syntax: Syntax) -> ArrayElementListSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -697,14 +697,14 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func _validateLayout() {
     // Check that all children match the expected element type
     assert(self.allSatisfy { node in
-      return Syntax(node).is(ArrayElementSyntax.self)
+      return Syntax(node).is(Syntax.self)
     })
   }
 }
 
 /// Conformance for `ArrayElementListSyntax` to the `BidirectionalCollection` protocol.
 extension ArrayElementListSyntax: BidirectionalCollection {
-  public typealias Element = ArrayElementSyntax
+  public typealias Element = Syntax
   public typealias Index = SyntaxChildrenIndex
 
   public struct Iterator: IteratorProtocol {
@@ -716,13 +716,13 @@ extension ArrayElementListSyntax: BidirectionalCollection {
       self.iterator = rawChildren.makeIterator()
     }
 
-    public mutating func next() -> ArrayElementSyntax? {
+    public mutating func next() -> Syntax? {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
       let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
-      return ArrayElementSyntax(data)
+      return Syntax(data)
     }
   }
 
@@ -757,16 +757,16 @@ extension ArrayElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
 
-  public subscript(position: SyntaxChildrenIndex) -> ArrayElementSyntax {
+  public subscript(position: SyntaxChildrenIndex) -> Syntax {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-    return ArrayElementSyntax(data)
+    return Syntax(data)
   }
 }
 
 /// `DictionaryElementListSyntax` represents a collection of one or more
-/// `DictionaryElementSyntax` nodes. DictionaryElementListSyntax behaves
+/// `Syntax` nodes. DictionaryElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -813,7 +813,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Parameter syntax: The element to append.
   /// - Returns: A new `DictionaryElementListSyntax` with that element appended to the end.
   public func appending(
-    _ syntax: DictionaryElementSyntax) -> DictionaryElementListSyntax {
+    _ syntax: Syntax) -> DictionaryElementListSyntax {
     var newLayout = data.raw.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
@@ -826,7 +826,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   /// - Returns: A new `DictionaryElementListSyntax` with that element prepended to the
   ///            beginning.
   public func prepending(
-    _ syntax: DictionaryElementSyntax) -> DictionaryElementListSyntax {
+    _ syntax: Syntax) -> DictionaryElementListSyntax {
     return inserting(syntax, at: 0)
   }
 
@@ -838,7 +838,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///   - index: The index at which to insert the element in the collection.
   ///
   /// - Returns: A new `DictionaryElementListSyntax` with that element appended to the end.
-  public func inserting(_ syntax: DictionaryElementSyntax,
+  public func inserting(_ syntax: Syntax,
                         at index: Int) -> DictionaryElementListSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -857,7 +857,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   ///
   /// - Returns: A new `DictionaryElementListSyntax` with the new element at the provided index.
   public func replacing(childAt index: Int,
-                        with syntax: DictionaryElementSyntax) -> DictionaryElementListSyntax {
+                        with syntax: Syntax) -> DictionaryElementListSyntax {
     var newLayout = data.raw.formLayoutArray()
     /// Make sure the index is a valid index for replacing
     precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -946,14 +946,14 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public func _validateLayout() {
     // Check that all children match the expected element type
     assert(self.allSatisfy { node in
-      return Syntax(node).is(DictionaryElementSyntax.self)
+      return Syntax(node).is(Syntax.self)
     })
   }
 }
 
 /// Conformance for `DictionaryElementListSyntax` to the `BidirectionalCollection` protocol.
 extension DictionaryElementListSyntax: BidirectionalCollection {
-  public typealias Element = DictionaryElementSyntax
+  public typealias Element = Syntax
   public typealias Index = SyntaxChildrenIndex
 
   public struct Iterator: IteratorProtocol {
@@ -965,13 +965,13 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
       self.iterator = rawChildren.makeIterator()
     }
 
-    public mutating func next() -> DictionaryElementSyntax? {
+    public mutating func next() -> Syntax? {
       guard let (raw, info) = self.iterator.next() else {
         return nil
       }
       let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
       let data = SyntaxData(absoluteRaw, parent: parent)
-      return DictionaryElementSyntax(data)
+      return Syntax(data)
     }
   }
 
@@ -1006,11 +1006,11 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
 
-  public subscript(position: SyntaxChildrenIndex) -> DictionaryElementSyntax {
+  public subscript(position: SyntaxChildrenIndex) -> Syntax {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-    return DictionaryElementSyntax(data)
+    return Syntax(data)
   }
 }
 

@@ -11,13 +11,13 @@
 //===----------------------------------------------------------------------===//
 
 
-import Foundation
+import SwiftSyntax
 
 extension FunctionCallExpr {
   public init(
     _ calledExpression: ExpressibleAsIdentifierExpr,
-    leftParen: ExpressibleAsTokenSyntax? = nil,
-    rightParen: ExpressibleAsTokenSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
     @TupleExprElementListBuilder argumentListBuilder: () -> TupleExprElementList = { .empty },
     @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }

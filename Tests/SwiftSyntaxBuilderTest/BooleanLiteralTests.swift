@@ -7,8 +7,8 @@ final class BooleanLiteralTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (BooleanLiteralExpr, String)] = [
-      #line: (BooleanLiteralExpr(booleanLiteral: TokenSyntax.true), "␣true "),
-      #line: (BooleanLiteralExpr(booleanLiteral: TokenSyntax.false), "␣false "),
+      #line: (BooleanLiteralExpr(booleanLiteral: .true), "␣true "),
+      #line: (BooleanLiteralExpr(booleanLiteral: .false), "␣false "),
       #line: (BooleanLiteralExpr(true), "␣true "),
       #line: (BooleanLiteralExpr(false), "␣false "),
       #line: (true, "␣true "),

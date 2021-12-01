@@ -7,8 +7,8 @@ final class FloatLiteralTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (FloatLiteralExpr, String)] = [
-      #line: (FloatLiteralExpr(floatingDigits: TokenSyntax.floatingLiteral(String(123.321))), "␣123.321"),
-      #line: (FloatLiteralExpr(floatingDigits: TokenSyntax.floatingLiteral(String(-123.321))), "␣-123.321"),
+      #line: (FloatLiteralExpr(floatingDigits: .floatingLiteral(String(123.321))), "␣123.321"),
+      #line: (FloatLiteralExpr(floatingDigits: .floatingLiteral(String(-123.321))), "␣-123.321"),
       #line: (FloatLiteralExpr(floatingDigits: "2_123.321"), "␣2_123.321"),
       #line: (FloatLiteralExpr(floatingDigits: "-2_123.321"), "␣-2_123.321"),
       #line: (FloatLiteralExpr(2_123.321), "␣2123.321"),

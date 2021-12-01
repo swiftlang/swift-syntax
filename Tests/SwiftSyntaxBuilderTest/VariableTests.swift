@@ -23,7 +23,7 @@ final class VariableTests: XCTestCase {
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: TokenSyntax.var, bindingsBuilder:  {
+    let buildable = VariableDecl(letOrVarKeyword: .var, bindingsBuilder:  {
         PatternBinding(pattern: "number", typeAnnotation: "Int",
                        initializer: InitializerClause(value: IntegerLiteralExpr(digits: "123")))
     })
@@ -42,8 +42,8 @@ final class VariableTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (TokenSyntax, String, String, String)] = [
-      #line: (TokenSyntax.let, "foo", "Int", "␣let foo: Int"),
-      #line: (TokenSyntax.var, "bar", "Baz", "␣var bar: Baz")
+      #line: (.let, "foo", "Int", "␣let foo: Int"),
+      #line: (.var, "bar", "Baz", "␣var bar: Baz")
     ]
 
     for (line, testCase) in testCases {

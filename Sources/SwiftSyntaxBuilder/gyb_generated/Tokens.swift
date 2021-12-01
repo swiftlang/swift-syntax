@@ -15,7 +15,7 @@
 import SwiftSyntax
 
 /// Namespace for commonly used tokens with default trivia.
-public extension ExpressibleAsTokenSyntax where Self == TokenSyntax {
+public extension TokenSyntax {
   /// The `associatedtype` keyword
   static var `associatedtype`: TokenSyntax {
     SyntaxFactory.makeAssociatedtypeKeyword()

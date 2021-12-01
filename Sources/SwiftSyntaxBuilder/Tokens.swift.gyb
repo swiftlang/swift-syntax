@@ -21,7 +21,7 @@
 import SwiftSyntax
 
 /// Namespace for commonly used tokens with default trivia.
-public extension ExpressibleAsTokenSyntax where Self == TokenSyntax {
+public extension TokenSyntax {
 % for token in SYNTAX_TOKENS:
 %   if token.is_keyword:
   /// The `${token.text.encode('utf-8').decode('unicode_escape')}` keyword

@@ -40,6 +40,12 @@ extension String: ExpressibleAsBinaryOperatorExpr {
   }
 }
 
+extension String: ExpressibleAsReturnClause {
+  public func createReturnClause() -> ReturnClause {
+    ReturnClause(returnType: self)
+  }
+}
+
 /// Default conformance to `ExpressibleByTypeBuildable`
 extension String {
   public func createTypeBuildable() -> TypeBuildable {

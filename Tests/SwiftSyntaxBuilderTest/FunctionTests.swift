@@ -21,7 +21,7 @@ final class FunctionTests: XCTestCase {
       IfStmt(conditions: ExprList([
         IntegerLiteralExpr(digits: "n"),
 
-        BinaryOperatorExpr(operatorToken: .unspacedBinaryOperator("<=")),
+        BinaryOperatorExpr("<="),
 
         IntegerLiteralExpr(1)
       ]), body: ifCodeBlock)
@@ -31,19 +31,19 @@ final class FunctionTests: XCTestCase {
           TupleExprElement(expression: SequenceExpr(elementsBuilder: {
             IntegerLiteralExpr(digits: "n")
 
-            BinaryOperatorExpr(operatorToken: .unspacedBinaryOperator("-"))
+            BinaryOperatorExpr("-")
 
             IntegerLiteralExpr(1)
           }))
         })
 
-        BinaryOperatorExpr(operatorToken: .spacedBinaryOperator("+"))
+        BinaryOperatorExpr("+")
 
         FunctionCallExpr("fibonacci", leftParen: .leftParen, rightParen: .rightParen, argumentListBuilder: {
           TupleExprElement(expression: SequenceExpr(elementsBuilder: {
             IntegerLiteralExpr(digits: "n")
 
-            BinaryOperatorExpr(operatorToken: .unspacedBinaryOperator("-"))
+            BinaryOperatorExpr("-")
 
             IntegerLiteralExpr(2)
           }))
@@ -56,10 +56,10 @@ final class FunctionTests: XCTestCase {
 
     XCTAssertEqual(syntax.description, """
       func fibonacci(_ n: Int)-> Int{
-          if n<=1{
+          if n <= 1{
               return n
           }
-          return fibonacci(n-1) + fibonacci(n-2)
+          return fibonacci(n - 1) + fibonacci(n - 2)
       }
       """)
   }

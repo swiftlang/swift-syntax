@@ -12318,7 +12318,7 @@ extension VersionTuple: ExpressibleAsVersionTuple {
   }
 }
 
-extension TokenSyntax: ExpressibleAsIdentifierList, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList {
+extension TokenSyntax: ExpressibleAsIdentifierList, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList, ExpressibleAsBinaryOperatorExpr {
 }
 
 // MARK: - Syntax Collection buildable expressible as conformances
@@ -12580,6 +12580,12 @@ extension ExpressibleAsStmtBuildable {
 extension ExpressibleAsMemberDeclList {
   public func createMemberDeclBlock() -> MemberDeclBlock {
     MemberDeclBlock(members: self)
+  }
+}
+
+extension TokenSyntax {
+  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
+    BinaryOperatorExpr(operatorToken: self)
   }
 }
 

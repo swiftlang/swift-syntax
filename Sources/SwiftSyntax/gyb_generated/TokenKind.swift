@@ -126,6 +126,7 @@ public enum TokenKind {
   case integerLiteral(String)
   case floatingLiteral(String)
   case stringLiteral(String)
+  case regexLiteral(String)
   case unknown(String)
   case identifier(String)
   case unspacedBinaryOperator(String)
@@ -254,6 +255,7 @@ public enum TokenKind {
     case .integerLiteral(let text): return text
     case .floatingLiteral(let text): return text
     case .stringLiteral(let text): return text
+    case .regexLiteral(let text): return text
     case .unknown(let text): return text
     case .identifier(let text): return text
     case .unspacedBinaryOperator(let text): return text
@@ -383,6 +385,7 @@ public enum TokenKind {
     case .integerLiteral: return false
     case .floatingLiteral: return false
     case .stringLiteral: return false
+    case .regexLiteral: return false
     case .unknown: return false
     case .identifier: return false
     case .unspacedBinaryOperator: return false
@@ -512,6 +515,7 @@ public enum TokenKind {
     case .integerLiteral(_): return "integer_literal"
     case .floatingLiteral(_): return "floating_literal"
     case .stringLiteral(_): return "string_literal"
+    case .regexLiteral(_): return "regex_literal"
     case .unknown(_): return "unknown"
     case .identifier(_): return "identifier"
     case .unspacedBinaryOperator(_): return "oper_binary_unspaced"
@@ -641,6 +645,7 @@ public enum TokenKind {
     case .integerLiteral(let text): return SourceLength(of: text)
     case .floatingLiteral(let text): return SourceLength(of: text)
     case .stringLiteral(let text): return SourceLength(of: text)
+    case .regexLiteral(let text): return SourceLength(of: text)
     case .unknown(let text): return SourceLength(of: text)
     case .identifier(let text): return SourceLength(of: text)
     case .unspacedBinaryOperator(let text): return SourceLength(of: text)
@@ -774,6 +779,8 @@ extension TokenKind: Equatable {
     case (.floatingLiteral(let lhsText), .floatingLiteral(let rhsText)):
       return lhsText == rhsText
     case (.stringLiteral(let lhsText), .stringLiteral(let rhsText)):
+      return lhsText == rhsText
+    case (.regexLiteral(let lhsText), .regexLiteral(let rhsText)):
       return lhsText == rhsText
     case (.unknown(let lhsText), .unknown(let rhsText)):
       return lhsText == rhsText
@@ -1029,6 +1036,8 @@ extension TokenKind {
       return .floatingLiteral(.fromBuffer(textBuffer))
     case 113:
       return .stringLiteral(.fromBuffer(textBuffer))
+    case 124:
+      return .regexLiteral(.fromBuffer(textBuffer))
     case 115:
       return .unknown(.fromBuffer(textBuffer))
     case 105:
@@ -1291,6 +1300,8 @@ extension TokenKind {
       return true
     case 113:
       return true
+    case 124:
+      return true
     case 115:
       return true
     case 105:
@@ -1435,6 +1446,7 @@ internal enum RawTokenKind: CTokenKind {
   case integerLiteral = 111
   case floatingLiteral = 112
   case stringLiteral = 113
+  case regexLiteral = 124
   case unknown = 115
   case identifier = 105
   case unspacedBinaryOperator = 107
@@ -1801,6 +1813,12 @@ extension TokenKind {
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .stringLiteral, length: length, customText: buf))
+      })!
+    case .regexLiteral(var text):
+      text.makeContiguousUTF8()
+      let length = text.utf8.count
+      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
+        return body(.init(kind: .regexLiteral, length: length, customText: buf))
       })!
     case .unknown(var text):
       text.makeContiguousUTF8()

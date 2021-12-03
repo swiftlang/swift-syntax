@@ -660,6 +660,10 @@ public extension TokenSyntax {
     SyntaxFactory.makeStringLiteral(text)
   }
 
+  static func `regexLiteral`(_ text: String) -> TokenSyntax {
+    SyntaxFactory.makeRegexLiteral(text)
+  }
+
   static func `unknown`(_ text: String) -> TokenSyntax {
     SyntaxFactory.makeUnknown(text)
   }

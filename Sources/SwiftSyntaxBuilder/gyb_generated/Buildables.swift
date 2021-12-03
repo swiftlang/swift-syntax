@@ -3437,6 +3437,47 @@ extension StringLiteralExpr: ExpressibleAsStringLiteralExpr {
   }
 }
 
+public struct RegexLiteralExpr: ExprBuildable {
+  let regex: TokenSyntax
+
+  /// Creates a `RegexLiteralExpr` using the provided parameters.
+  /// - Parameters:
+  ///   - regex: 
+  public init(
+    regex: TokenSyntax
+  ) {
+    self.regex = regex
+  }
+  
+  func buildRegexLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
+    let regexLiteralExpr = SyntaxFactory.makeRegexLiteralExpr(
+      regex: regex
+    )
+    
+    if let leadingTrivia = leadingTrivia {
+      return regexLiteralExpr.withLeadingTrivia(leadingTrivia + (regexLiteralExpr.leadingTrivia ?? []))
+    }
+
+    return regexLiteralExpr
+  }
+
+  /// Conformance for `RegexLiteralExpr` to the `ExprBuildable` protocol.
+  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let regexLiteralExpr = buildRegexLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    return ExprSyntax(regexLiteralExpr)
+  }
+}
+
+public protocol ExpressibleAsRegexLiteralExpr {
+  func createRegexLiteralExpr() -> RegexLiteralExpr
+}
+
+extension RegexLiteralExpr: ExpressibleAsRegexLiteralExpr {
+  public func createRegexLiteralExpr() -> RegexLiteralExpr {
+    self
+  }
+}
+
 public struct KeyPathExpr: ExprBuildable {
   let backslash: TokenSyntax
   let rootExpr: ExprBuildable?

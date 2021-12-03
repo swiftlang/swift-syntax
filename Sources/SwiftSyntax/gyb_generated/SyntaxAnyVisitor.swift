@@ -547,6 +547,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: StringLiteralExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: RegexLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: RegexLiteralExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

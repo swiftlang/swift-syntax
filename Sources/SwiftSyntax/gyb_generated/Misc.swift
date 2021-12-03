@@ -433,6 +433,12 @@ extension SyntaxNode {
     return StringLiteralExprSyntax(asSyntaxData)
   }
 
+  public var isRegexLiteralExpr: Bool { return raw.kind == .regexLiteralExpr }
+  public var asRegexLiteralExpr: RegexLiteralExprSyntax? {
+    guard isRegexLiteralExpr else { return nil }
+    return RegexLiteralExprSyntax(asSyntaxData)
+  }
+
   public var isKeyPathExpr: Bool { return raw.kind == .keyPathExpr }
   public var asKeyPathExpr: KeyPathExprSyntax? {
     guard isKeyPathExpr else { return nil }
@@ -1624,6 +1630,8 @@ extension Syntax {
     case .expressionSegment(let node):
       return node
     case .stringLiteralExpr(let node):
+      return node
+    case .regexLiteralExpr(let node):
       return node
     case .keyPathExpr(let node):
       return node

@@ -90,6 +90,7 @@ public enum SyntaxEnum {
   case stringSegment(StringSegmentSyntax)
   case expressionSegment(ExpressionSegmentSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
+  case regexLiteralExpr(RegexLiteralExprSyntax)
   case keyPathExpr(KeyPathExprSyntax)
   case keyPathBaseExpr(KeyPathBaseExprSyntax)
   case objcNamePiece(ObjcNamePieceSyntax)
@@ -419,6 +420,8 @@ public extension Syntax {
       return .expressionSegment(ExpressionSegmentSyntax(self)!)
     case .stringLiteralExpr:
       return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
+    case .regexLiteralExpr:
+      return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
     case .keyPathExpr:
       return .keyPathExpr(KeyPathExprSyntax(self)!)
     case .keyPathBaseExpr:

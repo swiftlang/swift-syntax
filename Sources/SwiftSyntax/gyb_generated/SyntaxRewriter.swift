@@ -506,6 +506,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
 
+  /// Visit a `RegexLiteralExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: RegexLiteralExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
   /// Visit a `KeyPathExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2485,6 +2492,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = RegexLiteralExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplKeyPathExprSyntax(_ data: SyntaxData) -> Syntax {
       let node = KeyPathExprSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4394,6 +4411,8 @@ open class SyntaxRewriter {
       return visitImplExpressionSegmentSyntax
     case .stringLiteralExpr:
       return visitImplStringLiteralExprSyntax
+    case .regexLiteralExpr:
+      return visitImplRegexLiteralExprSyntax
     case .keyPathExpr:
       return visitImplKeyPathExprSyntax
     case .keyPathBaseExpr:
@@ -4899,6 +4918,8 @@ open class SyntaxRewriter {
       return visitImplExpressionSegmentSyntax(data)
     case .stringLiteralExpr:
       return visitImplStringLiteralExprSyntax(data)
+    case .regexLiteralExpr:
+      return visitImplRegexLiteralExprSyntax(data)
     case .keyPathExpr:
       return visitImplKeyPathExprSyntax(data)
     case .keyPathBaseExpr:

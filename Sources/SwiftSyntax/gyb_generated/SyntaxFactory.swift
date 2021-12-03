@@ -1297,6 +1297,23 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return StringLiteralExprSyntax(data)
   }
+  public static func makeRegexLiteralExpr(regex: TokenSyntax) -> RegexLiteralExprSyntax {
+    let layout: [RawSyntax?] = [
+      regex.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.regexLiteralExpr,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return RegexLiteralExprSyntax(data)
+  }
+
+  public static func makeBlankRegexLiteralExpr() -> RegexLiteralExprSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .regexLiteralExpr,
+      layout: [
+      RawSyntax.missingToken(TokenKind.regexLiteral("")),
+    ], length: .zero, presence: .present))
+    return RegexLiteralExprSyntax(data)
+  }
   public static func makeKeyPathExpr(backslash: TokenSyntax, rootExpr: ExprSyntax?, expression: ExprSyntax) -> KeyPathExprSyntax {
     let layout: [RawSyntax?] = [
       backslash.raw,
@@ -5513,6 +5530,12 @@ public enum SyntaxFactory {
   public static func makeStringLiteral(_ text: String,
     leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
     return makeToken(.stringLiteral(text), presence: .present,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
+  }
+  public static func makeRegexLiteral(_ text: String,
+    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+    return makeToken(.regexLiteral(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }

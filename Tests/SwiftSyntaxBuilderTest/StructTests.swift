@@ -27,7 +27,10 @@ final class StructTests: XCTestCase {
                                   members: emptyMembers)
     let members = MemberDeclListItem(decl: nestedStruct)
     let testStruct = StructDecl(identifier: "TestStruct",
-                                members: members)
+                                members: members,
+                                attributesBuilder: {
+      DeclModifier(name: TokenSyntax.public)
+    })
     let syntax = testStruct.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     var text = ""
@@ -35,7 +38,7 @@ final class StructTests: XCTestCase {
 
     // FIXME: We should indent the nested struct by adding the indentation after every newline in the leading trivia.
     XCTAssertEqual(text, """
-    ␣struct TestStruct{
+    ␣public struct TestStruct{
         /// A nested struct
     struct NestedStruct{
         }

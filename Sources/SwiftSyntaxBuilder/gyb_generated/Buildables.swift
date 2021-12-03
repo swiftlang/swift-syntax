@@ -369,6 +369,7 @@ public struct CodeBlockItem: SyntaxBuildable {
   ) {
     self.item = item.createSyntaxBuildable()
     self.semicolon = semicolon
+    assert(semicolon == nil || [";"].contains(self.semicolon!.text))
     self.errorTokens = errorTokens?.createSyntaxBuildable()
   }
   
@@ -460,8 +461,10 @@ public struct CodeBlock: SyntaxBuildable {
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
+    assert(["{"].contains(self.leftBrace.text))
     self.statements = statements.createCodeBlockItemList()
     self.rightBrace = rightBrace
+    assert(["}"].contains(self.rightBrace.text))
   }
   
   func buildCodeBlock(format: Format, leadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
@@ -508,6 +511,7 @@ public struct InOutExpr: ExprBuildable {
     expression: ExpressibleAsExprBuildable
   ) {
     self.ampersand = ampersand
+    assert(["&"].contains(self.ampersand.text))
     self.expression = expression.createExprBuildable()
   }
   
@@ -551,6 +555,7 @@ public struct PoundColumnExpr: ExprBuildable {
     poundColumn: TokenSyntax = TokenSyntax.`poundColumn`
   ) {
     self.poundColumn = poundColumn
+    assert(["#column"].contains(self.poundColumn.text))
   }
   
   func buildPoundColumnExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
@@ -762,7 +767,9 @@ public struct TryExpr: ExprBuildable {
     expression: ExpressibleAsExprBuildable
   ) {
     self.tryKeyword = tryKeyword
+    assert(["try"].contains(self.tryKeyword.text))
     self.questionOrExclamationMark = questionOrExclamationMark
+    assert(questionOrExclamationMark == nil || ["?", "!"].contains(self.questionOrExclamationMark!.text))
     self.expression = expression.createExprBuildable()
   }
   
@@ -810,6 +817,7 @@ public struct AwaitExpr: ExprBuildable {
     expression: ExpressibleAsExprBuildable
   ) {
     self.awaitKeyword = awaitKeyword
+    assert(["await"].contains(self.awaitKeyword.text))
     self.expression = expression.createExprBuildable()
   }
   
@@ -857,6 +865,7 @@ public struct DeclNameArgument: SyntaxBuildable {
   ) {
     self.name = name
     self.colon = colon
+    assert([":"].contains(self.colon.text))
   }
   
   func buildDeclNameArgument(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
@@ -946,8 +955,10 @@ public struct DeclNameArguments: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.arguments = arguments.createDeclNameArgumentList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildDeclNameArguments(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
@@ -1037,6 +1048,7 @@ public struct SuperRefExpr: ExprBuildable {
     superKeyword: TokenSyntax = TokenSyntax.`super`
   ) {
     self.superKeyword = superKeyword
+    assert(["super"].contains(self.superKeyword.text))
   }
   
   func buildSuperRefExpr(format: Format, leadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
@@ -1078,6 +1090,7 @@ public struct NilLiteralExpr: ExprBuildable {
     nilKeyword: TokenSyntax = TokenSyntax.`nil`
   ) {
     self.nilKeyword = nilKeyword
+    assert(["nil"].contains(self.nilKeyword.text))
   }
   
   func buildNilLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
@@ -1119,6 +1132,7 @@ public struct DiscardAssignmentExpr: ExprBuildable {
     wildcard: TokenSyntax = TokenSyntax.`wildcard`
   ) {
     self.wildcard = wildcard
+    assert(["_"].contains(self.wildcard.text))
   }
   
   func buildDiscardAssignmentExpr(format: Format, leadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
@@ -1160,6 +1174,7 @@ public struct AssignmentExpr: ExprBuildable {
     assignToken: TokenSyntax = TokenSyntax.`equal`
   ) {
     self.assignToken = assignToken
+    assert(["="].contains(self.assignToken.text))
   }
   
   func buildAssignmentExpr(format: Format, leadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
@@ -1285,6 +1300,7 @@ public struct PoundLineExpr: ExprBuildable {
     poundLine: TokenSyntax = TokenSyntax.`poundLine`
   ) {
     self.poundLine = poundLine
+    assert(["#line"].contains(self.poundLine.text))
   }
   
   func buildPoundLineExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
@@ -1326,6 +1342,7 @@ public struct PoundFileExpr: ExprBuildable {
     poundFile: TokenSyntax = TokenSyntax.`poundFile`
   ) {
     self.poundFile = poundFile
+    assert(["#file"].contains(self.poundFile.text))
   }
   
   func buildPoundFileExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
@@ -1367,6 +1384,7 @@ public struct PoundFileIDExpr: ExprBuildable {
     poundFileID: TokenSyntax = TokenSyntax.`poundFileID`
   ) {
     self.poundFileID = poundFileID
+    assert(["#fileID"].contains(self.poundFileID.text))
   }
   
   func buildPoundFileIDExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
@@ -1408,6 +1426,7 @@ public struct PoundFilePathExpr: ExprBuildable {
     poundFilePath: TokenSyntax = TokenSyntax.`poundFilePath`
   ) {
     self.poundFilePath = poundFilePath
+    assert(["#filePath"].contains(self.poundFilePath.text))
   }
   
   func buildPoundFilePathExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
@@ -1449,6 +1468,7 @@ public struct PoundFunctionExpr: ExprBuildable {
     poundFunction: TokenSyntax = TokenSyntax.`poundFunction`
   ) {
     self.poundFunction = poundFunction
+    assert(["#function"].contains(self.poundFunction.text))
   }
   
   func buildPoundFunctionExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
@@ -1490,6 +1510,7 @@ public struct PoundDsohandleExpr: ExprBuildable {
     poundDsohandle: TokenSyntax = TokenSyntax.`poundDsohandle`
   ) {
     self.poundDsohandle = poundDsohandle
+    assert(["#dsohandle"].contains(self.poundDsohandle.text))
   }
   
   func buildPoundDsohandleExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
@@ -1670,8 +1691,11 @@ public struct ArrowExpr: ExprBuildable {
     arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
     self.asyncKeyword = asyncKeyword
+    assert(asyncKeyword == nil || ["async"].contains(self.asyncKeyword!.text))
     self.throwsToken = throwsToken
+    assert(throwsToken == nil || ["throws"].contains(self.throwsToken!.text))
     self.arrowToken = arrowToken
+    assert(["->"].contains(self.arrowToken.text))
   }
   
   func buildArrowExpr(format: Format, leadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
@@ -1762,8 +1786,10 @@ public struct TupleExpr: ExprBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.elementList = elementList.createTupleExprElementList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildTupleExpr(format: Format, leadingTrivia: Trivia? = nil) -> TupleExprSyntax {
@@ -1813,8 +1839,10 @@ public struct ArrayExpr: ExprBuildable {
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare
+    assert(["["].contains(self.leftSquare.text))
     self.elements = elements.createArrayElementList()
     self.rightSquare = rightSquare
+    assert(["]"].contains(self.rightSquare.text))
   }
   
   func buildArrayExpr(format: Format, leadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
@@ -1864,8 +1892,10 @@ public struct DictionaryExpr: ExprBuildable {
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare
+    assert(["["].contains(self.leftSquare.text))
     self.content = content.createSyntaxBuildable()
     self.rightSquare = rightSquare
+    assert(["]"].contains(self.rightSquare.text))
   }
   
   func buildDictionaryExpr(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
@@ -1919,8 +1949,10 @@ public struct TupleExprElement: SyntaxBuildable {
   ) {
     self.label = label
     self.colon = colon
+    assert(colon == nil || [":"].contains(self.colon!.text))
     self.expression = expression.createExprBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildTupleExprElement(format: Format, leadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
@@ -1969,6 +2001,7 @@ public struct ArrayElement: SyntaxBuildable {
   ) {
     self.expression = expression.createExprBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildArrayElement(format: Format, leadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
@@ -2021,8 +2054,10 @@ public struct DictionaryElement: SyntaxBuildable {
   ) {
     self.keyExpression = keyExpression.createExprBuildable()
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.valueExpression = valueExpression.createExprBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildDictionaryElement(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
@@ -2108,6 +2143,7 @@ public struct BooleanLiteralExpr: ExprBuildable {
     booleanLiteral: TokenSyntax
   ) {
     self.booleanLiteral = booleanLiteral
+    assert(["true", "false"].contains(self.booleanLiteral.text))
   }
   
   func buildBooleanLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
@@ -2162,8 +2198,10 @@ public struct TernaryExpr: ExprBuildable {
   ) {
     self.conditionExpression = conditionExpression.createExprBuildable()
     self.questionMark = questionMark
+    assert(["?"].contains(self.questionMark.text))
     self.firstChoice = firstChoice.createExprBuildable()
     self.colonMark = colonMark
+    assert([":"].contains(self.colonMark.text))
     self.secondChoice = secondChoice.createExprBuildable()
   }
   
@@ -2220,6 +2258,7 @@ public struct MemberAccessExpr: ExprBuildable {
   ) {
     self.base = base?.createExprBuildable()
     self.dot = dot
+    assert([".", "."].contains(self.dot.text))
     self.name = name
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
@@ -2269,6 +2308,7 @@ public struct IsExpr: ExprBuildable {
     typeName: ExpressibleAsTypeBuildable
   ) {
     self.isTok = isTok
+    assert(["is"].contains(self.isTok.text))
     self.typeName = typeName.createTypeBuildable()
   }
   
@@ -2318,7 +2358,9 @@ public struct AsExpr: ExprBuildable {
     typeName: ExpressibleAsTypeBuildable
   ) {
     self.asTok = asTok
+    assert(["as"].contains(self.asTok.text))
     self.questionOrExclamationMark = questionOrExclamationMark
+    assert(questionOrExclamationMark == nil || ["?", "!"].contains(self.questionOrExclamationMark!.text))
     self.typeName = typeName.createTypeBuildable()
   }
   
@@ -2418,8 +2460,10 @@ public struct ClosureCaptureItem: SyntaxBuildable {
     self.specifier = specifier?.createTokenList()
     self.name = name
     self.assignToken = assignToken
+    assert(assignToken == nil || ["="].contains(self.assignToken!.text))
     self.expression = expression.createExprBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildClosureCaptureItem(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
@@ -2512,8 +2556,10 @@ public struct ClosureCaptureSignature: SyntaxBuildable {
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquare = leftSquare
+    assert(["["].contains(self.leftSquare.text))
     self.items = items?.createClosureCaptureItemList()
     self.rightSquare = rightSquare
+    assert(["]"].contains(self.rightSquare.text))
   }
   
   func buildClosureCaptureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
@@ -2561,6 +2607,7 @@ public struct ClosureParam: SyntaxBuildable {
   ) {
     self.name = name
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildClosureParam(format: Format, leadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
@@ -2665,9 +2712,12 @@ public struct ClosureSignature: SyntaxBuildable {
     self.capture = capture?.createClosureCaptureSignature()
     self.input = input?.createSyntaxBuildable()
     self.asyncKeyword = asyncKeyword
+    assert(asyncKeyword == nil || ["async"].contains(self.asyncKeyword!.text))
     self.throwsTok = throwsTok
+    assert(throwsTok == nil || ["throws"].contains(self.throwsTok!.text))
     self.output = output?.createReturnClause()
     self.inTok = inTok
+    assert(["in"].contains(self.inTok.text))
   }
   
   func buildClosureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
@@ -2724,9 +2774,11 @@ public struct ClosureExpr: ExprBuildable {
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
+    assert(["{"].contains(self.leftBrace.text))
     self.signature = signature?.createClosureSignature()
     self.statements = statements.createCodeBlockItemList()
     self.rightBrace = rightBrace
+    assert(["}"].contains(self.rightBrace.text))
   }
   
   func buildClosureExpr(format: Format, leadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
@@ -2819,6 +2871,7 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable {
   ) {
     self.label = label
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.closure = closure.createClosureExpr()
   }
   
@@ -2920,8 +2973,10 @@ public struct FunctionCallExpr: ExprBuildable {
   ) {
     self.calledExpression = calledExpression.createExprBuildable()
     self.leftParen = leftParen
+    assert(leftParen == nil || ["("].contains(self.leftParen!.text))
     self.argumentList = argumentList.createTupleExprElementList()
     self.rightParen = rightParen
+    assert(rightParen == nil || [")"].contains(self.rightParen!.text))
     self.trailingClosure = trailingClosure?.createClosureExpr()
     self.additionalTrailingClosures = additionalTrailingClosures?.createMultipleTrailingClosureElementList()
   }
@@ -2986,8 +3041,10 @@ public struct SubscriptExpr: ExprBuildable {
   ) {
     self.calledExpression = calledExpression.createExprBuildable()
     self.leftBracket = leftBracket
+    assert(["["].contains(self.leftBracket.text))
     self.argumentList = argumentList.createTupleExprElementList()
     self.rightBracket = rightBracket
+    assert(["]"].contains(self.rightBracket.text))
     self.trailingClosure = trailingClosure?.createClosureExpr()
     self.additionalTrailingClosures = additionalTrailingClosures?.createMultipleTrailingClosureElementList()
   }
@@ -3040,6 +3097,7 @@ public struct OptionalChainingExpr: ExprBuildable {
   ) {
     self.expression = expression.createExprBuildable()
     self.questionMark = questionMark
+    assert(["?"].contains(self.questionMark.text))
   }
   
   func buildOptionalChainingExpr(format: Format, leadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
@@ -3086,6 +3144,7 @@ public struct ForcedValueExpr: ExprBuildable {
   ) {
     self.expression = expression.createExprBuildable()
     self.exclamationMark = exclamationMark
+    assert(["!"].contains(self.exclamationMark.text))
   }
   
   func buildForcedValueExpr(format: Format, leadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
@@ -3273,10 +3332,13 @@ public struct ExpressionSegment: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`
   ) {
     self.backslash = backslash
+    assert(["\\"].contains(self.backslash.text))
     self.delimiter = delimiter
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.expressions = expressions.createTupleExprElementList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildExpressionSegment(format: Format, leadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
@@ -3335,8 +3397,10 @@ public struct StringLiteralExpr: ExprBuildable {
   ) {
     self.openDelimiter = openDelimiter
     self.openQuote = openQuote
+    assert(["\"", "\"\"\""].contains(self.openQuote.text))
     self.segments = segments.createStringLiteralSegments()
     self.closeQuote = closeQuote
+    assert(["\"", "\"\"\""].contains(self.closeQuote.text))
     self.closeDelimiter = closeDelimiter
   }
   
@@ -3389,6 +3453,7 @@ public struct KeyPathExpr: ExprBuildable {
     expression: ExpressibleAsExprBuildable
   ) {
     self.backslash = backslash
+    assert(["\\"].contains(self.backslash.text))
     self.rootExpr = rootExpr?.createExprBuildable()
     self.expression = expression.createExprBuildable()
   }
@@ -3434,6 +3499,7 @@ public struct KeyPathBaseExpr: ExprBuildable {
     period: TokenSyntax = TokenSyntax.`period`
   ) {
     self.period = period
+    assert(["."].contains(self.period.text))
   }
   
   func buildKeyPathBaseExpr(format: Format, leadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
@@ -3479,6 +3545,7 @@ public struct ObjcNamePiece: SyntaxBuildable {
   ) {
     self.name = name
     self.dot = dot
+    assert(dot == nil || ["."].contains(self.dot!.text))
   }
   
   func buildObjcNamePiece(format: Format, leadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
@@ -3571,9 +3638,12 @@ public struct ObjcKeyPathExpr: ExprBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.keyPath = keyPath
+    assert(["#keyPath"].contains(self.keyPath.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.name = name.createObjcName()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildObjcKeyPathExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
@@ -3633,11 +3703,16 @@ public struct ObjcSelectorExpr: ExprBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundSelector = poundSelector
+    assert(["#selector"].contains(self.poundSelector.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.kind = kind
+    assert(kind == nil || ["getter", "setter"].contains(self.kind!.text))
     self.colon = colon
+    assert(colon == nil || [":"].contains(self.colon!.text))
     self.name = name.createExprBuildable()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildObjcSelectorExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
@@ -3780,9 +3855,12 @@ public struct ObjectLiteralExpr: ExprBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.identifier = identifier
+    assert(["#colorLiteral", "#fileLiteral", "#imageLiteral"].contains(self.identifier.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.arguments = arguments.createTupleExprElementList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildObjectLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
@@ -3830,6 +3908,7 @@ public struct TypeInitializerClause: SyntaxBuildable {
     value: ExpressibleAsTypeBuildable
   ) {
     self.equal = equal
+    assert(["="].contains(self.equal.text))
     self.value = value.createTypeBuildable()
   }
   
@@ -3893,6 +3972,7 @@ public struct TypealiasDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.typealiasKeyword = typealiasKeyword
+    assert(["typealias"].contains(self.typealiasKeyword.text))
     self.identifier = identifier
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.initializer = initializer?.createTypeInitializerClause()
@@ -3964,6 +4044,7 @@ public struct AssociatedtypeDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.associatedtypeKeyword = associatedtypeKeyword
+    assert(["associatedtype"].contains(self.associatedtypeKeyword.text))
     self.identifier = identifier
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
     self.initializer = initializer?.createTypeInitializerClause()
@@ -4062,8 +4143,10 @@ public struct ParameterClause: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.parameterList = parameterList.createFunctionParameterList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildParameterClause(format: Format, leadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
@@ -4110,6 +4193,7 @@ public struct ReturnClause: SyntaxBuildable {
     returnType: ExpressibleAsTypeBuildable
   ) {
     self.arrow = arrow
+    assert(["->"].contains(self.arrow.text))
     self.returnType = returnType.createTypeBuildable()
   }
   
@@ -4163,7 +4247,9 @@ public struct FunctionSignature: SyntaxBuildable {
   ) {
     self.input = input.createParameterClause()
     self.asyncOrReasyncKeyword = asyncOrReasyncKeyword
+    assert(asyncOrReasyncKeyword == nil || ["async", "reasync"].contains(self.asyncOrReasyncKeyword!.text))
     self.throwsOrRethrowsKeyword = throwsOrRethrowsKeyword
+    assert(throwsOrRethrowsKeyword == nil || ["throws", "rethrows"].contains(self.throwsOrRethrowsKeyword!.text))
     self.output = output?.createReturnClause()
   }
   
@@ -4215,6 +4301,7 @@ public struct IfConfigClause: SyntaxBuildable {
     elements: ExpressibleAsSyntaxBuildable
   ) {
     self.poundKeyword = poundKeyword
+    assert(["#if", "#elseif", "#else"].contains(self.poundKeyword.text))
     self.condition = condition?.createExprBuildable()
     self.elements = elements.createSyntaxBuildable()
   }
@@ -4305,6 +4392,7 @@ public struct IfConfigDecl: DeclBuildable {
   ) {
     self.clauses = clauses.createIfConfigClauseList()
     self.poundEndif = poundEndif
+    assert(["#endif"].contains(self.poundEndif.text))
   }
   
   func buildIfConfigDecl(format: Format, leadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
@@ -4356,9 +4444,12 @@ public struct PoundErrorDecl: DeclBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundError = poundError
+    assert(["#error"].contains(self.poundError.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.message = message.createStringLiteralExpr()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildPoundErrorDecl(format: Format, leadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
@@ -4412,9 +4503,12 @@ public struct PoundWarningDecl: DeclBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundWarning = poundWarning
+    assert(["#warning"].contains(self.poundWarning.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.message = message.createStringLiteralExpr()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildPoundWarningDecl(format: Format, leadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
@@ -4468,9 +4562,12 @@ public struct PoundSourceLocation: DeclBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundSourceLocation = poundSourceLocation
+    assert(["#sourceLocation"].contains(self.poundSourceLocation.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.args = args?.createPoundSourceLocationArgs()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildPoundSourceLocation(format: Format, leadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
@@ -4533,11 +4630,16 @@ public struct PoundSourceLocationArgs: SyntaxBuildable {
     lineNumber: TokenSyntax
   ) {
     self.fileArgLabel = fileArgLabel
+    assert(["file"].contains(self.fileArgLabel.text))
     self.fileArgColon = fileArgColon
+    assert([":"].contains(self.fileArgColon.text))
     self.fileName = fileName
     self.comma = comma
+    assert([","].contains(self.comma.text))
     self.lineArgLabel = lineArgLabel
+    assert(["line"].contains(self.lineArgLabel.text))
     self.lineArgColon = lineArgColon
+    assert([":"].contains(self.lineArgColon.text))
     self.lineNumber = lineNumber
   }
   
@@ -4595,9 +4697,12 @@ public struct DeclModifier: SyntaxBuildable {
     detailRightParen: TokenSyntax? = nil
   ) {
     self.name = name
+    assert(["class", "convenience", "dynamic", "final", "infix", "lazy", "optional", "override", "postfix", "prefix", "required", "static", "unowned", "weak", "private", "fileprivate", "internal", "public", "open", "mutating", "nonmutating", "indirect", "__consuming", "actor", "async", "distributed"].contains(self.name.text))
     self.detailLeftParen = detailLeftParen
+    assert(detailLeftParen == nil || ["("].contains(self.detailLeftParen!.text))
     self.detail = detail
     self.detailRightParen = detailRightParen
+    assert(detailRightParen == nil || [")"].contains(self.detailRightParen!.text))
   }
   
   func buildDeclModifier(format: Format, leadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
@@ -4646,6 +4751,7 @@ public struct InheritedType: SyntaxBuildable {
   ) {
     self.typeName = typeName.createTypeBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildInheritedType(format: Format, leadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
@@ -4732,6 +4838,7 @@ public struct TypeInheritanceClause: SyntaxBuildable {
     inheritedTypeCollection: ExpressibleAsInheritedTypeList
   ) {
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.inheritedTypeCollection = inheritedTypeCollection.createInheritedTypeList()
   }
   
@@ -4874,6 +4981,7 @@ public struct StructDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.structKeyword = structKeyword
+    assert(["struct"].contains(self.structKeyword.text))
     self.identifier = identifier
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
@@ -4947,6 +5055,7 @@ public struct ProtocolDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.protocolKeyword = protocolKeyword
+    assert(["protocol"].contains(self.protocolKeyword.text))
     self.identifier = identifier
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
@@ -5018,6 +5127,7 @@ public struct ExtensionDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.extensionKeyword = extensionKeyword
+    assert(["extension"].contains(self.extensionKeyword.text))
     self.extendedType = extendedType.createTypeBuildable()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
@@ -5075,8 +5185,10 @@ public struct MemberDeclBlock: SyntaxBuildable {
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
+    assert(["{"].contains(self.leftBrace.text))
     self.members = members.createMemberDeclList()
     self.rightBrace = rightBrace
+    assert(["}"].contains(self.rightBrace.text))
   }
   
   func buildMemberDeclBlock(format: Format, leadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
@@ -5169,6 +5281,7 @@ public struct MemberDeclListItem: SyntaxBuildable {
   ) {
     self.decl = decl.createDeclBuildable()
     self.semicolon = semicolon
+    assert(semicolon == nil || [";"].contains(self.semicolon!.text))
   }
   
   func buildMemberDeclListItem(format: Format, leadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
@@ -5260,6 +5373,7 @@ public struct InitializerClause: SyntaxBuildable {
     value: ExpressibleAsExprBuildable
   ) {
     self.equal = equal
+    assert(["="].contains(self.equal.text))
     self.value = value.createExprBuildable()
   }
   
@@ -5327,10 +5441,13 @@ public struct FunctionParameter: SyntaxBuildable {
     self.firstName = firstName
     self.secondName = secondName
     self.colon = colon
+    assert(colon == nil || [":"].contains(self.colon!.text))
     self.type = type?.createTypeBuildable()
     self.ellipsis = ellipsis
+    assert(ellipsis == nil || ["..."].contains(self.ellipsis!.text))
     self.defaultArgument = defaultArgument?.createInitializerClause()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildFunctionParameter(format: Format, leadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
@@ -5443,6 +5560,7 @@ public struct FunctionDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.funcKeyword = funcKeyword
+    assert(["func"].contains(self.funcKeyword.text))
     self.identifier = identifier
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.signature = signature.createFunctionSignature()
@@ -5522,10 +5640,13 @@ public struct InitializerDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.initKeyword = initKeyword
+    assert(["init"].contains(self.initKeyword.text))
     self.optionalMark = optionalMark
+    assert(optionalMark == nil || ["?", "?", "!"].contains(self.optionalMark!.text))
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.parameters = parameters.createParameterClause()
     self.throwsOrRethrowsKeyword = throwsOrRethrowsKeyword
+    assert(throwsOrRethrowsKeyword == nil || ["throws", "rethrows"].contains(self.throwsOrRethrowsKeyword!.text))
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
     self.body = body?.createCodeBlock()
   }
@@ -5588,6 +5709,7 @@ public struct DeinitializerDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.deinitKeyword = deinitKeyword
+    assert(["deinit"].contains(self.deinitKeyword.text))
     self.body = body.createCodeBlock()
   }
   
@@ -5656,6 +5778,7 @@ public struct SubscriptDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.subscriptKeyword = subscriptKeyword
+    assert(["subscript"].contains(self.subscriptKeyword.text))
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.indices = indices.createParameterClause()
     self.result = result.createReturnClause()
@@ -5719,8 +5842,10 @@ public struct AccessLevelModifier: SyntaxBuildable {
   ) {
     self.name = name
     self.leftParen = leftParen
+    assert(leftParen == nil || ["("].contains(self.leftParen!.text))
     self.modifier = modifier
     self.rightParen = rightParen
+    assert(rightParen == nil || [")"].contains(self.rightParen!.text))
   }
   
   func buildAccessLevelModifier(format: Format, leadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
@@ -5769,6 +5894,7 @@ public struct AccessPathComponent: SyntaxBuildable {
   ) {
     self.name = name
     self.trailingDot = trailingDot
+    assert(trailingDot == nil || ["."].contains(self.trailingDot!.text))
   }
   
   func buildAccessPathComponent(format: Format, leadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
@@ -5866,7 +5992,9 @@ public struct ImportDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.importTok = importTok
+    assert(["import"].contains(self.importTok.text))
     self.importKind = importKind
+    assert(importKind == nil || ["typealias", "struct", "class", "enum", "protocol", "var", "let", "func"].contains(self.importKind!.text))
     self.path = path.createAccessPath()
   }
   
@@ -5919,8 +6047,10 @@ public struct AccessorParameter: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.name = name
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildAccessorParameter(format: Format, leadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
@@ -5984,9 +6114,12 @@ public struct AccessorDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifier = modifier?.createDeclModifier()
     self.accessorKind = accessorKind
+    assert(["get", "set", "didSet", "willSet", "unsafeAddress", "addressWithOwner", "addressWithNativeOwner", "unsafeMutableAddress", "mutableAddressWithOwner", "mutableAddressWithNativeOwner", "_read", "_modify"].contains(self.accessorKind.text))
     self.parameter = parameter?.createAccessorParameter()
     self.asyncKeyword = asyncKeyword
+    assert(asyncKeyword == nil || ["async"].contains(self.asyncKeyword!.text))
     self.throwsKeyword = throwsKeyword
+    assert(throwsKeyword == nil || ["throws", "rethrows"].contains(self.throwsKeyword!.text))
     self.body = body?.createCodeBlock()
   }
   
@@ -6082,8 +6215,10 @@ public struct AccessorBlock: SyntaxBuildable {
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.leftBrace = leftBrace
+    assert(["{"].contains(self.leftBrace.text))
     self.accessors = accessors.createAccessorList()
     self.rightBrace = rightBrace
+    assert(["}"].contains(self.rightBrace.text))
   }
   
   func buildAccessorBlock(format: Format, leadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
@@ -6143,6 +6278,7 @@ public struct PatternBinding: SyntaxBuildable {
     self.initializer = initializer?.createInitializerClause()
     self.accessor = accessor?.createSyntaxBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildPatternBinding(format: Format, leadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
@@ -6240,6 +6376,7 @@ public struct VariableDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.letOrVarKeyword = letOrVarKeyword
+    assert(["let", "var"].contains(self.letOrVarKeyword.text))
     self.bindings = bindings.createPatternBindingList()
   }
   
@@ -6301,6 +6438,7 @@ public struct EnumCaseElement: SyntaxBuildable {
     self.associatedValue = associatedValue?.createParameterClause()
     self.rawValue = rawValue?.createInitializerClause()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildEnumCaseElement(format: Format, leadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
@@ -6401,6 +6539,7 @@ public struct EnumCaseDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.caseKeyword = caseKeyword
+    assert(["case"].contains(self.caseKeyword.text))
     self.elements = elements.createEnumCaseElementList()
   }
   
@@ -6470,6 +6609,7 @@ public struct EnumDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.enumKeyword = enumKeyword
+    assert(["enum"].contains(self.enumKeyword.text))
     self.identifier = identifier
     self.genericParameters = genericParameters?.createGenericParameterClause()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
@@ -6538,6 +6678,7 @@ public struct OperatorDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.operatorKeyword = operatorKeyword
+    assert(["operator"].contains(self.operatorKeyword.text))
     self.identifier = identifier
     self.operatorPrecedenceAndTypes = operatorPrecedenceAndTypes?.createOperatorPrecedenceAndTypes()
   }
@@ -6630,6 +6771,7 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable {
     precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList
   ) {
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
   }
   
@@ -6694,10 +6836,13 @@ public struct PrecedenceGroupDecl: DeclBuildable {
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.precedencegroupKeyword = precedencegroupKeyword
+    assert(["precedencegroup"].contains(self.precedencegroupKeyword.text))
     self.identifier = identifier
     self.leftBrace = leftBrace
+    assert(["{"].contains(self.leftBrace.text))
     self.groupAttributes = groupAttributes.createPrecedenceGroupAttributeList()
     self.rightBrace = rightBrace
+    assert(["}"].contains(self.rightBrace.text))
   }
   
   func buildPrecedenceGroupDecl(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
@@ -6796,7 +6941,9 @@ public struct PrecedenceGroupRelation: SyntaxBuildable {
     otherNames: ExpressibleAsPrecedenceGroupNameList
   ) {
     self.higherThanOrLowerThan = higherThanOrLowerThan
+    assert(["higherThan", "lowerThan"].contains(self.higherThanOrLowerThan.text))
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.otherNames = otherNames.createPrecedenceGroupNameList()
   }
   
@@ -6886,6 +7033,7 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable {
   ) {
     self.name = name
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildPrecedenceGroupNameElement(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
@@ -6938,8 +7086,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable {
     flag: TokenSyntax
   ) {
     self.assignmentKeyword = assignmentKeyword
+    assert(["assignment"].contains(self.assignmentKeyword.text))
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.flag = flag
+    assert(["true", "false"].contains(self.flag.text))
   }
   
   func buildPrecedenceGroupAssignment(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
@@ -6993,8 +7144,11 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable {
     value: TokenSyntax
   ) {
     self.associativityKeyword = associativityKeyword
+    assert(["associativity"].contains(self.associativityKeyword.text))
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.value = value
+    assert(["left", "right", "none"].contains(self.value.text))
   }
   
   func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
@@ -7131,10 +7285,13 @@ public struct CustomAttribute: SyntaxBuildable {
     rightParen: TokenSyntax? = nil
   ) {
     self.atSignToken = atSignToken
+    assert(["@"].contains(self.atSignToken.text))
     self.attributeName = attributeName.createTypeBuildable()
     self.leftParen = leftParen
+    assert(leftParen == nil || ["("].contains(self.leftParen!.text))
     self.argumentList = argumentList?.createTupleExprElementList()
     self.rightParen = rightParen
+    assert(rightParen == nil || [")"].contains(self.rightParen!.text))
   }
   
   func buildCustomAttribute(format: Format, leadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
@@ -7198,10 +7355,13 @@ public struct Attribute: SyntaxBuildable {
     tokenList: ExpressibleAsTokenList? = nil
   ) {
     self.atSignToken = atSignToken
+    assert(["@"].contains(self.atSignToken.text))
     self.attributeName = attributeName
     self.leftParen = leftParen
+    assert(leftParen == nil || ["("].contains(self.leftParen!.text))
     self.argument = argument?.createSyntaxBuildable()
     self.rightParen = rightParen
+    assert(rightParen == nil || [")"].contains(self.rightParen!.text))
     self.tokenList = tokenList?.createTokenList()
   }
   
@@ -7345,8 +7505,10 @@ public struct AvailabilityEntry: SyntaxBuildable {
   ) {
     self.label = label
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.availabilityList = availabilityList.createAvailabilitySpecList()
     self.semicolon = semicolon
+    assert([";"].contains(self.semicolon.text))
   }
   
   func buildAvailabilityEntry(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
@@ -7405,8 +7567,10 @@ public struct LabeledSpecializeEntry: SyntaxBuildable {
   ) {
     self.label = label
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.value = value
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildLabeledSpecializeEntry(format: Format, leadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
@@ -7466,8 +7630,10 @@ public struct TargetFunctionEntry: SyntaxBuildable {
   ) {
     self.label = label
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.delcname = delcname.createDeclName()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildTargetFunctionEntry(format: Format, leadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
@@ -7524,6 +7690,7 @@ public struct NamedAttributeStringArgument: SyntaxBuildable {
   ) {
     self.nameTok = nameTok
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.stringOrDeclname = stringOrDeclname.createSyntaxBuildable()
   }
   
@@ -7628,6 +7795,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable {
   ) {
     self.type = type.createSimpleTypeIdentifier()
     self.comma = comma
+    assert([","].contains(self.comma.text))
     self.declBaseName = declBaseName.createSyntaxBuildable()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
@@ -7683,6 +7851,7 @@ public struct ObjCSelectorPiece: SyntaxBuildable {
   ) {
     self.name = name
     self.colon = colon
+    assert(colon == nil || [":"].contains(self.colon!.text))
   }
   
   func buildObjCSelectorPiece(format: Format, leadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
@@ -7783,9 +7952,12 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable {
     whereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.diffKind = diffKind
+    assert(diffKind == nil || ["forward", "reverse", "linear"].contains(self.diffKind!.text))
     self.diffKindComma = diffKindComma
+    assert(diffKindComma == nil || [","].contains(self.diffKindComma!.text))
     self.diffParams = diffParams?.createDifferentiabilityParamsClause()
     self.diffParamsComma = diffParamsComma
+    assert(diffParamsComma == nil || [","].contains(self.diffParamsComma!.text))
     self.whereClause = whereClause?.createGenericWhereClause()
   }
   
@@ -7839,7 +8011,9 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable {
     parameters: ExpressibleAsSyntaxBuildable
   ) {
     self.wrtLabel = wrtLabel
+    assert(["wrt"].contains(self.wrtLabel.text))
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.parameters = parameters.createSyntaxBuildable()
   }
   
@@ -7891,8 +8065,10 @@ public struct DifferentiabilityParams: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.diffParams = diffParams.createDifferentiabilityParamList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildDifferentiabilityParams(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
@@ -7985,6 +8161,7 @@ public struct DifferentiabilityParam: SyntaxBuildable {
   ) {
     self.parameter = parameter.createSyntaxBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildDifferentiabilityParam(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
@@ -8050,11 +8227,16 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable {
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil
   ) {
     self.ofLabel = ofLabel
+    assert(["of"].contains(self.ofLabel.text))
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.originalDeclName = originalDeclName.createQualifiedDeclName()
     self.period = period
+    assert(period == nil || ["."].contains(self.period!.text))
     self.accessorKind = accessorKind
+    assert(accessorKind == nil || ["get", "set"].contains(self.accessorKind!.text))
     self.comma = comma
+    assert(comma == nil || [","].contains(self.comma!.text))
     self.diffParams = diffParams?.createDifferentiabilityParamsClause()
   }
   
@@ -8117,6 +8299,7 @@ public struct QualifiedDeclName: SyntaxBuildable {
   ) {
     self.baseType = baseType?.createTypeBuildable()
     self.dot = dot
+    assert(dot == nil || [".", "."].contains(self.dot!.text))
     self.name = name
     self.arguments = arguments?.createDeclNameArguments()
   }
@@ -8213,6 +8396,7 @@ public struct ContinueStmt: StmtBuildable {
     label: TokenSyntax? = nil
   ) {
     self.continueKeyword = continueKeyword
+    assert(["continue"].contains(self.continueKeyword.text))
     self.label = label
   }
   
@@ -8269,7 +8453,9 @@ public struct WhileStmt: StmtBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.whileKeyword = whileKeyword
+    assert(["while"].contains(self.whileKeyword.text))
     self.conditions = conditions.createConditionElementList()
     self.body = body.createCodeBlock()
   }
@@ -8320,6 +8506,7 @@ public struct DeferStmt: StmtBuildable {
     body: ExpressibleAsCodeBlock
   ) {
     self.deferKeyword = deferKeyword
+    assert(["defer"].contains(self.deferKeyword.text))
     self.body = body.createCodeBlock()
   }
   
@@ -8461,9 +8648,12 @@ public struct RepeatWhileStmt: StmtBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.repeatKeyword = repeatKeyword
+    assert(["repeat"].contains(self.repeatKeyword.text))
     self.body = body.createCodeBlock()
     self.whileKeyword = whileKeyword
+    assert(["while"].contains(self.whileKeyword.text))
     self.condition = condition.createExprBuildable()
   }
   
@@ -8520,8 +8710,10 @@ public struct GuardStmt: StmtBuildable {
     body: ExpressibleAsCodeBlock
   ) {
     self.guardKeyword = guardKeyword
+    assert(["guard"].contains(self.guardKeyword.text))
     self.conditions = conditions.createConditionElementList()
     self.elseKeyword = elseKeyword
+    assert(["else"].contains(self.elseKeyword.text))
     self.body = body.createCodeBlock()
   }
   
@@ -8570,6 +8762,7 @@ public struct WhereClause: SyntaxBuildable {
     guardResult: ExpressibleAsExprBuildable
   ) {
     self.whereKeyword = whereKeyword
+    assert(["where"].contains(self.whereKeyword.text))
     self.guardResult = guardResult.createExprBuildable()
   }
   
@@ -8647,13 +8840,19 @@ public struct ForInStmt: StmtBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.forKeyword = forKeyword
+    assert(["for"].contains(self.forKeyword.text))
     self.tryKeyword = tryKeyword
+    assert(tryKeyword == nil || ["try"].contains(self.tryKeyword!.text))
     self.awaitKeyword = awaitKeyword
+    assert(awaitKeyword == nil || ["await"].contains(self.awaitKeyword!.text))
     self.caseKeyword = caseKeyword
+    assert(caseKeyword == nil || ["case"].contains(self.caseKeyword!.text))
     self.pattern = pattern.createPatternBuildable()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
     self.inKeyword = inKeyword
+    assert(["in"].contains(self.inKeyword.text))
     self.sequenceExpr = sequenceExpr.createExprBuildable()
     self.whereClause = whereClause?.createWhereClause()
     self.body = body.createCodeBlock()
@@ -8728,11 +8927,15 @@ public struct SwitchStmt: StmtBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.switchKeyword = switchKeyword
+    assert(["switch"].contains(self.switchKeyword.text))
     self.expression = expression.createExprBuildable()
     self.leftBrace = leftBrace
+    assert(["{"].contains(self.leftBrace.text))
     self.cases = cases.createSwitchCaseList()
     self.rightBrace = rightBrace
+    assert(["}"].contains(self.rightBrace.text))
   }
   
   func buildSwitchStmt(format: Format, leadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
@@ -8834,7 +9037,9 @@ public struct DoStmt: StmtBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.doKeyword = doKeyword
+    assert(["do"].contains(self.doKeyword.text))
     self.body = body.createCodeBlock()
     self.catchClauses = catchClauses?.createCatchClauseList()
   }
@@ -8885,6 +9090,7 @@ public struct ReturnStmt: StmtBuildable {
     expression: ExpressibleAsExprBuildable? = nil
   ) {
     self.returnKeyword = returnKeyword
+    assert(["return"].contains(self.returnKeyword.text))
     self.expression = expression?.createExprBuildable()
   }
   
@@ -8931,6 +9137,7 @@ public struct YieldStmt: StmtBuildable {
     yields: ExpressibleAsSyntaxBuildable
   ) {
     self.yieldKeyword = yieldKeyword
+    assert(["yield"].contains(self.yieldKeyword.text))
     self.yields = yields.createSyntaxBuildable()
   }
   
@@ -8983,9 +9190,12 @@ public struct YieldList: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.elementList = elementList.createExprList()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildYieldList(format: Format, leadingTrivia: Trivia? = nil) -> YieldListSyntax {
@@ -9030,6 +9240,7 @@ public struct FallthroughStmt: StmtBuildable {
     fallthroughKeyword: TokenSyntax = TokenSyntax.`fallthrough`
   ) {
     self.fallthroughKeyword = fallthroughKeyword
+    assert(["fallthrough"].contains(self.fallthroughKeyword.text))
   }
   
   func buildFallthroughStmt(format: Format, leadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
@@ -9074,6 +9285,7 @@ public struct BreakStmt: StmtBuildable {
     label: TokenSyntax? = nil
   ) {
     self.breakKeyword = breakKeyword
+    assert(["break"].contains(self.breakKeyword.text))
     self.label = label
   }
   
@@ -9203,6 +9415,7 @@ public struct ConditionElement: SyntaxBuildable {
   ) {
     self.condition = condition.createSyntaxBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildConditionElement(format: Format, leadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
@@ -9254,9 +9467,12 @@ public struct AvailabilityCondition: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundAvailableKeyword = poundAvailableKeyword
+    assert(["#available"].contains(self.poundAvailableKeyword.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.availabilitySpec = availabilitySpec.createAvailabilitySpecList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildAvailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
@@ -9310,6 +9526,7 @@ public struct MatchingPatternCondition: SyntaxBuildable {
     initializer: ExpressibleAsInitializerClause
   ) {
     self.caseKeyword = caseKeyword
+    assert(["case"].contains(self.caseKeyword.text))
     self.pattern = pattern.createPatternBuildable()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
     self.initializer = initializer.createInitializerClause()
@@ -9366,6 +9583,7 @@ public struct OptionalBindingCondition: SyntaxBuildable {
     initializer: ExpressibleAsInitializerClause
   ) {
     self.letOrVarKeyword = letOrVarKeyword
+    assert(["let", "var"].contains(self.letOrVarKeyword.text))
     self.pattern = pattern.createPatternBuildable()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
     self.initializer = initializer.createInitializerClause()
@@ -9422,9 +9640,12 @@ public struct UnavailabilityCondition: SyntaxBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundUnavailableKeyword = poundUnavailableKeyword
+    assert(["#unavailable"].contains(self.poundUnavailableKeyword.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.availabilitySpec = availabilitySpec.createAvailabilitySpecList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildUnavailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
@@ -9554,6 +9775,7 @@ public struct ThrowStmt: StmtBuildable {
     expression: ExpressibleAsExprBuildable
   ) {
     self.throwKeyword = throwKeyword
+    assert(["throw"].contains(self.throwKeyword.text))
     self.expression = expression.createExprBuildable()
   }
   
@@ -9616,10 +9838,13 @@ public struct IfStmt: StmtBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.ifKeyword = ifKeyword
+    assert(["if"].contains(self.ifKeyword.text))
     self.conditions = conditions.createConditionElementList()
     self.body = body.createCodeBlock()
     self.elseKeyword = elseKeyword
+    assert(elseKeyword == nil || ["else"].contains(self.elseKeyword!.text))
     self.elseBody = elseBody?.createSyntaxBuildable()
   }
   
@@ -9712,6 +9937,7 @@ public struct ElseBlock: SyntaxBuildable {
     body: ExpressibleAsCodeBlock
   ) {
     self.elseKeyword = elseKeyword
+    assert(["else"].contains(self.elseKeyword.text))
     self.body = body.createCodeBlock()
   }
   
@@ -9809,7 +10035,9 @@ public struct SwitchDefaultLabel: SyntaxBuildable {
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.defaultKeyword = defaultKeyword
+    assert(["default"].contains(self.defaultKeyword.text))
     self.colon = colon
+    assert([":"].contains(self.colon.text))
   }
   
   func buildSwitchDefaultLabel(format: Format, leadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
@@ -9860,6 +10088,7 @@ public struct CaseItem: SyntaxBuildable {
     self.pattern = pattern.createPatternBuildable()
     self.whereClause = whereClause?.createWhereClause()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildCaseItem(format: Format, leadingTrivia: Trivia? = nil) -> CaseItemSyntax {
@@ -9911,6 +10140,7 @@ public struct CatchItem: SyntaxBuildable {
     self.pattern = pattern?.createPatternBuildable()
     self.whereClause = whereClause?.createWhereClause()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildCatchItem(format: Format, leadingTrivia: Trivia? = nil) -> CatchItemSyntax {
@@ -9960,8 +10190,10 @@ public struct SwitchCaseLabel: SyntaxBuildable {
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
     self.caseKeyword = caseKeyword
+    assert(["case"].contains(self.caseKeyword.text))
     self.caseItems = caseItems.createCaseItemList()
     self.colon = colon
+    assert([":"].contains(self.colon.text))
   }
   
   func buildSwitchCaseLabel(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
@@ -10011,6 +10243,7 @@ public struct CatchClause: SyntaxBuildable {
     body: ExpressibleAsCodeBlock
   ) {
     self.catchKeyword = catchKeyword
+    assert(["catch"].contains(self.catchKeyword.text))
     self.catchItems = catchItems?.createCatchItemList()
     self.body = body.createCodeBlock()
   }
@@ -10071,11 +10304,15 @@ public struct PoundAssertStmt: StmtBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.poundAssert = poundAssert
+    assert(["#assert"].contains(self.poundAssert.text))
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.condition = condition.createExprBuildable()
     self.comma = comma
+    assert(comma == nil || [","].contains(self.comma!.text))
     self.message = message
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildPoundAssertStmt(format: Format, leadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
@@ -10125,6 +10362,7 @@ public struct GenericWhereClause: SyntaxBuildable {
     requirementList: ExpressibleAsGenericRequirementList
   ) {
     self.whereKeyword = whereKeyword
+    assert(["where"].contains(self.whereKeyword.text))
     self.requirementList = requirementList.createGenericRequirementList()
   }
   
@@ -10213,6 +10451,7 @@ public struct GenericRequirement: SyntaxBuildable {
   ) {
     self.body = body.createSyntaxBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildGenericRequirement(format: Format, leadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
@@ -10361,8 +10600,10 @@ public struct GenericParameter: SyntaxBuildable {
     self.attributes = attributes?.createAttributeList()
     self.name = name
     self.colon = colon
+    assert(colon == nil || [":"].contains(self.colon!.text))
     self.inheritedType = inheritedType?.createTypeBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildGenericParameter(format: Format, leadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
@@ -10414,8 +10655,10 @@ public struct GenericParameterClause: SyntaxBuildable {
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leftAngleBracket = leftAngleBracket
+    assert(["<"].contains(self.leftAngleBracket.text))
     self.genericParameterList = genericParameterList.createGenericParameterList()
     self.rightAngleBracket = rightAngleBracket
+    assert([">"].contains(self.rightAngleBracket.text))
   }
   
   func buildGenericParameterClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
@@ -10466,6 +10709,7 @@ public struct ConformanceRequirement: SyntaxBuildable {
   ) {
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.rightTypeIdentifier = rightTypeIdentifier.createTypeBuildable()
   }
   
@@ -10566,6 +10810,7 @@ public struct MemberTypeIdentifier: TypeBuildable {
   ) {
     self.baseType = baseType.createTypeBuildable()
     self.period = period
+    assert([".", "."].contains(self.period.text))
     self.name = name
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
   }
@@ -10612,6 +10857,7 @@ public struct ClassRestrictionType: TypeBuildable {
     classKeyword: TokenSyntax = TokenSyntax.`class`
   ) {
     self.classKeyword = classKeyword
+    assert(["class"].contains(self.classKeyword.text))
   }
   
   func buildClassRestrictionType(format: Format, leadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
@@ -10659,8 +10905,10 @@ public struct ArrayType: TypeBuildable {
     rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquareBracket = leftSquareBracket
+    assert(["["].contains(self.leftSquareBracket.text))
     self.elementType = elementType.createTypeBuildable()
     self.rightSquareBracket = rightSquareBracket
+    assert(["]"].contains(self.rightSquareBracket.text))
   }
   
   func buildArrayType(format: Format, leadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
@@ -10716,10 +10964,13 @@ public struct DictionaryType: TypeBuildable {
     rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
     self.leftSquareBracket = leftSquareBracket
+    assert(["["].contains(self.leftSquareBracket.text))
     self.keyType = keyType.createTypeBuildable()
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.valueType = valueType.createTypeBuildable()
     self.rightSquareBracket = rightSquareBracket
+    assert(["]"].contains(self.rightSquareBracket.text))
   }
   
   func buildDictionaryType(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
@@ -10772,7 +11023,9 @@ public struct MetatypeType: TypeBuildable {
   ) {
     self.baseType = baseType.createTypeBuildable()
     self.period = period
+    assert(["."].contains(self.period.text))
     self.typeOrProtocol = typeOrProtocol
+    assert(["Type", "Protocol"].contains(self.typeOrProtocol.text))
   }
   
   func buildMetatypeType(format: Format, leadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
@@ -10820,6 +11073,7 @@ public struct OptionalType: TypeBuildable {
   ) {
     self.wrappedType = wrappedType.createTypeBuildable()
     self.questionMark = questionMark
+    assert(["?"].contains(self.questionMark.text))
   }
   
   func buildOptionalType(format: Format, leadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
@@ -10865,6 +11119,7 @@ public struct SomeType: TypeBuildable {
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.someSpecifier = someSpecifier
+    assert(["some"].contains(self.someSpecifier.text))
     self.baseType = baseType.createTypeBuildable()
   }
   
@@ -10912,6 +11167,7 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable {
   ) {
     self.wrappedType = wrappedType.createTypeBuildable()
     self.exclamationMark = exclamationMark
+    assert(["!"].contains(self.exclamationMark.text))
   }
   
   func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
@@ -10958,6 +11214,7 @@ public struct CompositionTypeElement: SyntaxBuildable {
   ) {
     self.type = type.createTypeBuildable()
     self.ampersand = ampersand
+    assert(ampersand == nil || ["&"].contains(self.ampersand!.text))
   }
   
   func buildCompositionTypeElement(format: Format, leadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
@@ -11103,13 +11360,17 @@ public struct TupleTypeElement: SyntaxBuildable {
     trailingComma: TokenSyntax? = nil
   ) {
     self.inOut = inOut
+    assert(inOut == nil || ["inout"].contains(self.inOut!.text))
     self.name = name
     self.secondName = secondName
     self.colon = colon
+    assert(colon == nil || [":"].contains(self.colon!.text))
     self.type = type.createTypeBuildable()
     self.ellipsis = ellipsis
+    assert(ellipsis == nil || ["..."].contains(self.ellipsis!.text))
     self.initializer = initializer?.createInitializerClause()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildTupleTypeElement(format: Format, leadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
@@ -11205,8 +11466,10 @@ public struct TupleType: TypeBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.elements = elements.createTupleTypeElementList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildTupleType(format: Format, leadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
@@ -11268,11 +11531,16 @@ public struct FunctionType: TypeBuildable {
     returnType: ExpressibleAsTypeBuildable
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.arguments = arguments.createTupleTypeElementList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
     self.asyncKeyword = asyncKeyword
+    assert(asyncKeyword == nil || ["async"].contains(self.asyncKeyword!.text))
     self.throwsOrRethrowsKeyword = throwsOrRethrowsKeyword
+    assert(throwsOrRethrowsKeyword == nil || ["throws", "rethrows", "throw"].contains(self.throwsOrRethrowsKeyword!.text))
     self.arrow = arrow
+    assert(["->"].contains(self.arrow.text))
     self.returnType = returnType.createTypeBuildable()
   }
   
@@ -11327,6 +11595,7 @@ public struct AttributedType: TypeBuildable {
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.specifier = specifier
+    assert(specifier == nil || ["inout", "__shared", "__owned"].contains(self.specifier!.text))
     self.attributes = attributes?.createAttributeList()
     self.baseType = baseType.createTypeBuildable()
   }
@@ -11417,6 +11686,7 @@ public struct GenericArgument: SyntaxBuildable {
   ) {
     self.argumentType = argumentType.createTypeBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildGenericArgument(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
@@ -11465,8 +11735,10 @@ public struct GenericArgumentClause: SyntaxBuildable {
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
     self.leftAngleBracket = leftAngleBracket
+    assert(["<"].contains(self.leftAngleBracket.text))
     self.arguments = arguments.createGenericArgumentList()
     self.rightAngleBracket = rightAngleBracket
+    assert([">"].contains(self.rightAngleBracket.text))
   }
   
   func buildGenericArgumentClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
@@ -11513,6 +11785,7 @@ public struct TypeAnnotation: SyntaxBuildable {
     type: ExpressibleAsTypeBuildable
   ) {
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.type = type.createTypeBuildable()
   }
   
@@ -11566,6 +11839,7 @@ public struct EnumCasePattern: PatternBuildable {
   ) {
     self.type = type?.createTypeBuildable()
     self.period = period
+    assert(["."].contains(self.period.text))
     self.caseName = caseName
     self.associatedTuple = associatedTuple?.createTuplePattern()
   }
@@ -11615,6 +11889,7 @@ public struct IsTypePattern: PatternBuildable {
     type: ExpressibleAsTypeBuildable
   ) {
     self.isKeyword = isKeyword
+    assert(["is"].contains(self.isKeyword.text))
     self.type = type.createTypeBuildable()
   }
   
@@ -11662,6 +11937,7 @@ public struct OptionalPattern: PatternBuildable {
   ) {
     self.subPattern = subPattern.createPatternBuildable()
     self.questionMark = questionMark
+    assert(["?"].contains(self.questionMark.text))
   }
   
   func buildOptionalPattern(format: Format, leadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
@@ -11752,6 +12028,7 @@ public struct AsTypePattern: PatternBuildable {
   ) {
     self.pattern = pattern.createPatternBuildable()
     self.asKeyword = asKeyword
+    assert(["as"].contains(self.asKeyword.text))
     self.type = type.createTypeBuildable()
   }
   
@@ -11802,8 +12079,10 @@ public struct TuplePattern: PatternBuildable {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.leftParen = leftParen
+    assert(["("].contains(self.leftParen.text))
     self.elements = elements.createTuplePatternElementList()
     self.rightParen = rightParen
+    assert([")"].contains(self.rightParen.text))
   }
   
   func buildTuplePattern(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
@@ -11850,6 +12129,7 @@ public struct WildcardPattern: PatternBuildable {
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil
   ) {
     self.wildcard = wildcard
+    assert(["_"].contains(self.wildcard.text))
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
   }
   
@@ -11903,8 +12183,10 @@ public struct TuplePatternElement: SyntaxBuildable {
   ) {
     self.labelName = labelName
     self.labelColon = labelColon
+    assert(labelColon == nil || [":"].contains(self.labelColon!.text))
     self.pattern = pattern.createPatternBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildTuplePatternElement(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
@@ -12034,6 +12316,7 @@ public struct ValueBindingPattern: PatternBuildable {
     valuePattern: ExpressibleAsPatternBuildable
   ) {
     self.letOrVarKeyword = letOrVarKeyword
+    assert(["let", "var"].contains(self.letOrVarKeyword.text))
     self.valuePattern = valuePattern.createPatternBuildable()
   }
   
@@ -12126,6 +12409,7 @@ public struct AvailabilityArgument: SyntaxBuildable {
   ) {
     self.entry = entry.createSyntaxBuildable()
     self.trailingComma = trailingComma
+    assert(trailingComma == nil || [","].contains(self.trailingComma!.text))
   }
   
   func buildAvailabilityArgument(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
@@ -12179,6 +12463,7 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable {
   ) {
     self.label = label
     self.colon = colon
+    assert([":"].contains(self.colon.text))
     self.value = value.createSyntaxBuildable()
   }
   
@@ -12284,6 +12569,7 @@ public struct VersionTuple: SyntaxBuildable {
   ) {
     self.majorMinor = majorMinor.createSyntaxBuildable()
     self.patchPeriod = patchPeriod
+    assert(patchPeriod == nil || ["."].contains(self.patchPeriod!.text))
     self.patchVersion = patchVersion
   }
   

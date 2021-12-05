@@ -33,6 +33,9 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
         'BinaryOperatorExpr',
         'DeclModifier',
         'IdentifierExpr'
+    ],
+    'TypeBuildable': [
+        'ReturnClause'
     ]
 }
 

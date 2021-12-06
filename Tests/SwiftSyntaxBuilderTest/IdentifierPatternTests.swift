@@ -8,6 +8,7 @@ final class IdentifierPatternTests: XCTestCase {
 
     let testCases: [UInt: (ExpressibleAsIdentifierPattern, String)] = [
       #line: (IdentifierPattern(identifier: .identifier("Test")), "␣Test"),
+      #line: (IdentifierPattern(stringLiteral: "Test"), "␣Test"),
       #line: (IdentifierPattern("Test"), "␣Test"),
       #line: ("Test", "␣Test")
     ]

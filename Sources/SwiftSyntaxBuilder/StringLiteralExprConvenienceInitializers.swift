@@ -14,12 +14,18 @@ import SwiftSyntax
 
 extension StringLiteralExpr {
   public init(_ value: String, openQuote: TokenSyntax = .stringQuote, closeQuote: TokenSyntax = .stringQuote) {
-    let content = SyntaxFactory.makeToken(.stringSegment(value), presence: .present)
+    let content = SyntaxFactory.makeToken(TokenKind.stringSegment(value), presence: .present)
     let segment = StringSegment(content: content)
     let segments = StringLiteralSegments([segment])
 
     self.init(openQuote: openQuote,
               segments: segments,
               closeQuote: closeQuote)
+  }
+}
+
+extension StringLiteralExpr: ExpressibleByStringLiteral {
+  public init(stringLiteral value: String) {
+    self.init(value)
   }
 }

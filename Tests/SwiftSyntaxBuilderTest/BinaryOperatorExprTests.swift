@@ -15,10 +15,10 @@ final class BinaryOperatorExprTests: XCTestCase {
       let (builder, expected) = testCase
       let binaryOperatorExpr = builder.createBinaryOperatorExpr()
       let syntax = binaryOperatorExpr.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
-
+      
       var text = ""
       syntax.write(to: &text)
-
+      
       XCTAssertEqual(text, expected, line: line)
     }
   }

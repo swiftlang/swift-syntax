@@ -15,3 +15,9 @@ extension TypeAnnotation {
     self.init(type: SimpleTypeIdentifier(type))
   }
 }
+
+extension TypeAnnotation: ExpressibleByStringLiteral {
+  public init(stringLiteral value: String) {
+    self.init(value)
+  }
+}

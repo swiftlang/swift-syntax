@@ -8,7 +8,6 @@ final class IdentifierExprTests: XCTestCase {
 
     let testCases: [UInt: (ExpressibleAsIdentifierExpr, String)] = [
       #line: (IdentifierExpr(identifier: .identifier("Test")), "␣Test"),
-      #line: (IdentifierExpr(stringLiteral: "Test"), "␣Test"),
       #line: (IdentifierExpr("Test"), "␣Test"),
       #line: ("Test", "␣Test")
     ]

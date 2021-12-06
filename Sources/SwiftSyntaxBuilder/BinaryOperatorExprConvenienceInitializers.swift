@@ -14,6 +14,6 @@ import SwiftSyntax
 
 extension BinaryOperatorExpr {
   public init(_ text: String) {
-    self.init(operatorToken: TokenSyntax.spacedBinaryOperator(text))
+    self.init(operatorToken: .spacedBinaryOperator(text))
   }
 }

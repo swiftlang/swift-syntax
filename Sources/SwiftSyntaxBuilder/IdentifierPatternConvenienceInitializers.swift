@@ -15,9 +15,3 @@ extension IdentifierPattern {
     self.init(identifier: .identifier(identifier))
   }
 }
-
-extension IdentifierPattern: ExpressibleByStringLiteral {
-  public init(stringLiteral value: String) {
-    self.init(value)
-  }
-}

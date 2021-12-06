@@ -9,7 +9,6 @@ final class TypeAnnotationTests: XCTestCase {
     let testCases: [UInt: (ExpressibleAsTypeAnnotation, String)] = [
       #line: (TypeAnnotation(type: "Test"), "␣: Test"),
       #line: (TypeAnnotation(type: SimpleTypeIdentifier("Test")), "␣: Test"),
-      #line: (TypeAnnotation(stringLiteral: "Test"), "␣: Test"),
       #line: (TypeAnnotation("Test"), "␣: Test"),
       #line: (SimpleTypeIdentifier("Test"), "␣: Test"),
       #line: ("Test", "␣: Test")

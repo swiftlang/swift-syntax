@@ -14,13 +14,7 @@ import SwiftSyntax
 
 extension SimpleTypeIdentifier {
   public init(_ name: String) {
-    self.init(name: SyntaxFactory.makeIdentifier(name),
+    self.init(name: .identifier(name),
               genericArgumentClause: nil)
-  }
-}
-
-extension SimpleTypeIdentifier: ExpressibleByStringLiteral {
-  public init(stringLiteral value: String) {
-    self.init(value)
   }
 }

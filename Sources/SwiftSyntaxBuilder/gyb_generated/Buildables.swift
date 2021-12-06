@@ -435,7 +435,7 @@ public struct CodeBlockItemList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsCodeBlockItemList {
+public protocol ExpressibleAsCodeBlockItemList: ExpressibleAsCodeBlock {
   func createCodeBlockItemList() -> CodeBlockItemList
 }
 
@@ -1237,7 +1237,7 @@ public struct SequenceExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsSequenceExpr {
+public protocol ExpressibleAsSequenceExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable, ExpressibleAsTupleExprElement {
   func createSequenceExpr() -> SequenceExpr
 }
 
@@ -3005,7 +3005,7 @@ public struct FunctionCallExpr: ExprBuildable {
   }
 }
 
-public protocol ExpressibleAsFunctionCallExpr {
+public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable {
   func createFunctionCallExpr() -> FunctionCallExpr
 }
 
@@ -6189,7 +6189,7 @@ public struct AccessorList: SyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsAccessorList {
+public protocol ExpressibleAsAccessorList: ExpressibleAsAccessorBlock {
   func createAccessorList() -> AccessorList
 }
 
@@ -12604,7 +12604,7 @@ extension VersionTuple: ExpressibleAsVersionTuple {
   }
 }
 
-extension TokenSyntax: ExpressibleAsIdentifierList, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList, ExpressibleAsBinaryOperatorExpr {
+extension TokenSyntax: ExpressibleAsIdentifierList, ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList, ExpressibleAsBinaryOperatorExpr, ExpressibleAsDeclModifier {
 }
 
 // MARK: - Syntax Collection buildable expressible as conformances
@@ -12857,9 +12857,15 @@ extension ExpressibleAsPrecedenceGroupNameElement {
 
 // MARK: - Syntax buildable expressible as conformances
 
-extension ExpressibleAsStmtBuildable {
+extension ExpressibleAsFunctionCallExpr {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleAsCodeBlockItemList {
+  public func createCodeBlock() -> CodeBlock {
+    CodeBlock(statements: self)
   }
 }
 
@@ -12869,21 +12875,15 @@ extension ExpressibleAsMemberDeclList {
   }
 }
 
-extension TokenSyntax {
-  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
-    BinaryOperatorExpr(operatorToken: self)
-  }
-}
-
-extension ExpressibleAsDeclBuildable {
+extension ExpressibleAsSequenceExpr {
   public func createCodeBlockItem() -> CodeBlockItem {
     CodeBlockItem(item: self)
   }
 }
 
-extension ExpressibleAsDeclBuildable {
-  public func createMemberDeclListItem() -> MemberDeclListItem {
-    MemberDeclListItem(decl: self)
+extension ExpressibleAsSequenceExpr {
+  public func createTupleExprElement() -> TupleExprElement {
+    TupleExprElement(expression: self)
   }
 }
 
@@ -12902,6 +12902,42 @@ extension ExpressibleAsSimpleTypeIdentifier {
 extension ExpressibleAsExprList {
   public func createConditionElement() -> ConditionElement {
     ConditionElement(condition: self)
+  }
+}
+
+extension ExpressibleAsStmtBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleAsDeclBuildable {
+  public func createCodeBlockItem() -> CodeBlockItem {
+    CodeBlockItem(item: self)
+  }
+}
+
+extension ExpressibleAsDeclBuildable {
+  public func createMemberDeclListItem() -> MemberDeclListItem {
+    MemberDeclListItem(decl: self)
+  }
+}
+
+extension ExpressibleAsAccessorList {
+  public func createAccessorBlock() -> AccessorBlock {
+    AccessorBlock(accessors: self)
+  }
+}
+
+extension TokenSyntax {
+  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
+    BinaryOperatorExpr(operatorToken: self)
+  }
+}
+
+extension TokenSyntax {
+  public func createDeclModifier() -> DeclModifier {
+    DeclModifier(name: self)
   }
 }
 

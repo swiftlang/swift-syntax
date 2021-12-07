@@ -90,6 +90,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case stringSegment = 104
   case expressionSegment = 105
   case stringLiteralExpr = 48
+  case regexLiteralExpr = 253
   case keyPathExpr = 65
   case keyPathBaseExpr = 66
   case objcNamePiece = 106

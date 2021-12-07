@@ -318,6 +318,16 @@ extension StringLiteralExpr {
   }
 }
 
+extension RegexLiteralExpr {
+  public init(
+    regex: String
+  ) {
+    self.init(
+      regex: TokenSyntax.regexLiteral(regex)
+    )
+  }
+}
+
 extension ObjcNamePiece {
   public init(
     name: String,

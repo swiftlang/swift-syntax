@@ -4615,6 +4615,79 @@ extension StringLiteralExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - RegexLiteralExprSyntax
+
+public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case regex
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `RegexLiteralExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .regexLiteralExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `RegexLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .regexLiteralExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var regex: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.regex,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRegex(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `regex` replaced.
+  /// - param newChild: The new `regex` to replace the node's
+  ///                   current `regex`, if present.
+  public func withRegex(
+    _ newChild: TokenSyntax?) -> RegexLiteralExprSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.regexLiteral(""))
+    let newData = data.replacingChild(raw, at: Cursor.regex)
+    return RegexLiteralExprSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 1)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension RegexLiteralExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "regex": Syntax(regex).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - KeyPathExprSyntax
 
 public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

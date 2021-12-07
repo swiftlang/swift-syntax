@@ -2673,6 +2673,44 @@ extension StringLiteralExprSyntax {
   }
 }
 
+public struct RegexLiteralExprSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 1)
+
+  internal init() {}
+
+  public mutating func useRegex(_ node: TokenSyntax) {
+    let idx = RegexLiteralExprSyntax.Cursor.regex.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.regexLiteral(""))
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .regexLiteralExpr,
+      layout: layout, presence: .present))
+  }
+}
+
+extension RegexLiteralExprSyntax {
+  /// Creates a `RegexLiteralExprSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `RegexLiteralExprSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `RegexLiteralExprSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout RegexLiteralExprSyntaxBuilder) -> Void) {
+    var builder = RegexLiteralExprSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct KeyPathExprSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 3)

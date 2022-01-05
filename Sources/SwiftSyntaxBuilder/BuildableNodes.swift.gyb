@@ -1,0 +1,134 @@
+%{
+  from gyb_syntax_support import SYNTAX_NODES
+  from gyb_helpers import SyntaxBuildableNode
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From BuildableNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+% for node in [SyntaxBuildableNode(syntax_node) for syntax_node in SYNTAX_NODES if syntax_node.is_buildable()]:
+%   type = node.type()
+%   base_type = node.base_type()
+%   if node.documentation():
+/// ${node.documentation()}
+%   end
+public struct ${type.buildable()}: ${base_type.buildable()}, ${type.expressible_as()} {
+%   children = node.children()
+%   for child in children:
+  let ${child.name()}: ${child.type().buildable()}
+%   end
+
+  /// Creates a `${type.buildable()}` using the provided parameters.
+  /// - Parameters:
+%   for child in children:
+  ///   - ${child.name()}: ${child.documentation()}
+%   end
+  public init(
+    ${',\n    '.join(['%s: %s%s' % (
+      child.name(),
+      child.type().expressible_as(),
+      child.type().default_initialization()
+    ) for child in children])}
+  ) {
+%   for child in children:
+%     assert_stmt = child.generate_assert_stmt_text_choices(child.name())
+    self.${child.name()} = ${child.type().generate_expr_convert_param_type_to_storage_type(child.name())}
+%     if assert_stmt:
+    ${assert_stmt}
+%     end
+%   end
+  }
+
+%{
+    create_convenience_initializer = False # Only create the convenience initializer if at least one parameter is different than in the initializer defined above
+    # Keep track of init parameter and result builder parameters in different lists to make sure result builder params occur at the end, so they can use trailing closure syntax
+    convenience_init_normal_parameters = []
+    convenience_init_result_builder_parameters = []
+    delegated_init_args = []
+    for child in node.children():
+      produce_expr = None # The expression that is used to call the default initializer defined above
+      if child.type().is_syntax_collection(): # Allow initializing syntax collections with result builders
+        create_convenience_initializer = True
+        default_value = ' = { nil }' if child.type().is_optional else ' = { %s([]) }' % (child.type().buildable())
+        convenience_init_result_builder_parameters.append('@%s %sBuilder: () -> %s%s' % (child.type().non_optional().result_builder(), child.name(), child.type().expressible_as(), default_value))
+        produce_expr = '%sBuilder()' % child.name()
+      elif child.type().token() and not child.type().token().text: # Allow initializing identifier or a token without default text with String value
+        create_convenience_initializer = True
+        if child.type().is_optional:
+          param_type = 'String?'
+          produce_expr = '%s.map(TokenSyntax.%s)' % (child.name(), child.type().token().swift_kind())
+        else:
+          param_type = 'String'
+          produce_expr = 'TokenSyntax.%s(%s)' % (child.type().token().swift_kind(), child.name())
+        convenience_init_normal_parameters.append('%s: %s' % (child.name(), param_type))
+      else:
+        convenience_init_normal_parameters.append('%s: %s%s' % (child.name(), child.type().expressible_as(), child.type().default_initialization()))
+        produce_expr = child.name()
+      delegated_init_args.append('%s: %s' % (child.name(), produce_expr))
+}%
+%   if create_convenience_initializer:
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    ${',\n    '.join(convenience_init_normal_parameters + convenience_init_result_builder_parameters)}
+  ) {
+    self.init(
+      ${',\n      '.join(delegated_init_args)}
+    )
+  }
+%   end
+
+  func build${type.base_name()}(format: Format, leadingTrivia: Trivia? = nil) -> ${type.syntax()} {
+    let result = SyntaxFactory.make${type.base_name()}(
+      ${',\n      '.join(['%s: %s' % (child.name(), child.generate_expr_build_syntax_node(child.name(), 'format')) for child in children])}
+    )
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  /// Conformance to `${base_type.buildable()}`.
+  public func build${base_type.base_name()}(format: Format, leadingTrivia: Trivia? = nil) -> ${base_type.syntax()} {
+    let result = build${type.base_name()}(format: format, leadingTrivia: leadingTrivia)
+    return ${base_type.syntax()}(result)
+  }
+
+  /// Conformance to `${type.expressible_as()}`.
+  public func create${type.buildable_base_name()}() -> ${type.buildable()} {
+    return self
+  }
+
+  /// `${type.buildable()}` might conform to `${base_type.expressible_as()}` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `create${base_type.buildable_base_name()}`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func create${base_type.buildable_base_name()}() -> ${base_type.buildable()} {
+    return self
+  }
+
+% if base_type.base_name() != 'Syntax':
+  /// `${type.buildable()}` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+% end
+}
+% end

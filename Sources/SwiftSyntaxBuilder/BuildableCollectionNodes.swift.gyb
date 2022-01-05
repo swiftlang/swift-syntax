@@ -1,0 +1,84 @@
+%{
+  from gyb_syntax_support import SYNTAX_NODES
+  from gyb_helpers import flat_documentation, SyntaxBuildableChild, SyntaxBuildableNode
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From BuildableCollectionNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+% for node in [SyntaxBuildableNode(syntax_node) for syntax_node in SYNTAX_NODES if syntax_node.is_syntax_collection()]:
+%   type = node.type()
+%   element_type = node.collection_element_type()
+%   if node.documentation():
+/// ${node.documentation()}
+%   end
+public struct ${type.buildable()}: ExpressibleByArrayLiteral, SyntaxBuildable, ${type.expressible_as()} {
+  let elements: [${element_type.buildable()}]
+
+  /// Creates a `${type.buildable()}` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `${element_type.expressible_as()}`
+  public init(_ elements: [${element_type.expressible_as()}]) {
+%   if element_type.is_token():
+    self.elements = elements
+%   else:
+    self.elements = elements.map { $0.create${element_type.buildable_base_name()}() }
+%   end
+  }
+
+  public init(arrayLiteral elements: ${element_type.expressible_as()}...) {
+    self.init(elements)
+  }
+
+  public func build${type.base_name()}(format: Format, leadingTrivia: Trivia? = nil) -> ${type.syntax()} {
+%   if element_type.is_token():
+    let result = SyntaxFactory.make${type.base_name()}(elements)
+%   else:
+%     if node.elements_separated_by_newline():
+%       element_leading_trivia = 'Trivia.newlines(1) + format._makeIndent()'
+%     else:
+%       element_leading_trivia = 'nil'
+%     end
+    let result = SyntaxFactory.make${type.base_name()}(elements.map {
+      $0.build${element_type.base_name()}(format: format, leadingTrivia: ${element_leading_trivia})
+    })
+%   end
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    return Syntax(build${type.base_name()}(format: format, leadingTrivia: leadingTrivia))
+  }
+
+  /// Conformance to `${type.expressible_as()}`.
+  public func create${type.buildable_base_name()}() -> ${type.buildable()} {
+    return self
+  }
+
+  /// `${type.buildable()}` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+
+% end

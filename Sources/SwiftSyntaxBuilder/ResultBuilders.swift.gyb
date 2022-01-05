@@ -1,7 +1,6 @@
 %{
-  from gyb_syntax_support import *
-  from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS, lowercase_first_word, syntax_buildable_child_type
-  NODE_MAP = create_node_map()
+  from gyb_syntax_support import SYNTAX_NODES
+  from gyb_helpers import SyntaxBuildableNode
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -21,81 +20,75 @@
 
 import SwiftSyntax
 
-% for node in SYNTAX_NODES:
-%   if node.is_syntax_collection():
+% for node in [SyntaxBuildableNode(syntax_node) for syntax_node in SYNTAX_NODES if syntax_node.is_syntax_collection()]:
+%   type = node.type()
+%   element_type = node.collection_element_type()
 @resultBuilder
-public struct ${node.syntax_kind}Builder {
-%     element_type = syntax_buildable_child_type(node.collection_element_type, node.collection_element, node.is_token())
-%     component_type = element_type if node.is_token() else 'ExpressibleAs' + element_type
+public struct ${type.result_builder()} {
 
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ${component_type}
+  public typealias Expression = ${element_type.expressible_as()}
 
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
-  public typealias Component = [${component_type}]
+  public typealias Component = [${element_type.expressible_as()}]
 
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ${node.syntax_kind}
+  public typealias FinalResult = ${type.buildable()}
 
   /// Required by every result builder to build combined results from
   /// statement blocks.
   public static func buildBlock(_ components: Component...) -> Component {
-    components.flatMap { $0 }
+    return components.flatMap { $0 }
   }
 
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
   public static func buildExpression(_ expression: Expression) -> Component {
-    [expression]
+    return [expression]
   }
 
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
-    component ?? []
+    return component ?? []
   }
 
   /// With buildEither(second:), enables support for 'if-else' and 'switch'
   /// statements by folding conditional results into a single result.
   public static func buildEither(first component: Component) -> Component {
-    component
+    return component
   }
 
   /// With buildEither(first:), enables support for 'if-else' and 'switch'
   /// statements by folding conditional results into a single result.
   public static func buildEither(second component: Component) -> Component {
-    component
+    return component
   }
 
   /// Enables support for 'for..in' loops by combining the
   /// results of all iterations into a single result.
   public static func buildArray(_ components: [Component]) -> Component {
-    components.flatMap { $0 }
+    return components.flatMap { $0 }
   }
 
   /// If declared, this will be called on the partial result of an 'if
   /// #available' block to allow the result builder to erase type
   /// information.
   public static func buildLimitedAvailability(_ component: Component) -> Component {
-    component
+    return component
   }
 
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-%     if node.is_token():
-    .init(component)
-%     else:
-    .init(component.map { $0.create${element_type}() })
-%     end
+%   if element_type.is_token():
+    return .init(component)
+%   else:
+    return .init(component.map { $0.create${element_type.buildable()}() })
+%   end
   }
 }
 
-extension ${node.syntax_kind} {
-  public static let empty: ${node.syntax_kind} = ${node.syntax_kind}([])
-}
-
-%   end
 % end

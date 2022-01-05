@@ -1,0 +1,58 @@
+%{
+  from gyb_syntax_support import SYNTAX_NODES
+  from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
+  from gyb_helpers import SyntaxBuildableType, SyntaxBuildableNode, conformance_clause
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From ExpressibleAsProtocols.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+% # See BuildabeBaseProtocols.swift.gyb why 'SyntaxCollection' is excluded here.
+% expressible_as_types = [SyntaxBuildableType(kind) for kind in SYNTAX_BASE_KINDS if kind != 'SyntaxCollection'] + \
+%                        [SyntaxBuildableNode(node).type() for node in SYNTAX_NODES if node.is_buildable() or node.is_syntax_collection()]
+% for type in expressible_as_types:
+%   base_type = type.base_type()
+%   conformances = type.generated_expressible_as_conformances()
+%   implied_conformances = type.implied_expressible_as_conformances() # Exclude conformances that are already implied because otherwise Swift throws a warning.
+public protocol ${type.expressible_as()}${conformance_clause([conforming_to.expressible_as() for conforming_to in conformances if conforming_to not in implied_conformances])} {
+  func create${type.buildable_base_name()}() -> ${type.buildable()}
+}
+
+%   if conformances:
+public extension ${type.expressible_as()} {
+%     for conformance in type.element_in_collections():
+  /// Conformance to `${conformance.expressible_as()}`.
+  func create${conformance.buildable_base_name()}() -> ${conformance.buildable()} {
+    return ${conformance.buildable()}([self])
+  }
+%     end
+%     for conformance in type.convertible_to_types():
+%       param = SyntaxBuildableNode(conformance).single_non_defaulted_child()
+  /// Conformance to `${conformance.expressible_as()}`.
+  func create${conformance.buildable_base_name()}() -> ${conformance.buildable()} {
+    return ${conformance.buildable()}(${param.name()}: self)
+  }
+%     end
+%   if base_type and base_type.base_name() != 'SyntaxCollection':
+  func create${base_type.buildable_base_name()}() -> ${base_type.buildable()} {
+    return self.create${type.buildable_base_name()}()
+  }
+%   end
+}
+
+%   end
+% end

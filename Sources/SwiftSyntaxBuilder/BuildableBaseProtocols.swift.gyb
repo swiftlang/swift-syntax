@@ -1,0 +1,85 @@
+%{
+  from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
+  from gyb_helpers import SyntaxBuildableType, conformance_clause
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From BuildableBaseProtocols.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+%{
+# `SyntaxCollectionBuildable` and `ExpressibleAsSyntaxCollectionBuildable` don't exist because of the following reason:
+# Through `ExpressibleAs*` conformances, a syntax kind might conform to `ExpressibleAsSyntaxCollectionBuildable` via different paths, thus the implementation of `createSyntaxCollectionBuildable` is ambiguous.
+# We have the same issue for `ExpressibleAsSyntaxBuildable`, but in that case the solution is simple: Create a custom implementaiton of `createSyntaxBuildable` that doesn't perform any of the conversions via the `ExpressibleAs` protocols.
+# For `SyntaxCollection` we would need to perform at least one conversion to end up with a type that we can put inside a `SyntaxCollection`, so there is no single canonical implementation.
+# Since the types don't provide any value, we don't generate them for now.
+}%
+% for kind in [syntax_base_kind for syntax_base_kind in SYNTAX_BASE_KINDS if syntax_base_kind != 'SyntaxCollection']:
+%   type = SyntaxBuildableType(kind)
+%   buildable_conformances = [type.expressible_as(), type.list_buildable()] # Types that the `*Buildable` conforms to
+%   list_conformances = [] # Types that the `*ListBuildable` conforms to
+%   if kind != 'Syntax':
+%     syntax_type = SyntaxBuildableType('Syntax')
+%     list_conformances.append(syntax_type.list_buildable())
+%     buildable_conformances.append(syntax_type.buildable())
+%   end
+
+public protocol ${type.list_buildable()}${conformance_clause(list_conformances)} {
+  /// Builds list of `${type.syntax()}`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `${type.syntax()}`.
+  func build${type.base_name()}List(format: Format, leadingTrivia: Trivia?) -> [${type.syntax()}]
+}
+
+public protocol ${type.buildable()}${conformance_clause(buildable_conformances)} {
+  /// Builds a `${type.syntax()}`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `${type.syntax()}`.
+  func build${type.base_name()}(format: Format, leadingTrivia: Trivia?) -> ${type.syntax()}
+}
+
+public extension ${type.buildable()} {
+  /// Satisfies conformance to `${type.expressible_as()}`.
+  func create${type.buildable_base_name()}() -> ${type.buildable()} {
+    return self
+  }
+
+  /// Builds list of `${type.syntax()}`s.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A list of `${type.syntax()}`.
+  ///
+  /// Satisfies conformance to `${type.list_buildable()}`.
+  func build${type.base_name()}List(format: Format, leadingTrivia: Trivia? = nil) -> [${type.syntax()}] {
+    return [build${type.base_name()}(format: format, leadingTrivia: leadingTrivia)]
+  }
+
+% if kind != 'Syntax':
+  /// Builds a `${type.syntax()}`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Replaces the the last leading trivia if not nil.
+  /// - Returns: A new `Syntax` with the builded `${type.syntax()}`.
+  ///
+  /// Satisfies conformance to `SyntaxBuildable`.
+  func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    return Syntax(build${type.base_name()}(format: format, leadingTrivia: leadingTrivia))
+  }
+% end
+}
+
+% end

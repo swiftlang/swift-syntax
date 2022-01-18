@@ -12,50 +12,60 @@
 
 extension String: ExpressibleAsSimpleTypeIdentifier {
   public func createSimpleTypeIdentifier() -> SimpleTypeIdentifier {
-    SimpleTypeIdentifier(self)
+    return SimpleTypeIdentifier(self)
   }
 }
 
 extension String: ExpressibleAsIdentifierPattern {
   public func createIdentifierPattern() -> IdentifierPattern {
-    IdentifierPattern(self)
+    return IdentifierPattern(self)
   }
 }
 
 extension String: ExpressibleAsIdentifierExpr {
   public func createIdentifierExpr() -> IdentifierExpr {
-    IdentifierExpr(self)
+    return IdentifierExpr(self)
   }
 }
 
 extension String: ExpressibleAsStringLiteralExpr {
   public func createStringLiteralExpr() -> StringLiteralExpr {
-    StringLiteralExpr(self)
+    return StringLiteralExpr(self)
   }
 }
 
 extension String: ExpressibleAsBinaryOperatorExpr {
   public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
-    BinaryOperatorExpr(self)
+    return BinaryOperatorExpr(self)
   }
 }
 
 extension String: ExpressibleAsReturnClause {
   public func createReturnClause() -> ReturnClause {
-    ReturnClause(returnType: self)
+    return ReturnClause(returnType: self)
   }
 }
 
 /// Default conformance to `ExpressibleByTypeBuildable`
 extension String {
   public func createTypeBuildable() -> TypeBuildable {
-    SimpleTypeIdentifier(self)
+    return SimpleTypeIdentifier(self)
   }
 }
 
 /// Default conformance to `ExpressibleByPatternBuildable`
 extension String {
   public func createPatternBuildable() -> PatternBuildable {
-    IdentifierPattern(self)
+    return IdentifierPattern(self)
+  }
+}
+
+/// `String` conforms to `SyntaxBuildable` and `ExprBuildable` via different paths, so we need to pick one default conversion path to create an an `ExprSyntax` (and `Syntax`) from a `String`. We choose `IdentifierExpr`.
+extension String {
+  public func createExprBuildable() -> ExprBuildable {
+    return createIdentifierExpr()
+  }
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return createIdentifierExpr()
   }
 }

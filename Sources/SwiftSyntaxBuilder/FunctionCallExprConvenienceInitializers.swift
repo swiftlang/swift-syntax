@@ -19,7 +19,7 @@ extension FunctionCallExpr {
     leftParen: TokenSyntax? = nil,
     rightParen: TokenSyntax? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
-    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList.empty },
+    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) },
     @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }
   ) {
     self.init(

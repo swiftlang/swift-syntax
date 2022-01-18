@@ -1,0 +1,50 @@
+%{
+  from gyb_helpers import SyntaxBuildableType, SyntaxBuildableNode, conformance_clause
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From TokenSyntax.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+import SwiftSyntax
+
+% token_type = SyntaxBuildableType('Token')
+% conformances = token_type.generated_expressible_as_conformances()
+
+extension TokenSyntax${conformance_clause([conforming_to.expressible_as() for conforming_to in conformances])} {
+% for conformance in token_type.element_in_collections():
+  /// Conformance to `${conformance.expressible_as()}`.
+  public func create${conformance.buildable_base_name()}() -> ${conformance.buildable()} {
+    return ${conformance.buildable()}([self])
+  }
+% end
+% for conformance in token_type.convertible_to_types():
+%   param = SyntaxBuildableNode(conformance).single_non_defaulted_child()
+  /// Conformance to `${conformance.expressible_as()}`.
+  public func create${conformance.buildable_base_name()}() -> ${conformance.buildable()} {
+    return ${conformance.buildable()}(${param.name()}: self)
+  }
+% end
+}
+
+/// `TokenSyntax` conforms to `SyntaxBuildable` and `ExprBuildable` via different paths, so we need to pick one default conversion path to create an an `ExprSyntax` (and `Syntax`) from a `String`. We choose `IdentifierExpr`.
+extension TokenSyntax {
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return createIdentifierExpr()
+  }
+
+  public func createExprBuildable() -> ExprBuildable {
+    return createIdentifierExpr()
+  }
+}

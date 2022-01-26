@@ -56,14 +56,10 @@ let package = Package(
       dependencies: ["SwiftSyntax"],
       exclude: [
         "README.md",
-        "gyb_helpers",
-        "ExpressibleAsProtocols.swift.gyb",
-        "BuildableBaseProtocols.swift.gyb",
-        "BuildableCollectionNodes.swift.gyb",
-        "BuildableNodes.swift.gyb",
+        "Buildables.swift.gyb",
+        "BuildablesConvenienceInitializers.swift.gyb",
         "ResultBuilders.swift.gyb",
         "Tokens.swift.gyb",
-        "TokenSyntax.swift.gyb",
       ]
     ),
     .target(name: "SwiftSyntaxParser", dependencies: ["SwiftSyntax"], exclude: [

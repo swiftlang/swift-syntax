@@ -28,7 +28,12 @@ let package = Package(
     .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"])
   ],
   targets: [
-    .target(name: "_CSwiftSyntax"),
+    .target(
+      name: "_CSwiftSyntax",
+      exclude: [
+        "README.md"
+      ]
+    ),
     .target(
       name: "SwiftSyntax",
       dependencies: ["_CSwiftSyntax"],

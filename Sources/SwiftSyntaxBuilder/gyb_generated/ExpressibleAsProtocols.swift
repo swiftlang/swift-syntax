@@ -82,8 +82,15 @@ public extension ExpressibleAsSyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeBuildable {
+public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause {
   func createTypeBuildable() -> TypeBuildable
+}
+
+public extension ExpressibleAsTypeBuildable {
+  /// Conformance to `ExpressibleAsReturnClause`.
+  func createReturnClause() -> ReturnClause {
+    return ReturnClause(returnType: self)
+  }
 }
 
 public protocol ExpressibleAsCodeBlockItem: ExpressibleAsCodeBlockItemList {

@@ -46,6 +46,12 @@ extension String: ExpressibleAsReturnClause {
   }
 }
 
+extension String: ExpressibleAsAccessPathComponent {
+  public func createAccessPathComponent() -> AccessPathComponent {
+    return AccessPathComponent(name: self)
+  }
+}
+
 /// Default conformance to `ExpressibleByTypeBuildable`
 extension String {
   public func createTypeBuildable() -> TypeBuildable {

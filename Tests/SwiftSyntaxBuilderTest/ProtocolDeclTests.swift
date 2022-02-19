@@ -11,9 +11,10 @@ final class ProtocolDeclTests: XCTestCase {
     })
     let functionSignature = FunctionSignature(input: input, output: returnType)
 
-    // FIXME: We need to add the `modifiersBuilder` with a non-empty value, otherwise will the builder omit newline.
-    let functionDecl = FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, modifiersBuilder: { TokenSyntax.public })
-    let buildable = ProtocolDecl(modifiers: TokenSyntax.public, identifier: .identifier("DeclListBuildable"), members: functionDecl)
+    let buildable = ProtocolDecl(identifier: "DeclListBuildable", attributesBuilder: { TokenSyntax.public }, membersBuilder: {
+      // FIXME: We need to add the `modifiersBuilder` with a non-empty value, otherwise will the builder omit newline.
+      FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, body: nil, modifiersBuilder: { TokenSyntax.public })
+    })
 
     let syntax = buildable.buildSyntax(format: Format())
 

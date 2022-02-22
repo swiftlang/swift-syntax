@@ -1,6 +1,4 @@
-//// Automatically Generated From NodeDeclarationHash.swift.gyb.
-//// Do Not Edit Directly!
-//===--------------------- NodeDeclarationHash.swift ----------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -12,11 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_implementationOnly import _InternalSwiftSyntaxParser
-
-extension SyntaxParser {
-  static func verifyNodeDeclarationHash() -> Bool {
-    return String(cString: swiftparse_syntax_structure_versioning_identifier()!) ==
-      "a7b223c2617516f8af63de3398a7f7d7c958f659"
+extension SourceFile {
+  /// A convenience initializer that allows passing in statements using a result builder instead of having to wrap them in a `CodeBlockItemList`.
+  public init(
+    @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList
+  ) {
+    self.init(
+      statements: statementsBuilder(),
+      eofToken: .eof
+    )
   }
 }

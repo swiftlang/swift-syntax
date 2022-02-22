@@ -8,6 +8,7 @@ final class ReturnClauseTests: XCTestCase {
 
     let testCases: [UInt: (ExpressibleAsReturnClause, String)] = [
       #line: (ReturnClause(returnType: "Int"), "␣-> Int"),
+      #line: (ArrayType(elementType: "Int"), "␣-> [Int]"),
       #line: ("Int", "␣-> Int"),
     ]
 

@@ -6,7 +6,7 @@ import Foundation
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
 let swiftSyntaxSwiftSettings: [SwiftSetting] 
-if case _? = ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] {
+if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
   let groupFile = URL(fileURLWithPath: #file)
     .deletingLastPathComponent()
     .appendingPathComponent("utils")

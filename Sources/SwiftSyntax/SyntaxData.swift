@@ -356,10 +356,18 @@ struct SyntaxData {
   }
 
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> SyntaxData {
-    return replacingSelf(raw.withLeadingTrivia(leadingTrivia))
+    if let raw = raw.withLeadingTrivia(leadingTrivia) {
+      return replacingSelf(raw)
+    } else {
+      return self
+    }
   }
 
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> SyntaxData {
-    return replacingSelf(raw.withTrailingTrivia(trailingTrivia))
+    if let raw = raw.withTrailingTrivia(trailingTrivia) {
+      return replacingSelf(raw)
+    } else {
+      return self
+    }
   }
 }

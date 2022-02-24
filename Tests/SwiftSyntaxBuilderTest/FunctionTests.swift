@@ -52,7 +52,7 @@ final class FunctionTests: XCTestCase {
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     XCTAssertEqual(syntax.description, """
-      func fibonacci(_ n: Int)-> Int{
+      ␣func fibonacci(_ n: Int)-> Int{
           if n <= 1{
               return n
           }

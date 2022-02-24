@@ -12,8 +12,7 @@ final class ProtocolDeclTests: XCTestCase {
     let functionSignature = FunctionSignature(input: input, output: returnType)
 
     let buildable = ProtocolDecl(identifier: "DeclListBuildable", attributesBuilder: { TokenSyntax.public }, membersBuilder: {
-      // FIXME: We need to add the `modifiersBuilder` with a non-empty value, otherwise will the builder omit newline.
-      FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, body: nil, modifiersBuilder: { TokenSyntax.public })
+      FunctionDecl(identifier: .identifier("buildDeclList"), signature: functionSignature, body: nil, modifiersBuilder: { })
     })
 
     let syntax = buildable.buildSyntax(format: Format())
@@ -23,7 +22,7 @@ final class ProtocolDeclTests: XCTestCase {
 
     XCTAssertEqual(text, """
     public protocol DeclListBuildable{
-        public func buildDeclList(format: Format, leadingTrivia: Trivia?)-> [DeclSyntax]
+        func buildDeclList(format: Format, leadingTrivia: Trivia?)-> [DeclSyntax]
     }
     """)
   }

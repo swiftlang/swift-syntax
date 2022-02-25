@@ -1113,7 +1113,11 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     }
   }
 
-  func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax {
+  /// Replaces the leading trivia of the first token in this syntax tree by `leadingTrivia`.
+  /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
+  /// - Parameters:
+  ///   - leadingTrivia: The trivia to attach.
+  func withLeadingTrivia(_ leadingTrivia: Trivia) -> RawSyntax? {
     if isToken {
       return RawSyntax.createAndCalcLength(
         kind: formTokenKind()!,
@@ -1123,16 +1127,20 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     } else {
       var layout = formLayoutArray()
       for (index, raw) in layout.enumerated() {
-        if let raw = raw {
-          layout[index] = raw.withLeadingTrivia(leadingTrivia)
+        if let raw = raw, let newRaw = raw.withLeadingTrivia(leadingTrivia) {
+          layout[index] = newRaw
           return replacingLayout(layout)
         }
       }
-      return self
+      return nil
     }
   }
 
-  func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax {
+  /// Replaces the trailing trivia of the first token in this syntax tree by `trailingTrivia`.
+  /// If the syntax tree did not contain a token and thus no trivia could be attached to it, `nil` is returned.
+  /// - Parameters:
+  ///   - trailingTrivia: The trivia to attach.
+  func withTrailingTrivia(_ trailingTrivia: Trivia) -> RawSyntax? {
     if isToken {
       return RawSyntax.createAndCalcLength(
         kind: formTokenKind()!,
@@ -1142,12 +1150,12 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     } else {
       var layout = formLayoutArray()
       for (index, raw) in layout.enumerated().reversed() {
-        if let raw = raw {
-          layout[index] = raw.withTrailingTrivia(trailingTrivia)
+        if let raw = raw, let newRaw = raw.withTrailingTrivia(trailingTrivia) {
+          layout[index] = newRaw
           return replacingLayout(layout)
         }
       }
-      return self
+      return nil
     }
   }
 

@@ -3,21 +3,23 @@
 import PackageDescription
 import Foundation
 
-var swiftSyntaxUnsafeSwiftFlags: [String] = []
-
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
+let swiftSyntaxSwiftSettings: [SwiftSetting] 
 if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
   let groupFile = URL(fileURLWithPath: #file)
     .deletingLastPathComponent()
     .appendingPathComponent("utils")
     .appendingPathComponent("group.json")
-
-  swiftSyntaxUnsafeSwiftFlags += ["-Xfrontend", "-group-info-path",
-                                "-Xfrontend", groupFile.path]
-  // Enforcing exclusivity increases compile time of release builds by 2 minutes.
-  // Disable it when we're in a controlled CI environment.
-  swiftSyntaxUnsafeSwiftFlags += ["-enforce-exclusivity=unchecked"]
+  swiftSyntaxSwiftSettings = [.unsafeFlags([
+    "-Xfrontend", "-group-info-path", 
+    "-Xfrontend", groupFile.path, 
+    // Enforcing exclusivity increases compile time of release builds by 2 minutes.
+    // Disable it when we're in a controlled CI environment.
+    "-enforce-exclusivity=unchecked",
+  ])]
+} else {
+    swiftSyntaxSwiftSettings = []
 }
 
 let package = Package(
@@ -54,7 +56,7 @@ let package = Package(
         "SyntaxNodes.swift.gyb.template",
         "SyntaxKind.swift.gyb",
       ],
-      swiftSettings: [.unsafeFlags(swiftSyntaxUnsafeSwiftFlags)]
+      swiftSettings: swiftSyntaxSwiftSettings
     ),
     .target(
       name: "SwiftSyntaxBuilder",

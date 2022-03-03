@@ -11158,6 +11158,96 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
   }
 
 }
+public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType {
+  let attributes: AttributeList?
+  let name: TokenSyntax
+  let colon: TokenSyntax?
+  let inheritedType: TypeBuildable?
+  let initializer: TypeInitializerClause?
+  let trailingComma: TokenSyntax?
+
+  /// Creates a `PrimaryAssociatedType` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - name: 
+  ///   - colon: 
+  ///   - inheritedType: 
+  ///   - initializer: 
+  ///   - trailingComma: 
+  public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    name: TokenSyntax,
+    colon: TokenSyntax? = nil,
+    inheritedType: ExpressibleAsTypeBuildable? = nil,
+    initializer: ExpressibleAsTypeInitializerClause? = nil,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.attributes = attributes?.createAttributeList()
+    self.name = name
+    self.colon = colon
+    assert(colon == nil || colon!.text == ":")
+    self.inheritedType = inheritedType?.createTypeBuildable()
+    self.initializer = initializer?.createTypeInitializerClause()
+    self.trailingComma = trailingComma
+    assert(trailingComma == nil || trailingComma!.text == ",")
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    name: String,
+    colon: TokenSyntax? = nil,
+    inheritedType: ExpressibleAsTypeBuildable? = nil,
+    initializer: ExpressibleAsTypeInitializerClause? = nil,
+    trailingComma: TokenSyntax? = nil,
+    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
+  ) {
+    self.init(
+      attributes: attributesBuilder(),
+      name: TokenSyntax.identifier(name),
+      colon: colon,
+      inheritedType: inheritedType,
+      initializer: initializer,
+      trailingComma: trailingComma
+    )
+  }
+
+  func buildPrimaryAssociatedType(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
+    let result = SyntaxFactory.makePrimaryAssociatedType(
+      attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      name: name,
+      colon: colon,
+      inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil),
+      initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
+      trailingComma: trailingComma
+    )
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrimaryAssociatedType(format: format, leadingTrivia: leadingTrivia)
+    return Syntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsPrimaryAssociatedType`.
+  public func createPrimaryAssociatedType() -> PrimaryAssociatedType {
+    return self
+  }
+
+  /// `PrimaryAssociatedType` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+
+}
 public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParameterClause {
   let leftAngleBracket: TokenSyntax
   let genericParameterList: GenericParameterList

@@ -223,6 +223,8 @@ internal enum SyntaxKind: CSyntaxKind {
   case sameTypeRequirement = 149
   case genericParameterList = 195
   case genericParameter = 150
+  case primaryAssociatedTypeList = 254
+  case primaryAssociatedType = 255
   case genericParameterClause = 151
   case conformanceRequirement = 152
   case simpleTypeIdentifier = 212
@@ -301,6 +303,7 @@ internal enum SyntaxKind: CSyntaxKind {
     case .conditionElementList: return true
     case .genericRequirementList: return true
     case .genericParameterList: return true
+    case .primaryAssociatedTypeList: return true
     case .compositionTypeElementList: return true
     case .tupleTypeElementList: return true
     case .genericArgumentList: return true

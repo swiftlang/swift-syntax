@@ -2052,6 +2052,26 @@ open class SyntaxVisitor {
   /// The function called after visiting `GenericParameterSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterSyntax) {}
+  /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `PrimaryAssociatedTypeListSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PrimaryAssociatedTypeListSyntax) {}
+  /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PrimaryAssociatedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `PrimaryAssociatedTypeSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PrimaryAssociatedTypeSyntax) {}
   /// Visiting `GenericParameterClauseSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4743,6 +4763,28 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrimaryAssociatedTypeListSyntax(_ data: SyntaxData) {
+      let node = PrimaryAssociatedTypeListSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrimaryAssociatedTypeSyntax(_ data: SyntaxData) {
+      let node = PrimaryAssociatedTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) {
       let node = GenericParameterClauseSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5605,6 +5647,10 @@ open class SyntaxVisitor {
       visitImplGenericParameterListSyntax(data)
     case .genericParameter:
       visitImplGenericParameterSyntax(data)
+    case .primaryAssociatedTypeList:
+      visitImplPrimaryAssociatedTypeListSyntax(data)
+    case .primaryAssociatedType:
+      visitImplPrimaryAssociatedTypeSyntax(data)
     case .genericParameterClause:
       visitImplGenericParameterClauseSyntax(data)
     case .conformanceRequirement:

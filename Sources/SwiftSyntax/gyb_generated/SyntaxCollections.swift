@@ -8978,6 +8978,255 @@ extension GenericParameterListSyntax: BidirectionalCollection {
   }
 }
 
+/// `PrimaryAssociatedTypeListSyntax` represents a collection of one or more
+/// `PrimaryAssociatedTypeSyntax` nodes. PrimaryAssociatedTypeListSyntax behaves
+/// as a regular Swift collection, and has accessors that return new
+/// versions of the collection with different children.
+public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `PrimaryAssociatedTypeListSyntax` if possible. Returns 
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .primaryAssociatedTypeList else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a Syntax node from the provided root and data. This assumes 
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .primaryAssociatedTypeList)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  /// The number of elements, `present` or `missing`, in this collection.
+  public var count: Int { return raw.numberOfChildren }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the underlying layout with
+  /// a different set of raw syntax nodes.
+  ///
+  /// - Parameter layout: The new list of raw syntax nodes underlying this
+  ///                     collection.
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
+  internal func replacingLayout(
+    _ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
+    let newRaw = data.raw.replacingLayout(layout)
+    let newData = data.replacingSelf(newRaw)
+    return PrimaryAssociatedTypeListSyntax(newData)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by appending the provided syntax element
+  /// to the children.
+  ///
+  /// - Parameter syntax: The element to append.
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element appended to the end.
+  public func appending(
+    _ syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.append(syntax.raw)
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by prepending the provided syntax element
+  /// to the children.
+  ///
+  /// - Parameter syntax: The element to prepend.
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element prepended to the
+  ///            beginning.
+  public func prepending(
+    _ syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeListSyntax {
+    return inserting(syntax, at: 0)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by inserting the provided syntax element
+  /// at the provided index in the children.
+  ///
+  /// - Parameters:
+  ///   - syntax: The element to insert.
+  ///   - index: The index at which to insert the element in the collection.
+  ///
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element appended to the end.
+  public func inserting(_ syntax: PrimaryAssociatedTypeSyntax,
+                        at index: Int) -> PrimaryAssociatedTypeListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    /// Make sure the index is a valid insertion index (0 to 1 past the end)
+    precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
+                 "inserting node at invalid index \(index)")
+    newLayout.insert(syntax.raw, at: index)
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the syntax element
+  /// at the provided index.
+  ///
+  /// - Parameters:
+  ///   - index: The index at which to replace the element in the collection.
+  ///   - syntax: The element to replace with.
+  ///
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new element at the provided index.
+  public func replacing(childAt index: Int,
+                        with syntax: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    /// Make sure the index is a valid index for replacing
+    precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
+                 "replacing node at invalid index \(index)")
+    newLayout[index] = syntax.raw
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by removing the syntax element at the
+  /// provided index.
+  ///
+  /// - Parameter index: The index of the element to remove from the collection.
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the element at the provided index
+  ///            removed.
+  public func removing(childAt index: Int) -> PrimaryAssociatedTypeListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.remove(at: index)
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by removing the first element.
+  ///
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the first element removed.
+  public func removingFirst() -> PrimaryAssociatedTypeListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.removeFirst()
+    return replacingLayout(newLayout)
+  }
+
+  /// Creates a new `PrimaryAssociatedTypeListSyntax` by removing the last element.
+  ///
+  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the last element removed.
+  public func removingLast() -> PrimaryAssociatedTypeListSyntax {
+    var newLayout = data.raw.formLayoutArray()
+    newLayout.removeLast()
+    return replacingLayout(newLayout)
+  }
+
+  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its leading trivia replaced
+  /// by the provided trivia.
+  public func withLeadingTrivia(_ leadingTrivia: Trivia) -> PrimaryAssociatedTypeListSyntax {
+    return PrimaryAssociatedTypeListSyntax(data.withLeadingTrivia(leadingTrivia))
+  }
+
+  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its trailing trivia replaced
+  /// by the provided trivia.
+  public func withTrailingTrivia(_ trailingTrivia: Trivia) -> PrimaryAssociatedTypeListSyntax {
+    return PrimaryAssociatedTypeListSyntax(data.withTrailingTrivia(trailingTrivia))
+  }
+
+  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its leading trivia removed.
+  public func withoutLeadingTrivia() -> PrimaryAssociatedTypeListSyntax {
+    return withLeadingTrivia([])
+  }
+
+  /// Returns a new `PrimaryAssociatedTypeListSyntax` with its trailing trivia removed.
+  public func withoutTrailingTrivia() -> PrimaryAssociatedTypeListSyntax {
+    return withTrailingTrivia([])
+  }
+
+  /// Returns a new `PrimaryAssociatedTypeListSyntax` with all trivia removed.
+  public func withoutTrivia() -> PrimaryAssociatedTypeListSyntax {
+    return withoutLeadingTrivia().withoutTrailingTrivia()
+  }
+
+  /// The leading trivia (spaces, newlines, etc.) associated with this `PrimaryAssociatedTypeListSyntax`.
+  public var leadingTrivia: Trivia? {
+    get {
+      return raw.formLeadingTrivia()
+    }
+    set {
+      self = withLeadingTrivia(newValue ?? [])
+    }
+  }
+
+  /// The trailing trivia (spaces, newlines, etc.) associated with this `PrimaryAssociatedTypeListSyntax`.
+  public var trailingTrivia: Trivia? {
+    get {
+      return raw.formTrailingTrivia()
+    }
+    set {
+      self = withTrailingTrivia(newValue ?? [])
+    }
+  }
+
+  public func _validateLayout() {
+    // Check that all children match the expected element type
+    assert(self.allSatisfy { node in
+      return Syntax(node).is(PrimaryAssociatedTypeSyntax.self)
+    })
+  }
+}
+
+/// Conformance for `PrimaryAssociatedTypeListSyntax` to the `BidirectionalCollection` protocol.
+extension PrimaryAssociatedTypeListSyntax: BidirectionalCollection {
+  public typealias Element = PrimaryAssociatedTypeSyntax
+  public typealias Index = SyntaxChildrenIndex
+
+  public struct Iterator: IteratorProtocol {
+    private let parent: Syntax
+    private var iterator: RawSyntaxChildren.Iterator
+
+    init(parent: Syntax, rawChildren: RawSyntaxChildren) {
+      self.parent = parent
+      self.iterator = rawChildren.makeIterator()
+    }
+
+    public mutating func next() -> PrimaryAssociatedTypeSyntax? {
+      guard let (raw, info) = self.iterator.next() else {
+        return nil
+      }
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let data = SyntaxData(absoluteRaw, parent: parent)
+      return PrimaryAssociatedTypeSyntax(data)
+    }
+  }
+
+  public func makeIterator() -> Iterator {
+    return Iterator(parent: Syntax(self), rawChildren: rawChildren)
+  }
+
+  private var rawChildren: RawSyntaxChildren {
+    // We know children in a syntax collection cannot be missing. So we can 
+    // use the low-level and faster RawSyntaxChildren collection instead of
+    // PresentRawSyntaxChildren.
+    return RawSyntaxChildren(self.data.absoluteRaw)
+  }
+
+  public var startIndex: SyntaxChildrenIndex {
+    return rawChildren.startIndex
+  }
+  public var endIndex: SyntaxChildrenIndex {
+    return rawChildren.endIndex
+  }
+
+  public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(after: index)
+  }
+
+  public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
+    return rawChildren.index(before: index)
+  }
+
+  public func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
+      -> Int {
+    return rawChildren.distance(from: start, to: end)
+  }
+
+  public subscript(position: SyntaxChildrenIndex) -> PrimaryAssociatedTypeSyntax {
+    let (raw, info) = rawChildren[position]
+    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+    let data = SyntaxData(absoluteRaw, parent: Syntax(self))
+    return PrimaryAssociatedTypeSyntax(data)
+  }
+}
+
 /// `CompositionTypeElementListSyntax` represents a collection of one or more
 /// `CompositionTypeElementSyntax` nodes. CompositionTypeElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
@@ -10399,6 +10648,11 @@ extension GenericRequirementListSyntax: CustomReflectable {
   }
 }
 extension GenericParameterListSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, unlabeledChildren: self.map{ $0 })
+  }
+}
+extension PrimaryAssociatedTypeListSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map{ $0 })
   }

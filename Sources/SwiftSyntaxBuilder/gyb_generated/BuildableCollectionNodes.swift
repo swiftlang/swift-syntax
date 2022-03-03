@@ -1556,6 +1556,49 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
+/// `PrimaryAssociatedTypeList` represents a collection of `PrimaryAssociatedType`s.
+public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeList {
+  let elements: [PrimaryAssociatedType]
+
+  /// Creates a `PrimaryAssociatedTypeList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsPrimaryAssociatedType`
+  public init(_ elements: [ExpressibleAsPrimaryAssociatedType]) {
+    self.elements = elements.map { $0.createPrimaryAssociatedType() }
+  }
+
+  public init(arrayLiteral elements: ExpressibleAsPrimaryAssociatedType...) {
+    self.init(elements)
+  }
+
+  public func buildPrimaryAssociatedTypeList(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeListSyntax {
+    let result = SyntaxFactory.makePrimaryAssociatedTypeList(elements.map {
+      $0.buildPrimaryAssociatedType(format: format, leadingTrivia: nil)
+    })
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    return Syntax(buildPrimaryAssociatedTypeList(format: format, leadingTrivia: leadingTrivia))
+  }
+
+  /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`.
+  public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
+    return self
+  }
+
+  /// `PrimaryAssociatedTypeList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+
 /// `CompositionTypeElementList` represents a collection of `CompositionTypeElement`s.
 public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCompositionTypeElementList {
   let elements: [CompositionTypeElement]

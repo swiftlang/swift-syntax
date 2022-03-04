@@ -1995,6 +1995,24 @@ public extension ExpressibleAsGenericParameter {
   }
 }
 
+public protocol ExpressibleAsPrimaryAssociatedTypeList {
+  func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList
+}
+
+public protocol ExpressibleAsPrimaryAssociatedType: ExpressibleAsPrimaryAssociatedTypeList, ExpressibleAsSyntaxBuildable {
+  func createPrimaryAssociatedType() -> PrimaryAssociatedType
+}
+
+public extension ExpressibleAsPrimaryAssociatedType {
+  /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`.
+  func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
+    return PrimaryAssociatedTypeList([self])
+  }
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return self.createPrimaryAssociatedType()
+  }
+}
+
 public protocol ExpressibleAsGenericParameterClause: ExpressibleAsSyntaxBuildable {
   func createGenericParameterClause() -> GenericParameterClause
 }

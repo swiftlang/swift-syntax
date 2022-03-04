@@ -1231,6 +1231,18 @@ extension SyntaxNode {
     return GenericParameterSyntax(asSyntaxData)
   }
 
+  public var isPrimaryAssociatedTypeList: Bool { return raw.kind == .primaryAssociatedTypeList }
+  public var asPrimaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax? {
+    guard isPrimaryAssociatedTypeList else { return nil }
+    return PrimaryAssociatedTypeListSyntax(asSyntaxData)
+  }
+
+  public var isPrimaryAssociatedType: Bool { return raw.kind == .primaryAssociatedType }
+  public var asPrimaryAssociatedType: PrimaryAssociatedTypeSyntax? {
+    guard isPrimaryAssociatedType else { return nil }
+    return PrimaryAssociatedTypeSyntax(asSyntaxData)
+  }
+
   public var isGenericParameterClause: Bool { return raw.kind == .genericParameterClause }
   public var asGenericParameterClause: GenericParameterClauseSyntax? {
     guard isGenericParameterClause else { return nil }
@@ -1896,6 +1908,10 @@ extension Syntax {
     case .genericParameterList(let node):
       return node
     case .genericParameter(let node):
+      return node
+    case .primaryAssociatedTypeList(let node):
+      return node
+    case .primaryAssociatedType(let node):
       return node
     case .genericParameterClause(let node):
       return node

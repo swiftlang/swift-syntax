@@ -4094,6 +4094,47 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return GenericParameterSyntax(data)
   }
+  public static func makePrimaryAssociatedTypeList(
+    _ elements: [PrimaryAssociatedTypeSyntax]) -> PrimaryAssociatedTypeListSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeList,
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return PrimaryAssociatedTypeListSyntax(data)
+  }
+
+  public static func makeBlankPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedTypeList,
+      layout: [
+    ], length: .zero, presence: .present))
+    return PrimaryAssociatedTypeListSyntax(data)
+  }
+  public static func makePrimaryAssociatedType(attributes: AttributeListSyntax?, name: TokenSyntax, colon: TokenSyntax?, inheritedType: TypeSyntax?, initializer: TypeInitializerClauseSyntax?, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let layout: [RawSyntax?] = [
+      attributes?.raw,
+      name.raw,
+      colon?.raw,
+      inheritedType?.raw,
+      initializer?.raw,
+      trailingComma?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return PrimaryAssociatedTypeSyntax(data)
+  }
+
+  public static func makeBlankPrimaryAssociatedType() -> PrimaryAssociatedTypeSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedType,
+      layout: [
+      nil,
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+      nil,
+      nil,
+      nil,
+    ], length: .zero, presence: .present))
+    return PrimaryAssociatedTypeSyntax(data)
+  }
   public static func makeGenericParameterClause(leftAngleBracket: TokenSyntax, genericParameterList: GenericParameterListSyntax, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
     let layout: [RawSyntax?] = [
       leftAngleBracket.raw,

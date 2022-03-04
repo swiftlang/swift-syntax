@@ -1437,6 +1437,20 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `PrimaryAssociatedTypeListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `PrimaryAssociatedTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: PrimaryAssociatedTypeSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `GenericParameterClauseSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3822,6 +3836,26 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPrimaryAssociatedTypeListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = PrimaryAssociatedTypeListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplPrimaryAssociatedTypeSyntax(_ data: SyntaxData) -> Syntax {
+      let node = PrimaryAssociatedTypeSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
       let node = GenericParameterClauseSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4677,6 +4711,10 @@ open class SyntaxRewriter {
       return visitImplGenericParameterListSyntax
     case .genericParameter:
       return visitImplGenericParameterSyntax
+    case .primaryAssociatedTypeList:
+      return visitImplPrimaryAssociatedTypeListSyntax
+    case .primaryAssociatedType:
+      return visitImplPrimaryAssociatedTypeSyntax
     case .genericParameterClause:
       return visitImplGenericParameterClauseSyntax
     case .conformanceRequirement:
@@ -5184,6 +5222,10 @@ open class SyntaxRewriter {
       return visitImplGenericParameterListSyntax(data)
     case .genericParameter:
       return visitImplGenericParameterSyntax(data)
+    case .primaryAssociatedTypeList:
+      return visitImplPrimaryAssociatedTypeListSyntax(data)
+    case .primaryAssociatedType:
+      return visitImplPrimaryAssociatedTypeSyntax(data)
     case .genericParameterClause:
       return visitImplGenericParameterClauseSyntax(data)
     case .conformanceRequirement:

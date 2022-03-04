@@ -261,6 +261,7 @@ extension CatchItemSyntax: WithTrailingCommaSyntax {}
 extension CatchClauseSyntax: WithCodeBlockSyntax {}
 extension GenericRequirementSyntax: WithTrailingCommaSyntax {}
 extension GenericParameterSyntax: WithTrailingCommaSyntax {}
+extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {}
 extension TupleTypeElementSyntax: WithTrailingCommaSyntax {}
 extension TupleTypeSyntax: ParenthesizedSyntax {}
 extension FunctionTypeSyntax: ParenthesizedSyntax {}

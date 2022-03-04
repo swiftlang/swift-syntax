@@ -11632,6 +11632,258 @@ extension GenericParameterSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PrimaryAssociatedTypeSyntax
+
+public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case attributes
+    case name
+    case colon
+    case inheritedType
+    case initializer
+    case trailingComma
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `PrimaryAssociatedTypeSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .primaryAssociatedType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrimaryAssociatedTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .primaryAssociatedType)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var attributes: AttributeListSyntax? {
+    get {
+      let childData = data.child(at: Cursor.attributes,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return AttributeListSyntax(childData!)
+    }
+    set(value) {
+      self = withAttributes(value)
+    }
+  }
+
+  /// Adds the provided `Attribute` to the node's `attributes`
+  /// collection.
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  public func addAttribute(_ element: Syntax) -> PrimaryAssociatedTypeSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.attributes] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.attributes)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `attributes` replaced.
+  /// - param newChild: The new `attributes` to replace the node's
+  ///                   current `attributes`, if present.
+  public func withAttributes(
+    _ newChild: AttributeListSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.attributes)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+  public var name: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.name,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withName(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `name` replaced.
+  /// - param newChild: The new `name` to replace the node's
+  ///                   current `name`, if present.
+  public func withName(
+    _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.name)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+  public var colon: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.colon,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withColon(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `colon` replaced.
+  /// - param newChild: The new `colon` to replace the node's
+  ///                   current `colon`, if present.
+  public func withColon(
+    _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.colon)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+  public var inheritedType: TypeSyntax? {
+    get {
+      let childData = data.child(at: Cursor.inheritedType,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeSyntax(childData!)
+    }
+    set(value) {
+      self = withInheritedType(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `inheritedType` replaced.
+  /// - param newChild: The new `inheritedType` to replace the node's
+  ///                   current `inheritedType`, if present.
+  public func withInheritedType(
+    _ newChild: TypeSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.inheritedType)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+  public var initializer: TypeInitializerClauseSyntax? {
+    get {
+      let childData = data.child(at: Cursor.initializer,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TypeInitializerClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withInitializer(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `initializer` replaced.
+  /// - param newChild: The new `initializer` to replace the node's
+  ///                   current `initializer`, if present.
+  public func withInitializer(
+    _ newChild: TypeInitializerClauseSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.initializer)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+  public var trailingComma: TokenSyntax? {
+    get {
+      let childData = data.child(at: Cursor.trailingComma,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withTrailingComma(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `trailingComma` replaced.
+  /// - param newChild: The new `trailingComma` to replace the node's
+  ///                   current `trailingComma`, if present.
+  public func withTrailingComma(
+    _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.trailingComma)
+    return PrimaryAssociatedTypeSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 6)
+    // Check child #0 child is AttributeListSyntax or missing
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(AttributeListSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax or missing
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #3 child is TypeSyntax or missing
+    if let raw = rawChildren[3].raw {
+      let info = rawChildren[3].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeSyntax.self))
+    }
+    // Check child #4 child is TypeInitializerClauseSyntax or missing
+    if let raw = rawChildren[4].raw {
+      let info = rawChildren[4].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TypeInitializerClauseSyntax.self))
+    }
+    // Check child #5 child is TokenSyntax or missing
+    if let raw = rawChildren[5].raw {
+      let info = rawChildren[5].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension PrimaryAssociatedTypeSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
+      "colon": colon.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "inheritedType": inheritedType.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+      "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
+    ])
+  }
+}
+
 // MARK: - GenericParameterClauseSyntax
 
 public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {

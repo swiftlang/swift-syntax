@@ -1478,6 +1478,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: GenericParameterSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PrimaryAssociatedTypeListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: PrimaryAssociatedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PrimaryAssociatedTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

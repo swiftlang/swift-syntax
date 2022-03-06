@@ -62,7 +62,6 @@ let package = Package(
       name: "SwiftSyntaxBuilder",
       dependencies: ["SwiftSyntax"],
       exclude: [
-        "README.md",
         "gyb_helpers",
         "ExpressibleAsProtocols.swift.gyb",
         "BuildableBaseProtocols.swift.gyb",

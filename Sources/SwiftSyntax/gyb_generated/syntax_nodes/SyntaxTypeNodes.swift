@@ -979,28 +979,28 @@ extension OptionalTypeSyntax: CustomReflectable {
   }
 }
 
-// MARK: - SomeTypeSyntax
+// MARK: - ConstrainedSugarTypeSyntax
 
-public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
-    case someSpecifier
+    case someOrAnySpecifier
     case baseType
   }
 
   public let _syntaxNode: Syntax
 
-  /// Converts the given `Syntax` node to a `SomeTypeSyntax` if possible. Returns
+  /// Converts the given `Syntax` node to a `ConstrainedSugarTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .someType else { return nil }
+    guard syntax.raw.kind == .constrainedSugarType else { return nil }
     self._syntaxNode = syntax
   }
 
-  /// Creates a `SomeTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a `ConstrainedSugarTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .someType)
+    assert(data.raw.kind == .constrainedSugarType)
     self._syntaxNode = Syntax(data)
   }
 
@@ -1008,25 +1008,25 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return Swift.type(of: self)
   }
 
-  public var someSpecifier: TokenSyntax {
+  public var someOrAnySpecifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.someSpecifier,
+      let childData = data.child(at: Cursor.someOrAnySpecifier,
                                  parent: Syntax(self))
       return TokenSyntax(childData!)
     }
     set(value) {
-      self = withSomeSpecifier(value)
+      self = withSomeOrAnySpecifier(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `someSpecifier` replaced.
-  /// - param newChild: The new `someSpecifier` to replace the node's
-  ///                   current `someSpecifier`, if present.
-  public func withSomeSpecifier(
-    _ newChild: TokenSyntax?) -> SomeTypeSyntax {
+  /// Returns a copy of the receiver with its `someOrAnySpecifier` replaced.
+  /// - param newChild: The new `someOrAnySpecifier` to replace the node's
+  ///                   current `someOrAnySpecifier`, if present.
+  public func withSomeOrAnySpecifier(
+    _ newChild: TokenSyntax?) -> ConstrainedSugarTypeSyntax {
     let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
-    let newData = data.replacingChild(raw, at: Cursor.someSpecifier)
-    return SomeTypeSyntax(newData)
+    let newData = data.replacingChild(raw, at: Cursor.someOrAnySpecifier)
+    return ConstrainedSugarTypeSyntax(newData)
   }
 
   public var baseType: TypeSyntax {
@@ -1044,10 +1044,10 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `baseType` to replace the node's
   ///                   current `baseType`, if present.
   public func withBaseType(
-    _ newChild: TypeSyntax?) -> SomeTypeSyntax {
+    _ newChild: TypeSyntax?) -> ConstrainedSugarTypeSyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
-    return SomeTypeSyntax(newData)
+    return ConstrainedSugarTypeSyntax(newData)
   }
 
 
@@ -1075,10 +1075,10 @@ public struct SomeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
-extension SomeTypeSyntax: CustomReflectable {
+extension ConstrainedSugarTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "someSpecifier": Syntax(someSpecifier).asProtocol(SyntaxProtocol.self),
+      "someOrAnySpecifier": Syntax(someOrAnySpecifier).asProtocol(SyntaxProtocol.self),
       "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
     ])
   }

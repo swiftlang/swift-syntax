@@ -1297,10 +1297,10 @@ extension SyntaxNode {
     return OptionalTypeSyntax(asSyntaxData)
   }
 
-  public var isSomeType: Bool { return raw.kind == .someType }
-  public var asSomeType: SomeTypeSyntax? {
-    guard isSomeType else { return nil }
-    return SomeTypeSyntax(asSyntaxData)
+  public var isConstrainedSugarType: Bool { return raw.kind == .constrainedSugarType }
+  public var asConstrainedSugarType: ConstrainedSugarTypeSyntax? {
+    guard isConstrainedSugarType else { return nil }
+    return ConstrainedSugarTypeSyntax(asSyntaxData)
   }
 
   public var isImplicitlyUnwrappedOptionalType: Bool { return raw.kind == .implicitlyUnwrappedOptionalType }
@@ -1931,7 +1931,7 @@ extension Syntax {
       return node
     case .optionalType(let node):
       return node
-    case .someType(let node):
+    case .constrainedSugarType(let node):
       return node
     case .implicitlyUnwrappedOptionalType(let node):
       return node

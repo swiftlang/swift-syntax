@@ -2111,13 +2111,13 @@ public extension ExpressibleAsOptionalType {
   }
 }
 
-public protocol ExpressibleAsSomeType: ExpressibleAsTypeBuildable {
-  func createSomeType() -> SomeType
+public protocol ExpressibleAsConstrainedSugarType: ExpressibleAsTypeBuildable {
+  func createConstrainedSugarType() -> ConstrainedSugarType
 }
 
-public extension ExpressibleAsSomeType {
+public extension ExpressibleAsConstrainedSugarType {
   func createTypeBuildable() -> TypeBuildable {
-    return self.createSomeType()
+    return self.createConstrainedSugarType()
   }
 }
 

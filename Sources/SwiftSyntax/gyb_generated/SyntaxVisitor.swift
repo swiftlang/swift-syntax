@@ -2162,16 +2162,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `OptionalTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalTypeSyntax) {}
-  /// Visiting `SomeTypeSyntax` specifically.
+  /// Visiting `ConstrainedSugarTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ConstrainedSugarTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `SomeTypeSyntax` and its descendents.
+  /// The function called after visiting `ConstrainedSugarTypeSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SomeTypeSyntax) {}
+  open func visitPost(_ node: ConstrainedSugarTypeSyntax) {}
   /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4884,8 +4884,8 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSomeTypeSyntax(_ data: SyntaxData) {
-      let node = SomeTypeSyntax(data)
+  private func visitImplConstrainedSugarTypeSyntax(_ data: SyntaxData) {
+      let node = ConstrainedSugarTypeSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -5669,8 +5669,8 @@ open class SyntaxVisitor {
       visitImplMetatypeTypeSyntax(data)
     case .optionalType:
       visitImplOptionalTypeSyntax(data)
-    case .someType:
-      visitImplSomeTypeSyntax(data)
+    case .constrainedSugarType:
+      visitImplConstrainedSugarTypeSyntax(data)
     case .implicitlyUnwrappedOptionalType:
       visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
     case .compositionTypeElement:

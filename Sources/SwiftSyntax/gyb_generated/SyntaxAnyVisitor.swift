@@ -1555,11 +1555,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: OptionalTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
-  override open func visit(_ node: SomeTypeSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ConstrainedSugarTypeSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  override open func visitPost(_ node: SomeTypeSyntax) {
+  override open func visitPost(_ node: ConstrainedSugarTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   override open func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {

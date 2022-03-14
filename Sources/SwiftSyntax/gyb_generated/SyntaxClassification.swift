@@ -95,7 +95,7 @@ extension SyntaxClassification {
         return (.typeIdentifier, false)
       case (.memberTypeIdentifier, 2):
         return (.typeIdentifier, false)
-      case (.someType, 0):
+      case (.constrainedSugarType, 0):
         return (.keyword, false)
       case (.functionType, 3):
         return (.keyword, false)

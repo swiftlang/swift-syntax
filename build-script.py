@@ -364,6 +364,7 @@ class Builder(object):
         if verbose:
             self.swiftpm_call.extend(["--verbose"])
         self.verbose = verbose
+        self.toolchain = toolchain
 
     def build(self, product_name):
         print("** Building " + product_name + " **")
@@ -374,6 +375,7 @@ class Builder(object):
         env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
         # Tell other projects in the unified build to use local dependencies
         env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+        env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = os.path.join(self.toolchain, "lib", "swift", "macosx")
         check_call(command, env=env, verbose=self.verbose)
 
 
@@ -572,6 +574,7 @@ def run_xctests(toolchain, build_dir, multiroot_data_file, release, verbose):
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
     # Tell other projects in the unified build to use local dependencies
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = os.path.join(toolchain, "lib", "swift", "macosx")
     return call(swiftpm_call, env=env, verbose=verbose) == 0
 
 

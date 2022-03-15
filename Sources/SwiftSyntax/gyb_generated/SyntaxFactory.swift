@@ -4322,24 +4322,24 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return OptionalTypeSyntax(data)
   }
-  public static func makeSomeType(someSpecifier: TokenSyntax, baseType: TypeSyntax) -> SomeTypeSyntax {
+  public static func makeConstrainedSugarType(someOrAnySpecifier: TokenSyntax, baseType: TypeSyntax) -> ConstrainedSugarTypeSyntax {
     let layout: [RawSyntax?] = [
-      someSpecifier.raw,
+      someOrAnySpecifier.raw,
       baseType.raw,
     ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.someType,
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.constrainedSugarType,
       layout: layout, presence: SourcePresence.present)
     let data = SyntaxData.forRoot(raw)
-    return SomeTypeSyntax(data)
+    return ConstrainedSugarTypeSyntax(data)
   }
 
-  public static func makeBlankSomeType() -> SomeTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .someType,
+  public static func makeBlankConstrainedSugarType() -> ConstrainedSugarTypeSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .constrainedSugarType,
       layout: [
       RawSyntax.missingToken(TokenKind.identifier("")),
       RawSyntax.missing(SyntaxKind.type),
     ], length: .zero, presence: .present))
-    return SomeTypeSyntax(data)
+    return ConstrainedSugarTypeSyntax(data)
   }
   public static func makeImplicitlyUnwrappedOptionalType(wrappedType: TypeSyntax, exclamationMark: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     let layout: [RawSyntax?] = [

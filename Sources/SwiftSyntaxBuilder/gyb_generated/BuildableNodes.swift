@@ -11803,20 +11803,20 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
     return self
   }
 }
-public struct SomeType: TypeBuildable, ExpressibleAsSomeType {
-  let someSpecifier: TokenSyntax
+public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugarType {
+  let someOrAnySpecifier: TokenSyntax
   let baseType: TypeBuildable
 
-  /// Creates a `SomeType` using the provided parameters.
+  /// Creates a `ConstrainedSugarType` using the provided parameters.
   /// - Parameters:
-  ///   - someSpecifier: 
+  ///   - someOrAnySpecifier: 
   ///   - baseType: 
   public init(
-    someSpecifier: TokenSyntax,
+    someOrAnySpecifier: TokenSyntax,
     baseType: ExpressibleAsTypeBuildable
   ) {
-    self.someSpecifier = someSpecifier
-    assert(someSpecifier.text == "some")
+    self.someOrAnySpecifier = someOrAnySpecifier
+    assert(someOrAnySpecifier.text == "some" || someOrAnySpecifier.text == "any")
     self.baseType = baseType.createTypeBuildable()
   }
 
@@ -11824,18 +11824,18 @@ public struct SomeType: TypeBuildable, ExpressibleAsSomeType {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
-    someSpecifier: String,
+    someOrAnySpecifier: String,
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.init(
-      someSpecifier: TokenSyntax.identifier(someSpecifier),
+      someOrAnySpecifier: TokenSyntax.identifier(someOrAnySpecifier),
       baseType: baseType
     )
   }
 
-  func buildSomeType(format: Format, leadingTrivia: Trivia? = nil) -> SomeTypeSyntax {
-    let result = SyntaxFactory.makeSomeType(
-      someSpecifier: someSpecifier,
+  func buildConstrainedSugarType(format: Format, leadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
+    let result = SyntaxFactory.makeConstrainedSugarType(
+      someOrAnySpecifier: someOrAnySpecifier,
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     if let leadingTrivia = leadingTrivia {
@@ -11847,23 +11847,23 @@ public struct SomeType: TypeBuildable, ExpressibleAsSomeType {
 
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildSomeType(format: format, leadingTrivia: leadingTrivia)
+    let result = buildConstrainedSugarType(format: format, leadingTrivia: leadingTrivia)
     return TypeSyntax(result)
   }
 
-  /// Conformance to `ExpressibleAsSomeType`.
-  public func createSomeType() -> SomeType {
+  /// Conformance to `ExpressibleAsConstrainedSugarType`.
+  public func createConstrainedSugarType() -> ConstrainedSugarType {
     return self
   }
 
-  /// `SomeType` might conform to `ExpressibleAsTypeBuildable` via different `ExpressibleAs*` paths.
+  /// `ConstrainedSugarType` might conform to `ExpressibleAsTypeBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createTypeBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createTypeBuildable() -> TypeBuildable {
     return self
   }
 
-  /// `SomeType` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// `ConstrainedSugarType` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {

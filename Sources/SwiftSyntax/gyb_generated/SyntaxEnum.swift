@@ -234,7 +234,7 @@ public enum SyntaxEnum {
   case dictionaryType(DictionaryTypeSyntax)
   case metatypeType(MetatypeTypeSyntax)
   case optionalType(OptionalTypeSyntax)
-  case someType(SomeTypeSyntax)
+  case constrainedSugarType(ConstrainedSugarTypeSyntax)
   case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
   case compositionTypeElement(CompositionTypeElementSyntax)
   case compositionTypeElementList(CompositionTypeElementListSyntax)
@@ -710,8 +710,8 @@ public extension Syntax {
       return .metatypeType(MetatypeTypeSyntax(self)!)
     case .optionalType:
       return .optionalType(OptionalTypeSyntax(self)!)
-    case .someType:
-      return .someType(SomeTypeSyntax(self)!)
+    case .constrainedSugarType:
+      return .constrainedSugarType(ConstrainedSugarTypeSyntax(self)!)
     case .implicitlyUnwrappedOptionalType:
       return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
     case .compositionTypeElement:

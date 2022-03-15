@@ -380,7 +380,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// `nil` if the conversion is not possible.
   public init?(_ syntax: Syntax) {
     switch syntax.raw.kind {
-    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .someType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
+    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
       self._syntaxNode = syntax
     default:
       return nil
@@ -394,7 +394,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // Assert that the kind of the given data matches in debug builds.
 #if DEBUG
     switch data.raw.kind {
-    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .someType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
+    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
       break
     default:
       fatalError("Unable to create TypeSyntax from \(data.raw.kind)")

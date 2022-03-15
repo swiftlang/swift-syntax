@@ -9613,19 +9613,19 @@ extension OptionalTypeSyntax {
   }
 }
 
-public struct SomeTypeSyntaxBuilder {
+public struct ConstrainedSugarTypeSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 2)
 
   internal init() {}
 
-  public mutating func useSomeSpecifier(_ node: TokenSyntax) {
-    let idx = SomeTypeSyntax.Cursor.someSpecifier.rawValue
+  public mutating func useSomeOrAnySpecifier(_ node: TokenSyntax) {
+    let idx = ConstrainedSugarTypeSyntax.Cursor.someOrAnySpecifier.rawValue
     layout[idx] = node.raw
   }
 
   public mutating func useBaseType(_ node: TypeSyntax) {
-    let idx = SomeTypeSyntax.Cursor.baseType.rawValue
+    let idx = ConstrainedSugarTypeSyntax.Cursor.baseType.rawValue
     layout[idx] = node.raw
   }
 
@@ -9637,22 +9637,22 @@ public struct SomeTypeSyntaxBuilder {
       layout[1] = RawSyntax.missing(SyntaxKind.type)
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .someType,
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .constrainedSugarType,
       layout: layout, presence: .present))
   }
 }
 
-extension SomeTypeSyntax {
-  /// Creates a `SomeTypeSyntax` using the provided build function.
+extension ConstrainedSugarTypeSyntax {
+  /// Creates a `ConstrainedSugarTypeSyntax` using the provided build function.
   /// - Parameter:
   ///   - build: A closure that will be invoked in order to initialize
   ///            the fields of the syntax node.
-  ///            This closure is passed a `SomeTypeSyntaxBuilder` which you can use to
+  ///            This closure is passed a `ConstrainedSugarTypeSyntaxBuilder` which you can use to
   ///            incrementally build the structure of the node.
-  /// - Returns: A `SomeTypeSyntax` with all the fields populated in the builder
+  /// - Returns: A `ConstrainedSugarTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SomeTypeSyntaxBuilder) -> Void) {
-    var builder = SomeTypeSyntaxBuilder()
+  public init(_ build: (inout ConstrainedSugarTypeSyntaxBuilder) -> Void) {
+    var builder = ConstrainedSugarTypeSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
     self.init(data)

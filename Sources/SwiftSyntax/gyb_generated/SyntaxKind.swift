@@ -234,7 +234,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case dictionaryType = 216
   case metatypeType = 217
   case optionalType = 218
-  case someType = 230
+  case constrainedSugarType = 230
   case implicitlyUnwrappedOptionalType = 219
   case compositionTypeElement = 153
   case compositionTypeElementList = 196

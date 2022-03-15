@@ -1514,10 +1514,10 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
 
-  /// Visit a `SomeTypeSyntax`.
+  /// Visit a `ConstrainedSugarTypeSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SomeTypeSyntax) -> TypeSyntax {
+  open func visit(_ node: ConstrainedSugarTypeSyntax) -> TypeSyntax {
     return TypeSyntax(visitChildren(node))
   }
 
@@ -3946,8 +3946,8 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSomeTypeSyntax(_ data: SyntaxData) -> Syntax {
-      let node = SomeTypeSyntax(data)
+  private func visitImplConstrainedSugarTypeSyntax(_ data: SyntaxData) -> Syntax {
+      let node = ConstrainedSugarTypeSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4733,8 +4733,8 @@ open class SyntaxRewriter {
       return visitImplMetatypeTypeSyntax
     case .optionalType:
       return visitImplOptionalTypeSyntax
-    case .someType:
-      return visitImplSomeTypeSyntax
+    case .constrainedSugarType:
+      return visitImplConstrainedSugarTypeSyntax
     case .implicitlyUnwrappedOptionalType:
       return visitImplImplicitlyUnwrappedOptionalTypeSyntax
     case .compositionTypeElement:
@@ -5244,8 +5244,8 @@ open class SyntaxRewriter {
       return visitImplMetatypeTypeSyntax(data)
     case .optionalType:
       return visitImplOptionalTypeSyntax(data)
-    case .someType:
-      return visitImplSomeTypeSyntax(data)
+    case .constrainedSugarType:
+      return visitImplConstrainedSugarTypeSyntax(data)
     case .implicitlyUnwrappedOptionalType:
       return visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
     case .compositionTypeElement:

@@ -1,5 +1,7 @@
 // RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
+// REQUIRES: rdar90284916
+
 // CHECK: <comment-block>/* foo is the best */</comment-block>
 /* foo is the best */
 func foo(n: Float) {}

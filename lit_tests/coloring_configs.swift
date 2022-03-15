@@ -1,5 +1,7 @@
 // RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
+// REQUIRES: rdar90284916
+
 // CHECK: <kw>var</kw> <id>f</id> : <type>Int</type>
 var f : Int
 

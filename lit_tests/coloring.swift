@@ -1,5 +1,7 @@
 // RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
+// REQUIRES: rdar90284916
+
 enum List<T> {
   case Nil
   // rdar://21927124

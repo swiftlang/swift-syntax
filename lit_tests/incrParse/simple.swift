@@ -15,6 +15,8 @@
 // RUN: %validate-incrparse %s --test-case ADD_IF_OPEN_BRACE
 // RUN: %validate-incrparse %s --test-case EXTEND_IDENTIFIER
 
+// REQUIRES: rdar90284916
+
 func start() {}
 
 <reparse REPLACE>

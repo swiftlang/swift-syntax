@@ -1,5 +1,7 @@
 // RUN: %lit-test-helper -classify-syntax -source-file %s | %FileCheck %s
 
+// REQUIRES: rdar90284916
+
 // CHECK: <#kw>#if</#kw> <#id>d</#id>
 // CHECK-NEXT: <kw>func</kw> <id>bar</id>() {
 // CHECK-NEXT: <#kw>#if</#kw> <#id>d</#id>

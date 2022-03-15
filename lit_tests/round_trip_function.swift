@@ -3,6 +3,8 @@
 // RUN: %lit-test-helper -roundtrip -source-file %s -out %t/afterRoundtrip.swift
 // RUN: diff -u %t/afterRoundtrip.swift %s
 
+// REQUIRES: rdar90284916
+
 func noArgs() {}
 func oneArg(x: Int) {}
 func oneUnlabeledArg(_ x: Int) {}

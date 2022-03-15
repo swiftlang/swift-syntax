@@ -2,6 +2,8 @@
 // RUN: %validate-incrparse %s --test-case NO_CHANGES
 // RUN: %validate-incrparse %s --test-case NESTED_INITIALIZERS
 
+// REQUIRES: rdar90284916
+
 func start() {}
 
 class Bar

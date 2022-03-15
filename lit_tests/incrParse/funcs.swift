@@ -6,6 +6,8 @@
 // RUN: %validate-incrparse %s --test-case ADD_PARAM_NAME
 // RUN: %validate-incrparse %s --test-case ADD_PARAM_TYPE
 
+// REQUIRES: rdar90284916
+
 func start() {}
 
 class Bar

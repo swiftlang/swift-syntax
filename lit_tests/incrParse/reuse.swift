@@ -4,6 +4,8 @@
 // RUN: %validate-incrparse %s --test-case UNWRAP_CLASS
 // RUN: %validate-incrparse %s --test-case NEXT_TOKEN_CALCULATION
 
+// REQUIRES: rdar90284916
+
 func start() {}
 
 <reparse ADD_PROPERTY>struct Foo {</reparse ADD_PROPERTY>
@@ -43,4 +45,3 @@ func start() {}
 // The indentation on these lines is important for the test case
     let a = "hello"
 <reparse NEXT_TOKEN_CALCULATION>    let c = "<<NEXT_TOKEN_CALCULATION< |||>>>world"</reparse NEXT_TOKEN_CALCULATION>
-

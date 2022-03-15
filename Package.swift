@@ -20,6 +20,21 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
   swiftSyntaxUnsafeSwiftFlags += ["-enforce-exclusivity=unchecked"]
 }
 
+// Include the parser library as a binary dependency if both the host and the target are macOS.
+//  - We need to require that the host is macOS (checked by `#if os(macOS)`) because package resolve will download and unzip the referenced framework, which requires `unzip` to be installed. Only macOS guarantees that `unzip` is installed, the Swift Docker images don’t have unzip installed, so package resolve would fail.
+//  - We need to require that the target is macOS (checked by `.when`) because binary dependencies are only supported by SwiftPM on macOS.
+#if os(macOS)
+let parserLibraryTarget: [Target] = [.binaryTarget(
+  name: "_InternalSwiftSyntaxParser",
+  url: "https://github.com/apple/swift-syntax/releases/download/0.50600.0/_InternalSwiftSyntaxParser.xcframework.zip",
+  checksum: "0e0d9ecbfddd0765485ded160beb9e7657e7add9d5ffd98ef61e8bd0c967e3a9"
+)]
+let parserLibraryDependency: [Target.Dependency] = [.target(name: "_InternalSwiftSyntaxParser", condition: .when(platforms: [.macOS]))]
+#else
+let parserLibraryTarget: [Target] = []
+let parserLibraryDependency: [Target.Dependency] = []
+#endif
+
 let package = Package(
   name: "SwiftSyntax",
   products: [
@@ -31,7 +46,7 @@ let package = Package(
     .target(name: "_CSwiftSyntax"),
     .target(
       name: "SwiftSyntax",
-      dependencies: ["_CSwiftSyntax"],
+      dependencies: ["_CSwiftSyntax"] + parserLibraryDependency,
       exclude: [
         "SyntaxFactory.swift.gyb",
         "SyntaxTraits.swift.gyb",
@@ -87,5 +102,5 @@ let package = Package(
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"],
       exclude: ["Inputs"]
     ),
-  ]
+  ] + parserLibraryTarget
 )

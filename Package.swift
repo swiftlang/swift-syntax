@@ -5,7 +5,7 @@ import Foundation
 
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
-let swiftSyntaxSwiftSettings: [SwiftSetting] 
+let swiftSyntaxSwiftSettings: [SwiftSetting]
 if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
   let groupFile = URL(fileURLWithPath: #file)
     .deletingLastPathComponent()
@@ -19,7 +19,20 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
     "-enforce-exclusivity=unchecked",
   ])]
 } else {
-    swiftSyntaxSwiftSettings = []
+  swiftSyntaxSwiftSettings = []
+}
+
+/// If the `lib_InternalSwiftSyntaxParser.dylib` is not in the standard search
+/// paths (which is the standard case on macOS),
+/// `SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH` can be used to add a rpath at which
+/// the parser lib should be searched.
+let swiftSyntaxParserLinkerSettings: [LinkerSetting]
+if let parserLibSearchPath = ProcessInfo.processInfo.environment["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] {
+  swiftSyntaxParserLinkerSettings = [.unsafeFlags([
+    "-Xlinker", "-rpath", "-Xlinker", parserLibSearchPath
+  ])]
+} else {
+  swiftSyntaxParserLinkerSettings = []
 }
 
 let package = Package(
@@ -72,9 +85,14 @@ let package = Package(
         "TokenSyntax.swift.gyb",
       ]
     ),
-    .target(name: "SwiftSyntaxParser", dependencies: ["SwiftSyntax"], exclude: [
-      "NodeDeclarationHash.swift.gyb"
-    ]),
+    .target(
+      name: "SwiftSyntaxParser",
+      dependencies: ["SwiftSyntax"],
+      exclude: [
+        "NodeDeclarationHash.swift.gyb"
+      ],
+      linkerSettings: swiftSyntaxParserLinkerSettings
+    ),
     .target(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]

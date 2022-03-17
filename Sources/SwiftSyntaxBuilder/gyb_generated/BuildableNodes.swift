@@ -5226,6 +5226,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   let modifiers: ModifierList?
   let protocolKeyword: TokenSyntax
   let identifier: TokenSyntax
+  let primaryAssociatedTypeClause: PrimaryAssociatedTypeClause?
   let inheritanceClause: TypeInheritanceClause?
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
@@ -5236,6 +5237,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   ///   - modifiers: 
   ///   - protocolKeyword: 
   ///   - identifier: 
+  ///   - primaryAssociatedTypeClause: 
   ///   - inheritanceClause: 
   ///   - genericWhereClause: 
   ///   - members: 
@@ -5244,6 +5246,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     modifiers: ExpressibleAsModifierList? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
     identifier: TokenSyntax,
+    primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock
@@ -5253,6 +5256,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     self.protocolKeyword = protocolKeyword
     assert(protocolKeyword.text == "protocol")
     self.identifier = identifier
+    self.primaryAssociatedTypeClause = primaryAssociatedTypeClause?.createPrimaryAssociatedTypeClause()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
     self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
     self.members = members.createMemberDeclBlock()
@@ -5264,6 +5268,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   public init(
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
     identifier: String,
+    primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock,
@@ -5275,6 +5280,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
       modifiers: modifiersBuilder(),
       protocolKeyword: protocolKeyword,
       identifier: TokenSyntax.identifier(identifier),
+      primaryAssociatedTypeClause: primaryAssociatedTypeClause,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
       members: members
@@ -5287,6 +5293,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
       protocolKeyword: protocolKeyword,
       identifier: identifier,
+      primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
@@ -11364,6 +11371,75 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   }
 
   /// `ConformanceRequirement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+
+}
+public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeClause {
+  let leftAngleBracket: TokenSyntax
+  let primaryAssociatedTypeList: PrimaryAssociatedTypeList
+  let rightAngleBracket: TokenSyntax
+
+  /// Creates a `PrimaryAssociatedTypeClause` using the provided parameters.
+  /// - Parameters:
+  ///   - leftAngleBracket: 
+  ///   - primaryAssociatedTypeList: 
+  ///   - rightAngleBracket: 
+  public init(
+    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    primaryAssociatedTypeList: ExpressibleAsPrimaryAssociatedTypeList,
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
+  ) {
+    self.leftAngleBracket = leftAngleBracket
+    assert(leftAngleBracket.text == "<")
+    self.primaryAssociatedTypeList = primaryAssociatedTypeList.createPrimaryAssociatedTypeList()
+    self.rightAngleBracket = rightAngleBracket
+    assert(rightAngleBracket.text == ">")
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
+    @PrimaryAssociatedTypeListBuilder primaryAssociatedTypeListBuilder: () -> ExpressibleAsPrimaryAssociatedTypeList = { PrimaryAssociatedTypeList([]) }
+  ) {
+    self.init(
+      leftAngleBracket: leftAngleBracket,
+      primaryAssociatedTypeList: primaryAssociatedTypeListBuilder(),
+      rightAngleBracket: rightAngleBracket
+    )
+  }
+
+  func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
+    let result = SyntaxFactory.makePrimaryAssociatedTypeClause(
+      leftAngleBracket: leftAngleBracket,
+      primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format, leadingTrivia: nil),
+      rightAngleBracket: rightAngleBracket
+    )
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: leadingTrivia)
+    return Syntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsPrimaryAssociatedTypeClause`.
+  public func createPrimaryAssociatedTypeClause() -> PrimaryAssociatedTypeClause {
+    return self
+  }
+
+  /// `PrimaryAssociatedTypeClause` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {

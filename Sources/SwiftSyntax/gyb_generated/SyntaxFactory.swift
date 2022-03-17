@@ -1937,12 +1937,13 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return StructDeclSyntax(data)
   }
-  public static func makeProtocolDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, protocolKeyword: TokenSyntax, identifier: TokenSyntax, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
+  public static func makeProtocolDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, protocolKeyword: TokenSyntax, identifier: TokenSyntax, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
       protocolKeyword.raw,
       identifier.raw,
+      primaryAssociatedTypeClause?.raw,
       inheritanceClause?.raw,
       genericWhereClause?.raw,
       members.raw,
@@ -1960,6 +1961,7 @@ public enum SyntaxFactory {
       nil,
       RawSyntax.missingToken(TokenKind.protocolKeyword),
       RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
       nil,
       nil,
       RawSyntax.missing(SyntaxKind.memberDeclBlock),
@@ -4176,6 +4178,27 @@ public enum SyntaxFactory {
       RawSyntax.missing(SyntaxKind.type),
     ], length: .zero, presence: .present))
     return ConformanceRequirementSyntax(data)
+  }
+  public static func makePrimaryAssociatedTypeClause(leftAngleBracket: TokenSyntax, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, rightAngleBracket: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+    let layout: [RawSyntax?] = [
+      leftAngleBracket.raw,
+      primaryAssociatedTypeList.raw,
+      rightAngleBracket.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeClause,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return PrimaryAssociatedTypeClauseSyntax(data)
+  }
+
+  public static func makeBlankPrimaryAssociatedTypeClause() -> PrimaryAssociatedTypeClauseSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedTypeClause,
+      layout: [
+      RawSyntax.missingToken(TokenKind.leftAngle),
+      RawSyntax.missing(SyntaxKind.primaryAssociatedTypeList),
+      RawSyntax.missingToken(TokenKind.rightAngle),
+    ], length: .zero, presence: .present))
+    return PrimaryAssociatedTypeClauseSyntax(data)
   }
   public static func makeSimpleTypeIdentifier(name: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
     let layout: [RawSyntax?] = [

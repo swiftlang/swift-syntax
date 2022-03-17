@@ -1255,6 +1255,12 @@ extension SyntaxNode {
     return ConformanceRequirementSyntax(asSyntaxData)
   }
 
+  public var isPrimaryAssociatedTypeClause: Bool { return raw.kind == .primaryAssociatedTypeClause }
+  public var asPrimaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? {
+    guard isPrimaryAssociatedTypeClause else { return nil }
+    return PrimaryAssociatedTypeClauseSyntax(asSyntaxData)
+  }
+
   public var isSimpleTypeIdentifier: Bool { return raw.kind == .simpleTypeIdentifier }
   public var asSimpleTypeIdentifier: SimpleTypeIdentifierSyntax? {
     guard isSimpleTypeIdentifier else { return nil }
@@ -1916,6 +1922,8 @@ extension Syntax {
     case .genericParameterClause(let node):
       return node
     case .conformanceRequirement(let node):
+      return node
+    case .primaryAssociatedTypeClause(let node):
       return node
     case .simpleTypeIdentifier(let node):
       return node

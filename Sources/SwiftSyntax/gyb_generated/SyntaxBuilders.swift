@@ -4207,7 +4207,7 @@ extension StructDeclSyntax {
 
 public struct ProtocolDeclSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+    Array<RawSyntax?>(repeating: nil, count: 8)
 
   internal init() {}
 
@@ -4243,6 +4243,11 @@ public struct ProtocolDeclSyntaxBuilder {
     layout[idx] = node.raw
   }
 
+  public mutating func usePrimaryAssociatedTypeClause(_ node: PrimaryAssociatedTypeClauseSyntax) {
+    let idx = ProtocolDeclSyntax.Cursor.primaryAssociatedTypeClause.rawValue
+    layout[idx] = node.raw
+  }
+
   public mutating func useInheritanceClause(_ node: TypeInheritanceClauseSyntax) {
     let idx = ProtocolDeclSyntax.Cursor.inheritanceClause.rawValue
     layout[idx] = node.raw
@@ -4265,8 +4270,8 @@ public struct ProtocolDeclSyntaxBuilder {
     if (layout[3] == nil) {
       layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
     }
-    if (layout[6] == nil) {
-      layout[6] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+    if (layout[7] == nil) {
+      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .protocolDecl,
@@ -9243,6 +9248,66 @@ extension ConformanceRequirementSyntax {
   ///            closure.
   public init(_ build: (inout ConformanceRequirementSyntaxBuilder) -> Void) {
     var builder = ConformanceRequirementSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct PrimaryAssociatedTypeClauseSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func useLeftAngleBracket(_ node: TokenSyntax) {
+    let idx = PrimaryAssociatedTypeClauseSyntax.Cursor.leftAngleBracket.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func addPrimaryAssociatedType(_ elt: PrimaryAssociatedTypeSyntax) {
+    let idx = PrimaryAssociatedTypeClauseSyntax.Cursor.primaryAssociatedTypeList.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.primaryAssociatedTypeList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func useRightAngleBracket(_ node: TokenSyntax) {
+    let idx = PrimaryAssociatedTypeClauseSyntax.Cursor.rightAngleBracket.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.leftAngle)
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missing(SyntaxKind.primaryAssociatedTypeList)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.rightAngle)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .primaryAssociatedTypeClause,
+      layout: layout, presence: .present))
+  }
+}
+
+extension PrimaryAssociatedTypeClauseSyntax {
+  /// Creates a `PrimaryAssociatedTypeClauseSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `PrimaryAssociatedTypeClauseSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `PrimaryAssociatedTypeClauseSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout PrimaryAssociatedTypeClauseSyntaxBuilder) -> Void) {
+    var builder = PrimaryAssociatedTypeClauseSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
     self.init(data)

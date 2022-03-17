@@ -2092,6 +2092,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `ConformanceRequirementSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConformanceRequirementSyntax) {}
+  /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `PrimaryAssociatedTypeClauseSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PrimaryAssociatedTypeClauseSyntax) {}
   /// Visiting `SimpleTypeIdentifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4807,6 +4817,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPrimaryAssociatedTypeClauseSyntax(_ data: SyntaxData) {
+      let node = PrimaryAssociatedTypeClauseSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) {
       let node = SimpleTypeIdentifierSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5655,6 +5676,8 @@ open class SyntaxVisitor {
       visitImplGenericParameterClauseSyntax(data)
     case .conformanceRequirement:
       visitImplConformanceRequirementSyntax(data)
+    case .primaryAssociatedTypeClause:
+      visitImplPrimaryAssociatedTypeClauseSyntax(data)
     case .simpleTypeIdentifier:
       visitImplSimpleTypeIdentifierSyntax(data)
     case .memberTypeIdentifier:

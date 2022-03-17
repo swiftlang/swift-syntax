@@ -227,6 +227,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case primaryAssociatedType = 255
   case genericParameterClause = 151
   case conformanceRequirement = 152
+  case primaryAssociatedTypeClause = 256
   case simpleTypeIdentifier = 212
   case memberTypeIdentifier = 213
   case classRestrictionType = 214

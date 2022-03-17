@@ -12177,6 +12177,162 @@ extension ConformanceRequirementSyntax: CustomReflectable {
   }
 }
 
+// MARK: - PrimaryAssociatedTypeClauseSyntax
+
+public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case leftAngleBracket
+    case primaryAssociatedTypeList
+    case rightAngleBracket
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `PrimaryAssociatedTypeClauseSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .primaryAssociatedTypeClause else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `PrimaryAssociatedTypeClauseSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .primaryAssociatedTypeClause)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var leftAngleBracket: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.leftAngleBracket,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftAngleBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftAngleBracket` replaced.
+  /// - param newChild: The new `leftAngleBracket` to replace the node's
+  ///                   current `leftAngleBracket`, if present.
+  public func withLeftAngleBracket(
+    _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftAngle)
+    let newData = data.replacingChild(raw, at: Cursor.leftAngleBracket)
+    return PrimaryAssociatedTypeClauseSyntax(newData)
+  }
+
+  public var primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax {
+    get {
+      let childData = data.child(at: Cursor.primaryAssociatedTypeList,
+                                 parent: Syntax(self))
+      return PrimaryAssociatedTypeListSyntax(childData!)
+    }
+    set(value) {
+      self = withPrimaryAssociatedTypeList(value)
+    }
+  }
+
+  /// Adds the provided `PrimaryAssociatedType` to the node's `primaryAssociatedTypeList`
+  /// collection.
+  /// - param element: The new `PrimaryAssociatedType` to add to the node's
+  ///                  `primaryAssociatedTypeList` collection.
+  /// - returns: A copy of the receiver with the provided `PrimaryAssociatedType`
+  ///            appended to its `primaryAssociatedTypeList` collection.
+  public func addPrimaryAssociatedType(_ element: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+    var collection: RawSyntax
+    if let col = raw[Cursor.primaryAssociatedTypeList] {
+      collection = col.appending(element.raw)
+    } else {
+      collection = RawSyntax.create(kind: SyntaxKind.primaryAssociatedTypeList,
+        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+    }
+    let newData = data.replacingChild(collection,
+                                      at: Cursor.primaryAssociatedTypeList)
+    return PrimaryAssociatedTypeClauseSyntax(newData)
+  }
+
+  /// Returns a copy of the receiver with its `primaryAssociatedTypeList` replaced.
+  /// - param newChild: The new `primaryAssociatedTypeList` to replace the node's
+  ///                   current `primaryAssociatedTypeList`, if present.
+  public func withPrimaryAssociatedTypeList(
+    _ newChild: PrimaryAssociatedTypeListSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.primaryAssociatedTypeList)
+    let newData = data.replacingChild(raw, at: Cursor.primaryAssociatedTypeList)
+    return PrimaryAssociatedTypeClauseSyntax(newData)
+  }
+
+  public var rightAngleBracket: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.rightAngleBracket,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightAngleBracket(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightAngleBracket` replaced.
+  /// - param newChild: The new `rightAngleBracket` to replace the node's
+  ///                   current `rightAngleBracket`, if present.
+  public func withRightAngleBracket(
+    _ newChild: TokenSyntax?) -> PrimaryAssociatedTypeClauseSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightAngle)
+    let newData = data.replacingChild(raw, at: Cursor.rightAngleBracket)
+    return PrimaryAssociatedTypeClauseSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 3)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is PrimaryAssociatedTypeListSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(PrimaryAssociatedTypeListSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension PrimaryAssociatedTypeClauseSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "leftAngleBracket": Syntax(leftAngleBracket).asProtocol(SyntaxProtocol.self),
+      "primaryAssociatedTypeList": Syntax(primaryAssociatedTypeList).asProtocol(SyntaxProtocol.self),
+      "rightAngleBracket": Syntax(rightAngleBracket).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - CompositionTypeElementSyntax
 
 public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {

@@ -1967,6 +1967,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     case modifiers
     case protocolKeyword
     case identifier
+    case primaryAssociatedTypeClause
     case inheritanceClause
     case genericWhereClause
     case members
@@ -2117,6 +2118,28 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ProtocolDeclSyntax(newData)
   }
 
+  public var primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? {
+    get {
+      let childData = data.child(at: Cursor.primaryAssociatedTypeClause,
+                                 parent: Syntax(self))
+      if childData == nil { return nil }
+      return PrimaryAssociatedTypeClauseSyntax(childData!)
+    }
+    set(value) {
+      self = withPrimaryAssociatedTypeClause(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `primaryAssociatedTypeClause` replaced.
+  /// - param newChild: The new `primaryAssociatedTypeClause` to replace the node's
+  ///                   current `primaryAssociatedTypeClause`, if present.
+  public func withPrimaryAssociatedTypeClause(
+    _ newChild: PrimaryAssociatedTypeClauseSyntax?) -> ProtocolDeclSyntax {
+    let raw = newChild?.raw
+    let newData = data.replacingChild(raw, at: Cursor.primaryAssociatedTypeClause)
+    return ProtocolDeclSyntax(newData)
+  }
+
   public var inheritanceClause: TypeInheritanceClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.inheritanceClause,
@@ -2185,7 +2208,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
+    assert(rawChildren.count == 8)
     // Check child #0 child is AttributeListSyntax or missing
     if let raw = rawChildren[0].raw {
       let info = rawChildren[0].syntaxInfo
@@ -2220,26 +2243,34 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #4 child is TypeInheritanceClauseSyntax or missing
+    // Check child #4 child is PrimaryAssociatedTypeClauseSyntax or missing
     if let raw = rawChildren[4].raw {
       let info = rawChildren[4].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
+      assert(syntaxChild.is(PrimaryAssociatedTypeClauseSyntax.self))
     }
-    // Check child #5 child is GenericWhereClauseSyntax or missing
+    // Check child #5 child is TypeInheritanceClauseSyntax or missing
     if let raw = rawChildren[5].raw {
       let info = rawChildren[5].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+      assert(syntaxChild.is(TypeInheritanceClauseSyntax.self))
     }
-    // Check child #6 child is MemberDeclBlockSyntax 
-    assert(rawChildren[6].raw != nil)
+    // Check child #6 child is GenericWhereClauseSyntax or missing
     if let raw = rawChildren[6].raw {
       let info = rawChildren[6].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(GenericWhereClauseSyntax.self))
+    }
+    // Check child #7 child is MemberDeclBlockSyntax 
+    assert(rawChildren[7].raw != nil)
+    if let raw = rawChildren[7].raw {
+      let info = rawChildren[7].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
@@ -2255,6 +2286,7 @@ extension ProtocolDeclSyntax: CustomReflectable {
       "modifiers": modifiers.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "protocolKeyword": Syntax(protocolKeyword).asProtocol(SyntaxProtocol.self),
       "identifier": Syntax(identifier).asProtocol(SyntaxProtocol.self),
+      "primaryAssociatedTypeClause": primaryAssociatedTypeClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "inheritanceClause": inheritanceClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "genericWhereClause": genericWhereClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "members": Syntax(members).asProtocol(SyntaxProtocol.self),

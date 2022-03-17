@@ -2033,6 +2033,16 @@ public extension ExpressibleAsConformanceRequirement {
   }
 }
 
+public protocol ExpressibleAsPrimaryAssociatedTypeClause: ExpressibleAsSyntaxBuildable {
+  func createPrimaryAssociatedTypeClause() -> PrimaryAssociatedTypeClause
+}
+
+public extension ExpressibleAsPrimaryAssociatedTypeClause {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return self.createPrimaryAssociatedTypeClause()
+  }
+}
+
 public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeAnnotation, ExpressibleAsTypeExpr, ExpressibleAsTypeBuildable {
   func createSimpleTypeIdentifier() -> SimpleTypeIdentifier
 }

@@ -1506,6 +1506,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: ConformanceRequirementSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: PrimaryAssociatedTypeClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

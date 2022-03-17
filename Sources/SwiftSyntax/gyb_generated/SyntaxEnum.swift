@@ -227,6 +227,7 @@ public enum SyntaxEnum {
   case primaryAssociatedType(PrimaryAssociatedTypeSyntax)
   case genericParameterClause(GenericParameterClauseSyntax)
   case conformanceRequirement(ConformanceRequirementSyntax)
+  case primaryAssociatedTypeClause(PrimaryAssociatedTypeClauseSyntax)
   case simpleTypeIdentifier(SimpleTypeIdentifierSyntax)
   case memberTypeIdentifier(MemberTypeIdentifierSyntax)
   case classRestrictionType(ClassRestrictionTypeSyntax)
@@ -696,6 +697,8 @@ public extension Syntax {
       return .genericParameterClause(GenericParameterClauseSyntax(self)!)
     case .conformanceRequirement:
       return .conformanceRequirement(ConformanceRequirementSyntax(self)!)
+    case .primaryAssociatedTypeClause:
+      return .primaryAssociatedTypeClause(PrimaryAssociatedTypeClauseSyntax(self)!)
     case .simpleTypeIdentifier:
       return .simpleTypeIdentifier(SimpleTypeIdentifierSyntax(self)!)
     case .memberTypeIdentifier:

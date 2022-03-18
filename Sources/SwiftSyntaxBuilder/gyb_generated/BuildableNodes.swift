@@ -8710,6 +8710,126 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   }
 
 }
+/// A collection of arguments for the `@_backDeploy` attribute
+public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDeployAttributeSpecList {
+  let beforeLabel: TokenSyntax
+  let colon: TokenSyntax
+  let versionList: BackDeployVersionList
+
+  /// Creates a `BackDeployAttributeSpecList` using the provided parameters.
+  /// - Parameters:
+  ///   - beforeLabel: The "before" label.
+  ///   - colon: The colon separating "before" and the parameter list.
+  ///   - versionList: The list of OS versions in which the declaration became ABIstable.
+  public init(
+    beforeLabel: TokenSyntax,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    versionList: ExpressibleAsBackDeployVersionList
+  ) {
+    self.beforeLabel = beforeLabel
+    assert(beforeLabel.text == "before")
+    self.colon = colon
+    assert(colon.text == ":")
+    self.versionList = versionList.createBackDeployVersionList()
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    beforeLabel: String,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    @BackDeployVersionListBuilder versionListBuilder: () -> ExpressibleAsBackDeployVersionList = { BackDeployVersionList([]) }
+  ) {
+    self.init(
+      beforeLabel: TokenSyntax.identifier(beforeLabel),
+      colon: colon,
+      versionList: versionListBuilder()
+    )
+  }
+
+  func buildBackDeployAttributeSpecList(format: Format, leadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
+    let result = SyntaxFactory.makeBackDeployAttributeSpecList(
+      beforeLabel: beforeLabel,
+      colon: colon,
+      versionList: versionList.buildBackDeployVersionList(format: format, leadingTrivia: nil)
+    )
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildBackDeployAttributeSpecList(format: format, leadingTrivia: leadingTrivia)
+    return Syntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsBackDeployAttributeSpecList`.
+  public func createBackDeployAttributeSpecList() -> BackDeployAttributeSpecList {
+    return self
+  }
+
+  /// `BackDeployAttributeSpecList` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+
+}
+/// A single platform/version pair in a `@_backDeploy` attribute,e.g. `iOS 10.1`.
+public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeployVersionArgument {
+  let availabilityVersionRestriction: AvailabilityVersionRestriction
+  let trailingComma: TokenSyntax?
+
+  /// Creates a `BackDeployVersionArgument` using the provided parameters.
+  /// - Parameters:
+  ///   - availabilityVersionRestriction: 
+  ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
+  public init(
+    availabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction,
+    trailingComma: TokenSyntax? = nil
+  ) {
+    self.availabilityVersionRestriction = availabilityVersionRestriction.createAvailabilityVersionRestriction()
+    self.trailingComma = trailingComma
+    assert(trailingComma == nil || trailingComma!.text == ",")
+  }
+
+
+  func buildBackDeployVersionArgument(format: Format, leadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
+    let result = SyntaxFactory.makeBackDeployVersionArgument(
+      availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format, leadingTrivia: nil),
+      trailingComma: trailingComma
+    )
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  /// Conformance to `SyntaxBuildable`.
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildBackDeployVersionArgument(format: format, leadingTrivia: leadingTrivia)
+    return Syntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsBackDeployVersionArgument`.
+  public func createBackDeployVersionArgument() -> BackDeployVersionArgument {
+    return self
+  }
+
+  /// `BackDeployVersionArgument` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+
+}
 public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   let continueKeyword: TokenSyntax
   let label: TokenSyntax?

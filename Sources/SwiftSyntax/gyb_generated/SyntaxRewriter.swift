@@ -1136,6 +1136,27 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `BackDeployAttributeSpecListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: BackDeployAttributeSpecListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `BackDeployVersionListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: BackDeployVersionListSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `BackDeployVersionArgumentSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: BackDeployVersionArgumentSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `ContinueStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3413,6 +3434,36 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplBackDeployAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = BackDeployAttributeSpecListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplBackDeployVersionListSyntax(_ data: SyntaxData) -> Syntax {
+      let node = BackDeployVersionListSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplBackDeployVersionArgumentSyntax(_ data: SyntaxData) -> Syntax {
+      let node = BackDeployVersionArgumentSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplContinueStmtSyntax(_ data: SyntaxData) -> Syntax {
       let node = ContinueStmtSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4642,6 +4693,12 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax
     case .functionDeclName:
       return visitImplFunctionDeclNameSyntax
+    case .backDeployAttributeSpecList:
+      return visitImplBackDeployAttributeSpecListSyntax
+    case .backDeployVersionList:
+      return visitImplBackDeployVersionListSyntax
+    case .backDeployVersionArgument:
+      return visitImplBackDeployVersionArgumentSyntax
     case .continueStmt:
       return visitImplContinueStmtSyntax
     case .whileStmt:
@@ -5155,6 +5212,12 @@ open class SyntaxRewriter {
       return visitImplQualifiedDeclNameSyntax(data)
     case .functionDeclName:
       return visitImplFunctionDeclNameSyntax(data)
+    case .backDeployAttributeSpecList:
+      return visitImplBackDeployAttributeSpecListSyntax(data)
+    case .backDeployVersionList:
+      return visitImplBackDeployVersionListSyntax(data)
+    case .backDeployVersionArgument:
+      return visitImplBackDeployVersionArgumentSyntax(data)
     case .continueStmt:
       return visitImplContinueStmtSyntax(data)
     case .whileStmt:

@@ -180,6 +180,9 @@ internal enum SyntaxKind: CSyntaxKind {
   case derivativeRegistrationAttributeArguments = 241
   case qualifiedDeclName = 242
   case functionDeclName = 239
+  case backDeployAttributeSpecList = 257
+  case backDeployVersionList = 258
+  case backDeployVersionArgument = 259
   case continueStmt = 72
   case whileStmt = 73
   case deferStmt = 74
@@ -297,6 +300,7 @@ internal enum SyntaxKind: CSyntaxKind {
     case .specializeAttributeSpecList: return true
     case .objCSelector: return true
     case .differentiabilityParamList: return true
+    case .backDeployVersionList: return true
     case .switchCaseList: return true
     case .catchClauseList: return true
     case .caseItemList: return true

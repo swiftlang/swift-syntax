@@ -3212,6 +3212,60 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return FunctionDeclNameSyntax(data)
   }
+  public static func makeBackDeployAttributeSpecList(beforeLabel: TokenSyntax, colon: TokenSyntax, versionList: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
+    let layout: [RawSyntax?] = [
+      beforeLabel.raw,
+      colon.raw,
+      versionList.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployAttributeSpecList,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return BackDeployAttributeSpecListSyntax(data)
+  }
+
+  public static func makeBlankBackDeployAttributeSpecList() -> BackDeployAttributeSpecListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .backDeployAttributeSpecList,
+      layout: [
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.colon),
+      RawSyntax.missing(SyntaxKind.backDeployVersionList),
+    ], length: .zero, presence: .present))
+    return BackDeployAttributeSpecListSyntax(data)
+  }
+  public static func makeBackDeployVersionList(
+    _ elements: [BackDeployVersionArgumentSyntax]) -> BackDeployVersionListSyntax {
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionList,
+      layout: elements.map { $0.raw }, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return BackDeployVersionListSyntax(data)
+  }
+
+  public static func makeBlankBackDeployVersionList() -> BackDeployVersionListSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .backDeployVersionList,
+      layout: [
+    ], length: .zero, presence: .present))
+    return BackDeployVersionListSyntax(data)
+  }
+  public static func makeBackDeployVersionArgument(availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, trailingComma: TokenSyntax?) -> BackDeployVersionArgumentSyntax {
+    let layout: [RawSyntax?] = [
+      availabilityVersionRestriction.raw,
+      trailingComma?.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionArgument,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return BackDeployVersionArgumentSyntax(data)
+  }
+
+  public static func makeBlankBackDeployVersionArgument() -> BackDeployVersionArgumentSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .backDeployVersionArgument,
+      layout: [
+      RawSyntax.missing(SyntaxKind.availabilityVersionRestriction),
+      nil,
+    ], length: .zero, presence: .present))
+    return BackDeployVersionArgumentSyntax(data)
+  }
   public static func makeContinueStmt(continueKeyword: TokenSyntax, label: TokenSyntax?) -> ContinueStmtSyntax {
     let layout: [RawSyntax?] = [
       continueKeyword.raw,

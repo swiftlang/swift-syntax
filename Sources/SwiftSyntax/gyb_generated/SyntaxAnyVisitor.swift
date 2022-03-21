@@ -1177,6 +1177,27 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: FunctionDeclNameSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: BackDeployAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: BackDeployAttributeSpecListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: BackDeployVersionListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: BackDeployVersionListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: BackDeployVersionArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: BackDeployVersionArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

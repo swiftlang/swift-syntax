@@ -1255,6 +1255,49 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   }
 }
 
+/// `BackDeployVersionList` represents a collection of `BackDeployVersionArgument`s.
+public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsBackDeployVersionList {
+  let elements: [BackDeployVersionArgument]
+
+  /// Creates a `BackDeployVersionList` with the provided list of elements.
+  /// - Parameters:
+  ///   - elements: A list of `ExpressibleAsBackDeployVersionArgument`
+  public init(_ elements: [ExpressibleAsBackDeployVersionArgument]) {
+    self.elements = elements.map { $0.createBackDeployVersionArgument() }
+  }
+
+  public init(arrayLiteral elements: ExpressibleAsBackDeployVersionArgument...) {
+    self.init(elements)
+  }
+
+  public func buildBackDeployVersionList(format: Format, leadingTrivia: Trivia? = nil) -> BackDeployVersionListSyntax {
+    let result = SyntaxFactory.makeBackDeployVersionList(elements.map {
+      $0.buildBackDeployVersionArgument(format: format, leadingTrivia: nil)
+    })
+    if let leadingTrivia = leadingTrivia {
+      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+    } else {
+      return result
+    }
+  }
+
+  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
+    return Syntax(buildBackDeployVersionList(format: format, leadingTrivia: leadingTrivia))
+  }
+
+  /// Conformance to `ExpressibleAsBackDeployVersionList`.
+  public func createBackDeployVersionList() -> BackDeployVersionList {
+    return self
+  }
+
+  /// `BackDeployVersionList` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+
 /// `SwitchCaseList` represents a collection of `SyntaxBuildable`s.
 public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSwitchCaseList {
   let elements: [SyntaxBuildable]

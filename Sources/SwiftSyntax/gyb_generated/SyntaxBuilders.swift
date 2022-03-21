@@ -7052,6 +7052,109 @@ extension FunctionDeclNameSyntax {
   }
 }
 
+public struct BackDeployAttributeSpecListSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 3)
+
+  internal init() {}
+
+  public mutating func useBeforeLabel(_ node: TokenSyntax) {
+    let idx = BackDeployAttributeSpecListSyntax.Cursor.beforeLabel.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = BackDeployAttributeSpecListSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func addAvailability(_ elt: BackDeployVersionArgumentSyntax) {
+    let idx = BackDeployAttributeSpecListSyntax.Cursor.versionList.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.backDeployVersionList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+    }
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missing(SyntaxKind.backDeployVersionList)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .backDeployAttributeSpecList,
+      layout: layout, presence: .present))
+  }
+}
+
+extension BackDeployAttributeSpecListSyntax {
+  /// Creates a `BackDeployAttributeSpecListSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `BackDeployAttributeSpecListSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `BackDeployAttributeSpecListSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout BackDeployAttributeSpecListSyntaxBuilder) -> Void) {
+    var builder = BackDeployAttributeSpecListSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct BackDeployVersionArgumentSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 2)
+
+  internal init() {}
+
+  public mutating func useAvailabilityVersionRestriction(_ node: AvailabilityVersionRestrictionSyntax) {
+    let idx = BackDeployVersionArgumentSyntax.Cursor.availabilityVersionRestriction.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useTrailingComma(_ node: TokenSyntax) {
+    let idx = BackDeployVersionArgumentSyntax.Cursor.trailingComma.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missing(SyntaxKind.availabilityVersionRestriction)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .backDeployVersionArgument,
+      layout: layout, presence: .present))
+  }
+}
+
+extension BackDeployVersionArgumentSyntax {
+  /// Creates a `BackDeployVersionArgumentSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `BackDeployVersionArgumentSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `BackDeployVersionArgumentSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout BackDeployVersionArgumentSyntaxBuilder) -> Void) {
+    var builder = BackDeployVersionArgumentSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
 public struct ContinueStmtSyntaxBuilder {
   private var layout =
     Array<RawSyntax?>(repeating: nil, count: 2)

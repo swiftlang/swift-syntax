@@ -973,6 +973,24 @@ extension SyntaxNode {
     return FunctionDeclNameSyntax(asSyntaxData)
   }
 
+  public var isBackDeployAttributeSpecList: Bool { return raw.kind == .backDeployAttributeSpecList }
+  public var asBackDeployAttributeSpecList: BackDeployAttributeSpecListSyntax? {
+    guard isBackDeployAttributeSpecList else { return nil }
+    return BackDeployAttributeSpecListSyntax(asSyntaxData)
+  }
+
+  public var isBackDeployVersionList: Bool { return raw.kind == .backDeployVersionList }
+  public var asBackDeployVersionList: BackDeployVersionListSyntax? {
+    guard isBackDeployVersionList else { return nil }
+    return BackDeployVersionListSyntax(asSyntaxData)
+  }
+
+  public var isBackDeployVersionArgument: Bool { return raw.kind == .backDeployVersionArgument }
+  public var asBackDeployVersionArgument: BackDeployVersionArgumentSyntax? {
+    guard isBackDeployVersionArgument else { return nil }
+    return BackDeployVersionArgumentSyntax(asSyntaxData)
+  }
+
   public var isContinueStmt: Bool { return raw.kind == .continueStmt }
   public var asContinueStmt: ContinueStmtSyntax? {
     guard isContinueStmt else { return nil }
@@ -1828,6 +1846,12 @@ extension Syntax {
     case .qualifiedDeclName(let node):
       return node
     case .functionDeclName(let node):
+      return node
+    case .backDeployAttributeSpecList(let node):
+      return node
+    case .backDeployVersionList(let node):
+      return node
+    case .backDeployVersionArgument(let node):
       return node
     case .continueStmt(let node):
       return node

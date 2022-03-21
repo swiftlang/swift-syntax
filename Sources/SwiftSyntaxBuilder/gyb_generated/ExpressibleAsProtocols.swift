@@ -1583,6 +1583,34 @@ public extension ExpressibleAsFunctionDeclName {
   }
 }
 
+public protocol ExpressibleAsBackDeployAttributeSpecList: ExpressibleAsSyntaxBuildable {
+  func createBackDeployAttributeSpecList() -> BackDeployAttributeSpecList
+}
+
+public extension ExpressibleAsBackDeployAttributeSpecList {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return self.createBackDeployAttributeSpecList()
+  }
+}
+
+public protocol ExpressibleAsBackDeployVersionList {
+  func createBackDeployVersionList() -> BackDeployVersionList
+}
+
+public protocol ExpressibleAsBackDeployVersionArgument: ExpressibleAsBackDeployVersionList, ExpressibleAsSyntaxBuildable {
+  func createBackDeployVersionArgument() -> BackDeployVersionArgument
+}
+
+public extension ExpressibleAsBackDeployVersionArgument {
+  /// Conformance to `ExpressibleAsBackDeployVersionList`.
+  func createBackDeployVersionList() -> BackDeployVersionList {
+    return BackDeployVersionList([self])
+  }
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return self.createBackDeployVersionArgument()
+  }
+}
+
 public protocol ExpressibleAsContinueStmt: ExpressibleAsStmtBuildable {
   func createContinueStmt() -> ContinueStmt
 }

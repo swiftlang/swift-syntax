@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-
-
-from __future__ import absolute_import, print_function, unicode_literals
+#!/usr/bin/env python3
 
 import argparse
 import os
@@ -519,7 +516,7 @@ def find_lit_test_helper_exec(toolchain, build_dir, release):
     swiftpm_call.extend(["--show-bin-path"])
 
     bin_dir = subprocess.check_output(swiftpm_call)
-    return os.path.join(bin_dir.strip(), "lit-test-helper")
+    return os.path.join(bin_dir.strip().decode('utf-8'), "lit-test-helper")
 
 
 def run_lit_tests(toolchain, build_dir, release, filecheck_exec, verbose):

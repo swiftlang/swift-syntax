@@ -760,6 +760,7 @@ def main():
         # targets simultaneously. For now, just build one product after the other.
         builder.build("SwiftSyntax")
         builder.build("SwiftSyntaxParser")
+        builder.build("SwiftSyntaxBuilder")
 
         # Only build lit-test-helper if we are planning to run tests
         if args.test:

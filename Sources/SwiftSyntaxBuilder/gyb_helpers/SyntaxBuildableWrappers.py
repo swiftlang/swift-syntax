@@ -1,8 +1,8 @@
 from gyb_syntax_support import SYNTAX_TOKEN_MAP, create_node_map, SYNTAX_NODES
 from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
 from gyb_syntax_support.kinds import lowercase_first_word
-from .ExpressibleAsConformances import SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES
-from .utils import flat_documentation
+from ExpressibleAsConformances import SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES
+from utils import flat_documentation
 
 class SyntaxBuildableChild:
   """

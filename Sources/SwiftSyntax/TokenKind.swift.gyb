@@ -76,7 +76,7 @@ public enum TokenKind {
     case .eof: return .zero
 % for token in SYNTAX_TOKENS:
 %   if token.text:
-    case .${token.swift_kind()}: return SourceLength(utf8Length: ${len(token.text.encode('utf-8').decode('unicode_escape'))})
+    case .${token.swift_kind()}: return SourceLength(utf8Length: ${len(token.text.decode('string_escape'))})
 %   else:
     case .${token.swift_kind()}(let text): return SourceLength(of: text)
 %   end
@@ -168,7 +168,7 @@ extension TokenKind {
 % for token in SYNTAX_TOKENS:
 %   if token.text:
     case .${token.swift_kind()}:
-      let length = ${len(token.text.encode('utf-8').decode('unicode_escape'))}
+      let length = ${len(token.text.decode('string_escape'))}
       return body(.init(kind: .${token.swift_kind()}, length: length))
 %   else:
     case .${token.swift_kind()}(var text):

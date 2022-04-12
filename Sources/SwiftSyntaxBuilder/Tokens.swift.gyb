@@ -62,4 +62,9 @@ public extension TokenSyntax {
   static var eof: TokenSyntax {
     SyntaxFactory.makeToken(.eof, presence: .present)
   }
+  /// The `open` contextual token
+  static var open: TokenSyntax {
+        SyntaxFactory.makeContextualKeyword("open")
+          .withTrailingTrivia(.spaces(1))
+    }
 }

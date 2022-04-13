@@ -74,15 +74,15 @@ extension TriviaPiece: TextOutputStreamable {
     case let .carriageReturnLineFeeds(count):
       printRepeated("\r\n", count: count)
     case let .lineComment(text):
-      target.write(text)
+    target.write("// \(text)")
     case let .blockComment(text):
-      target.write(text)
+    target.write("/* \(text) */")
     case let .docLineComment(text):
-      target.write(text)
+    target.write("/// \(text)")
     case let .docBlockComment(text):
-      target.write(text)
+    target.write("/** \(text) */")
     case let .garbageText(text):
-      target.write(text)
+    target.write(text)
     }
   }
 }

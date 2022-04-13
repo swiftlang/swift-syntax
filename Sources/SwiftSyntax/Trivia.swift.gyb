@@ -53,11 +53,18 @@ extension TriviaPiece: TextOutputStreamable {
 %   joined = ''.join(trivia.swift_characters)
     case let .${trivia.lower_name}s(count):
       printRepeated("${joined}", count: count)
-%   else:
-    case let .${trivia.lower_name}(text):
-      target.write(text)
 %   end
 % end
+    case let .lineComment(text):
+    target.write("// \(text)")
+    case let .blockComment(text):
+    target.write("/* \(text) */")
+    case let .docLineComment(text):
+    target.write("/// \(text)")
+    case let .docBlockComment(text):
+    target.write("/** \(text) */")
+    case let .garbageText(text):
+    target.write(text)
     }
   }
 }

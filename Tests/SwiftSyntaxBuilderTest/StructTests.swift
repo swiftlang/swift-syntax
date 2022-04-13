@@ -22,7 +22,7 @@ final class StructTests: XCTestCase {
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
     let emptyMembers = MemberDeclList([])
-    let nestedStruct = StructDecl(structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
+    let nestedStruct = StructDecl(structKeyword: .struct.withLeadingTrivia(.docLineComment("A nested struct\n")),
                                   identifier: "NestedStruct",
                                   members: emptyMembers)
     let members = MemberDeclListItem(decl: nestedStruct)

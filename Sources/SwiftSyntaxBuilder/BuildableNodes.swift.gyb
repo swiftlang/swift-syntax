@@ -107,15 +107,24 @@ public struct ${type.buildable()}: ${base_type.buildable()}, ${type.expressible_
 
   /// Conformance to `${base_type.buildable()}`.
   public func build${base_type.base_name()}(format: Format, leadingTrivia: Trivia? = nil) -> ${base_type.syntax()} {
+    %   if type.buildable() != 'SourceFile':
     let result = build${type.base_name()}(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ${base_type.syntax()}(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+    % end
+    %   if type.buildable() == 'SourceFile':
+    let combinedTrivia = [format._makeIndent(),
+                          leadingTrivia,
+                          itemLeadingTrivia]
+      .compactMap { $0 }
+      .reduce(.zero, +)
+    %   if type.buildable() == 'SourceFile':
+    let result = buildSourceFile(format: format, leadingTrivia: combinedTrivia)
+    % end
+    % else:
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ${base_type.syntax()}(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
+    %   end
     return ${base_type.syntax()}(result)
   }
 

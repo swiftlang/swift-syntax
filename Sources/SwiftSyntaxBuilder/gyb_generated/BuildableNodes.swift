@@ -54,14 +54,10 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCodeBlockItem(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -194,14 +190,10 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCodeBlock(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -314,14 +306,10 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildInOutExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -435,14 +423,10 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundColumnExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -567,14 +551,10 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTryExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -705,14 +685,10 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildAwaitExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -831,14 +807,10 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclNameArgument(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -971,14 +943,10 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclNameArguments(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -1090,14 +1058,10 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildIdentifierExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1211,14 +1175,10 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSuperRefExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1332,14 +1292,10 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildNilLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1453,14 +1409,10 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildDiscardAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1574,14 +1526,10 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1704,14 +1652,10 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSequenceExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1825,14 +1769,10 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundLineExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -1946,14 +1886,10 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFileExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2067,14 +2003,10 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFileIDExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2188,14 +2120,10 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFilePathExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2309,14 +2237,10 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFunctionExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2430,14 +2354,10 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundDsohandleExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2567,14 +2487,10 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSymbolicReferenceExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2704,14 +2620,10 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPrefixOperatorExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2824,14 +2736,10 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildBinaryOperatorExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -2971,14 +2879,10 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildArrowExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -3101,14 +3005,10 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildFloatLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -3247,14 +3147,10 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTupleExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -3393,14 +3289,10 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildArrayExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -3525,14 +3417,10 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildDictionaryExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -3662,14 +3550,10 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTupleExprElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -3782,14 +3666,10 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildArrayElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -3913,14 +3793,10 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDictionaryElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -4037,14 +3913,10 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildIntegerLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4158,14 +4030,10 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildBooleanLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4300,14 +4168,10 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTernaryExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4436,14 +4300,10 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildMemberAccessExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4562,14 +4422,10 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildIsExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4694,14 +4550,10 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildAsExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4814,14 +4666,10 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTypeExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -4974,14 +4822,10 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureCaptureItem(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -5114,14 +4958,10 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureCaptureSignature(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -5234,14 +5074,10 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureParam(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -5403,14 +5239,10 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureSignature(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -5550,14 +5382,10 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildClosureExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -5670,14 +5498,10 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildUnresolvedPatternExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -5801,14 +5625,10 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMultipleTrailingClosureElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -5962,14 +5782,10 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildFunctionCallExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -6129,14 +5945,10 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSubscriptExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -6255,14 +6067,10 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildOptionalChainingExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -6381,14 +6189,10 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildForcedValueExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -6518,14 +6322,10 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPostfixUnaryExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -6643,14 +6443,10 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSpecializeExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -6773,14 +6569,10 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildStringSegment(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -6928,14 +6720,10 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildExpressionSegment(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -7082,14 +6870,10 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildStringLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -7212,14 +6996,10 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildRegexLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -7343,14 +7123,10 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -7464,14 +7240,10 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildKeyPathBaseExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -7602,14 +7374,10 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildObjcNamePiece(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -7750,14 +7518,10 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildObjcKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -7920,14 +7684,10 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildObjcSelectorExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -8045,14 +7805,10 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPostfixIfConfigExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -8175,14 +7931,10 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildEditorPlaceholderExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -8329,14 +8081,10 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildObjectLiteralExpr(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return ExprSyntax(result)
   }
 
@@ -8455,14 +8203,10 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTypeInitializerClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -8622,14 +8366,10 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildTypealiasDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -8795,14 +8535,10 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildAssociatedtypeDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -8941,14 +8677,10 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildParameterClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -9061,14 +8793,10 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildReturnClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -9208,14 +8936,10 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildFunctionSignature(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -9333,14 +9057,10 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildIfConfigClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -9465,14 +9185,10 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildIfConfigDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -9603,14 +9319,10 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPoundErrorDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -9741,14 +9453,10 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPoundWarningDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -9879,14 +9587,10 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPoundSourceLocation(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -10056,14 +9760,10 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPoundSourceLocationArgs(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -10204,14 +9904,10 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclModifier(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -10324,14 +10020,10 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildInheritedType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -10456,14 +10148,10 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTypeInheritanceClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -10629,14 +10317,10 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildClassDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -10809,14 +10493,10 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildStructDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -10989,14 +10669,10 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildProtocolDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -11162,14 +10838,10 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildExtensionDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -11308,14 +10980,10 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMemberDeclBlock(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -11429,14 +11097,10 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMemberDeclListItem(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -11559,15 +11223,12 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
 
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSourceFile(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+    let combinedTrivia = [format._makeIndent(),
+                          leadingTrivia,
+                          itemLeadingTrivia]
+      .compactMap { $0 }
+      .reduce(.zero, +)
+    let result = buildSourceFile(format: format, leadingTrivia: combinedTrivia)
     return Syntax(result)
   }
 
@@ -11680,14 +11341,10 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildInitializerClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -11856,14 +11513,10 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildFunctionParameter(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -12030,14 +11683,10 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildFunctionDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -12219,14 +11868,10 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildInitializerDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -12371,14 +12016,10 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildDeinitializerDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -12551,14 +12192,10 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildSubscriptDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -12704,14 +12341,10 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessLevelModifier(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -12836,14 +12469,10 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessPathComponent(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -12990,14 +12619,10 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildImportDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -13136,14 +12761,10 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessorParameter(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -13305,14 +12926,10 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildAccessorDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -13451,14 +13068,10 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessorBlock(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -13586,14 +13199,10 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPatternBinding(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -13732,14 +13341,10 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildVariableDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -13885,14 +13490,10 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildEnumCaseElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -14032,14 +13633,10 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildEnumCaseDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -14213,14 +13810,10 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildEnumDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -14373,14 +13966,10 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildOperatorDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -14512,14 +14101,10 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -14682,14 +14267,10 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPrecedenceGroupDecl(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return DeclSyntax(result)
   }
 
@@ -14829,14 +14410,10 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupRelation(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -14961,14 +14538,10 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupNameElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -15103,14 +14676,10 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupAssignment(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -15245,14 +14814,10 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupAssociativity(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -15401,14 +14966,10 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCustomAttribute(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -15564,14 +15125,10 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAttribute(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -15712,14 +15269,10 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityEntry(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -15860,14 +15413,10 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildLabeledSpecializeEntry(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16008,14 +15557,10 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTargetFunctionEntry(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16134,14 +15679,10 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildNamedAttributeStringArgument(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16253,14 +15794,10 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclName(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16384,14 +15921,10 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildImplementsAttributeArguments(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16517,14 +16050,10 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildObjCSelectorPiece(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16673,14 +16202,10 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiableAttributeArguments(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16814,14 +16339,10 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiabilityParamsClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -16955,14 +16476,10 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiabilityParams(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17076,14 +16593,10 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiabilityParam(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17248,14 +16761,10 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDerivativeRegistrationAttributeArguments(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17379,14 +16888,10 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildQualifiedDeclName(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17499,14 +17004,10 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildFunctionDeclName(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17640,14 +17141,10 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildBackDeployAttributeSpecList(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17761,14 +17258,10 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildBackDeployVersionArgument(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -17893,14 +17386,10 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildContinueStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -18053,14 +17542,10 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildWhileStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -18179,14 +17664,10 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildDeferStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -18299,14 +17780,10 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildExpressionStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -18467,14 +17944,10 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildRepeatWhileStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -18620,14 +18093,10 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildGuardStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -18746,14 +18215,10 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildWhereClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -18953,14 +18418,10 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildForInStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -19129,14 +18590,10 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildSwitchStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -19289,14 +18746,10 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildDoStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -19415,14 +18868,10 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildReturnStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -19541,14 +18990,10 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildYieldStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -19695,14 +19140,10 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildYieldList(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -19810,14 +19251,10 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildFallthroughStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -19948,14 +19385,10 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildBreakStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -20074,14 +19507,10 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildConditionElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -20222,14 +19651,10 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityCondition(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -20352,14 +19777,10 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMatchingPatternCondition(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -20482,14 +19903,10 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildOptionalBindingCondition(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -20630,14 +20047,10 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildUnavailabilityCondition(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -20744,14 +20157,10 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildDeclarationStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -20870,14 +20279,10 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildThrowStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -21045,14 +20450,10 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildIfStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -21165,14 +20566,10 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildElseIfContinuation(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -21285,14 +20682,10 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildElseBlock(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -21423,14 +20816,10 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSwitchCase(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -21544,14 +20933,10 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSwitchDefaultLabel(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -21669,14 +21054,10 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCaseItem(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -21794,14 +21175,10 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCatchItem(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -21934,14 +21311,10 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSwitchCaseLabel(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -22073,14 +21446,10 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCatchClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -22236,14 +21605,10 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildPoundAssertStmt(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return StmtSyntax(result)
   }
 
@@ -22374,14 +21739,10 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericWhereClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -22494,14 +21855,10 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericRequirement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -22618,14 +21975,10 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSameTypeRequirement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -22772,14 +22125,10 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericParameter(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -22933,14 +22282,10 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrimaryAssociatedType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -23073,14 +22418,10 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericParameterClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -23198,14 +22539,10 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildConformanceRequirement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -23338,14 +22675,10 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -23457,14 +22790,10 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildSimpleTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -23593,14 +22922,10 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildMemberTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -23714,14 +23039,10 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildClassRestrictionType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -23846,14 +23167,10 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildArrayType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -23989,14 +23306,10 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildDictionaryType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -24135,14 +23448,10 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildMetatypeType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -24261,14 +23570,10 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildOptionalType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -24399,14 +23704,10 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildConstrainedSugarType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -24525,14 +23826,10 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildImplicitlyUnwrappedOptionalType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -24651,14 +23948,10 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCompositionTypeElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -24775,14 +24068,10 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildCompositionType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -24934,14 +24223,10 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTupleTypeElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -25074,14 +24359,10 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildTupleType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -25251,14 +24532,10 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildFunctionType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -25396,14 +24673,10 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildAttributedType(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return TypeSyntax(result)
   }
 
@@ -25522,14 +24795,10 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericArgument(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -25662,14 +24931,10 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericArgumentClause(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -25782,14 +25047,10 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTypeAnnotation(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -25928,14 +25189,10 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildEnumCasePattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26054,14 +25311,10 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildIsTypePattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26180,14 +25433,10 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildOptionalPattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26300,14 +25549,10 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildIdentifierPattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26431,14 +25676,10 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildAsTypePattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26577,14 +25818,10 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildTuplePattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26703,14 +25940,10 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildWildcardPattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -26856,14 +26089,10 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTuplePatternElement(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -26970,14 +26199,10 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildExpressionPattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -27096,14 +26321,10 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildValueBindingPattern(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return PatternSyntax(result)
   }
 
@@ -27223,14 +26444,10 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityArgument(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -27363,14 +26580,10 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityLabeledArgument(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -27495,14 +26708,10 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityVersionRestriction(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 
@@ -27635,14 +26844,10 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildVersionTuple(format: format, leadingTrivia: leadingTrivia)
-    
-      
-     if let itemLeadingTrivia = itemLeadingTrivia
-    {
-      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
-      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
-    }
-    
+      if let itemLeadingTrivia = itemLeadingTrivia {
+        let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+        return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+      }
     return Syntax(result)
   }
 

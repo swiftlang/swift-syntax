@@ -19,6 +19,7 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   let item: SyntaxBuildable
   let semicolon: TokenSyntax?
   let errorTokens: SyntaxBuildable?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CodeBlockItem` using the provided parameters.
   /// - Parameters:
@@ -53,6 +54,14 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCodeBlockItem(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -68,11 +77,74 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CodeBlockItem` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CodeBlockItem` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CodeBlockItem` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   let leftBrace: TokenSyntax
   let statements: CodeBlockItemList
   let rightBrace: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CodeBlock` using the provided parameters.
   /// - Parameters:
@@ -122,6 +194,14 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCodeBlock(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -137,10 +217,73 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CodeBlock` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CodeBlock` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CodeBlock` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   let ampersand: TokenSyntax
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `InOutExpr` using the provided parameters.
   /// - Parameters:
@@ -171,6 +314,14 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildInOutExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -192,9 +343,72 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `InOutExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `InOutExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `InOutExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   let poundColumn: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundColumnExpr` using the provided parameters.
   /// - Parameters:
@@ -221,6 +435,14 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundColumnExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -242,11 +464,74 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundColumnExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundColumnExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundColumnExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   let tryKeyword: TokenSyntax
   let questionOrExclamationMark: TokenSyntax?
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TryExpr` using the provided parameters.
   /// - Parameters:
@@ -282,6 +567,14 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTryExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -303,10 +596,73 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TryExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TryExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TryExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   let awaitKeyword: TokenSyntax
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AwaitExpr` using the provided parameters.
   /// - Parameters:
@@ -349,6 +705,14 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildAwaitExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -370,10 +734,73 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AwaitExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AwaitExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AwaitExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   let name: TokenSyntax
   let colon: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeclNameArgument` using the provided parameters.
   /// - Parameters:
@@ -404,6 +831,14 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclNameArgument(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -419,11 +854,74 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeclNameArgument` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeclNameArgument` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeclNameArgument` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments {
   let leftParen: TokenSyntax
   let arguments: DeclNameArgumentList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeclNameArguments` using the provided parameters.
   /// - Parameters:
@@ -473,6 +971,14 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclNameArguments(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -488,10 +994,73 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeclNameArguments` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeclNameArguments` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeclNameArguments` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   let identifier: TokenSyntax
   let declNameArguments: DeclNameArguments?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IdentifierExpr` using the provided parameters.
   /// - Parameters:
@@ -521,6 +1090,14 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildIdentifierExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -542,9 +1119,72 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IdentifierExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IdentifierExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IdentifierExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   let superKeyword: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SuperRefExpr` using the provided parameters.
   /// - Parameters:
@@ -571,6 +1211,14 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSuperRefExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -592,9 +1240,72 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SuperRefExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SuperRefExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SuperRefExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   let nilKeyword: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `NilLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -621,6 +1332,14 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildNilLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -642,9 +1361,72 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `NilLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `NilLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `NilLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignmentExpr {
   let wildcard: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DiscardAssignmentExpr` using the provided parameters.
   /// - Parameters:
@@ -671,6 +1453,14 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildDiscardAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -692,9 +1482,72 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DiscardAssignmentExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DiscardAssignmentExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DiscardAssignmentExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   let assignToken: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AssignmentExpr` using the provided parameters.
   /// - Parameters:
@@ -721,6 +1574,14 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -742,9 +1603,72 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AssignmentExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AssignmentExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AssignmentExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   let elements: ExprList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SequenceExpr` using the provided parameters.
   /// - Parameters:
@@ -780,6 +1704,14 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSequenceExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -801,9 +1733,72 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SequenceExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SequenceExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SequenceExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   let poundLine: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundLineExpr` using the provided parameters.
   /// - Parameters:
@@ -830,6 +1825,14 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundLineExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -851,9 +1854,72 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundLineExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundLineExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundLineExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   let poundFile: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundFileExpr` using the provided parameters.
   /// - Parameters:
@@ -880,6 +1946,14 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFileExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -901,9 +1975,72 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundFileExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundFileExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundFileExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   let poundFileID: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundFileIDExpr` using the provided parameters.
   /// - Parameters:
@@ -930,6 +2067,14 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFileIDExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -951,9 +2096,72 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundFileIDExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundFileIDExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundFileIDExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   let poundFilePath: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundFilePathExpr` using the provided parameters.
   /// - Parameters:
@@ -980,6 +2188,14 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFilePathExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1001,9 +2217,72 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundFilePathExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundFilePathExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundFilePathExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   let poundFunction: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundFunctionExpr` using the provided parameters.
   /// - Parameters:
@@ -1030,6 +2309,14 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundFunctionExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1051,9 +2338,72 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundFunctionExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundFunctionExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundFunctionExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr {
   let poundDsohandle: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundDsohandleExpr` using the provided parameters.
   /// - Parameters:
@@ -1080,6 +2430,14 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPoundDsohandleExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1101,10 +2459,73 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundDsohandleExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundDsohandleExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundDsohandleExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferenceExpr {
   let identifier: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SymbolicReferenceExpr` using the provided parameters.
   /// - Parameters:
@@ -1146,6 +2567,14 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSymbolicReferenceExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1167,10 +2596,73 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SymbolicReferenceExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SymbolicReferenceExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SymbolicReferenceExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr {
   let operatorToken: TokenSyntax?
   let postfixExpression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrefixOperatorExpr` using the provided parameters.
   /// - Parameters:
@@ -1212,6 +2704,14 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPrefixOperatorExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1233,9 +2733,72 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrefixOperatorExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrefixOperatorExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrefixOperatorExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr {
   let operatorToken: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `BinaryOperatorExpr` using the provided parameters.
   /// - Parameters:
@@ -1261,6 +2824,14 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildBinaryOperatorExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1282,11 +2853,74 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `BinaryOperatorExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `BinaryOperatorExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `BinaryOperatorExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   let asyncKeyword: TokenSyntax?
   let throwsToken: TokenSyntax?
   let arrowToken: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ArrowExpr` using the provided parameters.
   /// - Parameters:
@@ -1337,6 +2971,14 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildArrowExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1358,9 +3000,72 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ArrowExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ArrowExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ArrowExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   let floatingDigits: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FloatLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -1396,6 +3101,14 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildFloatLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1417,11 +3130,74 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FloatLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FloatLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FloatLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   let leftParen: TokenSyntax
   let elementList: TupleExprElementList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TupleExpr` using the provided parameters.
   /// - Parameters:
@@ -1471,6 +3247,14 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTupleExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1492,11 +3276,74 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TupleExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TupleExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TupleExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   let leftSquare: TokenSyntax
   let elements: ArrayElementList
   let rightSquare: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ArrayExpr` using the provided parameters.
   /// - Parameters:
@@ -1546,6 +3393,14 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildArrayExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1567,11 +3422,74 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ArrayExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ArrayExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ArrayExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   let leftSquare: TokenSyntax
   let content: SyntaxBuildable
   let rightSquare: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DictionaryExpr` using the provided parameters.
   /// - Parameters:
@@ -1607,6 +3525,14 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildDictionaryExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1628,12 +3554,75 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DictionaryExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DictionaryExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DictionaryExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
   let label: TokenSyntax?
   let colon: TokenSyntax?
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TupleExprElement` using the provided parameters.
   /// - Parameters:
@@ -1673,6 +3662,14 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTupleExprElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -1688,10 +3685,73 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TupleExprElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TupleExprElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TupleExprElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ArrayElement` using the provided parameters.
   /// - Parameters:
@@ -1722,6 +3782,14 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildArrayElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -1737,12 +3805,75 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ArrayElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ArrayElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ArrayElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement {
   let keyExpression: ExprBuildable
   let colon: TokenSyntax
   let valueExpression: ExprBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DictionaryElement` using the provided parameters.
   /// - Parameters:
@@ -1782,6 +3913,14 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDictionaryElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -1797,9 +3936,72 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DictionaryElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DictionaryElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DictionaryElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr {
   let digits: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IntegerLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -1835,6 +4037,14 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildIntegerLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1856,9 +4066,72 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IntegerLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IntegerLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IntegerLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr {
   let booleanLiteral: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `BooleanLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -1885,6 +4158,14 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildBooleanLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1906,6 +4187,68 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `BooleanLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `BooleanLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `BooleanLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   let conditionExpression: ExprBuildable
@@ -1913,6 +4256,7 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   let firstChoice: ExprBuildable
   let colonMark: TokenSyntax
   let secondChoice: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TernaryExpr` using the provided parameters.
   /// - Parameters:
@@ -1956,6 +4300,14 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTernaryExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -1977,12 +4329,75 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TernaryExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TernaryExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TernaryExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   let base: ExprBuildable?
   let dot: TokenSyntax
   let name: TokenSyntax
   let declNameArguments: DeclNameArguments?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MemberAccessExpr` using the provided parameters.
   /// - Parameters:
@@ -2021,6 +4436,14 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildMemberAccessExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2042,10 +4465,73 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MemberAccessExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MemberAccessExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MemberAccessExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   let isTok: TokenSyntax
   let typeName: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IsExpr` using the provided parameters.
   /// - Parameters:
@@ -2076,6 +4562,14 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildIsExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2097,11 +4591,74 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IsExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IsExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IsExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   let asTok: TokenSyntax
   let questionOrExclamationMark: TokenSyntax?
   let typeName: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AsExpr` using the provided parameters.
   /// - Parameters:
@@ -2137,6 +4694,14 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildAsExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2158,9 +4723,72 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AsExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AsExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AsExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   let type: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TypeExpr` using the provided parameters.
   /// - Parameters:
@@ -2186,6 +4814,14 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildTypeExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2207,6 +4843,68 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TypeExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TypeExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TypeExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureItem {
   let specifier: TokenList?
@@ -2214,6 +4912,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   let assignToken: TokenSyntax?
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClosureCaptureItem` using the provided parameters.
   /// - Parameters:
@@ -2275,6 +4974,14 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureCaptureItem(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -2290,11 +4997,74 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClosureCaptureItem` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClosureCaptureItem` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClosureCaptureItem` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCaptureSignature {
   let leftSquare: TokenSyntax
   let items: ClosureCaptureItemList?
   let rightSquare: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClosureCaptureSignature` using the provided parameters.
   /// - Parameters:
@@ -2344,6 +5114,14 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureCaptureSignature(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -2359,10 +5137,73 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClosureCaptureSignature` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClosureCaptureSignature` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClosureCaptureSignature` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam {
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClosureParam` using the provided parameters.
   /// - Parameters:
@@ -2393,6 +5234,14 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureParam(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -2408,6 +5257,68 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClosureParam` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClosureParam` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClosureParam` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   let attributes: AttributeList?
@@ -2417,6 +5328,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   let throwsTok: TokenSyntax?
   let output: ReturnClause?
   let inTok: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClosureSignature` using the provided parameters.
   /// - Parameters:
@@ -2491,6 +5403,14 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildClosureSignature(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -2506,12 +5426,75 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClosureSignature` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClosureSignature` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClosureSignature` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   let leftBrace: TokenSyntax
   let signature: ClosureSignature?
   let statements: CodeBlockItemList
   let rightBrace: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClosureExpr` using the provided parameters.
   /// - Parameters:
@@ -2567,6 +5550,14 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildClosureExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2588,9 +5579,72 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClosureExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClosureExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClosureExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatternExpr {
   let pattern: PatternBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `UnresolvedPatternExpr` using the provided parameters.
   /// - Parameters:
@@ -2616,6 +5670,14 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildUnresolvedPatternExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2637,11 +5699,74 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `UnresolvedPatternExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `UnresolvedPatternExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `UnresolvedPatternExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElement {
   let label: TokenSyntax
   let colon: TokenSyntax
   let closure: ClosureExpr
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MultipleTrailingClosureElement` using the provided parameters.
   /// - Parameters:
@@ -2676,6 +5801,14 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMultipleTrailingClosureElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -2691,6 +5824,68 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MultipleTrailingClosureElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MultipleTrailingClosureElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MultipleTrailingClosureElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   let calledExpression: ExprBuildable
@@ -2699,6 +5894,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   let rightParen: TokenSyntax?
   let trailingClosure: ClosureExpr?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FunctionCallExpr` using the provided parameters.
   /// - Parameters:
@@ -2766,6 +5962,14 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildFunctionCallExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2787,6 +5991,68 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FunctionCallExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FunctionCallExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FunctionCallExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   let calledExpression: ExprBuildable
@@ -2795,6 +6061,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   let rightBracket: TokenSyntax
   let trailingClosure: ClosureExpr?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SubscriptExpr` using the provided parameters.
   /// - Parameters:
@@ -2862,6 +6129,14 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSubscriptExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2883,10 +6158,73 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SubscriptExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SubscriptExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SubscriptExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChainingExpr {
   let expression: ExprBuildable
   let questionMark: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `OptionalChainingExpr` using the provided parameters.
   /// - Parameters:
@@ -2917,6 +6255,14 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildOptionalChainingExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2938,10 +6284,73 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `OptionalChainingExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `OptionalChainingExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `OptionalChainingExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   let expression: ExprBuildable
   let exclamationMark: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ForcedValueExpr` using the provided parameters.
   /// - Parameters:
@@ -2972,6 +6381,14 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildForcedValueExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -2993,10 +6410,73 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ForcedValueExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ForcedValueExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ForcedValueExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   let expression: ExprBuildable
   let operatorToken: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PostfixUnaryExpr` using the provided parameters.
   /// - Parameters:
@@ -3038,6 +6518,14 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPostfixUnaryExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3059,10 +6547,73 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PostfixUnaryExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PostfixUnaryExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PostfixUnaryExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   let expression: ExprBuildable
   let genericArgumentClause: GenericArgumentClause
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SpecializeExpr` using the provided parameters.
   /// - Parameters:
@@ -3092,6 +6643,14 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildSpecializeExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3113,9 +6672,72 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SpecializeExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SpecializeExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SpecializeExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   let content: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `StringSegment` using the provided parameters.
   /// - Parameters:
@@ -3151,6 +6773,14 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildStringSegment(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -3166,6 +6796,68 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `StringSegment` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `StringSegment` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `StringSegment` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment {
   let backslash: TokenSyntax
@@ -3173,6 +6865,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   let leftParen: TokenSyntax
   let expressions: TupleExprElementList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ExpressionSegment` using the provided parameters.
   /// - Parameters:
@@ -3235,6 +6928,14 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildExpressionSegment(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -3250,6 +6951,68 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ExpressionSegment` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ExpressionSegment` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ExpressionSegment` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   let openDelimiter: TokenSyntax?
@@ -3257,6 +7020,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   let segments: StringLiteralSegments
   let closeQuote: TokenSyntax
   let closeDelimiter: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `StringLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -3318,6 +7082,14 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildStringLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3339,9 +7111,72 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `StringLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `StringLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `StringLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   let regex: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `RegexLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -3377,6 +7212,14 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildRegexLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3398,11 +7241,74 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `RegexLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `RegexLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `RegexLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   let backslash: TokenSyntax
   let rootExpr: ExprBuildable?
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `KeyPathExpr` using the provided parameters.
   /// - Parameters:
@@ -3437,6 +7343,14 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3458,9 +7372,72 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `KeyPathExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `KeyPathExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `KeyPathExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   let period: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `KeyPathBaseExpr` using the provided parameters.
   /// - Parameters:
@@ -3487,6 +7464,14 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildKeyPathBaseExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3508,10 +7493,73 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `KeyPathBaseExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `KeyPathBaseExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `KeyPathBaseExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   let name: TokenSyntax
   let dot: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ObjcNamePiece` using the provided parameters.
   /// - Parameters:
@@ -3554,6 +7602,14 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildObjcNamePiece(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -3569,12 +7625,75 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ObjcNamePiece` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ObjcNamePiece` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ObjcNamePiece` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   let keyPath: TokenSyntax
   let leftParen: TokenSyntax
   let name: ObjcName
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ObjcKeyPathExpr` using the provided parameters.
   /// - Parameters:
@@ -3631,6 +7750,14 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildObjcKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3652,6 +7779,68 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ObjcKeyPathExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ObjcKeyPathExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ObjcKeyPathExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   let poundSelector: TokenSyntax
@@ -3660,6 +7849,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   let colon: TokenSyntax?
   let name: ExprBuildable
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ObjcSelectorExpr` using the provided parameters.
   /// - Parameters:
@@ -3730,6 +7920,14 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildObjcSelectorExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3751,10 +7949,73 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ObjcSelectorExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ObjcSelectorExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ObjcSelectorExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigExpr {
   let base: ExprBuildable?
   let config: IfConfigDecl
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PostfixIfConfigExpr` using the provided parameters.
   /// - Parameters:
@@ -3784,6 +8045,14 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildPostfixIfConfigExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3805,9 +8074,72 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PostfixIfConfigExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PostfixIfConfigExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PostfixIfConfigExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlaceholderExpr {
   let identifier: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `EditorPlaceholderExpr` using the provided parameters.
   /// - Parameters:
@@ -3843,6 +8175,14 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildEditorPlaceholderExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3864,12 +8204,75 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `EditorPlaceholderExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `EditorPlaceholderExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `EditorPlaceholderExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   let identifier: TokenSyntax
   let leftParen: TokenSyntax
   let arguments: TupleExprElementList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ObjectLiteralExpr` using the provided parameters.
   /// - Parameters:
@@ -3926,6 +8329,14 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// Conformance to `ExprBuildable`.
   public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
     let result = buildObjectLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return ExprSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return ExprSyntax(result)
   }
 
@@ -3947,10 +8358,73 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ObjectLiteralExpr` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ObjectLiteralExpr` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ObjectLiteralExpr` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializerClause {
   let equal: TokenSyntax
   let value: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TypeInitializerClause` using the provided parameters.
   /// - Parameters:
@@ -3981,6 +8455,14 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTypeInitializerClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -3996,6 +8478,68 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TypeInitializerClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TypeInitializerClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TypeInitializerClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   let attributes: AttributeList?
@@ -4005,6 +8549,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   let genericParameterClause: GenericParameterClause?
   let initializer: TypeInitializerClause?
   let genericWhereClause: GenericWhereClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TypealiasDecl` using the provided parameters.
   /// - Parameters:
@@ -4077,6 +8622,14 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildTypealiasDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -4098,6 +8651,68 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TypealiasDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TypealiasDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TypealiasDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl {
   let attributes: AttributeList?
@@ -4107,6 +8722,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   let inheritanceClause: TypeInheritanceClause?
   let initializer: TypeInitializerClause?
   let genericWhereClause: GenericWhereClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AssociatedtypeDecl` using the provided parameters.
   /// - Parameters:
@@ -4179,6 +8795,14 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildAssociatedtypeDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -4200,11 +8824,74 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AssociatedtypeDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AssociatedtypeDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AssociatedtypeDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   let leftParen: TokenSyntax
   let parameterList: FunctionParameterList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ParameterClause` using the provided parameters.
   /// - Parameters:
@@ -4254,6 +8941,14 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildParameterClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4269,10 +8964,73 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ParameterClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ParameterClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ParameterClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   let arrow: TokenSyntax
   let returnType: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ReturnClause` using the provided parameters.
   /// - Parameters:
@@ -4303,6 +9061,14 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildReturnClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4318,12 +9084,75 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ReturnClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ReturnClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ReturnClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature {
   let input: ParameterClause
   let asyncOrReasyncKeyword: TokenSyntax?
   let throwsOrRethrowsKeyword: TokenSyntax?
   let output: ReturnClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FunctionSignature` using the provided parameters.
   /// - Parameters:
@@ -4379,6 +9208,14 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildFunctionSignature(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4394,11 +9231,74 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FunctionSignature` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FunctionSignature` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FunctionSignature` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   let poundKeyword: TokenSyntax
   let condition: ExprBuildable?
   let elements: SyntaxBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IfConfigClause` using the provided parameters.
   /// - Parameters:
@@ -4433,6 +9333,14 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildIfConfigClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4448,10 +9356,73 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IfConfigClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IfConfigClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IfConfigClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   let clauses: IfConfigClauseList
   let poundEndif: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IfConfigDecl` using the provided parameters.
   /// - Parameters:
@@ -4494,6 +9465,14 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildIfConfigDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -4515,12 +9494,75 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IfConfigDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IfConfigDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IfConfigDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   let poundError: TokenSyntax
   let leftParen: TokenSyntax
   let message: StringLiteralExpr
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundErrorDecl` using the provided parameters.
   /// - Parameters:
@@ -4561,6 +9603,14 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPoundErrorDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -4582,12 +9632,75 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundErrorDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundErrorDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundErrorDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   let poundWarning: TokenSyntax
   let leftParen: TokenSyntax
   let message: StringLiteralExpr
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundWarningDecl` using the provided parameters.
   /// - Parameters:
@@ -4628,6 +9741,14 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPoundWarningDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -4649,12 +9770,75 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundWarningDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundWarningDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundWarningDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocation {
   let poundSourceLocation: TokenSyntax
   let leftParen: TokenSyntax
   let args: PoundSourceLocationArgs?
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundSourceLocation` using the provided parameters.
   /// - Parameters:
@@ -4695,6 +9879,14 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPoundSourceLocation(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -4716,6 +9908,68 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundSourceLocation` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundSourceLocation` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundSourceLocation` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSourceLocationArgs {
   let fileArgLabel: TokenSyntax
@@ -4725,6 +9979,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   let lineArgLabel: TokenSyntax
   let lineArgColon: TokenSyntax
   let lineNumber: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundSourceLocationArgs` using the provided parameters.
   /// - Parameters:
@@ -4801,6 +10056,14 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPoundSourceLocationArgs(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4816,12 +10079,75 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundSourceLocationArgs` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundSourceLocationArgs` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundSourceLocationArgs` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   let name: TokenSyntax
   let detailLeftParen: TokenSyntax?
   let detail: TokenSyntax?
   let detailRightParen: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeclModifier` using the provided parameters.
   /// - Parameters:
@@ -4878,6 +10204,14 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclModifier(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4893,10 +10227,73 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeclModifier` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeclModifier` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeclModifier` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType {
   let typeName: TypeBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `InheritedType` using the provided parameters.
   /// - Parameters:
@@ -4927,6 +10324,14 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildInheritedType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -4942,10 +10347,73 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `InheritedType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `InheritedType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `InheritedType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritanceClause {
   let colon: TokenSyntax
   let inheritedTypeCollection: InheritedTypeList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TypeInheritanceClause` using the provided parameters.
   /// - Parameters:
@@ -4988,6 +10456,14 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTypeInheritanceClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -5003,6 +10479,68 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TypeInheritanceClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TypeInheritanceClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TypeInheritanceClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   let attributes: AttributeList?
@@ -5013,6 +10551,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   let inheritanceClause: TypeInheritanceClause?
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClassDecl` using the provided parameters.
   /// - Parameters:
@@ -5090,6 +10629,14 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildClassDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -5111,6 +10658,68 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClassDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClassDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClassDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   let attributes: AttributeList?
@@ -5121,6 +10730,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   let inheritanceClause: TypeInheritanceClause?
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `StructDecl` using the provided parameters.
   /// - Parameters:
@@ -5199,6 +10809,14 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildStructDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -5220,6 +10838,68 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `StructDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `StructDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `StructDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   let attributes: AttributeList?
@@ -5230,6 +10910,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   let inheritanceClause: TypeInheritanceClause?
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ProtocolDecl` using the provided parameters.
   /// - Parameters:
@@ -5308,6 +10989,14 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildProtocolDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -5329,6 +11018,68 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ProtocolDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ProtocolDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ProtocolDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   let attributes: AttributeList?
@@ -5338,6 +11089,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   let inheritanceClause: TypeInheritanceClause?
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ExtensionDecl` using the provided parameters.
   /// - Parameters:
@@ -5410,6 +11162,14 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildExtensionDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -5431,11 +11191,74 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ExtensionDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ExtensionDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ExtensionDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   let leftBrace: TokenSyntax
   let members: MemberDeclList
   let rightBrace: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MemberDeclBlock` using the provided parameters.
   /// - Parameters:
@@ -5485,6 +11308,14 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMemberDeclBlock(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -5500,11 +11331,74 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MemberDeclBlock` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MemberDeclBlock` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MemberDeclBlock` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A member declaration of a type consisting of a declaration and anoptional semicolon;
 public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListItem {
   let decl: DeclBuildable
   let semicolon: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MemberDeclListItem` using the provided parameters.
   /// - Parameters:
@@ -5535,6 +11429,14 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMemberDeclListItem(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -5550,10 +11452,73 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MemberDeclListItem` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MemberDeclListItem` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MemberDeclListItem` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   let statements: CodeBlockItemList
   let eofToken: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SourceFile` using the provided parameters.
   /// - Parameters:
@@ -5595,6 +11560,14 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSourceFile(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -5610,10 +11583,73 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SourceFile` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SourceFile` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SourceFile` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause {
   let equal: TokenSyntax
   let value: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `InitializerClause` using the provided parameters.
   /// - Parameters:
@@ -5644,6 +11680,14 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildInitializerClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -5659,6 +11703,68 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `InitializerClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `InitializerClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `InitializerClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter {
   let attributes: AttributeList?
@@ -5669,6 +11775,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   let ellipsis: TokenSyntax?
   let defaultArgument: InitializerClause?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FunctionParameter` using the provided parameters.
   /// - Parameters:
@@ -5749,6 +11856,14 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildFunctionParameter(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -5764,6 +11879,68 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FunctionParameter` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FunctionParameter` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FunctionParameter` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   let attributes: AttributeList?
@@ -5774,6 +11951,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   let signature: FunctionSignature
   let genericWhereClause: GenericWhereClause?
   let body: CodeBlock?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FunctionDecl` using the provided parameters.
   /// - Parameters:
@@ -5852,6 +12030,14 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildFunctionDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -5873,6 +12059,68 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FunctionDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FunctionDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FunctionDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   let attributes: AttributeList?
@@ -5884,6 +12132,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   let throwsOrRethrowsKeyword: TokenSyntax?
   let genericWhereClause: GenericWhereClause?
   let body: CodeBlock?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `InitializerDecl` using the provided parameters.
   /// - Parameters:
@@ -5970,6 +12219,14 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildInitializerDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -5991,12 +12248,75 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `InitializerDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `InitializerDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `InitializerDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   let attributes: AttributeList?
   let modifiers: ModifierList?
   let deinitKeyword: TokenSyntax
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeinitializerDecl` using the provided parameters.
   /// - Parameters:
@@ -6051,6 +12371,14 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildDeinitializerDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -6072,6 +12400,68 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeinitializerDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeinitializerDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeinitializerDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   let attributes: AttributeList?
@@ -6082,6 +12472,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   let result: ReturnClause
   let genericWhereClause: GenericWhereClause?
   let accessor: SyntaxBuildable?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SubscriptDecl` using the provided parameters.
   /// - Parameters:
@@ -6160,6 +12551,14 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildSubscriptDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -6181,12 +12580,75 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SubscriptDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SubscriptDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SubscriptDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModifier {
   let name: TokenSyntax
   let leftParen: TokenSyntax?
   let modifier: TokenSyntax?
   let rightParen: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AccessLevelModifier` using the provided parameters.
   /// - Parameters:
@@ -6242,6 +12704,14 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessLevelModifier(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -6257,10 +12727,73 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AccessLevelModifier` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AccessLevelModifier` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AccessLevelModifier` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathComponent {
   let name: TokenSyntax
   let trailingDot: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AccessPathComponent` using the provided parameters.
   /// - Parameters:
@@ -6303,6 +12836,14 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessPathComponent(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -6318,6 +12859,68 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AccessPathComponent` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AccessPathComponent` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AccessPathComponent` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   let attributes: AttributeList?
@@ -6325,6 +12928,7 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   let importTok: TokenSyntax
   let importKind: TokenSyntax?
   let path: AccessPath
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ImportDecl` using the provided parameters.
   /// - Parameters:
@@ -6386,6 +12990,14 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildImportDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -6407,11 +13019,74 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ImportDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ImportDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ImportDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter {
   let leftParen: TokenSyntax
   let name: TokenSyntax
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AccessorParameter` using the provided parameters.
   /// - Parameters:
@@ -6461,6 +13136,14 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessorParameter(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -6476,6 +13159,68 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AccessorParameter` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AccessorParameter` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AccessorParameter` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   let attributes: AttributeList?
@@ -6485,6 +13230,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   let asyncKeyword: TokenSyntax?
   let throwsKeyword: TokenSyntax?
   let body: CodeBlock?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AccessorDecl` using the provided parameters.
   /// - Parameters:
@@ -6559,6 +13305,14 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildAccessorDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -6580,11 +13334,74 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AccessorDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AccessorDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AccessorDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   let leftBrace: TokenSyntax
   let accessors: AccessorList
   let rightBrace: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AccessorBlock` using the provided parameters.
   /// - Parameters:
@@ -6634,6 +13451,14 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAccessorBlock(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -6649,6 +13474,68 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AccessorBlock` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AccessorBlock` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AccessorBlock` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
   let pattern: PatternBuildable
@@ -6656,6 +13543,7 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
   let initializer: InitializerClause?
   let accessor: SyntaxBuildable?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PatternBinding` using the provided parameters.
   /// - Parameters:
@@ -6698,6 +13586,14 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPatternBinding(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -6713,12 +13609,75 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PatternBinding` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PatternBinding` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PatternBinding` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   let attributes: AttributeList?
   let modifiers: ModifierList?
   let letOrVarKeyword: TokenSyntax
   let bindings: PatternBindingList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `VariableDecl` using the provided parameters.
   /// - Parameters:
@@ -6773,6 +13732,14 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildVariableDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -6794,6 +13761,68 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `VariableDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `VariableDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `VariableDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.
 public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
@@ -6801,6 +13830,7 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
   let associatedValue: ParameterClause?
   let rawValue: InitializerClause?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `EnumCaseElement` using the provided parameters.
   /// - Parameters:
@@ -6855,6 +13885,14 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildEnumCaseElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -6870,6 +13908,68 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `EnumCaseElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `EnumCaseElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `EnumCaseElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A `case` declaration of a Swift `enum`. It can have 1 or more`EnumCaseElement`s inside, each declaring a different case of theenum.
 public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
@@ -6877,6 +13977,7 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   let modifiers: ModifierList?
   let caseKeyword: TokenSyntax
   let elements: EnumCaseElementList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `EnumCaseDecl` using the provided parameters.
   /// - Parameters:
@@ -6931,6 +14032,14 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildEnumCaseDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -6952,6 +14061,68 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `EnumCaseDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `EnumCaseDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `EnumCaseDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A Swift `enum` declaration.
 public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
@@ -6963,6 +14134,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   let inheritanceClause: TypeInheritanceClause?
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `EnumDecl` using the provided parameters.
   /// - Parameters:
@@ -7041,6 +14213,14 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildEnumDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -7062,6 +14242,68 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `EnumDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `EnumDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `EnumDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A Swift `operator` declaration.
 public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
@@ -7070,6 +14312,7 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   let operatorKeyword: TokenSyntax
   let identifier: TokenSyntax
   let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `OperatorDecl` using the provided parameters.
   /// - Parameters:
@@ -7130,6 +14373,14 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildOperatorDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -7151,11 +14402,74 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `OperatorDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `OperatorDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `OperatorDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.
 public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperatorPrecedenceAndTypes {
   let colon: TokenSyntax
   let precedenceGroupAndDesignatedTypes: IdentifierList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
   /// - Parameters:
@@ -7198,6 +14512,14 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7213,6 +14535,68 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `OperatorPrecedenceAndTypes` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `OperatorPrecedenceAndTypes` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `OperatorPrecedenceAndTypes` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A Swift `precedencegroup` declaration.
 public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDecl {
@@ -7223,6 +14607,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   let leftBrace: TokenSyntax
   let groupAttributes: PrecedenceGroupAttributeList
   let rightBrace: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrecedenceGroupDecl` using the provided parameters.
   /// - Parameters:
@@ -7297,6 +14682,14 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// Conformance to `DeclBuildable`.
   public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
     let result = buildPrecedenceGroupDecl(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return DeclSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return DeclSyntax(result)
   }
 
@@ -7318,12 +14711,75 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrecedenceGroupDecl` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrecedenceGroupDecl` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrecedenceGroupDecl` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// Specify the new precedence group's relation to existing precedencegroups.
 public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceGroupRelation {
   let higherThanOrLowerThan: TokenSyntax
   let colon: TokenSyntax
   let otherNames: PrecedenceGroupNameList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrecedenceGroupRelation` using the provided parameters.
   /// - Parameters:
@@ -7373,6 +14829,14 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupRelation(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7388,10 +14852,73 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrecedenceGroupRelation` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrecedenceGroupRelation` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrecedenceGroupRelation` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPrecedenceGroupNameElement {
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrecedenceGroupNameElement` using the provided parameters.
   /// - Parameters:
@@ -7434,6 +14961,14 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupNameElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7449,12 +14984,75 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrecedenceGroupNameElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrecedenceGroupNameElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrecedenceGroupNameElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// Specifies the precedence of an operator when used in an operationthat includes optional chaining.
 public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssignment {
   let assignmentKeyword: TokenSyntax
   let colon: TokenSyntax
   let flag: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrecedenceGroupAssignment` using the provided parameters.
   /// - Parameters:
@@ -7505,6 +15103,14 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupAssignment(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7520,12 +15126,75 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrecedenceGroupAssignment` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrecedenceGroupAssignment` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrecedenceGroupAssignment` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// Specifies how a sequence of operators with the same precedence levelare grouped together in the absence of grouping parentheses.
 public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPrecedenceGroupAssociativity {
   let associativityKeyword: TokenSyntax
   let colon: TokenSyntax
   let value: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrecedenceGroupAssociativity` using the provided parameters.
   /// - Parameters:
@@ -7576,6 +15245,14 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrecedenceGroupAssociativity(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7591,6 +15268,68 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrecedenceGroupAssociativity` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrecedenceGroupAssociativity` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrecedenceGroupAssociativity` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A custom `@` attribute.
 public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
@@ -7599,6 +15338,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   let leftParen: TokenSyntax?
   let argumentList: TupleExprElementList?
   let rightParen: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CustomAttribute` using the provided parameters.
   /// - Parameters:
@@ -7661,6 +15401,14 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCustomAttribute(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7676,6 +15424,68 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CustomAttribute` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CustomAttribute` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CustomAttribute` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// An `@` attribute.
 public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
@@ -7685,6 +15495,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   let argument: SyntaxBuildable?
   let rightParen: TokenSyntax?
   let tokenList: TokenList?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `Attribute` using the provided parameters.
   /// - Parameters:
@@ -7753,6 +15564,14 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAttribute(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7768,6 +15587,68 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `Attribute` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `Attribute` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `Attribute` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// The availability argument for the _specialize attribute
 public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry {
@@ -7775,6 +15656,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   let colon: TokenSyntax
   let availabilityList: AvailabilitySpecList
   let semicolon: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AvailabilityEntry` using the provided parameters.
   /// - Parameters:
@@ -7830,6 +15712,14 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityEntry(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7845,6 +15735,68 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AvailabilityEntry` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AvailabilityEntry` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AvailabilityEntry` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A labeled argument for the `@_specialize` attribute like`exported: true`
 public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpecializeEntry {
@@ -7852,6 +15804,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   let colon: TokenSyntax
   let value: TokenSyntax
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `LabeledSpecializeEntry` using the provided parameters.
   /// - Parameters:
@@ -7907,6 +15860,14 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildLabeledSpecializeEntry(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7922,6 +15883,68 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `LabeledSpecializeEntry` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `LabeledSpecializeEntry` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `LabeledSpecializeEntry` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`
 public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionEntry {
@@ -7929,6 +15952,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   let colon: TokenSyntax
   let delcname: DeclName
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TargetFunctionEntry` using the provided parameters.
   /// - Parameters:
@@ -7984,6 +16008,14 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTargetFunctionEntry(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -7999,12 +16031,75 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TargetFunctionEntry` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TargetFunctionEntry` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TargetFunctionEntry` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// The argument for the `@_dynamic_replacement` or `@_private`attribute of the form `for: "function()"` or `sourceFile:"Src.swift"`
 public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedAttributeStringArgument {
   let nameTok: TokenSyntax
   let colon: TokenSyntax
   let stringOrDeclname: SyntaxBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `NamedAttributeStringArgument` using the provided parameters.
   /// - Parameters:
@@ -8039,6 +16134,14 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildNamedAttributeStringArgument(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8054,10 +16157,73 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `NamedAttributeStringArgument` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `NamedAttributeStringArgument` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `NamedAttributeStringArgument` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeclName` using the provided parameters.
   /// - Parameters:
@@ -8087,6 +16253,14 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDeclName(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8102,6 +16276,68 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeclName` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeclName` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeclName` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// The arguments for the `@_implements` attribute of the form`Type, methodName(arg1Label:arg2Label:)`
 public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplementsAttributeArguments {
@@ -8109,6 +16345,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   let comma: TokenSyntax
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ImplementsAttributeArguments` using the provided parameters.
   /// - Parameters:
@@ -8147,6 +16384,14 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildImplementsAttributeArguments(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8162,11 +16407,74 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ImplementsAttributeArguments` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ImplementsAttributeArguments` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ImplementsAttributeArguments` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A piece of an Objective-C selector. Either consisiting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument
 public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece {
   let name: TokenSyntax?
   let colon: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ObjCSelectorPiece` using the provided parameters.
   /// - Parameters:
@@ -8209,6 +16517,14 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildObjCSelectorPiece(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8224,6 +16540,68 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ObjCSelectorPiece` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ObjCSelectorPiece` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ObjCSelectorPiece` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// The arguments for the `@differentiable` attribute: an optionaldifferentiability kind, an optional differentiability parameter clause,and an optional 'where' clause.
 public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDifferentiableAttributeArguments {
@@ -8232,6 +16610,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   let diffParams: DifferentiabilityParamsClause?
   let diffParamsComma: TokenSyntax?
   let whereClause: GenericWhereClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DifferentiableAttributeArguments` using the provided parameters.
   /// - Parameters:
@@ -8294,6 +16673,14 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiableAttributeArguments(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8309,12 +16696,75 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DifferentiableAttributeArguments` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DifferentiableAttributeArguments` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DifferentiableAttributeArguments` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A clause containing differentiability parameters.
 public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDifferentiabilityParamsClause {
   let wrtLabel: TokenSyntax
   let colon: TokenSyntax
   let parameters: SyntaxBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DifferentiabilityParamsClause` using the provided parameters.
   /// - Parameters:
@@ -8364,6 +16814,14 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiabilityParamsClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8379,12 +16837,75 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DifferentiabilityParamsClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DifferentiabilityParamsClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DifferentiabilityParamsClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// The differentiability parameters.
 public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentiabilityParams {
   let leftParen: TokenSyntax
   let diffParams: DifferentiabilityParamList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DifferentiabilityParams` using the provided parameters.
   /// - Parameters:
@@ -8434,6 +16955,14 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiabilityParams(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8449,11 +16978,74 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DifferentiabilityParams` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DifferentiabilityParams` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DifferentiabilityParams` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A differentiability parameter: either the "self" identifier, a functionparameter name, or a function parameter index.
 public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiabilityParam {
   let parameter: SyntaxBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DifferentiabilityParam` using the provided parameters.
   /// - Parameters:
@@ -8484,6 +17076,14 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDifferentiabilityParam(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8499,6 +17099,68 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DifferentiabilityParam` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DifferentiabilityParam` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DifferentiabilityParam` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// The arguments for the '@derivative(of:)' and '@transpose(of:)'attributes: the 'of:' label, the original declaration name, and anoptional differentiability parameter list.
 public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, ExpressibleAsDerivativeRegistrationAttributeArguments {
@@ -8509,6 +17171,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   let accessorKind: TokenSyntax?
   let comma: TokenSyntax?
   let diffParams: DifferentiabilityParamsClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DerivativeRegistrationAttributeArguments` using the provided parameters.
   /// - Parameters:
@@ -8585,6 +17248,14 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildDerivativeRegistrationAttributeArguments(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8600,6 +17271,68 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DerivativeRegistrationAttributeArguments` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DerivativeRegistrationAttributeArguments` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DerivativeRegistrationAttributeArguments` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// An optionally qualified function declaration name (e.g. `+(_:_:)`,`A.B.C.foo(_:_:)`).
 public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName {
@@ -8607,6 +17340,7 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   let dot: TokenSyntax?
   let name: TokenSyntax
   let arguments: DeclNameArguments?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `QualifiedDeclName` using the provided parameters.
   /// - Parameters:
@@ -8645,6 +17379,14 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildQualifiedDeclName(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8660,11 +17402,74 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `QualifiedDeclName` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `QualifiedDeclName` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `QualifiedDeclName` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A function declaration name (e.g. `foo(_:_:)`).
 public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   let name: SyntaxBuildable
   let arguments: DeclNameArguments?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FunctionDeclName` using the provided parameters.
   /// - Parameters:
@@ -8694,6 +17499,14 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildFunctionDeclName(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8709,12 +17522,75 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FunctionDeclName` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FunctionDeclName` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FunctionDeclName` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A collection of arguments for the `@_backDeploy` attribute
 public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDeployAttributeSpecList {
   let beforeLabel: TokenSyntax
   let colon: TokenSyntax
   let versionList: BackDeployVersionList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `BackDeployAttributeSpecList` using the provided parameters.
   /// - Parameters:
@@ -8764,6 +17640,14 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildBackDeployAttributeSpecList(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8779,11 +17663,74 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `BackDeployAttributeSpecList` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `BackDeployAttributeSpecList` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `BackDeployAttributeSpecList` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A single platform/version pair in a `@_backDeploy` attribute,e.g. `iOS 10.1`.
 public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeployVersionArgument {
   let availabilityVersionRestriction: AvailabilityVersionRestriction
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `BackDeployVersionArgument` using the provided parameters.
   /// - Parameters:
@@ -8814,6 +17761,14 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildBackDeployVersionArgument(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -8829,10 +17784,73 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `BackDeployVersionArgument` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `BackDeployVersionArgument` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `BackDeployVersionArgument` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   let continueKeyword: TokenSyntax
   let label: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ContinueStmt` using the provided parameters.
   /// - Parameters:
@@ -8875,6 +17893,14 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildContinueStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -8896,6 +17922,68 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ContinueStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ContinueStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ContinueStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   let labelName: TokenSyntax?
@@ -8903,6 +17991,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   let whileKeyword: TokenSyntax
   let conditions: ConditionElementList
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `WhileStmt` using the provided parameters.
   /// - Parameters:
@@ -8964,6 +18053,14 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildWhileStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -8985,10 +18082,73 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `WhileStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `WhileStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `WhileStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   let deferKeyword: TokenSyntax
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeferStmt` using the provided parameters.
   /// - Parameters:
@@ -9019,6 +18179,14 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildDeferStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9040,9 +18208,72 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeferStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeferStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeferStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ExpressionStmt` using the provided parameters.
   /// - Parameters:
@@ -9068,6 +18299,14 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildExpressionStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9089,6 +18328,68 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ExpressionStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ExpressionStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ExpressionStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   let labelName: TokenSyntax?
@@ -9097,6 +18398,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   let body: CodeBlock
   let whileKeyword: TokenSyntax
   let condition: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `RepeatWhileStmt` using the provided parameters.
   /// - Parameters:
@@ -9165,6 +18467,14 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildRepeatWhileStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9186,12 +18496,75 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `RepeatWhileStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `RepeatWhileStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `RepeatWhileStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   let guardKeyword: TokenSyntax
   let conditions: ConditionElementList
   let elseKeyword: TokenSyntax
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GuardStmt` using the provided parameters.
   /// - Parameters:
@@ -9247,6 +18620,14 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildGuardStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9268,10 +18649,73 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GuardStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GuardStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GuardStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   let whereKeyword: TokenSyntax
   let guardResult: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `WhereClause` using the provided parameters.
   /// - Parameters:
@@ -9302,6 +18746,14 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildWhereClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -9317,6 +18769,68 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `WhereClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `WhereClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `WhereClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   let labelName: TokenSyntax?
@@ -9331,6 +18845,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   let sequenceExpr: ExprBuildable
   let whereClause: WhereClause?
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ForInStmt` using the provided parameters.
   /// - Parameters:
@@ -9438,6 +18953,14 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildForInStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9459,6 +18982,68 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ForInStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ForInStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ForInStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   let labelName: TokenSyntax?
@@ -9468,6 +19053,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   let leftBrace: TokenSyntax
   let cases: SwitchCaseList
   let rightBrace: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SwitchStmt` using the provided parameters.
   /// - Parameters:
@@ -9543,6 +19129,14 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildSwitchStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9564,6 +19158,68 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SwitchStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SwitchStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SwitchStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   let labelName: TokenSyntax?
@@ -9571,6 +19227,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   let doKeyword: TokenSyntax
   let body: CodeBlock
   let catchClauses: CatchClauseList?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DoStmt` using the provided parameters.
   /// - Parameters:
@@ -9632,6 +19289,14 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildDoStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9653,10 +19318,73 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DoStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DoStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DoStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   let returnKeyword: TokenSyntax
   let expression: ExprBuildable?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ReturnStmt` using the provided parameters.
   /// - Parameters:
@@ -9687,6 +19415,14 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildReturnStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9708,10 +19444,73 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ReturnStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ReturnStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ReturnStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   let yieldKeyword: TokenSyntax
   let yields: SyntaxBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `YieldStmt` using the provided parameters.
   /// - Parameters:
@@ -9742,6 +19541,14 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildYieldStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9763,12 +19570,75 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `YieldStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `YieldStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `YieldStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   let leftParen: TokenSyntax
   let elementList: ExprList
   let trailingComma: TokenSyntax?
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `YieldList` using the provided parameters.
   /// - Parameters:
@@ -9825,6 +19695,14 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildYieldList(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -9840,9 +19718,72 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `YieldList` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `YieldList` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `YieldList` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   let fallthroughKeyword: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FallthroughStmt` using the provided parameters.
   /// - Parameters:
@@ -9869,6 +19810,14 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildFallthroughStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9890,10 +19839,73 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FallthroughStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FallthroughStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FallthroughStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   let breakKeyword: TokenSyntax
   let label: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `BreakStmt` using the provided parameters.
   /// - Parameters:
@@ -9936,6 +19948,14 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildBreakStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -9957,10 +19977,73 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `BreakStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `BreakStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `BreakStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement {
   let condition: SyntaxBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ConditionElement` using the provided parameters.
   /// - Parameters:
@@ -9991,6 +20074,14 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildConditionElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10006,12 +20097,75 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ConditionElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ConditionElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ConditionElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityCondition {
   let poundAvailableKeyword: TokenSyntax
   let leftParen: TokenSyntax
   let availabilitySpec: AvailabilitySpecList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AvailabilityCondition` using the provided parameters.
   /// - Parameters:
@@ -10068,6 +20222,14 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityCondition(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10083,12 +20245,75 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AvailabilityCondition` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AvailabilityCondition` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AvailabilityCondition` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPatternCondition {
   let caseKeyword: TokenSyntax
   let pattern: PatternBuildable
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MatchingPatternCondition` using the provided parameters.
   /// - Parameters:
@@ -10127,6 +20352,14 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildMatchingPatternCondition(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10142,12 +20375,75 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MatchingPatternCondition` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MatchingPatternCondition` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MatchingPatternCondition` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBindingCondition {
   let letOrVarKeyword: TokenSyntax
   let pattern: PatternBuildable
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `OptionalBindingCondition` using the provided parameters.
   /// - Parameters:
@@ -10186,6 +20482,14 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildOptionalBindingCondition(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10201,12 +20505,75 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `OptionalBindingCondition` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `OptionalBindingCondition` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `OptionalBindingCondition` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabilityCondition {
   let poundUnavailableKeyword: TokenSyntax
   let leftParen: TokenSyntax
   let availabilitySpec: AvailabilitySpecList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `UnavailabilityCondition` using the provided parameters.
   /// - Parameters:
@@ -10263,6 +20630,14 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildUnavailabilityCondition(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10278,9 +20653,72 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `UnavailabilityCondition` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `UnavailabilityCondition` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `UnavailabilityCondition` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   let declaration: DeclBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DeclarationStmt` using the provided parameters.
   /// - Parameters:
@@ -10306,6 +20744,14 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildDeclarationStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -10327,10 +20773,73 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DeclarationStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DeclarationStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DeclarationStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   let throwKeyword: TokenSyntax
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ThrowStmt` using the provided parameters.
   /// - Parameters:
@@ -10361,6 +20870,14 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildThrowStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -10382,6 +20899,68 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ThrowStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ThrowStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ThrowStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   let labelName: TokenSyntax?
@@ -10391,6 +20970,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   let body: CodeBlock
   let elseKeyword: TokenSyntax?
   let elseBody: SyntaxBuildable?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IfStmt` using the provided parameters.
   /// - Parameters:
@@ -10465,6 +21045,14 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildIfStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -10486,9 +21074,72 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IfStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IfStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IfStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuation {
   let ifStatement: IfStmt
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ElseIfContinuation` using the provided parameters.
   /// - Parameters:
@@ -10514,6 +21165,14 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildElseIfContinuation(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10529,10 +21188,73 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ElseIfContinuation` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ElseIfContinuation` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ElseIfContinuation` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   let elseKeyword: TokenSyntax
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ElseBlock` using the provided parameters.
   /// - Parameters:
@@ -10563,6 +21285,14 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildElseBlock(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10578,11 +21308,74 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ElseBlock` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ElseBlock` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ElseBlock` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   let unknownAttr: Attribute?
   let label: SyntaxBuildable
   let statements: CodeBlockItemList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SwitchCase` using the provided parameters.
   /// - Parameters:
@@ -10630,6 +21423,14 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSwitchCase(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10645,10 +21446,73 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SwitchCase` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SwitchCase` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SwitchCase` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLabel {
   let defaultKeyword: TokenSyntax
   let colon: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SwitchDefaultLabel` using the provided parameters.
   /// - Parameters:
@@ -10680,6 +21544,14 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSwitchDefaultLabel(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10695,11 +21567,74 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SwitchDefaultLabel` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SwitchDefaultLabel` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SwitchDefaultLabel` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
   let pattern: PatternBuildable
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CaseItem` using the provided parameters.
   /// - Parameters:
@@ -10734,6 +21669,14 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCaseItem(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10749,11 +21692,74 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CaseItem` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CaseItem` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CaseItem` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem {
   let pattern: PatternBuildable?
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CatchItem` using the provided parameters.
   /// - Parameters:
@@ -10788,6 +21794,14 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCatchItem(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10803,11 +21817,74 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CatchItem` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CatchItem` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CatchItem` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   let caseKeyword: TokenSyntax
   let caseItems: CaseItemList
   let colon: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SwitchCaseLabel` using the provided parameters.
   /// - Parameters:
@@ -10857,6 +21934,14 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSwitchCaseLabel(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10872,11 +21957,74 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SwitchCaseLabel` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SwitchCaseLabel` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SwitchCaseLabel` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   let catchKeyword: TokenSyntax
   let catchItems: CatchItemList?
   let body: CodeBlock
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CatchClause` using the provided parameters.
   /// - Parameters:
@@ -10925,6 +22073,14 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCatchClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -10940,6 +22096,68 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CatchClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CatchClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CatchClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   let poundAssert: TokenSyntax
@@ -10948,6 +22166,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   let comma: TokenSyntax?
   let message: TokenSyntax?
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PoundAssertStmt` using the provided parameters.
   /// - Parameters:
@@ -11017,6 +22236,14 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// Conformance to `StmtBuildable`.
   public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
     let result = buildPoundAssertStmt(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return StmtSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return StmtSyntax(result)
   }
 
@@ -11038,10 +22265,73 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PoundAssertStmt` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PoundAssertStmt` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PoundAssertStmt` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClause {
   let whereKeyword: TokenSyntax
   let requirementList: GenericRequirementList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GenericWhereClause` using the provided parameters.
   /// - Parameters:
@@ -11084,6 +22374,14 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericWhereClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11099,10 +22397,73 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GenericWhereClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GenericWhereClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GenericWhereClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequirement {
   let body: SyntaxBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GenericRequirement` using the provided parameters.
   /// - Parameters:
@@ -11133,6 +22494,14 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericRequirement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11148,11 +22517,74 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GenericRequirement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GenericRequirement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GenericRequirement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequirement {
   let leftTypeIdentifier: TypeBuildable
   let equalityToken: TokenSyntax
   let rightTypeIdentifier: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SameTypeRequirement` using the provided parameters.
   /// - Parameters:
@@ -11186,6 +22618,14 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildSameTypeRequirement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11201,6 +22641,68 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SameTypeRequirement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SameTypeRequirement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SameTypeRequirement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
   let attributes: AttributeList?
@@ -11208,6 +22710,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
   let colon: TokenSyntax?
   let inheritedType: TypeBuildable?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GenericParameter` using the provided parameters.
   /// - Parameters:
@@ -11269,6 +22772,14 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericParameter(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11284,6 +22795,68 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GenericParameter` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GenericParameter` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GenericParameter` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType {
   let attributes: AttributeList?
@@ -11292,6 +22865,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   let inheritedType: TypeBuildable?
   let initializer: TypeInitializerClause?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
@@ -11359,6 +22933,14 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrimaryAssociatedType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11374,11 +22956,74 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrimaryAssociatedType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrimaryAssociatedType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrimaryAssociatedType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParameterClause {
   let leftAngleBracket: TokenSyntax
   let genericParameterList: GenericParameterList
   let rightAngleBracket: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
@@ -11428,6 +23073,14 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericParameterClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11443,11 +23096,74 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GenericParameterClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GenericParameterClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GenericParameterClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceRequirement {
   let leftTypeIdentifier: TypeBuildable
   let colon: TokenSyntax
   let rightTypeIdentifier: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ConformanceRequirement` using the provided parameters.
   /// - Parameters:
@@ -11482,6 +23198,14 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildConformanceRequirement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11497,11 +23221,74 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ConformanceRequirement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ConformanceRequirement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ConformanceRequirement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimaryAssociatedTypeClause {
   let leftAngleBracket: TokenSyntax
   let primaryAssociatedTypeList: PrimaryAssociatedTypeList
   let rightAngleBracket: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `PrimaryAssociatedTypeClause` using the provided parameters.
   /// - Parameters:
@@ -11551,6 +23338,14 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -11566,10 +23361,73 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `PrimaryAssociatedTypeClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `PrimaryAssociatedTypeClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `PrimaryAssociatedTypeClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdentifier {
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `SimpleTypeIdentifier` using the provided parameters.
   /// - Parameters:
@@ -11599,6 +23457,14 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildSimpleTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11620,12 +23486,75 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `SimpleTypeIdentifier` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `SimpleTypeIdentifier` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `SimpleTypeIdentifier` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdentifier {
   let baseType: TypeBuildable
   let period: TokenSyntax
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MemberTypeIdentifier` using the provided parameters.
   /// - Parameters:
@@ -11664,6 +23593,14 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildMemberTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11685,9 +23622,72 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MemberTypeIdentifier` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MemberTypeIdentifier` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MemberTypeIdentifier` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestrictionType {
   let classKeyword: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ClassRestrictionType` using the provided parameters.
   /// - Parameters:
@@ -11714,6 +23714,14 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildClassRestrictionType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11735,11 +23743,74 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ClassRestrictionType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ClassRestrictionType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ClassRestrictionType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   let leftSquareBracket: TokenSyntax
   let elementType: TypeBuildable
   let rightSquareBracket: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ArrayType` using the provided parameters.
   /// - Parameters:
@@ -11775,6 +23846,14 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildArrayType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11796,6 +23875,68 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ArrayType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ArrayType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ArrayType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   let leftSquareBracket: TokenSyntax
@@ -11803,6 +23944,7 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   let colon: TokenSyntax
   let valueType: TypeBuildable
   let rightSquareBracket: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `DictionaryType` using the provided parameters.
   /// - Parameters:
@@ -11847,6 +23989,14 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildDictionaryType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11868,11 +24018,74 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `DictionaryType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `DictionaryType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `DictionaryType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   let baseType: TypeBuildable
   let period: TokenSyntax
   let typeOrProtocol: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `MetatypeType` using the provided parameters.
   /// - Parameters:
@@ -11922,6 +24135,14 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildMetatypeType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11943,10 +24164,73 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `MetatypeType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `MetatypeType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `MetatypeType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   let wrappedType: TypeBuildable
   let questionMark: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `OptionalType` using the provided parameters.
   /// - Parameters:
@@ -11977,6 +24261,14 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildOptionalType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -11998,10 +24290,73 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `OptionalType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `OptionalType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `OptionalType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugarType {
   let someOrAnySpecifier: TokenSyntax
   let baseType: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ConstrainedSugarType` using the provided parameters.
   /// - Parameters:
@@ -12044,6 +24399,14 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildConstrainedSugarType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -12065,10 +24428,73 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ConstrainedSugarType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ConstrainedSugarType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ConstrainedSugarType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImplicitlyUnwrappedOptionalType {
   let wrappedType: TypeBuildable
   let exclamationMark: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ImplicitlyUnwrappedOptionalType` using the provided parameters.
   /// - Parameters:
@@ -12099,6 +24525,14 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildImplicitlyUnwrappedOptionalType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -12120,10 +24554,73 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ImplicitlyUnwrappedOptionalType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ImplicitlyUnwrappedOptionalType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ImplicitlyUnwrappedOptionalType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionTypeElement {
   let type: TypeBuildable
   let ampersand: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CompositionTypeElement` using the provided parameters.
   /// - Parameters:
@@ -12154,6 +24651,14 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildCompositionTypeElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -12169,9 +24674,72 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CompositionTypeElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CompositionTypeElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CompositionTypeElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   let elements: CompositionTypeElementList
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `CompositionType` using the provided parameters.
   /// - Parameters:
@@ -12207,6 +24775,14 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildCompositionType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -12228,6 +24804,68 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `CompositionType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `CompositionType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `CompositionType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
   let inOut: TokenSyntax?
@@ -12238,6 +24876,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
   let ellipsis: TokenSyntax?
   let initializer: InitializerClause?
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TupleTypeElement` using the provided parameters.
   /// - Parameters:
@@ -12295,6 +24934,14 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTupleTypeElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -12310,11 +24957,74 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TupleTypeElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TupleTypeElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TupleTypeElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   let leftParen: TokenSyntax
   let elements: TupleTypeElementList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TupleType` using the provided parameters.
   /// - Parameters:
@@ -12364,6 +25074,14 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildTupleType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -12385,6 +25103,68 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TupleType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TupleType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TupleType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   let leftParen: TokenSyntax
@@ -12394,6 +25174,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   let throwsOrRethrowsKeyword: TokenSyntax?
   let arrow: TokenSyntax
   let returnType: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `FunctionType` using the provided parameters.
   /// - Parameters:
@@ -12470,6 +25251,14 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildFunctionType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -12491,11 +25280,74 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `FunctionType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `FunctionType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `FunctionType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   let specifier: TokenSyntax?
   let attributes: AttributeList?
   let baseType: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AttributedType` using the provided parameters.
   /// - Parameters:
@@ -12544,6 +25396,14 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// Conformance to `TypeBuildable`.
   public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
     let result = buildAttributedType(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return TypeSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return TypeSyntax(result)
   }
 
@@ -12565,10 +25425,73 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AttributedType` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AttributedType` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AttributedType` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument {
   let argumentType: TypeBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GenericArgument` using the provided parameters.
   /// - Parameters:
@@ -12599,6 +25522,14 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericArgument(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -12614,11 +25545,74 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GenericArgument` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GenericArgument` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GenericArgument` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgumentClause {
   let leftAngleBracket: TokenSyntax
   let arguments: GenericArgumentList
   let rightAngleBracket: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `GenericArgumentClause` using the provided parameters.
   /// - Parameters:
@@ -12668,6 +25662,14 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildGenericArgumentClause(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -12683,10 +25685,73 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `GenericArgumentClause` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `GenericArgumentClause` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `GenericArgumentClause` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   let colon: TokenSyntax
   let type: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TypeAnnotation` using the provided parameters.
   /// - Parameters:
@@ -12717,6 +25782,14 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTypeAnnotation(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -12732,12 +25805,75 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TypeAnnotation` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TypeAnnotation` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TypeAnnotation` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   let type: TypeBuildable?
   let period: TokenSyntax
   let caseName: TokenSyntax
   let associatedTuple: TuplePattern?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `EnumCasePattern` using the provided parameters.
   /// - Parameters:
@@ -12792,6 +25928,14 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildEnumCasePattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -12813,10 +25957,73 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `EnumCasePattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `EnumCasePattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `EnumCasePattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   let isKeyword: TokenSyntax
   let type: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IsTypePattern` using the provided parameters.
   /// - Parameters:
@@ -12847,6 +26054,14 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildIsTypePattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -12868,10 +26083,73 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IsTypePattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IsTypePattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IsTypePattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   let subPattern: PatternBuildable
   let questionMark: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `OptionalPattern` using the provided parameters.
   /// - Parameters:
@@ -12902,6 +26180,14 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildOptionalPattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -12923,9 +26209,72 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `OptionalPattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `OptionalPattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `OptionalPattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPattern {
   let identifier: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `IdentifierPattern` using the provided parameters.
   /// - Parameters:
@@ -12951,6 +26300,14 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildIdentifierPattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -12972,11 +26329,74 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `IdentifierPattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `IdentifierPattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `IdentifierPattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   let pattern: PatternBuildable
   let asKeyword: TokenSyntax
   let type: TypeBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AsTypePattern` using the provided parameters.
   /// - Parameters:
@@ -13011,6 +26431,14 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildAsTypePattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -13032,11 +26460,74 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AsTypePattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AsTypePattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AsTypePattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   let leftParen: TokenSyntax
   let elements: TuplePatternElementList
   let rightParen: TokenSyntax
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TuplePattern` using the provided parameters.
   /// - Parameters:
@@ -13086,6 +26577,14 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildTuplePattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -13107,10 +26606,73 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TuplePattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TuplePattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TuplePattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   let wildcard: TokenSyntax
   let typeAnnotation: TypeAnnotation?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `WildcardPattern` using the provided parameters.
   /// - Parameters:
@@ -13141,6 +26703,14 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildWildcardPattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -13162,12 +26732,75 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `WildcardPattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `WildcardPattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `WildcardPattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternElement {
   let labelName: TokenSyntax?
   let labelColon: TokenSyntax?
   let pattern: PatternBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `TuplePatternElement` using the provided parameters.
   /// - Parameters:
@@ -13223,6 +26856,14 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildTuplePatternElement(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -13238,9 +26879,72 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `TuplePatternElement` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `TuplePatternElement` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `TuplePatternElement` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPattern {
   let expression: ExprBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ExpressionPattern` using the provided parameters.
   /// - Parameters:
@@ -13266,6 +26970,14 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildExpressionPattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -13287,10 +26999,73 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ExpressionPattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ExpressionPattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ExpressionPattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPattern {
   let letOrVarKeyword: TokenSyntax
   let valuePattern: PatternBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `ValueBindingPattern` using the provided parameters.
   /// - Parameters:
@@ -13321,6 +27096,14 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// Conformance to `PatternBuildable`.
   public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
     let result = buildValueBindingPattern(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return PatternSyntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return PatternSyntax(result)
   }
 
@@ -13342,11 +27125,74 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
   }
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `ValueBindingPattern` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `ValueBindingPattern` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `ValueBindingPattern` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A single argument to an `@available` argument like `*`, `iOS 10.1`,or `message: "This has been deprecated"`.
 public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityArgument {
   let entry: SyntaxBuildable
   let trailingComma: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AvailabilityArgument` using the provided parameters.
   /// - Parameters:
@@ -13377,6 +27223,14 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityArgument(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -13392,12 +27246,75 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AvailabilityArgument` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AvailabilityArgument` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AvailabilityArgument` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A argument to an `@available` attribute that consists of a label anda value, e.g. `message: "This has been deprecated"`.
 public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailabilityLabeledArgument {
   let label: TokenSyntax
   let colon: TokenSyntax
   let value: SyntaxBuildable
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AvailabilityLabeledArgument` using the provided parameters.
   /// - Parameters:
@@ -13446,6 +27363,14 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityLabeledArgument(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -13461,11 +27386,74 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AvailabilityLabeledArgument` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AvailabilityLabeledArgument` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AvailabilityLabeledArgument` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// An argument to `@available` that restricts the availability on acertain platform to a version, e.g. `iOS 10` or `swift 3.4`.
 public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvailabilityVersionRestriction {
   let platform: TokenSyntax
   let version: VersionTuple?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `AvailabilityVersionRestriction` using the provided parameters.
   /// - Parameters:
@@ -13507,6 +27495,14 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildAvailabilityVersionRestriction(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -13522,12 +27518,75 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `AvailabilityVersionRestriction` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `AvailabilityVersionRestriction` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `AvailabilityVersionRestriction` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }
 /// A version number of the form major.minor.patch in which the minorand patch part may be ommited.
 public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   let majorMinor: SyntaxBuildable
   let patchPeriod: TokenSyntax?
   let patchVersion: TokenSyntax?
+  public var itemLeadingTrivia: Trivia?
 
   /// Creates a `VersionTuple` using the provided parameters.
   /// - Parameters:
@@ -13576,6 +27635,14 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// Conformance to `SyntaxBuildable`.
   public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
     let result = buildVersionTuple(format: format, leadingTrivia: leadingTrivia)
+    
+      
+     if let itemLeadingTrivia = itemLeadingTrivia
+    {
+      let formattedLeadingTrivia = [itemLeadingTrivia, format._makeIndent()].reduce(.zero, +)
+      return Syntax(result).withLeadingTrivia(formattedLeadingTrivia)
+    }
+    
     return Syntax(result)
   }
 
@@ -13591,4 +27658,66 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
     return self
   }
 
+  
+  public func lineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "//")
+    
+    let piece = TriviaPiece.lineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text:  inserted between /*  and  */.
+  /// - Returns: a `VersionTuple` with the added line comment.
+  public func blockComment(_ text: String) -> Self {
+    
+    let piece = TriviaPiece.blockComment("/* \(text) */")
+    return addCommentPiece(commentPiece: piece)
+    
+  }
+  
+  /// A documentation line comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted after ///
+  /// - Returns: a `VersionTuple` with the added documentation line comment.
+  public func docLineComment(_ text: String) -> Self {
+    
+    let textWithSlashes = prefixLines(of: text, with: "///")
+    
+    let piece = TriviaPiece.docLineComment("\(textWithSlashes)")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// - Parameter text: comment to be inserted between /** and '*/.
+  /// - Returns: a `VersionTuple` with the added  documentation block comment.
+  public func docBlockComment(_ text: String) -> Self {
+    let piece = TriviaPiece.docBlockComment("/** \(text) */")
+    return addCommentPiece(commentPiece: piece)
+  }
+  
+  private func addCommentPiece(commentPiece: TriviaPiece) -> Self {
+    var newSelf = self
+    newSelf.itemLeadingTrivia = itemLeadingTrivia?
+      .appending(commentPiece)
+      .appending(.newlines(1)) ?? [commentPiece, .newlines(1)]
+    return newSelf
+  }
+  
+  /// Extracts Lines from a given text, and add a prefix to it
+  /// - Parameters:
+  ///   - text: Text which its lines will be prefixed
+  ///   - prefix: prefix for each line
+  /// - Returns: a new string, with prefixed lines
+  private func prefixLines(of text: String, with prefix: String) -> String {
+    
+    let prefixedLines = text
+      .split(whereSeparator: \.isNewline)
+      .map {"\(prefix) \($0)\n"}
+      .reduce("", { $0 + $1 })
+      .dropLast(1)
+    
+    return "\(prefixedLines)"
+  }
+  
 }

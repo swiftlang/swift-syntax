@@ -6431,8 +6431,8 @@ public struct TargetFunctionEntrySyntaxBuilder {
     layout[idx] = node.raw
   }
 
-  public mutating func useDelcname(_ node: DeclNameSyntax) {
-    let idx = TargetFunctionEntrySyntax.Cursor.delcname.rawValue
+  public mutating func useDeclname(_ node: DeclNameSyntax) {
+    let idx = TargetFunctionEntrySyntax.Cursor.declname.rawValue
     layout[idx] = node.raw
   }
 

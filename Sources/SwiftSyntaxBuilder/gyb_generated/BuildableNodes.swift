@@ -7927,25 +7927,25 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
 public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionEntry {
   let label: TokenSyntax
   let colon: TokenSyntax
-  let delcname: DeclName
+  let declname: DeclName
   let trailingComma: TokenSyntax?
 
   /// Creates a `TargetFunctionEntry` using the provided parameters.
   /// - Parameters:
   ///   - label: The label of the argument
   ///   - colon: The colon separating the label and the value
-  ///   - delcname: The value for this argument
+  ///   - declname: The value for this argument
   ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
     label: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
-    delcname: ExpressibleAsDeclName,
+    declname: ExpressibleAsDeclName,
     trailingComma: TokenSyntax? = nil
   ) {
     self.label = label
     self.colon = colon
     assert(colon.text == ":")
-    self.delcname = delcname.createDeclName()
+    self.declname = declname.createDeclName()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -7956,13 +7956,13 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   public init(
     label: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
-    delcname: ExpressibleAsDeclName,
+    declname: ExpressibleAsDeclName,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       label: TokenSyntax.identifier(label),
       colon: colon,
-      delcname: delcname,
+      declname: declname,
       trailingComma: trailingComma
     )
   }
@@ -7971,7 +7971,7 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     let result = SyntaxFactory.makeTargetFunctionEntry(
       label: label,
       colon: colon,
-      delcname: delcname.buildDeclName(format: format, leadingTrivia: nil),
+      declname: declname.buildDeclName(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     if let leadingTrivia = leadingTrivia {
@@ -8163,7 +8163,7 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   }
 
 }
-/// A piece of an Objective-C selector. Either consisiting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument
+/// A piece of an Objective-C selector. Either consisting of just anidentifier for a nullary selector, an identifier and a colon for alabeled argument or just a colon for an unlabeled argument
 public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece {
   let name: TokenSyntax?
   let colon: TokenSyntax?
@@ -13523,7 +13523,7 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   }
 
 }
-/// A version number of the form major.minor.patch in which the minorand patch part may be ommited.
+/// A version number of the form major.minor.patch in which the minorand patch part may be omitted.
 public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   let majorMinor: SyntaxBuildable
   let patchPeriod: TokenSyntax?

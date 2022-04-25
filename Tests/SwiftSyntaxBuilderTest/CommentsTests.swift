@@ -26,7 +26,7 @@ final class CommentsTests: XCTestCase {
       import Foundation
       // Important line comment
       import UIKit
-      // SomeViewController is used for tableView
+      // SomeViewController is used for tableView.
       class SomeViewController{
           let tableView: UITableView
       }
@@ -52,7 +52,7 @@ final class CommentsTests: XCTestCase {
     XCTAssertEqual(text, """
       
       import SceneKit
-      /// Plane node used to represent in a scene
+      /// Plane node used to represent in a scene.
       class PlaneNode{
           var planeGeometry: SCNGeometry
       }
@@ -142,6 +142,7 @@ final class CommentsTests: XCTestCase {
       """)
   }
   
+  
   func testFirstNodeComment() {
     // Given
     let source = SourceFile {
@@ -161,7 +162,7 @@ final class CommentsTests: XCTestCase {
       """)
   }
   
-  func testSourceFileComments() {
+  func testSourceFileMultipleLineComments() {
     // Given
     let source = SourceFile {
       ImportDecl(path: "SceneKit")
@@ -181,6 +182,26 @@ final class CommentsTests: XCTestCase {
       import SceneKit
       """)
   }
+  
+  func testSourceFileSingleLineComments() {
+    // Given
+    let source = SourceFile {
+      ImportDecl(path: "SceneKit")
+    }.lineComment("""
+    This source file is part of the Swift.org open source project
+    """)
+    // When
+    let syntax = source.buildSyntax(format: Format())
+    var text = ""
+    syntax.write(to: &text)
+    // Then
+    XCTAssertEqual(text, """
+      // This source file is part of the Swift.org open source project
+      
+      import SceneKit
+      """)
+  }
+  
   
   func testSourceFileCommentsWhenFirstNodeHasComment() {
     // Given
@@ -223,6 +244,37 @@ final class CommentsTests: XCTestCase {
       import SceneKit
       class PlaneNode{
           // Geometry of plane, could be modified.
+          var planeGeometry: SCNGeometry
+      }
+      """)
+  }
+  
+  func testMultipleLineCommentsIndentation() {
+    // Given
+    let source = SourceFile {
+      ImportDecl(path: "SceneKit")
+      ClassDecl(classOrActorKeyword: .class, identifier: "PlaneNode", membersBuilder: {
+        VariableDecl(.var, name: "planeGeometry", type: "SCNGeometry")
+          .lineComment("""
+    Plane node used to represent in a scene.
+    Each scene is supposed to have only one plane.
+    """
+          )
+      })
+    }
+    // When
+    let syntax = source.buildSyntax(format: Format())
+    var text = ""
+    syntax.write(to: &text)
+    print(text)
+    
+    // Then
+    XCTAssertEqual(text, """
+      
+      import SceneKit
+      class PlaneNode{
+          // Plane node used to represent in a scene.
+          // Each scene is supposed to have only one plane.
           var planeGeometry: SCNGeometry
       }
       """)

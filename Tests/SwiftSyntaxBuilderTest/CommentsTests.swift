@@ -182,6 +182,27 @@ final class CommentsTests: XCTestCase {
       """)
   }
   
+  func testSourceFileCommentsWhenFirstNodeHasComment() {
+    // Given
+    let source = SourceFile {
+      ImportDecl(path: "SceneKit")
+        .lineComment("Create 3D games and add 3D content to apps using high-level scene descriptions.")
+    }.lineComment("""
+    This source file is part of the Swift.org open source project.
+    """)
+    // When
+    let syntax = source.buildSyntax(format: Format())
+    var text = ""
+    syntax.write(to: &text)
+    // Then
+    XCTAssertEqual(text, """
+      // This source file is part of the Swift.org open source project.
+      
+      // Create 3D games and add 3D content to apps using high-level scene descriptions.
+      import SceneKit
+      """)
+  }
+  
   func testNestedCommentsIndentation() {
     // Given
     let source = SourceFile {

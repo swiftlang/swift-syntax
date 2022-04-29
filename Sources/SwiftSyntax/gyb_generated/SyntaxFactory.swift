@@ -2922,11 +2922,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return LabeledSpecializeEntrySyntax(data)
   }
-  public static func makeTargetFunctionEntry(label: TokenSyntax, colon: TokenSyntax, delcname: DeclNameSyntax, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
+  public static func makeTargetFunctionEntry(label: TokenSyntax, colon: TokenSyntax, declname: DeclNameSyntax, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
     let layout: [RawSyntax?] = [
       label.raw,
       colon.raw,
-      delcname.raw,
+      declname.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,

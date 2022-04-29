@@ -29,7 +29,7 @@ public enum SyntaxClassification {
   case floatingLiteral
   /// A string literal including multiline string literals. 
   case stringLiteral
-  /// The opening and closing paranthesis of string interpolation. 
+  /// The opening and closing parenthesis of string interpolation. 
   case stringInterpolationAnchor
   /// A `#` keyword like `#warning`. 
   case poundDirectiveKeyword

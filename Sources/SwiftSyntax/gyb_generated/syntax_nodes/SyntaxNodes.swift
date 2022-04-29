@@ -6988,7 +6988,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case label
     case colon
-    case delcname
+    case declname
     case trailingComma
   }
 
@@ -7058,24 +7058,24 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// The value for this argument
-  public var delcname: DeclNameSyntax {
+  public var declname: DeclNameSyntax {
     get {
-      let childData = data.child(at: Cursor.delcname,
+      let childData = data.child(at: Cursor.declname,
                                  parent: Syntax(self))
       return DeclNameSyntax(childData!)
     }
     set(value) {
-      self = withDelcname(value)
+      self = withDeclname(value)
     }
   }
 
-  /// Returns a copy of the receiver with its `delcname` replaced.
-  /// - param newChild: The new `delcname` to replace the node's
-  ///                   current `delcname`, if present.
-  public func withDelcname(
+  /// Returns a copy of the receiver with its `declname` replaced.
+  /// - param newChild: The new `declname` to replace the node's
+  ///                   current `declname`, if present.
+  public func withDeclname(
     _ newChild: DeclNameSyntax?) -> TargetFunctionEntrySyntax {
     let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.declName)
-    let newData = data.replacingChild(raw, at: Cursor.delcname)
+    let newData = data.replacingChild(raw, at: Cursor.declname)
     return TargetFunctionEntrySyntax(newData)
   }
 
@@ -7151,7 +7151,7 @@ extension TargetFunctionEntrySyntax: CustomReflectable {
     return Mirror(self, children: [
       "label": Syntax(label).asProtocol(SyntaxProtocol.self),
       "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "delcname": Syntax(delcname).asProtocol(SyntaxProtocol.self),
+      "declname": Syntax(declname).asProtocol(SyntaxProtocol.self),
       "trailingComma": trailingComma.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -7603,7 +7603,7 @@ extension ImplementsAttributeArgumentsSyntax: CustomReflectable {
 // MARK: - ObjCSelectorPieceSyntax
 
 /// 
-/// A piece of an Objective-C selector. Either consisiting of just an
+/// A piece of an Objective-C selector. Either consisting of just an
 /// identifier for a nullary selector, an identifier and a colon for a
 /// labeled argument or just a colon for an unlabeled argument
 /// 
@@ -13926,7 +13926,7 @@ extension AvailabilityVersionRestrictionSyntax: CustomReflectable {
 
 /// 
 /// A version number of the form major.minor.patch in which the minor
-/// and patch part may be ommited.
+/// and patch part may be omitted.
 /// 
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {

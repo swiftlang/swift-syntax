@@ -1,4 +1,5 @@
 import SwiftSyntax
+import SwiftSyntaxParser
 import Foundation
 
 /// AddOneToIntegerLiterals will visit each token in the Syntax tree, and

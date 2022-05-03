@@ -3,7 +3,7 @@
 enum List<T> {
   case Nil
   // rdar://21927124
-  // CHECK: <attr-builtin>indirect</attr-builtin> <kw>case</kw> <id>Cons</id>(<type>T</type>, <type>List</type>)
+  // CHECK: <kw>indirect</kw> <kw>case</kw> <id>Cons</id>(<type>T</type>, <type>List</type>)
   indirect case Cons(T, List)
 }
 
@@ -97,10 +97,10 @@ class Attributes {
 // CHECK: <attr-builtin>@IBAction</attr-builtin> <attr-builtin>@available</attr-builtin>(*, <id>unavailable</id>) <kw>func</kw> <id>f3</id>() {}
   @IBAction @available(*, unavailable) func f3() {}
 
-// CHECK: <attr-builtin>mutating</attr-builtin> <kw>func</kw> <id>func_mutating_1</id>() {}
+// CHECK: <kw>mutating</kw> <kw>func</kw> <id>func_mutating_1</id>() {}
   mutating func func_mutating_1() {}
 
-// CHECK: <attr-builtin>nonmutating</attr-builtin> <kw>func</kw> <id>func_mutating_2</id>() {}
+// CHECK: <kw>nonmutating</kw> <kw>func</kw> <id>func_mutating_2</id>() {}
   nonmutating func func_mutating_2() {}
 }
 
@@ -160,7 +160,7 @@ protocol Prot {
   var protocolProperty2: Int { get set }
 }
 
-// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *-* : <id>FunnyPrecedence</id>{{$}}
+// CHECK: <kw>infix</kw> <kw>operator</kw> *-* : <id>FunnyPrecedence</id>{{$}}
 infix operator *-* : FunnyPrecedence
 
 // CHECK: <kw>precedencegroup</kw> <id>FunnyPrecedence</id>
@@ -174,13 +174,13 @@ precedencegroup FunnyPrecedence {
 // CHECK: <kw>func</kw> *-*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *-*(l: Int, r: Int) -> Int { return l }
 
-// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *-+* : <id>FunnyPrecedence</id>
+// CHECK: <kw>infix</kw> <kw>operator</kw> *-+* : <id>FunnyPrecedence</id>
 infix operator *-+* : FunnyPrecedence
 
 // CHECK: <kw>func</kw> *-+*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
 func *-+*(l: Int, r: Int) -> Int { return l }
 
-// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> *--*{{$}}
+// CHECK: <kw>infix</kw> <kw>operator</kw> *--*{{$}}
 infix operator *--*
 
 // CHECK: <kw>func</kw> *--*(<id>l</id>: <type>Int</type>, <id>r</id>: <type>Int</type>) -> <type>Int</type> { <kw>return</kw> <id>l</id> }{{$}}
@@ -283,21 +283,21 @@ func test3(o: AnyObject) {
 
 // CHECK: <kw>class</kw> <id>MySubClass</id> : <type>MyCls</type> {
 class MySubClass : MyCls {
-    // CHECK: <attr-builtin>override</attr-builtin> <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>) {}
+    // CHECK: <kw>override</kw> <kw>func</kw> <id>foo</id>(<id>x</id>: <type>Int</type>) {}
     override func foo(x: Int) {}
 
-    // CHECK: <attr-builtin>convenience</attr-builtin> <kw>init</kw>(<id>a</id>: <type>Int</type>) {}
+    // CHECK: <kw>convenience</kw> <kw>init</kw>(<id>a</id>: <type>Int</type>) {}
     convenience init(a: Int) {}
 }
 
 // CHECK: <kw>var</kw> <id>g1</id> = { (<id>x</id>: <type>Int</type>) -> <type>Int</type> <kw>in</kw> <kw>return</kw> <int>0</int> }
 var g1 = { (x: Int) -> Int in return 0 }
 
-// CHECK: <attr-builtin>infix</attr-builtin> <kw>operator</kw> ~~ {
+// CHECK: <kw>infix</kw> <kw>operator</kw> ~~ {
 infix operator ~~ {}
-// CHECK: <attr-builtin>prefix</attr-builtin> <kw>operator</kw> *~~ {
+// CHECK: <kw>prefix</kw> <kw>operator</kw> *~~ {
 prefix operator *~~ {}
-// CHECK: <attr-builtin>postfix</attr-builtin> <kw>operator</kw> ~~* {
+// CHECK: <kw>postfix</kw> <kw>operator</kw> ~~* {
 postfix operator ~~* {}
 
 func test_defer() {
@@ -381,11 +381,11 @@ func keywordInCaseAndLocalArgLabel(_ for: Int, for in: Int, class _: Int) {
 
 // CHECK: <kw>class</kw> <id>Ownership</id> {
 class Ownership {
-  // CHECK: <attr-builtin>weak</attr-builtin> <kw>var</kw> <id>w</id>
+  // CHECK: <kw>weak</kw> <kw>var</kw> <id>w</id>
   weak var w
-  // CHECK: <attr-builtin>unowned</attr-builtin> <kw>var</kw> <id>u</id>
+  // CHECK: <kw>unowned</kw> <kw>var</kw> <id>u</id>
   unowned var u
-  // CHECK: <attr-builtin>unowned</attr-builtin>(<id>unsafe</id>) <kw>var</kw> <id>uu</id>
+  // CHECK: <kw>unowned</kw>(<id>unsafe</id>) <kw>var</kw> <id>uu</id>
   unowned(unsafe) var uu
 }
 // FIXME: CHECK: <kw>let</kw> closure = { [weak x=bindtox, unowned y=bindtoy, unowned(unsafe) z=bindtoz] <kw>in</kw> }

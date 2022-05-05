@@ -1,0 +1,21 @@
+# This source file is part of the Swift.org open source project
+ #
+ # Copyright (c) 2022 Apple Inc. and the Swift project authors
+ # Licensed under Apache License v2.0 with Runtime Library Exception
+ #
+ # See https://swift.org/LICENSE.txt for license information
+ # See https://swift.org/CONTRIBUTORS.txt for Swift project authors
+
+ # This is set to `false` to encourage users to use the provided templates instead
+ # of beginning with a blank one.
+ #
+ # For details, see: https://docs.github.com/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#configuring-the-template-chooser
+ blank_issues_enabled: false
+
+ contact_links:
+   - name: Discussion Forum
+     url: https://forums.swift.org/tags/c/development/tooling/39/swift-syntax
+     about: Ask and answer questions about SwiftSyntax
+   - name: SwiftSyntax Documentation
+     url: https://github.com/apple/swift-syntax/tree/main/Documentation
+     about: Learn about how to use the SwiftSyntax in your projects

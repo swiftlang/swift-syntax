@@ -51,7 +51,7 @@ Start contributing to SwiftSyntax see [this guide](https://github.com/apple/swif
 
 ## Reporting Issues
 
-If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [bugs.swift.org](https://bugs.swift.org) in the [SwiftSyntax component](https://bugs.swift.org/issues/?jql=component%20%3D%20SwiftSyntax).
+If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [GitHub Issue](https://github.com/apple/swift-syntax/issues).
 
 ## License
 

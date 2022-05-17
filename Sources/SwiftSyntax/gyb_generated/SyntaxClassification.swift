@@ -67,22 +67,14 @@ extension SyntaxClassification {
       switch (parentKind, indexInParent) {
       case (.awaitExpr, 0):
         return (.keyword, false)
-      case (.arrowExpr, 0):
-        return (.keyword, false)
-      case (.closureSignature, 3):
-        return (.keyword, false)
       case (.expressionSegment, 2):
         return (.stringInterpolationAnchor, true)
-      case (.functionSignature, 1):
-        return (.keyword, false)
       case (.ifConfigClause, 0):
         return (.buildConfigId, false)
       case (.ifConfigDecl, 1):
         return (.buildConfigId, false)
       case (.declModifier, 0):
         return (.attribute, false)
-      case (.accessorDecl, 4):
-        return (.keyword, false)
       case (.precedenceGroupRelation, 0):
         return (.keyword, false)
       case (.precedenceGroupAssociativity, 0):
@@ -96,8 +88,6 @@ extension SyntaxClassification {
       case (.memberTypeIdentifier, 2):
         return (.typeIdentifier, false)
       case (.constrainedSugarType, 0):
-        return (.keyword, false)
-      case (.functionType, 3):
         return (.keyword, false)
       case (.availabilityVersionRestriction, 0):
         return (.keyword, false)

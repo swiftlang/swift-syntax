@@ -1315,7 +1315,7 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
     arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
     self.init(
-      asyncKeyword: asyncKeyword.map(TokenSyntax.identifier),
+      asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsToken: throwsToken,
       arrowToken: arrowToken
     )
@@ -2464,7 +2464,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
       attributes: attributesBuilder(),
       capture: capture,
       input: input,
-      asyncKeyword: asyncKeyword.map(TokenSyntax.identifier),
+      asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsTok: throwsTok,
       output: output,
       inTok: inTok
@@ -4356,7 +4356,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   ) {
     self.init(
       input: input,
-      asyncOrReasyncKeyword: asyncOrReasyncKeyword.map(TokenSyntax.identifier),
+      asyncOrReasyncKeyword: asyncOrReasyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
       output: output
     )
@@ -6533,7 +6533,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
       modifier: modifier,
       accessorKind: accessorKind,
       parameter: parameter,
-      asyncKeyword: asyncKeyword.map(TokenSyntax.identifier),
+      asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsKeyword: throwsKeyword,
       body: body
     )
@@ -12433,7 +12433,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   public init(
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    asyncKeyword: String?,
+    asyncKeyword: TokenSyntax? = nil,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
     arrow: TokenSyntax = TokenSyntax.`arrow`,
     returnType: ExpressibleAsTypeBuildable,
@@ -12443,7 +12443,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
       leftParen: leftParen,
       arguments: argumentsBuilder(),
       rightParen: rightParen,
-      asyncKeyword: asyncKeyword.map(TokenSyntax.identifier),
+      asyncKeyword: asyncKeyword,
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
       arrow: arrow,
       returnType: returnType

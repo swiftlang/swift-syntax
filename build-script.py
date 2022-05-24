@@ -730,7 +730,9 @@ def main():
             printerr(
                 "FAIL: Gyb-generated files committed to repository do "
                 "not match generated ones. Please re-generate the "
-                "gyb-files and recommit them."
+                "gyb-files using the following command, open a PR to the "
+                "SwiftSyntax project and merge it alongside the main PR."
+                "$ swift-syntax/build-script.py --degyb-only --toolchain ignored"
             )
             sys.exit(1)
 

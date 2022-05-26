@@ -10,12 +10,12 @@ import SwiftSyntaxBuilder
 /// }
 ///```
 
-let source = SourceFile {
-  ImportDecl(path: "Foundation")
-  ImportDecl(path: "UIKit")
-  ClassDecl(classOrActorKeyword: .class, identifier: "SomeViewController", membersBuilder: {
+let source = SourceFile(eofToken: .eof) {
+  ImportDecl(path: AccessPathComponent(name: "Foundation"))
+  ImportDecl(path: AccessPathComponent(name: "UIKit"))
+  ClassDecl(classOrActorKeyword: .class, identifier: "SomeViewController", members: MemberDeclBlock(membersBuilder: {
     VariableDecl(.let, name: "tableView", type: "UITableView")
-  })
+  }))
 }
 
 let syntax = source.buildSyntax(format: Format())

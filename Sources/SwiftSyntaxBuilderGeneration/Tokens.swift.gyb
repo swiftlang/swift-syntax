@@ -117,20 +117,24 @@ public class Misc: Token { }
 let SYNTAX_TOKENS: [Token] = [
 % for token in SYNTAX_TOKENS:
 %   class_name = type(token).__name__
-%   text = 'text: "' + token.text + '", ' if token.text else ""
+%   parameters = ["name: \"%s\"" % token.name]
 %   if class_name in ['Keyword', 'SwiftKeyword', 'DeclKeyword', 'StmtKeyword', 'ExprKeyword', 'PatternKeyword', 'SilKeyword']:
-    ${class_name}(name: "${token.name}", serializationCode: ${token.serialization_code}, text: "${token.text}"),
+%     parameters += ["serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text]
 %   elif class_name in ['PoundKeyword', 'PoundConfig', 'PoundDirectiveKeyword', 'PoundConditionalDirectiveKeyword']:
-    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}, text: "${token.text}"),
-%   elif class_name in ['Punctuator', 'Misc']:
-    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}, ${text}requiresLeadingSpace: ${str(token.requires_leading_space).lower()}, requiresTrailingSpace: ${str(token.requires_trailing_space).lower()}),
-%   elif class_name == 'Literal':
-    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}),
+%     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text]
+%   elif class_name in ['Punctuator', 'Misc', 'Literal']:
+%     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code]
+%     if token.text:
+%       parameters += ["text: \"%s\"" % token.text]
+%     end
+%     parameters += ["requiresLeadingSpace: true"] if token.requires_leading_space else []
+%     parameters += ["requiresTrailingSpace: true"] if token.requires_trailing_space else []
 %   elif class_name == 'PoundObjectLiteral':
-    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}, ${text}description: "${token.description}", protocol: "${token.protocol}"),
+%     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text, "description: \"%s\"" % token.description, "protocol: \"%s\"" % token.protocol]
 %   else:
 %     print("Unknown token `%s`", (token.name), file=sys.stderr)
 %     sys.exit(1)
 %   end
+    ${class_name}(${", ".join(parameters)}),
 % end
 ]

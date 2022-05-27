@@ -40,7 +40,8 @@ let package = Package(
   products: [
     .library(name: "SwiftSyntax", type: .static, targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxParser", type: .static, targets: ["SwiftSyntaxParser"]),
-    .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"])
+    .library(name: "SwiftSyntaxBuilder", type: .static, targets: ["SwiftSyntaxBuilder"]),
+    .executable(name: "SwiftSyntaxBuilderGeneration", targets: ["SwiftSyntaxBuilderGeneration"])
   ],
   targets: [
     .target(
@@ -81,7 +82,6 @@ let package = Package(
         "BuildableCollectionNodes.swift.gyb",
         "BuildableNodes.swift.gyb",
         "ResultBuilders.swift.gyb",
-        "Tokens.swift.gyb",
         "TokenSyntax.swift.gyb",
       ]
     ),
@@ -96,6 +96,13 @@ let package = Package(
     .target(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
+    ),
+    .target(
+        name: "SwiftSyntaxBuilderGeneration",
+        dependencies: ["SwiftSyntaxBuilder"],
+        exclude: [
+          "Tokens.swift.gyb"
+        ]
     ),
     .testTarget(
       name: "SwiftSyntaxTest",

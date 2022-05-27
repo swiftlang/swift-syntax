@@ -1,0 +1,136 @@
+%{
+  from gyb_syntax_support import *
+  from gyb_syntax_support.Token import *
+  from gyb_syntax_support.kinds import lowercase_first_word
+  # -*- mode: Swift -*-
+  # Ignore the following admonition it applies to the resulting .swift file only
+}%
+//// Automatically Generated From Tokens.swift.gyb.
+//// Do Not Edit Directly!
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+/// Represents the specification for a Token in the TokenSyntax file.
+public class Token {
+  public let name: String
+  public let kind: String
+  public let serializationCode: Int
+  public let unprefixedKind: String
+  public let text: String?
+  public let classification: String
+  public let isKeyword: Bool
+  public let requiresLeadingSpace: Bool
+  public let requiresTrailingSpace: Bool
+
+  public var swiftKind: String {
+    let name = self.name
+
+    if isKeyword {
+      return name + "Keyword"
+    } else {
+      return name
+    }
+  }
+
+  public init(name: String, kind: String, serializationCode: Int, unprefixedKind: String? = nil, text: String? = nil, classification: String = "None", isKeyword: Bool = false, requiresLeadingSpace: Bool = false, requiresTrailingSpace: Bool = false) {
+    self.name = name
+    self.kind = kind
+    self.serializationCode = serializationCode
+    if let unprefixedKind = unprefixedKind {
+      self.unprefixedKind = unprefixedKind
+    } else {
+      self.unprefixedKind = kind
+    }
+    self.text = text
+    self.classification = classification
+    self.isKeyword = isKeyword
+    self.requiresLeadingSpace = requiresLeadingSpace
+    self.requiresTrailingSpace = requiresTrailingSpace
+  }
+}
+
+/// Represents a keyword token.
+public class Keyword: Token {
+  public init(name: String, serializationCode: Int, text: String, classification: String = "Keyword") {
+    super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true, requiresTrailingSpace: true)
+  }
+}
+
+public class SwiftKeyword: Keyword { }
+
+public class DeclKeyword: SwiftKeyword { }
+
+public class StmtKeyword: SwiftKeyword { }
+
+public class ExprKeyword: SwiftKeyword { }
+
+public class PatternKeyword: SwiftKeyword { }
+
+public class SilKeyword: Keyword { }
+
+public class PoundKeyword: Token {
+  public init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "Keyword") {
+    super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true, requiresTrailingSpace: true)
+  }
+}
+
+public class PoundObjectLiteral: PoundKeyword {
+  public let description: String
+  public let `protocol`: String
+
+  public init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "ObjectLiteral", description: String, `protocol`: String) {
+    self.description = `description`
+    self.`protocol` = `protocol`
+    super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
+  }
+}
+
+public class PoundConfig: PoundKeyword { }
+
+public class PoundDirectiveKeyword: PoundKeyword {
+  public override init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "PoundDirectiveKeyword") {
+    super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
+  }
+}
+
+public class PoundConditionalDirectiveKeyword: PoundDirectiveKeyword {
+  public override init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "PoundDirectiveKeyword") {
+    super.init(name: name, kind: kind, serializationCode: serializationCode, text: text, classification: classification)
+  }
+}
+
+public class Punctuator: Token { }
+
+public class Literal: Token { }
+
+public class Misc: Token { }
+
+let SYNTAX_TOKENS: [Token] = [
+% for token in SYNTAX_TOKENS:
+%   class_name = type(token).__name__
+%   text = 'text: "' + token.text + '", ' if token.text else ""
+%   if class_name in ['Keyword', 'SwiftKeyword', 'DeclKeyword', 'StmtKeyword', 'ExprKeyword', 'PatternKeyword', 'SilKeyword']:
+    ${class_name}(name: "${token.name}", serializationCode: ${token.serialization_code}, text: "${token.text}"),
+%   elif class_name in ['PoundKeyword', 'PoundConfig', 'PoundDirectiveKeyword', 'PoundConditionalDirectiveKeyword']:
+    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}, text: "${token.text}"),
+%   elif class_name in ['Punctuator', 'Misc']:
+    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}, ${text}requiresLeadingSpace: ${str(token.requires_leading_space).lower()}, requiresTrailingSpace: ${str(token.requires_trailing_space).lower()}),
+%   elif class_name == 'Literal':
+    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}),
+%   elif class_name == 'PoundObjectLiteral':
+    ${class_name}(name: "${token.name}", kind: "${token.kind}", serializationCode: ${token.serialization_code}, ${text}description: "${token.description}", protocol: "${token.protocol}"),
+%   else:
+%     print("Unknown token `%s`", (token.name), file=sys.stderr)
+%     sys.exit(1)
+%   end
+% end
+]

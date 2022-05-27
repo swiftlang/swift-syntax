@@ -17,6 +17,8 @@ SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAXBUILDER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxBuilder")
 SWIFTSYNTAXPARSER_DIR = os.path.join(SOURCES_DIR, "SwiftSyntaxParser")
+SWIFTSYNTAXBUILDERGENERATION_DIR = \
+        os.path.join(SOURCES_DIR, "SwiftSyntaxBuilderGeneration")
 
 LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")
@@ -260,7 +262,8 @@ def generate_syntax_node_template_gyb_files(
 def generate_gyb_files(
     gyb_exec, verbose, add_source_locations, 
     swiftsyntax_destination=None, swiftsyntaxbuilder_destination=None,
-    swiftsyntaxparser_destination=None,
+    swiftsyntaxparser_destination=None, 
+    swiftsyntaxbuildergenerator_destination=None
 ):
     print("** Generating gyb Files **")
 
@@ -288,6 +291,13 @@ def generate_gyb_files(
         add_source_locations, 
         verbose
     )
+    generate_gyb_files_helper(
+        SWIFTSYNTAXBUILDERGENERATION_DIR, 
+        swiftsyntaxbuildergenerator_destination,
+        gyb_exec, 
+        add_source_locations, 
+        verbose
+    )
     generate_syntax_node_template_gyb_files(
         swiftsyntax_destination,
         gyb_exec,
@@ -295,7 +305,30 @@ def generate_gyb_files(
         verbose
     )
 
-    print("Done Generating gyb Files")
+    print("** Done Generating gyb Files **")
+
+def run_code_generation(toolchain, build_dir, multiroot_data_file, release, verbose, swiftsyntaxbuilder_destination):
+    print("** Running code generation **")
+    swiftpm_call = get_swiftpm_invocation(
+        toolchain=toolchain,
+        action="run",
+        build_dir=build_dir,
+        multiroot_data_file=multiroot_data_file,
+        release=release,
+    )
+
+    swiftpm_call.extend(["SwiftSyntaxBuilderGeneration", 
+        swiftsyntaxbuilder_destination])
+
+    if verbose:
+        swiftpm_call.extend(["--verbose"])
+
+    env = dict(os.environ)
+    env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+    # Tell other projects in the unified build to use local dependencies
+    env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = os.path.join(toolchain, "lib", "swift", "macosx")
+    return call(swiftpm_call, env=env, verbose=verbose) == 0
 
 
 def make_dir_if_needed(path):
@@ -390,10 +423,14 @@ def verify_generated_files(gyb_exec, verbose):
     user_swiftsyntaxparser_generated_dir = os.path.join(
         SWIFTSYNTAXPARSER_DIR, "gyb_generated"
     )
+    user_swiftsyntaxbuildergeneration_generated_dir = os.path.join(
+        SWIFTSYNTAXBUILDERGENERATION_DIR, "gyb_generated"
+    )
 
     self_swiftsyntax_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
     self_swiftsyntaxparser_generated_dir = tempfile.mkdtemp()
+    self_swiftsyntaxbuildergeneration_generated_dir = tempfile.mkdtemp()
     
     generate_gyb_files(
         gyb_exec,
@@ -402,6 +439,7 @@ def verify_generated_files(gyb_exec, verbose):
         swiftsyntax_destination=self_swiftsyntax_generated_dir,
         swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir,
         swiftsyntaxparser_destination=self_swiftsyntaxparser_generated_dir,
+        swiftsyntaxbuildergenerator_destination=self_swiftsyntaxbuildergeneration_generated_dir
     )
 
     check_generated_files_match(self_swiftsyntax_generated_dir, 
@@ -410,6 +448,30 @@ def verify_generated_files(gyb_exec, verbose):
         user_swiftsyntaxbuilder_generated_dir)
     check_generated_files_match(self_swiftsyntaxparser_generated_dir,
         user_swiftsyntaxparser_generated_dir)
+    check_generated_files_match(self_swiftsyntaxbuildergeneration_generated_dir,
+        user_swiftsyntaxbuildergeneration_generated_dir)
+
+
+def verify_code_generated_files(toolchain, build_dir, multiroot_data_file, release, verbose):
+    user_swiftsyntaxbuilder_generated_dir = os.path.join(
+        SWIFTSYNTAXBUILDER_DIR, "generated"
+    )
+
+    self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
+
+    run_code_generation(
+        toolchain=toolchain,
+        build_dir=realpath(build_dir),
+        multiroot_data_file=multiroot_data_file,
+        release=release,
+        verbose=verbose,
+        swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir
+    )
+
+    print("** Verifing code generated files **")
+
+    check_generated_files_match(self_swiftsyntaxbuilder_generated_dir,
+        user_swiftsyntaxbuilder_generated_dir)
 
 
 def check_generated_files_match(self_generated_dir, user_generated_dir):
@@ -653,6 +715,13 @@ def parse_args():
     )
 
     build_group.add_argument(
+        "--run-swiftsyntaxbuilder-generation",
+        action="store_true",
+        help="The script only run the Swift code generation and skips the "
+        "rest of the build",
+    )
+
+    build_group.add_argument(
         "--disable-sandbox",
         action="store_true",
         help="Disable sandboxes when building with SwiftPM",
@@ -710,6 +779,17 @@ def parse_args():
 def main():
     args = parse_args()
 
+    if args.run_swiftsyntaxbuilder_generation:
+        run_code_generation(
+            toolchain=args.toolchain,
+            build_dir=realpath(args.build_dir),
+            multiroot_data_file=args.multiroot_data_file,
+            release=args.release,
+            verbose=args.verbose,
+            swiftsyntaxbuilder_destination=os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
+        )
+        sys.exit(0)
+
     try:
         if not args.verify_generated_files:
             generate_gyb_files(
@@ -726,6 +806,14 @@ def main():
     if args.verify_generated_files:
         try:
             success = verify_generated_files(args.gyb_exec, verbose=args.verbose)
+
+            verify_code_generated_files(
+                toolchain=args.toolchain,
+                build_dir=realpath(args.build_dir),
+                multiroot_data_file=args.multiroot_data_file,
+                release=args.release,
+                verbose=args.verbose,
+            )
         except subprocess.CalledProcessError as e:
             printerr(
                 "FAIL: Gyb-generated files committed to repository do "
@@ -759,6 +847,8 @@ def main():
         # targets simultaneously. For now, just build one product after the other.
         builder.build("SwiftSyntax")
         builder.build("SwiftSyntaxParser")
+        builder.build("SwiftSyntaxBuilder")
+        builder.build("SwiftSyntaxBuilderGeneration")
 
         # Only build lit-test-helper if we are planning to run tests
         if args.test:

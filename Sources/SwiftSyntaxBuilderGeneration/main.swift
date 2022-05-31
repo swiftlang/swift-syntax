@@ -17,15 +17,15 @@ import SwiftSyntaxBuilder
 private let format = Format(indentWidth: 2)
 
 private func createSpacingCall() -> FunctionCallExpr {
-  FunctionCallExpr(calledExpression: MemberAccessExpr(name: "spaces"), leftParen: .leftParen, argumentList: TupleExprElement(expression: IntegerLiteralExpr(1)), rightParen: .rightParen)
+  FunctionCallExpr(MemberAccessExpr(name: "spaces"), argumentListBuilder: { TupleExprElement(expression: IntegerLiteralExpr(1)) })
 }
 
 private func createWithLeadingTriviaCall() -> FunctionCallExpr {
-  FunctionCallExpr(calledExpression: MemberAccessExpr(name: "withLeadingTrivia"), leftParen: .leftParen, argumentList: TupleExprElement.init(expression: createSpacingCall()), rightParen: .rightParen)
+  FunctionCallExpr(MemberAccessExpr(name: "withLeadingTrivia"), argumentListBuilder: { TupleExprElement(expression: createSpacingCall()) })
 }
 
 private func createWithTrailingTriviaCall() -> FunctionCallExpr {
-  FunctionCallExpr(calledExpression: MemberAccessExpr(name: "withTrailingTrivia"), leftParen: .leftParen, argumentList: TupleExprElement(expression: createSpacingCall()), rightParen: .rightParen)
+  FunctionCallExpr(MemberAccessExpr(name: "withTrailingTrivia"), argumentListBuilder: { TupleExprElement(expression: createSpacingCall()) })
 }
 
 private func createTokenSyntaxPatternBinding(_ pattern: ExpressibleAsPatternBuildable, accessor: ExpressibleAsSyntaxBuildable) -> PatternBinding {
@@ -72,9 +72,7 @@ let tokensFile = SourceFile {
             // We need to use `CodeBlock` here to ensure there is braces around.
 
             let accessor = CodeBlock {
-              FunctionCallExpr(calledExpression: MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Keyword"),
-                               leftParen: .leftParen,
-                               rightParen: .rightParen)
+              FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Keyword"))
 
               if token.requiresLeadingSpace {
                 createWithLeadingTriviaCall()
@@ -99,9 +97,7 @@ let tokensFile = SourceFile {
                        bindingsBuilder: {
             // We need to use `CodeBlock` here to ensure there is braces around.
             let accessor = CodeBlock {
-              FunctionCallExpr(calledExpression: MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Token"),
-                               leftParen: .leftParen,
-                               rightParen: .rightParen)
+              FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Token"))
 
               if token.requiresLeadingSpace {
                 createWithLeadingTriviaCall()
@@ -115,7 +111,7 @@ let tokensFile = SourceFile {
             createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
           })
         } else {
-          let signature = FunctionSignature(input: ParameterClause(leftParen: TokenSyntax.leftParen, parameterList: FunctionParameter(attributes: nil, firstName: .wildcard, secondName: .identifier("text"), colon: .colon, type: "String"), rightParen: .rightParen.withTrailingTrivia(.spaces(1))), output: "TokenSyntax")
+          let signature = FunctionSignature(input: ParameterClause(parameterList: FunctionParameter(attributes: nil, firstName: .wildcard, secondName: .identifier("text"), colon: .colon, type: "String"), rightParen: .rightParen.withTrailingTrivia(.spaces(1))), output: "TokenSyntax")
 
           FunctionDecl(identifier: .identifier("`\(token.name.withFirstCharacterLowercased)`"),
                        signature: signature,
@@ -127,7 +123,7 @@ let tokensFile = SourceFile {
             }
           },
                        bodyBuilder: {
-            FunctionCallExpr(calledExpression: MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)"), leftParen: .leftParen, rightParen: .rightParen, trailingClosure: nil, argumentListBuilder: {
+            FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)"), argumentListBuilder: {
               TupleExprElement(expression: IdentifierExpr("text"))
             })
 
@@ -146,12 +142,10 @@ let tokensFile = SourceFile {
                    bindingsBuilder: {
         // We need to use `CodeBlock` here to ensure there is braces around.
         let body = CodeBlock {
-          FunctionCallExpr(calledExpression: MemberAccessExpr(base: "SyntaxFactory", name: "makeToken"),
-                           leftParen: .leftParen,
-                           rightParen: .rightParen,
+          FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeToken"),
                            argumentListBuilder: {
-            TupleExprElement(expression: FunctionCallExpr(calledExpression: MemberAccessExpr(name: "eof")), trailingComma: .comma)
-            TupleExprElement(label: TokenSyntax.identifier("presence"), colon: .colon, expression: FunctionCallExpr(calledExpression: MemberAccessExpr(name: "present")))
+            TupleExprElement(expression: MemberAccessExpr(name: "eof"), trailingComma: .comma)
+            TupleExprElement(label: TokenSyntax.identifier("presence"), colon: .colon, expression: MemberAccessExpr(name: "present"))
           })
         }
 
@@ -162,9 +156,7 @@ let tokensFile = SourceFile {
                    bindingsBuilder: {
         // We need to use `CodeBlock` here to ensure there is braces around.
         let body = CodeBlock {
-          FunctionCallExpr(calledExpression: MemberAccessExpr(base: "SyntaxFactory", name: "makeContextualKeyword"),
-                           leftParen: .leftParen,
-                           rightParen: .rightParen,
+          FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeContextualKeyword"),
                            argumentListBuilder: {
             TupleExprElement(expression: StringLiteralExpr("open"))
           })

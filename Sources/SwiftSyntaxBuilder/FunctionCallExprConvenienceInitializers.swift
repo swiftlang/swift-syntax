@@ -15,15 +15,15 @@ import SwiftSyntax
 
 extension FunctionCallExpr {
   public init(
-    _ calledExpression: ExpressibleAsIdentifierExpr,
-    leftParen: TokenSyntax? = nil,
-    rightParen: TokenSyntax? = nil,
+    _ calledExpression: ExpressibleAsExprBuildable,
+    leftParen: TokenSyntax? = .leftParen,
+    rightParen: TokenSyntax? = .rightParen,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) },
     @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }
   ) {
     self.init(
-      calledExpression: calledExpression.createIdentifierExpr(),
+      calledExpression: calledExpression.createExprBuildable(),
       leftParen: leftParen,
       argumentList: argumentListBuilder(),
       rightParen: rightParen,

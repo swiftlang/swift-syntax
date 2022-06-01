@@ -58,6 +58,12 @@ public enum SyntaxParser {
   ///   - source: The source string to parse.
   ///   - parseTransition: Optional mechanism for incremental re-parsing.
   ///   - filenameForDiagnostics: Optional file name used for SourceLocation.
+  ///   - languageVersion: Interpret input according to a specific Swift
+  ///       language version number. If `nil`, this inherits the default from
+  ///       the syntax parser library.
+  ///   - enableBareSlashRegexLiteral: Enable or disable the use of forward
+  ///       slash regular-expression literal syntax. If `nil`, this inherits the
+  ///       default from the syntax parser library.
   ///   - diagnosticHandler: Optional callback that will be called for all
   ///       diagnostics the parser emits
   /// - Returns: A top-level Syntax node representing the contents of the tree,
@@ -67,6 +73,8 @@ public enum SyntaxParser {
     source: String,
     parseTransition: IncrementalParseTransition? = nil,
     filenameForDiagnostics: String = "",
+    languageVersion: String? = nil,
+    enableBareSlashRegexLiteral: Bool? = nil,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
   ) throws -> SourceFileSyntax {
     guard nodeHashVerifyResult && cnodeLayoutHashVerifyResult else {
@@ -78,8 +86,12 @@ public enum SyntaxParser {
     var utf8Source = source
     utf8Source.makeContiguousUTF8()
 
-    let rawSyntax = parseRaw(utf8Source, parseTransition, filenameForDiagnostics,
-                             diagnosticHandler)
+    let rawSyntax = parseRaw(source: utf8Source,
+                             parseTransition: parseTransition,
+                             filenameForDiagnostics: filenameForDiagnostics,
+                             languageVersion: languageVersion,
+                             enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
+                             diagnosticHandler: diagnosticHandler)
 
     let base = _SyntaxParserInterop.nodeFromRetainedOpaqueRawSyntax(rawSyntax)
     guard let file = base.as(SourceFileSyntax.self) else {
@@ -92,32 +104,54 @@ public enum SyntaxParser {
   ///
   /// - Parameters:
   ///   - url: The file URL to parse.
+  ///   - languageVersion: Interpret input according to a specific Swift
+  ///       language version number. If `nil`, this inherits the default from
+  ///       the syntax parser library.
+  ///   - enableBareSlashRegexLiteral: Enable or disable the use of forward
+  ///       slash regular-expression literal syntax. If `nil`, this inherits the
+  ///       default from the syntax parser library.
   ///   - diagnosticHandler: Optional callback that will be called for all
   ///       diagnostics the parser emits
   /// - Returns: A top-level Syntax node representing the contents of the tree,
   ///            if the parse was successful.
   /// - Throws: `ParserError`
-  public static func parse(_ url: URL,
-      diagnosticHandler: ((Diagnostic) -> Void)? = nil) throws -> SourceFileSyntax {
+  public static func parse(
+    _ url: URL,
+    languageVersion: String? = nil,
+    enableBareSlashRegexLiteral: Bool? = nil,
+    diagnosticHandler: ((Diagnostic) -> Void)? = nil
+  ) throws -> SourceFileSyntax {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     let fileData = try Data(contentsOf: url)
     let source = fileData.withUnsafeBytes { buf in
       return String(decoding: buf.bindMemory(to: UInt8.self), as: UTF8.self)
     }
     return try parse(source: source, filenameForDiagnostics: url.path,
+                     languageVersion: languageVersion,
+                     enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
                      diagnosticHandler: diagnosticHandler)
   }
 
   private static func parseRaw(
-    _ source: String,
-    _ parseTransition: IncrementalParseTransition?,
-    _ filenameForDiagnostics: String,
-    _ diagnosticHandler: ((Diagnostic) -> Void)?
+    source: String,
+    parseTransition: IncrementalParseTransition?,
+    filenameForDiagnostics: String,
+    languageVersion: String?,
+    enableBareSlashRegexLiteral: Bool?,
+    diagnosticHandler: ((Diagnostic) -> Void)?
   ) -> CClientNode {
     precondition(source.isContiguousUTF8)
     let c_parser = swiftparse_parser_create()
     defer {
       swiftparse_parser_dispose(c_parser)
+    }
+    if let languageVersion = languageVersion {
+      languageVersion.withCString { languageVersionCString in
+        swiftparse_parser_set_language_version(c_parser, languageVersionCString)
+      }
+    }
+    if let enableBareSlashRegexLiteral = enableBareSlashRegexLiteral {
+      swiftparse_parser_set_enable_bare_slash_regex_literal(c_parser, enableBareSlashRegexLiteral)
     }
 
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in

@@ -85,6 +85,12 @@ public struct ${type.result_builder()} {
   public static func buildFinalResult(_ component: Component) -> FinalResult {
 %   if element_type.is_token():
     return .init(component)
+%   elif element_type.has_with_trailing_comma_trait():
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.create${element_type.buildable_base_name()}()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
 %   else:
     return .init(component.map { $0.create${element_type.buildable()}() })
 %   end

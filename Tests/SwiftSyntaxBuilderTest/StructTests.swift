@@ -22,9 +22,20 @@ final class StructTests: XCTestCase {
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
     let emptyMembers = MemberDeclList([])
-    let nestedStruct = StructDecl(structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
-                                  identifier: "NestedStruct",
-                                  members: emptyMembers)
+    let nestedStruct = StructDecl(
+        structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
+        identifier: "NestedStruct",
+        genericParameterClause: GenericParameterClause(genericParameterListBuilder: {
+          GenericParameter(name: "A")
+          GenericParameter(name: "B", colon: .colon, inheritedType: "C")
+          GenericParameter(name: "D")
+        }),
+        genericWhereClause: GenericWhereClause(requirementListBuilder: {
+          GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
+          GenericRequirement(body: SameTypeRequirement(
+              leftTypeIdentifier: "A.P", equalityToken: .identifier("=="), rightTypeIdentifier: "D"))
+        }),
+        members: emptyMembers)
     let members = MemberDeclListItem(decl: nestedStruct)
     let testStruct = StructDecl(identifier: "TestStruct",
                                 members: members,
@@ -40,7 +51,7 @@ final class StructTests: XCTestCase {
     XCTAssertEqual(text, """
     ␣public struct TestStruct{
         /// A nested struct
-    struct NestedStruct{
+    struct NestedStruct < A, B: C, D > where A: X, A.P==D{
         }
     }
     """)

@@ -138,7 +138,11 @@ public struct TupleExprElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createTupleExprElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createTupleExprElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -202,7 +206,11 @@ public struct ArrayElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createArrayElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createArrayElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -266,7 +274,11 @@ public struct DictionaryElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createDictionaryElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createDictionaryElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -522,7 +534,11 @@ public struct ClosureCaptureItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createClosureCaptureItem() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createClosureCaptureItem()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -586,7 +602,11 @@ public struct ClosureParamListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createClosureParam() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createClosureParam()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -778,7 +798,11 @@ public struct FunctionParameterListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createFunctionParameter() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createFunctionParameter()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -906,7 +930,11 @@ public struct InheritedTypeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createInheritedType() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createInheritedType()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -1226,7 +1254,11 @@ public struct PatternBindingListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createPatternBinding() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createPatternBinding()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -1290,7 +1322,11 @@ public struct EnumCaseElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createEnumCaseElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createEnumCaseElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -1866,7 +1902,11 @@ public struct DifferentiabilityParamListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createDifferentiabilityParam() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createDifferentiabilityParam()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2122,7 +2162,11 @@ public struct CaseItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createCaseItem() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createCaseItem()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2186,7 +2230,11 @@ public struct CatchItemListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createCatchItem() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createCatchItem()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2250,7 +2298,11 @@ public struct ConditionElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createConditionElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createConditionElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2314,7 +2366,11 @@ public struct GenericRequirementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createGenericRequirement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createGenericRequirement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2378,7 +2434,11 @@ public struct GenericParameterListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createGenericParameter() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createGenericParameter()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2442,7 +2502,11 @@ public struct PrimaryAssociatedTypeListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createPrimaryAssociatedType() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createPrimaryAssociatedType()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2570,7 +2634,11 @@ public struct TupleTypeElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createTupleTypeElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createTupleTypeElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2634,7 +2702,11 @@ public struct GenericArgumentListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createGenericArgument() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createGenericArgument()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 
@@ -2698,7 +2770,11 @@ public struct TuplePatternElementListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component.map { $0.createTuplePatternElement() })
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map({ index, source in
+      let element = source.createTuplePatternElement()
+      return index < lastIndex ? element.withTrailingComma(true) : element
+    }))
   }
 }
 

@@ -61,6 +61,20 @@ final class FunctionTests: XCTestCase {
       """)
   }
 
+  func testArguments() {
+    let buildable = FunctionCallExpr("test", argumentListBuilder: {
+      for param in (1...5) {
+        if param.isMultiple(of: 2) {
+          TupleExprElement(label: .identifier("p\(param)"), colon: .colon, expression: "value\(param)")
+        } else {
+          TupleExprElement(expression: "value\(param)")
+        }
+      }
+    })
+    let syntax = buildable.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, "test(value1, p2: value2, value3, p4: value4, value5)")
+  }
+
   func testParensEmittedForNoArgumentsAndNoTrailingClosure() {
     let buildable = FunctionCallExpr("test")
     let syntax = buildable.buildSyntax(format: Format())

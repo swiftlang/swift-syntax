@@ -132,7 +132,7 @@ let tokensFile = SourceFile {
             FunctionCallExpr(
               MemberAccessExpr(base: "SyntaxFactory", name: "makeToken"),
               argumentListBuilder: {
-                TupleExprElement(expression: MemberAccessExpr(name: "eof"), trailingComma: .comma)
+                TupleExprElement(expression: MemberAccessExpr(name: "eof"))
                 TupleExprElement(label: TokenSyntax.identifier("presence"), colon: .colon, expression: MemberAccessExpr(name: "present"))
               }
             )

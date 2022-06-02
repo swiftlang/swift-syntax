@@ -28,27 +28,32 @@ final class VariableTests: XCTestCase {
     XCTAssertEqual(syntax.description, "␣var d: [String: Int] = [:]")
   }
 
+  func testVariableDeclWithExplictiTrailingCommas() {
+    let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
+      PatternBinding(pattern: "a", initializer: InitializerClause(value: ArrayExpr(elementsBuilder: {
+        for i in 1...3 {
+          ArrayElement(expression: "\(i)", trailingComma: .comma)
+        }
+      })))
+    ])
+    let syntax = buildable.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, "let a = [1, 2, 3, ]")
+  }
+
   func testMultiPatternVariableDecl() {
     let buildable = VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
-      PatternBinding(
-        pattern: "a",
-        initializer: InitializerClause(
-          value: ArrayExpr(elementsBuilder: {
-            ArrayElement(expression: IntegerLiteralExpr(1), trailingComma: .comma)
-            ArrayElement(expression: IntegerLiteralExpr(2), trailingComma: .comma)
-            ArrayElement(expression: IntegerLiteralExpr(3))
-          })),
-        trailingComma: .comma)
-      PatternBinding(
-        pattern: "d",
-        initializer: InitializerClause(value: DictionaryExpr(
-          contentBuilder: {
-            DictionaryElement(keyExpression: StringLiteralExpr("key1"), valueExpression: "1", trailingComma: .comma)
-            DictionaryElement(keyExpression: StringLiteralExpr("key2"), valueExpression: "2", trailingComma: .comma)
-            DictionaryElement(keyExpression: StringLiteralExpr("key3"), valueExpression: "3")
-        })),
-        trailingComma: .comma)
-      PatternBinding(pattern: "i", typeAnnotation: "Int", trailingComma: .comma)
+      PatternBinding(pattern: "a", initializer: InitializerClause(value: ArrayExpr(elementsBuilder: {
+        for i in 1...3 {
+          ArrayElement(expression: IntegerLiteralExpr(i))
+        }
+      })))
+      PatternBinding(pattern: "d", initializer: InitializerClause(value: DictionaryExpr(
+        contentBuilder: {
+          for i in 1...3 {
+            DictionaryElement(keyExpression: StringLiteralExpr("key\(i)"), valueExpression: "\(i)")
+          }
+        })))
+      PatternBinding(pattern: "i", typeAnnotation: "Int")
       PatternBinding(pattern: "s", typeAnnotation: "String")
     })
     let syntax = buildable.buildSyntax(format: Format())

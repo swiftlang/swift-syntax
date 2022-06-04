@@ -2,12 +2,18 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'AccessorList': [
         'AccessorBlock'
     ],
+    'ArrayType': [
+        'TypeAnnotation'
+    ],
     'CodeBlockItemList': [
         'CodeBlock'
     ],
     'DeclBuildable': [
         'CodeBlockItem',
         'MemberDeclListItem'
+    ],
+    'DictionaryType': [
+        'TypeAnnotation'
     ],
     'ExprList': [
         'ConditionElement'

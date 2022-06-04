@@ -2109,21 +2109,29 @@ public extension ExpressibleAsClassRestrictionType {
   }
 }
 
-public protocol ExpressibleAsArrayType: ExpressibleAsTypeBuildable {
+public protocol ExpressibleAsArrayType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable {
   func createArrayType() -> ArrayType
 }
 
 public extension ExpressibleAsArrayType {
+  /// Conformance to `ExpressibleAsTypeAnnotation`.
+  func createTypeAnnotation() -> TypeAnnotation {
+    return TypeAnnotation(type: self)
+  }
   func createTypeBuildable() -> TypeBuildable {
     return self.createArrayType()
   }
 }
 
-public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeBuildable {
+public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable {
   func createDictionaryType() -> DictionaryType
 }
 
 public extension ExpressibleAsDictionaryType {
+  /// Conformance to `ExpressibleAsTypeAnnotation`.
+  func createTypeAnnotation() -> TypeAnnotation {
+    return TypeAnnotation(type: self)
+  }
   func createTypeBuildable() -> TypeBuildable {
     return self.createDictionaryType()
   }

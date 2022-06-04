@@ -351,6 +351,7 @@ def clear_gyb_files_from_previous_run(sources_dir, destination_dir, verbose):
                     verbose=verbose
                 )
 
+
 # -----------------------------------------------------------------------------
 # Building SwiftSyntax
 
@@ -636,6 +637,115 @@ def run_xctests(toolchain, build_dir, multiroot_data_file, release, verbose):
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = os.path.join(toolchain, "lib", "swift", "macosx")
     return call(swiftpm_call, env=env, verbose=verbose) == 0
 
+# -----------------------------------------------------------------------------
+# Arugment Parsing functions
+
+
+def generate_xcodeproj(args):
+    xcode_gen(config=args.xcconfig_path)
+
+
+def generate_source_code_command(args):
+    try:
+        generate_gyb_files(
+            args.gyb_exec,
+            verbose=args.verbose,
+            add_source_locations=args.add_source_locations,
+        )
+    except subprocess.CalledProcessError as e:
+        printerr("FAIL: Generating .gyb files failed")
+        printerr("Executing: %s" % " ".join(e.cmd))
+        printerr(e.output)
+
+    run_code_generation(
+        toolchain=args.toolchain,
+        build_dir=realpath(args.build_dir),
+        multiroot_data_file=args.multiroot_data_file,
+        release=args.release,
+        verbose=args.verbose,
+        swiftsyntaxbuilder_destination=os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
+    )
+
+
+def verify_source_code_command(args):
+    try:
+        verify_generated_files(args.gyb_exec, verbose=args.verbose)
+
+        verify_code_generated_files(
+            toolchain=args.toolchain,
+            build_dir=realpath(args.build_dir),
+            multiroot_data_file=args.multiroot_data_file,
+            release=args.release,
+            verbose=args.verbose,
+        )
+
+        verify_c_syntax_nodes_match()
+    except subprocess.CalledProcessError as e:
+        printerr(
+            "FAIL: Gyb-generated files committed to repository do "
+            "not match generated ones. Please re-generate the "
+            "gyb-files using the following command, open a PR to the "
+            "SwiftSyntax project and merge it alongside the main PR."
+            "$ swift-syntax/build-script.py generate-source-code --toolchain /path/to/toolchain.xctoolchain/usr"
+        )
+
+
+def build_command(args):
+    try:
+        builder = Builder(
+            toolchain=args.toolchain,
+            build_dir=realpath(args.build_dir),
+            multiroot_data_file=args.multiroot_data_file,
+            release=args.release,
+            verbose=args.verbose,
+            disable_sandbox=args.disable_sandbox,
+        )
+        # Until rdar://53881101 is implemented, we cannot request a build of multiple
+        # targets simultaneously. For now, just build one product after the other.
+        builder.build("SwiftSyntax")
+        builder.build("SwiftSyntaxParser")
+        builder.build("SwiftSyntaxBuilder")
+        builder.build("SwiftSyntaxBuilderGeneration")
+    except subprocess.CalledProcessError as e:
+        printerr("FAIL: Building SwiftSyntax failed")
+        printerr("Executing: %s" % " ".join(e.cmd))
+        printerr(e.output)
+
+
+def test_command(args):
+    try:
+        builder = Builder(
+            toolchain=args.toolchain,
+            build_dir=realpath(args.build_dir),
+            multiroot_data_file=args.multiroot_data_file,
+            release=args.release,
+            verbose=args.verbose,
+            disable_sandbox=args.disable_sandbox,
+        )
+        
+        builder.build("lit-test-helper")
+        
+        success = run_tests(
+            toolchain=args.toolchain,
+            build_dir=realpath(args.build_dir),
+            multiroot_data_file=args.multiroot_data_file,
+            release=args.release,
+            filecheck_exec=realpath(args.filecheck_exec),
+            skip_lit_tests=args.skip_lit_tests,
+            verbose=args.verbose,
+        )
+        if not success:
+            # An error message has already been printed by the failing test
+            # suite
+            sys.exit(1)
+        else:
+            print("** All tests passed **")
+    except subprocess.CalledProcessError as e:
+        printerr("FAIL: Running tests failed")
+        printerr("Executing: %s" % " ".join(e.cmd))
+        printerr(e.output)
+        sys.exit(1)
+
 
 # -----------------------------------------------------------------------------
 # Arugment Parsing
@@ -661,94 +771,99 @@ section for arguments that need to be specified for this.
 
 
 def parse_args():
+    def add_default_build_arguments(parser):
+        parser.add_argument(
+            "-r", "--release", action="store_true", help="Build in release mode."
+        )
+
+        parser.add_argument(
+            "--build-dir",
+            default=None,
+            help="The directory in which build products shall be put. If omitted "
+            'a directory named ".build" will be put in the swift-syntax '
+            "directory.",
+        )
+
+        parser.add_argument(
+            "--disable-sandbox",
+            action="store_true",
+            help="Disable sandboxes when building with SwiftPM",
+        )
+        
+        parser.add_argument(
+            "--multiroot-data-file",
+            help="Path to an Xcode workspace to create a unified build of "
+            "SwiftSyntax with other projects.",
+        )
+        
+        parser.add_argument(
+            "--toolchain",
+            required=True,
+            help="The path to the toolchain that shall be used to build SwiftSyntax.",
+        )
+
+        parser.add_argument(
+            "-v", "--verbose", action="store_true", help="Enable verbose logging."
+        )
+
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter, description=_DESCRIPTION
     )
 
     # -------------------------------------------------------------------------
+    # Shared arguments
 
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Enable verbose logging."
-    )
-
+    sub_parsers = parser.add_subparsers()
+    
     # -------------------------------------------------------------------------
-    xcode_project_group = parser.add_argument_group("Xcode Project")
+    generate_xcodeproj_parser = sub_parsers.add_parser("generate-xcodeproj", help="Generate an Xcode project for SwiftSyntax.")
+    generate_xcodeproj_parser.set_defaults(func=generate_xcodeproj)  
 
-    xcode_project_group.add_argument(
-        "--generate-xcodeproj",
-        action="store_true",
-        help="Generate an Xcode project for SwiftSyntax.",
-    )
-
-    xcode_project_group.add_argument(
+    generate_xcodeproj_parser.add_argument(
         "--xcconfig-path",
         help="The path to an xcconfig file for generating Xcode projct.",
     )
 
+    generate_xcodeproj_parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Enable verbose logging."
+    )
+
     # -------------------------------------------------------------------------
-    build_group = parser.add_argument_group("Build")
+    generate_source_code_parser = sub_parsers.add_parser("generate-source-code")
+    generate_source_code_parser.set_defaults(func=generate_source_code_command)
+    
+    add_default_build_arguments(generate_source_code_parser)
 
-    build_group.add_argument(
-        "-r", "--release", action="store_true", help="Build in release mode."
+    generate_source_code_parser.add_argument(
+        "--gyb-exec",
+        default=GYB_EXEC,
+        help="Path to the gyb tool (default: %(default)s).",
     )
 
-    build_group.add_argument(
-        "--build-dir",
-        default=None,
-        help="The directory in which build products shall be put. If omitted "
-        'a directory named ".build" will be put in the swift-syntax '
-        "directory.",
-    )
-
-    build_group.add_argument(
+    generate_source_code_parser.add_argument(
         "--add-source-locations",
         action="store_true",
         help="Insert ###sourceLocation comments in generated code for "
         "line-directive.",
     )
 
-    build_group.add_argument(
-        "--degyb-only",
-        action="store_true",
-        help="The script only generates swift files from gyb and skips the "
-        "rest of the build",
-    )
-
-    build_group.add_argument(
-        "--run-swiftsyntaxbuilder-generation",
-        action="store_true",
-        help="The script only run the Swift code generation and skips the "
-        "rest of the build",
-    )
-
-    build_group.add_argument(
-        "--disable-sandbox",
-        action="store_true",
-        help="Disable sandboxes when building with SwiftPM",
-    )
-
-    build_group.add_argument(
-        "--multiroot-data-file",
-        help="Path to an Xcode workspace to create a unified build of "
-        "SwiftSyntax with other projects.",
-    )
-
-    build_group.add_argument(
-        "--toolchain",
-        required=True,
-        help="The path to the toolchain that shall be used to build " "SwiftSyntax.",
-    )
+    # -------------------------------------------------------------------------
+    build_parser = sub_parsers.add_parser("build")
+    build_parser.set_defaults(func=build_command)    
+    
+    add_default_build_arguments(build_parser)
 
     # -------------------------------------------------------------------------
-    test_group = parser.add_argument_group("Test")
+    test_parser = sub_parsers.add_parser("test")
+    test_parser.set_defaults(func=test_command)
 
-    test_group.add_argument("-t", "--test", action="store_true", help="Run tests")
+    add_default_build_arguments(test_parser)
 
-    test_group.add_argument("--skip-lit-tests", action="store_true",
+    test_parser.add_argument("--skip-lit-tests", action="store_true",
         help="Don't run lit-based tests"
     )
 
-    test_group.add_argument(
+    test_parser.add_argument(
         "--filecheck-exec",
         default=None,
         help="Path to the FileCheck executable that was built as part of the "
@@ -756,18 +871,16 @@ def parse_args():
         "PATH.",
     )
 
-    test_group.add_argument(
+    # -------------------------------------------------------------------------
+    verify_source_code_parser = sub_parsers.add_parser("verify-source-code")
+    verify_source_code_parser.set_defaults(func=verify_source_code_command)    
+    
+    add_default_build_arguments(verify_source_code_parser)
+
+    verify_source_code_parser.add_argument(
         "--gyb-exec",
         default=GYB_EXEC,
         help="Path to the gyb tool (default: %(default)s).",
-    )
-
-    test_group.add_argument(
-        "--verify-generated-files",
-        action="store_true",
-        help="Instead of generating files using gyb, verify that the files "
-        "which already exist match the ones that would be generated by "
-        "this script.",
     )
 
     return parser.parse_args()
@@ -778,110 +891,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-
-    if args.run_swiftsyntaxbuilder_generation:
-        run_code_generation(
-            toolchain=args.toolchain,
-            build_dir=realpath(args.build_dir),
-            multiroot_data_file=args.multiroot_data_file,
-            release=args.release,
-            verbose=args.verbose,
-            swiftsyntaxbuilder_destination=os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
-        )
-        sys.exit(0)
-
-    try:
-        if not args.verify_generated_files:
-            generate_gyb_files(
-                args.gyb_exec,
-                verbose=args.verbose,
-                add_source_locations=args.add_source_locations,
-            )
-    except subprocess.CalledProcessError as e:
-        printerr("FAIL: Generating .gyb files failed")
-        printerr("Executing: %s" % " ".join(e.cmd))
-        printerr(e.output)
-        sys.exit(1)
-
-    if args.verify_generated_files:
-        try:
-            success = verify_generated_files(args.gyb_exec, verbose=args.verbose)
-
-            verify_code_generated_files(
-                toolchain=args.toolchain,
-                build_dir=realpath(args.build_dir),
-                multiroot_data_file=args.multiroot_data_file,
-                release=args.release,
-                verbose=args.verbose,
-            )
-        except subprocess.CalledProcessError as e:
-            printerr(
-                "FAIL: Gyb-generated files committed to repository do "
-                "not match generated ones. Please re-generate the "
-                "gyb-files using the following command, open a PR to the "
-                "SwiftSyntax project and merge it alongside the main PR."
-                "$ swift-syntax/build-script.py --degyb-only --toolchain ignored"
-            )
-            sys.exit(1)
-
-    # Skip the rest of the build if we should perform degyb only
-    if args.degyb_only:
-        sys.exit(0)
-
-    verify_c_syntax_nodes_match()
-
-    if args.generate_xcodeproj:
-        xcode_gen(config=args.xcconfig_path)
-        sys.exit(0)
-
-    try:
-        builder = Builder(
-            toolchain=args.toolchain,
-            build_dir=realpath(args.build_dir),
-            multiroot_data_file=args.multiroot_data_file,
-            release=args.release,
-            verbose=args.verbose,
-            disable_sandbox=args.disable_sandbox,
-        )
-        # Until rdar://53881101 is implemented, we cannot request a build of multiple
-        # targets simultaneously. For now, just build one product after the other.
-        builder.build("SwiftSyntax")
-        builder.build("SwiftSyntaxParser")
-        builder.build("SwiftSyntaxBuilder")
-        builder.build("SwiftSyntaxBuilderGeneration")
-
-        # Only build lit-test-helper if we are planning to run tests
-        if args.test:
-            builder.build("lit-test-helper")
-    except subprocess.CalledProcessError as e:
-        printerr("FAIL: Building SwiftSyntax failed")
-        printerr("Executing: %s" % " ".join(e.cmd))
-        printerr(e.output)
-        sys.exit(1)
-
-    if args.test:
-        try:
-            success = run_tests(
-                toolchain=args.toolchain,
-                build_dir=realpath(args.build_dir),
-                multiroot_data_file=args.multiroot_data_file,
-                release=args.release,
-                filecheck_exec=realpath(args.filecheck_exec),
-                skip_lit_tests=args.skip_lit_tests,
-                verbose=args.verbose,
-            )
-            if not success:
-                # An error message has already been printed by the failing test
-                # suite
-                sys.exit(1)
-            else:
-                print("** All tests passed **")
-        except subprocess.CalledProcessError as e:
-            printerr("FAIL: Running tests failed")
-            printerr("Executing: %s" % " ".join(e.cmd))
-            printerr(e.output)
-            sys.exit(1)
-
+    args.func(args)
 
 if __name__ == "__main__":
     main()

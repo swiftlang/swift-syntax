@@ -21,7 +21,7 @@ To build the `main` branch of SwiftSyntax, follow the following instructions:
     ```
 
 4. To make sure everything is set up correctly, check the return statement of `xcrun --find swift`. It should point inside the latest installed trunk development toolchain. If it points inside an Xcode toolchain, check that you exported the `TOOLCHAINS` environment variable correctly. If it points inside a version-specific toolchain (like Swift 5.0-dev), you'll need to remove that toolchain.
-5. Run `swift-syntax/build-script.py --toolchain /path/to/recent/swift/development/snapshot.xctoolchain/usr`.
+5. Run `swift-syntax/build-script.py build --toolchain /path/to/recent/swift/development/snapshot.xctoolchain/usr`.
     If despite following those instructions, you get compiler errors, the Swift toolchain might be too old to contain recent changes in Swift's SwiftSyntaxParser C library. In that case, you'll have to build the compiler and SwiftSyntax together with the following command:
 
     ```bash

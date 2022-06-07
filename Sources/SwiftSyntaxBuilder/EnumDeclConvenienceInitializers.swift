@@ -15,18 +15,18 @@ import SwiftSyntax
 extension EnumDecl {
   /// A convenience initializer that allows passing in members using a result builder instead of having to wrap them in a `MemberDeclBlock`.
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
     identifier: String,
     genericParameters: ExpressibleAsGenericParameterClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       enumKeyword: enumKeyword,
       identifier: TokenSyntax.identifier(identifier),
       genericParameters: genericParameters,

@@ -21,4 +21,18 @@ extension VariableDecl {
                      typeAnnotation: type.createTypeAnnotation())
       })
   }
+
+  public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
+    _ letOrVarKeyword: TokenSyntax,
+    @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList = { PatternBindingList([]) }
+  ) {
+    self.init(
+      attributes: attributes,
+      modifiers: modifiers,
+      letOrVarKeyword: letOrVarKeyword,
+      bindings: bindingsBuilder()
+    )
+  }
 }

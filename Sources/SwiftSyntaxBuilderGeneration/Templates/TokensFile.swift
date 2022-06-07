@@ -18,22 +18,14 @@ let tokensFile = SourceFile {
   ImportDecl(importTok: TokenSyntax.import.withLeadingTrivia(.docLineComment(copyrightHeader)), path: "SwiftSyntax")
 
   ExtensionDecl(
+    modifiers: ModifierList([TokenSyntax.public.withLeadingTrivia(.newlines(1) + .docLineComment("/// Namespace for commonly used tokens with default trivia.") + .newlines(1))]),
     extendedType: "TokenSyntax",
-    modifiersBuilder: {
-      TokenSyntax.public.withLeadingTrivia(.newlines(1) + .docLineComment("/// Namespace for commonly used tokens with default trivia.") + .newlines(1))
-    },
     membersBuilder: {
       for token in SYNTAX_TOKENS {
         if token.isKeyword {
           VariableDecl(
-            letOrVarKeyword: .var,
-            modifiersBuilder: {
-              if let text = token.text {
-                TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\(text)` keyword") + .newlines(1))
-              } else {
-                TokenSyntax.static
-              }
-            },
+            modifiers: ModifierList([token.text.map { TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\($0)` keyword") + .newlines(1)) } ?? TokenSyntax.static]),
+            .var,
             bindingsBuilder: {
               // We need to use `CodeBlock` here to ensure there is braces around.
 
@@ -52,16 +44,10 @@ let tokensFile = SourceFile {
               createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
             }
           )
-        } else if token.text != nil {
+        } else if let text = token.text {
           VariableDecl(
-            letOrVarKeyword: .var,
-            modifiersBuilder: {
-              if let text = token.text {
-                TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\(text)` token") + .newlines(1))
-              } else {
-                TokenSyntax.static
-              }
-            },
+            modifiers: ModifierList([TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\(text)` token") + .newlines(1))]),
+            .var,
             bindingsBuilder: {
               // We need to use `CodeBlock` here to ensure there is braces around.
               let accessor = CodeBlock {
@@ -95,15 +81,9 @@ let tokensFile = SourceFile {
           )
 
           FunctionDecl(
+            modifiers: ModifierList([TokenSyntax.static]),
             identifier: .identifier("`\(token.name.withFirstCharacterLowercased)`"),
             signature: signature,
-            modifiersBuilder: {
-              if let text = token.text {
-                TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\(text)` token"))
-              } else {
-                TokenSyntax.static
-              }
-            },
             bodyBuilder: {
               FunctionCallExpr(
                 MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)"),
@@ -124,8 +104,8 @@ let tokensFile = SourceFile {
         }
       }
       VariableDecl(
-        letOrVarKeyword: .var,
-        modifiersBuilder: { TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `eof` token") + .newlines(1)) },
+        modifiers: ModifierList([TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `eof` token") + .newlines(1))]),
+        .var,
         bindingsBuilder: {
           // We need to use `CodeBlock` here to ensure there is braces around.
           let body = CodeBlock {
@@ -142,8 +122,8 @@ let tokensFile = SourceFile {
         }
       )
       VariableDecl(
-        letOrVarKeyword: .var,
-        modifiersBuilder: { TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `open` contextual token") + .newlines(1)) },
+        modifiers: ModifierList([TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `open` contextual token") + .newlines(1))]),
+        .var,
         bindingsBuilder: {
           // We need to use `CodeBlock` here to ensure there is braces around.
           let body = CodeBlock {

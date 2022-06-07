@@ -15,17 +15,17 @@ import SwiftSyntax
 extension ExtensionDecl {
   /// A convenience initializer that allows passing in members using a result builder instead of having to wrap them in a `MemberDeclBlock`.
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
     extendedType: ExpressibleAsTypeBuildable,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       extensionKeyword: extensionKeyword,
       extendedType: extendedType,
       inheritanceClause: inheritanceClause,

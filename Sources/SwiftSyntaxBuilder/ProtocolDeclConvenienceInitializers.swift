@@ -15,17 +15,17 @@ import SwiftSyntax
 extension ProtocolDecl {
   /// A convenience initializer that allows passing in members using a result builder instead of having to wrap them in a `MemberDeclBlock`.
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
     identifier: String,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       protocolKeyword: protocolKeyword,
       identifier: TokenSyntax.identifier(identifier),
       inheritanceClause: inheritanceClause,

@@ -15,18 +15,18 @@ import SwiftSyntax
 extension FunctionDecl {
   /// A convenience initializer that allows passing in members using a result builder instead of having to wrap them in a `MemberDeclBlock`.
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
     identifier: TokenSyntax,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     signature: ExpressibleAsFunctionSignature,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
     @CodeBlockItemListBuilder bodyBuilder: () -> CodeBlockItemList? = { nil }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       funcKeyword: funcKeyword,
       identifier: identifier,
       genericParameterClause: genericParameterClause,

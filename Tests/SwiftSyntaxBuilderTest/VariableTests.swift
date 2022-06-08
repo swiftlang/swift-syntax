@@ -6,36 +6,53 @@ final class VariableTests: XCTestCase {
   func testVariableDecl() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: .let, bindingsBuilder:  {
-        PatternBinding(pattern: "color", typeAnnotation: "UIColor")
+    let buildable = VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
+      PatternBinding(pattern: "a", typeAnnotation: ArrayType(elementType: "Int"))
     })
 
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
-
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
-    ␣let color: UIColor
-    """)
+    XCTAssertEqual(syntax.description, "␣let a: [Int]")
   }
 
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let buildable = VariableDecl(letOrVarKeyword: .var, bindingsBuilder:  {
-        PatternBinding(pattern: "number", typeAnnotation: "Int",
-                       initializer: InitializerClause(value: IntegerLiteralExpr(digits: "123")))
+    let buildable = VariableDecl(letOrVarKeyword: .var, bindingsBuilder: {
+      PatternBinding(
+        pattern: "d",
+        typeAnnotation: DictionaryType(keyType: "String", valueType: "Int"),
+        initializer: InitializerClause(value: DictionaryExpr()))
     })
 
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
+    XCTAssertEqual(syntax.description, "␣var d: [String: Int] = [:]")
+  }
 
-    var text = ""
-    syntax.write(to: &text)
-
-    XCTAssertEqual(text, """
-    ␣var number: Int = 123
-    """)
+  func testMultiPatternVariableDecl() {
+    let buildable = VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
+      PatternBinding(
+        pattern: "a",
+        initializer: InitializerClause(
+          value: ArrayExpr(elementsBuilder: {
+            ArrayElement(expression: IntegerLiteralExpr(1), trailingComma: .comma)
+            ArrayElement(expression: IntegerLiteralExpr(2), trailingComma: .comma)
+            ArrayElement(expression: IntegerLiteralExpr(3))
+          })),
+        trailingComma: .comma)
+      PatternBinding(
+        pattern: "d",
+        initializer: InitializerClause(value: DictionaryExpr(
+          contentBuilder: {
+            DictionaryElement(keyExpression: StringLiteralExpr("key1"), valueExpression: "1", trailingComma: .comma)
+            DictionaryElement(keyExpression: StringLiteralExpr("key2"), valueExpression: "2", trailingComma: .comma)
+            DictionaryElement(keyExpression: StringLiteralExpr("key3"), valueExpression: "3")
+        })),
+        trailingComma: .comma)
+      PatternBinding(pattern: "i", typeAnnotation: "Int", trailingComma: .comma)
+      PatternBinding(pattern: "s", typeAnnotation: "String")
+    })
+    let syntax = buildable.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
   }
 
   func testConvenienceInitializer() {

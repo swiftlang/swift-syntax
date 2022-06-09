@@ -57,6 +57,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   }
 }
 
+
 /// `TupleExprElementList` represents a collection of `TupleExprElement`s.
 public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleExprElementList {
   let elements: [TupleExprElement]
@@ -97,6 +98,12 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsTupleExprElementList where Element == ExpressibleAsTupleExprElement {
+  public func createTupleExprElementList() -> TupleExprElementList {
+    return TupleExprElementList(self)
   }
 }
 
@@ -143,6 +150,12 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   }
 }
 
+extension Array: ExpressibleAsArrayElementList where Element == ExpressibleAsArrayElement {
+  public func createArrayElementList() -> ArrayElementList {
+    return ArrayElementList(self)
+  }
+}
+
 /// `DictionaryElementList` represents a collection of `DictionaryElement`s.
 public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDictionaryElementList {
   let elements: [DictionaryElement]
@@ -183,6 +196,12 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsDictionaryElementList where Element == ExpressibleAsDictionaryElement {
+  public func createDictionaryElementList() -> DictionaryElementList {
+    return DictionaryElementList(self)
   }
 }
 
@@ -229,6 +248,12 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   }
 }
 
+extension Array: ExpressibleAsStringLiteralSegments where Element == ExpressibleAsSyntaxBuildable {
+  public func createStringLiteralSegments() -> StringLiteralSegments {
+    return StringLiteralSegments(self)
+  }
+}
+
 /// `DeclNameArgumentList` represents a collection of `DeclNameArgument`s.
 public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDeclNameArgumentList {
   let elements: [DeclNameArgument]
@@ -269,6 +294,12 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsDeclNameArgumentList where Element == ExpressibleAsDeclNameArgument {
+  public func createDeclNameArgumentList() -> DeclNameArgumentList {
+    return DeclNameArgumentList(self)
   }
 }
 
@@ -315,6 +346,7 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   }
 }
 
+
 /// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItem`s.
 public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsClosureCaptureItemList {
   let elements: [ClosureCaptureItem]
@@ -355,6 +387,12 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsClosureCaptureItemList where Element == ExpressibleAsClosureCaptureItem {
+  public func createClosureCaptureItemList() -> ClosureCaptureItemList {
+    return ClosureCaptureItemList(self)
   }
 }
 
@@ -401,6 +439,12 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   }
 }
 
+extension Array: ExpressibleAsClosureParamList where Element == ExpressibleAsClosureParam {
+  public func createClosureParamList() -> ClosureParamList {
+    return ClosureParamList(self)
+  }
+}
+
 /// `MultipleTrailingClosureElementList` represents a collection of `MultipleTrailingClosureElement`s.
 public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsMultipleTrailingClosureElementList {
   let elements: [MultipleTrailingClosureElement]
@@ -441,6 +485,12 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsMultipleTrailingClosureElementList where Element == ExpressibleAsMultipleTrailingClosureElement {
+  public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
+    return MultipleTrailingClosureElementList(self)
   }
 }
 
@@ -487,6 +537,12 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   }
 }
 
+extension Array: ExpressibleAsObjcName where Element == ExpressibleAsObjcNamePiece {
+  public func createObjcName() -> ObjcName {
+    return ObjcName(self)
+  }
+}
+
 /// `FunctionParameterList` represents a collection of `FunctionParameter`s.
 public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsFunctionParameterList {
   let elements: [FunctionParameter]
@@ -527,6 +583,12 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsFunctionParameterList where Element == ExpressibleAsFunctionParameter {
+  public func createFunctionParameterList() -> FunctionParameterList {
+    return FunctionParameterList(self)
   }
 }
 
@@ -573,6 +635,12 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   }
 }
 
+extension Array: ExpressibleAsIfConfigClauseList where Element == ExpressibleAsIfConfigClause {
+  public func createIfConfigClauseList() -> IfConfigClauseList {
+    return IfConfigClauseList(self)
+  }
+}
+
 /// `InheritedTypeList` represents a collection of `InheritedType`s.
 public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsInheritedTypeList {
   let elements: [InheritedType]
@@ -613,6 +681,12 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsInheritedTypeList where Element == ExpressibleAsInheritedType {
+  public func createInheritedTypeList() -> InheritedTypeList {
+    return InheritedTypeList(self)
   }
 }
 
@@ -659,6 +733,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
 }
 
+
 /// `ModifierList` represents a collection of `DeclModifier`s.
 public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsModifierList {
   let elements: [DeclModifier]
@@ -699,6 +774,12 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsModifierList where Element == ExpressibleAsDeclModifier {
+  public func createModifierList() -> ModifierList {
+    return ModifierList(self)
   }
 }
 
@@ -745,6 +826,12 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   }
 }
 
+extension Array: ExpressibleAsAccessPath where Element == ExpressibleAsAccessPathComponent {
+  public func createAccessPath() -> AccessPath {
+    return AccessPath(self)
+  }
+}
+
 /// `AccessorList` represents a collection of `AccessorDecl`s.
 public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAccessorList {
   let elements: [AccessorDecl]
@@ -788,6 +875,7 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   }
 }
 
+
 /// `PatternBindingList` represents a collection of `PatternBinding`s.
 public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPatternBindingList {
   let elements: [PatternBinding]
@@ -828,6 +916,12 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsPatternBindingList where Element == ExpressibleAsPatternBinding {
+  public func createPatternBindingList() -> PatternBindingList {
+    return PatternBindingList(self)
   }
 }
 
@@ -874,6 +968,12 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   }
 }
 
+extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAsEnumCaseElement {
+  public func createEnumCaseElementList() -> EnumCaseElementList {
+    return EnumCaseElementList(self)
+  }
+}
+
 /// `IdentifierList` represents a collection of `TokenSyntax`s.
 public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsIdentifierList {
   let elements: [TokenSyntax]
@@ -912,6 +1012,12 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsIdentifierList where Element == TokenSyntax {
+  public func createIdentifierList() -> IdentifierList {
+    return IdentifierList(self)
   }
 }
 
@@ -958,6 +1064,12 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   }
 }
 
+extension Array: ExpressibleAsPrecedenceGroupAttributeList where Element == ExpressibleAsSyntaxBuildable {
+  public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
+    return PrecedenceGroupAttributeList(self)
+  }
+}
+
 /// `PrecedenceGroupNameList` represents a collection of `PrecedenceGroupNameElement`s.
 public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPrecedenceGroupNameList {
   let elements: [PrecedenceGroupNameElement]
@@ -998,6 +1110,12 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsPrecedenceGroupNameList where Element == ExpressibleAsPrecedenceGroupNameElement {
+  public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
+    return PrecedenceGroupNameList(self)
   }
 }
 
@@ -1042,6 +1160,12 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   }
 }
 
+extension Array: ExpressibleAsTokenList where Element == TokenSyntax {
+  public func createTokenList() -> TokenList {
+    return TokenList(self)
+  }
+}
+
 /// `NonEmptyTokenList` represents a collection of `TokenSyntax`s.
 public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsNonEmptyTokenList {
   let elements: [TokenSyntax]
@@ -1080,6 +1204,12 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsNonEmptyTokenList where Element == TokenSyntax {
+  public func createNonEmptyTokenList() -> NonEmptyTokenList {
+    return NonEmptyTokenList(self)
   }
 }
 
@@ -1126,6 +1256,12 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   }
 }
 
+extension Array: ExpressibleAsAttributeList where Element == ExpressibleAsSyntaxBuildable {
+  public func createAttributeList() -> AttributeList {
+    return AttributeList(self)
+  }
+}
+
 /// A collection of arguments for the `@_specialize` attribute
 public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSpecializeAttributeSpecList {
   let elements: [SyntaxBuildable]
@@ -1166,6 +1302,12 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsSpecializeAttributeSpecList where Element == ExpressibleAsSyntaxBuildable {
+  public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
+    return SpecializeAttributeSpecList(self)
   }
 }
 
@@ -1212,6 +1354,12 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   }
 }
 
+extension Array: ExpressibleAsObjCSelector where Element == ExpressibleAsObjCSelectorPiece {
+  public func createObjCSelector() -> ObjCSelector {
+    return ObjCSelector(self)
+  }
+}
+
 /// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParam`s.
 public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsDifferentiabilityParamList {
   let elements: [DifferentiabilityParam]
@@ -1252,6 +1400,12 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsDifferentiabilityParamList where Element == ExpressibleAsDifferentiabilityParam {
+  public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
+    return DifferentiabilityParamList(self)
   }
 }
 
@@ -1298,6 +1452,12 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   }
 }
 
+extension Array: ExpressibleAsBackDeployVersionList where Element == ExpressibleAsBackDeployVersionArgument {
+  public func createBackDeployVersionList() -> BackDeployVersionList {
+    return BackDeployVersionList(self)
+  }
+}
+
 /// `SwitchCaseList` represents a collection of `SyntaxBuildable`s.
 public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsSwitchCaseList {
   let elements: [SyntaxBuildable]
@@ -1338,6 +1498,12 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsSwitchCaseList where Element == ExpressibleAsSyntaxBuildable {
+  public func createSwitchCaseList() -> SwitchCaseList {
+    return SwitchCaseList(self)
   }
 }
 
@@ -1384,6 +1550,12 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   }
 }
 
+extension Array: ExpressibleAsCatchClauseList where Element == ExpressibleAsCatchClause {
+  public func createCatchClauseList() -> CatchClauseList {
+    return CatchClauseList(self)
+  }
+}
+
 /// `CaseItemList` represents a collection of `CaseItem`s.
 public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCaseItemList {
   let elements: [CaseItem]
@@ -1424,6 +1596,12 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsCaseItemList where Element == ExpressibleAsCaseItem {
+  public func createCaseItemList() -> CaseItemList {
+    return CaseItemList(self)
   }
 }
 
@@ -1470,6 +1648,12 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   }
 }
 
+extension Array: ExpressibleAsCatchItemList where Element == ExpressibleAsCatchItem {
+  public func createCatchItemList() -> CatchItemList {
+    return CatchItemList(self)
+  }
+}
+
 /// `ConditionElementList` represents a collection of `ConditionElement`s.
 public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsConditionElementList {
   let elements: [ConditionElement]
@@ -1510,6 +1694,12 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsConditionElementList where Element == ExpressibleAsConditionElement {
+  public func createConditionElementList() -> ConditionElementList {
+    return ConditionElementList(self)
   }
 }
 
@@ -1556,6 +1746,12 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   }
 }
 
+extension Array: ExpressibleAsGenericRequirementList where Element == ExpressibleAsGenericRequirement {
+  public func createGenericRequirementList() -> GenericRequirementList {
+    return GenericRequirementList(self)
+  }
+}
+
 /// `GenericParameterList` represents a collection of `GenericParameter`s.
 public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericParameterList {
   let elements: [GenericParameter]
@@ -1596,6 +1792,12 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsGenericParameterList where Element == ExpressibleAsGenericParameter {
+  public func createGenericParameterList() -> GenericParameterList {
+    return GenericParameterList(self)
   }
 }
 
@@ -1642,6 +1844,12 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   }
 }
 
+extension Array: ExpressibleAsPrimaryAssociatedTypeList where Element == ExpressibleAsPrimaryAssociatedType {
+  public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
+    return PrimaryAssociatedTypeList(self)
+  }
+}
+
 /// `CompositionTypeElementList` represents a collection of `CompositionTypeElement`s.
 public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsCompositionTypeElementList {
   let elements: [CompositionTypeElement]
@@ -1682,6 +1890,12 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsCompositionTypeElementList where Element == ExpressibleAsCompositionTypeElement {
+  public func createCompositionTypeElementList() -> CompositionTypeElementList {
+    return CompositionTypeElementList(self)
   }
 }
 
@@ -1728,6 +1942,12 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
+extension Array: ExpressibleAsTupleTypeElementList where Element == ExpressibleAsTupleTypeElement {
+  public func createTupleTypeElementList() -> TupleTypeElementList {
+    return TupleTypeElementList(self)
+  }
+}
+
 /// `GenericArgumentList` represents a collection of `GenericArgument`s.
 public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsGenericArgumentList {
   let elements: [GenericArgument]
@@ -1768,6 +1988,12 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsGenericArgumentList where Element == ExpressibleAsGenericArgument {
+  public func createGenericArgumentList() -> GenericArgumentList {
+    return GenericArgumentList(self)
   }
 }
 
@@ -1814,6 +2040,12 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   }
 }
 
+extension Array: ExpressibleAsTuplePatternElementList where Element == ExpressibleAsTuplePatternElement {
+  public func createTuplePatternElementList() -> TuplePatternElementList {
+    return TuplePatternElementList(self)
+  }
+}
+
 /// `AvailabilitySpecList` represents a collection of `AvailabilityArgument`s.
 public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsAvailabilitySpecList {
   let elements: [AvailabilityArgument]
@@ -1854,6 +2086,12 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
     return self
+  }
+}
+
+extension Array: ExpressibleAsAvailabilitySpecList where Element == ExpressibleAsAvailabilityArgument {
+  public func createAvailabilitySpecList() -> AvailabilitySpecList {
+    return AvailabilitySpecList(self)
   }
 }
 

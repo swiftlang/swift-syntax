@@ -81,4 +81,12 @@ public struct ${type.buildable()}: ExpressibleByArrayLiteral, SyntaxBuildable, $
   }
 }
 
+% if not type.generated_expressible_as_conformances():
+extension Array: ${type.expressible_as()} where Element == ${element_type.expressible_as()} {
+  public func create${type.buildable_base_name()}() -> ${type.buildable()} {
+    return ${type.buildable()}(self)
+  }
+}
+% end
+
 % end

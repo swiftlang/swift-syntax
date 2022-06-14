@@ -39,6 +39,13 @@ public struct ${type.buildable()}: ExpressibleByArrayLiteral, SyntaxBuildable, $
     self.elements = elements.map { $0.create${element_type.buildable_base_name()}() }
 %   end
   }
+  
+  /// Creates a new ${type.buildable()} by flattening the elements in `lists`
+  public init(combining lists: [${type.expressible_as()}]) {
+    self.elements = lists.flatMap {
+      $0.create${type.buildable()}().elements
+    }
+  }
 
   public init(arrayLiteral elements: ${element_type.expressible_as()}...) {
     self.init(elements)

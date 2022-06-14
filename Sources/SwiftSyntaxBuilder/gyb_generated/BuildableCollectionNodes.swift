@@ -24,6 +24,13 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public init(_ elements: [ExpressibleAsCodeBlockItem]) {
     self.elements = elements.map { $0.createCodeBlockItem() }
   }
+  
+  /// Creates a new CodeBlockItemList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsCodeBlockItemList]) {
+    self.elements = lists.flatMap {
+      $0.createCodeBlockItemList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsCodeBlockItem...) {
     self.init(elements)
@@ -67,6 +74,13 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   ///   - elements: A list of `ExpressibleAsTupleExprElement`
   public init(_ elements: [ExpressibleAsTupleExprElement]) {
     self.elements = elements.map { $0.createTupleExprElement() }
+  }
+  
+  /// Creates a new TupleExprElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsTupleExprElementList]) {
+    self.elements = lists.flatMap {
+      $0.createTupleExprElementList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsTupleExprElement...) {
@@ -117,6 +131,13 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public init(_ elements: [ExpressibleAsArrayElement]) {
     self.elements = elements.map { $0.createArrayElement() }
   }
+  
+  /// Creates a new ArrayElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsArrayElementList]) {
+    self.elements = lists.flatMap {
+      $0.createArrayElementList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsArrayElement...) {
     self.init(elements)
@@ -165,6 +186,13 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   ///   - elements: A list of `ExpressibleAsDictionaryElement`
   public init(_ elements: [ExpressibleAsDictionaryElement]) {
     self.elements = elements.map { $0.createDictionaryElement() }
+  }
+  
+  /// Creates a new DictionaryElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsDictionaryElementList]) {
+    self.elements = lists.flatMap {
+      $0.createDictionaryElementList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsDictionaryElement...) {
@@ -215,6 +243,13 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
+  
+  /// Creates a new StringLiteralSegments by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsStringLiteralSegments]) {
+    self.elements = lists.flatMap {
+      $0.createStringLiteralSegments().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
@@ -263,6 +298,13 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   ///   - elements: A list of `ExpressibleAsDeclNameArgument`
   public init(_ elements: [ExpressibleAsDeclNameArgument]) {
     self.elements = elements.map { $0.createDeclNameArgument() }
+  }
+  
+  /// Creates a new DeclNameArgumentList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsDeclNameArgumentList]) {
+    self.elements = lists.flatMap {
+      $0.createDeclNameArgumentList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsDeclNameArgument...) {
@@ -313,6 +355,13 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public init(_ elements: [ExpressibleAsExprBuildable]) {
     self.elements = elements.map { $0.createExprBuildable() }
   }
+  
+  /// Creates a new ExprList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsExprList]) {
+    self.elements = lists.flatMap {
+      $0.createExprList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsExprBuildable...) {
     self.init(elements)
@@ -356,6 +405,13 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   ///   - elements: A list of `ExpressibleAsClosureCaptureItem`
   public init(_ elements: [ExpressibleAsClosureCaptureItem]) {
     self.elements = elements.map { $0.createClosureCaptureItem() }
+  }
+  
+  /// Creates a new ClosureCaptureItemList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsClosureCaptureItemList]) {
+    self.elements = lists.flatMap {
+      $0.createClosureCaptureItemList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsClosureCaptureItem...) {
@@ -406,6 +462,13 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   public init(_ elements: [ExpressibleAsClosureParam]) {
     self.elements = elements.map { $0.createClosureParam() }
   }
+  
+  /// Creates a new ClosureParamList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsClosureParamList]) {
+    self.elements = lists.flatMap {
+      $0.createClosureParamList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsClosureParam...) {
     self.init(elements)
@@ -454,6 +517,13 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   ///   - elements: A list of `ExpressibleAsMultipleTrailingClosureElement`
   public init(_ elements: [ExpressibleAsMultipleTrailingClosureElement]) {
     self.elements = elements.map { $0.createMultipleTrailingClosureElement() }
+  }
+  
+  /// Creates a new MultipleTrailingClosureElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsMultipleTrailingClosureElementList]) {
+    self.elements = lists.flatMap {
+      $0.createMultipleTrailingClosureElementList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsMultipleTrailingClosureElement...) {
@@ -504,6 +574,13 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   public init(_ elements: [ExpressibleAsObjcNamePiece]) {
     self.elements = elements.map { $0.createObjcNamePiece() }
   }
+  
+  /// Creates a new ObjcName by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsObjcName]) {
+    self.elements = lists.flatMap {
+      $0.createObjcName().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsObjcNamePiece...) {
     self.init(elements)
@@ -552,6 +629,13 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   ///   - elements: A list of `ExpressibleAsFunctionParameter`
   public init(_ elements: [ExpressibleAsFunctionParameter]) {
     self.elements = elements.map { $0.createFunctionParameter() }
+  }
+  
+  /// Creates a new FunctionParameterList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsFunctionParameterList]) {
+    self.elements = lists.flatMap {
+      $0.createFunctionParameterList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsFunctionParameter...) {
@@ -602,6 +686,13 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   public init(_ elements: [ExpressibleAsIfConfigClause]) {
     self.elements = elements.map { $0.createIfConfigClause() }
   }
+  
+  /// Creates a new IfConfigClauseList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsIfConfigClauseList]) {
+    self.elements = lists.flatMap {
+      $0.createIfConfigClauseList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsIfConfigClause...) {
     self.init(elements)
@@ -650,6 +741,13 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   ///   - elements: A list of `ExpressibleAsInheritedType`
   public init(_ elements: [ExpressibleAsInheritedType]) {
     self.elements = elements.map { $0.createInheritedType() }
+  }
+  
+  /// Creates a new InheritedTypeList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsInheritedTypeList]) {
+    self.elements = lists.flatMap {
+      $0.createInheritedTypeList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsInheritedType...) {
@@ -700,6 +798,13 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public init(_ elements: [ExpressibleAsMemberDeclListItem]) {
     self.elements = elements.map { $0.createMemberDeclListItem() }
   }
+  
+  /// Creates a new MemberDeclList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsMemberDeclList]) {
+    self.elements = lists.flatMap {
+      $0.createMemberDeclList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsMemberDeclListItem...) {
     self.init(elements)
@@ -743,6 +848,13 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   ///   - elements: A list of `ExpressibleAsDeclModifier`
   public init(_ elements: [ExpressibleAsDeclModifier]) {
     self.elements = elements.map { $0.createDeclModifier() }
+  }
+  
+  /// Creates a new ModifierList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsModifierList]) {
+    self.elements = lists.flatMap {
+      $0.createModifierList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsDeclModifier...) {
@@ -793,6 +905,13 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   public init(_ elements: [ExpressibleAsAccessPathComponent]) {
     self.elements = elements.map { $0.createAccessPathComponent() }
   }
+  
+  /// Creates a new AccessPath by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsAccessPath]) {
+    self.elements = lists.flatMap {
+      $0.createAccessPath().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsAccessPathComponent...) {
     self.init(elements)
@@ -842,6 +961,13 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init(_ elements: [ExpressibleAsAccessorDecl]) {
     self.elements = elements.map { $0.createAccessorDecl() }
   }
+  
+  /// Creates a new AccessorList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsAccessorList]) {
+    self.elements = lists.flatMap {
+      $0.createAccessorList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsAccessorDecl...) {
     self.init(elements)
@@ -885,6 +1011,13 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   ///   - elements: A list of `ExpressibleAsPatternBinding`
   public init(_ elements: [ExpressibleAsPatternBinding]) {
     self.elements = elements.map { $0.createPatternBinding() }
+  }
+  
+  /// Creates a new PatternBindingList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsPatternBindingList]) {
+    self.elements = lists.flatMap {
+      $0.createPatternBindingList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsPatternBinding...) {
@@ -935,6 +1068,13 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public init(_ elements: [ExpressibleAsEnumCaseElement]) {
     self.elements = elements.map { $0.createEnumCaseElement() }
   }
+  
+  /// Creates a new EnumCaseElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsEnumCaseElementList]) {
+    self.elements = lists.flatMap {
+      $0.createEnumCaseElementList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsEnumCaseElement...) {
     self.init(elements)
@@ -984,6 +1124,13 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public init(_ elements: [TokenSyntax]) {
     self.elements = elements
   }
+  
+  /// Creates a new IdentifierList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsIdentifierList]) {
+    self.elements = lists.flatMap {
+      $0.createIdentifierList().elements
+    }
+  }
 
   public init(arrayLiteral elements: TokenSyntax...) {
     self.init(elements)
@@ -1030,6 +1177,13 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
+  }
+  
+  /// Creates a new PrecedenceGroupAttributeList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsPrecedenceGroupAttributeList]) {
+    self.elements = lists.flatMap {
+      $0.createPrecedenceGroupAttributeList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
@@ -1080,6 +1234,13 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public init(_ elements: [ExpressibleAsPrecedenceGroupNameElement]) {
     self.elements = elements.map { $0.createPrecedenceGroupNameElement() }
   }
+  
+  /// Creates a new PrecedenceGroupNameList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsPrecedenceGroupNameList]) {
+    self.elements = lists.flatMap {
+      $0.createPrecedenceGroupNameList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsPrecedenceGroupNameElement...) {
     self.init(elements)
@@ -1129,6 +1290,13 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   public init(_ elements: [TokenSyntax]) {
     self.elements = elements
   }
+  
+  /// Creates a new TokenList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsTokenList]) {
+    self.elements = lists.flatMap {
+      $0.createTokenList().elements
+    }
+  }
 
   public init(arrayLiteral elements: TokenSyntax...) {
     self.init(elements)
@@ -1176,6 +1344,13 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public init(_ elements: [TokenSyntax]) {
     self.elements = elements
   }
+  
+  /// Creates a new NonEmptyTokenList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsNonEmptyTokenList]) {
+    self.elements = lists.flatMap {
+      $0.createNonEmptyTokenList().elements
+    }
+  }
 
   public init(arrayLiteral elements: TokenSyntax...) {
     self.init(elements)
@@ -1222,6 +1397,13 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   ///   - elements: A list of `ExpressibleAsSyntaxBuildable`
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
+  }
+  
+  /// Creates a new AttributeList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsAttributeList]) {
+    self.elements = lists.flatMap {
+      $0.createAttributeList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
@@ -1272,6 +1454,13 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
+  
+  /// Creates a new SpecializeAttributeSpecList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsSpecializeAttributeSpecList]) {
+    self.elements = lists.flatMap {
+      $0.createSpecializeAttributeSpecList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
@@ -1320,6 +1509,13 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   ///   - elements: A list of `ExpressibleAsObjCSelectorPiece`
   public init(_ elements: [ExpressibleAsObjCSelectorPiece]) {
     self.elements = elements.map { $0.createObjCSelectorPiece() }
+  }
+  
+  /// Creates a new ObjCSelector by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsObjCSelector]) {
+    self.elements = lists.flatMap {
+      $0.createObjCSelector().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsObjCSelectorPiece...) {
@@ -1370,6 +1566,13 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   public init(_ elements: [ExpressibleAsDifferentiabilityParam]) {
     self.elements = elements.map { $0.createDifferentiabilityParam() }
   }
+  
+  /// Creates a new DifferentiabilityParamList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsDifferentiabilityParamList]) {
+    self.elements = lists.flatMap {
+      $0.createDifferentiabilityParamList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsDifferentiabilityParam...) {
     self.init(elements)
@@ -1418,6 +1621,13 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   ///   - elements: A list of `ExpressibleAsBackDeployVersionArgument`
   public init(_ elements: [ExpressibleAsBackDeployVersionArgument]) {
     self.elements = elements.map { $0.createBackDeployVersionArgument() }
+  }
+  
+  /// Creates a new BackDeployVersionList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsBackDeployVersionList]) {
+    self.elements = lists.flatMap {
+      $0.createBackDeployVersionList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsBackDeployVersionArgument...) {
@@ -1468,6 +1678,13 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public init(_ elements: [ExpressibleAsSyntaxBuildable]) {
     self.elements = elements.map { $0.createSyntaxBuildable() }
   }
+  
+  /// Creates a new SwitchCaseList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsSwitchCaseList]) {
+    self.elements = lists.flatMap {
+      $0.createSwitchCaseList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsSyntaxBuildable...) {
     self.init(elements)
@@ -1516,6 +1733,13 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   ///   - elements: A list of `ExpressibleAsCatchClause`
   public init(_ elements: [ExpressibleAsCatchClause]) {
     self.elements = elements.map { $0.createCatchClause() }
+  }
+  
+  /// Creates a new CatchClauseList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsCatchClauseList]) {
+    self.elements = lists.flatMap {
+      $0.createCatchClauseList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsCatchClause...) {
@@ -1566,6 +1790,13 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   public init(_ elements: [ExpressibleAsCaseItem]) {
     self.elements = elements.map { $0.createCaseItem() }
   }
+  
+  /// Creates a new CaseItemList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsCaseItemList]) {
+    self.elements = lists.flatMap {
+      $0.createCaseItemList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsCaseItem...) {
     self.init(elements)
@@ -1614,6 +1845,13 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   ///   - elements: A list of `ExpressibleAsCatchItem`
   public init(_ elements: [ExpressibleAsCatchItem]) {
     self.elements = elements.map { $0.createCatchItem() }
+  }
+  
+  /// Creates a new CatchItemList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsCatchItemList]) {
+    self.elements = lists.flatMap {
+      $0.createCatchItemList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsCatchItem...) {
@@ -1664,6 +1902,13 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init(_ elements: [ExpressibleAsConditionElement]) {
     self.elements = elements.map { $0.createConditionElement() }
   }
+  
+  /// Creates a new ConditionElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsConditionElementList]) {
+    self.elements = lists.flatMap {
+      $0.createConditionElementList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsConditionElement...) {
     self.init(elements)
@@ -1712,6 +1957,13 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   ///   - elements: A list of `ExpressibleAsGenericRequirement`
   public init(_ elements: [ExpressibleAsGenericRequirement]) {
     self.elements = elements.map { $0.createGenericRequirement() }
+  }
+  
+  /// Creates a new GenericRequirementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsGenericRequirementList]) {
+    self.elements = lists.flatMap {
+      $0.createGenericRequirementList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsGenericRequirement...) {
@@ -1762,6 +2014,13 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   public init(_ elements: [ExpressibleAsGenericParameter]) {
     self.elements = elements.map { $0.createGenericParameter() }
   }
+  
+  /// Creates a new GenericParameterList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsGenericParameterList]) {
+    self.elements = lists.flatMap {
+      $0.createGenericParameterList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsGenericParameter...) {
     self.init(elements)
@@ -1810,6 +2069,13 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   ///   - elements: A list of `ExpressibleAsPrimaryAssociatedType`
   public init(_ elements: [ExpressibleAsPrimaryAssociatedType]) {
     self.elements = elements.map { $0.createPrimaryAssociatedType() }
+  }
+  
+  /// Creates a new PrimaryAssociatedTypeList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsPrimaryAssociatedTypeList]) {
+    self.elements = lists.flatMap {
+      $0.createPrimaryAssociatedTypeList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsPrimaryAssociatedType...) {
@@ -1860,6 +2126,13 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   public init(_ elements: [ExpressibleAsCompositionTypeElement]) {
     self.elements = elements.map { $0.createCompositionTypeElement() }
   }
+  
+  /// Creates a new CompositionTypeElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsCompositionTypeElementList]) {
+    self.elements = lists.flatMap {
+      $0.createCompositionTypeElementList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsCompositionTypeElement...) {
     self.init(elements)
@@ -1908,6 +2181,13 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   ///   - elements: A list of `ExpressibleAsTupleTypeElement`
   public init(_ elements: [ExpressibleAsTupleTypeElement]) {
     self.elements = elements.map { $0.createTupleTypeElement() }
+  }
+  
+  /// Creates a new TupleTypeElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsTupleTypeElementList]) {
+    self.elements = lists.flatMap {
+      $0.createTupleTypeElementList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsTupleTypeElement...) {
@@ -1958,6 +2238,13 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   public init(_ elements: [ExpressibleAsGenericArgument]) {
     self.elements = elements.map { $0.createGenericArgument() }
   }
+  
+  /// Creates a new GenericArgumentList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsGenericArgumentList]) {
+    self.elements = lists.flatMap {
+      $0.createGenericArgumentList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsGenericArgument...) {
     self.init(elements)
@@ -2007,6 +2294,13 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   public init(_ elements: [ExpressibleAsTuplePatternElement]) {
     self.elements = elements.map { $0.createTuplePatternElement() }
   }
+  
+  /// Creates a new TuplePatternElementList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsTuplePatternElementList]) {
+    self.elements = lists.flatMap {
+      $0.createTuplePatternElementList().elements
+    }
+  }
 
   public init(arrayLiteral elements: ExpressibleAsTuplePatternElement...) {
     self.init(elements)
@@ -2055,6 +2349,13 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   ///   - elements: A list of `ExpressibleAsAvailabilityArgument`
   public init(_ elements: [ExpressibleAsAvailabilityArgument]) {
     self.elements = elements.map { $0.createAvailabilityArgument() }
+  }
+  
+  /// Creates a new AvailabilitySpecList by flattening the elements in `lists`
+  public init(combining lists: [ExpressibleAsAvailabilitySpecList]) {
+    self.elements = lists.flatMap {
+      $0.createAvailabilitySpecList().elements
+    }
   }
 
   public init(arrayLiteral elements: ExpressibleAsAvailabilityArgument...) {

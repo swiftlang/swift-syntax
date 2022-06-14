@@ -40,7 +40,12 @@ public struct CodeBlockItemListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsCodeBlockItemList) -> Component {
+    return expression.createCodeBlockItemList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -104,7 +109,12 @@ public struct TupleExprElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsTupleExprElementList) -> Component {
+    return expression.createTupleExprElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -168,7 +178,12 @@ public struct ArrayElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsArrayElementList) -> Component {
+    return expression.createArrayElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -232,7 +247,12 @@ public struct DictionaryElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsDictionaryElementList) -> Component {
+    return expression.createDictionaryElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -296,7 +316,12 @@ public struct StringLiteralSegmentsBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsStringLiteralSegments) -> Component {
+    return expression.createStringLiteralSegments().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -360,7 +385,12 @@ public struct DeclNameArgumentListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsDeclNameArgumentList) -> Component {
+    return expression.createDeclNameArgumentList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -424,7 +454,12 @@ public struct ExprListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsExprList) -> Component {
+    return expression.createExprList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -488,7 +523,12 @@ public struct ClosureCaptureItemListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsClosureCaptureItemList) -> Component {
+    return expression.createClosureCaptureItemList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -552,7 +592,12 @@ public struct ClosureParamListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsClosureParamList) -> Component {
+    return expression.createClosureParamList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -616,7 +661,12 @@ public struct MultipleTrailingClosureElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsMultipleTrailingClosureElementList) -> Component {
+    return expression.createMultipleTrailingClosureElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -680,7 +730,12 @@ public struct ObjcNameBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsObjcName) -> Component {
+    return expression.createObjcName().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -744,7 +799,12 @@ public struct FunctionParameterListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsFunctionParameterList) -> Component {
+    return expression.createFunctionParameterList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -808,7 +868,12 @@ public struct IfConfigClauseListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsIfConfigClauseList) -> Component {
+    return expression.createIfConfigClauseList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -872,7 +937,12 @@ public struct InheritedTypeListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsInheritedTypeList) -> Component {
+    return expression.createInheritedTypeList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -936,7 +1006,12 @@ public struct MemberDeclListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsMemberDeclList) -> Component {
+    return expression.createMemberDeclList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1000,7 +1075,12 @@ public struct ModifierListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsModifierList) -> Component {
+    return expression.createModifierList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1064,7 +1144,12 @@ public struct AccessPathBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsAccessPath) -> Component {
+    return expression.createAccessPath().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1128,7 +1213,12 @@ public struct AccessorListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsAccessorList) -> Component {
+    return expression.createAccessorList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1192,7 +1282,12 @@ public struct PatternBindingListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsPatternBindingList) -> Component {
+    return expression.createPatternBindingList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1256,7 +1351,12 @@ public struct EnumCaseElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsEnumCaseElementList) -> Component {
+    return expression.createEnumCaseElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1320,7 +1420,12 @@ public struct IdentifierListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsIdentifierList) -> Component {
+    return expression.createIdentifierList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1384,7 +1489,12 @@ public struct PrecedenceGroupAttributeListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsPrecedenceGroupAttributeList) -> Component {
+    return expression.createPrecedenceGroupAttributeList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1448,7 +1558,12 @@ public struct PrecedenceGroupNameListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsPrecedenceGroupNameList) -> Component {
+    return expression.createPrecedenceGroupNameList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1512,7 +1627,12 @@ public struct TokenListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsTokenList) -> Component {
+    return expression.createTokenList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1576,7 +1696,12 @@ public struct NonEmptyTokenListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsNonEmptyTokenList) -> Component {
+    return expression.createNonEmptyTokenList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1640,7 +1765,12 @@ public struct AttributeListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsAttributeList) -> Component {
+    return expression.createAttributeList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1704,7 +1834,12 @@ public struct SpecializeAttributeSpecListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsSpecializeAttributeSpecList) -> Component {
+    return expression.createSpecializeAttributeSpecList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1768,7 +1903,12 @@ public struct ObjCSelectorBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsObjCSelector) -> Component {
+    return expression.createObjCSelector().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1832,7 +1972,12 @@ public struct DifferentiabilityParamListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsDifferentiabilityParamList) -> Component {
+    return expression.createDifferentiabilityParamList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1896,7 +2041,12 @@ public struct BackDeployVersionListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsBackDeployVersionList) -> Component {
+    return expression.createBackDeployVersionList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -1960,7 +2110,12 @@ public struct SwitchCaseListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsSwitchCaseList) -> Component {
+    return expression.createSwitchCaseList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2024,7 +2179,12 @@ public struct CatchClauseListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsCatchClauseList) -> Component {
+    return expression.createCatchClauseList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2088,7 +2248,12 @@ public struct CaseItemListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsCaseItemList) -> Component {
+    return expression.createCaseItemList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2152,7 +2317,12 @@ public struct CatchItemListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsCatchItemList) -> Component {
+    return expression.createCatchItemList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2216,7 +2386,12 @@ public struct ConditionElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsConditionElementList) -> Component {
+    return expression.createConditionElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2280,7 +2455,12 @@ public struct GenericRequirementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsGenericRequirementList) -> Component {
+    return expression.createGenericRequirementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2344,7 +2524,12 @@ public struct GenericParameterListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsGenericParameterList) -> Component {
+    return expression.createGenericParameterList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2408,7 +2593,12 @@ public struct PrimaryAssociatedTypeListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsPrimaryAssociatedTypeList) -> Component {
+    return expression.createPrimaryAssociatedTypeList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2472,7 +2662,12 @@ public struct CompositionTypeElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsCompositionTypeElementList) -> Component {
+    return expression.createCompositionTypeElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2536,7 +2731,12 @@ public struct TupleTypeElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsTupleTypeElementList) -> Component {
+    return expression.createTupleTypeElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2600,7 +2800,12 @@ public struct GenericArgumentListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsGenericArgumentList) -> Component {
+    return expression.createGenericArgumentList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2664,7 +2869,12 @@ public struct TuplePatternElementListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsTuplePatternElementList) -> Component {
+    return expression.createTuplePatternElementList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []
@@ -2728,7 +2938,12 @@ public struct AvailabilitySpecListBuilder {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ExpressibleAsAvailabilitySpecList) -> Component {
+    return expression.createAvailabilitySpecList().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []

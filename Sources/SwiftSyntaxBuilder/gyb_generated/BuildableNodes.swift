@@ -2554,8 +2554,8 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
     let result = SyntaxFactory.makeClosureExpr(
       leftBrace: leftBrace,
       signature: signature?.buildClosureSignature(format: format, leadingTrivia: nil),
-      statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil),
-      rightBrace: rightBrace
+      statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
+      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
@@ -9531,7 +9531,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
       cases: cases.buildSwitchCaseList(format: format, leadingTrivia: nil),
-      rightBrace: rightBrace
+      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
@@ -10618,7 +10618,7 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
     let result = SyntaxFactory.makeSwitchCase(
       unknownAttr: unknownAttr?.buildAttribute(format: format, leadingTrivia: nil),
       label: label.buildSyntax(format: format, leadingTrivia: nil),
-      statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil)
+      statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil)
     )
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))

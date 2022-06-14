@@ -51,34 +51,30 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
     let switchStmt = SwitchStmt(labelName: nil,
                                 expression: expression,
-                                leftBrace: .leftBrace.withTrailingTrivia(.newlines(1)),
-                                rightBrace: .rightBrace.withLeadingTrivia(.newlines(1)),
                                 casesBuilder: {
       for (version, semVer) in versions {
         SwitchCase(label: SwitchCaseLabel(caseItemsBuilder: {
           CaseItem(pattern: EnumCasePattern(caseName: version))
         }), statementsBuilder: {
-          ReturnStmt(expression: StringLiteralExpr(semVer, closeQuote: .stringQuote.withTrailingTrivia(.newlines(1))))
+          ReturnStmt(expression: StringLiteralExpr(semVer))
         })
       }
     })
 
     let syntax = switchStmt.buildSyntax(format: Format())
-
-    // The generated code contains whitespace after `:`.
-    // So replacing whitespace with `␣`.
-    XCTAssertEqual(syntax.description.replacingOccurrences(of: " ", with: "␣"), """
-    switch␣version{
-    case␣.version_1:␣
-    return␣"1.0.0"
-    case␣.version_2:␣
-    return␣"2.0.0"
-    case␣.version_3:␣
-    return␣"3.0.0"
-    case␣.version_3_1:␣
-    return␣"3.1.0"
-
-    }
-    """)
+    XCTAssertEqual(
+      syntax.description,
+      """
+      switch version{
+      case .version_1: 
+          return "1.0.0"
+      case .version_2: 
+          return "2.0.0"
+      case .version_3: 
+          return "3.0.0"
+      case .version_3_1: 
+          return "3.1.0"
+      }
+      """)
   }
 }

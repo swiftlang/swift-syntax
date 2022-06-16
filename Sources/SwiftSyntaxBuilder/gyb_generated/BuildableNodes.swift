@@ -5561,7 +5561,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   ///   - eofToken: 
   public init(
     statements: ExpressibleAsCodeBlockItemList,
-    eofToken: TokenSyntax
+    eofToken: TokenSyntax = TokenSyntax.eof
   ) {
     self.statements = statements.createCodeBlockItemList()
     self.eofToken = eofToken
@@ -5571,7 +5571,7 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
-    eofToken: TokenSyntax,
+    eofToken: TokenSyntax = TokenSyntax.eof,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(

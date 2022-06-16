@@ -1,0 +1,15 @@
+BUILDER_INITIALIZABLE_TYPES = {
+    'CodeBlock': 'CodeBlockItemList',
+    'MemberDeclBlock': 'MemberDeclList',
+    'CodeBlockItemList': None,
+    'MemberDeclList': None,
+    'PatternBindingList': None,
+    'SwitchCaseList': None,
+    'ArrayElementList': None,
+    'TupleExprElementList': None,
+    'EnumCaseElementList': None,
+    'FunctionParameterList': None,
+    'GenericParameterList': None,
+    'GenericRequirementList': None,
+    'InheritedTypeList': None,
+}

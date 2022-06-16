@@ -442,20 +442,6 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @DeclNameArgumentListBuilder argumentsBuilder: () -> ExpressibleAsDeclNameArgumentList = { DeclNameArgumentList([]) }
-  ) {
-    self.init(
-      leftParen: leftParen,
-      arguments: argumentsBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildDeclNameArguments(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
     let result = SyntaxFactory.makeDeclNameArguments(
@@ -755,16 +741,6 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
     self.elements = elements.createExprList()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    @ExprListBuilder elementsBuilder: () -> ExpressibleAsExprList = { ExprList([]) }
-  ) {
-    self.init(
-      elements: elementsBuilder()
-    )
-  }
 
   func buildSequenceExpr(format: Format, leadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
     let result = SyntaxFactory.makeSequenceExpr(
@@ -2270,14 +2246,14 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    specifier: ExpressibleAsTokenList? = nil,
     name: String?,
     assignToken: TokenSyntax? = nil,
     expression: ExpressibleAsExprBuildable,
-    trailingComma: TokenSyntax? = nil,
-    @TokenListBuilder specifierBuilder: () -> ExpressibleAsTokenList? = { nil }
+    trailingComma: TokenSyntax? = nil
   ) {
     self.init(
-      specifier: specifierBuilder(),
+      specifier: specifier,
       name: name.map(TokenSyntax.identifier),
       assignToken: assignToken,
       expression: expression,
@@ -2352,20 +2328,6 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
     assert(rightSquare.text == "]")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
-    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
-    @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? = { nil }
-  ) {
-    self.init(
-      leftSquare: leftSquare,
-      items: itemsBuilder(),
-      rightSquare: rightSquare
-    )
-  }
 
   func buildClosureCaptureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
     let result = SyntaxFactory.makeClosureCaptureSignature(
@@ -2499,16 +2461,16 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
     capture: ExpressibleAsClosureCaptureSignature? = nil,
     input: ExpressibleAsSyntaxBuildable? = nil,
     asyncKeyword: String?,
     throwsTok: TokenSyntax? = nil,
     output: ExpressibleAsReturnClause? = nil,
-    inTok: TokenSyntax = TokenSyntax.`in`,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
+    inTok: TokenSyntax = TokenSyntax.`in`
   ) {
     self.init(
-      attributes: attributesBuilder(),
+      attributes: attributes,
       capture: capture,
       input: input,
       asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
@@ -2781,8 +2743,8 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     leftParen: TokenSyntax? = nil,
     rightParen: TokenSyntax? = nil,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
-    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) },
-    @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> ExpressibleAsMultipleTrailingClosureElementList? = { nil }
+    additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil,
+    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       calledExpression: calledExpression,
@@ -2790,7 +2752,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
       argumentList: argumentListBuilder(),
       rightParen: rightParen,
       trailingClosure: trailingClosure,
-      additionalTrailingClosures: additionalTrailingClosuresBuilder()
+      additionalTrailingClosures: additionalTrailingClosures
     )
   }
 
@@ -2877,8 +2839,8 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
-    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) },
-    @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> ExpressibleAsMultipleTrailingClosureElementList? = { nil }
+    additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil,
+    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
       calledExpression: calledExpression,
@@ -2886,7 +2848,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
       argumentList: argumentListBuilder(),
       rightBracket: rightBracket,
       trailingClosure: trailingClosure,
-      additionalTrailingClosures: additionalTrailingClosuresBuilder()
+      additionalTrailingClosures: additionalTrailingClosures
     )
   }
 
@@ -3334,14 +3296,14 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   public init(
     openDelimiter: String?,
     openQuote: TokenSyntax,
+    segments: ExpressibleAsStringLiteralSegments,
     closeQuote: TokenSyntax,
-    closeDelimiter: String?,
-    @StringLiteralSegmentsBuilder segmentsBuilder: () -> ExpressibleAsStringLiteralSegments = { StringLiteralSegments([]) }
+    closeDelimiter: String?
   ) {
     self.init(
       openDelimiter: openDelimiter.map(TokenSyntax.rawStringDelimiter),
       openQuote: openQuote,
-      segments: segmentsBuilder(),
+      segments: segments,
       closeQuote: closeQuote,
       closeDelimiter: closeDelimiter.map(TokenSyntax.rawStringDelimiter)
     )
@@ -3644,22 +3606,6 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    keyPath: TokenSyntax = TokenSyntax.`poundKeyPath`,
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @ObjcNameBuilder nameBuilder: () -> ExpressibleAsObjcName = { ObjcName([]) }
-  ) {
-    self.init(
-      keyPath: keyPath,
-      leftParen: leftParen,
-      name: nameBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildObjcKeyPathExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
     let result = SyntaxFactory.makeObjcKeyPathExpr(
@@ -4085,17 +4031,17 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
     identifier: String,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     initializer: ExpressibleAsTypeInitializerClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       typealiasKeyword: typealiasKeyword,
       identifier: TokenSyntax.identifier(identifier),
       genericParameterClause: genericParameterClause,
@@ -4187,17 +4133,17 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
     identifier: String,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     initializer: ExpressibleAsTypeInitializerClause? = nil,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       associatedtypeKeyword: associatedtypeKeyword,
       identifier: TokenSyntax.identifier(identifier),
       inheritanceClause: inheritanceClause,
@@ -4513,18 +4459,6 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
     assert(poundEndif.text == "#endif")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    poundEndif: TokenSyntax = TokenSyntax.`poundEndif`,
-    @IfConfigClauseListBuilder clausesBuilder: () -> ExpressibleAsIfConfigClauseList = { IfConfigClauseList([]) }
-  ) {
-    self.init(
-      clauses: clausesBuilder(),
-      poundEndif: poundEndif
-    )
-  }
 
   func buildIfConfigDecl(format: Format, leadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
     let result = SyntaxFactory.makeIfConfigDecl(
@@ -5103,24 +5037,24 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     classOrActorKeyword: TokenSyntax,
     identifier: String,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       classOrActorKeyword: classOrActorKeyword,
       identifier: TokenSyntax.identifier(identifier),
       genericParameterClause: genericParameterClause,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
-      members: members
+      members: membersBuilder()
     )
   }
 
@@ -5212,24 +5146,24 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     structKeyword: TokenSyntax = TokenSyntax.`struct`,
     identifier: String,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       structKeyword: structKeyword,
       identifier: TokenSyntax.identifier(identifier),
       genericParameterClause: genericParameterClause,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
-      members: members
+      members: membersBuilder()
     )
   }
 
@@ -5321,24 +5255,24 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
     identifier: String,
     primaryAssociatedTypeClause: ExpressibleAsPrimaryAssociatedTypeClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       protocolKeyword: protocolKeyword,
       identifier: TokenSyntax.identifier(identifier),
       primaryAssociatedTypeClause: primaryAssociatedTypeClause,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
-      members: members
+      members: membersBuilder()
     )
   }
 
@@ -5426,22 +5360,22 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
     extendedType: ExpressibleAsTypeBuildable,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       extensionKeyword: extensionKeyword,
       extendedType: extendedType,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
-      members: members
+      members: membersBuilder()
     )
   }
 
@@ -5758,30 +5692,6 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    firstName: TokenSyntax? = nil,
-    secondName: TokenSyntax? = nil,
-    colon: TokenSyntax? = nil,
-    type: ExpressibleAsTypeBuildable? = nil,
-    ellipsis: TokenSyntax? = nil,
-    defaultArgument: ExpressibleAsInitializerClause? = nil,
-    trailingComma: TokenSyntax? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
-  ) {
-    self.init(
-      attributes: attributesBuilder(),
-      firstName: firstName,
-      secondName: secondName,
-      colon: colon,
-      type: type,
-      ellipsis: ellipsis,
-      defaultArgument: defaultArgument,
-      trailingComma: trailingComma
-    )
-  }
 
   func buildFunctionParameter(format: Format, leadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
     let result = SyntaxFactory.makeFunctionParameter(
@@ -5879,24 +5789,24 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
     identifier: TokenSyntax,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     signature: ExpressibleAsFunctionSignature,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    body: ExpressibleAsCodeBlock? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       funcKeyword: funcKeyword,
       identifier: identifier,
       genericParameterClause: genericParameterClause,
       signature: signature,
       genericWhereClause: genericWhereClause,
-      body: body
+      body: bodyBuilder()
     )
   }
 
@@ -5994,26 +5904,26 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     initKeyword: TokenSyntax = TokenSyntax.`init`,
     optionalMark: TokenSyntax? = nil,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     parameters: ExpressibleAsParameterClause,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    body: ExpressibleAsCodeBlock? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       initKeyword: initKeyword,
       optionalMark: optionalMark,
       genericParameterClause: genericParameterClause,
       parameters: parameters,
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
       genericWhereClause: genericWhereClause,
-      body: body
+      body: bodyBuilder()
     )
   }
 
@@ -6090,16 +6000,16 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
-    body: ExpressibleAsCodeBlock,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       deinitKeyword: deinitKeyword,
-      body: body
+      body: bodyBuilder()
     )
   }
 
@@ -6183,30 +6093,6 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
     self.accessor = accessor?.createSyntaxBuildable()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    subscriptKeyword: TokenSyntax = TokenSyntax.`subscript`,
-    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
-    indices: ExpressibleAsParameterClause,
-    result: ExpressibleAsReturnClause,
-    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    accessor: ExpressibleAsSyntaxBuildable? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
-  ) {
-    self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
-      subscriptKeyword: subscriptKeyword,
-      genericParameterClause: genericParameterClause,
-      indices: indices,
-      result: result,
-      genericWhereClause: genericWhereClause,
-      accessor: accessor
-    )
-  }
 
   func buildSubscriptDecl(format: Format, leadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
     let result = SyntaxFactory.makeSubscriptDecl(
@@ -6418,24 +6304,6 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
     self.path = path.createAccessPath()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    importTok: TokenSyntax = TokenSyntax.`import`,
-    importKind: TokenSyntax? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
-    @AccessPathBuilder pathBuilder: () -> ExpressibleAsAccessPath = { AccessPath([]) }
-  ) {
-    self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
-      importTok: importTok,
-      importKind: importKind,
-      path: pathBuilder()
-    )
-  }
 
   func buildImportDecl(format: Format, leadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
     let result = SyntaxFactory.makeImportDecl(
@@ -6589,22 +6457,22 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
     modifier: ExpressibleAsDeclModifier? = nil,
     accessorKind: TokenSyntax,
     parameter: ExpressibleAsAccessorParameter? = nil,
     asyncKeyword: String?,
     throwsKeyword: TokenSyntax? = nil,
-    body: ExpressibleAsCodeBlock? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
-      attributes: attributesBuilder(),
+      attributes: attributes,
       modifier: modifier,
       accessorKind: accessorKind,
       parameter: parameter,
       asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsKeyword: throwsKeyword,
-      body: body
+      body: bodyBuilder()
     )
   }
 
@@ -6672,20 +6540,6 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
     assert(rightBrace.text == "}")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
-    @AccessorListBuilder accessorsBuilder: () -> ExpressibleAsAccessorList = { AccessorList([]) }
-  ) {
-    self.init(
-      leftBrace: leftBrace,
-      accessors: accessorsBuilder(),
-      rightBrace: rightBrace
-    )
-  }
 
   func buildAccessorBlock(format: Format, leadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
     let result = SyntaxFactory.makeAccessorBlock(
@@ -6823,14 +6677,14 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     letOrVarKeyword: TokenSyntax,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
     @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList = { PatternBindingList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       letOrVarKeyword: letOrVarKeyword,
       bindings: bindingsBuilder()
     )
@@ -6991,14 +6845,14 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
     @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList = { EnumCaseElementList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       caseKeyword: caseKeyword,
       elements: elementsBuilder()
     )
@@ -7089,24 +6943,24 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
     identifier: String,
     genericParameters: ExpressibleAsGenericParameterClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
-    members: ExpressibleAsMemberDeclBlock,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
+    @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       enumKeyword: enumKeyword,
       identifier: TokenSyntax.identifier(identifier),
       genericParameters: genericParameters,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
-      members: members
+      members: membersBuilder()
     )
   }
 
@@ -7183,24 +7037,6 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
     self.operatorPrecedenceAndTypes = operatorPrecedenceAndTypes?.createOperatorPrecedenceAndTypes()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    operatorKeyword: TokenSyntax = TokenSyntax.`operator`,
-    identifier: TokenSyntax,
-    operatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil }
-  ) {
-    self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
-      operatorKeyword: operatorKeyword,
-      identifier: identifier,
-      operatorPrecedenceAndTypes: operatorPrecedenceAndTypes
-    )
-  }
 
   func buildOperatorDecl(format: Format, leadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
     let result = SyntaxFactory.makeOperatorDecl(
@@ -7260,18 +7096,6 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
     self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    colon: TokenSyntax = TokenSyntax.`colon`,
-    @IdentifierListBuilder precedenceGroupAndDesignatedTypesBuilder: () -> ExpressibleAsIdentifierList = { IdentifierList([]) }
-  ) {
-    self.init(
-      colon: colon,
-      precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypesBuilder()
-    )
-  }
 
   func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
     let result = SyntaxFactory.makeOperatorPrecedenceAndTypes(
@@ -7348,21 +7172,21 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
     precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
     identifier: String,
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
-    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil },
-    @ModifierListBuilder modifiersBuilder: () -> ExpressibleAsModifierList? = { nil },
-    @PrecedenceGroupAttributeListBuilder groupAttributesBuilder: () -> ExpressibleAsPrecedenceGroupAttributeList = { PrecedenceGroupAttributeList([]) }
+    groupAttributes: ExpressibleAsPrecedenceGroupAttributeList,
+    rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.init(
-      attributes: attributesBuilder(),
-      modifiers: modifiersBuilder(),
+      attributes: attributes,
+      modifiers: modifiers,
       precedencegroupKeyword: precedencegroupKeyword,
       identifier: TokenSyntax.identifier(identifier),
       leftBrace: leftBrace,
-      groupAttributes: groupAttributesBuilder(),
+      groupAttributes: groupAttributes,
       rightBrace: rightBrace
     )
   }
@@ -7438,12 +7262,12 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   public init(
     higherThanOrLowerThan: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
-    @PrecedenceGroupNameListBuilder otherNamesBuilder: () -> ExpressibleAsPrecedenceGroupNameList = { PrecedenceGroupNameList([]) }
+    otherNames: ExpressibleAsPrecedenceGroupNameList
   ) {
     self.init(
       higherThanOrLowerThan: TokenSyntax.identifier(higherThanOrLowerThan),
       colon: colon,
-      otherNames: otherNamesBuilder()
+      otherNames: otherNames
     )
   }
 
@@ -7803,26 +7627,6 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     self.tokenList = tokenList?.createTokenList()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    atSignToken: TokenSyntax = TokenSyntax.`atSign`,
-    attributeName: TokenSyntax,
-    leftParen: TokenSyntax? = nil,
-    argument: ExpressibleAsSyntaxBuildable? = nil,
-    rightParen: TokenSyntax? = nil,
-    @TokenListBuilder tokenListBuilder: () -> ExpressibleAsTokenList? = { nil }
-  ) {
-    self.init(
-      atSignToken: atSignToken,
-      attributeName: attributeName,
-      leftParen: leftParen,
-      argument: argument,
-      rightParen: rightParen,
-      tokenList: tokenListBuilder()
-    )
-  }
 
   func buildAttribute(format: Format, leadingTrivia: Trivia? = nil) -> AttributeSyntax {
     let result = SyntaxFactory.makeAttribute(
@@ -7892,13 +7696,13 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   public init(
     label: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
-    semicolon: TokenSyntax = TokenSyntax.`semicolon`,
-    @AvailabilitySpecListBuilder availabilityListBuilder: () -> ExpressibleAsAvailabilitySpecList = { AvailabilitySpecList([]) }
+    availabilityList: ExpressibleAsAvailabilitySpecList,
+    semicolon: TokenSyntax = TokenSyntax.`semicolon`
   ) {
     self.init(
       label: TokenSyntax.identifier(label),
       colon: colon,
-      availabilityList: availabilityListBuilder(),
+      availabilityList: availabilityList,
       semicolon: semicolon
     )
   }
@@ -8513,20 +8317,6 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @DifferentiabilityParamListBuilder diffParamsBuilder: () -> ExpressibleAsDifferentiabilityParamList = { DifferentiabilityParamList([]) }
-  ) {
-    self.init(
-      leftParen: leftParen,
-      diffParams: diffParamsBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildDifferentiabilityParams(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParams(
@@ -8857,12 +8647,12 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   public init(
     beforeLabel: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
-    @BackDeployVersionListBuilder versionListBuilder: () -> ExpressibleAsBackDeployVersionList = { BackDeployVersionList([]) }
+    versionList: ExpressibleAsBackDeployVersionList
   ) {
     self.init(
       beforeLabel: TokenSyntax.identifier(beforeLabel),
       colon: colon,
-      versionList: versionListBuilder()
+      versionList: versionList
     )
   }
 
@@ -9052,15 +8842,15 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
-    body: ExpressibleAsCodeBlock,
-    @ConditionElementListBuilder conditionsBuilder: () -> ExpressibleAsConditionElementList = { ConditionElementList([]) }
+    conditions: ExpressibleAsConditionElementList,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       whileKeyword: whileKeyword,
-      conditions: conditionsBuilder(),
-      body: body
+      conditions: conditions,
+      body: bodyBuilder()
     )
   }
 
@@ -9121,6 +8911,18 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
     self.body = body.createCodeBlock()
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    deferKeyword: TokenSyntax = TokenSyntax.`defer`,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
+  ) {
+    self.init(
+      deferKeyword: deferKeyword,
+      body: bodyBuilder()
+    )
+  }
 
   func buildDeferStmt(format: Format, leadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
     let result = SyntaxFactory.makeDeferStmt(
@@ -9250,15 +9052,15 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
-    body: ExpressibleAsCodeBlock,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
-    condition: ExpressibleAsExprBuildable
+    condition: ExpressibleAsExprBuildable,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       repeatKeyword: repeatKeyword,
-      body: body,
+      body: bodyBuilder(),
       whileKeyword: whileKeyword,
       condition: condition
     )
@@ -9336,15 +9138,15 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   ///  - Initializing tokens without default text using strings
   public init(
     guardKeyword: TokenSyntax = TokenSyntax.`guard`,
+    conditions: ExpressibleAsConditionElementList,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
-    body: ExpressibleAsCodeBlock,
-    @ConditionElementListBuilder conditionsBuilder: () -> ExpressibleAsConditionElementList = { ConditionElementList([]) }
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       guardKeyword: guardKeyword,
-      conditions: conditionsBuilder(),
+      conditions: conditions,
       elseKeyword: elseKeyword,
-      body: body
+      body: bodyBuilder()
     )
   }
 
@@ -9513,7 +9315,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     inKeyword: TokenSyntax = TokenSyntax.`in`,
     sequenceExpr: ExpressibleAsExprBuildable,
     whereClause: ExpressibleAsWhereClause? = nil,
-    body: ExpressibleAsCodeBlock
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       labelName: labelName.map(TokenSyntax.identifier),
@@ -9527,7 +9329,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
       inKeyword: inKeyword,
       sequenceExpr: sequenceExpr,
       whereClause: whereClause,
-      body: body
+      body: bodyBuilder()
     )
   }
 
@@ -9720,15 +9522,15 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
-    body: ExpressibleAsCodeBlock,
-    @CatchClauseListBuilder catchClausesBuilder: () -> ExpressibleAsCatchClauseList? = { nil }
+    catchClauses: ExpressibleAsCatchClauseList? = nil,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       doKeyword: doKeyword,
-      body: body,
-      catchClauses: catchClausesBuilder()
+      body: bodyBuilder(),
+      catchClauses: catchClauses
     )
   }
 
@@ -9909,22 +9711,6 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    trailingComma: TokenSyntax? = nil,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @ExprListBuilder elementListBuilder: () -> ExpressibleAsExprList = { ExprList([]) }
-  ) {
-    self.init(
-      leftParen: leftParen,
-      elementList: elementListBuilder(),
-      trailingComma: trailingComma,
-      rightParen: rightParen
-    )
-  }
 
   func buildYieldList(format: Format, leadingTrivia: Trivia? = nil) -> YieldListSyntax {
     let result = SyntaxFactory.makeYieldList(
@@ -10160,22 +9946,6 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    poundAvailableKeyword: TokenSyntax = TokenSyntax.`poundAvailable`,
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @AvailabilitySpecListBuilder availabilitySpecBuilder: () -> ExpressibleAsAvailabilitySpecList = { AvailabilitySpecList([]) }
-  ) {
-    self.init(
-      poundAvailableKeyword: poundAvailableKeyword,
-      leftParen: leftParen,
-      availabilitySpec: availabilitySpecBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildAvailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
     let result = SyntaxFactory.makeAvailabilityCondition(
@@ -10355,22 +10125,6 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    poundUnavailableKeyword: TokenSyntax = TokenSyntax.`poundUnavailable`,
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @AvailabilitySpecListBuilder availabilitySpecBuilder: () -> ExpressibleAsAvailabilitySpecList = { AvailabilitySpecList([]) }
-  ) {
-    self.init(
-      poundUnavailableKeyword: poundUnavailableKeyword,
-      leftParen: leftParen,
-      availabilitySpec: availabilitySpecBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildUnavailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
     let result = SyntaxFactory.makeUnavailabilityCondition(
@@ -10555,17 +10309,17 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
-    body: ExpressibleAsCodeBlock,
+    conditions: ExpressibleAsConditionElementList,
     elseKeyword: TokenSyntax? = nil,
     elseBody: ExpressibleAsSyntaxBuildable? = nil,
-    @ConditionElementListBuilder conditionsBuilder: () -> ExpressibleAsConditionElementList = { ConditionElementList([]) }
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       ifKeyword: ifKeyword,
-      conditions: conditionsBuilder(),
-      body: body,
+      conditions: conditions,
+      body: bodyBuilder(),
       elseKeyword: elseKeyword,
       elseBody: elseBody
     )
@@ -10673,6 +10427,18 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
     self.body = body.createCodeBlock()
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    elseKeyword: TokenSyntax = TokenSyntax.`else`,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
+  ) {
+    self.init(
+      elseKeyword: elseKeyword,
+      body: bodyBuilder()
+    )
+  }
 
   func buildElseBlock(format: Format, leadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
     let result = SyntaxFactory.makeElseBlock(
@@ -10970,20 +10736,6 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
     assert(colon.text == ":")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    caseKeyword: TokenSyntax = TokenSyntax.`case`,
-    colon: TokenSyntax = TokenSyntax.`colon`,
-    @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList = { CaseItemList([]) }
-  ) {
-    self.init(
-      caseKeyword: caseKeyword,
-      caseItems: caseItemsBuilder(),
-      colon: colon
-    )
-  }
 
   func buildSwitchCaseLabel(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
     let result = SyntaxFactory.makeSwitchCaseLabel(
@@ -11043,13 +10795,13 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   ///  - Initializing tokens without default text using strings
   public init(
     catchKeyword: TokenSyntax = TokenSyntax.`catch`,
-    body: ExpressibleAsCodeBlock,
-    @CatchItemListBuilder catchItemsBuilder: () -> ExpressibleAsCatchItemList? = { nil }
+    catchItems: ExpressibleAsCatchItemList? = nil,
+    @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
       catchKeyword: catchKeyword,
-      catchItems: catchItemsBuilder(),
-      body: body
+      catchItems: catchItems,
+      body: bodyBuilder()
     )
   }
 
@@ -11388,14 +11140,14 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
     name: String,
     colon: TokenSyntax? = nil,
     inheritedType: ExpressibleAsTypeBuildable? = nil,
-    trailingComma: TokenSyntax? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
+    trailingComma: TokenSyntax? = nil
   ) {
     self.init(
-      attributes: attributesBuilder(),
+      attributes: attributes,
       name: TokenSyntax.identifier(name),
       colon: colon,
       inheritedType: inheritedType,
@@ -11486,15 +11238,15 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    attributes: ExpressibleAsAttributeList? = nil,
     name: String,
     colon: TokenSyntax? = nil,
     inheritedType: ExpressibleAsTypeBuildable? = nil,
     initializer: ExpressibleAsTypeInitializerClause? = nil,
-    trailingComma: TokenSyntax? = nil,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
+    trailingComma: TokenSyntax? = nil
   ) {
     self.init(
-      attributes: attributesBuilder(),
+      attributes: attributes,
       name: TokenSyntax.identifier(name),
       colon: colon,
       inheritedType: inheritedType,
@@ -11695,20 +11447,6 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
     assert(rightAngleBracket.text == ">")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
-    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
-    @PrimaryAssociatedTypeListBuilder primaryAssociatedTypeListBuilder: () -> ExpressibleAsPrimaryAssociatedTypeList = { PrimaryAssociatedTypeList([]) }
-  ) {
-    self.init(
-      leftAngleBracket: leftAngleBracket,
-      primaryAssociatedTypeList: primaryAssociatedTypeListBuilder(),
-      rightAngleBracket: rightAngleBracket
-    )
-  }
 
   func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedTypeClause(
@@ -12357,16 +12095,6 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
     self.elements = elements.createCompositionTypeElementList()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    @CompositionTypeElementListBuilder elementsBuilder: () -> ExpressibleAsCompositionTypeElementList = { CompositionTypeElementList([]) }
-  ) {
-    self.init(
-      elements: elementsBuilder()
-    )
-  }
 
   func buildCompositionType(format: Format, leadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
     let result = SyntaxFactory.makeCompositionType(
@@ -12522,20 +12250,6 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @TupleTypeElementListBuilder elementsBuilder: () -> ExpressibleAsTupleTypeElementList = { TupleTypeElementList([]) }
-  ) {
-    self.init(
-      leftParen: leftParen,
-      elements: elementsBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildTupleType(format: Format, leadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
     let result = SyntaxFactory.makeTupleType(
@@ -12616,28 +12330,6 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     self.returnType = returnType.createTypeBuildable()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    asyncKeyword: TokenSyntax? = nil,
-    throwsOrRethrowsKeyword: TokenSyntax? = nil,
-    arrow: TokenSyntax = TokenSyntax.`arrow`,
-    returnType: ExpressibleAsTypeBuildable,
-    @TupleTypeElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleTypeElementList = { TupleTypeElementList([]) }
-  ) {
-    self.init(
-      leftParen: leftParen,
-      arguments: argumentsBuilder(),
-      rightParen: rightParen,
-      asyncKeyword: asyncKeyword,
-      throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
-      arrow: arrow,
-      returnType: returnType
-    )
-  }
 
   func buildFunctionType(format: Format, leadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
     let result = SyntaxFactory.makeFunctionType(
@@ -12702,20 +12394,6 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
     self.baseType = baseType.createTypeBuildable()
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    specifier: TokenSyntax? = nil,
-    baseType: ExpressibleAsTypeBuildable,
-    @AttributeListBuilder attributesBuilder: () -> ExpressibleAsAttributeList? = { nil }
-  ) {
-    self.init(
-      specifier: specifier,
-      attributes: attributesBuilder(),
-      baseType: baseType
-    )
-  }
 
   func buildAttributedType(format: Format, leadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
     let result = SyntaxFactory.makeAttributedType(
@@ -12834,20 +12512,6 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     assert(rightAngleBracket.text == ">")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
-    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
-    @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList = { GenericArgumentList([]) }
-  ) {
-    self.init(
-      leftAngleBracket: leftAngleBracket,
-      arguments: argumentsBuilder(),
-      rightAngleBracket: rightAngleBracket
-    )
-  }
 
   func buildGenericArgumentClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
     let result = SyntaxFactory.makeGenericArgumentClause(
@@ -13252,20 +12916,6 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
     assert(rightParen.text == ")")
   }
 
-  /// A convenience initializer that allows:
-  ///  - Initializing syntax collections using result builders
-  ///  - Initializing tokens without default text using strings
-  public init(
-    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
-    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
-    @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList = { TuplePatternElementList([]) }
-  ) {
-    self.init(
-      leftParen: leftParen,
-      elements: elementsBuilder(),
-      rightParen: rightParen
-    )
-  }
 
   func buildTuplePattern(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
     let result = SyntaxFactory.makeTuplePattern(

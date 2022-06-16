@@ -1,6 +1,7 @@
 from gyb_syntax_support import SYNTAX_TOKEN_MAP, create_node_map, SYNTAX_NODES
 from gyb_syntax_support.kinds import SYNTAX_BASE_KINDS
 from gyb_syntax_support.kinds import lowercase_first_word
+from .BuilderInitializableTypes import BUILDER_INITIALIZABLE_TYPES
 from .ExpressibleAsConformances import SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES
 from .utils import flat_documentation
 
@@ -229,6 +230,22 @@ class SyntaxBuildableType:
       return self.syntax_kind + 'Buildable' + self._optional_question_mark()
     else:
       return self.syntax_kind + self._optional_question_mark()
+
+  def is_builder_initializable(self):
+    """
+    Returns whether parameters of this type should be initializable by
+    a result builder. Used for certain syntax collections and block-like
+    structures (e.g. CodeBlock, MemberDeclList).
+    """
+    return self.non_optional().buildable() in BUILDER_INITIALIZABLE_TYPES
+
+  def builder_initializable_type(self):
+    """
+    Returns a type suitable for initializing this type though a builder
+    (e.g. returns CodeBlockItemList for CodeBlock) and otherwise itself.
+    """
+    buildable = self.non_optional().buildable()
+    return SyntaxBuildableType(BUILDER_INITIALIZABLE_TYPES.get(buildable, None) or buildable, is_optional=self.is_optional)
 
   def buildable_base_name(self):
     """

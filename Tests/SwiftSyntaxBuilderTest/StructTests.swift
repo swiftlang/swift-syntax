@@ -5,9 +5,7 @@ import SwiftSyntaxBuilder
 final class StructTests: XCTestCase {
   func testEmptyStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let members = MemberDeclList([])
-    let buildable = StructDecl(identifier: "TestStruct",
-                               members: members)
+    let buildable = StructDecl(identifier: "TestStruct") {}
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     var text = ""
@@ -21,27 +19,26 @@ final class StructTests: XCTestCase {
 
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let emptyMembers = MemberDeclList([])
     let nestedStruct = StructDecl(
-        structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
-        identifier: "NestedStruct",
-        genericParameterClause: GenericParameterClause(genericParameterListBuilder: {
-          GenericParameter(name: "A")
-          GenericParameter(name: "B", colon: .colon, inheritedType: "C")
-          GenericParameter(name: "D")
-        }),
-        genericWhereClause: GenericWhereClause(requirementListBuilder: {
-          GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
-          GenericRequirement(body: SameTypeRequirement(
-              leftTypeIdentifier: "A.P", equalityToken: .identifier("=="), rightTypeIdentifier: "D"))
-        }),
-        members: emptyMembers)
-    let members = MemberDeclListItem(decl: nestedStruct)
-    let testStruct = StructDecl(identifier: "TestStruct",
-                                members: members,
-                                attributesBuilder: {
-      DeclModifier(name: TokenSyntax.public)
-    })
+      structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
+      identifier: "NestedStruct",
+      genericParameterClause: GenericParameterClause {
+        GenericParameter(name: "A")
+        GenericParameter(name: "B", colon: .colon, inheritedType: "C")
+        GenericParameter(name: "D")
+      },
+      genericWhereClause: GenericWhereClause {
+        GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
+        GenericRequirement(body: SameTypeRequirement(
+            leftTypeIdentifier: "A.P", equalityToken: .identifier("=="), rightTypeIdentifier: "D"))
+      }
+    ) {}
+    let testStruct = StructDecl(
+      modifiers: [TokenSyntax.public],
+      identifier: "TestStruct"
+    ) {
+      nestedStruct
+    }
     let syntax = testStruct.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     var text = ""
@@ -58,18 +55,18 @@ final class StructTests: XCTestCase {
   }
 
   func testControlWithLoopAndIf() {
-    let myStruct = StructDecl(identifier: "MyStruct", members: MemberDeclBlock(membersBuilder: {
+    let myStruct = StructDecl(identifier: "MyStruct") {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
-           VariableDecl(letOrVarKeyword: .let, bindingsBuilder: {
+           VariableDecl(letOrVarKeyword: .let) {
             PatternBinding(
               pattern: IdentifierPattern("var\(i)"),
               typeAnnotation: "String"
             )
-          })
+          }
         }
       }
-    }))
+    }
     let syntax = myStruct.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, """
     struct MyStruct{

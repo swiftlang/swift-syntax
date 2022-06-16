@@ -6,49 +6,41 @@ final class FunctionTests: XCTestCase {
   func testFibonacci() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let input = ParameterClause(parameterListBuilder: {
-      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int", attributesBuilder: {})
-    })
+    let input = ParameterClause(parameterList: [
+      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int")
+    ])
 
     let ifCodeBlock = ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
     
     let signature = FunctionSignature(input: input, output: "Int")
     
-    let codeBlock = CodeBlock(statementsBuilder: {
+    let buildable = FunctionDecl(identifier: .identifier("fibonacci"), signature: signature) {
       IfStmt(conditions: ExprList([
         IntegerLiteralExpr(digits: "n"),
-
         BinaryOperatorExpr("<="),
-
-        IntegerLiteralExpr(1)
+        IntegerLiteralExpr(1),
       ]), body: ifCodeBlock)
 
-      ReturnStmt(expression: SequenceExpr(elementsBuilder: {
-        FunctionCallExpr("fibonacci", argumentListBuilder: {
-          TupleExprElement(expression: SequenceExpr(elementsBuilder: {
-            IntegerLiteralExpr(digits: "n")
+      ReturnStmt(expression: SequenceExpr(elements: ExprList([
+        FunctionCallExpr("fibonacci") {
+          SequenceExpr(elements: ExprList([
+            IntegerLiteralExpr(digits: "n"),
+            BinaryOperatorExpr("-"),
+            IntegerLiteralExpr(1),
+          ]))
+        },
 
-            BinaryOperatorExpr("-")
+        BinaryOperatorExpr("+"),
 
-            IntegerLiteralExpr(1)
-          }))
-        })
-
-        BinaryOperatorExpr("+")
-
-        FunctionCallExpr(MemberAccessExpr(base: "self", name: "fibonacci"), argumentListBuilder: {
-          TupleExprElement(expression: SequenceExpr(elementsBuilder: {
-            IntegerLiteralExpr(digits: "n")
-
-            BinaryOperatorExpr("-")
-
-            IntegerLiteralExpr(2)
-          }))
-        })
-      }))
-    })
-
-    let buildable = FunctionDecl(identifier: .identifier("fibonacci"), signature: signature, body: codeBlock, attributesBuilder: {})
+        FunctionCallExpr(MemberAccessExpr(base: "self", name: "fibonacci")) {
+          TupleExprElement(expression: SequenceExpr(elements: ExprList([
+            IntegerLiteralExpr(digits: "n"),
+            BinaryOperatorExpr("-"),
+            IntegerLiteralExpr(2),
+          ])))
+        },
+      ])))
+    }
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     XCTAssertEqual(syntax.description, """
@@ -62,7 +54,7 @@ final class FunctionTests: XCTestCase {
   }
 
   func testArguments() {
-    let buildable = FunctionCallExpr("test", argumentListBuilder: {
+    let buildable = FunctionCallExpr("test") {
       for param in (1...5) {
         if param.isMultiple(of: 2) {
           TupleExprElement(label: .identifier("p\(param)"), colon: .colon, expression: "value\(param)")
@@ -70,7 +62,7 @@ final class FunctionTests: XCTestCase {
           TupleExprElement(expression: "value\(param)")
         }
       }
-    })
+    }
     let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, "test(value1, p2: value2, value3, p4: value4, value5)")
   }
@@ -82,18 +74,18 @@ final class FunctionTests: XCTestCase {
   }
 
   func testParensEmittedForArgumentAndTrailingClosure() {
-    let buildable = FunctionCallExpr("test", trailingClosure: ClosureExpr(), argumentListBuilder: {
+    let buildable = FunctionCallExpr("test", trailingClosure: ClosureExpr()) {
       TupleExprElement(expression: "42")
-    })
+    }
     let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, "test(42){\n}")
   }
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
     let closure = ClosureExpr(statementsBuilder: {
-      FunctionCallExpr("f", argumentListBuilder: {
+      FunctionCallExpr("f") {
         TupleExprElement(expression: "a")
-      })
+      }
     })
     let buildable = FunctionCallExpr("test", trailingClosure: closure)
     let syntax = buildable.buildSyntax(format: Format())

@@ -32,15 +32,21 @@ let copyrightHeader = """
     """
 
 func createSpacingCall() -> FunctionCallExpr {
-  FunctionCallExpr(MemberAccessExpr(name: "spaces"), argumentListBuilder: { TupleExprElement(expression: IntegerLiteralExpr(1)) })
+  FunctionCallExpr(MemberAccessExpr(name: "spaces")) {
+    TupleExprElement(expression: IntegerLiteralExpr(1))
+  }
 }
 
 func createWithLeadingTriviaCall() -> FunctionCallExpr {
-  FunctionCallExpr(MemberAccessExpr(name: "withLeadingTrivia"), argumentListBuilder: { TupleExprElement(expression: createSpacingCall()) })
+  FunctionCallExpr(MemberAccessExpr(name: "withLeadingTrivia")) {
+    TupleExprElement(expression: createSpacingCall())
+  }
 }
 
 func createWithTrailingTriviaCall() -> FunctionCallExpr {
-  FunctionCallExpr(MemberAccessExpr(name: "withTrailingTrivia"), argumentListBuilder: { TupleExprElement(expression: createSpacingCall()) })
+  FunctionCallExpr(MemberAccessExpr(name: "withTrailingTrivia")) {
+    TupleExprElement(expression: createSpacingCall())
+  }
 }
 
 func createTokenSyntaxPatternBinding(_ pattern: ExpressibleAsPatternBuildable, accessor: ExpressibleAsSyntaxBuildable) -> PatternBinding {

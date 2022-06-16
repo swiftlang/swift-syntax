@@ -18,7 +18,7 @@ extension DictionaryExpr {
   public init(
     leftSquare: TokenSyntax = .`leftSquareBracket`,
     rightSquare: TokenSyntax = .`rightSquareBracket`,
-    @DictionaryElementListBuilder contentBuilder: () -> ExpressibleAsDictionaryElementList = { DictionaryElementList([]) }
+    @DictionaryElementListBuilder contentBuilder: () -> ExpressibleAsDictionaryElementList = { [] }
   ) {
     let elementList = contentBuilder().createDictionaryElementList()
     self.init(

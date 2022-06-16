@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 
 import PackageDescription
 import Foundation
@@ -94,11 +94,11 @@ let package = Package(
       name: "_SwiftSyntaxTestSupport",
       dependencies: ["SwiftSyntax"]
     ),
-    .target(
+    .executableTarget(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
     ),
-    .target(
+    .executableTarget(
         name: "SwiftSyntaxBuilderGeneration",
         dependencies: ["SwiftSyntaxBuilder"],
         exclude: [
@@ -142,3 +142,7 @@ let package = Package(
     ),
   ]
 )
+
+if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] == nil {
+    package.dependencies.append(.package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0"))
+}

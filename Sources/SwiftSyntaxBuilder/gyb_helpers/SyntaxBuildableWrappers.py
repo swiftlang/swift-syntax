@@ -191,6 +191,8 @@ class SyntaxBuildableType:
       token = self.token()
       if token and token.text:
         return ' = TokenSyntax.`%s`' % lowercase_first_word(token.name)
+      elif self.token_kind == 'EOFToken':
+        return ' = TokenSyntax.eof'
       else:
         return ''
     else:

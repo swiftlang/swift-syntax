@@ -72,12 +72,23 @@ final class FunctionTests: XCTestCase {
       TupleExprElement(expression: "42")
     })
     let syntax = buildable.buildSyntax(format: Format())
-    XCTAssertEqual(syntax.description, "test(42){}")
+    XCTAssertEqual(syntax.description, "test(42){\n}")
   }
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
-    let buildable = FunctionCallExpr("test", trailingClosure: ClosureExpr())
+    let closure = ClosureExpr(statementsBuilder: {
+      FunctionCallExpr("f", argumentListBuilder: {
+        TupleExprElement(expression: "a")
+      })
+    })
+    let buildable = FunctionCallExpr("test", trailingClosure: closure)
     let syntax = buildable.buildSyntax(format: Format())
-    XCTAssertEqual(syntax.description, "test{}")
+    XCTAssertEqual(
+      syntax.description,
+      """
+      test{
+          f(a)
+      }
+      """)
   }
 }

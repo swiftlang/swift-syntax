@@ -1475,7 +1475,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
 
   public func buildSwitchCaseList(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseListSyntax {
     let result = SyntaxFactory.makeSwitchCaseList(elements.map {
-      $0.buildSyntax(format: format, leadingTrivia: nil)
+      $0.buildSyntax(format: format, leadingTrivia: Trivia.newlines(1) + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
       return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))

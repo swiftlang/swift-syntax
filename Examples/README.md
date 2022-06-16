@@ -31,6 +31,6 @@
 
 [**Piranha**](https://github.com/uber/piranha): a tool for refactoring code related to feature flags.
 
-[**STAR**](https://github.com/thumbtack/star): a tool to find how often specified Swift type(s) are used in a project.## Some Example Users
+[**STAR**](https://github.com/thumbtack/star): a tool to find how often specified Swift type(s) are used in a project.
 
 [**Hatch**](https://github.com/sdidla/Hatch): Provides a simple, extensible parser to obtain a hierarchical list of symbols

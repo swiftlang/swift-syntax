@@ -3,25 +3,33 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class EnumCaseElementTests: XCTestCase {
-  func test_enumCaseElementInit() {
+  func testEnumInit() {
     let leadingTrivia = Trivia.garbageText("␣")
-    let string = SyntaxFactory.makeStringSegment("Hello World")
-    let segment = StringSegment(content: string)
-    let segments = StringLiteralSegments([segment])
+    let buildable = EnumDecl(
+      identifier: "Greeting",
+      inheritanceClause: TypeInheritanceClause(inheritedTypeCollectionBuilder: {
+        InheritedType(typeName: "String")
+        InheritedType(typeName: "Codable")
+        InheritedType(typeName: "Equatable")
+        }),
+      members: MemberDeclBlock(membersBuilder: {
+        MemberDeclListItem(decl: EnumCaseDecl(elementsBuilder: {
+          EnumCaseElement(
+            identifier: "goodMorning",
+            rawValue: InitializerClause(value: StringLiteralExpr("Good Morning")))
+          EnumCaseElement(
+            identifier: "helloWorld",
+            rawValue: InitializerClause(value: StringLiteralExpr("Hello World")))
+          EnumCaseElement(identifier: "hi")
+        }))
+      }))
+    let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
-    let stringLiteralExpr: ExprBuildable = StringLiteralExpr(openQuote: .stringQuote,
-                                                             segments: segments,
-                                                             closeQuote: .stringQuote)
-
-    let initializerClause = InitializerClause(value: stringLiteralExpr)
-
-    let enumCase = EnumCaseElement(identifier: "TestEnum",
-                                   rawValue: initializerClause)
-
-    let test = enumCase.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
-
-    var result = ""
-    test.write(to: &result)
-    XCTAssertEqual(result, "␣TestEnum = \"Hello World\"")
+    XCTAssertEqual(syntax.description,
+      """
+      ␣enum Greeting: String, Codable, Equatable{
+          case goodMorning = "Good Morning", helloWorld = "Hello World", hi
+      }
+      """)
   }
 }

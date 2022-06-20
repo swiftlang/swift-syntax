@@ -283,6 +283,15 @@ class SyntaxBuildableType:
         result.append(node.type())
     return result
 
+  def has_with_trailing_comma_trait(self):
+    """
+    Returns if this type has `WithTrailingComma` trait
+    """
+    for node in [SyntaxBuildableNode(node) for node in SYNTAX_NODES]:
+      if node.type() == self:
+        return node.node.traits and 'WithTrailingComma' in node.node.traits
+    return False
+
   def convertible_to_types(self):
     """
     Types that take a single non-optional parameter of this types and to which this type is thus convertible.

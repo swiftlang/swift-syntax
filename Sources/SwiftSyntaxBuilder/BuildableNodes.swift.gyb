@@ -1,6 +1,6 @@
 %{
   from gyb_syntax_support import SYNTAX_NODES
-  from gyb_helpers import SyntaxBuildableNode
+  from gyb_helpers import SyntaxBuildableNode, conformance_clause
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -23,10 +23,15 @@ import SwiftSyntax
 % for node in [SyntaxBuildableNode(syntax_node) for syntax_node in SYNTAX_NODES if syntax_node.is_buildable()]:
 %   type = node.type()
 %   base_type = node.base_type()
+%   conformances = [base_type.buildable(), type.expressible_as()]
+%   has_with_trailing_comma_trait = node.node.traits and 'WithTrailingComma' in node.node.traits
+%   if has_with_trailing_comma_trait:
+%     conformances.append("HasTrailingComma")
+%   end
 %   if node.documentation():
 /// ${node.documentation()}
 %   end
-public struct ${type.buildable()}: ${base_type.buildable()}, ${type.expressible_as()} {
+public struct ${type.buildable()}${conformance_clause(conformances)} {
 %   children = node.children()
 %   for child in children:
   let ${child.name()}: ${child.type().buildable()}
@@ -114,6 +119,23 @@ public struct ${type.buildable()}: ${base_type.buildable()}, ${type.expressible_
   public func create${type.buildable_base_name()}() -> ${type.buildable()} {
     return self
   }
+%   if has_with_trailing_comma_trait:
+%     trailing_comma_init_args = []
+%     for child in children:
+%       if child.name() == 'trailingComma':
+%         trailing_comma_init_args.append('%s: withComma ? .comma : nil' % (child.name()))
+%       else:
+%         trailing_comma_init_args.append('%s: %s' % (child.name(), child.name()))
+%       end
+%     end
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        ${',\n        '.join(trailing_comma_init_args)}
+      )
+  }
+%   end
 
   /// `${type.buildable()}` might conform to `${base_type.expressible_as()}` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `create${base_type.buildable_base_name()}`, some of which perform conversions through `ExpressibleAs*` protocols.

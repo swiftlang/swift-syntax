@@ -1629,7 +1629,7 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
     return self
   }
 }
-public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
+public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, HasTrailingComma {
   let label: TokenSyntax?
   let colon: TokenSyntax?
   let expression: ExprBuildable
@@ -1681,6 +1681,16 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
     return self
   }
 
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        label: label,
+        colon: colon,
+        expression: expression,
+        trailingComma: withComma ? .comma : nil
+      )
+  }
+
   /// `TupleExprElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
@@ -1689,7 +1699,7 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement {
   }
 
 }
-public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
+public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrailingComma {
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
@@ -1730,6 +1740,14 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
     return self
   }
 
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        expression: expression,
+        trailingComma: withComma ? .comma : nil
+      )
+  }
+
   /// `ArrayElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
@@ -1738,7 +1756,7 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement {
   }
 
 }
-public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement {
+public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement, HasTrailingComma {
   let keyExpression: ExprBuildable
   let colon: TokenSyntax
   let valueExpression: ExprBuildable
@@ -1788,6 +1806,16 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// Conformance to `ExpressibleAsDictionaryElement`.
   public func createDictionaryElement() -> DictionaryElement {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        keyExpression: keyExpression,
+        colon: colon,
+        valueExpression: valueExpression,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `DictionaryElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -2208,7 +2236,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
     return self
   }
 }
-public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureItem {
+public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureItem, HasTrailingComma {
   let specifier: TokenList?
   let name: TokenSyntax?
   let assignToken: TokenSyntax?
@@ -2281,6 +2309,17 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// Conformance to `ExpressibleAsClosureCaptureItem`.
   public func createClosureCaptureItem() -> ClosureCaptureItem {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        specifier: specifier,
+        name: name,
+        assignToken: assignToken,
+        expression: expression,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `ClosureCaptureItem` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -2360,7 +2399,7 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   }
 
 }
-public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam {
+public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrailingComma {
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
 
@@ -2399,6 +2438,14 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam {
   /// Conformance to `ExpressibleAsClosureParam`.
   public func createClosureParam() -> ClosureParam {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        name: name,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `ClosureParam` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -4894,7 +4941,7 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   }
 
 }
-public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType {
+public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTrailingComma {
   let typeName: TypeBuildable
   let trailingComma: TokenSyntax?
 
@@ -4933,6 +4980,14 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType {
   /// Conformance to `ExpressibleAsInheritedType`.
   public func createInheritedType() -> InheritedType {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        typeName: typeName,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `InheritedType` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -5660,7 +5715,7 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   }
 
 }
-public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter {
+public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter, HasTrailingComma {
   let attributes: AttributeList?
   let firstName: TokenSyntax?
   let secondName: TokenSyntax?
@@ -5755,6 +5810,20 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// Conformance to `ExpressibleAsFunctionParameter`.
   public func createFunctionParameter() -> FunctionParameter {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        attributes: attributes,
+        firstName: firstName,
+        secondName: secondName,
+        colon: colon,
+        type: type,
+        ellipsis: ellipsis,
+        defaultArgument: defaultArgument,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `FunctionParameter` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -6650,7 +6719,7 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   }
 
 }
-public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
+public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasTrailingComma {
   let pattern: PatternBuildable
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause?
@@ -6704,6 +6773,17 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding {
   /// Conformance to `ExpressibleAsPatternBinding`.
   public func createPatternBinding() -> PatternBinding {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        pattern: pattern,
+        typeAnnotation: typeAnnotation,
+        initializer: initializer,
+        accessor: accessor,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `PatternBinding` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -6796,7 +6876,7 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   }
 }
 /// An element of an enum case, containing the name of the case and,optionally, either associated values or an assignment to a raw value.
-public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
+public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, HasTrailingComma {
   let identifier: TokenSyntax
   let associatedValue: ParameterClause?
   let rawValue: InitializerClause?
@@ -6861,6 +6941,16 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement {
   /// Conformance to `ExpressibleAsEnumCaseElement`.
   public func createEnumCaseElement() -> EnumCaseElement {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        identifier: identifier,
+        associatedValue: associatedValue,
+        rawValue: rawValue,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `EnumCaseElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -7847,7 +7937,7 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
 
 }
 /// A labeled argument for the `@_specialize` attribute like`exported: true`
-public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpecializeEntry {
+public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpecializeEntry, HasTrailingComma {
   let label: TokenSyntax
   let colon: TokenSyntax
   let value: TokenSyntax
@@ -7915,6 +8005,16 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
     return self
   }
 
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        label: label,
+        colon: colon,
+        value: value,
+        trailingComma: withComma ? .comma : nil
+      )
+  }
+
   /// `LabeledSpecializeEntry` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
@@ -7924,7 +8024,7 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
 
 }
 /// A labeled argument for the `@_specialize` attribute with a functiondecl value like`target: myFunc(_:)`
-public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionEntry {
+public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionEntry, HasTrailingComma {
   let label: TokenSyntax
   let colon: TokenSyntax
   let declname: DeclName
@@ -7990,6 +8090,16 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// Conformance to `ExpressibleAsTargetFunctionEntry`.
   public func createTargetFunctionEntry() -> TargetFunctionEntry {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        label: label,
+        colon: colon,
+        declname: declname,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `TargetFunctionEntry` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -8451,7 +8561,7 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
 
 }
 /// A differentiability parameter: either the "self" identifier, a functionparameter name, or a function parameter index.
-public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiabilityParam {
+public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiabilityParam, HasTrailingComma {
   let parameter: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
@@ -8490,6 +8600,14 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// Conformance to `ExpressibleAsDifferentiabilityParam`.
   public func createDifferentiabilityParam() -> DifferentiabilityParam {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        parameter: parameter,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `DifferentiabilityParam` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -9958,7 +10076,7 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
     return self
   }
 }
-public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement {
+public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, HasTrailingComma {
   let condition: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
@@ -9997,6 +10115,14 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement {
   /// Conformance to `ExpressibleAsConditionElement`.
   public func createConditionElement() -> ConditionElement {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        condition: condition,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `ConditionElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -10696,7 +10822,7 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   }
 
 }
-public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
+public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma {
   let pattern: PatternBuildable
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
@@ -10742,6 +10868,15 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
     return self
   }
 
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        pattern: pattern,
+        whereClause: whereClause,
+        trailingComma: withComma ? .comma : nil
+      )
+  }
+
   /// `CaseItem` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
@@ -10750,7 +10885,7 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem {
   }
 
 }
-public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem {
+public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingComma {
   let pattern: PatternBuildable?
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
@@ -10794,6 +10929,15 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem {
   /// Conformance to `ExpressibleAsCatchItem`.
   public func createCatchItem() -> CatchItem {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        pattern: pattern,
+        whereClause: whereClause,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `CatchItem` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -11100,7 +11244,7 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   }
 
 }
-public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequirement {
+public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequirement, HasTrailingComma {
   let body: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
@@ -11139,6 +11283,14 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// Conformance to `ExpressibleAsGenericRequirement`.
   public func createGenericRequirement() -> GenericRequirement {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        body: body,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `GenericRequirement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -11202,7 +11354,7 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   }
 
 }
-public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
+public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, HasTrailingComma {
   let attributes: AttributeList?
   let name: TokenSyntax
   let colon: TokenSyntax?
@@ -11277,6 +11429,17 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
     return self
   }
 
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        attributes: attributes,
+        name: name,
+        colon: colon,
+        inheritedType: inheritedType,
+        trailingComma: withComma ? .comma : nil
+      )
+  }
+
   /// `GenericParameter` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
@@ -11285,7 +11448,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter {
   }
 
 }
-public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType {
+public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType, HasTrailingComma {
   let attributes: AttributeList?
   let name: TokenSyntax
   let colon: TokenSyntax?
@@ -11365,6 +11528,18 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `ExpressibleAsPrimaryAssociatedType`.
   public func createPrimaryAssociatedType() -> PrimaryAssociatedType {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        attributes: attributes,
+        name: name,
+        colon: colon,
+        inheritedType: inheritedType,
+        initializer: initializer,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `PrimaryAssociatedType` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -12229,7 +12404,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
     return self
   }
 }
-public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
+public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, HasTrailingComma {
   let inOut: TokenSyntax?
   let name: TokenSyntax?
   let secondName: TokenSyntax?
@@ -12301,6 +12476,20 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement {
   /// Conformance to `ExpressibleAsTupleTypeElement`.
   public func createTupleTypeElement() -> TupleTypeElement {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        inOut: inOut,
+        name: name,
+        secondName: secondName,
+        colon: colon,
+        type: type,
+        ellipsis: ellipsis,
+        initializer: initializer,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `TupleTypeElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -12566,7 +12755,7 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
     return self
   }
 }
-public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument {
+public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, HasTrailingComma {
   let argumentType: TypeBuildable
   let trailingComma: TokenSyntax?
 
@@ -12605,6 +12794,14 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument {
   /// Conformance to `ExpressibleAsGenericArgument`.
   public func createGenericArgument() -> GenericArgument {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        argumentType: argumentType,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `GenericArgument` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.
@@ -13163,7 +13360,7 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
     return self
   }
 }
-public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternElement {
+public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternElement, HasTrailingComma {
   let labelName: TokenSyntax?
   let labelColon: TokenSyntax?
   let pattern: PatternBuildable
@@ -13229,6 +13426,16 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// Conformance to `ExpressibleAsTuplePatternElement`.
   public func createTuplePatternElement() -> TuplePatternElement {
     return self
+  }
+
+  /// Conformance to `HasTrailingComma`.
+  public func withTrailingComma(_ withComma: Bool) -> Self {
+      return Self.init(
+        labelName: labelName,
+        labelColon: labelColon,
+        pattern: pattern,
+        trailingComma: withComma ? .comma : nil
+      )
   }
 
   /// `TuplePatternElement` might conform to `ExpressibleAsSyntaxBuildable` via different `ExpressibleAs*` paths.

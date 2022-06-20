@@ -6,8 +6,8 @@ final class ProtocolDeclTests: XCTestCase {
   func testProtocolDecl() {
     let returnType = ArrayType(elementType: "DeclSyntax")
     let input = ParameterClause(parameterListBuilder: {
-      FunctionParameter(firstName: .identifier("format"), colon: .colon, type: "Format", trailingComma: .comma, attributesBuilder: {})
-      FunctionParameter(firstName: .identifier("leadingTrivia"), colon: .colon, type: OptionalType(wrappedType: "Trivia"), attributesBuilder: {})
+      FunctionParameter(attributes: nil, firstName: .identifier("format"), colon: .colon, type: "Format")
+      FunctionParameter(attributes: nil, firstName: .identifier("leadingTrivia"), colon: .colon, type: OptionalType(wrappedType: "Trivia"))
     })
     let functionSignature = FunctionSignature(input: input, output: returnType)
 

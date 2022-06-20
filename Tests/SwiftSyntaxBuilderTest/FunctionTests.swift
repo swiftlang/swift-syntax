@@ -33,11 +33,11 @@ final class FunctionTests: XCTestCase {
         BinaryOperatorExpr("+"),
 
         FunctionCallExpr(MemberAccessExpr(base: "self", name: "fibonacci")) {
-          TupleExprElement(expression: SequenceExpr(elements: ExprList([
+          SequenceExpr(elements: ExprList([
             IntegerLiteralExpr(digits: "n"),
             BinaryOperatorExpr("-"),
             IntegerLiteralExpr(2),
-          ])))
+          ]))
         },
       ])))
     }

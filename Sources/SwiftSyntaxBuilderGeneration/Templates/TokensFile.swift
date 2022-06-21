@@ -96,35 +96,6 @@ let tokensFile = SourceFile {
           }
         }
       }
-      VariableDecl(
-        modifiers: [TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `eof` token") + .newlines(1))],
-        letOrVarKeyword: .var
-      ) {
-        // We need to use `CodeBlock` here to ensure there is braces around.
-        let body = CodeBlock {
-          FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeToken")) {
-            TupleExprElement(expression: MemberAccessExpr(name: "eof"))
-            TupleExprElement(label: TokenSyntax.identifier("presence"), colon: .colon, expression: MemberAccessExpr(name: "present"))
-          }
-        }
-
-        createTokenSyntaxPatternBinding("eof", accessor: body)
-      }
-      VariableDecl(
-        modifiers: [TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `open` contextual token") + .newlines(1))],
-        letOrVarKeyword: .var
-      ) {
-        // We need to use `CodeBlock` here to ensure there is braces around.
-        let body = CodeBlock {
-          FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeContextualKeyword")) {
-            TupleExprElement(expression: StringLiteralExpr("open"))
-          }
-
-          createWithTrailingTriviaCall()
-        }
-
-        createTokenSyntaxPatternBinding("open", accessor: body)
-      }
     }
     VariableDecl(
       modifiers: [TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `eof` token") + .newlines(1))],
@@ -133,7 +104,7 @@ let tokensFile = SourceFile {
       // We need to use `CodeBlock` here to ensure there is braces around.
       let body = CodeBlock {
         FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeToken")) {
-          TupleExprElement(expression: MemberAccessExpr(name: "eof"), trailingComma: .comma)
+          TupleExprElement(expression: MemberAccessExpr(name: "eof"))
           TupleExprElement(label: TokenSyntax.identifier("presence"), colon: .colon, expression: MemberAccessExpr(name: "present"))
         }
       }

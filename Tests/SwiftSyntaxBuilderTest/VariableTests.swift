@@ -30,14 +30,18 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplictiTrailingCommas() {
     let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
-      PatternBinding(pattern: "a", initializer: InitializerClause(value: ArrayExpr(elementsBuilder: {
+      PatternBinding(pattern: "a", initializer: InitializerClause(value: ArrayExpr(
+        leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newlines(1)),
+        elementsBuilder: {
         for i in 1...3 {
-          ArrayElement(expression: "\(i)", trailingComma: .comma)
+          ArrayElement(
+            expression: IntegerLiteralExpr(i),
+            trailingComma: .comma.withoutTrailingTrivia().withTrailingTrivia(.newlines(1)))
         }
       })))
     ])
     let syntax = buildable.buildSyntax(format: Format())
-    XCTAssertEqual(syntax.description, "let a = [1, 2, 3, ]")
+    XCTAssertEqual(syntax.description, "let a = [\n1,\n2,\n3,\n]")
   }
 
   func testMultiPatternVariableDecl() {

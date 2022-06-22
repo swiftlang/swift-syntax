@@ -12,4 +12,8 @@ BUILDER_INITIALIZABLE_TYPES = {
     'GenericParameterList': None,
     'GenericRequirementList': None,
     'InheritedTypeList': None,
+    'ClosureCaptureItemList': None,
+    'CaseItemList': None,
+    'GenericArgumentList': None,
+    'TuplePatternElementList': None,
 }

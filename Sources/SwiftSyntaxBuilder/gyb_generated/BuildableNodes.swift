@@ -2328,6 +2328,20 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
     assert(rightSquare.text == "]")
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
+    rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
+    @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? = { nil }
+  ) {
+    self.init(
+      leftSquare: leftSquare,
+      items: itemsBuilder(),
+      rightSquare: rightSquare
+    )
+  }
 
   func buildClosureCaptureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
     let result = SyntaxFactory.makeClosureCaptureSignature(
@@ -10736,6 +10750,20 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
     assert(colon.text == ":")
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    caseKeyword: TokenSyntax = TokenSyntax.`case`,
+    colon: TokenSyntax = TokenSyntax.`colon`,
+    @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList = { CaseItemList([]) }
+  ) {
+    self.init(
+      caseKeyword: caseKeyword,
+      caseItems: caseItemsBuilder(),
+      colon: colon
+    )
+  }
 
   func buildSwitchCaseLabel(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
     let result = SyntaxFactory.makeSwitchCaseLabel(
@@ -12512,6 +12540,20 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
     assert(rightAngleBracket.text == ">")
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
+    rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
+    @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList = { GenericArgumentList([]) }
+  ) {
+    self.init(
+      leftAngleBracket: leftAngleBracket,
+      arguments: argumentsBuilder(),
+      rightAngleBracket: rightAngleBracket
+    )
+  }
 
   func buildGenericArgumentClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
     let result = SyntaxFactory.makeGenericArgumentClause(
@@ -12916,6 +12958,20 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
     assert(rightParen.text == ")")
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList = { TuplePatternElementList([]) }
+  ) {
+    self.init(
+      leftParen: leftParen,
+      elements: elementsBuilder(),
+      rightParen: rightParen
+    )
+  }
 
   func buildTuplePattern(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
     let result = SyntaxFactory.makeTuplePattern(

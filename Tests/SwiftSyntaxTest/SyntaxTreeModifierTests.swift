@@ -8,7 +8,7 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
   let Pattern = SyntaxFactory.makePatternBinding(
     pattern: PatternSyntax(identifierPattern),
     typeAnnotation: SyntaxFactory.makeTypeAnnotation(
-      colon: SyntaxFactory.makeColonToken().withTrailingTrivia(.spaces(1)),
+      colon: SyntaxFactory.makeColonToken().withTrailingTrivia(.space),
       type: SyntaxFactory.makeTypeIdentifier("Int")),
     initializer: nil, accessor: nil, trailingComma: nil)
   return VariableDeclSyntax {

@@ -31,10 +31,8 @@ let copyrightHeader = """
 
     """
 
-func createSpacingCall() -> FunctionCallExpr {
-  FunctionCallExpr(MemberAccessExpr(name: "spaces")) {
-    TupleExprElement(expression: IntegerLiteralExpr(1))
-  }
+func createSpacingCall() -> MemberAccessExpr {
+  MemberAccessExpr(name: "space")
 }
 
 func createWithLeadingTriviaCall() -> FunctionCallExpr {

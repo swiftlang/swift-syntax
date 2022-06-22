@@ -30,15 +30,14 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplictiTrailingCommas() {
     let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
-      PatternBinding(pattern: "a", initializer: InitializerClause(value: ArrayExpr(
-        leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newlines(1)),
-        elementsBuilder: {
-        for i in 1...3 {
-          ArrayElement(
-            expression: IntegerLiteralExpr(i),
-            trailingComma: .comma.withoutTrailingTrivia().withTrailingTrivia(.newlines(1)))
-        }
-      })))
+      PatternBinding(pattern: "a", initializer: InitializerClause(
+        value: ArrayExpr(leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
+          for i in 1...3 {
+            ArrayElement(
+              expression: IntegerLiteralExpr(i),
+              trailingComma: .comma.withoutTrailingTrivia().withTrailingTrivia(.newline))
+          }
+        }))
     ])
     let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, "let a = [\n1,\n2,\n3,\n]")
@@ -53,7 +52,7 @@ final class VariableTests: XCTestCase {
       }))
       PatternBinding(pattern: "d", initializer: InitializerClause(value: DictionaryExpr {
         for i in 1...3 {
-          DictionaryElement(keyExpression: StringLiteralExpr("key\(i)"), valueExpression: "\(i)")
+          DictionaryElement(keyExpression: StringLiteralExpr("key\(i)"), valueExpression: IntegerLiteralExpr(i))
         }
       }))
       PatternBinding(pattern: "i", typeAnnotation: "Int")

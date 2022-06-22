@@ -4988,7 +4988,7 @@ public enum SyntaxFactory {
 
   public static func makeAssociatedtypeKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.associatedtypeKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -4996,7 +4996,7 @@ public enum SyntaxFactory {
   }
   public static func makeClassKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.classKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5004,7 +5004,7 @@ public enum SyntaxFactory {
   }
   public static func makeDeinitKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.deinitKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5012,7 +5012,7 @@ public enum SyntaxFactory {
   }
   public static func makeEnumKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.enumKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5020,7 +5020,7 @@ public enum SyntaxFactory {
   }
   public static func makeExtensionKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.extensionKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5028,7 +5028,7 @@ public enum SyntaxFactory {
   }
   public static func makeFuncKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.funcKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5036,7 +5036,7 @@ public enum SyntaxFactory {
   }
   public static func makeImportKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.importKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5044,7 +5044,7 @@ public enum SyntaxFactory {
   }
   public static func makeInitKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.initKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5052,7 +5052,7 @@ public enum SyntaxFactory {
   }
   public static func makeInoutKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.inoutKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5060,7 +5060,7 @@ public enum SyntaxFactory {
   }
   public static func makeLetKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.letKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5068,7 +5068,7 @@ public enum SyntaxFactory {
   }
   public static func makeOperatorKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.operatorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5076,7 +5076,7 @@ public enum SyntaxFactory {
   }
   public static func makePrecedencegroupKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.precedencegroupKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5084,7 +5084,7 @@ public enum SyntaxFactory {
   }
   public static func makeProtocolKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.protocolKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5092,7 +5092,7 @@ public enum SyntaxFactory {
   }
   public static func makeStructKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.structKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5100,7 +5100,7 @@ public enum SyntaxFactory {
   }
   public static func makeSubscriptKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.subscriptKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5108,7 +5108,7 @@ public enum SyntaxFactory {
   }
   public static func makeTypealiasKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.typealiasKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5116,7 +5116,7 @@ public enum SyntaxFactory {
   }
   public static func makeVarKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.varKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5124,7 +5124,7 @@ public enum SyntaxFactory {
   }
   public static func makeFileprivateKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.fileprivateKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5132,7 +5132,7 @@ public enum SyntaxFactory {
   }
   public static func makeInternalKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.internalKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5140,7 +5140,7 @@ public enum SyntaxFactory {
   }
   public static func makePrivateKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.privateKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5148,7 +5148,7 @@ public enum SyntaxFactory {
   }
   public static func makePublicKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.publicKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5156,7 +5156,7 @@ public enum SyntaxFactory {
   }
   public static func makeStaticKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.staticKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5164,7 +5164,7 @@ public enum SyntaxFactory {
   }
   public static func makeDeferKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.deferKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5172,7 +5172,7 @@ public enum SyntaxFactory {
   }
   public static func makeIfKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.ifKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5180,7 +5180,7 @@ public enum SyntaxFactory {
   }
   public static func makeGuardKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.guardKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5188,7 +5188,7 @@ public enum SyntaxFactory {
   }
   public static func makeDoKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.doKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5196,7 +5196,7 @@ public enum SyntaxFactory {
   }
   public static func makeRepeatKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.repeatKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5204,7 +5204,7 @@ public enum SyntaxFactory {
   }
   public static func makeElseKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.elseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5212,7 +5212,7 @@ public enum SyntaxFactory {
   }
   public static func makeForKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.forKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5220,7 +5220,7 @@ public enum SyntaxFactory {
   }
   public static func makeInKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.inKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5228,7 +5228,7 @@ public enum SyntaxFactory {
   }
   public static func makeWhileKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.whileKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5236,7 +5236,7 @@ public enum SyntaxFactory {
   }
   public static func makeReturnKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.returnKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5244,7 +5244,7 @@ public enum SyntaxFactory {
   }
   public static func makeBreakKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.breakKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5252,7 +5252,7 @@ public enum SyntaxFactory {
   }
   public static func makeContinueKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.continueKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5260,7 +5260,7 @@ public enum SyntaxFactory {
   }
   public static func makeFallthroughKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.fallthroughKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5268,7 +5268,7 @@ public enum SyntaxFactory {
   }
   public static func makeSwitchKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.switchKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5276,7 +5276,7 @@ public enum SyntaxFactory {
   }
   public static func makeCaseKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.caseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5284,7 +5284,7 @@ public enum SyntaxFactory {
   }
   public static func makeDefaultKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.defaultKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5292,7 +5292,7 @@ public enum SyntaxFactory {
   }
   public static func makeWhereKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.whereKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5300,7 +5300,7 @@ public enum SyntaxFactory {
   }
   public static func makeCatchKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.catchKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5308,7 +5308,7 @@ public enum SyntaxFactory {
   }
   public static func makeThrowKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.throwKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5316,7 +5316,7 @@ public enum SyntaxFactory {
   }
   public static func makeAsKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.asKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5324,7 +5324,7 @@ public enum SyntaxFactory {
   }
   public static func makeAnyKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.anyKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5332,7 +5332,7 @@ public enum SyntaxFactory {
   }
   public static func makeFalseKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.falseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5340,7 +5340,7 @@ public enum SyntaxFactory {
   }
   public static func makeIsKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.isKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5348,7 +5348,7 @@ public enum SyntaxFactory {
   }
   public static func makeNilKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.nilKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5356,7 +5356,7 @@ public enum SyntaxFactory {
   }
   public static func makeRethrowsKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.rethrowsKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5364,7 +5364,7 @@ public enum SyntaxFactory {
   }
   public static func makeSuperKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.superKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5372,7 +5372,7 @@ public enum SyntaxFactory {
   }
   public static func makeSelfKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.selfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5380,7 +5380,7 @@ public enum SyntaxFactory {
   }
   public static func makeCapitalSelfKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.capitalSelfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5388,7 +5388,7 @@ public enum SyntaxFactory {
   }
   public static func makeTrueKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.trueKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5396,7 +5396,7 @@ public enum SyntaxFactory {
   }
   public static func makeTryKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.tryKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5404,7 +5404,7 @@ public enum SyntaxFactory {
   }
   public static func makeThrowsKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.throwsKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5412,7 +5412,7 @@ public enum SyntaxFactory {
   }
   public static func make__FILE__Keyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.__file__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5420,7 +5420,7 @@ public enum SyntaxFactory {
   }
   public static func make__LINE__Keyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.__line__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5428,7 +5428,7 @@ public enum SyntaxFactory {
   }
   public static func make__COLUMN__Keyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.__column__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5436,7 +5436,7 @@ public enum SyntaxFactory {
   }
   public static func make__FUNCTION__Keyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.__function__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5444,7 +5444,7 @@ public enum SyntaxFactory {
   }
   public static func make__DSO_HANDLE__Keyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.__dso_handle__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5452,7 +5452,7 @@ public enum SyntaxFactory {
   }
   public static func makeWildcardKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.wildcardKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5507,16 +5507,16 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makeLeftAngleToken(
-    leadingTrivia: Trivia = [.spaces(1)],
-    trailingTrivia: Trivia = [.spaces(1)]
+    leadingTrivia: Trivia = .space,
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.leftAngle, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
   public static func makeRightAngleToken(
-    leadingTrivia: Trivia = [.spaces(1)],
-    trailingTrivia: Trivia = [.spaces(1)]
+    leadingTrivia: Trivia = .space,
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.rightAngle, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5540,7 +5540,7 @@ public enum SyntaxFactory {
   }
   public static func makeCommaToken(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.comma, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5556,7 +5556,7 @@ public enum SyntaxFactory {
   }
   public static func makeColonToken(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.colon, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5571,8 +5571,8 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makeEqualToken(
-    leadingTrivia: Trivia = [.spaces(1)],
-    trailingTrivia: Trivia = [.spaces(1)]
+    leadingTrivia: Trivia = .space,
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.equal, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5595,8 +5595,8 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makePrefixAmpersandToken(
-    leadingTrivia: Trivia = [.spaces(1)],
-    trailingTrivia: Trivia = [.spaces(1)]
+    leadingTrivia: Trivia = .space,
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.prefixAmpersand, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5604,7 +5604,7 @@ public enum SyntaxFactory {
   }
   public static func makeArrowToken(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.arrow, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5676,7 +5676,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundKeyPathKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundKeyPathKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5684,7 +5684,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundLineKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundLineKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5692,7 +5692,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundSelectorKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundSelectorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5700,7 +5700,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundFileKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundFileKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5708,7 +5708,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundFileIDKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundFileIDKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5716,7 +5716,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundFilePathKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundFilePathKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5724,7 +5724,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundColumnKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundColumnKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5732,7 +5732,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundFunctionKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundFunctionKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5740,7 +5740,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundDsohandleKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundDsohandleKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5748,7 +5748,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundAssertKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundAssertKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5756,7 +5756,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundSourceLocationKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundSourceLocationKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5764,7 +5764,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundWarningKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundWarningKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5772,7 +5772,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundErrorKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundErrorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5780,7 +5780,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundIfKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundIfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5788,7 +5788,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundElseKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundElseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5796,7 +5796,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundElseifKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundElseifKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5804,7 +5804,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundEndifKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundEndifKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5812,7 +5812,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundAvailableKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundAvailableKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5820,7 +5820,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundUnavailableKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundUnavailableKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5828,7 +5828,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundFileLiteralKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundFileLiteralKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5836,7 +5836,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundImageLiteralKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundImageLiteralKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5844,7 +5844,7 @@ public enum SyntaxFactory {
   }
   public static func makePoundColorLiteralKeyword(
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [.spaces(1)]
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.poundColorLiteralKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
@@ -5915,8 +5915,8 @@ public enum SyntaxFactory {
   }
   public static func makeSpacedBinaryOperator(
     _ text: String,
-    leadingTrivia: Trivia = [.spaces(1)],
-    trailingTrivia: Trivia = [.spaces(1)]
+    leadingTrivia: Trivia = .space,
+    trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.spacedBinaryOperator(text), presence: .present,
                      leadingTrivia: leadingTrivia,

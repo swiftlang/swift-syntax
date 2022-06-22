@@ -130,54 +130,100 @@ public struct Trivia {
     return sourceLength.utf8Length
   }
 
-    /// Return a piece of trivia for some number of ' ' characters.
-    public static func spaces(_ count: Int) -> Trivia {
-      return [.spaces(count)]
-    }
-    /// Return a piece of trivia for some number of '\t' characters.
-    public static func tabs(_ count: Int) -> Trivia {
-      return [.tabs(count)]
-    }
-    /// Return a piece of trivia for some number of '\u{2B7F}' characters.
-    public static func verticalTabs(_ count: Int) -> Trivia {
-      return [.verticalTabs(count)]
-    }
-    /// Return a piece of trivia for some number of '\u{240C}' characters.
-    public static func formfeeds(_ count: Int) -> Trivia {
-      return [.formfeeds(count)]
-    }
-    /// Return a piece of trivia for some number of '\n' characters.
-    public static func newlines(_ count: Int) -> Trivia {
-      return [.newlines(count)]
-    }
-    /// Return a piece of trivia for some number of '\r' characters.
-    public static func carriageReturns(_ count: Int) -> Trivia {
-      return [.carriageReturns(count)]
-    }
-    /// Return a piece of trivia for some number of '\r\n' characters.
-    public static func carriageReturnLineFeeds(_ count: Int) -> Trivia {
-      return [.carriageReturnLineFeeds(count)]
-    }
-    /// Return a piece of trivia for LineComment.
-    public static func lineComment(_ text: String) -> Trivia {
-      return [.lineComment(text)]
-    }
-    /// Return a piece of trivia for BlockComment.
-    public static func blockComment(_ text: String) -> Trivia {
-      return [.blockComment(text)]
-    }
-    /// Return a piece of trivia for DocLineComment.
-    public static func docLineComment(_ text: String) -> Trivia {
-      return [.docLineComment(text)]
-    }
-    /// Return a piece of trivia for DocBlockComment.
-    public static func docBlockComment(_ text: String) -> Trivia {
-      return [.docBlockComment(text)]
-    }
-    /// Return a piece of trivia for GarbageText.
-    public static func garbageText(_ text: String) -> Trivia {
-      return [.garbageText(text)]
-    }
+  /// Returns a piece of trivia for some number of ' ' characters.
+  public static func spaces(_ count: Int) -> Trivia {
+    return [.spaces(count)]
+  }
+
+  /// Gets a piece of trivia for ' ' characters.
+  public static var space: Trivia {
+    return .spaces(1)
+  }
+
+  /// Returns a piece of trivia for some number of '\t' characters.
+  public static func tabs(_ count: Int) -> Trivia {
+    return [.tabs(count)]
+  }
+
+  /// Gets a piece of trivia for '\t' characters.
+  public static var tab: Trivia {
+    return .tabs(1)
+  }
+
+  /// Returns a piece of trivia for some number of '\u{2B7F}' characters.
+  public static func verticalTabs(_ count: Int) -> Trivia {
+    return [.verticalTabs(count)]
+  }
+
+  /// Gets a piece of trivia for '\u{2B7F}' characters.
+  public static var verticalTab: Trivia {
+    return .verticalTabs(1)
+  }
+
+  /// Returns a piece of trivia for some number of '\u{240C}' characters.
+  public static func formfeeds(_ count: Int) -> Trivia {
+    return [.formfeeds(count)]
+  }
+
+  /// Gets a piece of trivia for '\u{240C}' characters.
+  public static var formfeed: Trivia {
+    return .formfeeds(1)
+  }
+
+  /// Returns a piece of trivia for some number of '\n' characters.
+  public static func newlines(_ count: Int) -> Trivia {
+    return [.newlines(count)]
+  }
+
+  /// Gets a piece of trivia for '\n' characters.
+  public static var newline: Trivia {
+    return .newlines(1)
+  }
+
+  /// Returns a piece of trivia for some number of '\r' characters.
+  public static func carriageReturns(_ count: Int) -> Trivia {
+    return [.carriageReturns(count)]
+  }
+
+  /// Gets a piece of trivia for '\r' characters.
+  public static var carriageReturn: Trivia {
+    return .carriageReturns(1)
+  }
+
+  /// Returns a piece of trivia for some number of '\r\n' characters.
+  public static func carriageReturnLineFeeds(_ count: Int) -> Trivia {
+    return [.carriageReturnLineFeeds(count)]
+  }
+
+  /// Gets a piece of trivia for '\r\n' characters.
+  public static var carriageReturnLineFeed: Trivia {
+    return .carriageReturnLineFeeds(1)
+  }
+
+  /// Returns a piece of trivia for LineComment.
+  public static func lineComment(_ text: String) -> Trivia {
+    return [.lineComment(text)]
+  }
+
+  /// Returns a piece of trivia for BlockComment.
+  public static func blockComment(_ text: String) -> Trivia {
+    return [.blockComment(text)]
+  }
+
+  /// Returns a piece of trivia for DocLineComment.
+  public static func docLineComment(_ text: String) -> Trivia {
+    return [.docLineComment(text)]
+  }
+
+  /// Returns a piece of trivia for DocBlockComment.
+  public static func docBlockComment(_ text: String) -> Trivia {
+    return [.docBlockComment(text)]
+  }
+
+  /// Returns a piece of trivia for GarbageText.
+  public static func garbageText(_ text: String) -> Trivia {
+    return [.garbageText(text)]
+  }
 }
 
 extension Trivia: Equatable {}

@@ -618,6 +618,6 @@ static var eof: TokenSyntax{
 /// The `open` contextual token
 static var open: TokenSyntax{
     SyntaxFactory.makeContextualKeyword("open")
-    .withTrailingTrivia(.spaces(1))
+    .withTrailingTrivia(.space)
   }
 }

@@ -20,10 +20,10 @@ extension FunctionCallExpr {
   public init(
     _ calledExpression: ExpressibleAsExprBuildable,
     trailingClosure: ExpressibleAsClosureExpr? = nil,
-    @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) },
-    @MultipleTrailingClosureElementListBuilder additionalTrailingClosuresBuilder: () -> MultipleTrailingClosureElementList? = { nil }
+    additionalTrailingClosures: MultipleTrailingClosureElementList? = nil,
+    @TupleExprElementListBuilder argumentList: () -> ExpressibleAsTupleExprElementList = { [] }
   ) {
-    let argumentList = argumentListBuilder().createTupleExprElementList()
+    let argumentList = argumentList().createTupleExprElementList()
     let shouldOmitParens = argumentList.elements.isEmpty && trailingClosure != nil
     self.init(
       calledExpression: calledExpression.createExprBuildable(),
@@ -31,7 +31,7 @@ extension FunctionCallExpr {
       argumentList: argumentList,
       rightParen: shouldOmitParens ? nil : .rightParen,
       trailingClosure: trailingClosure,
-      additionalTrailingClosures: additionalTrailingClosuresBuilder()
+      additionalTrailingClosures: additionalTrailingClosures
     )
   }
 }

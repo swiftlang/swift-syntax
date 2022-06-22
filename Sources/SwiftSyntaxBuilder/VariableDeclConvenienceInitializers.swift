@@ -16,9 +16,9 @@ extension VariableDecl {
   public init(_ letOrVarKeyword: TokenSyntax,
               name: ExpressibleAsIdentifierPattern,
               type: ExpressibleAsTypeAnnotation) {
-    self.init(letOrVarKeyword: letOrVarKeyword, bindingsBuilder: {
+    self.init(letOrVarKeyword: letOrVarKeyword) {
       PatternBinding(pattern: name.createIdentifierPattern(),
                      typeAnnotation: type.createTypeAnnotation())
-      })
+    }
   }
 }

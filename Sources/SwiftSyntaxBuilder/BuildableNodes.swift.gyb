@@ -1,6 +1,6 @@
 %{
   from gyb_syntax_support import SYNTAX_NODES
-  from gyb_helpers import SyntaxBuildableNode, conformance_clause
+  from gyb_helpers import SyntaxBuildableNode, SyntaxBuildableType, conformance_clause
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -66,10 +66,15 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
     delegated_init_args = []
     for child in node.children():
       produce_expr = None # The expression that is used to call the default initializer defined above
-      if child.type().is_syntax_collection(): # Allow initializing syntax collections with result builders
+      if child.type().is_builder_initializable(): # Allow initializing certain syntax collections with result builders
         create_convenience_initializer = True
-        default_value = ' = { nil }' if child.type().is_optional else ' = { %s([]) }' % (child.type().buildable())
-        convenience_init_result_builder_parameters.append('@%s %sBuilder: () -> %s%s' % (child.type().non_optional().result_builder(), child.name(), child.type().expressible_as(), default_value))
+        default_value = ' = { nil }' if child.type().is_optional else ' = { %s([]) }' % (child.type().builder_initializable_type().buildable())
+        convenience_init_result_builder_parameters.append('@%s %sBuilder: () -> %s%s' % (
+          child.type().builder_initializable_type().non_optional().result_builder(),
+          child.name(),
+          child.type().builder_initializable_type().expressible_as(),
+          default_value
+        ))
         produce_expr = '%sBuilder()' % child.name()
       elif child.type().token() and not child.type().token().text: # Allow initializing identifier or a token without default text with String value
         create_convenience_initializer = True

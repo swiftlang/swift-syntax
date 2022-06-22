@@ -10,15 +10,16 @@ final class ExtensionDeclTests: XCTestCase {
         FunctionCallExpr("SyntaxFactory.make\(keyword)Keyword")
       }
 
-      return VariableDecl(letOrVarKeyword: .var,
-                          modifiersBuilder: { TokenSyntax.public },
-                          bindingsBuilder: {
+      return VariableDecl(
+        modifiers: [TokenSyntax.public],
+        letOrVarKeyword: .var
+      ) {
         PatternBinding(pattern: "`\(keyword)`",
                        typeAnnotation: "TokenSyntax",
                        initializer: nil,
                        accessor: body)
 
-      })
+      }
     }
     let members = MemberDeclList(keywords)
     let buildable = ExtensionDecl(modifiers: nil,

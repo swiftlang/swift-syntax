@@ -15,16 +15,21 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 let tokensFile = SourceFile {
-  ImportDecl(importTok: TokenSyntax.import.withLeadingTrivia(.docLineComment(copyrightHeader)), path: "SwiftSyntax")
+  ImportDecl(
+    leadingTrivia: .docLineComment(copyrightHeader),
+    path: "SwiftSyntax"
+  )
 
   ExtensionDecl(
-    modifiers: [TokenSyntax.public.withLeadingTrivia(.newlines(1) + .docLineComment("/// Namespace for commonly used tokens with default trivia.") + .newlines(1))],
+    leadingTrivia: .newlines(1) + .docLineComment("/// Namespace for commonly used tokens with default trivia.") + .newlines(1),
+    modifiers: [TokenSyntax.public],
     extendedType: "TokenSyntax"
   ) {
     for token in SYNTAX_TOKENS {
       if token.isKeyword {
         VariableDecl(
-          modifiers: [token.text.map { TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\($0)` keyword") + .newlines(1)) } ?? TokenSyntax.static],
+          leadingTrivia: token.text.map { .newlines(1) + .docLineComment("/// The `\($0)` keyword") + .newlines(1) } ?? [],
+          modifiers: [TokenSyntax.static],
           letOrVarKeyword: .var
         ) {
           // We need to use `CodeBlock` here to ensure there is braces around.
@@ -37,7 +42,8 @@ let tokensFile = SourceFile {
         }
       } else if let text = token.text {
         VariableDecl(
-          modifiers: [TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `\(text)` token") + .newlines(1))],
+          leadingTrivia: .newlines(1) + .docLineComment("/// The `\(text)` token") + .newlines(1),
+          modifiers: [TokenSyntax.static],
           letOrVarKeyword: .var
         ) {
           // We need to use `CodeBlock` here to ensure there is braces around.
@@ -74,7 +80,8 @@ let tokensFile = SourceFile {
       }
     }
     VariableDecl(
-      modifiers: [TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `eof` token") + .newlines(1))],
+      leadingTrivia: .newlines(1) + .docLineComment("/// The `eof` token") + .newlines(1),
+      modifiers: [TokenSyntax.static],
       letOrVarKeyword: .var
     ) {
       // We need to use `CodeBlock` here to ensure there is braces around.
@@ -88,7 +95,8 @@ let tokensFile = SourceFile {
       createTokenSyntaxPatternBinding("eof", accessor: body)
     }
     VariableDecl(
-      modifiers: [TokenSyntax.static.withLeadingTrivia(.newlines(1) + .docLineComment("/// The `open` contextual token") + .newlines(1))],
+      leadingTrivia: .newlines(1) + .docLineComment("/// The `open` contextual token") + .newlines(1),
+      modifiers: [TokenSyntax.static],
       letOrVarKeyword: .var
     ) {
       // We need to use `CodeBlock` here to ensure there is braces around.

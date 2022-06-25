@@ -84,6 +84,11 @@ public struct Trivia {
     return Trivia(pieces: [])
   }
 
+  /// Whether the Trivia contains no pieces.
+  public var isEmpty: Bool {
+    pieces.isEmpty
+  }
+
   /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
   public func appending(_ piece: TriviaPiece) -> Trivia {
     var copy = pieces

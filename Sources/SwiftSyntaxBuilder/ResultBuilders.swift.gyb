@@ -89,7 +89,7 @@ public struct ${type.result_builder()} {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.create${element_type.buildable_base_name()}()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
 %   else:
     return .init(component.map { $0.create${element_type.buildable()}() })

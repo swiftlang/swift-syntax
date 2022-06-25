@@ -141,7 +141,7 @@ public struct TupleExprElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createTupleExprElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -209,7 +209,7 @@ public struct ArrayElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createArrayElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -277,7 +277,7 @@ public struct DictionaryElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createDictionaryElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -537,7 +537,7 @@ public struct ClosureCaptureItemListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createClosureCaptureItem()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -605,7 +605,7 @@ public struct ClosureParamListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createClosureParam()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -801,7 +801,7 @@ public struct FunctionParameterListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createFunctionParameter()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -933,7 +933,7 @@ public struct InheritedTypeListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createInheritedType()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -1257,7 +1257,7 @@ public struct PatternBindingListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createPatternBinding()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -1325,7 +1325,7 @@ public struct EnumCaseElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createEnumCaseElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -1905,7 +1905,7 @@ public struct DifferentiabilityParamListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createDifferentiabilityParam()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2165,7 +2165,7 @@ public struct CaseItemListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createCaseItem()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2233,7 +2233,7 @@ public struct CatchItemListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createCatchItem()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2301,7 +2301,7 @@ public struct ConditionElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createConditionElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2369,7 +2369,7 @@ public struct GenericRequirementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createGenericRequirement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2437,7 +2437,7 @@ public struct GenericParameterListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createGenericParameter()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2505,7 +2505,7 @@ public struct PrimaryAssociatedTypeListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createPrimaryAssociatedType()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2637,7 +2637,7 @@ public struct TupleTypeElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createTupleTypeElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2705,7 +2705,7 @@ public struct GenericArgumentListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createGenericArgument()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }
@@ -2773,7 +2773,7 @@ public struct TuplePatternElementListBuilder {
     let lastIndex = component.count - 1
     return .init(component.enumerated().map({ index, source in
       let element = source.createTuplePatternElement()
-      return index < lastIndex ? element.withTrailingComma(true) : element
+      return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
   }
 }

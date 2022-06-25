@@ -10,7 +10,17 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol HasTrailingComma {
+import SwiftSyntax
+
+protocol HasTrailingComma {
+  var trailingComma: TokenSyntax? { get }
+
   /// Returns this node overriding presence of the trailing comma
   func withTrailingComma(_ withComma: Bool) -> Self
+}
+
+extension HasTrailingComma {
+  func ensuringTrailingComma() -> Self {
+    trailingComma == nil ? withTrailingComma(true) : self
+  }
 }

@@ -23,7 +23,7 @@ extension DictionaryExpr {
     let elementList = contentBuilder().createDictionaryElementList()
     self.init(
       leftSquare: leftSquare,
-      content: elementList.elements.isEmpty ? SyntaxFactory.makeColonToken() : elementList,
+      content: elementList.elements.isEmpty ? SyntaxFactory.makeColonToken(trailingTrivia: []) : elementList,
       rightSquare: rightSquare
     )
   }

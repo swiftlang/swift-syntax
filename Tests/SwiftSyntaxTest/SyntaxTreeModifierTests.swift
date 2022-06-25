@@ -4,7 +4,6 @@ import SwiftSyntax
 fileprivate func cannedVarDecl() -> VariableDeclSyntax {
   let identifierPattern = SyntaxFactory.makeIdentifierPattern(
     identifier: SyntaxFactory.makeIdentifier("a")
-                .withLeadingTrivia(.spaces(1))
   )
   let Pattern = SyntaxFactory.makePatternBinding(
     pattern: PatternSyntax(identifierPattern),
@@ -23,7 +22,7 @@ public class SyntaxTreeModifierTests: XCTestCase {
   public func testAccessorAsModifier() {
     var VD = cannedVarDecl()
     XCTAssertEqual("\(VD)", "let a: Int")
-    VD.letOrVarKeyword = SyntaxFactory.makeVarKeyword().withTrailingTrivia(.spaces(0))
+    VD.letOrVarKeyword = SyntaxFactory.makeVarKeyword()
     XCTAssertEqual("\(VD)", "var a: Int")
   }
 }

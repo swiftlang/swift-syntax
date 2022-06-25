@@ -28,8 +28,6 @@ public class Token {
   public let text: String?
   public let classification: String
   public let isKeyword: Bool
-  public let requiresLeadingSpace: Bool
-  public let requiresTrailingSpace: Bool
 
   public var swiftKind: String {
     let name = self.name
@@ -41,7 +39,7 @@ public class Token {
     }
   }
 
-  public init(name: String, kind: String, serializationCode: Int, unprefixedKind: String? = nil, text: String? = nil, classification: String = "None", isKeyword: Bool = false, requiresLeadingSpace: Bool = false, requiresTrailingSpace: Bool = false) {
+  public init(name: String, kind: String, serializationCode: Int, unprefixedKind: String? = nil, text: String? = nil, classification: String = "None", isKeyword: Bool = false) {
     self.name = name
     self.kind = kind
     self.serializationCode = serializationCode
@@ -53,15 +51,13 @@ public class Token {
     self.text = text
     self.classification = classification
     self.isKeyword = isKeyword
-    self.requiresLeadingSpace = requiresLeadingSpace
-    self.requiresTrailingSpace = requiresTrailingSpace
   }
 }
 
 /// Represents a keyword token.
 public class Keyword: Token {
   public init(name: String, serializationCode: Int, text: String, classification: String = "Keyword") {
-    super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true, requiresTrailingSpace: true)
+    super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true)
   }
 }
 
@@ -79,7 +75,7 @@ public class SilKeyword: Keyword { }
 
 public class PoundKeyword: Token {
   public init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "Keyword") {
-    super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true, requiresTrailingSpace: true)
+    super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true)
   }
 }
 
@@ -127,8 +123,6 @@ let SYNTAX_TOKENS: [Token] = [
 %     if token.text:
 %       parameters += ["text: \"%s\"" % token.text]
 %     end
-%     parameters += ["requiresLeadingSpace: true"] if token.requires_leading_space else []
-%     parameters += ["requiresTrailingSpace: true"] if token.requires_trailing_space else []
 %   elif class_name == 'PoundObjectLiteral':
 %     parameters += ["kind: \"%s\"" % token.kind, "serializationCode: %s" % token.serialization_code, "text: \"%s\"" % token.text, "description: \"%s\"" % token.description, "protocol: \"%s\"" % token.protocol]
 %   else:

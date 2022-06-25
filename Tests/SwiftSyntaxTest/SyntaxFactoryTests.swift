@@ -61,15 +61,15 @@ public class SyntaxFactoryTests: XCTestCase {
 
   public func testTokenSyntax() {
     let tok = SyntaxFactory.makeStructKeyword()
-    XCTAssertEqual("\(tok)", "struct")
+    XCTAssertEqual("\(tok)", "struct ")
     XCTAssertTrue(tok.isPresent)
 
     let preSpacedTok = tok.withLeadingTrivia(.spaces(3))
-    XCTAssertEqual("\(preSpacedTok)", "   struct")
+    XCTAssertEqual("\(preSpacedTok)", "   struct ")
 
     var mutablePreSpacedTok = tok
     mutablePreSpacedTok.leadingTrivia = .spaces(4)
-    XCTAssertEqual("\(mutablePreSpacedTok)", "    struct")
+    XCTAssertEqual("\(mutablePreSpacedTok)", "    struct ")
 
     let postSpacedTok = tok.withTrailingTrivia(.spaces(6))
     XCTAssertEqual("\(postSpacedTok)", "struct      ")

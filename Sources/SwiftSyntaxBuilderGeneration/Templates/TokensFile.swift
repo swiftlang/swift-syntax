@@ -31,14 +31,6 @@ let tokensFile = SourceFile {
 
           let accessor = CodeBlock {
             FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Keyword"))
-
-            if token.requiresLeadingSpace {
-              createWithLeadingTriviaCall()
-            }
-
-            if token.requiresTrailingSpace {
-              createWithTrailingTriviaCall()
-            }
           }
 
           createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
@@ -51,14 +43,6 @@ let tokensFile = SourceFile {
           // We need to use `CodeBlock` here to ensure there is braces around.
           let accessor = CodeBlock {
             FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)Token"))
-
-            if token.requiresLeadingSpace {
-              createWithLeadingTriviaCall()
-            }
-
-            if token.requiresTrailingSpace {
-              createWithTrailingTriviaCall()
-            }
           }
 
           createTokenSyntaxPatternBinding("`\(token.name.withFirstCharacterLowercased)`", accessor: accessor)
@@ -85,14 +69,6 @@ let tokensFile = SourceFile {
         ) {
           FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)")) {
             TupleExprElement(expression: IdentifierExpr("text"))
-          }
-
-          if token.requiresLeadingSpace {
-            createWithLeadingTriviaCall()
-          }
-
-          if token.requiresTrailingSpace {
-            createWithTrailingTriviaCall()
           }
         }
       }

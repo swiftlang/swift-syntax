@@ -37,18 +37,24 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
   let ${child.name()}: ${child.type().buildable()}
 %   end
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `${type.buildable()}` using the provided parameters.
   /// - Parameters:
 %   for child in children:
   ///   - ${child.name()}: ${child.documentation()}
 %   end
   public init(
+    leadingTrivia: Trivia = [],
     ${',\n    '.join(['%s: %s%s' % (
       child.name(),
       child.type().expressible_as(),
       child.type().default_initialization()
     ) for child in children])}
   ) {
+    self.leadingTrivia = leadingTrivia
 %   for child in children:
 %     assert_stmt = child.generate_assert_stmt_text_choices(child.name())
     self.${child.name()} = ${child.type().generate_expr_convert_param_type_to_storage_type(child.name())}
@@ -95,28 +101,31 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     ${',\n    '.join(convenience_init_normal_parameters + convenience_init_result_builder_parameters)}
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       ${',\n      '.join(delegated_init_args)}
     )
   }
 %   end
 
-  func build${type.base_name()}(format: Format, leadingTrivia: Trivia? = nil) -> ${type.syntax()} {
+  /// Builds a `${type.syntax()}`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `${type.syntax()}`.
+  func build${type.base_name()}(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ${type.syntax()} {
     let result = SyntaxFactory.make${type.base_name()}(
       ${',\n      '.join(['%s: %s' % (child.name(), child.generate_expr_build_syntax_node(child.name(), 'format')) for child in children])}
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `${base_type.buildable()}`.
-  public func build${base_type.base_name()}(format: Format, leadingTrivia: Trivia? = nil) -> ${base_type.syntax()} {
-    let result = build${type.base_name()}(format: format, leadingTrivia: leadingTrivia)
+  public func build${base_type.base_name()}(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ${base_type.syntax()} {
+    let result = build${type.base_name()}(format: format, leadingTrivia: additionalLeadingTrivia)
     return ${base_type.syntax()}(result)
   }
 

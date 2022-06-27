@@ -4985,746 +4985,1009 @@ public enum SyntaxFactory {
 
 /// MARK: Token Creation APIs
 
-  public static func makeAssociatedtypeKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+
+  public static func makeAssociatedtypeKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.associatedtypeKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeClassKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeClassKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.classKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeDeinitKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeDeinitKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.deinitKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeEnumKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeEnumKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.enumKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeExtensionKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeExtensionKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.extensionKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeFuncKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeFuncKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.funcKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeImportKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeImportKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.importKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeInitKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeInitKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.initKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeInoutKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeInoutKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.inoutKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeLetKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeLetKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.letKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeOperatorKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeOperatorKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.operatorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePrecedencegroupKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePrecedencegroupKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.precedencegroupKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeProtocolKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeProtocolKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.protocolKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeStructKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeStructKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.structKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSubscriptKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSubscriptKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.subscriptKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeTypealiasKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeTypealiasKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.typealiasKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeVarKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeVarKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.varKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeFileprivateKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeFileprivateKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.fileprivateKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeInternalKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeInternalKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.internalKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePrivateKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePrivateKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.privateKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePublicKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePublicKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.publicKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeStaticKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeStaticKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.staticKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeDeferKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeDeferKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.deferKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeIfKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeIfKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.ifKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeGuardKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeGuardKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.guardKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeDoKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeDoKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.doKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRepeatKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRepeatKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.repeatKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeElseKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeElseKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.elseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeForKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeForKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.forKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeInKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeInKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.inKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeWhileKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeWhileKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.whileKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeReturnKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeReturnKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.returnKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeBreakKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeBreakKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.breakKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeContinueKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeContinueKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.continueKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeFallthroughKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeFallthroughKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.fallthroughKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSwitchKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSwitchKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.switchKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeCaseKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeCaseKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.caseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeDefaultKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeDefaultKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.defaultKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeWhereKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeWhereKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.whereKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeCatchKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeCatchKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.catchKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeThrowKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeThrowKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.throwKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeAsKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeAsKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.asKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeAnyKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeAnyKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.anyKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeFalseKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeFalseKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.falseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeIsKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeIsKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.isKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeNilKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeNilKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.nilKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRethrowsKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRethrowsKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.rethrowsKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSuperKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSuperKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.superKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSelfKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSelfKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.selfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeCapitalSelfKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeCapitalSelfKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.capitalSelfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeTrueKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeTrueKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.trueKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeTryKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeTryKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.tryKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeThrowsKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeThrowsKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.throwsKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func make__FILE__Keyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make__FILE__Keyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.__file__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func make__LINE__Keyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make__LINE__Keyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.__line__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func make__COLUMN__Keyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make__COLUMN__Keyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.__column__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func make__FUNCTION__Keyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make__FUNCTION__Keyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.__function__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func make__DSO_HANDLE__Keyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make__DSO_HANDLE__Keyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.__dso_handle__Keyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeWildcardKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeWildcardKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.wildcardKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeLeftParenToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeLeftParenToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.leftParen, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRightParenToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRightParenToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.rightParen, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeLeftBraceToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeLeftBraceToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.leftBrace, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRightBraceToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRightBraceToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.rightBrace, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeLeftSquareBracketToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeLeftSquareBracketToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.leftSquareBracket, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRightSquareBracketToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRightSquareBracketToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.rightSquareBracket, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeLeftAngleToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeLeftAngleToken(
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.leftAngle, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRightAngleToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRightAngleToken(
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.rightAngle, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePeriodToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePeriodToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.period, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePrefixPeriodToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePrefixPeriodToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.prefixPeriod, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeCommaToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeCommaToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.comma, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeEllipsisToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeEllipsisToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.ellipsis, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeColonToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeColonToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.colon, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSemicolonToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSemicolonToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.semicolon, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeEqualToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeEqualToken(
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.equal, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeAtSignToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeAtSignToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.atSign, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.pound, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePrefixAmpersandToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePrefixAmpersandToken(
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.prefixAmpersand, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeArrowToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeArrowToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.arrow, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeBacktickToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeBacktickToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.backtick, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeBackslashToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeBackslashToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.backslash, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeExclamationMarkToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeExclamationMarkToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.exclamationMark, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePostfixQuestionMarkToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePostfixQuestionMarkToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.postfixQuestionMark, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeInfixQuestionMarkToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeInfixQuestionMarkToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.infixQuestionMark, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeStringQuoteToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeStringQuoteToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.stringQuote, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSingleQuoteToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSingleQuoteToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.singleQuote, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeMultilineStringQuoteToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeMultilineStringQuoteToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.multilineStringQuote, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundKeyPathKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundKeyPathKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundKeyPathKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundLineKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundLineKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundLineKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundSelectorKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundSelectorKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundSelectorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundFileKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundFileKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundFileKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundFileIDKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundFileIDKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundFileIDKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundFilePathKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundFilePathKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundFilePathKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundColumnKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundColumnKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundColumnKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundFunctionKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundFunctionKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundFunctionKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundDsohandleKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundDsohandleKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundDsohandleKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundAssertKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundAssertKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundAssertKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundSourceLocationKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundSourceLocationKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundSourceLocationKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundWarningKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundWarningKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundWarningKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundErrorKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundErrorKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundErrorKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundIfKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundIfKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundIfKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundElseKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundElseKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundElseKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundElseifKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundElseifKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundElseifKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundEndifKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundEndifKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundEndifKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundAvailableKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundAvailableKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundAvailableKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundUnavailableKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundUnavailableKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundUnavailableKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundFileLiteralKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundFileLiteralKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundFileLiteralKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundImageLiteralKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundImageLiteralKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundImageLiteralKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePoundColorLiteralKeyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePoundColorLiteralKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.poundColorLiteralKeyword, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeIntegerLiteral(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeIntegerLiteral(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.integerLiteral(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeFloatingLiteral(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeFloatingLiteral(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.floatingLiteral(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeStringLiteral(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeStringLiteral(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.stringLiteral(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRegexLiteral(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRegexLiteral(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.regexLiteral(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeUnknown(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeUnknown(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.unknown(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeIdentifier(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeIdentifier(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.identifier(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeUnspacedBinaryOperator(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeUnspacedBinaryOperator(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.unspacedBinaryOperator(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeSpacedBinaryOperator(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeSpacedBinaryOperator(
+    _ text: String,
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
+  ) -> TokenSyntax {
     return makeToken(.spacedBinaryOperator(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePostfixOperator(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePostfixOperator(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.postfixOperator(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makePrefixOperator(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makePrefixOperator(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.prefixOperator(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeDollarIdentifier(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeDollarIdentifier(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.dollarIdentifier(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeContextualKeyword(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeContextualKeyword(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.contextualKeyword(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeRawStringDelimiter(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeRawStringDelimiter(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.rawStringDelimiter(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeStringSegment(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeStringSegment(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.stringSegment(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeStringInterpolationAnchorToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeStringInterpolationAnchorToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.stringInterpolationAnchor, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
-  public static func makeYieldToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func makeYieldToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
     return makeToken(.yield, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)

@@ -21,8 +21,6 @@ public class Token {
   public let text: String?
   public let classification: String
   public let isKeyword: Bool
-  public let requiresLeadingSpace: Bool
-  public let requiresTrailingSpace: Bool
 
   public var swiftKind: String {
     let name = self.name
@@ -34,7 +32,7 @@ public class Token {
     }
   }
 
-  public init(name: String, kind: String, serializationCode: Int, unprefixedKind: String? = nil, text: String? = nil, classification: String = "None", isKeyword: Bool = false, requiresLeadingSpace: Bool = false, requiresTrailingSpace: Bool = false) {
+  public init(name: String, kind: String, serializationCode: Int, unprefixedKind: String? = nil, text: String? = nil, classification: String = "None", isKeyword: Bool = false) {
     self.name = name
     self.kind = kind
     self.serializationCode = serializationCode
@@ -46,15 +44,13 @@ public class Token {
     self.text = text
     self.classification = classification
     self.isKeyword = isKeyword
-    self.requiresLeadingSpace = requiresLeadingSpace
-    self.requiresTrailingSpace = requiresTrailingSpace
   }
 }
 
 /// Represents a keyword token.
 public class Keyword: Token {
   public init(name: String, serializationCode: Int, text: String, classification: String = "Keyword") {
-    super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true, requiresTrailingSpace: true)
+    super.init(name: name, kind: "kw_\(text)", serializationCode: serializationCode, unprefixedKind: text, text: text, classification: classification, isKeyword: true)
   }
 }
 
@@ -72,7 +68,7 @@ public class SilKeyword: Keyword { }
 
 public class PoundKeyword: Token {
   public init(name: String, kind: String, serializationCode: Int, text: String, classification: String = "Keyword") {
-    super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true, requiresTrailingSpace: true)
+    super.init(name: name, kind: "pound_\(kind)", serializationCode: serializationCode, unprefixedKind: kind, text: text, classification: classification, isKeyword: true)
   }
 }
 
@@ -173,19 +169,19 @@ let SYNTAX_TOKENS: [Token] = [
     Punctuator(name: "RightBrace", kind: "r_brace", serializationCode: 91, text: "}"),
     Punctuator(name: "LeftSquareBracket", kind: "l_square", serializationCode: 92, text: "["),
     Punctuator(name: "RightSquareBracket", kind: "r_square", serializationCode: 93, text: "]"),
-    Punctuator(name: "LeftAngle", kind: "l_angle", serializationCode: 94, text: "<", requiresLeadingSpace: true, requiresTrailingSpace: true),
-    Punctuator(name: "RightAngle", kind: "r_angle", serializationCode: 95, text: ">", requiresLeadingSpace: true, requiresTrailingSpace: true),
+    Punctuator(name: "LeftAngle", kind: "l_angle", serializationCode: 94, text: "<"),
+    Punctuator(name: "RightAngle", kind: "r_angle", serializationCode: 95, text: ">"),
     Punctuator(name: "Period", kind: "period", serializationCode: 85, text: "."),
     Punctuator(name: "PrefixPeriod", kind: "period_prefix", serializationCode: 87, text: "."),
-    Punctuator(name: "Comma", kind: "comma", serializationCode: 84, text: ",", requiresTrailingSpace: true),
+    Punctuator(name: "Comma", kind: "comma", serializationCode: 84, text: ","),
     Punctuator(name: "Ellipsis", kind: "ellipsis", serializationCode: 118, text: "..."),
-    Punctuator(name: "Colon", kind: "colon", serializationCode: 82, text: ":", requiresTrailingSpace: true),
+    Punctuator(name: "Colon", kind: "colon", serializationCode: 82, text: ":"),
     Punctuator(name: "Semicolon", kind: "semi", serializationCode: 83, text: ";"),
-    Punctuator(name: "Equal", kind: "equal", serializationCode: 86, text: "=", requiresLeadingSpace: true, requiresTrailingSpace: true),
+    Punctuator(name: "Equal", kind: "equal", serializationCode: 86, text: "="),
     Punctuator(name: "AtSign", kind: "at_sign", serializationCode: 80, text: "@"),
     Punctuator(name: "Pound", kind: "pound", serializationCode: 81, text: "#"),
-    Punctuator(name: "PrefixAmpersand", kind: "amp_prefix", serializationCode: 96, text: "&", requiresLeadingSpace: true, requiresTrailingSpace: true),
-    Punctuator(name: "Arrow", kind: "arrow", serializationCode: 78, text: "->", requiresTrailingSpace: true),
+    Punctuator(name: "PrefixAmpersand", kind: "amp_prefix", serializationCode: 96, text: "&"),
+    Punctuator(name: "Arrow", kind: "arrow", serializationCode: 78, text: "->"),
     Punctuator(name: "Backtick", kind: "backtick", serializationCode: 79, text: "`"),
     Punctuator(name: "Backslash", kind: "backslash", serializationCode: 100, text: "\\"),
     Punctuator(name: "ExclamationMark", kind: "exclaim_postfix", serializationCode: 99, text: "!"),
@@ -223,7 +219,7 @@ let SYNTAX_TOKENS: [Token] = [
     Misc(name: "Unknown", kind: "unknown", serializationCode: 115),
     Misc(name: "Identifier", kind: "identifier", serializationCode: 105),
     Misc(name: "UnspacedBinaryOperator", kind: "oper_binary_unspaced", serializationCode: 107),
-    Misc(name: "SpacedBinaryOperator", kind: "oper_binary_spaced", serializationCode: 108, requiresLeadingSpace: true, requiresTrailingSpace: true),
+    Misc(name: "SpacedBinaryOperator", kind: "oper_binary_spaced", serializationCode: 108),
     Misc(name: "PostfixOperator", kind: "oper_postfix", serializationCode: 110),
     Misc(name: "PrefixOperator", kind: "oper_prefix", serializationCode: 109),
     Misc(name: "DollarIdentifier", kind: "dollarident", serializationCode: 106),

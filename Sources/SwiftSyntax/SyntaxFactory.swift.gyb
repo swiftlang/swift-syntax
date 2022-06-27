@@ -101,24 +101,38 @@ public enum SyntaxFactory {
 
 /// MARK: Token Creation APIs
 
+%{
+  def token_trivia(requires_space):
+    return '[.spaces(1)]' if requires_space else '[]'
+}%
+
 % for token in SYNTAX_TOKENS:
+%   leading_trivia = token_trivia(token.requires_leading_space)
+%   trailing_trivia = token_trivia(token.requires_trailing_space)
 %   if token.is_keyword:
-  public static func make${token.name}Keyword(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make${token.name}Keyword(
+    leadingTrivia: Trivia = ${leading_trivia},
+    trailingTrivia: Trivia = ${trailing_trivia}
+  ) -> TokenSyntax {
     return makeToken(.${token.swift_kind()}, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
 %   elif token.text:
-  public static func make${token.name}Token(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make${token.name}Token(
+    leadingTrivia: Trivia = ${leading_trivia},
+    trailingTrivia: Trivia = ${trailing_trivia}
+  ) -> TokenSyntax {
     return makeToken(.${token.swift_kind()}, presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)
   }
 %   else:
-  public static func make${token.name}(_ text: String,
-    leadingTrivia: Trivia = [], trailingTrivia: Trivia = []) -> TokenSyntax {
+  public static func make${token.name}(
+    _ text: String,
+    leadingTrivia: Trivia = ${leading_trivia},
+    trailingTrivia: Trivia = ${trailing_trivia}
+  ) -> TokenSyntax {
     return makeToken(.${token.swift_kind()}(text), presence: .present,
                      leadingTrivia: leadingTrivia,
                      trailingTrivia: trailingTrivia)

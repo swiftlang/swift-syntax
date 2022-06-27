@@ -49,7 +49,12 @@ public struct ${type.result_builder()} {
   public static func buildExpression(_ expression: Expression) -> Component {
     return [expression]
   }
-
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: ${type.expressible_as()}) -> Component {
+    return expression.create${type.buildable()}().elements
+  }
+  
   /// Enables support for `if` statements that do not have an `else`.
   public static func buildOptional(_ component: Component?) -> Component {
     return component ?? []

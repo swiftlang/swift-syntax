@@ -20,16 +20,22 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   let semicolon: TokenSyntax?
   let errorTokens: SyntaxBuildable?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CodeBlockItem` using the provided parameters.
   /// - Parameters:
   ///   - item: The underlying node inside the code block.
   ///   - semicolon: If present, the trailing semicolon at the end of the item.
   ///   - errorTokens: 
   public init(
+    leadingTrivia: Trivia = [],
     item: ExpressibleAsSyntaxBuildable,
     semicolon: TokenSyntax? = nil,
     errorTokens: ExpressibleAsSyntaxBuildable? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.item = item.createSyntaxBuildable()
     self.semicolon = semicolon
     assert(semicolon == nil || semicolon!.text == ";")
@@ -37,22 +43,23 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   }
 
 
-  func buildCodeBlockItem(format: Format, leadingTrivia: Trivia? = nil) -> CodeBlockItemSyntax {
+  /// Builds a `CodeBlockItemSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CodeBlockItemSyntax`.
+  func buildCodeBlockItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockItemSyntax {
     let result = SyntaxFactory.makeCodeBlockItem(
       item: item.buildSyntax(format: format, leadingTrivia: nil),
       semicolon: semicolon,
       errorTokens: errorTokens?.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCodeBlockItem(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCodeBlockItem(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -74,16 +81,22 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   let statements: CodeBlockItemList
   let rightBrace: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CodeBlock` using the provided parameters.
   /// - Parameters:
   ///   - leftBrace: 
   ///   - statements: 
   ///   - rightBrace: 
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     statements: ExpressibleAsCodeBlockItemList,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
     self.statements = statements.createCodeBlockItemList()
@@ -95,33 +108,36 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftBrace: leftBrace,
       statements: statementsBuilder(),
       rightBrace: rightBrace
     )
   }
 
-  func buildCodeBlock(format: Format, leadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
+  /// Builds a `CodeBlockSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CodeBlockSyntax`.
+  func buildCodeBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
     let result = SyntaxFactory.makeCodeBlock(
       leftBrace: leftBrace,
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCodeBlock(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCodeBlock(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -142,35 +158,42 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   let ampersand: TokenSyntax
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `InOutExpr` using the provided parameters.
   /// - Parameters:
   ///   - ampersand: 
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     ampersand: TokenSyntax = TokenSyntax.`prefixAmpersand`,
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.ampersand = ampersand
     assert(ampersand.text == "&")
     self.expression = expression.createExprBuildable()
   }
 
 
-  func buildInOutExpr(format: Format, leadingTrivia: Trivia? = nil) -> InOutExprSyntax {
+  /// Builds a `InOutExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `InOutExprSyntax`.
+  func buildInOutExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InOutExprSyntax {
     let result = SyntaxFactory.makeInOutExpr(
       ampersand: ampersand,
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildInOutExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildInOutExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -196,31 +219,38 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
 public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   let poundColumn: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundColumnExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundColumn: 
   public init(
+    leadingTrivia: Trivia = [],
     poundColumn: TokenSyntax = TokenSyntax.`poundColumn`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundColumn = poundColumn
     assert(poundColumn.text == "#column")
   }
 
 
-  func buildPoundColumnExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
+  /// Builds a `PoundColumnExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundColumnExprSyntax`.
+  func buildPoundColumnExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
     let result = SyntaxFactory.makePoundColumnExpr(
       poundColumn: poundColumn
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundColumnExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundColumnExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -248,16 +278,22 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   let questionOrExclamationMark: TokenSyntax?
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TryExpr` using the provided parameters.
   /// - Parameters:
   ///   - tryKeyword: 
   ///   - questionOrExclamationMark: 
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     tryKeyword: TokenSyntax = TokenSyntax.`try`,
     questionOrExclamationMark: TokenSyntax? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.tryKeyword = tryKeyword
     assert(tryKeyword.text == "try")
     self.questionOrExclamationMark = questionOrExclamationMark
@@ -266,22 +302,23 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   }
 
 
-  func buildTryExpr(format: Format, leadingTrivia: Trivia? = nil) -> TryExprSyntax {
+  /// Builds a `TryExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TryExprSyntax`.
+  func buildTryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TryExprSyntax {
     let result = SyntaxFactory.makeTryExpr(
       tryKeyword: tryKeyword,
       questionOrExclamationMark: questionOrExclamationMark,
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTryExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildTryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -308,14 +345,20 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   let awaitKeyword: TokenSyntax
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AwaitExpr` using the provided parameters.
   /// - Parameters:
   ///   - awaitKeyword: 
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     awaitKeyword: TokenSyntax,
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.awaitKeyword = awaitKeyword
     assert(awaitKeyword.text == "await")
     self.expression = expression.createExprBuildable()
@@ -325,30 +368,33 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     awaitKeyword: String,
     expression: ExpressibleAsExprBuildable
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       awaitKeyword: TokenSyntax.identifier(awaitKeyword),
       expression: expression
     )
   }
 
-  func buildAwaitExpr(format: Format, leadingTrivia: Trivia? = nil) -> AwaitExprSyntax {
+  /// Builds a `AwaitExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AwaitExprSyntax`.
+  func buildAwaitExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AwaitExprSyntax {
     let result = SyntaxFactory.makeAwaitExpr(
       awaitKeyword: awaitKeyword,
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildAwaitExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildAwaitExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -375,35 +421,42 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   let name: TokenSyntax
   let colon: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeclNameArgument` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - colon: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.colon = colon
     assert(colon.text == ":")
   }
 
 
-  func buildDeclNameArgument(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
+  /// Builds a `DeclNameArgumentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeclNameArgumentSyntax`.
+  func buildDeclNameArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
     let result = SyntaxFactory.makeDeclNameArgument(
       name: name,
       colon: colon
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclNameArgument(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDeclNameArgument(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -425,16 +478,22 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   let arguments: DeclNameArgumentList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeclNameArguments` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - arguments: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     arguments: ExpressibleAsDeclNameArgumentList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.arguments = arguments.createDeclNameArgumentList()
@@ -443,22 +502,23 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   }
 
 
-  func buildDeclNameArguments(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
+  /// Builds a `DeclNameArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeclNameArgumentsSyntax`.
+  func buildDeclNameArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
     let result = SyntaxFactory.makeDeclNameArguments(
       leftParen: leftParen,
       arguments: arguments.buildDeclNameArgumentList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclNameArguments(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDeclNameArguments(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -479,34 +539,41 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   let identifier: TokenSyntax
   let declNameArguments: DeclNameArguments?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IdentifierExpr` using the provided parameters.
   /// - Parameters:
   ///   - identifier: 
   ///   - declNameArguments: 
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.identifier = identifier
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
 
 
-  func buildIdentifierExpr(format: Format, leadingTrivia: Trivia? = nil) -> IdentifierExprSyntax {
+  /// Builds a `IdentifierExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IdentifierExprSyntax`.
+  func buildIdentifierExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierExprSyntax {
     let result = SyntaxFactory.makeIdentifierExpr(
       identifier: identifier,
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildIdentifierExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildIdentifierExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -532,31 +599,38 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
 public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   let superKeyword: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SuperRefExpr` using the provided parameters.
   /// - Parameters:
   ///   - superKeyword: 
   public init(
+    leadingTrivia: Trivia = [],
     superKeyword: TokenSyntax = TokenSyntax.`super`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.superKeyword = superKeyword
     assert(superKeyword.text == "super")
   }
 
 
-  func buildSuperRefExpr(format: Format, leadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
+  /// Builds a `SuperRefExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SuperRefExprSyntax`.
+  func buildSuperRefExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
     let result = SyntaxFactory.makeSuperRefExpr(
       superKeyword: superKeyword
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSuperRefExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildSuperRefExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -582,31 +656,38 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
 public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   let nilKeyword: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `NilLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - nilKeyword: 
   public init(
+    leadingTrivia: Trivia = [],
     nilKeyword: TokenSyntax = TokenSyntax.`nil`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.nilKeyword = nilKeyword
     assert(nilKeyword.text == "nil")
   }
 
 
-  func buildNilLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
+  /// Builds a `NilLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `NilLiteralExprSyntax`.
+  func buildNilLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
     let result = SyntaxFactory.makeNilLiteralExpr(
       nilKeyword: nilKeyword
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildNilLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildNilLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -632,31 +713,38 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
 public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignmentExpr {
   let wildcard: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DiscardAssignmentExpr` using the provided parameters.
   /// - Parameters:
   ///   - wildcard: 
   public init(
+    leadingTrivia: Trivia = [],
     wildcard: TokenSyntax = TokenSyntax.`wildcard`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.wildcard = wildcard
     assert(wildcard.text == "_")
   }
 
 
-  func buildDiscardAssignmentExpr(format: Format, leadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
+  /// Builds a `DiscardAssignmentExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DiscardAssignmentExprSyntax`.
+  func buildDiscardAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
     let result = SyntaxFactory.makeDiscardAssignmentExpr(
       wildcard: wildcard
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildDiscardAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildDiscardAssignmentExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -682,31 +770,38 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
 public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   let assignToken: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AssignmentExpr` using the provided parameters.
   /// - Parameters:
   ///   - assignToken: 
   public init(
+    leadingTrivia: Trivia = [],
     assignToken: TokenSyntax = TokenSyntax.`equal`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.assignToken = assignToken
     assert(assignToken.text == "=")
   }
 
 
-  func buildAssignmentExpr(format: Format, leadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
+  /// Builds a `AssignmentExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AssignmentExprSyntax`.
+  func buildAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
     let result = SyntaxFactory.makeAssignmentExpr(
       assignToken: assignToken
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildAssignmentExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildAssignmentExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -732,30 +827,37 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
 public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   let elements: ExprList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SequenceExpr` using the provided parameters.
   /// - Parameters:
   ///   - elements: 
   public init(
+    leadingTrivia: Trivia = [],
     elements: ExpressibleAsExprList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.elements = elements.createExprList()
   }
 
 
-  func buildSequenceExpr(format: Format, leadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
+  /// Builds a `SequenceExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SequenceExprSyntax`.
+  func buildSequenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
     let result = SyntaxFactory.makeSequenceExpr(
       elements: elements.buildExprList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSequenceExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildSequenceExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -781,31 +883,38 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
 public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   let poundLine: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundLineExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundLine: 
   public init(
+    leadingTrivia: Trivia = [],
     poundLine: TokenSyntax = TokenSyntax.`poundLine`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundLine = poundLine
     assert(poundLine.text == "#line")
   }
 
 
-  func buildPoundLineExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
+  /// Builds a `PoundLineExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundLineExprSyntax`.
+  func buildPoundLineExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
     let result = SyntaxFactory.makePoundLineExpr(
       poundLine: poundLine
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundLineExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundLineExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -831,31 +940,38 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
 public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   let poundFile: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundFileExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundFile: 
   public init(
+    leadingTrivia: Trivia = [],
     poundFile: TokenSyntax = TokenSyntax.`poundFile`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundFile = poundFile
     assert(poundFile.text == "#file")
   }
 
 
-  func buildPoundFileExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
+  /// Builds a `PoundFileExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundFileExprSyntax`.
+  func buildPoundFileExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
     let result = SyntaxFactory.makePoundFileExpr(
       poundFile: poundFile
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFileExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundFileExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -881,31 +997,38 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
 public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   let poundFileID: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundFileIDExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundFileID: 
   public init(
+    leadingTrivia: Trivia = [],
     poundFileID: TokenSyntax = TokenSyntax.`poundFileID`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundFileID = poundFileID
     assert(poundFileID.text == "#fileID")
   }
 
 
-  func buildPoundFileIDExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
+  /// Builds a `PoundFileIDExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundFileIDExprSyntax`.
+  func buildPoundFileIDExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
     let result = SyntaxFactory.makePoundFileIDExpr(
       poundFileID: poundFileID
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFileIDExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundFileIDExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -931,31 +1054,38 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
 public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   let poundFilePath: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundFilePathExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundFilePath: 
   public init(
+    leadingTrivia: Trivia = [],
     poundFilePath: TokenSyntax = TokenSyntax.`poundFilePath`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundFilePath = poundFilePath
     assert(poundFilePath.text == "#filePath")
   }
 
 
-  func buildPoundFilePathExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
+  /// Builds a `PoundFilePathExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundFilePathExprSyntax`.
+  func buildPoundFilePathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
     let result = SyntaxFactory.makePoundFilePathExpr(
       poundFilePath: poundFilePath
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFilePathExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundFilePathExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -981,31 +1111,38 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
 public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   let poundFunction: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundFunctionExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundFunction: 
   public init(
+    leadingTrivia: Trivia = [],
     poundFunction: TokenSyntax = TokenSyntax.`poundFunction`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundFunction = poundFunction
     assert(poundFunction.text == "#function")
   }
 
 
-  func buildPoundFunctionExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
+  /// Builds a `PoundFunctionExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundFunctionExprSyntax`.
+  func buildPoundFunctionExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
     let result = SyntaxFactory.makePoundFunctionExpr(
       poundFunction: poundFunction
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundFunctionExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundFunctionExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1031,31 +1168,38 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
 public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr {
   let poundDsohandle: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundDsohandleExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundDsohandle: 
   public init(
+    leadingTrivia: Trivia = [],
     poundDsohandle: TokenSyntax = TokenSyntax.`poundDsohandle`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundDsohandle = poundDsohandle
     assert(poundDsohandle.text == "#dsohandle")
   }
 
 
-  func buildPoundDsohandleExpr(format: Format, leadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
+  /// Builds a `PoundDsohandleExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundDsohandleExprSyntax`.
+  func buildPoundDsohandleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
     let result = SyntaxFactory.makePoundDsohandleExpr(
       poundDsohandle: poundDsohandle
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPoundDsohandleExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPoundDsohandleExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1082,14 +1226,20 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   let identifier: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SymbolicReferenceExpr` using the provided parameters.
   /// - Parameters:
   ///   - identifier: 
   ///   - genericArgumentClause: 
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.identifier = identifier
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
   }
@@ -1098,30 +1248,33 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     identifier: String,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       identifier: TokenSyntax.identifier(identifier),
       genericArgumentClause: genericArgumentClause
     )
   }
 
-  func buildSymbolicReferenceExpr(format: Format, leadingTrivia: Trivia? = nil) -> SymbolicReferenceExprSyntax {
+  /// Builds a `SymbolicReferenceExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SymbolicReferenceExprSyntax`.
+  func buildSymbolicReferenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SymbolicReferenceExprSyntax {
     let result = SyntaxFactory.makeSymbolicReferenceExpr(
       identifier: identifier,
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSymbolicReferenceExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildSymbolicReferenceExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1148,14 +1301,20 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   let operatorToken: TokenSyntax?
   let postfixExpression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrefixOperatorExpr` using the provided parameters.
   /// - Parameters:
   ///   - operatorToken: 
   ///   - postfixExpression: 
   public init(
+    leadingTrivia: Trivia = [],
     operatorToken: TokenSyntax? = nil,
     postfixExpression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.operatorToken = operatorToken
     self.postfixExpression = postfixExpression.createExprBuildable()
   }
@@ -1164,30 +1323,33 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     operatorToken: String?,
     postfixExpression: ExpressibleAsExprBuildable
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       operatorToken: operatorToken.map(TokenSyntax.prefixOperator),
       postfixExpression: postfixExpression
     )
   }
 
-  func buildPrefixOperatorExpr(format: Format, leadingTrivia: Trivia? = nil) -> PrefixOperatorExprSyntax {
+  /// Builds a `PrefixOperatorExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrefixOperatorExprSyntax`.
+  func buildPrefixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrefixOperatorExprSyntax {
     let result = SyntaxFactory.makePrefixOperatorExpr(
       operatorToken: operatorToken,
       postfixExpression: postfixExpression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPrefixOperatorExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPrefixOperatorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1213,30 +1375,37 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
 public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr {
   let operatorToken: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `BinaryOperatorExpr` using the provided parameters.
   /// - Parameters:
   ///   - operatorToken: 
   public init(
+    leadingTrivia: Trivia = [],
     operatorToken: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.operatorToken = operatorToken
   }
 
 
-  func buildBinaryOperatorExpr(format: Format, leadingTrivia: Trivia? = nil) -> BinaryOperatorExprSyntax {
+  /// Builds a `BinaryOperatorExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `BinaryOperatorExprSyntax`.
+  func buildBinaryOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BinaryOperatorExprSyntax {
     let result = SyntaxFactory.makeBinaryOperatorExpr(
       operatorToken: operatorToken
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildBinaryOperatorExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildBinaryOperatorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1264,16 +1433,22 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   let throwsToken: TokenSyntax?
   let arrowToken: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ArrowExpr` using the provided parameters.
   /// - Parameters:
   ///   - asyncKeyword: 
   ///   - throwsToken: 
   ///   - arrowToken: 
   public init(
+    leadingTrivia: Trivia = [],
     asyncKeyword: TokenSyntax? = nil,
     throwsToken: TokenSyntax? = nil,
     arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.asyncKeyword = asyncKeyword
     assert(asyncKeyword == nil || asyncKeyword!.text == "async")
     self.throwsToken = throwsToken
@@ -1286,33 +1461,36 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     asyncKeyword: String?,
     throwsToken: TokenSyntax? = nil,
     arrowToken: TokenSyntax = TokenSyntax.`arrow`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       asyncKeyword: asyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsToken: throwsToken,
       arrowToken: arrowToken
     )
   }
 
-  func buildArrowExpr(format: Format, leadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
+  /// Builds a `ArrowExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ArrowExprSyntax`.
+  func buildArrowExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
     let result = SyntaxFactory.makeArrowExpr(
       asyncKeyword: asyncKeyword,
       throwsToken: throwsToken,
       arrowToken: arrowToken
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildArrowExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildArrowExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1338,12 +1516,18 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
 public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   let floatingDigits: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FloatLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - floatingDigits: 
   public init(
+    leadingTrivia: Trivia = [],
     floatingDigits: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.floatingDigits = floatingDigits
   }
 
@@ -1351,27 +1535,30 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     floatingDigits: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       floatingDigits: TokenSyntax.floatingLiteral(floatingDigits)
     )
   }
 
-  func buildFloatLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> FloatLiteralExprSyntax {
+  /// Builds a `FloatLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FloatLiteralExprSyntax`.
+  func buildFloatLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FloatLiteralExprSyntax {
     let result = SyntaxFactory.makeFloatLiteralExpr(
       floatingDigits: floatingDigits
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildFloatLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildFloatLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1399,16 +1586,22 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   let elementList: TupleExprElementList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TupleExpr` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - elementList: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elementList: ExpressibleAsTupleExprElementList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.elementList = elementList.createTupleExprElementList()
@@ -1420,33 +1613,36 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @TupleExprElementListBuilder elementListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftParen: leftParen,
       elementList: elementListBuilder(),
       rightParen: rightParen
     )
   }
 
-  func buildTupleExpr(format: Format, leadingTrivia: Trivia? = nil) -> TupleExprSyntax {
+  /// Builds a `TupleExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TupleExprSyntax`.
+  func buildTupleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprSyntax {
     let result = SyntaxFactory.makeTupleExpr(
       leftParen: leftParen,
       elementList: elementList.buildTupleExprElementList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTupleExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildTupleExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1474,16 +1670,22 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   let elements: ArrayElementList
   let rightSquare: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ArrayExpr` using the provided parameters.
   /// - Parameters:
   ///   - leftSquare: 
   ///   - elements: 
   ///   - rightSquare: 
   public init(
+    leadingTrivia: Trivia = [],
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     elements: ExpressibleAsArrayElementList,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftSquare = leftSquare
     assert(leftSquare.text == "[")
     self.elements = elements.createArrayElementList()
@@ -1495,33 +1697,36 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     @ArrayElementListBuilder elementsBuilder: () -> ExpressibleAsArrayElementList = { ArrayElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftSquare: leftSquare,
       elements: elementsBuilder(),
       rightSquare: rightSquare
     )
   }
 
-  func buildArrayExpr(format: Format, leadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
+  /// Builds a `ArrayExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ArrayExprSyntax`.
+  func buildArrayExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
     let result = SyntaxFactory.makeArrayExpr(
       leftSquare: leftSquare,
       elements: elements.buildArrayElementList(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildArrayExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildArrayExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1549,16 +1754,22 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   let content: SyntaxBuildable
   let rightSquare: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DictionaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - leftSquare: 
   ///   - content: 
   ///   - rightSquare: 
   public init(
+    leadingTrivia: Trivia = [],
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     content: ExpressibleAsSyntaxBuildable,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftSquare = leftSquare
     assert(leftSquare.text == "[")
     self.content = content.createSyntaxBuildable()
@@ -1567,22 +1778,23 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   }
 
 
-  func buildDictionaryExpr(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
+  /// Builds a `DictionaryExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DictionaryExprSyntax`.
+  func buildDictionaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
     let result = SyntaxFactory.makeDictionaryExpr(
       leftSquare: leftSquare,
       content: content.buildSyntax(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildDictionaryExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildDictionaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1611,6 +1823,10 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TupleExprElement` using the provided parameters.
   /// - Parameters:
   ///   - label: 
@@ -1618,11 +1834,13 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   ///   - expression: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     label: TokenSyntax? = nil,
     colon: TokenSyntax? = nil,
     expression: ExpressibleAsExprBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.label = label
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
@@ -1632,23 +1850,24 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   }
 
 
-  func buildTupleExprElement(format: Format, leadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
+  /// Builds a `TupleExprElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TupleExprElementSyntax`.
+  func buildTupleExprElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
     let result = SyntaxFactory.makeTupleExprElement(
       label: label,
       colon: colon,
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTupleExprElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTupleExprElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -1679,35 +1898,42 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ArrayElement` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildArrayElement(format: Format, leadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
+  /// Builds a `ArrayElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ArrayElementSyntax`.
+  func buildArrayElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
     let result = SyntaxFactory.makeArrayElement(
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildArrayElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildArrayElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -1738,6 +1964,10 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   let valueExpression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DictionaryElement` using the provided parameters.
   /// - Parameters:
   ///   - keyExpression: 
@@ -1745,11 +1975,13 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   ///   - valueExpression: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     keyExpression: ExpressibleAsExprBuildable,
     colon: TokenSyntax = TokenSyntax.`colon`,
     valueExpression: ExpressibleAsExprBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.keyExpression = keyExpression.createExprBuildable()
     self.colon = colon
     assert(colon.text == ":")
@@ -1759,23 +1991,24 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   }
 
 
-  func buildDictionaryElement(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
+  /// Builds a `DictionaryElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DictionaryElementSyntax`.
+  func buildDictionaryElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
     let result = SyntaxFactory.makeDictionaryElement(
       keyExpression: keyExpression.buildExpr(format: format, leadingTrivia: nil),
       colon: colon,
       valueExpression: valueExpression.buildExpr(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDictionaryElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDictionaryElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -1805,12 +2038,18 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
 public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr {
   let digits: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IntegerLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - digits: 
   public init(
+    leadingTrivia: Trivia = [],
     digits: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.digits = digits
   }
 
@@ -1818,27 +2057,30 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     digits: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       digits: TokenSyntax.integerLiteral(digits)
     )
   }
 
-  func buildIntegerLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> IntegerLiteralExprSyntax {
+  /// Builds a `IntegerLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IntegerLiteralExprSyntax`.
+  func buildIntegerLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IntegerLiteralExprSyntax {
     let result = SyntaxFactory.makeIntegerLiteralExpr(
       digits: digits
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildIntegerLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildIntegerLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1864,31 +2106,38 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
 public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr {
   let booleanLiteral: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `BooleanLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - booleanLiteral: 
   public init(
+    leadingTrivia: Trivia = [],
     booleanLiteral: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.booleanLiteral = booleanLiteral
     assert(booleanLiteral.text == "true" || booleanLiteral.text == "false")
   }
 
 
-  func buildBooleanLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
+  /// Builds a `BooleanLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `BooleanLiteralExprSyntax`.
+  func buildBooleanLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
     let result = SyntaxFactory.makeBooleanLiteralExpr(
       booleanLiteral: booleanLiteral
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildBooleanLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildBooleanLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1918,6 +2167,10 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   let colonMark: TokenSyntax
   let secondChoice: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TernaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - conditionExpression: 
@@ -1926,12 +2179,14 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   ///   - colonMark: 
   ///   - secondChoice: 
   public init(
+    leadingTrivia: Trivia = [],
     conditionExpression: ExpressibleAsExprBuildable,
     questionMark: TokenSyntax = TokenSyntax.`infixQuestionMark`,
     firstChoice: ExpressibleAsExprBuildable,
     colonMark: TokenSyntax = TokenSyntax.`colon`,
     secondChoice: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.conditionExpression = conditionExpression.createExprBuildable()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
@@ -1942,7 +2197,11 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   }
 
 
-  func buildTernaryExpr(format: Format, leadingTrivia: Trivia? = nil) -> TernaryExprSyntax {
+  /// Builds a `TernaryExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TernaryExprSyntax`.
+  func buildTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TernaryExprSyntax {
     let result = SyntaxFactory.makeTernaryExpr(
       conditionExpression: conditionExpression.buildExpr(format: format, leadingTrivia: nil),
       questionMark: questionMark,
@@ -1950,16 +2209,13 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
       colonMark: colonMark,
       secondChoice: secondChoice.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTernaryExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildTernaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -1988,6 +2244,10 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   let name: TokenSyntax
   let declNameArguments: DeclNameArguments?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MemberAccessExpr` using the provided parameters.
   /// - Parameters:
   ///   - base: 
@@ -1995,11 +2255,13 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   ///   - name: 
   ///   - declNameArguments: 
   public init(
+    leadingTrivia: Trivia = [],
     base: ExpressibleAsExprBuildable? = nil,
     dot: TokenSyntax,
     name: TokenSyntax,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.base = base?.createExprBuildable()
     self.dot = dot
     assert(dot.text == "." || dot.text == ".")
@@ -2008,23 +2270,24 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   }
 
 
-  func buildMemberAccessExpr(format: Format, leadingTrivia: Trivia? = nil) -> MemberAccessExprSyntax {
+  /// Builds a `MemberAccessExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MemberAccessExprSyntax`.
+  func buildMemberAccessExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberAccessExprSyntax {
     let result = SyntaxFactory.makeMemberAccessExpr(
       base: base?.buildExpr(format: format, leadingTrivia: nil),
       dot: dot,
       name: name,
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildMemberAccessExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildMemberAccessExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2051,35 +2314,42 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   let isTok: TokenSyntax
   let typeName: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IsExpr` using the provided parameters.
   /// - Parameters:
   ///   - isTok: 
   ///   - typeName: 
   public init(
+    leadingTrivia: Trivia = [],
     isTok: TokenSyntax = TokenSyntax.`is`,
     typeName: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.isTok = isTok
     assert(isTok.text == "is")
     self.typeName = typeName.createTypeBuildable()
   }
 
 
-  func buildIsExpr(format: Format, leadingTrivia: Trivia? = nil) -> IsExprSyntax {
+  /// Builds a `IsExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IsExprSyntax`.
+  func buildIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsExprSyntax {
     let result = SyntaxFactory.makeIsExpr(
       isTok: isTok,
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildIsExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildIsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2107,16 +2377,22 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   let questionOrExclamationMark: TokenSyntax?
   let typeName: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AsExpr` using the provided parameters.
   /// - Parameters:
   ///   - asTok: 
   ///   - questionOrExclamationMark: 
   ///   - typeName: 
   public init(
+    leadingTrivia: Trivia = [],
     asTok: TokenSyntax = TokenSyntax.`as`,
     questionOrExclamationMark: TokenSyntax? = nil,
     typeName: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.asTok = asTok
     assert(asTok.text == "as")
     self.questionOrExclamationMark = questionOrExclamationMark
@@ -2125,22 +2401,23 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   }
 
 
-  func buildAsExpr(format: Format, leadingTrivia: Trivia? = nil) -> AsExprSyntax {
+  /// Builds a `AsExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AsExprSyntax`.
+  func buildAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsExprSyntax {
     let result = SyntaxFactory.makeAsExpr(
       asTok: asTok,
       questionOrExclamationMark: questionOrExclamationMark,
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildAsExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildAsExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2166,30 +2443,37 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
 public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   let type: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TypeExpr` using the provided parameters.
   /// - Parameters:
   ///   - type: 
   public init(
+    leadingTrivia: Trivia = [],
     type: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.type = type.createTypeBuildable()
   }
 
 
-  func buildTypeExpr(format: Format, leadingTrivia: Trivia? = nil) -> TypeExprSyntax {
+  /// Builds a `TypeExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TypeExprSyntax`.
+  func buildTypeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeExprSyntax {
     let result = SyntaxFactory.makeTypeExpr(
       type: type.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildTypeExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildTypeExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2219,6 +2503,10 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   let expression: ExprBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClosureCaptureItem` using the provided parameters.
   /// - Parameters:
   ///   - specifier: 
@@ -2227,12 +2515,14 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   ///   - expression: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     specifier: ExpressibleAsTokenList? = nil,
     name: TokenSyntax? = nil,
     assignToken: TokenSyntax? = nil,
     expression: ExpressibleAsExprBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.specifier = specifier?.createTokenList()
     self.name = name
     self.assignToken = assignToken
@@ -2246,6 +2536,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     specifier: ExpressibleAsTokenList? = nil,
     name: String?,
     assignToken: TokenSyntax? = nil,
@@ -2253,6 +2544,7 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       specifier: specifier,
       name: name.map(TokenSyntax.identifier),
       assignToken: assignToken,
@@ -2261,7 +2553,11 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
     )
   }
 
-  func buildClosureCaptureItem(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
+  /// Builds a `ClosureCaptureItemSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClosureCaptureItemSyntax`.
+  func buildClosureCaptureItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
     let result = SyntaxFactory.makeClosureCaptureItem(
       specifier: specifier?.buildTokenList(format: format, leadingTrivia: nil),
       name: name,
@@ -2269,16 +2565,13 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureCaptureItem(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildClosureCaptureItem(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -2311,16 +2604,22 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   let items: ClosureCaptureItemList?
   let rightSquare: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClosureCaptureSignature` using the provided parameters.
   /// - Parameters:
   ///   - leftSquare: 
   ///   - items: 
   ///   - rightSquare: 
   public init(
+    leadingTrivia: Trivia = [],
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     items: ExpressibleAsClosureCaptureItemList? = nil,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftSquare = leftSquare
     assert(leftSquare.text == "[")
     self.items = items?.createClosureCaptureItemList()
@@ -2332,33 +2631,36 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftSquare: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     rightSquare: TokenSyntax = TokenSyntax.`rightSquareBracket`,
     @ClosureCaptureItemListBuilder itemsBuilder: () -> ExpressibleAsClosureCaptureItemList? = { nil }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftSquare: leftSquare,
       items: itemsBuilder(),
       rightSquare: rightSquare
     )
   }
 
-  func buildClosureCaptureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
+  /// Builds a `ClosureCaptureSignatureSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClosureCaptureSignatureSyntax`.
+  func buildClosureCaptureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
     let result = SyntaxFactory.makeClosureCaptureSignature(
       leftSquare: leftSquare,
       items: items?.buildClosureCaptureItemList(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureCaptureSignature(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildClosureCaptureSignature(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -2379,35 +2681,42 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClosureParam` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildClosureParam(format: Format, leadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
+  /// Builds a `ClosureParamSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClosureParamSyntax`.
+  func buildClosureParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
     let result = SyntaxFactory.makeClosureParam(
       name: name,
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureParam(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildClosureParam(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -2441,6 +2750,10 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   let output: ReturnClause?
   let inTok: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClosureSignature` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -2451,6 +2764,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   ///   - output: 
   ///   - inTok: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     capture: ExpressibleAsClosureCaptureSignature? = nil,
     input: ExpressibleAsSyntaxBuildable? = nil,
@@ -2459,6 +2773,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     output: ExpressibleAsReturnClause? = nil,
     inTok: TokenSyntax = TokenSyntax.`in`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.capture = capture?.createClosureCaptureSignature()
     self.input = input?.createSyntaxBuildable()
@@ -2475,6 +2790,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     capture: ExpressibleAsClosureCaptureSignature? = nil,
     input: ExpressibleAsSyntaxBuildable? = nil,
@@ -2484,6 +2800,7 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     inTok: TokenSyntax = TokenSyntax.`in`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       capture: capture,
       input: input,
@@ -2494,7 +2811,11 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
     )
   }
 
-  func buildClosureSignature(format: Format, leadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
+  /// Builds a `ClosureSignatureSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClosureSignatureSyntax`.
+  func buildClosureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
     let result = SyntaxFactory.makeClosureSignature(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       capture: capture?.buildClosureCaptureSignature(format: format, leadingTrivia: nil),
@@ -2504,16 +2825,13 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
       output: output?.buildReturnClause(format: format, leadingTrivia: nil),
       inTok: inTok
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildClosureSignature(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildClosureSignature(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -2536,6 +2854,10 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   let statements: CodeBlockItemList
   let rightBrace: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClosureExpr` using the provided parameters.
   /// - Parameters:
   ///   - leftBrace: 
@@ -2543,11 +2865,13 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   ///   - statements: 
   ///   - rightBrace: 
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     signature: ExpressibleAsClosureSignature? = nil,
     statements: ExpressibleAsCodeBlockItemList,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
     self.signature = signature?.createClosureSignature()
@@ -2560,12 +2884,14 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     signature: ExpressibleAsClosureSignature? = nil,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftBrace: leftBrace,
       signature: signature,
       statements: statementsBuilder(),
@@ -2573,23 +2899,24 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
     )
   }
 
-  func buildClosureExpr(format: Format, leadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
+  /// Builds a `ClosureExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClosureExprSyntax`.
+  func buildClosureExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
     let result = SyntaxFactory.makeClosureExpr(
       leftBrace: leftBrace,
       signature: signature?.buildClosureSignature(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildClosureExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildClosureExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2615,30 +2942,37 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
 public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatternExpr {
   let pattern: PatternBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `UnresolvedPatternExpr` using the provided parameters.
   /// - Parameters:
   ///   - pattern: 
   public init(
+    leadingTrivia: Trivia = [],
     pattern: ExpressibleAsPatternBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.pattern = pattern.createPatternBuildable()
   }
 
 
-  func buildUnresolvedPatternExpr(format: Format, leadingTrivia: Trivia? = nil) -> UnresolvedPatternExprSyntax {
+  /// Builds a `UnresolvedPatternExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `UnresolvedPatternExprSyntax`.
+  func buildUnresolvedPatternExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedPatternExprSyntax {
     let result = SyntaxFactory.makeUnresolvedPatternExpr(
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildUnresolvedPatternExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildUnresolvedPatternExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2666,16 +3000,22 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   let colon: TokenSyntax
   let closure: ClosureExpr
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MultipleTrailingClosureElement` using the provided parameters.
   /// - Parameters:
   ///   - label: 
   ///   - colon: 
   ///   - closure: 
   public init(
+    leadingTrivia: Trivia = [],
     label: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     closure: ExpressibleAsClosureExpr
   ) {
+    self.leadingTrivia = leadingTrivia
     self.label = label
     self.colon = colon
     assert(colon.text == ":")
@@ -2683,22 +3023,23 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   }
 
 
-  func buildMultipleTrailingClosureElement(format: Format, leadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementSyntax {
+  /// Builds a `MultipleTrailingClosureElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MultipleTrailingClosureElementSyntax`.
+  func buildMultipleTrailingClosureElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementSyntax {
     let result = SyntaxFactory.makeMultipleTrailingClosureElement(
       label: label,
       colon: colon,
       closure: closure.buildClosureExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMultipleTrailingClosureElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildMultipleTrailingClosureElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -2723,6 +3064,10 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   let trailingClosure: ClosureExpr?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FunctionCallExpr` using the provided parameters.
   /// - Parameters:
   ///   - calledExpression: 
@@ -2732,6 +3077,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   ///   - trailingClosure: 
   ///   - additionalTrailingClosures: 
   public init(
+    leadingTrivia: Trivia = [],
     calledExpression: ExpressibleAsExprBuildable,
     leftParen: TokenSyntax? = nil,
     argumentList: ExpressibleAsTupleExprElementList,
@@ -2739,6 +3085,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     trailingClosure: ExpressibleAsClosureExpr? = nil,
     additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.calledExpression = calledExpression.createExprBuildable()
     self.leftParen = leftParen
     assert(leftParen == nil || leftParen!.text == "(")
@@ -2753,6 +3100,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     calledExpression: ExpressibleAsExprBuildable,
     leftParen: TokenSyntax? = nil,
     rightParen: TokenSyntax? = nil,
@@ -2761,6 +3109,7 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       calledExpression: calledExpression,
       leftParen: leftParen,
       argumentList: argumentListBuilder(),
@@ -2770,7 +3119,11 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
     )
   }
 
-  func buildFunctionCallExpr(format: Format, leadingTrivia: Trivia? = nil) -> FunctionCallExprSyntax {
+  /// Builds a `FunctionCallExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FunctionCallExprSyntax`.
+  func buildFunctionCallExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionCallExprSyntax {
     let result = SyntaxFactory.makeFunctionCallExpr(
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
       leftParen: leftParen,
@@ -2779,16 +3132,13 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
       trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil),
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildFunctionCallExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildFunctionCallExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2819,6 +3169,10 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   let trailingClosure: ClosureExpr?
   let additionalTrailingClosures: MultipleTrailingClosureElementList?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SubscriptExpr` using the provided parameters.
   /// - Parameters:
   ///   - calledExpression: 
@@ -2828,6 +3182,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   ///   - trailingClosure: 
   ///   - additionalTrailingClosures: 
   public init(
+    leadingTrivia: Trivia = [],
     calledExpression: ExpressibleAsExprBuildable,
     leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     argumentList: ExpressibleAsTupleExprElementList,
@@ -2835,6 +3190,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     trailingClosure: ExpressibleAsClosureExpr? = nil,
     additionalTrailingClosures: ExpressibleAsMultipleTrailingClosureElementList? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.calledExpression = calledExpression.createExprBuildable()
     self.leftBracket = leftBracket
     assert(leftBracket.text == "[")
@@ -2849,6 +3205,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     calledExpression: ExpressibleAsExprBuildable,
     leftBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     rightBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`,
@@ -2857,6 +3214,7 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       calledExpression: calledExpression,
       leftBracket: leftBracket,
       argumentList: argumentListBuilder(),
@@ -2866,7 +3224,11 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
     )
   }
 
-  func buildSubscriptExpr(format: Format, leadingTrivia: Trivia? = nil) -> SubscriptExprSyntax {
+  /// Builds a `SubscriptExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SubscriptExprSyntax`.
+  func buildSubscriptExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptExprSyntax {
     let result = SyntaxFactory.makeSubscriptExpr(
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
       leftBracket: leftBracket,
@@ -2875,16 +3237,13 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
       trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil),
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSubscriptExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildSubscriptExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2911,35 +3270,42 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   let expression: ExprBuildable
   let questionMark: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `OptionalChainingExpr` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   ///   - questionMark: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable,
     questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
   }
 
 
-  func buildOptionalChainingExpr(format: Format, leadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
+  /// Builds a `OptionalChainingExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OptionalChainingExprSyntax`.
+  func buildOptionalChainingExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
     let result = SyntaxFactory.makeOptionalChainingExpr(
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildOptionalChainingExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildOptionalChainingExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -2966,35 +3332,42 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   let expression: ExprBuildable
   let exclamationMark: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ForcedValueExpr` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   ///   - exclamationMark: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable,
     exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
     self.exclamationMark = exclamationMark
     assert(exclamationMark.text == "!")
   }
 
 
-  func buildForcedValueExpr(format: Format, leadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
+  /// Builds a `ForcedValueExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ForcedValueExprSyntax`.
+  func buildForcedValueExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
     let result = SyntaxFactory.makeForcedValueExpr(
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       exclamationMark: exclamationMark
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildForcedValueExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildForcedValueExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3021,14 +3394,20 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   let expression: ExprBuildable
   let operatorToken: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PostfixUnaryExpr` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   ///   - operatorToken: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable,
     operatorToken: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
     self.operatorToken = operatorToken
   }
@@ -3037,30 +3416,33 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable,
     operatorToken: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       expression: expression,
       operatorToken: TokenSyntax.postfixOperator(operatorToken)
     )
   }
 
-  func buildPostfixUnaryExpr(format: Format, leadingTrivia: Trivia? = nil) -> PostfixUnaryExprSyntax {
+  /// Builds a `PostfixUnaryExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PostfixUnaryExprSyntax`.
+  func buildPostfixUnaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixUnaryExprSyntax {
     let result = SyntaxFactory.makePostfixUnaryExpr(
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       operatorToken: operatorToken
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPostfixUnaryExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPostfixUnaryExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3087,34 +3469,41 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   let expression: ExprBuildable
   let genericArgumentClause: GenericArgumentClause
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SpecializeExpr` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   ///   - genericArgumentClause: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable,
     genericArgumentClause: ExpressibleAsGenericArgumentClause
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
     self.genericArgumentClause = genericArgumentClause.createGenericArgumentClause()
   }
 
 
-  func buildSpecializeExpr(format: Format, leadingTrivia: Trivia? = nil) -> SpecializeExprSyntax {
+  /// Builds a `SpecializeExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SpecializeExprSyntax`.
+  func buildSpecializeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SpecializeExprSyntax {
     let result = SyntaxFactory.makeSpecializeExpr(
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildSpecializeExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildSpecializeExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3140,12 +3529,18 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
 public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   let content: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `StringSegment` using the provided parameters.
   /// - Parameters:
   ///   - content: 
   public init(
+    leadingTrivia: Trivia = [],
     content: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.content = content
   }
 
@@ -3153,27 +3548,30 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     content: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       content: TokenSyntax.stringSegment(content)
     )
   }
 
-  func buildStringSegment(format: Format, leadingTrivia: Trivia? = nil) -> StringSegmentSyntax {
+  /// Builds a `StringSegmentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `StringSegmentSyntax`.
+  func buildStringSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringSegmentSyntax {
     let result = SyntaxFactory.makeStringSegment(
       content: content
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildStringSegment(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildStringSegment(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -3197,6 +3595,10 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   let expressions: TupleExprElementList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ExpressionSegment` using the provided parameters.
   /// - Parameters:
   ///   - backslash: 
@@ -3205,12 +3607,14 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   ///   - expressions: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     backslash: TokenSyntax = TokenSyntax.`backslash`,
     delimiter: TokenSyntax? = nil,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     expressions: ExpressibleAsTupleExprElementList,
     rightParen: TokenSyntax = TokenSyntax.`stringInterpolationAnchor`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.backslash = backslash
     assert(backslash.text == "\\")
     self.delimiter = delimiter
@@ -3225,6 +3629,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     backslash: TokenSyntax = TokenSyntax.`backslash`,
     delimiter: String?,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
@@ -3232,6 +3637,7 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
     @TupleExprElementListBuilder expressionsBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       backslash: backslash,
       delimiter: delimiter.map(TokenSyntax.rawStringDelimiter),
       leftParen: leftParen,
@@ -3240,7 +3646,11 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
     )
   }
 
-  func buildExpressionSegment(format: Format, leadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
+  /// Builds a `ExpressionSegmentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ExpressionSegmentSyntax`.
+  func buildExpressionSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
     let result = SyntaxFactory.makeExpressionSegment(
       backslash: backslash,
       delimiter: delimiter,
@@ -3248,16 +3658,13 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
       expressions: expressions.buildTupleExprElementList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildExpressionSegment(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildExpressionSegment(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -3281,6 +3688,10 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   let closeQuote: TokenSyntax
   let closeDelimiter: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `StringLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - openDelimiter: 
@@ -3289,12 +3700,14 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   ///   - closeQuote: 
   ///   - closeDelimiter: 
   public init(
+    leadingTrivia: Trivia = [],
     openDelimiter: TokenSyntax? = nil,
     openQuote: TokenSyntax,
     segments: ExpressibleAsStringLiteralSegments,
     closeQuote: TokenSyntax,
     closeDelimiter: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.openDelimiter = openDelimiter
     self.openQuote = openQuote
     assert(openQuote.text == "\"" || openQuote.text == "\"\"\"")
@@ -3308,6 +3721,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     openDelimiter: String?,
     openQuote: TokenSyntax,
     segments: ExpressibleAsStringLiteralSegments,
@@ -3315,6 +3729,7 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
     closeDelimiter: String?
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       openDelimiter: openDelimiter.map(TokenSyntax.rawStringDelimiter),
       openQuote: openQuote,
       segments: segments,
@@ -3323,7 +3738,11 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
     )
   }
 
-  func buildStringLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> StringLiteralExprSyntax {
+  /// Builds a `StringLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `StringLiteralExprSyntax`.
+  func buildStringLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringLiteralExprSyntax {
     let result = SyntaxFactory.makeStringLiteralExpr(
       openDelimiter: openDelimiter,
       openQuote: openQuote,
@@ -3331,16 +3750,13 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
       closeQuote: closeQuote,
       closeDelimiter: closeDelimiter
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildStringLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildStringLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3366,12 +3782,18 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
 public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   let regex: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `RegexLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - regex: 
   public init(
+    leadingTrivia: Trivia = [],
     regex: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.regex = regex
   }
 
@@ -3379,27 +3801,30 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     regex: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       regex: TokenSyntax.regexLiteral(regex)
     )
   }
 
-  func buildRegexLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
+  /// Builds a `RegexLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `RegexLiteralExprSyntax`.
+  func buildRegexLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
     let result = SyntaxFactory.makeRegexLiteralExpr(
       regex: regex
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildRegexLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildRegexLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3427,16 +3852,22 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   let rootExpr: ExprBuildable?
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `KeyPathExpr` using the provided parameters.
   /// - Parameters:
   ///   - backslash: 
   ///   - rootExpr: 
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     backslash: TokenSyntax = TokenSyntax.`backslash`,
     rootExpr: ExpressibleAsExprBuildable? = nil,
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.backslash = backslash
     assert(backslash.text == "\\")
     self.rootExpr = rootExpr?.createExprBuildable()
@@ -3444,22 +3875,23 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   }
 
 
-  func buildKeyPathExpr(format: Format, leadingTrivia: Trivia? = nil) -> KeyPathExprSyntax {
+  /// Builds a `KeyPathExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `KeyPathExprSyntax`.
+  func buildKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathExprSyntax {
     let result = SyntaxFactory.makeKeyPathExpr(
       backslash: backslash,
       rootExpr: rootExpr?.buildExpr(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildKeyPathExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3485,31 +3917,38 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
 public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   let period: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `KeyPathBaseExpr` using the provided parameters.
   /// - Parameters:
   ///   - period: 
   public init(
+    leadingTrivia: Trivia = [],
     period: TokenSyntax = TokenSyntax.`period`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.period = period
     assert(period.text == ".")
   }
 
 
-  func buildKeyPathBaseExpr(format: Format, leadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
+  /// Builds a `KeyPathBaseExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `KeyPathBaseExprSyntax`.
+  func buildKeyPathBaseExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
     let result = SyntaxFactory.makeKeyPathBaseExpr(
       period: period
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildKeyPathBaseExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildKeyPathBaseExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3536,14 +3975,20 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   let name: TokenSyntax
   let dot: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ObjcNamePiece` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - dot: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     dot: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.dot = dot
     assert(dot == nil || dot!.text == ".")
@@ -3553,30 +3998,33 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     name: String,
     dot: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       name: TokenSyntax.identifier(name),
       dot: dot
     )
   }
 
-  func buildObjcNamePiece(format: Format, leadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
+  /// Builds a `ObjcNamePieceSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ObjcNamePieceSyntax`.
+  func buildObjcNamePiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
     let result = SyntaxFactory.makeObjcNamePiece(
       name: name,
       dot: dot
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildObjcNamePiece(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildObjcNamePiece(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -3599,6 +4047,10 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   let name: ObjcName
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ObjcKeyPathExpr` using the provided parameters.
   /// - Parameters:
   ///   - keyPath: 
@@ -3606,11 +4058,13 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   ///   - name: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     keyPath: TokenSyntax = TokenSyntax.`poundKeyPath`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     name: ExpressibleAsObjcName,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.keyPath = keyPath
     assert(keyPath.text == "#keyPath")
     self.leftParen = leftParen
@@ -3621,23 +4075,24 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   }
 
 
-  func buildObjcKeyPathExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
+  /// Builds a `ObjcKeyPathExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ObjcKeyPathExprSyntax`.
+  func buildObjcKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
     let result = SyntaxFactory.makeObjcKeyPathExpr(
       keyPath: keyPath,
       leftParen: leftParen,
       name: name.buildObjcName(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildObjcKeyPathExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildObjcKeyPathExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3668,6 +4123,10 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   let name: ExprBuildable
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ObjcSelectorExpr` using the provided parameters.
   /// - Parameters:
   ///   - poundSelector: 
@@ -3677,6 +4136,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   ///   - name: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundSelector: TokenSyntax = TokenSyntax.`poundSelector`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     kind: TokenSyntax? = nil,
@@ -3684,6 +4144,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
     name: ExpressibleAsExprBuildable,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundSelector = poundSelector
     assert(poundSelector.text == "#selector")
     self.leftParen = leftParen
@@ -3701,6 +4162,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     poundSelector: TokenSyntax = TokenSyntax.`poundSelector`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     kind: String?,
@@ -3709,6 +4171,7 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       poundSelector: poundSelector,
       leftParen: leftParen,
       kind: kind.map(TokenSyntax.contextualKeyword),
@@ -3718,7 +4181,11 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
     )
   }
 
-  func buildObjcSelectorExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
+  /// Builds a `ObjcSelectorExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ObjcSelectorExprSyntax`.
+  func buildObjcSelectorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
     let result = SyntaxFactory.makeObjcSelectorExpr(
       poundSelector: poundSelector,
       leftParen: leftParen,
@@ -3727,16 +4194,13 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
       name: name.buildExpr(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildObjcSelectorExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildObjcSelectorExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3763,34 +4227,41 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   let base: ExprBuildable?
   let config: IfConfigDecl
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PostfixIfConfigExpr` using the provided parameters.
   /// - Parameters:
   ///   - base: 
   ///   - config: 
   public init(
+    leadingTrivia: Trivia = [],
     base: ExpressibleAsExprBuildable? = nil,
     config: ExpressibleAsIfConfigDecl
   ) {
+    self.leadingTrivia = leadingTrivia
     self.base = base?.createExprBuildable()
     self.config = config.createIfConfigDecl()
   }
 
 
-  func buildPostfixIfConfigExpr(format: Format, leadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
+  /// Builds a `PostfixIfConfigExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PostfixIfConfigExprSyntax`.
+  func buildPostfixIfConfigExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
     let result = SyntaxFactory.makePostfixIfConfigExpr(
       base: base?.buildExpr(format: format, leadingTrivia: nil),
       config: config.buildIfConfigDecl(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildPostfixIfConfigExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildPostfixIfConfigExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3816,12 +4287,18 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
 public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlaceholderExpr {
   let identifier: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `EditorPlaceholderExpr` using the provided parameters.
   /// - Parameters:
   ///   - identifier: 
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.identifier = identifier
   }
 
@@ -3829,27 +4306,30 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     identifier: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       identifier: TokenSyntax.identifier(identifier)
     )
   }
 
-  func buildEditorPlaceholderExpr(format: Format, leadingTrivia: Trivia? = nil) -> EditorPlaceholderExprSyntax {
+  /// Builds a `EditorPlaceholderExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `EditorPlaceholderExprSyntax`.
+  func buildEditorPlaceholderExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EditorPlaceholderExprSyntax {
     let result = SyntaxFactory.makeEditorPlaceholderExpr(
       identifier: identifier
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildEditorPlaceholderExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildEditorPlaceholderExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3878,6 +4358,10 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   let arguments: TupleExprElementList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ObjectLiteralExpr` using the provided parameters.
   /// - Parameters:
   ///   - identifier: 
@@ -3885,11 +4369,13 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   ///   - arguments: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     arguments: ExpressibleAsTupleExprElementList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.identifier = identifier
     assert(identifier.text == "#colorLiteral" || identifier.text == "#fileLiteral" || identifier.text == "#imageLiteral")
     self.leftParen = leftParen
@@ -3903,12 +4389,14 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @TupleExprElementListBuilder argumentsBuilder: () -> ExpressibleAsTupleExprElementList = { TupleExprElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       identifier: identifier,
       leftParen: leftParen,
       arguments: argumentsBuilder(),
@@ -3916,23 +4404,24 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
     )
   }
 
-  func buildObjectLiteralExpr(format: Format, leadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
+  /// Builds a `ObjectLiteralExprSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ObjectLiteralExprSyntax`.
+  func buildObjectLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
     let result = SyntaxFactory.makeObjectLiteralExpr(
       identifier: identifier,
       leftParen: leftParen,
       arguments: arguments.buildTupleExprElementList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `ExprBuildable`.
-  public func buildExpr(format: Format, leadingTrivia: Trivia? = nil) -> ExprSyntax {
-    let result = buildObjectLiteralExpr(format: format, leadingTrivia: leadingTrivia)
+  public func buildExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExprSyntax {
+    let result = buildObjectLiteralExpr(format: format, leadingTrivia: additionalLeadingTrivia)
     return ExprSyntax(result)
   }
 
@@ -3959,35 +4448,42 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   let equal: TokenSyntax
   let value: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TypeInitializerClause` using the provided parameters.
   /// - Parameters:
   ///   - equal: 
   ///   - value: 
   public init(
+    leadingTrivia: Trivia = [],
     equal: TokenSyntax = TokenSyntax.`equal`,
     value: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.equal = equal
     assert(equal.text == "=")
     self.value = value.createTypeBuildable()
   }
 
 
-  func buildTypeInitializerClause(format: Format, leadingTrivia: Trivia? = nil) -> TypeInitializerClauseSyntax {
+  /// Builds a `TypeInitializerClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TypeInitializerClauseSyntax`.
+  func buildTypeInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInitializerClauseSyntax {
     let result = SyntaxFactory.makeTypeInitializerClause(
       equal: equal,
       value: value.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTypeInitializerClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTypeInitializerClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4013,6 +4509,10 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   let initializer: TypeInitializerClause?
   let genericWhereClause: GenericWhereClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TypealiasDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -4023,6 +4523,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   ///   - initializer: 
   ///   - genericWhereClause: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
@@ -4031,6 +4532,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
     initializer: ExpressibleAsTypeInitializerClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.typealiasKeyword = typealiasKeyword
@@ -4045,6 +4547,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     typealiasKeyword: TokenSyntax = TokenSyntax.`typealias`,
@@ -4054,6 +4557,7 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       typealiasKeyword: typealiasKeyword,
@@ -4064,7 +4568,11 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
     )
   }
 
-  func buildTypealiasDecl(format: Format, leadingTrivia: Trivia? = nil) -> TypealiasDeclSyntax {
+  /// Builds a `TypealiasDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TypealiasDeclSyntax`.
+  func buildTypealiasDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypealiasDeclSyntax {
     let result = SyntaxFactory.makeTypealiasDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -4074,16 +4582,13 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
       initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildTypealiasDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildTypealiasDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -4115,6 +4620,10 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   let initializer: TypeInitializerClause?
   let genericWhereClause: GenericWhereClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AssociatedtypeDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -4125,6 +4634,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   ///   - initializer: 
   ///   - genericWhereClause: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
@@ -4133,6 +4643,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
     initializer: ExpressibleAsTypeInitializerClause? = nil,
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.associatedtypeKeyword = associatedtypeKeyword
@@ -4147,6 +4658,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     associatedtypeKeyword: TokenSyntax = TokenSyntax.`associatedtype`,
@@ -4156,6 +4668,7 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       associatedtypeKeyword: associatedtypeKeyword,
@@ -4166,7 +4679,11 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
     )
   }
 
-  func buildAssociatedtypeDecl(format: Format, leadingTrivia: Trivia? = nil) -> AssociatedtypeDeclSyntax {
+  /// Builds a `AssociatedtypeDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AssociatedtypeDeclSyntax`.
+  func buildAssociatedtypeDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssociatedtypeDeclSyntax {
     let result = SyntaxFactory.makeAssociatedtypeDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -4176,16 +4693,13 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
       initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildAssociatedtypeDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildAssociatedtypeDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -4213,16 +4727,22 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   let parameterList: FunctionParameterList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ParameterClause` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - parameterList: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     parameterList: ExpressibleAsFunctionParameterList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.parameterList = parameterList.createFunctionParameterList()
@@ -4234,33 +4754,36 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @FunctionParameterListBuilder parameterListBuilder: () -> ExpressibleAsFunctionParameterList = { FunctionParameterList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftParen: leftParen,
       parameterList: parameterListBuilder(),
       rightParen: rightParen
     )
   }
 
-  func buildParameterClause(format: Format, leadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
+  /// Builds a `ParameterClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ParameterClauseSyntax`.
+  func buildParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
     let result = SyntaxFactory.makeParameterClause(
       leftParen: leftParen,
       parameterList: parameterList.buildFunctionParameterList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildParameterClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildParameterClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4281,35 +4804,42 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   let arrow: TokenSyntax
   let returnType: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ReturnClause` using the provided parameters.
   /// - Parameters:
   ///   - arrow: 
   ///   - returnType: 
   public init(
+    leadingTrivia: Trivia = [],
     arrow: TokenSyntax = TokenSyntax.`arrow`,
     returnType: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.arrow = arrow
     assert(arrow.text == "->")
     self.returnType = returnType.createTypeBuildable()
   }
 
 
-  func buildReturnClause(format: Format, leadingTrivia: Trivia? = nil) -> ReturnClauseSyntax {
+  /// Builds a `ReturnClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ReturnClauseSyntax`.
+  func buildReturnClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnClauseSyntax {
     let result = SyntaxFactory.makeReturnClause(
       arrow: arrow,
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildReturnClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildReturnClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4332,6 +4862,10 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   let throwsOrRethrowsKeyword: TokenSyntax?
   let output: ReturnClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FunctionSignature` using the provided parameters.
   /// - Parameters:
   ///   - input: 
@@ -4339,11 +4873,13 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   ///   - throwsOrRethrowsKeyword: 
   ///   - output: 
   public init(
+    leadingTrivia: Trivia = [],
     input: ExpressibleAsParameterClause,
     asyncOrReasyncKeyword: TokenSyntax? = nil,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
     output: ExpressibleAsReturnClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.input = input.createParameterClause()
     self.asyncOrReasyncKeyword = asyncOrReasyncKeyword
     assert(asyncOrReasyncKeyword == nil || asyncOrReasyncKeyword!.text == "async" || asyncOrReasyncKeyword!.text == "reasync")
@@ -4356,12 +4892,14 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     input: ExpressibleAsParameterClause,
     asyncOrReasyncKeyword: String?,
     throwsOrRethrowsKeyword: TokenSyntax? = nil,
     output: ExpressibleAsReturnClause? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       input: input,
       asyncOrReasyncKeyword: asyncOrReasyncKeyword.map(TokenSyntax.contextualKeyword),
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
@@ -4369,23 +4907,24 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
     )
   }
 
-  func buildFunctionSignature(format: Format, leadingTrivia: Trivia? = nil) -> FunctionSignatureSyntax {
+  /// Builds a `FunctionSignatureSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FunctionSignatureSyntax`.
+  func buildFunctionSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionSignatureSyntax {
     let result = SyntaxFactory.makeFunctionSignature(
       input: input.buildParameterClause(format: format, leadingTrivia: nil),
       asyncOrReasyncKeyword: asyncOrReasyncKeyword,
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
       output: output?.buildReturnClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildFunctionSignature(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildFunctionSignature(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4407,16 +4946,22 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   let condition: ExprBuildable?
   let elements: SyntaxBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IfConfigClause` using the provided parameters.
   /// - Parameters:
   ///   - poundKeyword: 
   ///   - condition: 
   ///   - elements: 
   public init(
+    leadingTrivia: Trivia = [],
     poundKeyword: TokenSyntax,
     condition: ExpressibleAsExprBuildable? = nil,
     elements: ExpressibleAsSyntaxBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundKeyword = poundKeyword
     assert(poundKeyword.text == "#if" || poundKeyword.text == "#elseif" || poundKeyword.text == "#else")
     self.condition = condition?.createExprBuildable()
@@ -4424,22 +4969,23 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   }
 
 
-  func buildIfConfigClause(format: Format, leadingTrivia: Trivia? = nil) -> IfConfigClauseSyntax {
+  /// Builds a `IfConfigClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IfConfigClauseSyntax`.
+  func buildIfConfigClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigClauseSyntax {
     let result = SyntaxFactory.makeIfConfigClause(
       poundKeyword: poundKeyword,
       condition: condition?.buildExpr(format: format, leadingTrivia: nil),
       elements: elements.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildIfConfigClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildIfConfigClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4460,35 +5006,42 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   let clauses: IfConfigClauseList
   let poundEndif: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IfConfigDecl` using the provided parameters.
   /// - Parameters:
   ///   - clauses: 
   ///   - poundEndif: 
   public init(
+    leadingTrivia: Trivia = [],
     clauses: ExpressibleAsIfConfigClauseList,
     poundEndif: TokenSyntax = TokenSyntax.`poundEndif`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.clauses = clauses.createIfConfigClauseList()
     self.poundEndif = poundEndif
     assert(poundEndif.text == "#endif")
   }
 
 
-  func buildIfConfigDecl(format: Format, leadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
+  /// Builds a `IfConfigDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IfConfigDeclSyntax`.
+  func buildIfConfigDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
     let result = SyntaxFactory.makeIfConfigDecl(
       clauses: clauses.buildIfConfigClauseList(format: format, leadingTrivia: nil),
       poundEndif: poundEndif
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildIfConfigDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildIfConfigDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -4517,6 +5070,10 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   let message: StringLiteralExpr
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundErrorDecl` using the provided parameters.
   /// - Parameters:
   ///   - poundError: 
@@ -4524,11 +5081,13 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   ///   - message: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundError: TokenSyntax = TokenSyntax.`poundError`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     message: ExpressibleAsStringLiteralExpr,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundError = poundError
     assert(poundError.text == "#error")
     self.leftParen = leftParen
@@ -4539,23 +5098,24 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   }
 
 
-  func buildPoundErrorDecl(format: Format, leadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
+  /// Builds a `PoundErrorDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundErrorDeclSyntax`.
+  func buildPoundErrorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
     let result = SyntaxFactory.makePoundErrorDecl(
       poundError: poundError,
       leftParen: leftParen,
       message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPoundErrorDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildPoundErrorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -4584,6 +5144,10 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   let message: StringLiteralExpr
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundWarningDecl` using the provided parameters.
   /// - Parameters:
   ///   - poundWarning: 
@@ -4591,11 +5155,13 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   ///   - message: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundWarning: TokenSyntax = TokenSyntax.`poundWarning`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     message: ExpressibleAsStringLiteralExpr,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundWarning = poundWarning
     assert(poundWarning.text == "#warning")
     self.leftParen = leftParen
@@ -4606,23 +5172,24 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   }
 
 
-  func buildPoundWarningDecl(format: Format, leadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
+  /// Builds a `PoundWarningDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundWarningDeclSyntax`.
+  func buildPoundWarningDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
     let result = SyntaxFactory.makePoundWarningDecl(
       poundWarning: poundWarning,
       leftParen: leftParen,
       message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPoundWarningDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildPoundWarningDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -4651,6 +5218,10 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   let args: PoundSourceLocationArgs?
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundSourceLocation` using the provided parameters.
   /// - Parameters:
   ///   - poundSourceLocation: 
@@ -4658,11 +5229,13 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   ///   - args: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundSourceLocation: TokenSyntax = TokenSyntax.`poundSourceLocation`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     args: ExpressibleAsPoundSourceLocationArgs? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundSourceLocation = poundSourceLocation
     assert(poundSourceLocation.text == "#sourceLocation")
     self.leftParen = leftParen
@@ -4673,23 +5246,24 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   }
 
 
-  func buildPoundSourceLocation(format: Format, leadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
+  /// Builds a `PoundSourceLocationSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundSourceLocationSyntax`.
+  func buildPoundSourceLocation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
     let result = SyntaxFactory.makePoundSourceLocation(
       poundSourceLocation: poundSourceLocation,
       leftParen: leftParen,
       args: args?.buildPoundSourceLocationArgs(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPoundSourceLocation(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildPoundSourceLocation(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -4721,6 +5295,10 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   let lineArgColon: TokenSyntax
   let lineNumber: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundSourceLocationArgs` using the provided parameters.
   /// - Parameters:
   ///   - fileArgLabel: 
@@ -4731,6 +5309,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   ///   - lineArgColon: 
   ///   - lineNumber: 
   public init(
+    leadingTrivia: Trivia = [],
     fileArgLabel: TokenSyntax,
     fileArgColon: TokenSyntax = TokenSyntax.`colon`,
     fileName: TokenSyntax,
@@ -4739,6 +5318,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     lineArgColon: TokenSyntax = TokenSyntax.`colon`,
     lineNumber: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.fileArgLabel = fileArgLabel
     assert(fileArgLabel.text == "file")
     self.fileArgColon = fileArgColon
@@ -4757,6 +5337,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     fileArgLabel: String,
     fileArgColon: TokenSyntax = TokenSyntax.`colon`,
     fileName: String,
@@ -4766,6 +5347,7 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     lineNumber: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       fileArgLabel: TokenSyntax.identifier(fileArgLabel),
       fileArgColon: fileArgColon,
       fileName: TokenSyntax.stringLiteral(fileName),
@@ -4776,7 +5358,11 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
     )
   }
 
-  func buildPoundSourceLocationArgs(format: Format, leadingTrivia: Trivia? = nil) -> PoundSourceLocationArgsSyntax {
+  /// Builds a `PoundSourceLocationArgsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundSourceLocationArgsSyntax`.
+  func buildPoundSourceLocationArgs(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationArgsSyntax {
     let result = SyntaxFactory.makePoundSourceLocationArgs(
       fileArgLabel: fileArgLabel,
       fileArgColon: fileArgColon,
@@ -4786,16 +5372,13 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
       lineArgColon: lineArgColon,
       lineNumber: lineNumber
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPoundSourceLocationArgs(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPoundSourceLocationArgs(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4818,6 +5401,10 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   let detail: TokenSyntax?
   let detailRightParen: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeclModifier` using the provided parameters.
   /// - Parameters:
   ///   - name: 
@@ -4825,11 +5412,13 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   ///   - detail: 
   ///   - detailRightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     detailLeftParen: TokenSyntax? = nil,
     detail: TokenSyntax? = nil,
     detailRightParen: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     assert(name.text == "class" || name.text == "convenience" || name.text == "dynamic" || name.text == "final" || name.text == "infix" || name.text == "lazy" || name.text == "optional" || name.text == "override" || name.text == "postfix" || name.text == "prefix" || name.text == "required" || name.text == "static" || name.text == "unowned" || name.text == "weak" || name.text == "private" || name.text == "fileprivate" || name.text == "internal" || name.text == "public" || name.text == "open" || name.text == "mutating" || name.text == "nonmutating" || name.text == "indirect" || name.text == "__consuming" || name.text == "actor" || name.text == "async" || name.text == "distributed")
     self.detailLeftParen = detailLeftParen
@@ -4843,12 +5432,14 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     detailLeftParen: TokenSyntax? = nil,
     detail: String?,
     detailRightParen: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       name: name,
       detailLeftParen: detailLeftParen,
       detail: detail.map(TokenSyntax.identifier),
@@ -4856,23 +5447,24 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
     )
   }
 
-  func buildDeclModifier(format: Format, leadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
+  /// Builds a `DeclModifierSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeclModifierSyntax`.
+  func buildDeclModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
     let result = SyntaxFactory.makeDeclModifier(
       name: name,
       detailLeftParen: detailLeftParen,
       detail: detail,
       detailRightParen: detailRightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclModifier(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDeclModifier(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4893,35 +5485,42 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   let typeName: TypeBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `InheritedType` using the provided parameters.
   /// - Parameters:
   ///   - typeName: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     typeName: ExpressibleAsTypeBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.typeName = typeName.createTypeBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildInheritedType(format: Format, leadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
+  /// Builds a `InheritedTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `InheritedTypeSyntax`.
+  func buildInheritedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
     let result = SyntaxFactory.makeInheritedType(
       typeName: typeName.buildType(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildInheritedType(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildInheritedType(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -4950,14 +5549,20 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   let colon: TokenSyntax
   let inheritedTypeCollection: InheritedTypeList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TypeInheritanceClause` using the provided parameters.
   /// - Parameters:
   ///   - colon: 
   ///   - inheritedTypeCollection: 
   public init(
+    leadingTrivia: Trivia = [],
     colon: TokenSyntax = TokenSyntax.`colon`,
     inheritedTypeCollection: ExpressibleAsInheritedTypeList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.colon = colon
     assert(colon.text == ":")
     self.inheritedTypeCollection = inheritedTypeCollection.createInheritedTypeList()
@@ -4967,30 +5572,33 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     colon: TokenSyntax = TokenSyntax.`colon`,
     @InheritedTypeListBuilder inheritedTypeCollectionBuilder: () -> ExpressibleAsInheritedTypeList = { InheritedTypeList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       colon: colon,
       inheritedTypeCollection: inheritedTypeCollectionBuilder()
     )
   }
 
-  func buildTypeInheritanceClause(format: Format, leadingTrivia: Trivia? = nil) -> TypeInheritanceClauseSyntax {
+  /// Builds a `TypeInheritanceClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TypeInheritanceClauseSyntax`.
+  func buildTypeInheritanceClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInheritanceClauseSyntax {
     let result = SyntaxFactory.makeTypeInheritanceClause(
       colon: colon,
       inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTypeInheritanceClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTypeInheritanceClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -5017,6 +5625,10 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClassDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5028,6 +5640,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   ///   - genericWhereClause: 
   ///   - members: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     classOrActorKeyword: TokenSyntax,
@@ -5037,6 +5650,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.classOrActorKeyword = classOrActorKeyword
@@ -5051,6 +5665,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     classOrActorKeyword: TokenSyntax,
@@ -5061,6 +5676,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       classOrActorKeyword: classOrActorKeyword,
@@ -5072,7 +5688,11 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     )
   }
 
-  func buildClassDecl(format: Format, leadingTrivia: Trivia? = nil) -> ClassDeclSyntax {
+  /// Builds a `ClassDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClassDeclSyntax`.
+  func buildClassDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassDeclSyntax {
     let result = SyntaxFactory.makeClassDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -5083,16 +5703,13 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildClassDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildClassDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -5125,6 +5742,10 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `StructDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5136,6 +5757,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   ///   - genericWhereClause: 
   ///   - members: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     structKeyword: TokenSyntax = TokenSyntax.`struct`,
@@ -5145,6 +5767,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.structKeyword = structKeyword
@@ -5160,6 +5783,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     structKeyword: TokenSyntax = TokenSyntax.`struct`,
@@ -5170,6 +5794,7 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       structKeyword: structKeyword,
@@ -5181,7 +5806,11 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
     )
   }
 
-  func buildStructDecl(format: Format, leadingTrivia: Trivia? = nil) -> StructDeclSyntax {
+  /// Builds a `StructDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `StructDeclSyntax`.
+  func buildStructDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StructDeclSyntax {
     let result = SyntaxFactory.makeStructDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -5192,16 +5821,13 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildStructDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildStructDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -5234,6 +5860,10 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ProtocolDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5245,6 +5875,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   ///   - genericWhereClause: 
   ///   - members: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
@@ -5254,6 +5885,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.protocolKeyword = protocolKeyword
@@ -5269,6 +5901,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     protocolKeyword: TokenSyntax = TokenSyntax.`protocol`,
@@ -5279,6 +5912,7 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       protocolKeyword: protocolKeyword,
@@ -5290,7 +5924,11 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
     )
   }
 
-  func buildProtocolDecl(format: Format, leadingTrivia: Trivia? = nil) -> ProtocolDeclSyntax {
+  /// Builds a `ProtocolDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ProtocolDeclSyntax`.
+  func buildProtocolDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ProtocolDeclSyntax {
     let result = SyntaxFactory.makeProtocolDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -5301,16 +5939,13 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildProtocolDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildProtocolDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -5342,6 +5977,10 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ExtensionDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5352,6 +5991,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   ///   - genericWhereClause: 
   ///   - members: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
@@ -5360,6 +6000,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.extensionKeyword = extensionKeyword
@@ -5374,6 +6015,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     extensionKeyword: TokenSyntax = TokenSyntax.`extension`,
@@ -5383,6 +6025,7 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       extensionKeyword: extensionKeyword,
@@ -5393,7 +6036,11 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
     )
   }
 
-  func buildExtensionDecl(format: Format, leadingTrivia: Trivia? = nil) -> ExtensionDeclSyntax {
+  /// Builds a `ExtensionDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ExtensionDeclSyntax`.
+  func buildExtensionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExtensionDeclSyntax {
     let result = SyntaxFactory.makeExtensionDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -5403,16 +6050,13 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildExtensionDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildExtensionDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -5440,16 +6084,22 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   let members: MemberDeclList
   let rightBrace: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MemberDeclBlock` using the provided parameters.
   /// - Parameters:
   ///   - leftBrace: 
   ///   - members: 
   ///   - rightBrace: 
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     members: ExpressibleAsMemberDeclList,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
     self.members = members.createMemberDeclList()
@@ -5461,33 +6111,36 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`,
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftBrace: leftBrace,
       members: membersBuilder(),
       rightBrace: rightBrace
     )
   }
 
-  func buildMemberDeclBlock(format: Format, leadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
+  /// Builds a `MemberDeclBlockSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MemberDeclBlockSyntax`.
+  func buildMemberDeclBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
     let result = SyntaxFactory.makeMemberDeclBlock(
       leftBrace: leftBrace,
       members: members.buildMemberDeclList(format: format._indented(), leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMemberDeclBlock(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildMemberDeclBlock(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -5509,35 +6162,42 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   let decl: DeclBuildable
   let semicolon: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MemberDeclListItem` using the provided parameters.
   /// - Parameters:
   ///   - decl: The declaration of the type member.
   ///   - semicolon: An optional trailing semicolon.
   public init(
+    leadingTrivia: Trivia = [],
     decl: ExpressibleAsDeclBuildable,
     semicolon: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.decl = decl.createDeclBuildable()
     self.semicolon = semicolon
     assert(semicolon == nil || semicolon!.text == ";")
   }
 
 
-  func buildMemberDeclListItem(format: Format, leadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
+  /// Builds a `MemberDeclListItemSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MemberDeclListItemSyntax`.
+  func buildMemberDeclListItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
     let result = SyntaxFactory.makeMemberDeclListItem(
       decl: decl.buildDecl(format: format, leadingTrivia: nil),
       semicolon: semicolon
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMemberDeclListItem(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildMemberDeclListItem(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -5558,14 +6218,20 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   let statements: CodeBlockItemList
   let eofToken: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SourceFile` using the provided parameters.
   /// - Parameters:
   ///   - statements: 
   ///   - eofToken: 
   public init(
+    leadingTrivia: Trivia = [],
     statements: ExpressibleAsCodeBlockItemList,
     eofToken: TokenSyntax = TokenSyntax.eof
   ) {
+    self.leadingTrivia = leadingTrivia
     self.statements = statements.createCodeBlockItemList()
     self.eofToken = eofToken
   }
@@ -5574,30 +6240,33 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     eofToken: TokenSyntax = TokenSyntax.eof,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       statements: statementsBuilder(),
       eofToken: eofToken
     )
   }
 
-  func buildSourceFile(format: Format, leadingTrivia: Trivia? = nil) -> SourceFileSyntax {
+  /// Builds a `SourceFileSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SourceFileSyntax`.
+  func buildSourceFile(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SourceFileSyntax {
     let result = SyntaxFactory.makeSourceFile(
       statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil),
       eofToken: eofToken
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSourceFile(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildSourceFile(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -5618,35 +6287,42 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   let equal: TokenSyntax
   let value: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `InitializerClause` using the provided parameters.
   /// - Parameters:
   ///   - equal: 
   ///   - value: 
   public init(
+    leadingTrivia: Trivia = [],
     equal: TokenSyntax = TokenSyntax.`equal`,
     value: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.equal = equal
     assert(equal.text == "=")
     self.value = value.createExprBuildable()
   }
 
 
-  func buildInitializerClause(format: Format, leadingTrivia: Trivia? = nil) -> InitializerClauseSyntax {
+  /// Builds a `InitializerClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `InitializerClauseSyntax`.
+  func buildInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerClauseSyntax {
     let result = SyntaxFactory.makeInitializerClause(
       equal: equal,
       value: value.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildInitializerClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildInitializerClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -5673,6 +6349,10 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   let defaultArgument: InitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FunctionParameter` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5684,6 +6364,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   ///   - defaultArgument: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     firstName: TokenSyntax? = nil,
     secondName: TokenSyntax? = nil,
@@ -5693,6 +6374,7 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
     defaultArgument: ExpressibleAsInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.firstName = firstName
     self.secondName = secondName
@@ -5707,7 +6389,11 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   }
 
 
-  func buildFunctionParameter(format: Format, leadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
+  /// Builds a `FunctionParameterSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FunctionParameterSyntax`.
+  func buildFunctionParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
     let result = SyntaxFactory.makeFunctionParameter(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       firstName: firstName,
@@ -5718,16 +6404,13 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
       defaultArgument: defaultArgument?.buildInitializerClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildFunctionParameter(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildFunctionParameter(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -5768,6 +6451,10 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   let genericWhereClause: GenericWhereClause?
   let body: CodeBlock?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FunctionDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5779,6 +6466,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   ///   - genericWhereClause: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
@@ -5788,6 +6476,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.funcKeyword = funcKeyword
@@ -5803,6 +6492,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     funcKeyword: TokenSyntax = TokenSyntax.`func`,
@@ -5813,6 +6503,7 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       funcKeyword: funcKeyword,
@@ -5824,7 +6515,11 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
     )
   }
 
-  func buildFunctionDecl(format: Format, leadingTrivia: Trivia? = nil) -> FunctionDeclSyntax {
+  /// Builds a `FunctionDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FunctionDeclSyntax`.
+  func buildFunctionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclSyntax {
     let result = SyntaxFactory.makeFunctionDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -5835,16 +6530,13 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildFunctionDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildFunctionDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -5878,6 +6570,10 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   let genericWhereClause: GenericWhereClause?
   let body: CodeBlock?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `InitializerDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5890,6 +6586,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   ///   - genericWhereClause: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     initKeyword: TokenSyntax = TokenSyntax.`init`,
@@ -5900,6 +6597,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.initKeyword = initKeyword
@@ -5918,6 +6616,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     initKeyword: TokenSyntax = TokenSyntax.`init`,
@@ -5929,6 +6628,7 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       initKeyword: initKeyword,
@@ -5941,7 +6641,11 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
     )
   }
 
-  func buildInitializerDecl(format: Format, leadingTrivia: Trivia? = nil) -> InitializerDeclSyntax {
+  /// Builds a `InitializerDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `InitializerDeclSyntax`.
+  func buildInitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerDeclSyntax {
     let result = SyntaxFactory.makeInitializerDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -5953,16 +6657,13 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildInitializerDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildInitializerDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -5991,6 +6692,10 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   let deinitKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeinitializerDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -5998,11 +6703,13 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   ///   - deinitKeyword: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.deinitKeyword = deinitKeyword
@@ -6014,12 +6721,14 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     deinitKeyword: TokenSyntax = TokenSyntax.`deinit`,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       deinitKeyword: deinitKeyword,
@@ -6027,23 +6736,24 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
     )
   }
 
-  func buildDeinitializerDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeinitializerDeclSyntax {
+  /// Builds a `DeinitializerDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeinitializerDeclSyntax`.
+  func buildDeinitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeinitializerDeclSyntax {
     let result = SyntaxFactory.makeDeinitializerDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
       deinitKeyword: deinitKeyword,
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildDeinitializerDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildDeinitializerDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -6076,6 +6786,10 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   let genericWhereClause: GenericWhereClause?
   let accessor: SyntaxBuildable?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SubscriptDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -6087,6 +6801,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   ///   - genericWhereClause: 
   ///   - accessor: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     subscriptKeyword: TokenSyntax = TokenSyntax.`subscript`,
@@ -6096,6 +6811,7 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     accessor: ExpressibleAsSyntaxBuildable? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.subscriptKeyword = subscriptKeyword
@@ -6108,7 +6824,11 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   }
 
 
-  func buildSubscriptDecl(format: Format, leadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
+  /// Builds a `SubscriptDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SubscriptDeclSyntax`.
+  func buildSubscriptDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
     let result = SyntaxFactory.makeSubscriptDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -6119,16 +6839,13 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildSubscriptDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildSubscriptDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -6157,6 +6874,10 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   let modifier: TokenSyntax?
   let rightParen: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AccessLevelModifier` using the provided parameters.
   /// - Parameters:
   ///   - name: 
@@ -6164,11 +6885,13 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   ///   - modifier: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     leftParen: TokenSyntax? = nil,
     modifier: TokenSyntax? = nil,
     rightParen: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.leftParen = leftParen
     assert(leftParen == nil || leftParen!.text == "(")
@@ -6181,12 +6904,14 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     name: String,
     leftParen: TokenSyntax? = nil,
     modifier: String?,
     rightParen: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       name: TokenSyntax.identifier(name),
       leftParen: leftParen,
       modifier: modifier.map(TokenSyntax.identifier),
@@ -6194,23 +6919,24 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
     )
   }
 
-  func buildAccessLevelModifier(format: Format, leadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
+  /// Builds a `AccessLevelModifierSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AccessLevelModifierSyntax`.
+  func buildAccessLevelModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
     let result = SyntaxFactory.makeAccessLevelModifier(
       name: name,
       leftParen: leftParen,
       modifier: modifier,
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessLevelModifier(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAccessLevelModifier(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -6231,14 +6957,20 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   let name: TokenSyntax
   let trailingDot: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AccessPathComponent` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - trailingDot: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     trailingDot: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.trailingDot = trailingDot
     assert(trailingDot == nil || trailingDot!.text == ".")
@@ -6248,30 +6980,33 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     name: String,
     trailingDot: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       name: TokenSyntax.identifier(name),
       trailingDot: trailingDot
     )
   }
 
-  func buildAccessPathComponent(format: Format, leadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
+  /// Builds a `AccessPathComponentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AccessPathComponentSyntax`.
+  func buildAccessPathComponent(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
     let result = SyntaxFactory.makeAccessPathComponent(
       name: name,
       trailingDot: trailingDot
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessPathComponent(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAccessPathComponent(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -6295,6 +7030,10 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   let importKind: TokenSyntax?
   let path: AccessPath
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ImportDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -6303,12 +7042,14 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   ///   - importKind: 
   ///   - path: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     importTok: TokenSyntax = TokenSyntax.`import`,
     importKind: TokenSyntax? = nil,
     path: ExpressibleAsAccessPath
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.importTok = importTok
@@ -6319,7 +7060,11 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   }
 
 
-  func buildImportDecl(format: Format, leadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
+  /// Builds a `ImportDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ImportDeclSyntax`.
+  func buildImportDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
     let result = SyntaxFactory.makeImportDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -6327,16 +7072,13 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
       importKind: importKind,
       path: path.buildAccessPath(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildImportDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildImportDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -6364,16 +7106,22 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   let name: TokenSyntax
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AccessorParameter` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - name: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     name: TokenSyntax,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.name = name
@@ -6385,33 +7133,36 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     name: String,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftParen: leftParen,
       name: TokenSyntax.identifier(name),
       rightParen: rightParen
     )
   }
 
-  func buildAccessorParameter(format: Format, leadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
+  /// Builds a `AccessorParameterSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AccessorParameterSyntax`.
+  func buildAccessorParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
     let result = SyntaxFactory.makeAccessorParameter(
       leftParen: leftParen,
       name: name,
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessorParameter(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAccessorParameter(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -6437,6 +7188,10 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   let throwsKeyword: TokenSyntax?
   let body: CodeBlock?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AccessorDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -6447,6 +7202,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   ///   - throwsKeyword: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifier: ExpressibleAsDeclModifier? = nil,
     accessorKind: TokenSyntax,
@@ -6455,6 +7211,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
     throwsKeyword: TokenSyntax? = nil,
     body: ExpressibleAsCodeBlock? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifier = modifier?.createDeclModifier()
     self.accessorKind = accessorKind
@@ -6471,6 +7228,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifier: ExpressibleAsDeclModifier? = nil,
     accessorKind: TokenSyntax,
@@ -6480,6 +7238,7 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList? = { nil }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifier: modifier,
       accessorKind: accessorKind,
@@ -6490,7 +7249,11 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
     )
   }
 
-  func buildAccessorDecl(format: Format, leadingTrivia: Trivia? = nil) -> AccessorDeclSyntax {
+  /// Builds a `AccessorDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AccessorDeclSyntax`.
+  func buildAccessorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorDeclSyntax {
     let result = SyntaxFactory.makeAccessorDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifier: modifier?.buildDeclModifier(format: format, leadingTrivia: nil),
@@ -6500,16 +7263,13 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
       throwsKeyword: throwsKeyword,
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildAccessorDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildAccessorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -6537,16 +7297,22 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   let accessors: AccessorList
   let rightBrace: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AccessorBlock` using the provided parameters.
   /// - Parameters:
   ///   - leftBrace: 
   ///   - accessors: 
   ///   - rightBrace: 
   public init(
+    leadingTrivia: Trivia = [],
     leftBrace: TokenSyntax = TokenSyntax.`leftBrace`,
     accessors: ExpressibleAsAccessorList,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftBrace = leftBrace
     assert(leftBrace.text == "{")
     self.accessors = accessors.createAccessorList()
@@ -6555,22 +7321,23 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   }
 
 
-  func buildAccessorBlock(format: Format, leadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
+  /// Builds a `AccessorBlockSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AccessorBlockSyntax`.
+  func buildAccessorBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
     let result = SyntaxFactory.makeAccessorBlock(
       leftBrace: leftBrace,
       accessors: accessors.buildAccessorList(format: format, leadingTrivia: nil),
       rightBrace: rightBrace
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAccessorBlock(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAccessorBlock(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -6594,6 +7361,10 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   let accessor: SyntaxBuildable?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PatternBinding` using the provided parameters.
   /// - Parameters:
   ///   - pattern: 
@@ -6602,12 +7373,14 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   ///   - accessor: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     pattern: ExpressibleAsPatternBuildable,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
     initializer: ExpressibleAsInitializerClause? = nil,
     accessor: ExpressibleAsSyntaxBuildable? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.pattern = pattern.createPatternBuildable()
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
     self.initializer = initializer?.createInitializerClause()
@@ -6617,7 +7390,11 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   }
 
 
-  func buildPatternBinding(format: Format, leadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
+  /// Builds a `PatternBindingSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PatternBindingSyntax`.
+  func buildPatternBinding(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
     let result = SyntaxFactory.makePatternBinding(
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
@@ -6625,16 +7402,13 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPatternBinding(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPatternBinding(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -6668,6 +7442,10 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   let letOrVarKeyword: TokenSyntax
   let bindings: PatternBindingList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `VariableDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -6675,11 +7453,13 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   ///   - letOrVarKeyword: 
   ///   - bindings: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     letOrVarKeyword: TokenSyntax,
     bindings: ExpressibleAsPatternBindingList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.letOrVarKeyword = letOrVarKeyword
@@ -6691,12 +7471,14 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     letOrVarKeyword: TokenSyntax,
     @PatternBindingListBuilder bindingsBuilder: () -> ExpressibleAsPatternBindingList = { PatternBindingList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       letOrVarKeyword: letOrVarKeyword,
@@ -6704,23 +7486,24 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
     )
   }
 
-  func buildVariableDecl(format: Format, leadingTrivia: Trivia? = nil) -> VariableDeclSyntax {
+  /// Builds a `VariableDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `VariableDeclSyntax`.
+  func buildVariableDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VariableDeclSyntax {
     let result = SyntaxFactory.makeVariableDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
       bindings: bindings.buildPatternBindingList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildVariableDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildVariableDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -6750,6 +7533,10 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   let rawValue: InitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `EnumCaseElement` using the provided parameters.
   /// - Parameters:
   ///   - identifier: The name of this case.
@@ -6757,11 +7544,13 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   ///   - rawValue: The raw value of this enum element, if present.
   ///   - trailingComma: The trailing comma of this element, if the case hasmultiple elements.
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax,
     associatedValue: ExpressibleAsParameterClause? = nil,
     rawValue: ExpressibleAsInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.identifier = identifier
     self.associatedValue = associatedValue?.createParameterClause()
     self.rawValue = rawValue?.createInitializerClause()
@@ -6773,12 +7562,14 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     identifier: String,
     associatedValue: ExpressibleAsParameterClause? = nil,
     rawValue: ExpressibleAsInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       identifier: TokenSyntax.identifier(identifier),
       associatedValue: associatedValue,
       rawValue: rawValue,
@@ -6786,23 +7577,24 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
     )
   }
 
-  func buildEnumCaseElement(format: Format, leadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
+  /// Builds a `EnumCaseElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `EnumCaseElementSyntax`.
+  func buildEnumCaseElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
     let result = SyntaxFactory.makeEnumCaseElement(
       identifier: identifier,
       associatedValue: associatedValue?.buildParameterClause(format: format, leadingTrivia: nil),
       rawValue: rawValue?.buildInitializerClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildEnumCaseElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildEnumCaseElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -6836,6 +7628,10 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   let caseKeyword: TokenSyntax
   let elements: EnumCaseElementList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `EnumCaseDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: The attributes applied to the case declaration.
@@ -6843,11 +7639,13 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   ///   - caseKeyword: The `case` keyword for this case.
   ///   - elements: The elements this case declares.
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
     elements: ExpressibleAsEnumCaseElementList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.caseKeyword = caseKeyword
@@ -6859,12 +7657,14 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
     @EnumCaseElementListBuilder elementsBuilder: () -> ExpressibleAsEnumCaseElementList = { EnumCaseElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       caseKeyword: caseKeyword,
@@ -6872,23 +7672,24 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
     )
   }
 
-  func buildEnumCaseDecl(format: Format, leadingTrivia: Trivia? = nil) -> EnumCaseDeclSyntax {
+  /// Builds a `EnumCaseDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `EnumCaseDeclSyntax`.
+  func buildEnumCaseDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseDeclSyntax {
     let result = SyntaxFactory.makeEnumCaseDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
       elements: elements.buildEnumCaseElementList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildEnumCaseDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildEnumCaseDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -6922,6 +7723,10 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   let genericWhereClause: GenericWhereClause?
   let members: MemberDeclBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `EnumDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: The attributes applied to the enum declaration.
@@ -6933,6 +7738,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters ofthis enum.
   ///   - members: The cases and other members of this enum.
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
@@ -6942,6 +7748,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
     genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
     members: ExpressibleAsMemberDeclBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.enumKeyword = enumKeyword
@@ -6957,6 +7764,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     enumKeyword: TokenSyntax = TokenSyntax.`enum`,
@@ -6967,6 +7775,7 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
     @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       enumKeyword: enumKeyword,
@@ -6978,7 +7787,11 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
     )
   }
 
-  func buildEnumDecl(format: Format, leadingTrivia: Trivia? = nil) -> EnumDeclSyntax {
+  /// Builds a `EnumDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `EnumDeclSyntax`.
+  func buildEnumDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumDeclSyntax {
     let result = SyntaxFactory.makeEnumDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -6989,16 +7802,13 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildEnumDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildEnumDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -7029,6 +7839,10 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   let identifier: TokenSyntax
   let operatorPrecedenceAndTypes: OperatorPrecedenceAndTypes?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `OperatorDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: The attributes applied to the 'operator' declaration.
@@ -7037,12 +7851,14 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   ///   - identifier: 
   ///   - operatorPrecedenceAndTypes: Optionally specify a precedence group and designated types.
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     operatorKeyword: TokenSyntax = TokenSyntax.`operator`,
     identifier: TokenSyntax,
     operatorPrecedenceAndTypes: ExpressibleAsOperatorPrecedenceAndTypes? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.operatorKeyword = operatorKeyword
@@ -7052,7 +7868,11 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   }
 
 
-  func buildOperatorDecl(format: Format, leadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
+  /// Builds a `OperatorDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OperatorDeclSyntax`.
+  func buildOperatorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
     let result = SyntaxFactory.makeOperatorDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -7060,16 +7880,13 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
       identifier: identifier,
       operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildOperatorDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildOperatorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -7097,35 +7914,42 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   let colon: TokenSyntax
   let precedenceGroupAndDesignatedTypes: IdentifierList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `OperatorPrecedenceAndTypes` using the provided parameters.
   /// - Parameters:
   ///   - colon: 
   ///   - precedenceGroupAndDesignatedTypes: The precedence group and designated types for this operator
   public init(
+    leadingTrivia: Trivia = [],
     colon: TokenSyntax = TokenSyntax.`colon`,
     precedenceGroupAndDesignatedTypes: ExpressibleAsIdentifierList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.colon = colon
     assert(colon.text == ":")
     self.precedenceGroupAndDesignatedTypes = precedenceGroupAndDesignatedTypes.createIdentifierList()
   }
 
 
-  func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
+  /// Builds a `OperatorPrecedenceAndTypesSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
+  func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
     let result = SyntaxFactory.makeOperatorPrecedenceAndTypes(
       colon: colon,
       precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7152,6 +7976,10 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   let groupAttributes: PrecedenceGroupAttributeList
   let rightBrace: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrecedenceGroupDecl` using the provided parameters.
   /// - Parameters:
   ///   - attributes: The attributes applied to the 'precedencegroup' declaration.
@@ -7162,6 +7990,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   ///   - groupAttributes: The characteristics of this precedence group.
   ///   - rightBrace: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
@@ -7170,6 +7999,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
     groupAttributes: ExpressibleAsPrecedenceGroupAttributeList,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
     self.precedencegroupKeyword = precedencegroupKeyword
@@ -7186,6 +8016,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
     precedencegroupKeyword: TokenSyntax = TokenSyntax.`precedencegroup`,
@@ -7195,6 +8026,7 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
       precedencegroupKeyword: precedencegroupKeyword,
@@ -7205,7 +8037,11 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
     )
   }
 
-  func buildPrecedenceGroupDecl(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
+  /// Builds a `PrecedenceGroupDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrecedenceGroupDeclSyntax`.
+  func buildPrecedenceGroupDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
     let result = SyntaxFactory.makePrecedenceGroupDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
@@ -7215,16 +8051,13 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
       groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format, leadingTrivia: nil),
       rightBrace: rightBrace
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `DeclBuildable`.
-  public func buildDecl(format: Format, leadingTrivia: Trivia? = nil) -> DeclSyntax {
-    let result = buildPrecedenceGroupDecl(format: format, leadingTrivia: leadingTrivia)
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildPrecedenceGroupDecl(format: format, leadingTrivia: additionalLeadingTrivia)
     return DeclSyntax(result)
   }
 
@@ -7253,16 +8086,22 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   let colon: TokenSyntax
   let otherNames: PrecedenceGroupNameList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrecedenceGroupRelation` using the provided parameters.
   /// - Parameters:
   ///   - higherThanOrLowerThan: The relation to specified other precedence groups.
   ///   - colon: 
   ///   - otherNames: The name of other precedence group to which this precedencegroup relates.
   public init(
+    leadingTrivia: Trivia = [],
     higherThanOrLowerThan: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     otherNames: ExpressibleAsPrecedenceGroupNameList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.higherThanOrLowerThan = higherThanOrLowerThan
     assert(higherThanOrLowerThan.text == "higherThan" || higherThanOrLowerThan.text == "lowerThan")
     self.colon = colon
@@ -7274,33 +8113,36 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     higherThanOrLowerThan: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     otherNames: ExpressibleAsPrecedenceGroupNameList
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       higherThanOrLowerThan: TokenSyntax.identifier(higherThanOrLowerThan),
       colon: colon,
       otherNames: otherNames
     )
   }
 
-  func buildPrecedenceGroupRelation(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupRelationSyntax {
+  /// Builds a `PrecedenceGroupRelationSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrecedenceGroupRelationSyntax`.
+  func buildPrecedenceGroupRelation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupRelationSyntax {
     let result = SyntaxFactory.makePrecedenceGroupRelation(
       higherThanOrLowerThan: higherThanOrLowerThan,
       colon: colon,
       otherNames: otherNames.buildPrecedenceGroupNameList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupRelation(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrecedenceGroupRelation(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7321,14 +8163,20 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   let name: TokenSyntax
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrecedenceGroupNameElement` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
@@ -7338,30 +8186,33 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     name: String,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       name: TokenSyntax.identifier(name),
       trailingComma: trailingComma
     )
   }
 
-  func buildPrecedenceGroupNameElement(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
+  /// Builds a `PrecedenceGroupNameElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrecedenceGroupNameElementSyntax`.
+  func buildPrecedenceGroupNameElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
     let result = SyntaxFactory.makePrecedenceGroupNameElement(
       name: name,
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupNameElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrecedenceGroupNameElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7384,16 +8235,22 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   let colon: TokenSyntax
   let flag: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrecedenceGroupAssignment` using the provided parameters.
   /// - Parameters:
   ///   - assignmentKeyword: 
   ///   - colon: 
   ///   - flag: When true, an operator in the corresponding precedence groupuses the same grouping rules during optional chaining as theassignment operators from the standard library. Otherwise,operators in the precedence group follows the same optionalchaining rules as operators that don't perform assignment.
   public init(
+    leadingTrivia: Trivia = [],
     assignmentKeyword: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     flag: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.assignmentKeyword = assignmentKeyword
     assert(assignmentKeyword.text == "assignment")
     self.colon = colon
@@ -7406,33 +8263,36 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     assignmentKeyword: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     flag: TokenSyntax
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       assignmentKeyword: TokenSyntax.identifier(assignmentKeyword),
       colon: colon,
       flag: flag
     )
   }
 
-  func buildPrecedenceGroupAssignment(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
+  /// Builds a `PrecedenceGroupAssignmentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrecedenceGroupAssignmentSyntax`.
+  func buildPrecedenceGroupAssignment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
     let result = SyntaxFactory.makePrecedenceGroupAssignment(
       assignmentKeyword: assignmentKeyword,
       colon: colon,
       flag: flag
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupAssignment(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrecedenceGroupAssignment(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7455,16 +8315,22 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   let colon: TokenSyntax
   let value: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrecedenceGroupAssociativity` using the provided parameters.
   /// - Parameters:
   ///   - associativityKeyword: 
   ///   - colon: 
   ///   - value: Operators that are `left`-associative group left-to-right.Operators that are `right`-associative group right-to-left.Operators that are specified with an associativity of `none`don't associate at all
   public init(
+    leadingTrivia: Trivia = [],
     associativityKeyword: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     value: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.associativityKeyword = associativityKeyword
     assert(associativityKeyword.text == "associativity")
     self.colon = colon
@@ -7477,33 +8343,36 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     associativityKeyword: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     value: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       associativityKeyword: TokenSyntax.identifier(associativityKeyword),
       colon: colon,
       value: TokenSyntax.identifier(value)
     )
   }
 
-  func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
+  /// Builds a `PrecedenceGroupAssociativitySyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrecedenceGroupAssociativitySyntax`.
+  func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
     let result = SyntaxFactory.makePrecedenceGroupAssociativity(
       associativityKeyword: associativityKeyword,
       colon: colon,
       value: value
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrecedenceGroupAssociativity(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrecedenceGroupAssociativity(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7528,6 +8397,10 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   let argumentList: TupleExprElementList?
   let rightParen: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CustomAttribute` using the provided parameters.
   /// - Parameters:
   ///   - atSignToken: The `@` sign.
@@ -7536,12 +8409,14 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   ///   - argumentList: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
     attributeName: ExpressibleAsTypeBuildable,
     leftParen: TokenSyntax? = nil,
     argumentList: ExpressibleAsTupleExprElementList? = nil,
     rightParen: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.atSignToken = atSignToken
     assert(atSignToken.text == "@")
     self.attributeName = attributeName.createTypeBuildable()
@@ -7556,6 +8431,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
     attributeName: ExpressibleAsTypeBuildable,
     leftParen: TokenSyntax? = nil,
@@ -7563,6 +8439,7 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
     @TupleExprElementListBuilder argumentListBuilder: () -> ExpressibleAsTupleExprElementList? = { nil }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       atSignToken: atSignToken,
       attributeName: attributeName,
       leftParen: leftParen,
@@ -7571,7 +8448,11 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
     )
   }
 
-  func buildCustomAttribute(format: Format, leadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
+  /// Builds a `CustomAttributeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CustomAttributeSyntax`.
+  func buildCustomAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
     let result = SyntaxFactory.makeCustomAttribute(
       atSignToken: atSignToken,
       attributeName: attributeName.buildType(format: format, leadingTrivia: nil),
@@ -7579,16 +8460,13 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
       argumentList: argumentList?.buildTupleExprElementList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCustomAttribute(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCustomAttribute(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7614,6 +8492,10 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   let rightParen: TokenSyntax?
   let tokenList: TokenList?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `Attribute` using the provided parameters.
   /// - Parameters:
   ///   - atSignToken: The `@` sign.
@@ -7623,6 +8505,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   ///   - rightParen: If the attribute takes arguments, the closing parenthesis.
   ///   - tokenList: 
   public init(
+    leadingTrivia: Trivia = [],
     atSignToken: TokenSyntax = TokenSyntax.`atSign`,
     attributeName: TokenSyntax,
     leftParen: TokenSyntax? = nil,
@@ -7630,6 +8513,7 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
     rightParen: TokenSyntax? = nil,
     tokenList: ExpressibleAsTokenList? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.atSignToken = atSignToken
     assert(atSignToken.text == "@")
     self.attributeName = attributeName
@@ -7642,7 +8526,11 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   }
 
 
-  func buildAttribute(format: Format, leadingTrivia: Trivia? = nil) -> AttributeSyntax {
+  /// Builds a `AttributeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AttributeSyntax`.
+  func buildAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributeSyntax {
     let result = SyntaxFactory.makeAttribute(
       atSignToken: atSignToken,
       attributeName: attributeName,
@@ -7651,16 +8539,13 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
       rightParen: rightParen,
       tokenList: tokenList?.buildTokenList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAttribute(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAttribute(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7684,6 +8569,10 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   let availabilityList: AvailabilitySpecList
   let semicolon: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AvailabilityEntry` using the provided parameters.
   /// - Parameters:
   ///   - label: The label of the argument
@@ -7691,11 +8580,13 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   ///   - availabilityList: 
   ///   - semicolon: 
   public init(
+    leadingTrivia: Trivia = [],
     label: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     availabilityList: ExpressibleAsAvailabilitySpecList,
     semicolon: TokenSyntax = TokenSyntax.`semicolon`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.label = label
     self.colon = colon
     assert(colon.text == ":")
@@ -7708,12 +8599,14 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     label: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     availabilityList: ExpressibleAsAvailabilitySpecList,
     semicolon: TokenSyntax = TokenSyntax.`semicolon`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       label: TokenSyntax.identifier(label),
       colon: colon,
       availabilityList: availabilityList,
@@ -7721,23 +8614,24 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
     )
   }
 
-  func buildAvailabilityEntry(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
+  /// Builds a `AvailabilityEntrySyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AvailabilityEntrySyntax`.
+  func buildAvailabilityEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
     let result = SyntaxFactory.makeAvailabilityEntry(
       label: label,
       colon: colon,
       availabilityList: availabilityList.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
       semicolon: semicolon
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityEntry(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAvailabilityEntry(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7761,6 +8655,10 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   let value: TokenSyntax
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `LabeledSpecializeEntry` using the provided parameters.
   /// - Parameters:
   ///   - label: The label of the argument
@@ -7768,11 +8666,13 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   ///   - value: The value for this argument
   ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
+    leadingTrivia: Trivia = [],
     label: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     value: TokenSyntax,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.label = label
     self.colon = colon
     assert(colon.text == ":")
@@ -7785,12 +8685,14 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     label: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     value: TokenSyntax,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       label: TokenSyntax.identifier(label),
       colon: colon,
       value: value,
@@ -7798,23 +8700,24 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
     )
   }
 
-  func buildLabeledSpecializeEntry(format: Format, leadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
+  /// Builds a `LabeledSpecializeEntrySyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `LabeledSpecializeEntrySyntax`.
+  func buildLabeledSpecializeEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
     let result = SyntaxFactory.makeLabeledSpecializeEntry(
       label: label,
       colon: colon,
       value: value,
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildLabeledSpecializeEntry(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildLabeledSpecializeEntry(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7848,6 +8751,10 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   let declname: DeclName
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TargetFunctionEntry` using the provided parameters.
   /// - Parameters:
   ///   - label: The label of the argument
@@ -7855,11 +8762,13 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   ///   - declname: The value for this argument
   ///   - trailingComma: A trailing comma if this argument is followed by another one
   public init(
+    leadingTrivia: Trivia = [],
     label: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     declname: ExpressibleAsDeclName,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.label = label
     self.colon = colon
     assert(colon.text == ":")
@@ -7872,12 +8781,14 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     label: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     declname: ExpressibleAsDeclName,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       label: TokenSyntax.identifier(label),
       colon: colon,
       declname: declname,
@@ -7885,23 +8796,24 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
     )
   }
 
-  func buildTargetFunctionEntry(format: Format, leadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
+  /// Builds a `TargetFunctionEntrySyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TargetFunctionEntrySyntax`.
+  func buildTargetFunctionEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
     let result = SyntaxFactory.makeTargetFunctionEntry(
       label: label,
       colon: colon,
       declname: declname.buildDeclName(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTargetFunctionEntry(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTargetFunctionEntry(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7934,16 +8846,22 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   let colon: TokenSyntax
   let stringOrDeclname: SyntaxBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `NamedAttributeStringArgument` using the provided parameters.
   /// - Parameters:
   ///   - nameTok: The label of the argument
   ///   - colon: The colon separating the label and the value
   ///   - stringOrDeclname: 
   public init(
+    leadingTrivia: Trivia = [],
     nameTok: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     stringOrDeclname: ExpressibleAsSyntaxBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.nameTok = nameTok
     self.colon = colon
     assert(colon.text == ":")
@@ -7951,22 +8869,23 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   }
 
 
-  func buildNamedAttributeStringArgument(format: Format, leadingTrivia: Trivia? = nil) -> NamedAttributeStringArgumentSyntax {
+  /// Builds a `NamedAttributeStringArgumentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `NamedAttributeStringArgumentSyntax`.
+  func buildNamedAttributeStringArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NamedAttributeStringArgumentSyntax {
     let result = SyntaxFactory.makeNamedAttributeStringArgument(
       nameTok: nameTok,
       colon: colon,
       stringOrDeclname: stringOrDeclname.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildNamedAttributeStringArgument(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildNamedAttributeStringArgument(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -7987,34 +8906,41 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeclName` using the provided parameters.
   /// - Parameters:
   ///   - declBaseName: The base name of the protocol's requirement.
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
   public init(
+    leadingTrivia: Trivia = [],
     declBaseName: ExpressibleAsSyntaxBuildable,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.declBaseName = declBaseName.createSyntaxBuildable()
     self.declNameArguments = declNameArguments?.createDeclNameArguments()
   }
 
 
-  func buildDeclName(format: Format, leadingTrivia: Trivia? = nil) -> DeclNameSyntax {
+  /// Builds a `DeclNameSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeclNameSyntax`.
+  func buildDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameSyntax {
     let result = SyntaxFactory.makeDeclName(
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDeclName(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDeclName(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8038,6 +8964,10 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   let declBaseName: SyntaxBuildable
   let declNameArguments: DeclNameArguments?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ImplementsAttributeArguments` using the provided parameters.
   /// - Parameters:
   ///   - type: The type for which the method with this attributeimplements a requirement.
@@ -8045,11 +8975,13 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   ///   - declBaseName: The base name of the protocol's requirement.
   ///   - declNameArguments: The argument labels of the protocol's requirement if itis a function requirement.
   public init(
+    leadingTrivia: Trivia = [],
     type: ExpressibleAsSimpleTypeIdentifier,
     comma: TokenSyntax = TokenSyntax.`comma`,
     declBaseName: ExpressibleAsSyntaxBuildable,
     declNameArguments: ExpressibleAsDeclNameArguments? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.type = type.createSimpleTypeIdentifier()
     self.comma = comma
     assert(comma.text == ",")
@@ -8058,23 +8990,24 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   }
 
 
-  func buildImplementsAttributeArguments(format: Format, leadingTrivia: Trivia? = nil) -> ImplementsAttributeArgumentsSyntax {
+  /// Builds a `ImplementsAttributeArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
+  func buildImplementsAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplementsAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeImplementsAttributeArguments(
       type: type.buildSimpleTypeIdentifier(format: format, leadingTrivia: nil),
       comma: comma,
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildImplementsAttributeArguments(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildImplementsAttributeArguments(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8096,14 +9029,20 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   let name: TokenSyntax?
   let colon: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ObjCSelectorPiece` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - colon: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax? = nil,
     colon: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.colon = colon
     assert(colon == nil || colon!.text == ":")
@@ -8113,30 +9052,33 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     name: String?,
     colon: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       name: name.map(TokenSyntax.identifier),
       colon: colon
     )
   }
 
-  func buildObjCSelectorPiece(format: Format, leadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
+  /// Builds a `ObjCSelectorPieceSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ObjCSelectorPieceSyntax`.
+  func buildObjCSelectorPiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
     let result = SyntaxFactory.makeObjCSelectorPiece(
       name: name,
       colon: colon
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildObjCSelectorPiece(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildObjCSelectorPiece(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8161,6 +9103,10 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   let diffParamsComma: TokenSyntax?
   let whereClause: GenericWhereClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DifferentiableAttributeArguments` using the provided parameters.
   /// - Parameters:
   ///   - diffKind: 
@@ -8169,12 +9115,14 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   ///   - diffParamsComma: The comma following the differentiability parameters clause,if it exists.
   ///   - whereClause: 
   public init(
+    leadingTrivia: Trivia = [],
     diffKind: TokenSyntax? = nil,
     diffKindComma: TokenSyntax? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil,
     diffParamsComma: TokenSyntax? = nil,
     whereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.diffKind = diffKind
     assert(diffKind == nil || diffKind!.text == "forward" || diffKind!.text == "reverse" || diffKind!.text == "linear")
     self.diffKindComma = diffKindComma
@@ -8189,6 +9137,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     diffKind: String?,
     diffKindComma: TokenSyntax? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil,
@@ -8196,6 +9145,7 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     whereClause: ExpressibleAsGenericWhereClause? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       diffKind: diffKind.map(TokenSyntax.identifier),
       diffKindComma: diffKindComma,
       diffParams: diffParams,
@@ -8204,7 +9154,11 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
     )
   }
 
-  func buildDifferentiableAttributeArguments(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiableAttributeArgumentsSyntax {
+  /// Builds a `DifferentiableAttributeArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DifferentiableAttributeArgumentsSyntax`.
+  func buildDifferentiableAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiableAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeDifferentiableAttributeArguments(
       diffKind: diffKind,
       diffKindComma: diffKindComma,
@@ -8212,16 +9166,13 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
       diffParamsComma: diffParamsComma,
       whereClause: whereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiableAttributeArguments(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDifferentiableAttributeArguments(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8244,16 +9195,22 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   let colon: TokenSyntax
   let parameters: SyntaxBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DifferentiabilityParamsClause` using the provided parameters.
   /// - Parameters:
   ///   - wrtLabel: The "wrt" label.
   ///   - colon: The colon separating "wrt" and the parameter list.
   ///   - parameters: 
   public init(
+    leadingTrivia: Trivia = [],
     wrtLabel: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     parameters: ExpressibleAsSyntaxBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.wrtLabel = wrtLabel
     assert(wrtLabel.text == "wrt")
     self.colon = colon
@@ -8265,33 +9222,36 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     wrtLabel: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     parameters: ExpressibleAsSyntaxBuildable
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       wrtLabel: TokenSyntax.identifier(wrtLabel),
       colon: colon,
       parameters: parameters
     )
   }
 
-  func buildDifferentiabilityParamsClause(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamsClauseSyntax {
+  /// Builds a `DifferentiabilityParamsClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DifferentiabilityParamsClauseSyntax`.
+  func buildDifferentiabilityParamsClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsClauseSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParamsClause(
       wrtLabel: wrtLabel,
       colon: colon,
       parameters: parameters.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiabilityParamsClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDifferentiabilityParamsClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8314,16 +9274,22 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   let diffParams: DifferentiabilityParamList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DifferentiabilityParams` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - diffParams: The parameters for differentiation.
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     diffParams: ExpressibleAsDifferentiabilityParamList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.diffParams = diffParams.createDifferentiabilityParamList()
@@ -8332,22 +9298,23 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   }
 
 
-  func buildDifferentiabilityParams(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
+  /// Builds a `DifferentiabilityParamsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DifferentiabilityParamsSyntax`.
+  func buildDifferentiabilityParams(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParams(
       leftParen: leftParen,
       diffParams: diffParams.buildDifferentiabilityParamList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiabilityParams(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDifferentiabilityParams(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8369,35 +9336,42 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   let parameter: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DifferentiabilityParam` using the provided parameters.
   /// - Parameters:
   ///   - parameter: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     parameter: ExpressibleAsSyntaxBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.parameter = parameter.createSyntaxBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildDifferentiabilityParam(format: Format, leadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
+  /// Builds a `DifferentiabilityParamSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DifferentiabilityParamSyntax`.
+  func buildDifferentiabilityParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParam(
       parameter: parameter.buildSyntax(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDifferentiabilityParam(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDifferentiabilityParam(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8432,6 +9406,10 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   let comma: TokenSyntax?
   let diffParams: DifferentiabilityParamsClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DerivativeRegistrationAttributeArguments` using the provided parameters.
   /// - Parameters:
   ///   - ofLabel: The "of" label.
@@ -8442,6 +9420,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   ///   - comma: 
   ///   - diffParams: 
   public init(
+    leadingTrivia: Trivia = [],
     ofLabel: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     originalDeclName: ExpressibleAsQualifiedDeclName,
@@ -8450,6 +9429,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     comma: TokenSyntax? = nil,
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.ofLabel = ofLabel
     assert(ofLabel.text == "of")
     self.colon = colon
@@ -8468,6 +9448,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     ofLabel: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     originalDeclName: ExpressibleAsQualifiedDeclName,
@@ -8477,6 +9458,7 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     diffParams: ExpressibleAsDifferentiabilityParamsClause? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       ofLabel: TokenSyntax.identifier(ofLabel),
       colon: colon,
       originalDeclName: originalDeclName,
@@ -8487,7 +9469,11 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
     )
   }
 
-  func buildDerivativeRegistrationAttributeArguments(format: Format, leadingTrivia: Trivia? = nil) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  /// Builds a `DerivativeRegistrationAttributeArgumentsSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DerivativeRegistrationAttributeArgumentsSyntax`.
+  func buildDerivativeRegistrationAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeDerivativeRegistrationAttributeArguments(
       ofLabel: ofLabel,
       colon: colon,
@@ -8497,16 +9483,13 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
       comma: comma,
       diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildDerivativeRegistrationAttributeArguments(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildDerivativeRegistrationAttributeArguments(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8530,6 +9513,10 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   let name: TokenSyntax
   let arguments: DeclNameArguments?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `QualifiedDeclName` using the provided parameters.
   /// - Parameters:
   ///   - baseType: The base type of the qualified name, optionally specified.
@@ -8537,11 +9524,13 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   ///   - name: The base name of the referenced function.
   ///   - arguments: The argument labels of the referenced function, optionallyspecified.
   public init(
+    leadingTrivia: Trivia = [],
     baseType: ExpressibleAsTypeBuildable? = nil,
     dot: TokenSyntax? = nil,
     name: TokenSyntax,
     arguments: ExpressibleAsDeclNameArguments? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.baseType = baseType?.createTypeBuildable()
     self.dot = dot
     assert(dot == nil || dot!.text == "." || dot!.text == ".")
@@ -8550,23 +9539,24 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   }
 
 
-  func buildQualifiedDeclName(format: Format, leadingTrivia: Trivia? = nil) -> QualifiedDeclNameSyntax {
+  /// Builds a `QualifiedDeclNameSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `QualifiedDeclNameSyntax`.
+  func buildQualifiedDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> QualifiedDeclNameSyntax {
     let result = SyntaxFactory.makeQualifiedDeclName(
       baseType: baseType?.buildType(format: format, leadingTrivia: nil),
       dot: dot,
       name: name,
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildQualifiedDeclName(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildQualifiedDeclName(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8588,34 +9578,41 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   let name: SyntaxBuildable
   let arguments: DeclNameArguments?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FunctionDeclName` using the provided parameters.
   /// - Parameters:
   ///   - name: The base name of the referenced function.
   ///   - arguments: The argument labels of the referenced function, optionallyspecified.
   public init(
+    leadingTrivia: Trivia = [],
     name: ExpressibleAsSyntaxBuildable,
     arguments: ExpressibleAsDeclNameArguments? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name.createSyntaxBuildable()
     self.arguments = arguments?.createDeclNameArguments()
   }
 
 
-  func buildFunctionDeclName(format: Format, leadingTrivia: Trivia? = nil) -> FunctionDeclNameSyntax {
+  /// Builds a `FunctionDeclNameSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FunctionDeclNameSyntax`.
+  func buildFunctionDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclNameSyntax {
     let result = SyntaxFactory.makeFunctionDeclName(
       name: name.buildSyntax(format: format, leadingTrivia: nil),
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildFunctionDeclName(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildFunctionDeclName(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8638,16 +9635,22 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   let colon: TokenSyntax
   let versionList: BackDeployVersionList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `BackDeployAttributeSpecList` using the provided parameters.
   /// - Parameters:
   ///   - beforeLabel: The "before" label.
   ///   - colon: The colon separating "before" and the parameter list.
   ///   - versionList: The list of OS versions in which the declaration became ABIstable.
   public init(
+    leadingTrivia: Trivia = [],
     beforeLabel: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     versionList: ExpressibleAsBackDeployVersionList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.beforeLabel = beforeLabel
     assert(beforeLabel.text == "before")
     self.colon = colon
@@ -8659,33 +9662,36 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     beforeLabel: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     versionList: ExpressibleAsBackDeployVersionList
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       beforeLabel: TokenSyntax.identifier(beforeLabel),
       colon: colon,
       versionList: versionList
     )
   }
 
-  func buildBackDeployAttributeSpecList(format: Format, leadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
+  /// Builds a `BackDeployAttributeSpecListSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `BackDeployAttributeSpecListSyntax`.
+  func buildBackDeployAttributeSpecList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
     let result = SyntaxFactory.makeBackDeployAttributeSpecList(
       beforeLabel: beforeLabel,
       colon: colon,
       versionList: versionList.buildBackDeployVersionList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildBackDeployAttributeSpecList(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildBackDeployAttributeSpecList(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8707,35 +9713,42 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   let availabilityVersionRestriction: AvailabilityVersionRestriction
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `BackDeployVersionArgument` using the provided parameters.
   /// - Parameters:
   ///   - availabilityVersionRestriction: 
   ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
   public init(
+    leadingTrivia: Trivia = [],
     availabilityVersionRestriction: ExpressibleAsAvailabilityVersionRestriction,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.availabilityVersionRestriction = availabilityVersionRestriction.createAvailabilityVersionRestriction()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildBackDeployVersionArgument(format: Format, leadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
+  /// Builds a `BackDeployVersionArgumentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `BackDeployVersionArgumentSyntax`.
+  func buildBackDeployVersionArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
     let result = SyntaxFactory.makeBackDeployVersionArgument(
       availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildBackDeployVersionArgument(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildBackDeployVersionArgument(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -8756,14 +9769,20 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   let continueKeyword: TokenSyntax
   let label: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ContinueStmt` using the provided parameters.
   /// - Parameters:
   ///   - continueKeyword: 
   ///   - label: 
   public init(
+    leadingTrivia: Trivia = [],
     continueKeyword: TokenSyntax = TokenSyntax.`continue`,
     label: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.continueKeyword = continueKeyword
     assert(continueKeyword.text == "continue")
     self.label = label
@@ -8773,30 +9792,33 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     continueKeyword: TokenSyntax = TokenSyntax.`continue`,
     label: String?
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       continueKeyword: continueKeyword,
       label: label.map(TokenSyntax.identifier)
     )
   }
 
-  func buildContinueStmt(format: Format, leadingTrivia: Trivia? = nil) -> ContinueStmtSyntax {
+  /// Builds a `ContinueStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ContinueStmtSyntax`.
+  func buildContinueStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ContinueStmtSyntax {
     let result = SyntaxFactory.makeContinueStmt(
       continueKeyword: continueKeyword,
       label: label
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildContinueStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildContinueStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -8826,6 +9848,10 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   let conditions: ConditionElementList
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `WhileStmt` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -8834,12 +9860,14 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ///   - conditions: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
     conditions: ExpressibleAsConditionElementList,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -8853,6 +9881,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
@@ -8860,6 +9889,7 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       whileKeyword: whileKeyword,
@@ -8868,7 +9898,11 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
     )
   }
 
-  func buildWhileStmt(format: Format, leadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
+  /// Builds a `WhileStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `WhileStmtSyntax`.
+  func buildWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
     let result = SyntaxFactory.makeWhileStmt(
       labelName: labelName,
       labelColon: labelColon,
@@ -8876,16 +9910,13 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildWhileStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildWhileStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -8912,14 +9943,20 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   let deferKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeferStmt` using the provided parameters.
   /// - Parameters:
   ///   - deferKeyword: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     deferKeyword: TokenSyntax = TokenSyntax.`defer`,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.deferKeyword = deferKeyword
     assert(deferKeyword.text == "defer")
     self.body = body.createCodeBlock()
@@ -8929,30 +9966,33 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     deferKeyword: TokenSyntax = TokenSyntax.`defer`,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       deferKeyword: deferKeyword,
       body: bodyBuilder()
     )
   }
 
-  func buildDeferStmt(format: Format, leadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
+  /// Builds a `DeferStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeferStmtSyntax`.
+  func buildDeferStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
     let result = SyntaxFactory.makeDeferStmt(
       deferKeyword: deferKeyword,
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildDeferStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildDeferStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -8978,30 +10018,37 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
 public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ExpressionStmt` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
   }
 
 
-  func buildExpressionStmt(format: Format, leadingTrivia: Trivia? = nil) -> ExpressionStmtSyntax {
+  /// Builds a `ExpressionStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ExpressionStmtSyntax`.
+  func buildExpressionStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionStmtSyntax {
     let result = SyntaxFactory.makeExpressionStmt(
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildExpressionStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildExpressionStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9032,6 +10079,10 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   let whileKeyword: TokenSyntax
   let condition: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `RepeatWhileStmt` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -9041,6 +10092,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ///   - whileKeyword: 
   ///   - condition: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
@@ -9048,6 +10100,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     whileKeyword: TokenSyntax = TokenSyntax.`while`,
     condition: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -9063,6 +10116,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     repeatKeyword: TokenSyntax = TokenSyntax.`repeat`,
@@ -9071,6 +10125,7 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       repeatKeyword: repeatKeyword,
@@ -9080,7 +10135,11 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
     )
   }
 
-  func buildRepeatWhileStmt(format: Format, leadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
+  /// Builds a `RepeatWhileStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `RepeatWhileStmtSyntax`.
+  func buildRepeatWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
     let result = SyntaxFactory.makeRepeatWhileStmt(
       labelName: labelName,
       labelColon: labelColon,
@@ -9089,16 +10148,13 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
       whileKeyword: whileKeyword,
       condition: condition.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildRepeatWhileStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildRepeatWhileStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9127,6 +10183,10 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   let elseKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GuardStmt` using the provided parameters.
   /// - Parameters:
   ///   - guardKeyword: 
@@ -9134,11 +10194,13 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   ///   - elseKeyword: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     guardKeyword: TokenSyntax = TokenSyntax.`guard`,
     conditions: ExpressibleAsConditionElementList,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.guardKeyword = guardKeyword
     assert(guardKeyword.text == "guard")
     self.conditions = conditions.createConditionElementList()
@@ -9151,12 +10213,14 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     guardKeyword: TokenSyntax = TokenSyntax.`guard`,
     conditions: ExpressibleAsConditionElementList,
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       guardKeyword: guardKeyword,
       conditions: conditions,
       elseKeyword: elseKeyword,
@@ -9164,23 +10228,24 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
     )
   }
 
-  func buildGuardStmt(format: Format, leadingTrivia: Trivia? = nil) -> GuardStmtSyntax {
+  /// Builds a `GuardStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GuardStmtSyntax`.
+  func buildGuardStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GuardStmtSyntax {
     let result = SyntaxFactory.makeGuardStmt(
       guardKeyword: guardKeyword,
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildGuardStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildGuardStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9207,35 +10272,42 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   let whereKeyword: TokenSyntax
   let guardResult: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `WhereClause` using the provided parameters.
   /// - Parameters:
   ///   - whereKeyword: 
   ///   - guardResult: 
   public init(
+    leadingTrivia: Trivia = [],
     whereKeyword: TokenSyntax = TokenSyntax.`where`,
     guardResult: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.whereKeyword = whereKeyword
     assert(whereKeyword.text == "where")
     self.guardResult = guardResult.createExprBuildable()
   }
 
 
-  func buildWhereClause(format: Format, leadingTrivia: Trivia? = nil) -> WhereClauseSyntax {
+  /// Builds a `WhereClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `WhereClauseSyntax`.
+  func buildWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhereClauseSyntax {
     let result = SyntaxFactory.makeWhereClause(
       whereKeyword: whereKeyword,
       guardResult: guardResult.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildWhereClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildWhereClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -9266,6 +10338,10 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   let whereClause: WhereClause?
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ForInStmt` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -9281,6 +10357,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ///   - whereClause: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     forKeyword: TokenSyntax = TokenSyntax.`for`,
@@ -9294,6 +10371,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     whereClause: ExpressibleAsWhereClause? = nil,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -9318,6 +10396,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     forKeyword: TokenSyntax = TokenSyntax.`for`,
@@ -9332,6 +10411,7 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       forKeyword: forKeyword,
@@ -9347,7 +10427,11 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
     )
   }
 
-  func buildForInStmt(format: Format, leadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
+  /// Builds a `ForInStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ForInStmtSyntax`.
+  func buildForInStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
     let result = SyntaxFactory.makeForInStmt(
       labelName: labelName,
       labelColon: labelColon,
@@ -9362,16 +10446,13 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildForInStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildForInStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9403,6 +10484,10 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   let cases: SwitchCaseList
   let rightBrace: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SwitchStmt` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -9413,6 +10498,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ///   - cases: 
   ///   - rightBrace: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
@@ -9421,6 +10507,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     cases: ExpressibleAsSwitchCaseList,
     rightBrace: TokenSyntax = TokenSyntax.`rightBrace`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -9438,6 +10525,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     switchKeyword: TokenSyntax = TokenSyntax.`switch`,
@@ -9447,6 +10535,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     @SwitchCaseListBuilder casesBuilder: () -> ExpressibleAsSwitchCaseList = { SwitchCaseList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       switchKeyword: switchKeyword,
@@ -9457,7 +10546,11 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
     )
   }
 
-  func buildSwitchStmt(format: Format, leadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
+  /// Builds a `SwitchStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SwitchStmtSyntax`.
+  func buildSwitchStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
     let result = SyntaxFactory.makeSwitchStmt(
       labelName: labelName,
       labelColon: labelColon,
@@ -9467,16 +10560,13 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
       cases: cases.buildSwitchCaseList(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildSwitchStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildSwitchStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9506,6 +10596,10 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   let body: CodeBlock
   let catchClauses: CatchClauseList?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DoStmt` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -9514,12 +10608,14 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ///   - body: 
   ///   - catchClauses: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
     body: ExpressibleAsCodeBlock,
     catchClauses: ExpressibleAsCatchClauseList? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -9533,6 +10629,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     doKeyword: TokenSyntax = TokenSyntax.`do`,
@@ -9540,6 +10637,7 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       doKeyword: doKeyword,
@@ -9548,7 +10646,11 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
     )
   }
 
-  func buildDoStmt(format: Format, leadingTrivia: Trivia? = nil) -> DoStmtSyntax {
+  /// Builds a `DoStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DoStmtSyntax`.
+  func buildDoStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DoStmtSyntax {
     let result = SyntaxFactory.makeDoStmt(
       labelName: labelName,
       labelColon: labelColon,
@@ -9556,16 +10658,13 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
       catchClauses: catchClauses?.buildCatchClauseList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildDoStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildDoStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9592,35 +10691,42 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   let returnKeyword: TokenSyntax
   let expression: ExprBuildable?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ReturnStmt` using the provided parameters.
   /// - Parameters:
   ///   - returnKeyword: 
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     returnKeyword: TokenSyntax = TokenSyntax.`return`,
     expression: ExpressibleAsExprBuildable? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.returnKeyword = returnKeyword
     assert(returnKeyword.text == "return")
     self.expression = expression?.createExprBuildable()
   }
 
 
-  func buildReturnStmt(format: Format, leadingTrivia: Trivia? = nil) -> ReturnStmtSyntax {
+  /// Builds a `ReturnStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ReturnStmtSyntax`.
+  func buildReturnStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnStmtSyntax {
     let result = SyntaxFactory.makeReturnStmt(
       returnKeyword: returnKeyword,
       expression: expression?.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildReturnStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildReturnStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9647,35 +10753,42 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   let yieldKeyword: TokenSyntax
   let yields: SyntaxBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `YieldStmt` using the provided parameters.
   /// - Parameters:
   ///   - yieldKeyword: 
   ///   - yields: 
   public init(
+    leadingTrivia: Trivia = [],
     yieldKeyword: TokenSyntax = TokenSyntax.`yield`,
     yields: ExpressibleAsSyntaxBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.yieldKeyword = yieldKeyword
     assert(yieldKeyword.text == "yield")
     self.yields = yields.createSyntaxBuildable()
   }
 
 
-  func buildYieldStmt(format: Format, leadingTrivia: Trivia? = nil) -> YieldStmtSyntax {
+  /// Builds a `YieldStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `YieldStmtSyntax`.
+  func buildYieldStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldStmtSyntax {
     let result = SyntaxFactory.makeYieldStmt(
       yieldKeyword: yieldKeyword,
       yields: yields.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildYieldStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildYieldStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9704,6 +10817,10 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   let trailingComma: TokenSyntax?
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `YieldList` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
@@ -9711,11 +10828,13 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   ///   - trailingComma: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elementList: ExpressibleAsExprList,
     trailingComma: TokenSyntax? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.elementList = elementList.createExprList()
@@ -9726,23 +10845,24 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   }
 
 
-  func buildYieldList(format: Format, leadingTrivia: Trivia? = nil) -> YieldListSyntax {
+  /// Builds a `YieldListSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `YieldListSyntax`.
+  func buildYieldList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldListSyntax {
     let result = SyntaxFactory.makeYieldList(
       leftParen: leftParen,
       elementList: elementList.buildExprList(format: format, leadingTrivia: nil),
       trailingComma: trailingComma,
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildYieldList(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildYieldList(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -9762,31 +10882,38 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
 public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   let fallthroughKeyword: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FallthroughStmt` using the provided parameters.
   /// - Parameters:
   ///   - fallthroughKeyword: 
   public init(
+    leadingTrivia: Trivia = [],
     fallthroughKeyword: TokenSyntax = TokenSyntax.`fallthrough`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.fallthroughKeyword = fallthroughKeyword
     assert(fallthroughKeyword.text == "fallthrough")
   }
 
 
-  func buildFallthroughStmt(format: Format, leadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
+  /// Builds a `FallthroughStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FallthroughStmtSyntax`.
+  func buildFallthroughStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
     let result = SyntaxFactory.makeFallthroughStmt(
       fallthroughKeyword: fallthroughKeyword
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildFallthroughStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildFallthroughStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9813,14 +10940,20 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   let breakKeyword: TokenSyntax
   let label: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `BreakStmt` using the provided parameters.
   /// - Parameters:
   ///   - breakKeyword: 
   ///   - label: 
   public init(
+    leadingTrivia: Trivia = [],
     breakKeyword: TokenSyntax = TokenSyntax.`break`,
     label: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.breakKeyword = breakKeyword
     assert(breakKeyword.text == "break")
     self.label = label
@@ -9830,30 +10963,33 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     breakKeyword: TokenSyntax = TokenSyntax.`break`,
     label: String?
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       breakKeyword: breakKeyword,
       label: label.map(TokenSyntax.identifier)
     )
   }
 
-  func buildBreakStmt(format: Format, leadingTrivia: Trivia? = nil) -> BreakStmtSyntax {
+  /// Builds a `BreakStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `BreakStmtSyntax`.
+  func buildBreakStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BreakStmtSyntax {
     let result = SyntaxFactory.makeBreakStmt(
       breakKeyword: breakKeyword,
       label: label
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildBreakStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildBreakStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -9880,35 +11016,42 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   let condition: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ConditionElement` using the provided parameters.
   /// - Parameters:
   ///   - condition: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     condition: ExpressibleAsSyntaxBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.condition = condition.createSyntaxBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildConditionElement(format: Format, leadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
+  /// Builds a `ConditionElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ConditionElementSyntax`.
+  func buildConditionElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
     let result = SyntaxFactory.makeConditionElement(
       condition: condition.buildSyntax(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildConditionElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildConditionElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -9939,6 +11082,10 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   let availabilitySpec: AvailabilitySpecList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AvailabilityCondition` using the provided parameters.
   /// - Parameters:
   ///   - poundAvailableKeyword: 
@@ -9946,11 +11093,13 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   ///   - availabilitySpec: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundAvailableKeyword: TokenSyntax = TokenSyntax.`poundAvailable`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     availabilitySpec: ExpressibleAsAvailabilitySpecList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundAvailableKeyword = poundAvailableKeyword
     assert(poundAvailableKeyword.text == "#available")
     self.leftParen = leftParen
@@ -9961,23 +11110,24 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   }
 
 
-  func buildAvailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
+  /// Builds a `AvailabilityConditionSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AvailabilityConditionSyntax`.
+  func buildAvailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
     let result = SyntaxFactory.makeAvailabilityCondition(
       poundAvailableKeyword: poundAvailableKeyword,
       leftParen: leftParen,
       availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityCondition(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAvailabilityCondition(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10000,6 +11150,10 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MatchingPatternCondition` using the provided parameters.
   /// - Parameters:
   ///   - caseKeyword: 
@@ -10007,11 +11161,13 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   ///   - typeAnnotation: 
   ///   - initializer: 
   public init(
+    leadingTrivia: Trivia = [],
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
     pattern: ExpressibleAsPatternBuildable,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
     initializer: ExpressibleAsInitializerClause
   ) {
+    self.leadingTrivia = leadingTrivia
     self.caseKeyword = caseKeyword
     assert(caseKeyword.text == "case")
     self.pattern = pattern.createPatternBuildable()
@@ -10020,23 +11176,24 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   }
 
 
-  func buildMatchingPatternCondition(format: Format, leadingTrivia: Trivia? = nil) -> MatchingPatternConditionSyntax {
+  /// Builds a `MatchingPatternConditionSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MatchingPatternConditionSyntax`.
+  func buildMatchingPatternCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MatchingPatternConditionSyntax {
     let result = SyntaxFactory.makeMatchingPatternCondition(
       caseKeyword: caseKeyword,
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
       initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildMatchingPatternCondition(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildMatchingPatternCondition(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10059,6 +11216,10 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   let typeAnnotation: TypeAnnotation?
   let initializer: InitializerClause
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `OptionalBindingCondition` using the provided parameters.
   /// - Parameters:
   ///   - letOrVarKeyword: 
@@ -10066,11 +11227,13 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   ///   - typeAnnotation: 
   ///   - initializer: 
   public init(
+    leadingTrivia: Trivia = [],
     letOrVarKeyword: TokenSyntax,
     pattern: ExpressibleAsPatternBuildable,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil,
     initializer: ExpressibleAsInitializerClause
   ) {
+    self.leadingTrivia = leadingTrivia
     self.letOrVarKeyword = letOrVarKeyword
     assert(letOrVarKeyword.text == "let" || letOrVarKeyword.text == "var")
     self.pattern = pattern.createPatternBuildable()
@@ -10079,23 +11242,24 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   }
 
 
-  func buildOptionalBindingCondition(format: Format, leadingTrivia: Trivia? = nil) -> OptionalBindingConditionSyntax {
+  /// Builds a `OptionalBindingConditionSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OptionalBindingConditionSyntax`.
+  func buildOptionalBindingCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalBindingConditionSyntax {
     let result = SyntaxFactory.makeOptionalBindingCondition(
       letOrVarKeyword: letOrVarKeyword,
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
       initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildOptionalBindingCondition(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildOptionalBindingCondition(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10118,6 +11282,10 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   let availabilitySpec: AvailabilitySpecList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `UnavailabilityCondition` using the provided parameters.
   /// - Parameters:
   ///   - poundUnavailableKeyword: 
@@ -10125,11 +11293,13 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   ///   - availabilitySpec: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundUnavailableKeyword: TokenSyntax = TokenSyntax.`poundUnavailable`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     availabilitySpec: ExpressibleAsAvailabilitySpecList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundUnavailableKeyword = poundUnavailableKeyword
     assert(poundUnavailableKeyword.text == "#unavailable")
     self.leftParen = leftParen
@@ -10140,23 +11310,24 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   }
 
 
-  func buildUnavailabilityCondition(format: Format, leadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
+  /// Builds a `UnavailabilityConditionSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `UnavailabilityConditionSyntax`.
+  func buildUnavailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
     let result = SyntaxFactory.makeUnavailabilityCondition(
       poundUnavailableKeyword: poundUnavailableKeyword,
       leftParen: leftParen,
       availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildUnavailabilityCondition(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildUnavailabilityCondition(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10176,30 +11347,37 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
 public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   let declaration: DeclBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DeclarationStmt` using the provided parameters.
   /// - Parameters:
   ///   - declaration: 
   public init(
+    leadingTrivia: Trivia = [],
     declaration: ExpressibleAsDeclBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.declaration = declaration.createDeclBuildable()
   }
 
 
-  func buildDeclarationStmt(format: Format, leadingTrivia: Trivia? = nil) -> DeclarationStmtSyntax {
+  /// Builds a `DeclarationStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DeclarationStmtSyntax`.
+  func buildDeclarationStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclarationStmtSyntax {
     let result = SyntaxFactory.makeDeclarationStmt(
       declaration: declaration.buildDecl(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildDeclarationStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildDeclarationStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -10226,35 +11404,42 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   let throwKeyword: TokenSyntax
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ThrowStmt` using the provided parameters.
   /// - Parameters:
   ///   - throwKeyword: 
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     throwKeyword: TokenSyntax = TokenSyntax.`throw`,
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.throwKeyword = throwKeyword
     assert(throwKeyword.text == "throw")
     self.expression = expression.createExprBuildable()
   }
 
 
-  func buildThrowStmt(format: Format, leadingTrivia: Trivia? = nil) -> ThrowStmtSyntax {
+  /// Builds a `ThrowStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ThrowStmtSyntax`.
+  func buildThrowStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ThrowStmtSyntax {
     let result = SyntaxFactory.makeThrowStmt(
       throwKeyword: throwKeyword,
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildThrowStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildThrowStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -10286,6 +11471,10 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   let elseKeyword: TokenSyntax?
   let elseBody: SyntaxBuildable?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IfStmt` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -10296,6 +11485,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ///   - elseKeyword: 
   ///   - elseBody: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
@@ -10304,6 +11494,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     elseKeyword: TokenSyntax? = nil,
     elseBody: ExpressibleAsSyntaxBuildable? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -10320,6 +11511,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     ifKeyword: TokenSyntax = TokenSyntax.`if`,
@@ -10329,6 +11521,7 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       ifKeyword: ifKeyword,
@@ -10339,7 +11532,11 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
     )
   }
 
-  func buildIfStmt(format: Format, leadingTrivia: Trivia? = nil) -> IfStmtSyntax {
+  /// Builds a `IfStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IfStmtSyntax`.
+  func buildIfStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfStmtSyntax {
     let result = SyntaxFactory.makeIfStmt(
       labelName: labelName,
       labelColon: labelColon,
@@ -10349,16 +11546,13 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
       elseKeyword: elseKeyword,
       elseBody: elseBody?.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildIfStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildIfStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -10384,30 +11578,37 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
 public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuation {
   let ifStatement: IfStmt
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ElseIfContinuation` using the provided parameters.
   /// - Parameters:
   ///   - ifStatement: 
   public init(
+    leadingTrivia: Trivia = [],
     ifStatement: ExpressibleAsIfStmt
   ) {
+    self.leadingTrivia = leadingTrivia
     self.ifStatement = ifStatement.createIfStmt()
   }
 
 
-  func buildElseIfContinuation(format: Format, leadingTrivia: Trivia? = nil) -> ElseIfContinuationSyntax {
+  /// Builds a `ElseIfContinuationSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ElseIfContinuationSyntax`.
+  func buildElseIfContinuation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseIfContinuationSyntax {
     let result = SyntaxFactory.makeElseIfContinuation(
       ifStatement: ifStatement.buildIfStmt(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildElseIfContinuation(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildElseIfContinuation(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10428,14 +11629,20 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   let elseKeyword: TokenSyntax
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ElseBlock` using the provided parameters.
   /// - Parameters:
   ///   - elseKeyword: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.elseKeyword = elseKeyword
     assert(elseKeyword.text == "else")
     self.body = body.createCodeBlock()
@@ -10445,30 +11652,33 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     elseKeyword: TokenSyntax = TokenSyntax.`else`,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       elseKeyword: elseKeyword,
       body: bodyBuilder()
     )
   }
 
-  func buildElseBlock(format: Format, leadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
+  /// Builds a `ElseBlockSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ElseBlockSyntax`.
+  func buildElseBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
     let result = SyntaxFactory.makeElseBlock(
       elseKeyword: elseKeyword,
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildElseBlock(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildElseBlock(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10490,16 +11700,22 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   let label: SyntaxBuildable
   let statements: CodeBlockItemList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SwitchCase` using the provided parameters.
   /// - Parameters:
   ///   - unknownAttr: 
   ///   - label: 
   ///   - statements: 
   public init(
+    leadingTrivia: Trivia = [],
     unknownAttr: ExpressibleAsAttribute? = nil,
     label: ExpressibleAsSyntaxBuildable,
     statements: ExpressibleAsCodeBlockItemList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.unknownAttr = unknownAttr?.createAttribute()
     self.label = label.createSyntaxBuildable()
     self.statements = statements.createCodeBlockItemList()
@@ -10509,33 +11725,36 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     unknownAttr: ExpressibleAsAttribute? = nil,
     label: ExpressibleAsSyntaxBuildable,
     @CodeBlockItemListBuilder statementsBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       unknownAttr: unknownAttr,
       label: label,
       statements: statementsBuilder()
     )
   }
 
-  func buildSwitchCase(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseSyntax {
+  /// Builds a `SwitchCaseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SwitchCaseSyntax`.
+  func buildSwitchCase(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseSyntax {
     let result = SyntaxFactory.makeSwitchCase(
       unknownAttr: unknownAttr?.buildAttribute(format: format, leadingTrivia: nil),
       label: label.buildSyntax(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSwitchCase(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildSwitchCase(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10556,14 +11775,20 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   let defaultKeyword: TokenSyntax
   let colon: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SwitchDefaultLabel` using the provided parameters.
   /// - Parameters:
   ///   - defaultKeyword: 
   ///   - colon: 
   public init(
+    leadingTrivia: Trivia = [],
     defaultKeyword: TokenSyntax = TokenSyntax.`default`,
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.defaultKeyword = defaultKeyword
     assert(defaultKeyword.text == "default")
     self.colon = colon
@@ -10571,21 +11796,22 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   }
 
 
-  func buildSwitchDefaultLabel(format: Format, leadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
+  /// Builds a `SwitchDefaultLabelSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SwitchDefaultLabelSyntax`.
+  func buildSwitchDefaultLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
     let result = SyntaxFactory.makeSwitchDefaultLabel(
       defaultKeyword: defaultKeyword,
       colon: colon
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSwitchDefaultLabel(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildSwitchDefaultLabel(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10607,16 +11833,22 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CaseItem` using the provided parameters.
   /// - Parameters:
   ///   - pattern: 
   ///   - whereClause: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     pattern: ExpressibleAsPatternBuildable,
     whereClause: ExpressibleAsWhereClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.pattern = pattern.createPatternBuildable()
     self.whereClause = whereClause?.createWhereClause()
     self.trailingComma = trailingComma
@@ -10624,22 +11856,23 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   }
 
 
-  func buildCaseItem(format: Format, leadingTrivia: Trivia? = nil) -> CaseItemSyntax {
+  /// Builds a `CaseItemSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CaseItemSyntax`.
+  func buildCaseItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CaseItemSyntax {
     let result = SyntaxFactory.makeCaseItem(
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCaseItem(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCaseItem(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10670,16 +11903,22 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   let whereClause: WhereClause?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CatchItem` using the provided parameters.
   /// - Parameters:
   ///   - pattern: 
   ///   - whereClause: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     pattern: ExpressibleAsPatternBuildable? = nil,
     whereClause: ExpressibleAsWhereClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.pattern = pattern?.createPatternBuildable()
     self.whereClause = whereClause?.createWhereClause()
     self.trailingComma = trailingComma
@@ -10687,22 +11926,23 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   }
 
 
-  func buildCatchItem(format: Format, leadingTrivia: Trivia? = nil) -> CatchItemSyntax {
+  /// Builds a `CatchItemSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CatchItemSyntax`.
+  func buildCatchItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchItemSyntax {
     let result = SyntaxFactory.makeCatchItem(
       pattern: pattern?.buildPattern(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCatchItem(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCatchItem(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10733,16 +11973,22 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   let caseItems: CaseItemList
   let colon: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SwitchCaseLabel` using the provided parameters.
   /// - Parameters:
   ///   - caseKeyword: 
   ///   - caseItems: 
   ///   - colon: 
   public init(
+    leadingTrivia: Trivia = [],
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
     caseItems: ExpressibleAsCaseItemList,
     colon: TokenSyntax = TokenSyntax.`colon`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.caseKeyword = caseKeyword
     assert(caseKeyword.text == "case")
     self.caseItems = caseItems.createCaseItemList()
@@ -10754,33 +12000,36 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     caseKeyword: TokenSyntax = TokenSyntax.`case`,
     colon: TokenSyntax = TokenSyntax.`colon`,
     @CaseItemListBuilder caseItemsBuilder: () -> ExpressibleAsCaseItemList = { CaseItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       caseKeyword: caseKeyword,
       caseItems: caseItemsBuilder(),
       colon: colon
     )
   }
 
-  func buildSwitchCaseLabel(format: Format, leadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
+  /// Builds a `SwitchCaseLabelSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SwitchCaseLabelSyntax`.
+  func buildSwitchCaseLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
     let result = SyntaxFactory.makeSwitchCaseLabel(
       caseKeyword: caseKeyword,
       caseItems: caseItems.buildCaseItemList(format: format, leadingTrivia: nil),
       colon: colon
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSwitchCaseLabel(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildSwitchCaseLabel(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10802,16 +12051,22 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   let catchItems: CatchItemList?
   let body: CodeBlock
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CatchClause` using the provided parameters.
   /// - Parameters:
   ///   - catchKeyword: 
   ///   - catchItems: 
   ///   - body: 
   public init(
+    leadingTrivia: Trivia = [],
     catchKeyword: TokenSyntax = TokenSyntax.`catch`,
     catchItems: ExpressibleAsCatchItemList? = nil,
     body: ExpressibleAsCodeBlock
   ) {
+    self.leadingTrivia = leadingTrivia
     self.catchKeyword = catchKeyword
     assert(catchKeyword.text == "catch")
     self.catchItems = catchItems?.createCatchItemList()
@@ -10822,33 +12077,36 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     catchKeyword: TokenSyntax = TokenSyntax.`catch`,
     catchItems: ExpressibleAsCatchItemList? = nil,
     @CodeBlockItemListBuilder bodyBuilder: () -> ExpressibleAsCodeBlockItemList = { CodeBlockItemList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       catchKeyword: catchKeyword,
       catchItems: catchItems,
       body: bodyBuilder()
     )
   }
 
-  func buildCatchClause(format: Format, leadingTrivia: Trivia? = nil) -> CatchClauseSyntax {
+  /// Builds a `CatchClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CatchClauseSyntax`.
+  func buildCatchClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchClauseSyntax {
     let result = SyntaxFactory.makeCatchClause(
       catchKeyword: catchKeyword,
       catchItems: catchItems?.buildCatchItemList(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCatchClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCatchClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -10873,6 +12131,10 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   let message: TokenSyntax?
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PoundAssertStmt` using the provided parameters.
   /// - Parameters:
   ///   - poundAssert: 
@@ -10882,6 +12144,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   ///   - message: The assertion message.
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     poundAssert: TokenSyntax = TokenSyntax.`poundAssert`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     condition: ExpressibleAsExprBuildable,
@@ -10889,6 +12152,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
     message: TokenSyntax? = nil,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.poundAssert = poundAssert
     assert(poundAssert.text == "#assert")
     self.leftParen = leftParen
@@ -10905,6 +12169,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     poundAssert: TokenSyntax = TokenSyntax.`poundAssert`,
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     condition: ExpressibleAsExprBuildable,
@@ -10913,6 +12178,7 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       poundAssert: poundAssert,
       leftParen: leftParen,
       condition: condition,
@@ -10922,7 +12188,11 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
     )
   }
 
-  func buildPoundAssertStmt(format: Format, leadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
+  /// Builds a `PoundAssertStmtSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PoundAssertStmtSyntax`.
+  func buildPoundAssertStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
     let result = SyntaxFactory.makePoundAssertStmt(
       poundAssert: poundAssert,
       leftParen: leftParen,
@@ -10931,16 +12201,13 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
       message: message,
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `StmtBuildable`.
-  public func buildStmt(format: Format, leadingTrivia: Trivia? = nil) -> StmtSyntax {
-    let result = buildPoundAssertStmt(format: format, leadingTrivia: leadingTrivia)
+  public func buildStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StmtSyntax {
+    let result = buildPoundAssertStmt(format: format, leadingTrivia: additionalLeadingTrivia)
     return StmtSyntax(result)
   }
 
@@ -10967,14 +12234,20 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   let whereKeyword: TokenSyntax
   let requirementList: GenericRequirementList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GenericWhereClause` using the provided parameters.
   /// - Parameters:
   ///   - whereKeyword: 
   ///   - requirementList: 
   public init(
+    leadingTrivia: Trivia = [],
     whereKeyword: TokenSyntax = TokenSyntax.`where`,
     requirementList: ExpressibleAsGenericRequirementList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.whereKeyword = whereKeyword
     assert(whereKeyword.text == "where")
     self.requirementList = requirementList.createGenericRequirementList()
@@ -10984,30 +12257,33 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     whereKeyword: TokenSyntax = TokenSyntax.`where`,
     @GenericRequirementListBuilder requirementListBuilder: () -> ExpressibleAsGenericRequirementList = { GenericRequirementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       whereKeyword: whereKeyword,
       requirementList: requirementListBuilder()
     )
   }
 
-  func buildGenericWhereClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericWhereClauseSyntax {
+  /// Builds a `GenericWhereClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GenericWhereClauseSyntax`.
+  func buildGenericWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericWhereClauseSyntax {
     let result = SyntaxFactory.makeGenericWhereClause(
       whereKeyword: whereKeyword,
       requirementList: requirementList.buildGenericRequirementList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericWhereClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildGenericWhereClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11028,35 +12304,42 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   let body: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GenericRequirement` using the provided parameters.
   /// - Parameters:
   ///   - body: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     body: ExpressibleAsSyntaxBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.body = body.createSyntaxBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildGenericRequirement(format: Format, leadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
+  /// Builds a `GenericRequirementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GenericRequirementSyntax`.
+  func buildGenericRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
     let result = SyntaxFactory.makeGenericRequirement(
       body: body.buildSyntax(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericRequirement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildGenericRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11086,38 +12369,45 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   let equalityToken: TokenSyntax
   let rightTypeIdentifier: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SameTypeRequirement` using the provided parameters.
   /// - Parameters:
   ///   - leftTypeIdentifier: 
   ///   - equalityToken: 
   ///   - rightTypeIdentifier: 
   public init(
+    leadingTrivia: Trivia = [],
     leftTypeIdentifier: ExpressibleAsTypeBuildable,
     equalityToken: TokenSyntax,
     rightTypeIdentifier: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
     self.equalityToken = equalityToken
     self.rightTypeIdentifier = rightTypeIdentifier.createTypeBuildable()
   }
 
 
-  func buildSameTypeRequirement(format: Format, leadingTrivia: Trivia? = nil) -> SameTypeRequirementSyntax {
+  /// Builds a `SameTypeRequirementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SameTypeRequirementSyntax`.
+  func buildSameTypeRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SameTypeRequirementSyntax {
     let result = SyntaxFactory.makeSameTypeRequirement(
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
       equalityToken: equalityToken,
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildSameTypeRequirement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildSameTypeRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11141,6 +12431,10 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   let inheritedType: TypeBuildable?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GenericParameter` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -11149,12 +12443,14 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   ///   - inheritedType: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     name: TokenSyntax,
     colon: TokenSyntax? = nil,
     inheritedType: ExpressibleAsTypeBuildable? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.name = name
     self.colon = colon
@@ -11168,6 +12464,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     name: String,
     colon: TokenSyntax? = nil,
@@ -11175,6 +12472,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       name: TokenSyntax.identifier(name),
       colon: colon,
@@ -11183,7 +12481,11 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
     )
   }
 
-  func buildGenericParameter(format: Format, leadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
+  /// Builds a `GenericParameterSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GenericParameterSyntax`.
+  func buildGenericParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
     let result = SyntaxFactory.makeGenericParameter(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       name: name,
@@ -11191,16 +12493,13 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
       inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericParameter(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildGenericParameter(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11236,6 +12535,10 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   let initializer: TypeInitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
   ///   - attributes: 
@@ -11245,6 +12548,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   ///   - initializer: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     name: TokenSyntax,
     colon: TokenSyntax? = nil,
@@ -11252,6 +12556,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     initializer: ExpressibleAsTypeInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.name = name
     self.colon = colon
@@ -11266,6 +12571,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     name: String,
     colon: TokenSyntax? = nil,
@@ -11274,6 +12580,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       attributes: attributes,
       name: TokenSyntax.identifier(name),
       colon: colon,
@@ -11283,7 +12590,11 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
     )
   }
 
-  func buildPrimaryAssociatedType(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
+  /// Builds a `PrimaryAssociatedTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
+  func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedType(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       name: name,
@@ -11292,16 +12603,13 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
       initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrimaryAssociatedType(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrimaryAssociatedType(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11335,16 +12643,22 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   let genericParameterList: GenericParameterList
   let rightAngleBracket: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GenericParameterClause` using the provided parameters.
   /// - Parameters:
   ///   - leftAngleBracket: 
   ///   - genericParameterList: 
   ///   - rightAngleBracket: 
   public init(
+    leadingTrivia: Trivia = [],
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     genericParameterList: ExpressibleAsGenericParameterList,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftAngleBracket = leftAngleBracket
     assert(leftAngleBracket.text == "<")
     self.genericParameterList = genericParameterList.createGenericParameterList()
@@ -11356,33 +12670,36 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
     @GenericParameterListBuilder genericParameterListBuilder: () -> ExpressibleAsGenericParameterList = { GenericParameterList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftAngleBracket: leftAngleBracket,
       genericParameterList: genericParameterListBuilder(),
       rightAngleBracket: rightAngleBracket
     )
   }
 
-  func buildGenericParameterClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
+  /// Builds a `GenericParameterClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GenericParameterClauseSyntax`.
+  func buildGenericParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
     let result = SyntaxFactory.makeGenericParameterClause(
       leftAngleBracket: leftAngleBracket,
       genericParameterList: genericParameterList.buildGenericParameterList(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericParameterClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildGenericParameterClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11404,16 +12721,22 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   let colon: TokenSyntax
   let rightTypeIdentifier: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ConformanceRequirement` using the provided parameters.
   /// - Parameters:
   ///   - leftTypeIdentifier: 
   ///   - colon: 
   ///   - rightTypeIdentifier: 
   public init(
+    leadingTrivia: Trivia = [],
     leftTypeIdentifier: ExpressibleAsTypeBuildable,
     colon: TokenSyntax = TokenSyntax.`colon`,
     rightTypeIdentifier: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftTypeIdentifier = leftTypeIdentifier.createTypeBuildable()
     self.colon = colon
     assert(colon.text == ":")
@@ -11421,22 +12744,23 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   }
 
 
-  func buildConformanceRequirement(format: Format, leadingTrivia: Trivia? = nil) -> ConformanceRequirementSyntax {
+  /// Builds a `ConformanceRequirementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ConformanceRequirementSyntax`.
+  func buildConformanceRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConformanceRequirementSyntax {
     let result = SyntaxFactory.makeConformanceRequirement(
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
       colon: colon,
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildConformanceRequirement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildConformanceRequirement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11458,16 +12782,22 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   let primaryAssociatedTypeList: PrimaryAssociatedTypeList
   let rightAngleBracket: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `PrimaryAssociatedTypeClause` using the provided parameters.
   /// - Parameters:
   ///   - leftAngleBracket: 
   ///   - primaryAssociatedTypeList: 
   ///   - rightAngleBracket: 
   public init(
+    leadingTrivia: Trivia = [],
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     primaryAssociatedTypeList: ExpressibleAsPrimaryAssociatedTypeList,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftAngleBracket = leftAngleBracket
     assert(leftAngleBracket.text == "<")
     self.primaryAssociatedTypeList = primaryAssociatedTypeList.createPrimaryAssociatedTypeList()
@@ -11476,22 +12806,23 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   }
 
 
-  func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
+  /// Builds a `PrimaryAssociatedTypeClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `PrimaryAssociatedTypeClauseSyntax`.
+  func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedTypeClause(
       leftAngleBracket: leftAngleBracket,
       primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -11512,34 +12843,41 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `SimpleTypeIdentifier` using the provided parameters.
   /// - Parameters:
   ///   - name: 
   ///   - genericArgumentClause: 
   public init(
+    leadingTrivia: Trivia = [],
     name: TokenSyntax,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.name = name
     self.genericArgumentClause = genericArgumentClause?.createGenericArgumentClause()
   }
 
 
-  func buildSimpleTypeIdentifier(format: Format, leadingTrivia: Trivia? = nil) -> SimpleTypeIdentifierSyntax {
+  /// Builds a `SimpleTypeIdentifierSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `SimpleTypeIdentifierSyntax`.
+  func buildSimpleTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SimpleTypeIdentifierSyntax {
     let result = SyntaxFactory.makeSimpleTypeIdentifier(
       name: name,
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildSimpleTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildSimpleTypeIdentifier(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11568,6 +12906,10 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   let name: TokenSyntax
   let genericArgumentClause: GenericArgumentClause?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MemberTypeIdentifier` using the provided parameters.
   /// - Parameters:
   ///   - baseType: 
@@ -11575,11 +12917,13 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   ///   - name: 
   ///   - genericArgumentClause: 
   public init(
+    leadingTrivia: Trivia = [],
     baseType: ExpressibleAsTypeBuildable,
     period: TokenSyntax,
     name: TokenSyntax,
     genericArgumentClause: ExpressibleAsGenericArgumentClause? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.baseType = baseType.createTypeBuildable()
     self.period = period
     assert(period.text == "." || period.text == ".")
@@ -11588,23 +12932,24 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   }
 
 
-  func buildMemberTypeIdentifier(format: Format, leadingTrivia: Trivia? = nil) -> MemberTypeIdentifierSyntax {
+  /// Builds a `MemberTypeIdentifierSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MemberTypeIdentifierSyntax`.
+  func buildMemberTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberTypeIdentifierSyntax {
     let result = SyntaxFactory.makeMemberTypeIdentifier(
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
       period: period,
       name: name,
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildMemberTypeIdentifier(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildMemberTypeIdentifier(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11630,31 +12975,38 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
 public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestrictionType {
   let classKeyword: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ClassRestrictionType` using the provided parameters.
   /// - Parameters:
   ///   - classKeyword: 
   public init(
+    leadingTrivia: Trivia = [],
     classKeyword: TokenSyntax = TokenSyntax.`class`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.classKeyword = classKeyword
     assert(classKeyword.text == "class")
   }
 
 
-  func buildClassRestrictionType(format: Format, leadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
+  /// Builds a `ClassRestrictionTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ClassRestrictionTypeSyntax`.
+  func buildClassRestrictionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
     let result = SyntaxFactory.makeClassRestrictionType(
       classKeyword: classKeyword
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildClassRestrictionType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildClassRestrictionType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11682,16 +13034,22 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   let elementType: TypeBuildable
   let rightSquareBracket: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ArrayType` using the provided parameters.
   /// - Parameters:
   ///   - leftSquareBracket: 
   ///   - elementType: 
   ///   - rightSquareBracket: 
   public init(
+    leadingTrivia: Trivia = [],
     leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     elementType: ExpressibleAsTypeBuildable,
     rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftSquareBracket = leftSquareBracket
     assert(leftSquareBracket.text == "[")
     self.elementType = elementType.createTypeBuildable()
@@ -11700,22 +13058,23 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   }
 
 
-  func buildArrayType(format: Format, leadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
+  /// Builds a `ArrayTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ArrayTypeSyntax`.
+  func buildArrayType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
     let result = SyntaxFactory.makeArrayType(
       leftSquareBracket: leftSquareBracket,
       elementType: elementType.buildType(format: format, leadingTrivia: nil),
       rightSquareBracket: rightSquareBracket
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildArrayType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildArrayType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11745,6 +13104,10 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   let valueType: TypeBuildable
   let rightSquareBracket: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `DictionaryType` using the provided parameters.
   /// - Parameters:
   ///   - leftSquareBracket: 
@@ -11753,12 +13116,14 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   ///   - valueType: 
   ///   - rightSquareBracket: 
   public init(
+    leadingTrivia: Trivia = [],
     leftSquareBracket: TokenSyntax = TokenSyntax.`leftSquareBracket`,
     keyType: ExpressibleAsTypeBuildable,
     colon: TokenSyntax = TokenSyntax.`colon`,
     valueType: ExpressibleAsTypeBuildable,
     rightSquareBracket: TokenSyntax = TokenSyntax.`rightSquareBracket`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftSquareBracket = leftSquareBracket
     assert(leftSquareBracket.text == "[")
     self.keyType = keyType.createTypeBuildable()
@@ -11770,7 +13135,11 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   }
 
 
-  func buildDictionaryType(format: Format, leadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
+  /// Builds a `DictionaryTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `DictionaryTypeSyntax`.
+  func buildDictionaryType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
     let result = SyntaxFactory.makeDictionaryType(
       leftSquareBracket: leftSquareBracket,
       keyType: keyType.buildType(format: format, leadingTrivia: nil),
@@ -11778,16 +13147,13 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
       valueType: valueType.buildType(format: format, leadingTrivia: nil),
       rightSquareBracket: rightSquareBracket
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildDictionaryType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildDictionaryType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11815,16 +13181,22 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   let period: TokenSyntax
   let typeOrProtocol: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `MetatypeType` using the provided parameters.
   /// - Parameters:
   ///   - baseType: 
   ///   - period: 
   ///   - typeOrProtocol: 
   public init(
+    leadingTrivia: Trivia = [],
     baseType: ExpressibleAsTypeBuildable,
     period: TokenSyntax = TokenSyntax.`period`,
     typeOrProtocol: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.baseType = baseType.createTypeBuildable()
     self.period = period
     assert(period.text == ".")
@@ -11836,33 +13208,36 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     baseType: ExpressibleAsTypeBuildable,
     period: TokenSyntax = TokenSyntax.`period`,
     typeOrProtocol: String
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       baseType: baseType,
       period: period,
       typeOrProtocol: TokenSyntax.identifier(typeOrProtocol)
     )
   }
 
-  func buildMetatypeType(format: Format, leadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
+  /// Builds a `MetatypeTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `MetatypeTypeSyntax`.
+  func buildMetatypeType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
     let result = SyntaxFactory.makeMetatypeType(
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
       period: period,
       typeOrProtocol: typeOrProtocol
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildMetatypeType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildMetatypeType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11889,35 +13264,42 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   let wrappedType: TypeBuildable
   let questionMark: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `OptionalType` using the provided parameters.
   /// - Parameters:
   ///   - wrappedType: 
   ///   - questionMark: 
   public init(
+    leadingTrivia: Trivia = [],
     wrappedType: ExpressibleAsTypeBuildable,
     questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.wrappedType = wrappedType.createTypeBuildable()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
   }
 
 
-  func buildOptionalType(format: Format, leadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
+  /// Builds a `OptionalTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OptionalTypeSyntax`.
+  func buildOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
     let result = SyntaxFactory.makeOptionalType(
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildOptionalType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildOptionalType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -11944,14 +13326,20 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   let someOrAnySpecifier: TokenSyntax
   let baseType: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ConstrainedSugarType` using the provided parameters.
   /// - Parameters:
   ///   - someOrAnySpecifier: 
   ///   - baseType: 
   public init(
+    leadingTrivia: Trivia = [],
     someOrAnySpecifier: TokenSyntax,
     baseType: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.someOrAnySpecifier = someOrAnySpecifier
     assert(someOrAnySpecifier.text == "some" || someOrAnySpecifier.text == "any")
     self.baseType = baseType.createTypeBuildable()
@@ -11961,30 +13349,33 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     someOrAnySpecifier: String,
     baseType: ExpressibleAsTypeBuildable
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       someOrAnySpecifier: TokenSyntax.identifier(someOrAnySpecifier),
       baseType: baseType
     )
   }
 
-  func buildConstrainedSugarType(format: Format, leadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
+  /// Builds a `ConstrainedSugarTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ConstrainedSugarTypeSyntax`.
+  func buildConstrainedSugarType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
     let result = SyntaxFactory.makeConstrainedSugarType(
       someOrAnySpecifier: someOrAnySpecifier,
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildConstrainedSugarType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildConstrainedSugarType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -12011,35 +13402,42 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   let wrappedType: TypeBuildable
   let exclamationMark: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ImplicitlyUnwrappedOptionalType` using the provided parameters.
   /// - Parameters:
   ///   - wrappedType: 
   ///   - exclamationMark: 
   public init(
+    leadingTrivia: Trivia = [],
     wrappedType: ExpressibleAsTypeBuildable,
     exclamationMark: TokenSyntax = TokenSyntax.`exclamationMark`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.wrappedType = wrappedType.createTypeBuildable()
     self.exclamationMark = exclamationMark
     assert(exclamationMark.text == "!")
   }
 
 
-  func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+  /// Builds a `ImplicitlyUnwrappedOptionalTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ImplicitlyUnwrappedOptionalTypeSyntax`.
+  func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     let result = SyntaxFactory.makeImplicitlyUnwrappedOptionalType(
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
       exclamationMark: exclamationMark
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildImplicitlyUnwrappedOptionalType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildImplicitlyUnwrappedOptionalType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -12066,35 +13464,42 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   let type: TypeBuildable
   let ampersand: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CompositionTypeElement` using the provided parameters.
   /// - Parameters:
   ///   - type: 
   ///   - ampersand: 
   public init(
+    leadingTrivia: Trivia = [],
     type: ExpressibleAsTypeBuildable,
     ampersand: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.type = type.createTypeBuildable()
     self.ampersand = ampersand
     assert(ampersand == nil || ampersand!.text == "&")
   }
 
 
-  func buildCompositionTypeElement(format: Format, leadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
+  /// Builds a `CompositionTypeElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CompositionTypeElementSyntax`.
+  func buildCompositionTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
     let result = SyntaxFactory.makeCompositionTypeElement(
       type: type.buildType(format: format, leadingTrivia: nil),
       ampersand: ampersand
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildCompositionTypeElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildCompositionTypeElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -12114,30 +13519,37 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
 public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   let elements: CompositionTypeElementList
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `CompositionType` using the provided parameters.
   /// - Parameters:
   ///   - elements: 
   public init(
+    leadingTrivia: Trivia = [],
     elements: ExpressibleAsCompositionTypeElementList
   ) {
+    self.leadingTrivia = leadingTrivia
     self.elements = elements.createCompositionTypeElementList()
   }
 
 
-  func buildCompositionType(format: Format, leadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
+  /// Builds a `CompositionTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `CompositionTypeSyntax`.
+  func buildCompositionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
     let result = SyntaxFactory.makeCompositionType(
       elements: elements.buildCompositionTypeElementList(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildCompositionType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildCompositionType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -12170,6 +13582,10 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   let initializer: InitializerClause?
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TupleTypeElement` using the provided parameters.
   /// - Parameters:
   ///   - inOut: 
@@ -12181,6 +13597,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   ///   - initializer: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     inOut: TokenSyntax? = nil,
     name: TokenSyntax? = nil,
     secondName: TokenSyntax? = nil,
@@ -12190,6 +13607,7 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
     initializer: ExpressibleAsInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.inOut = inOut
     assert(inOut == nil || inOut!.text == "inout")
     self.name = name
@@ -12205,7 +13623,11 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   }
 
 
-  func buildTupleTypeElement(format: Format, leadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
+  /// Builds a `TupleTypeElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TupleTypeElementSyntax`.
+  func buildTupleTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
     let result = SyntaxFactory.makeTupleTypeElement(
       inOut: inOut,
       name: name,
@@ -12216,16 +13638,13 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTupleTypeElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTupleTypeElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -12261,16 +13680,22 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   let elements: TupleTypeElementList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TupleType` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - elements: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elements: ExpressibleAsTupleTypeElementList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.elements = elements.createTupleTypeElementList()
@@ -12279,22 +13704,23 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   }
 
 
-  func buildTupleType(format: Format, leadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
+  /// Builds a `TupleTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TupleTypeSyntax`.
+  func buildTupleType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
     let result = SyntaxFactory.makeTupleType(
       leftParen: leftParen,
       elements: elements.buildTupleTypeElementList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildTupleType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildTupleType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -12326,6 +13752,10 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   let arrow: TokenSyntax
   let returnType: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `FunctionType` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
@@ -12336,6 +13766,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   ///   - arrow: 
   ///   - returnType: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     arguments: ExpressibleAsTupleTypeElementList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
@@ -12344,6 +13775,7 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
     arrow: TokenSyntax = TokenSyntax.`arrow`,
     returnType: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.arguments = arguments.createTupleTypeElementList()
@@ -12359,7 +13791,11 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   }
 
 
-  func buildFunctionType(format: Format, leadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
+  /// Builds a `FunctionTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `FunctionTypeSyntax`.
+  func buildFunctionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
     let result = SyntaxFactory.makeFunctionType(
       leftParen: leftParen,
       arguments: arguments.buildTupleTypeElementList(format: format, leadingTrivia: nil),
@@ -12369,16 +13805,13 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
       arrow: arrow,
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildFunctionType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildFunctionType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -12406,16 +13839,22 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   let attributes: AttributeList?
   let baseType: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AttributedType` using the provided parameters.
   /// - Parameters:
   ///   - specifier: 
   ///   - attributes: 
   ///   - baseType: 
   public init(
+    leadingTrivia: Trivia = [],
     specifier: TokenSyntax? = nil,
     attributes: ExpressibleAsAttributeList? = nil,
     baseType: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.specifier = specifier
     assert(specifier == nil || specifier!.text == "inout" || specifier!.text == "__shared" || specifier!.text == "__owned")
     self.attributes = attributes?.createAttributeList()
@@ -12423,22 +13862,23 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   }
 
 
-  func buildAttributedType(format: Format, leadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
+  /// Builds a `AttributedTypeSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AttributedTypeSyntax`.
+  func buildAttributedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
     let result = SyntaxFactory.makeAttributedType(
       specifier: specifier,
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `TypeBuildable`.
-  public func buildType(format: Format, leadingTrivia: Trivia? = nil) -> TypeSyntax {
-    let result = buildAttributedType(format: format, leadingTrivia: leadingTrivia)
+  public func buildType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeSyntax {
+    let result = buildAttributedType(format: format, leadingTrivia: additionalLeadingTrivia)
     return TypeSyntax(result)
   }
 
@@ -12465,35 +13905,42 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   let argumentType: TypeBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GenericArgument` using the provided parameters.
   /// - Parameters:
   ///   - argumentType: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     argumentType: ExpressibleAsTypeBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.argumentType = argumentType.createTypeBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildGenericArgument(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
+  /// Builds a `GenericArgumentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GenericArgumentSyntax`.
+  func buildGenericArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
     let result = SyntaxFactory.makeGenericArgument(
       argumentType: argumentType.buildType(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericArgument(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildGenericArgument(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -12523,16 +13970,22 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   let arguments: GenericArgumentList
   let rightAngleBracket: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `GenericArgumentClause` using the provided parameters.
   /// - Parameters:
   ///   - leftAngleBracket: 
   ///   - arguments: 
   ///   - rightAngleBracket: 
   public init(
+    leadingTrivia: Trivia = [],
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     arguments: ExpressibleAsGenericArgumentList,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftAngleBracket = leftAngleBracket
     assert(leftAngleBracket.text == "<")
     self.arguments = arguments.createGenericArgumentList()
@@ -12544,33 +13997,36 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftAngleBracket: TokenSyntax = TokenSyntax.`leftAngle`,
     rightAngleBracket: TokenSyntax = TokenSyntax.`rightAngle`,
     @GenericArgumentListBuilder argumentsBuilder: () -> ExpressibleAsGenericArgumentList = { GenericArgumentList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftAngleBracket: leftAngleBracket,
       arguments: argumentsBuilder(),
       rightAngleBracket: rightAngleBracket
     )
   }
 
-  func buildGenericArgumentClause(format: Format, leadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
+  /// Builds a `GenericArgumentClauseSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `GenericArgumentClauseSyntax`.
+  func buildGenericArgumentClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
     let result = SyntaxFactory.makeGenericArgumentClause(
       leftAngleBracket: leftAngleBracket,
       arguments: arguments.buildGenericArgumentList(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildGenericArgumentClause(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildGenericArgumentClause(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -12591,35 +14047,42 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   let colon: TokenSyntax
   let type: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TypeAnnotation` using the provided parameters.
   /// - Parameters:
   ///   - colon: 
   ///   - type: 
   public init(
+    leadingTrivia: Trivia = [],
     colon: TokenSyntax = TokenSyntax.`colon`,
     type: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.colon = colon
     assert(colon.text == ":")
     self.type = type.createTypeBuildable()
   }
 
 
-  func buildTypeAnnotation(format: Format, leadingTrivia: Trivia? = nil) -> TypeAnnotationSyntax {
+  /// Builds a `TypeAnnotationSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TypeAnnotationSyntax`.
+  func buildTypeAnnotation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeAnnotationSyntax {
     let result = SyntaxFactory.makeTypeAnnotation(
       colon: colon,
       type: type.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTypeAnnotation(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTypeAnnotation(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -12642,6 +14105,10 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   let caseName: TokenSyntax
   let associatedTuple: TuplePattern?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `EnumCasePattern` using the provided parameters.
   /// - Parameters:
   ///   - type: 
@@ -12649,11 +14116,13 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   ///   - caseName: 
   ///   - associatedTuple: 
   public init(
+    leadingTrivia: Trivia = [],
     type: ExpressibleAsTypeBuildable? = nil,
     period: TokenSyntax = TokenSyntax.`period`,
     caseName: TokenSyntax,
     associatedTuple: ExpressibleAsTuplePattern? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.type = type?.createTypeBuildable()
     self.period = period
     assert(period.text == ".")
@@ -12665,12 +14134,14 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     type: ExpressibleAsTypeBuildable? = nil,
     period: TokenSyntax = TokenSyntax.`period`,
     caseName: String,
     associatedTuple: ExpressibleAsTuplePattern? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       type: type,
       period: period,
       caseName: TokenSyntax.identifier(caseName),
@@ -12678,23 +14149,24 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
     )
   }
 
-  func buildEnumCasePattern(format: Format, leadingTrivia: Trivia? = nil) -> EnumCasePatternSyntax {
+  /// Builds a `EnumCasePatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `EnumCasePatternSyntax`.
+  func buildEnumCasePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCasePatternSyntax {
     let result = SyntaxFactory.makeEnumCasePattern(
       type: type?.buildType(format: format, leadingTrivia: nil),
       period: period,
       caseName: caseName,
       associatedTuple: associatedTuple?.buildTuplePattern(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildEnumCasePattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildEnumCasePattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -12721,35 +14193,42 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   let isKeyword: TokenSyntax
   let type: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IsTypePattern` using the provided parameters.
   /// - Parameters:
   ///   - isKeyword: 
   ///   - type: 
   public init(
+    leadingTrivia: Trivia = [],
     isKeyword: TokenSyntax = TokenSyntax.`is`,
     type: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.isKeyword = isKeyword
     assert(isKeyword.text == "is")
     self.type = type.createTypeBuildable()
   }
 
 
-  func buildIsTypePattern(format: Format, leadingTrivia: Trivia? = nil) -> IsTypePatternSyntax {
+  /// Builds a `IsTypePatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IsTypePatternSyntax`.
+  func buildIsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsTypePatternSyntax {
     let result = SyntaxFactory.makeIsTypePattern(
       isKeyword: isKeyword,
       type: type.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildIsTypePattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildIsTypePattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -12776,35 +14255,42 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   let subPattern: PatternBuildable
   let questionMark: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `OptionalPattern` using the provided parameters.
   /// - Parameters:
   ///   - subPattern: 
   ///   - questionMark: 
   public init(
+    leadingTrivia: Trivia = [],
     subPattern: ExpressibleAsPatternBuildable,
     questionMark: TokenSyntax = TokenSyntax.`postfixQuestionMark`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.subPattern = subPattern.createPatternBuildable()
     self.questionMark = questionMark
     assert(questionMark.text == "?")
   }
 
 
-  func buildOptionalPattern(format: Format, leadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
+  /// Builds a `OptionalPatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `OptionalPatternSyntax`.
+  func buildOptionalPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
     let result = SyntaxFactory.makeOptionalPattern(
       subPattern: subPattern.buildPattern(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildOptionalPattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildOptionalPattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -12830,30 +14316,37 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
 public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPattern {
   let identifier: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `IdentifierPattern` using the provided parameters.
   /// - Parameters:
   ///   - identifier: 
   public init(
+    leadingTrivia: Trivia = [],
     identifier: TokenSyntax
   ) {
+    self.leadingTrivia = leadingTrivia
     self.identifier = identifier
   }
 
 
-  func buildIdentifierPattern(format: Format, leadingTrivia: Trivia? = nil) -> IdentifierPatternSyntax {
+  /// Builds a `IdentifierPatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `IdentifierPatternSyntax`.
+  func buildIdentifierPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierPatternSyntax {
     let result = SyntaxFactory.makeIdentifierPattern(
       identifier: identifier
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildIdentifierPattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildIdentifierPattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -12881,16 +14374,22 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   let asKeyword: TokenSyntax
   let type: TypeBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AsTypePattern` using the provided parameters.
   /// - Parameters:
   ///   - pattern: 
   ///   - asKeyword: 
   ///   - type: 
   public init(
+    leadingTrivia: Trivia = [],
     pattern: ExpressibleAsPatternBuildable,
     asKeyword: TokenSyntax = TokenSyntax.`as`,
     type: ExpressibleAsTypeBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.pattern = pattern.createPatternBuildable()
     self.asKeyword = asKeyword
     assert(asKeyword.text == "as")
@@ -12898,22 +14397,23 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   }
 
 
-  func buildAsTypePattern(format: Format, leadingTrivia: Trivia? = nil) -> AsTypePatternSyntax {
+  /// Builds a `AsTypePatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AsTypePatternSyntax`.
+  func buildAsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsTypePatternSyntax {
     let result = SyntaxFactory.makeAsTypePattern(
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       asKeyword: asKeyword,
       type: type.buildType(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildAsTypePattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildAsTypePattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -12941,16 +14441,22 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   let elements: TuplePatternElementList
   let rightParen: TokenSyntax
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TuplePattern` using the provided parameters.
   /// - Parameters:
   ///   - leftParen: 
   ///   - elements: 
   ///   - rightParen: 
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     elements: ExpressibleAsTuplePatternElementList,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`
   ) {
+    self.leadingTrivia = leadingTrivia
     self.leftParen = leftParen
     assert(leftParen.text == "(")
     self.elements = elements.createTuplePatternElementList()
@@ -12962,33 +14468,36 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     leftParen: TokenSyntax = TokenSyntax.`leftParen`,
     rightParen: TokenSyntax = TokenSyntax.`rightParen`,
     @TuplePatternElementListBuilder elementsBuilder: () -> ExpressibleAsTuplePatternElementList = { TuplePatternElementList([]) }
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       leftParen: leftParen,
       elements: elementsBuilder(),
       rightParen: rightParen
     )
   }
 
-  func buildTuplePattern(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
+  /// Builds a `TuplePatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TuplePatternSyntax`.
+  func buildTuplePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
     let result = SyntaxFactory.makeTuplePattern(
       leftParen: leftParen,
       elements: elements.buildTuplePatternElementList(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildTuplePattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildTuplePattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -13015,35 +14524,42 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   let wildcard: TokenSyntax
   let typeAnnotation: TypeAnnotation?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `WildcardPattern` using the provided parameters.
   /// - Parameters:
   ///   - wildcard: 
   ///   - typeAnnotation: 
   public init(
+    leadingTrivia: Trivia = [],
     wildcard: TokenSyntax = TokenSyntax.`wildcard`,
     typeAnnotation: ExpressibleAsTypeAnnotation? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.wildcard = wildcard
     assert(wildcard.text == "_")
     self.typeAnnotation = typeAnnotation?.createTypeAnnotation()
   }
 
 
-  func buildWildcardPattern(format: Format, leadingTrivia: Trivia? = nil) -> WildcardPatternSyntax {
+  /// Builds a `WildcardPatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `WildcardPatternSyntax`.
+  func buildWildcardPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WildcardPatternSyntax {
     let result = SyntaxFactory.makeWildcardPattern(
       wildcard: wildcard,
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildWildcardPattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildWildcardPattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -13072,6 +14588,10 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   let pattern: PatternBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `TuplePatternElement` using the provided parameters.
   /// - Parameters:
   ///   - labelName: 
@@ -13079,11 +14599,13 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   ///   - pattern: 
   ///   - trailingComma: 
   public init(
+    leadingTrivia: Trivia = [],
     labelName: TokenSyntax? = nil,
     labelColon: TokenSyntax? = nil,
     pattern: ExpressibleAsPatternBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.labelName = labelName
     self.labelColon = labelColon
     assert(labelColon == nil || labelColon!.text == ":")
@@ -13096,12 +14618,14 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     labelName: String?,
     labelColon: TokenSyntax? = nil,
     pattern: ExpressibleAsPatternBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       labelName: labelName.map(TokenSyntax.identifier),
       labelColon: labelColon,
       pattern: pattern,
@@ -13109,23 +14633,24 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
     )
   }
 
-  func buildTuplePatternElement(format: Format, leadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
+  /// Builds a `TuplePatternElementSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `TuplePatternElementSyntax`.
+  func buildTuplePatternElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
     let result = SyntaxFactory.makeTuplePatternElement(
       labelName: labelName,
       labelColon: labelColon,
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildTuplePatternElement(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildTuplePatternElement(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -13155,30 +14680,37 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
 public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPattern {
   let expression: ExprBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ExpressionPattern` using the provided parameters.
   /// - Parameters:
   ///   - expression: 
   public init(
+    leadingTrivia: Trivia = [],
     expression: ExpressibleAsExprBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.expression = expression.createExprBuildable()
   }
 
 
-  func buildExpressionPattern(format: Format, leadingTrivia: Trivia? = nil) -> ExpressionPatternSyntax {
+  /// Builds a `ExpressionPatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ExpressionPatternSyntax`.
+  func buildExpressionPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionPatternSyntax {
     let result = SyntaxFactory.makeExpressionPattern(
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildExpressionPattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildExpressionPattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -13205,35 +14737,42 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   let letOrVarKeyword: TokenSyntax
   let valuePattern: PatternBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `ValueBindingPattern` using the provided parameters.
   /// - Parameters:
   ///   - letOrVarKeyword: 
   ///   - valuePattern: 
   public init(
+    leadingTrivia: Trivia = [],
     letOrVarKeyword: TokenSyntax,
     valuePattern: ExpressibleAsPatternBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.letOrVarKeyword = letOrVarKeyword
     assert(letOrVarKeyword.text == "let" || letOrVarKeyword.text == "var")
     self.valuePattern = valuePattern.createPatternBuildable()
   }
 
 
-  func buildValueBindingPattern(format: Format, leadingTrivia: Trivia? = nil) -> ValueBindingPatternSyntax {
+  /// Builds a `ValueBindingPatternSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ValueBindingPatternSyntax`.
+  func buildValueBindingPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ValueBindingPatternSyntax {
     let result = SyntaxFactory.makeValueBindingPattern(
       letOrVarKeyword: letOrVarKeyword,
       valuePattern: valuePattern.buildPattern(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `PatternBuildable`.
-  public func buildPattern(format: Format, leadingTrivia: Trivia? = nil) -> PatternSyntax {
-    let result = buildValueBindingPattern(format: format, leadingTrivia: leadingTrivia)
+  public func buildPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternSyntax {
+    let result = buildValueBindingPattern(format: format, leadingTrivia: additionalLeadingTrivia)
     return PatternSyntax(result)
   }
 
@@ -13261,35 +14800,42 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   let entry: SyntaxBuildable
   let trailingComma: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AvailabilityArgument` using the provided parameters.
   /// - Parameters:
   ///   - entry: The actual argument
   ///   - trailingComma: A trailing comma if the argument is followed by anotherargument
   public init(
+    leadingTrivia: Trivia = [],
     entry: ExpressibleAsSyntaxBuildable,
     trailingComma: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.entry = entry.createSyntaxBuildable()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
 
 
-  func buildAvailabilityArgument(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
+  /// Builds a `AvailabilityArgumentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AvailabilityArgumentSyntax`.
+  func buildAvailabilityArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
     let result = SyntaxFactory.makeAvailabilityArgument(
       entry: entry.buildSyntax(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityArgument(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAvailabilityArgument(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -13312,16 +14858,22 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   let colon: TokenSyntax
   let value: SyntaxBuildable
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AvailabilityLabeledArgument` using the provided parameters.
   /// - Parameters:
   ///   - label: The label of the argument
   ///   - colon: The colon separating label and value
   ///   - value: The value of this labeled argument
   public init(
+    leadingTrivia: Trivia = [],
     label: TokenSyntax,
     colon: TokenSyntax = TokenSyntax.`colon`,
     value: ExpressibleAsSyntaxBuildable
   ) {
+    self.leadingTrivia = leadingTrivia
     self.label = label
     self.colon = colon
     assert(colon.text == ":")
@@ -13332,33 +14884,36 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     label: String,
     colon: TokenSyntax = TokenSyntax.`colon`,
     value: ExpressibleAsSyntaxBuildable
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       label: TokenSyntax.identifier(label),
       colon: colon,
       value: value
     )
   }
 
-  func buildAvailabilityLabeledArgument(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityLabeledArgumentSyntax {
+  /// Builds a `AvailabilityLabeledArgumentSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AvailabilityLabeledArgumentSyntax`.
+  func buildAvailabilityLabeledArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityLabeledArgumentSyntax {
     let result = SyntaxFactory.makeAvailabilityLabeledArgument(
       label: label,
       colon: colon,
       value: value.buildSyntax(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityLabeledArgument(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAvailabilityLabeledArgument(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -13380,14 +14935,20 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   let platform: TokenSyntax
   let version: VersionTuple?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `AvailabilityVersionRestriction` using the provided parameters.
   /// - Parameters:
   ///   - platform: The name of the OS on which the availability should berestricted or 'swift' if the availability should berestricted based on a Swift version.
   ///   - version: 
   public init(
+    leadingTrivia: Trivia = [],
     platform: TokenSyntax,
     version: ExpressibleAsVersionTuple? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.platform = platform
     self.version = version?.createVersionTuple()
   }
@@ -13396,30 +14957,33 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     platform: String,
     version: ExpressibleAsVersionTuple? = nil
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       platform: TokenSyntax.identifier(platform),
       version: version
     )
   }
 
-  func buildAvailabilityVersionRestriction(format: Format, leadingTrivia: Trivia? = nil) -> AvailabilityVersionRestrictionSyntax {
+  /// Builds a `AvailabilityVersionRestrictionSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `AvailabilityVersionRestrictionSyntax`.
+  func buildAvailabilityVersionRestriction(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityVersionRestrictionSyntax {
     let result = SyntaxFactory.makeAvailabilityVersionRestriction(
       platform: platform,
       version: version?.buildVersionTuple(format: format, leadingTrivia: nil)
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildAvailabilityVersionRestriction(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildAvailabilityVersionRestriction(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 
@@ -13442,16 +15006,22 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   let patchPeriod: TokenSyntax?
   let patchVersion: TokenSyntax?
 
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
   /// Creates a `VersionTuple` using the provided parameters.
   /// - Parameters:
   ///   - majorMinor: In case the version consists only of the major version, aninteger literal that specifies the major version. In casethe version consists of major and minor version number, afloating literal in which the decimal part is interpretedas the minor version.
   ///   - patchPeriod: If the version contains a patch number, the periodseparating the minor from the patch number.
   ///   - patchVersion: The patch version if specified.
   public init(
+    leadingTrivia: Trivia = [],
     majorMinor: ExpressibleAsSyntaxBuildable,
     patchPeriod: TokenSyntax? = nil,
     patchVersion: TokenSyntax? = nil
   ) {
+    self.leadingTrivia = leadingTrivia
     self.majorMinor = majorMinor.createSyntaxBuildable()
     self.patchPeriod = patchPeriod
     assert(patchPeriod == nil || patchPeriod!.text == ".")
@@ -13462,33 +15032,36 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   ///  - Initializing syntax collections using result builders
   ///  - Initializing tokens without default text using strings
   public init(
+    leadingTrivia: Trivia = [],
     majorMinor: ExpressibleAsSyntaxBuildable,
     patchPeriod: TokenSyntax? = nil,
     patchVersion: String?
   ) {
     self.init(
+      leadingTrivia: leadingTrivia,
       majorMinor: majorMinor,
       patchPeriod: patchPeriod,
       patchVersion: patchVersion.map(TokenSyntax.integerLiteral)
     )
   }
 
-  func buildVersionTuple(format: Format, leadingTrivia: Trivia? = nil) -> VersionTupleSyntax {
+  /// Builds a `VersionTupleSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `VersionTupleSyntax`.
+  func buildVersionTuple(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VersionTupleSyntax {
     let result = SyntaxFactory.makeVersionTuple(
       majorMinor: majorMinor.buildSyntax(format: format, leadingTrivia: nil),
       patchPeriod: patchPeriod,
       patchVersion: patchVersion
     )
-    if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
-    } else {
-      return result
-    }
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
   }
 
   /// Conformance to `SyntaxBuildable`.
-  public func buildSyntax(format: Format, leadingTrivia: Trivia? = nil) -> Syntax {
-    let result = buildVersionTuple(format: format, leadingTrivia: leadingTrivia)
+  public func buildSyntax(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> Syntax {
+    let result = buildVersionTuple(format: format, leadingTrivia: additionalLeadingTrivia)
     return Syntax(result)
   }
 

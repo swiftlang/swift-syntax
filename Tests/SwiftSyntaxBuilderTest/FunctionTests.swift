@@ -56,11 +56,7 @@ final class FunctionTests: XCTestCase {
   func testArguments() {
     let buildable = FunctionCallExpr("test") {
       for param in (1...5) {
-        if param.isMultiple(of: 2) {
-          TupleExprElement(label: .identifier("p\(param)"), colon: .colon, expression: "value\(param)")
-        } else {
-          TupleExprElement(expression: "value\(param)")
-        }
+        TupleExprElement(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: "value\(param)")
       }
     }
     let syntax = buildable.buildSyntax(format: Format())

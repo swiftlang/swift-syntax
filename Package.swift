@@ -101,7 +101,22 @@ let package = Package(
         name: "SwiftSyntaxBuilderGeneration",
         dependencies: ["SwiftSyntaxBuilder"],
         exclude: [
-          "Tokens.swift.gyb"
+          "gyb_helpers",
+          "AttributeNodes.swift.gyb",
+          "AvailabilityNodes.swift.gyb",
+          "Classification.swift.gyb",
+          "CommonNodes.swift.gyb",
+          "DeclNodes.swift.gyb",
+          "ExprNodes.swift.gyb",
+          "GenericNodes.swift.gyb",
+          "Kinds.swift.gyb",
+          "NodeSerializationCodes.swift.gyb",
+          "PatternNodes.swift.gyb",
+          "StmtNodes.swift.gyb",
+          "Tokens.swift.gyb",
+          "Traits.swift.gyb",
+          "Trivia.swift.gyb",
+          "TypeNodes.swift.gyb"
         ]
     ),
     .testTarget(

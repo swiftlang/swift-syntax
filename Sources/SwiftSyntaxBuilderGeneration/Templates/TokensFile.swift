@@ -88,7 +88,7 @@ let tokensFile = SourceFile {
       let body = CodeBlock {
         FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "makeToken")) {
           TupleExprElement(expression: MemberAccessExpr(name: "eof"))
-          TupleExprElement(label: TokenSyntax.identifier("presence"), colon: .colon, expression: MemberAccessExpr(name: "present"))
+          TupleExprElement(label: "presence", expression: MemberAccessExpr(name: "present"))
         }
       }
 

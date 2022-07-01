@@ -70,7 +70,7 @@ public class AbsolutePositionTests: XCTestCase {
         item: Syntax(
           SyntaxFactory.makeReturnStmt(
             returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
-                             .withTrailingTrivia(.newlines(1)),
+                             .withTrailingTrivia(.newline),
             expression: nil
           )
         ),
@@ -170,8 +170,8 @@ public class AbsolutePositionTests: XCTestCase {
       item: Syntax(
         SyntaxFactory.makeReturnStmt(
           returnKeyword: SyntaxFactory.makeToken(.returnKeyword, presence: .present)
-                           .withLeadingTrivia(.newlines(1))
-                           .withTrailingTrivia(.newlines(1)),
+                           .withLeadingTrivia(.newline)
+                           .withTrailingTrivia(.newline),
           expression: nil)
       ),
       semicolon: nil,

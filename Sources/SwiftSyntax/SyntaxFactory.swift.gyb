@@ -103,7 +103,7 @@ public enum SyntaxFactory {
 
 %{
   def token_trivia(requires_space):
-    return '[.spaces(1)]' if requires_space else '[]'
+    return '.space' if requires_space else '[]'
 }%
 
 % for token in SYNTAX_TOKENS:

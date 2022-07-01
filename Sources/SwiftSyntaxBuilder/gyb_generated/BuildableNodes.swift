@@ -129,7 +129,7 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
     let result = SyntaxFactory.makeCodeBlock(
       leftBrace: leftBrace,
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
-      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
+      rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia)
@@ -2908,7 +2908,7 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
       leftBrace: leftBrace,
       signature: signature?.buildClosureSignature(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
-      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
+      rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia)
@@ -6132,7 +6132,7 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
     let result = SyntaxFactory.makeMemberDeclBlock(
       leftBrace: leftBrace,
       members: members.buildMemberDeclList(format: format._indented(), leadingTrivia: nil),
-      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
+      rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia)
@@ -10558,7 +10558,7 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
       cases: cases.buildSwitchCaseList(format: format, leadingTrivia: nil),
-      rightBrace: rightBrace.withLeadingTrivia(.newlines(1) + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
+      rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia)

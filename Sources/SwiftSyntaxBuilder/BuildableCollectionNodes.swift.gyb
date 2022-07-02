@@ -65,7 +65,7 @@ public struct ${type.buildable()}: ExpressibleByArrayLiteral, SyntaxBuildable, $
     })
 %   end
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }

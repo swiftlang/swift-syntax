@@ -20,7 +20,13 @@ final class StructTests: XCTestCase {
   func testNestedStruct() {
     let leadingTrivia = Trivia.garbageText("␣")
     let nestedStruct = StructDecl(
-      structKeyword: .struct.withLeadingTrivia(.docLineComment("/// A nested struct\n")),
+      leadingTrivia: [
+        .docLineComment("/// A nested struct"),
+        .newlines(1),
+        .docLineComment("/// with multi line comment"),
+        .newlines(1)
+      ],
+      structKeyword: .struct,
       identifier: "NestedStruct",
       genericParameterClause: GenericParameterClause {
         GenericParameter(name: "A")
@@ -33,22 +39,53 @@ final class StructTests: XCTestCase {
             leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D"))
       }
     ) {}
+    
+    let carriateReturnsStruct = StructDecl(
+        leadingTrivia: [
+          .docLineComment("/// A nested struct"),
+          .carriageReturns(1),
+          .docLineComment("/// with multi line comment where the newline is a CR"),
+          .carriageReturns(1)
+        ],
+        structKeyword: .struct,
+        identifier: "CarriateReturnsStruct"
+      )
+      let carriageReturnFormFeedsStruct = StructDecl(
+          leadingTrivia: [
+            .docLineComment("/// A nested struct"),
+            .carriageReturnLineFeeds(1),
+            .docLineComment("/// with multi line comment where the newline is a CRLF"),
+            .carriageReturnLineFeeds(1),
+          ],
+          structKeyword: .struct,
+          identifier: "CarriageReturnFormFeedsStruct"
+        )
     let testStruct = StructDecl(
       modifiers: [TokenSyntax.public],
       identifier: "TestStruct"
     ) {
       nestedStruct
+      carriateReturnsStruct
+      carriageReturnFormFeedsStruct
     }
     let syntax = testStruct.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     var text = ""
     syntax.write(to: &text)
 
-    // FIXME: We should indent the nested struct by adding the indentation after every newline in the leading trivia.
     XCTAssertEqual(text, """
     ␣public struct TestStruct {
         /// A nested struct
-    struct NestedStruct < A, B: C, D > where A: X, A.P == D {
+        /// with multi line comment
+        struct NestedStruct < A, B: C, D > where A: X, A.P == D {
+        }
+        /// A nested struct\r\
+        /// with multi line comment where the newline is a CR\r\
+        struct CarriateReturnsStruct {
+        }
+        /// A nested struct\r\n\
+        /// with multi line comment where the newline is a CRLF\r\n\
+        struct CarriageReturnFormFeedsStruct {
         }
     }
     """)

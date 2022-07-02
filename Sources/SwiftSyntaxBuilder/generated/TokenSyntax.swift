@@ -16,23 +16,23 @@
 import SwiftSyntax
 extension TokenSyntax: ExpressibleAsTokenList, ExpressibleAsNonEmptyTokenList, ExpressibleAsBinaryOperatorExpr, ExpressibleAsDeclModifier, ExpressibleAsIdentifierExpr {
   /// Conformance to ExpressibleAsTokenList
-public func createTokenList() -> TokenList {
+  public func createTokenList() -> TokenList {
     return TokenList([self])
   }
   /// Conformance to ExpressibleAsNonEmptyTokenList
-public func createNonEmptyTokenList() -> NonEmptyTokenList {
+  public func createNonEmptyTokenList() -> NonEmptyTokenList {
     return NonEmptyTokenList([self])
   }
   /// Conformance to ExpressibleAsBinaryOperatorExpr
-public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
+  public func createBinaryOperatorExpr() -> BinaryOperatorExpr {
     return BinaryOperatorExpr(operatorToken: self)
   }
   /// Conformance to ExpressibleAsDeclModifier
-public func createDeclModifier() -> DeclModifier {
+  public func createDeclModifier() -> DeclModifier {
     return DeclModifier(name: self)
   }
   /// Conformance to ExpressibleAsIdentifierExpr
-public func createIdentifierExpr() -> IdentifierExpr {
+  public func createIdentifierExpr() -> IdentifierExpr {
     return IdentifierExpr(identifier: self)
   }
 }

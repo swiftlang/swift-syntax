@@ -123,10 +123,24 @@ extension TriviaPiece: CustomDebugStringConvertible {
   }
 }
 
+extension TriviaPiece {
+  /// Returns true if the trivia is `.newlines`, `.carriageReturns` or `.carriageReturnLineFeeds`
+  public var isNewline: Bool {
+    switch self {
+    case .newlines,
+         .carriageReturns,
+         .carriageReturnLineFeeds:
+      return true
+    default:
+      return false
+    }
+  }
+}
+
 /// A collection of leading or trailing trivia. This is the main data structure
 /// for thinking about trivia.
 public struct Trivia {
-  let pieces: [TriviaPiece]
+  public let pieces: [TriviaPiece]
 
   /// Creates Trivia with the provided underlying pieces.
   public init(pieces: [TriviaPiece]) {

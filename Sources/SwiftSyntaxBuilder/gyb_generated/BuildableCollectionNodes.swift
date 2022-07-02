@@ -41,7 +41,7 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       $0.buildCodeBlockItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -92,7 +92,7 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildTupleExprElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -148,7 +148,7 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
       $0.buildArrayElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -204,7 +204,7 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildDictionaryElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -260,7 +260,7 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -316,7 +316,7 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildDeclNameArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -372,7 +372,7 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
       $0.buildExpr(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -423,7 +423,7 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
       $0.buildClosureCaptureItem(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -479,7 +479,7 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
       $0.buildClosureParam(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -535,7 +535,7 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
       $0.buildMultipleTrailingClosureElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -591,7 +591,7 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
       $0.buildObjcNamePiece(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -647,7 +647,7 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildFunctionParameter(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -703,7 +703,7 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       $0.buildIfConfigClause(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -759,7 +759,7 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
       $0.buildInheritedType(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -815,7 +815,7 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       $0.buildMemberDeclListItem(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -866,7 +866,7 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildDeclModifier(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -922,7 +922,7 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
       $0.buildAccessPathComponent(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -978,7 +978,7 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildAccessorDecl(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1029,7 +1029,7 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
       $0.buildPatternBinding(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1085,7 +1085,7 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
       $0.buildEnumCaseElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1139,7 +1139,7 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   public func buildIdentifierList(format: Format, leadingTrivia: Trivia? = nil) -> IdentifierListSyntax {
     let result = SyntaxFactory.makeIdentifierList(elements)
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1195,7 +1195,7 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1251,7 +1251,7 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
       $0.buildPrecedenceGroupNameElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1305,7 +1305,7 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   public func buildTokenList(format: Format, leadingTrivia: Trivia? = nil) -> TokenListSyntax {
     let result = SyntaxFactory.makeTokenList(elements)
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1359,7 +1359,7 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   public func buildNonEmptyTokenList(format: Format, leadingTrivia: Trivia? = nil) -> NonEmptyTokenListSyntax {
     let result = SyntaxFactory.makeNonEmptyTokenList(elements)
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1415,7 +1415,7 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1471,7 +1471,7 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1527,7 +1527,7 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildObjCSelectorPiece(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1583,7 +1583,7 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
       $0.buildDifferentiabilityParam(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1639,7 +1639,7 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
       $0.buildBackDeployVersionArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1695,7 +1695,7 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
       $0.buildSyntax(format: format, leadingTrivia: Trivia.newline + format._makeIndent())
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1751,7 +1751,7 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
       $0.buildCatchClause(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1807,7 +1807,7 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildCaseItem(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1863,7 +1863,7 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
       $0.buildCatchItem(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1919,7 +1919,7 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildConditionElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -1975,7 +1975,7 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
       $0.buildGenericRequirement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2031,7 +2031,7 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildGenericParameter(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2087,7 +2087,7 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
       $0.buildPrimaryAssociatedType(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2143,7 +2143,7 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
       $0.buildCompositionTypeElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2199,7 +2199,7 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildTupleTypeElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2255,7 +2255,7 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
       $0.buildGenericArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2311,7 +2311,7 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
       $0.buildTuplePatternElement(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }
@@ -2367,7 +2367,7 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
       $0.buildAvailabilityArgument(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }

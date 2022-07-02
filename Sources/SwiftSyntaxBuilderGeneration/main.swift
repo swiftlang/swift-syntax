@@ -17,6 +17,7 @@ import SwiftSyntaxBuilder
 /// SwiftSyntaxBuilder sources to be generated
 let sourceTemplates = [
   (tokensFile, "Tokens.swift"),
+  (tokenSyntaxFile, "TokenSyntax.swift"),
 ]
 
 guard CommandLine.arguments.count > 1 else {

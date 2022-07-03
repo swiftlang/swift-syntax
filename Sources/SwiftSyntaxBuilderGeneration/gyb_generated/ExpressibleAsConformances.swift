@@ -16,6 +16,9 @@ let SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES: [String: [String]] = [
   "AccessorList": [
     "AccessorBlock",
   ],
+  "ArrayElementList": [
+    "ArrayExpr",
+  ],
   "ArrayType": [
     "TypeAnnotation",
   ],

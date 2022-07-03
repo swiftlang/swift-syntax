@@ -19,3 +19,8 @@ let SYNTAX_NODES: [Node] = COMMON_NODES
   + TYPE_NODES
   + PATTERN_NODES
   + AVAILABILITY_NODES
+
+/// A lookup table of nodes indexed by their kind.
+let SYNTAX_NODE_MAP: [String: Node] = Dictionary(
+  uniqueKeysWithValues: SYNTAX_NODES.map { node in (node.syntaxKind, node) }
+)

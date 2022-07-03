@@ -656,15 +656,16 @@ def generate_source_code_command(args):
         printerr("FAIL: Generating .gyb files failed")
         printerr("Executing: %s" % " ".join(e.cmd))
         printerr(e.output)
-
-    run_code_generation(
-        toolchain=args.toolchain,
-        build_dir=realpath(args.build_dir),
-        multiroot_data_file=args.multiroot_data_file,
-        release=args.release,
-        verbose=args.verbose,
-        swiftsyntaxbuilder_destination=os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
-    )
+    
+    if not args.gyb_only:
+        run_code_generation(
+            toolchain=args.toolchain,
+            build_dir=realpath(args.build_dir),
+            multiroot_data_file=args.multiroot_data_file,
+            release=args.release,
+            verbose=args.verbose,
+            swiftsyntaxbuilder_destination=os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
+        )
 
 
 def verify_source_code_command(args):
@@ -833,6 +834,12 @@ def parse_args():
     generate_source_code_parser.set_defaults(func=generate_source_code_command)
     
     add_default_build_arguments(generate_source_code_parser)
+
+    generate_source_code_parser.add_argument(
+        "--gyb-only",
+        action="store_true",
+        help="Only generate gyb templates (and not SwiftSyntaxBuilderGeneration's templates)",
+    )
 
     generate_source_code_parser.add_argument(
         "--gyb-exec",

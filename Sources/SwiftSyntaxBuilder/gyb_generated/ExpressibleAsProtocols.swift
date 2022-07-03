@@ -82,7 +82,7 @@ public extension ExpressibleAsSyntaxBuildable {
   }
 }
 
-public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause {
+public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause, ExpressibleAsTypeInitializerClause {
   func createTypeBuildable() -> TypeBuildable
 }
 
@@ -90,6 +90,10 @@ public extension ExpressibleAsTypeBuildable {
   /// Conformance to `ExpressibleAsReturnClause`.
   func createReturnClause() -> ReturnClause {
     return ReturnClause(returnType: self)
+  }
+  /// Conformance to `ExpressibleAsTypeInitializerClause`.
+  func createTypeInitializerClause() -> TypeInitializerClause {
+    return TypeInitializerClause(value: self)
   }
 }
 

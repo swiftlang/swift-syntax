@@ -52,6 +52,12 @@ extension String: ExpressibleAsAccessPathComponent {
   }
 }
 
+extension String: ExpressibleAsTypeInitializerClause {
+  public func createTypeInitializerClause() -> TypeInitializerClause {
+    return TypeInitializerClause(value: self)
+  }
+}
+
 /// Default conformance to `ExpressibleByTypeBuildable`
 extension String {
   public func createTypeBuildable() -> TypeBuildable {

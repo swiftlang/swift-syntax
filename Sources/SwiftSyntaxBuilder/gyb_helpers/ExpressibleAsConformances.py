@@ -18,11 +18,11 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'ExprList': [
         'ConditionElement'
     ],
-    'MemberDeclList': [
-        'MemberDeclBlock'
-    ],
     'FunctionCallExpr': [
         'CodeBlockItem'
+    ],
+    'MemberDeclList': [
+        'MemberDeclBlock'
     ],
     'SequenceExpr': [
         'CodeBlockItem',
@@ -41,7 +41,8 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
         'IdentifierExpr'
     ],
     'TypeBuildable': [
-        'ReturnClause'
+        'ReturnClause',
+        'TypeInitializerClause'
     ]
 }
 

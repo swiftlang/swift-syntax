@@ -442,6 +442,13 @@ public extension SyntaxProtocol {
     return String(reflecting: type(of: self))
   }
 
+  /// Dumps the syntax node and all of its children for debugging purposes.
+  var recursiveDescription: String {
+    var result = ""
+    dump(self, to: &result)
+    return result
+  }
+
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
   func write<Target>(to target: inout Target)

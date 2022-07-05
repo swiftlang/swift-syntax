@@ -113,6 +113,7 @@ let package = Package(
           "NodeSerializationCodes.swift.gyb",
           "PatternNodes.swift.gyb",
           "StmtNodes.swift.gyb",
+          "SyntaxBaseKinds.swift.gyb",
           "Tokens.swift.gyb",
           "Traits.swift.gyb",
           "Trivia.swift.gyb",

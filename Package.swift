@@ -107,6 +107,7 @@ let package = Package(
           "Classification.swift.gyb",
           "CommonNodes.swift.gyb",
           "DeclNodes.swift.gyb",
+          "ExpressibleAsConformances.swift.gyb",
           "ExprNodes.swift.gyb",
           "GenericNodes.swift.gyb",
           "Kinds.swift.gyb",

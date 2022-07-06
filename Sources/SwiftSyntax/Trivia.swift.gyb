@@ -65,7 +65,17 @@ extension TriviaPiece: TextOutputStreamable {
 extension TriviaPiece: CustomDebugStringConvertible {
   /// Returns a description used by dump.
   public var debugDescription: String {
-    return "TriviaPiece"
+    switch self {
+% for trivia in TRIVIAS:
+%   if trivia.is_collection():
+    case .${trivia.lower_name}s(let data):
+      return "${trivia.lower_name}s(\(data))"
+%   else:
+    case .${trivia.lower_name}(let name):
+      return "${trivia.lower_name}(\(name))"
+%   end
+% end
+    }
   }
 }
 

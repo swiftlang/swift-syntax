@@ -45,6 +45,11 @@ public enum TokenKind {
     }
   }
 
+  /// Returns `true` if the token is a Swift keyword.
+  ///
+  /// Keywords are reserved unconditionally for use by Swift and may not
+  /// appear as identifiers in any position without being escaped. For example,
+  /// `class`, `func`, or `import`.
   public var isKeyword: Bool {
     switch self {
     case .eof: return false
@@ -58,6 +63,11 @@ public enum TokenKind {
     }
   }
 
+  /// Returns `true` if the token is a Swift punctuator.
+  ///
+  /// Punctuation tokens generally separate identifiers from each other. For
+  /// example, the '<' and '>' characters in a generic parameter list, or the
+  /// quote characters in a string literal.
   public var isPunctuation: Bool {
     switch self {
     case .eof: return false

@@ -57,6 +57,19 @@ public enum TokenKind {
 % end
     }
   }
+
+  public var isPunctuation: Bool {
+    switch self {
+    case .eof: return false
+% for token in SYNTAX_TOKENS:
+%   if type(token).__name__ == 'Punctuator':
+    case .${token.swift_kind()}: return true
+%   else:
+    case .${token.swift_kind()}: return false
+%   end
+% end
+    }
+  }
   
   var kind: String {
     switch self {

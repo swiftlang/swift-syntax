@@ -90,7 +90,32 @@ extension TriviaPiece: TextOutputStreamable {
 extension TriviaPiece: CustomDebugStringConvertible {
   /// Returns a description used by dump.
   public var debugDescription: String {
-    return "TriviaPiece"
+    switch self {
+    case .spaces(let data):
+      return "spaces(\(data))"
+    case .tabs(let data):
+      return "tabs(\(data))"
+    case .verticalTabs(let data):
+      return "verticalTabs(\(data))"
+    case .formfeeds(let data):
+      return "formfeeds(\(data))"
+    case .newlines(let data):
+      return "newlines(\(data))"
+    case .carriageReturns(let data):
+      return "carriageReturns(\(data))"
+    case .carriageReturnLineFeeds(let data):
+      return "carriageReturnLineFeeds(\(data))"
+    case .lineComment(let name):
+      return "lineComment(\(name))"
+    case .blockComment(let name):
+      return "blockComment(\(name))"
+    case .docLineComment(let name):
+      return "docLineComment(\(name))"
+    case .docBlockComment(let name):
+      return "docBlockComment(\(name))"
+    case .garbageText(let name):
+      return "garbageText(\(name))"
+    }
   }
 }
 

@@ -12,7 +12,7 @@ final class StructTests: XCTestCase {
     syntax.write(to: &text)
 
     XCTAssertEqual(text, """
-    ␣struct TestStruct{
+    ␣struct TestStruct {
     }
     """)
   }
@@ -46,9 +46,9 @@ final class StructTests: XCTestCase {
 
     // FIXME: We should indent the nested struct by adding the indentation after every newline in the leading trivia.
     XCTAssertEqual(text, """
-    ␣public struct TestStruct{
+    ␣public struct TestStruct {
         /// A nested struct
-    struct NestedStruct < A, B: C, D > where A: X, A.P==D{
+    struct NestedStruct < A, B: C, D > where A: X, A.P==D {
         }
     }
     """)
@@ -69,7 +69,7 @@ final class StructTests: XCTestCase {
     }
     let syntax = myStruct.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, """
-    struct MyStruct{
+    struct MyStruct {
         let var0: String
         let var2: String
         let var4: String

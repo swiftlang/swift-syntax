@@ -29,7 +29,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     var result = ""
     test.write(to: &result)
     XCTAssertEqual(result, """
-      ␣{
+      ␣ {
           outsideBuilder()
           outerBuilder()
           innerBuilder()
@@ -67,7 +67,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       var result = ""
       test.write(to: &result)
       XCTAssertEqual(result, """
-        ␣{
+        ␣ {
             outsideBuilder()
             outerBuilder()
             innerBuilder()

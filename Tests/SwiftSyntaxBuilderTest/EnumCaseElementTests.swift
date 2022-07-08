@@ -27,7 +27,7 @@ final class EnumCaseElementTests: XCTestCase {
 
     XCTAssertEqual(syntax.description,
       """
-      ␣enum Greeting: String, Codable, Equatable{
+      ␣enum Greeting: String, Codable, Equatable {
           case goodMorning = "Good Morning", helloWorld = "Hello World", hi
       }
       """)

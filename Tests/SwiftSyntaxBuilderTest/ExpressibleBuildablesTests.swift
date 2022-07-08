@@ -17,10 +17,10 @@ final class ExpressibleBuildablesTests: XCTestCase {
 
     let syntax = myStruct.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, """
-    struct MyStruct{
+    struct MyStruct {
         var myFirstVar: Int
         let myOtherLet: String
-        struct InnerStruct{
+        struct InnerStruct {
         }
     }
     """)
@@ -36,9 +36,9 @@ final class ExpressibleBuildablesTests: XCTestCase {
     let syntax = myCodeBlock.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, """
 
-    struct MyStruct1{
+    struct MyStruct1 {
     }
-    struct MyStruct2{
+    struct MyStruct2 {
     }
     """)
   }
@@ -64,7 +64,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
     XCTAssertEqual(
       syntax.description,
       """
-      switch version{
+      switch version {
       case .version_1: 
           return "1.0.0"
       case .version_2: 

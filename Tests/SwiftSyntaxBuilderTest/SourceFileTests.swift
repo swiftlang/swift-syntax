@@ -21,7 +21,7 @@ final class SourceFileTests: XCTestCase {
 
       import Foundation
       import UIKit
-      class SomeViewController{
+      class SomeViewController {
           let tableView: UITableView
       }
       """)

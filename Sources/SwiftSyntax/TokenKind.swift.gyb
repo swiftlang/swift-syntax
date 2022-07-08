@@ -31,6 +31,21 @@ public enum TokenKind {
   case ${kind}
 % end
 
+  /// Initializes a keyword token kind from its string representation. If the
+  /// given string is not a keyword, this function returns `nil`.
+  public init?(keyword: String) {
+    switch keyword {
+% for token in SYNTAX_TOKENS:
+%   if token.is_keyword:
+    case "${token.text}":
+      self = .${token.swift_kind()}
+%   end
+% end
+    default:
+      return nil
+    }
+  }
+
   /// The textual representation of this token kind.
   var text: String {
     switch self {

@@ -47,6 +47,8 @@ public enum TriviaPiece {
     case docBlockComment(String)
     /// Any skipped garbage text.
     case garbageText(String)
+    /// A script command, starting with '#!'.
+    case shebang(String)
 }
 
 extension TriviaPiece: TextOutputStreamable {
@@ -83,6 +85,8 @@ extension TriviaPiece: TextOutputStreamable {
       target.write(text)
     case let .garbageText(text):
       target.write(text)
+    case let .shebang(text):
+      target.write(text)
     }
   }
 }
@@ -115,6 +119,8 @@ extension TriviaPiece: CustomDebugStringConvertible {
       return "docBlockComment(\(name))"
     case .garbageText(let name):
       return "garbageText(\(name))"
+    case .shebang(let name):
+      return "shebang(\(name))"
     }
   }
 }
@@ -249,6 +255,11 @@ public struct Trivia {
   public static func garbageText(_ text: String) -> Trivia {
     return [.garbageText(text)]
   }
+
+  /// Returns a piece of trivia for Shebang.
+  public static func shebang(_ text: String) -> Trivia {
+    return [.shebang(text)]
+  }
 }
 
 extension Trivia: Equatable {}
@@ -314,6 +325,8 @@ extension TriviaPiece {
       return SourceLength(of: text)
     case let .garbageText(text):
       return SourceLength(of: text)
+    case let .shebang(text):
+      return SourceLength(of: text)
     }
   }
 }
@@ -346,6 +359,8 @@ extension TriviaPiece {
       return .docBlockComment(.fromBuffer(textBuffer))
     case 12:
       return .garbageText(.fromBuffer(textBuffer))
+    case 13:
+      return .shebang(.fromBuffer(textBuffer))
     default:
       fatalError("unexpected trivia piece kind \(piece.kind)")
     }
@@ -376,6 +391,8 @@ extension TriviaPiece {
     case 11:
       return true
     case 12:
+      return true
+    case 13:
       return true
     default:
       fatalError("unexpected trivia piece kind \(kind)")
@@ -409,6 +426,8 @@ internal enum TriviaPieceKind: CTriviaKind {
     case docBlockComment = 11
     /// Any skipped garbage text.
     case garbageText = 12
+    /// A script command, starting with '#!'.
+    case shebang = 13
 
   static func fromRawValue(_ rawValue: CTriviaKind) -> TriviaPieceKind {
     return TriviaPieceKind(rawValue: rawValue)!
@@ -470,6 +489,12 @@ extension TriviaPiece {
       let length = text.utf8.count
       return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
         return body(.init(kind: .garbageText, length: length, customText: buf))
+      })!
+    case var .shebang(text):
+      text.makeContiguousUTF8()
+      let length = text.utf8.count
+      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
+        return body(.init(kind: .shebang, length: length, customText: buf))
       })!
     }
   }

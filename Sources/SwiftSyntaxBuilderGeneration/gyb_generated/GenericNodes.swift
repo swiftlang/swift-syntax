@@ -101,21 +101,8 @@ let GENERIC_NODES: [Node] = [
          "WithTrailingComma"
        ],
        children: [
-         Child(name: "Attributes",
-               kind: "AttributeList",
-               isOptional: true,
-               collectionElementName: "Attribute"),
          Child(name: "Name",
                kind: "IdentifierToken"),
-         Child(name: "Colon",
-               kind: "ColonToken",
-               isOptional: true),
-         Child(name: "InheritedType",
-               kind: "Type",
-               isOptional: true),
-         Child(name: "Initializer",
-               kind: "TypeInitializerClause",
-               isOptional: true),
          Child(name: "TrailingComma",
                kind: "CommaToken",
                isOptional: true)

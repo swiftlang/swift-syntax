@@ -4164,13 +4164,9 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return PrimaryAssociatedTypeListSyntax(data)
   }
-  public static func makePrimaryAssociatedType(attributes: AttributeListSyntax?, name: TokenSyntax, colon: TokenSyntax?, inheritedType: TypeSyntax?, initializer: TypeInitializerClauseSyntax?, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+  public static func makePrimaryAssociatedType(name: TokenSyntax, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
     let layout: [RawSyntax?] = [
-      attributes?.raw,
       name.raw,
-      colon?.raw,
-      inheritedType?.raw,
-      initializer?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
@@ -4182,11 +4178,7 @@ public enum SyntaxFactory {
   public static func makeBlankPrimaryAssociatedType() -> PrimaryAssociatedTypeSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedType,
       layout: [
-      nil,
       RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
       nil,
     ], length: .zero, presence: .present))
     return PrimaryAssociatedTypeSyntax(data)

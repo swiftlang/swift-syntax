@@ -9176,38 +9176,12 @@ extension GenericParameterSyntax {
 
 public struct PrimaryAssociatedTypeSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+    Array<RawSyntax?>(repeating: nil, count: 2)
 
   internal init() {}
 
-  public mutating func addAttribute(_ elt: Syntax) {
-    let idx = PrimaryAssociatedTypeSyntax.Cursor.attributes.rawValue
-    if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
-    } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
-    }
-  }
-
   public mutating func useName(_ node: TokenSyntax) {
     let idx = PrimaryAssociatedTypeSyntax.Cursor.name.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useColon(_ node: TokenSyntax) {
-    let idx = PrimaryAssociatedTypeSyntax.Cursor.colon.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useInheritedType(_ node: TypeSyntax) {
-    let idx = PrimaryAssociatedTypeSyntax.Cursor.inheritedType.rawValue
-    layout[idx] = node.raw
-  }
-
-  public mutating func useInitializer(_ node: TypeInitializerClauseSyntax) {
-    let idx = PrimaryAssociatedTypeSyntax.Cursor.initializer.rawValue
     layout[idx] = node.raw
   }
 
@@ -9217,8 +9191,8 @@ public struct PrimaryAssociatedTypeSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.identifier(""))
+    if (layout[0] == nil) {
+      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .primaryAssociatedType,

@@ -12528,11 +12528,7 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
 
 }
 public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType, HasTrailingComma {
-  let attributes: AttributeList?
   let name: TokenSyntax
-  let colon: TokenSyntax?
-  let inheritedType: TypeBuildable?
-  let initializer: TypeInitializerClause?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12541,28 +12537,15 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
 
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
-  ///   - attributes: 
   ///   - name: 
-  ///   - colon: 
-  ///   - inheritedType: 
-  ///   - initializer: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
-    attributes: ExpressibleAsAttributeList? = nil,
     name: TokenSyntax,
-    colon: TokenSyntax? = nil,
-    inheritedType: ExpressibleAsTypeBuildable? = nil,
-    initializer: ExpressibleAsTypeInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
-    self.attributes = attributes?.createAttributeList()
     self.name = name
-    self.colon = colon
-    assert(colon == nil || colon!.text == ":")
-    self.inheritedType = inheritedType?.createTypeBuildable()
-    self.initializer = initializer?.createTypeInitializerClause()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12572,20 +12555,12 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
-    attributes: ExpressibleAsAttributeList? = nil,
     name: String,
-    colon: TokenSyntax? = nil,
-    inheritedType: ExpressibleAsTypeBuildable? = nil,
-    initializer: ExpressibleAsTypeInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes,
       name: TokenSyntax.identifier(name),
-      colon: colon,
-      inheritedType: inheritedType,
-      initializer: initializer,
       trailingComma: trailingComma
     )
   }
@@ -12596,11 +12571,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
   func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedType(
-      attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       name: name,
-      colon: colon,
-      inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil),
-      initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12621,11 +12592,7 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
-        attributes: attributes,
         name: name,
-        colon: colon,
-        inheritedType: inheritedType,
-        initializer: initializer,
         trailingComma: withComma ? .comma : nil
       )
   }

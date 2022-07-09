@@ -351,7 +351,8 @@ let STMT_NODES: [Node] = [
                kind: "TypeAnnotation",
                isOptional: true),
          Child(name: "Initializer",
-               kind: "InitializerClause")
+               kind: "InitializerClause",
+               isOptional: true)
        ]),
 
   Node(name: "UnavailabilityCondition",

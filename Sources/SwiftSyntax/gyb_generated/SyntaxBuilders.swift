@@ -8234,9 +8234,6 @@ public struct OptionalBindingConditionSyntaxBuilder {
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missing(SyntaxKind.pattern)
     }
-    if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.initializerClause)
-    }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .optionalBindingCondition,
       layout: layout, presence: .present))

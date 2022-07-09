@@ -10039,10 +10039,11 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return OptionalBindingConditionSyntax(newData)
   }
 
-  public var initializer: InitializerClauseSyntax {
+  public var initializer: InitializerClauseSyntax? {
     get {
       let childData = data.child(at: Cursor.initializer,
                                  parent: Syntax(self))
+      if childData == nil { return nil }
       return InitializerClauseSyntax(childData!)
     }
     set(value) {
@@ -10055,7 +10056,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `initializer`, if present.
   public func withInitializer(
     _ newChild: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.initializerClause)
+    let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.initializer)
     return OptionalBindingConditionSyntax(newData)
   }
@@ -10090,8 +10091,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TypeAnnotationSyntax.self))
     }
-    // Check child #3 child is InitializerClauseSyntax 
-    assert(rawChildren[3].raw != nil)
+    // Check child #3 child is InitializerClauseSyntax or missing
     if let raw = rawChildren[3].raw {
       let info = rawChildren[3].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -10108,7 +10108,7 @@ extension OptionalBindingConditionSyntax: CustomReflectable {
       "letOrVarKeyword": Syntax(letOrVarKeyword).asProtocol(SyntaxProtocol.self),
       "pattern": Syntax(pattern).asProtocol(SyntaxProtocol.self),
       "typeAnnotation": typeAnnotation.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "initializer": Syntax(initializer).asProtocol(SyntaxProtocol.self),
+      "initializer": initializer.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

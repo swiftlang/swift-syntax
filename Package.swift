@@ -104,6 +104,7 @@ let package = Package(
           "gyb_helpers",
           "AttributeNodes.swift.gyb",
           "AvailabilityNodes.swift.gyb",
+          "BuilderInitializableTypes.swift.gyb",
           "Classification.swift.gyb",
           "CommonNodes.swift.gyb",
           "DeclNodes.swift.gyb",

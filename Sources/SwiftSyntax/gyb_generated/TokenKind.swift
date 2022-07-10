@@ -312,7 +312,8 @@ public enum TokenKind {
   }
 
   /// The textual representation of this token kind.
-  var text: String {
+  @_spi(Testing)
+  public var text: String {
     switch self {
     case .eof: return ""
     case .associatedtypeKeyword: return "associatedtype"

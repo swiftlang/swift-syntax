@@ -228,6 +228,7 @@ extension PoundWarningDeclSyntax: ParenthesizedSyntax {}
 extension PoundSourceLocationSyntax: ParenthesizedSyntax {}
 extension InheritedTypeSyntax: WithTrailingCommaSyntax {}
 extension ClassDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {}
+extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {}
 extension StructDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {}
 extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax {}
 extension ExtensionDeclSyntax: DeclGroupSyntax {}

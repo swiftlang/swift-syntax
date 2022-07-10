@@ -119,6 +119,7 @@ internal enum SyntaxKind: CSyntaxKind {
   case inheritedTypeList = 176
   case typeInheritanceClause = 115
   case classDecl = 9
+  case actorDecl = 96
   case structDecl = 10
   case protocolDecl = 11
   case extensionDecl = 12

@@ -5618,7 +5618,7 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
 public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   let attributes: AttributeList?
   let modifiers: ModifierList?
-  let classOrActorKeyword: TokenSyntax
+  let classKeyword: TokenSyntax
   let identifier: TokenSyntax
   let genericParameterClause: GenericParameterClause?
   let inheritanceClause: TypeInheritanceClause?
@@ -5633,7 +5633,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// - Parameters:
   ///   - attributes: 
   ///   - modifiers: 
-  ///   - classOrActorKeyword: 
+  ///   - classKeyword: 
   ///   - identifier: 
   ///   - genericParameterClause: 
   ///   - inheritanceClause: 
@@ -5643,7 +5643,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
-    classOrActorKeyword: TokenSyntax,
+    classKeyword: TokenSyntax = TokenSyntax.`class`,
     identifier: TokenSyntax,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
@@ -5653,7 +5653,8 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     self.leadingTrivia = leadingTrivia
     self.attributes = attributes?.createAttributeList()
     self.modifiers = modifiers?.createModifierList()
-    self.classOrActorKeyword = classOrActorKeyword
+    self.classKeyword = classKeyword
+    assert(classKeyword.text == "class")
     self.identifier = identifier
     self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
     self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
@@ -5668,7 +5669,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     leadingTrivia: Trivia = [],
     attributes: ExpressibleAsAttributeList? = nil,
     modifiers: ExpressibleAsModifierList? = nil,
-    classOrActorKeyword: TokenSyntax,
+    classKeyword: TokenSyntax = TokenSyntax.`class`,
     identifier: String,
     genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
     inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
@@ -5679,7 +5680,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
       leadingTrivia: leadingTrivia,
       attributes: attributes,
       modifiers: modifiers,
-      classOrActorKeyword: classOrActorKeyword,
+      classKeyword: classKeyword,
       identifier: TokenSyntax.identifier(identifier),
       genericParameterClause: genericParameterClause,
       inheritanceClause: inheritanceClause,
@@ -5696,7 +5697,7 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
     let result = SyntaxFactory.makeClassDecl(
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      classOrActorKeyword: classOrActorKeyword,
+      classKeyword: classKeyword,
       identifier: identifier,
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
@@ -5726,6 +5727,124 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   }
 
   /// `ClassDecl` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    return self
+  }
+}
+public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
+  let attributes: AttributeList?
+  let modifiers: ModifierList?
+  let actorKeyword: TokenSyntax
+  let identifier: TokenSyntax
+  let genericParameterClause: GenericParameterClause?
+  let inheritanceClause: TypeInheritanceClause?
+  let genericWhereClause: GenericWhereClause?
+  let members: MemberDeclBlock
+
+  /// The leading trivia attached to this syntax node once built.
+  /// This is typically used to add comments (e.g. for documentation).
+  let leadingTrivia: Trivia
+
+  /// Creates a `ActorDecl` using the provided parameters.
+  /// - Parameters:
+  ///   - attributes: 
+  ///   - modifiers: 
+  ///   - actorKeyword: 
+  ///   - identifier: 
+  ///   - genericParameterClause: 
+  ///   - inheritanceClause: 
+  ///   - genericWhereClause: 
+  ///   - members: 
+  public init(
+    leadingTrivia: Trivia = [],
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
+    actorKeyword: TokenSyntax,
+    identifier: TokenSyntax,
+    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    members: ExpressibleAsMemberDeclBlock
+  ) {
+    self.leadingTrivia = leadingTrivia
+    self.attributes = attributes?.createAttributeList()
+    self.modifiers = modifiers?.createModifierList()
+    self.actorKeyword = actorKeyword
+    assert(actorKeyword.text == "actor")
+    self.identifier = identifier
+    self.genericParameterClause = genericParameterClause?.createGenericParameterClause()
+    self.inheritanceClause = inheritanceClause?.createTypeInheritanceClause()
+    self.genericWhereClause = genericWhereClause?.createGenericWhereClause()
+    self.members = members.createMemberDeclBlock()
+  }
+
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leadingTrivia: Trivia = [],
+    attributes: ExpressibleAsAttributeList? = nil,
+    modifiers: ExpressibleAsModifierList? = nil,
+    actorKeyword: String,
+    identifier: String,
+    genericParameterClause: ExpressibleAsGenericParameterClause? = nil,
+    inheritanceClause: ExpressibleAsTypeInheritanceClause? = nil,
+    genericWhereClause: ExpressibleAsGenericWhereClause? = nil,
+    @MemberDeclListBuilder membersBuilder: () -> ExpressibleAsMemberDeclList = { MemberDeclList([]) }
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      attributes: attributes,
+      modifiers: modifiers,
+      actorKeyword: TokenSyntax.contextualKeyword(actorKeyword),
+      identifier: TokenSyntax.identifier(identifier),
+      genericParameterClause: genericParameterClause,
+      inheritanceClause: inheritanceClause,
+      genericWhereClause: genericWhereClause,
+      members: membersBuilder()
+    )
+  }
+
+  /// Builds a `ActorDeclSyntax`.
+  /// - Parameter format: The `Format` to use.
+  /// - Parameter leadingTrivia: Additional leading trivia to attach, typically used for indentation.
+  /// - Returns: The built `ActorDeclSyntax`.
+  func buildActorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ActorDeclSyntax {
+    let result = SyntaxFactory.makeActorDecl(
+      attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
+      modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
+      actorKeyword: actorKeyword,
+      identifier: identifier,
+      genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
+      inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
+      genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
+      members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
+    )
+    let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
+    return result.withLeadingTrivia(combinedLeadingTrivia)
+  }
+
+  /// Conformance to `DeclBuildable`.
+  public func buildDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclSyntax {
+    let result = buildActorDecl(format: format, leadingTrivia: additionalLeadingTrivia)
+    return DeclSyntax(result)
+  }
+
+  /// Conformance to `ExpressibleAsActorDecl`.
+  public func createActorDecl() -> ActorDecl {
+    return self
+  }
+
+  /// `ActorDecl` might conform to `ExpressibleAsDeclBuildable` via different `ExpressibleAs*` paths.
+  /// Thus, there are multiple default implementations for `createDeclBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
+  /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
+  public func createDeclBuildable() -> DeclBuildable {
+    return self
+  }
+
+  /// `ActorDecl` might conform to `SyntaxBuildable` via different `ExpressibleAs*` paths.
   /// Thus, there are multiple default implementations for `createSyntaxBuildable`, some of which perform conversions through `ExpressibleAs*` protocols.
   /// To resolve the ambiguity, provide a fixed implementation that doesn't perform any conversions.
   public func createSyntaxBuildable() -> SyntaxBuildable {
@@ -12528,7 +12647,11 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
 
 }
 public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssociatedType, HasTrailingComma {
+  let attributes: AttributeList?
   let name: TokenSyntax
+  let colon: TokenSyntax?
+  let inheritedType: TypeBuildable?
+  let initializer: TypeInitializerClause?
   let trailingComma: TokenSyntax?
 
   /// The leading trivia attached to this syntax node once built.
@@ -12537,15 +12660,28 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
 
   /// Creates a `PrimaryAssociatedType` using the provided parameters.
   /// - Parameters:
+  ///   - attributes: 
   ///   - name: 
+  ///   - colon: 
+  ///   - inheritedType: 
+  ///   - initializer: 
   ///   - trailingComma: 
   public init(
     leadingTrivia: Trivia = [],
+    attributes: ExpressibleAsAttributeList? = nil,
     name: TokenSyntax,
+    colon: TokenSyntax? = nil,
+    inheritedType: ExpressibleAsTypeBuildable? = nil,
+    initializer: ExpressibleAsTypeInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.leadingTrivia = leadingTrivia
+    self.attributes = attributes?.createAttributeList()
     self.name = name
+    self.colon = colon
+    assert(colon == nil || colon!.text == ":")
+    self.inheritedType = inheritedType?.createTypeBuildable()
+    self.initializer = initializer?.createTypeInitializerClause()
     self.trailingComma = trailingComma
     assert(trailingComma == nil || trailingComma!.text == ",")
   }
@@ -12555,12 +12691,20 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   ///  - Initializing tokens without default text using strings
   public init(
     leadingTrivia: Trivia = [],
+    attributes: ExpressibleAsAttributeList? = nil,
     name: String,
+    colon: TokenSyntax? = nil,
+    inheritedType: ExpressibleAsTypeBuildable? = nil,
+    initializer: ExpressibleAsTypeInitializerClause? = nil,
     trailingComma: TokenSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      attributes: attributes,
       name: TokenSyntax.identifier(name),
+      colon: colon,
+      inheritedType: inheritedType,
+      initializer: initializer,
       trailingComma: trailingComma
     )
   }
@@ -12571,7 +12715,11 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
   func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedType(
+      attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
       name: name,
+      colon: colon,
+      inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil),
+      initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12592,7 +12740,11 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// Conformance to `HasTrailingComma`.
   public func withTrailingComma(_ withComma: Bool) -> Self {
       return Self.init(
+        attributes: attributes,
         name: name,
+        colon: colon,
+        inheritedType: inheritedType,
+        initializer: initializer,
         trailingComma: withComma ? .comma : nil
       )
   }

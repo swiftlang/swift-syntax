@@ -1017,6 +1017,16 @@ public extension ExpressibleAsClassDecl {
   }
 }
 
+public protocol ExpressibleAsActorDecl: ExpressibleAsDeclBuildable {
+  func createActorDecl() -> ActorDecl
+}
+
+public extension ExpressibleAsActorDecl {
+  func createDeclBuildable() -> DeclBuildable {
+    return self.createActorDecl()
+  }
+}
+
 public protocol ExpressibleAsStructDecl: ExpressibleAsDeclBuildable {
   func createStructDecl() -> StructDecl
 }

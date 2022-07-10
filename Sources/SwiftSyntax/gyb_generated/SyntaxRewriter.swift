@@ -709,6 +709,13 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
 
+  /// Visit a `ActorDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(visitChildren(node))
+  }
+
   /// Visit a `StructDeclSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2824,6 +2831,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplActorDeclSyntax(_ data: SyntaxData) -> Syntax {
+      let node = ActorDeclSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplStructDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = StructDeclSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -4571,6 +4588,8 @@ open class SyntaxRewriter {
       return visitImplTypeInheritanceClauseSyntax
     case .classDecl:
       return visitImplClassDeclSyntax
+    case .actorDecl:
+      return visitImplActorDeclSyntax
     case .structDecl:
       return visitImplStructDeclSyntax
     case .protocolDecl:
@@ -5090,6 +5109,8 @@ open class SyntaxRewriter {
       return visitImplTypeInheritanceClauseSyntax(data)
     case .classDecl:
       return visitImplClassDeclSyntax(data)
+    case .actorDecl:
+      return visitImplActorDeclSyntax(data)
     case .structDecl:
       return visitImplStructDeclSyntax(data)
     case .protocolDecl:

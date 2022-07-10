@@ -607,6 +607,12 @@ extension SyntaxNode {
     return ClassDeclSyntax(asSyntaxData)
   }
 
+  public var isActorDecl: Bool { return raw.kind == .actorDecl }
+  public var asActorDecl: ActorDeclSyntax? {
+    guard isActorDecl else { return nil }
+    return ActorDeclSyntax(asSyntaxData)
+  }
+
   public var isStructDecl: Bool { return raw.kind == .structDecl }
   public var asStructDecl: StructDeclSyntax? {
     guard isStructDecl else { return nil }
@@ -1724,6 +1730,8 @@ extension Syntax {
     case .typeInheritanceClause(let node):
       return node
     case .classDecl(let node):
+      return node
+    case .actorDecl(let node):
       return node
     case .structDecl(let node):
       return node

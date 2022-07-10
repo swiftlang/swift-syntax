@@ -337,11 +337,42 @@ let DECL_NODES: [Node] = [
                kind: "ModifierList",
                isOptional: true,
                collectionElementName: "Modifier"),
-         Child(name: "ClassOrActorKeyword",
-               kind: "Token",
-               tokenChoices: [
-                 "Class",
-                 "ContextualKeyword"
+         Child(name: "ClassKeyword",
+               kind: "ClassToken"),
+         Child(name: "Identifier",
+               kind: "IdentifierToken"),
+         Child(name: "GenericParameterClause",
+               kind: "GenericParameterClause",
+               isOptional: true),
+         Child(name: "InheritanceClause",
+               kind: "TypeInheritanceClause",
+               isOptional: true),
+         Child(name: "GenericWhereClause",
+               kind: "GenericWhereClause",
+               isOptional: true),
+         Child(name: "Members",
+               kind: "MemberDeclBlock")
+       ]),
+
+  Node(name: "ActorDecl",
+       kind: "Decl",
+       traits: [
+         "DeclGroup",
+         "IdentifiedDecl"
+       ],
+       children: [
+         Child(name: "Attributes",
+               kind: "AttributeList",
+               isOptional: true,
+               collectionElementName: "Attribute"),
+         Child(name: "Modifiers",
+               kind: "ModifierList",
+               isOptional: true,
+               collectionElementName: "Modifier"),
+         Child(name: "ActorKeyword",
+               kind: "ContextualKeywordToken",
+               textChoices: [
+                 "actor"
                ]),
          Child(name: "Identifier",
                kind: "IdentifierToken"),

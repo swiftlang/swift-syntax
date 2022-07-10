@@ -4051,8 +4051,8 @@ public struct ClassDeclSyntaxBuilder {
     }
   }
 
-  public mutating func useClassOrActorKeyword(_ node: TokenSyntax) {
-    let idx = ClassDeclSyntax.Cursor.classOrActorKeyword.rawValue
+  public mutating func useClassKeyword(_ node: TokenSyntax) {
+    let idx = ClassDeclSyntax.Cursor.classKeyword.rawValue
     layout[idx] = node.raw
   }
 
@@ -4108,6 +4108,97 @@ extension ClassDeclSyntax {
   ///            closure.
   public init(_ build: (inout ClassDeclSyntaxBuilder) -> Void) {
     var builder = ClassDeclSyntaxBuilder()
+    build(&builder)
+    let data = builder.buildData()
+    self.init(data)
+  }
+}
+
+public struct ActorDeclSyntaxBuilder {
+  private var layout =
+    Array<RawSyntax?>(repeating: nil, count: 8)
+
+  internal init() {}
+
+  public mutating func addAttribute(_ elt: Syntax) {
+    let idx = ActorDeclSyntax.Cursor.attributes.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func addModifier(_ elt: DeclModifierSyntax) {
+    let idx = ActorDeclSyntax.Cursor.modifiers.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
+  public mutating func useActorKeyword(_ node: TokenSyntax) {
+    let idx = ActorDeclSyntax.Cursor.actorKeyword.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useIdentifier(_ node: TokenSyntax) {
+    let idx = ActorDeclSyntax.Cursor.identifier.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useGenericParameterClause(_ node: GenericParameterClauseSyntax) {
+    let idx = ActorDeclSyntax.Cursor.genericParameterClause.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useInheritanceClause(_ node: TypeInheritanceClauseSyntax) {
+    let idx = ActorDeclSyntax.Cursor.inheritanceClause.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useGenericWhereClause(_ node: GenericWhereClauseSyntax) {
+    let idx = ActorDeclSyntax.Cursor.genericWhereClause.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useMembers(_ node: MemberDeclBlockSyntax) {
+    let idx = ActorDeclSyntax.Cursor.members.rawValue
+    layout[idx] = node.raw
+  }
+
+  internal mutating func buildData() -> SyntaxData {
+    if (layout[2] == nil) {
+      layout[2] = RawSyntax.missingToken(TokenKind.contextualKeyword(""))
+    }
+    if (layout[3] == nil) {
+      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+    }
+    if (layout[7] == nil) {
+      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+    }
+
+    return .forRoot(RawSyntax.createAndCalcLength(kind: .actorDecl,
+      layout: layout, presence: .present))
+  }
+}
+
+extension ActorDeclSyntax {
+  /// Creates a `ActorDeclSyntax` using the provided build function.
+  /// - Parameter:
+  ///   - build: A closure that will be invoked in order to initialize
+  ///            the fields of the syntax node.
+  ///            This closure is passed a `ActorDeclSyntaxBuilder` which you can use to
+  ///            incrementally build the structure of the node.
+  /// - Returns: A `ActorDeclSyntax` with all the fields populated in the builder
+  ///            closure.
+  public init(_ build: (inout ActorDeclSyntaxBuilder) -> Void) {
+    var builder = ActorDeclSyntaxBuilder()
     build(&builder)
     let data = builder.buildData()
     self.init(data)
@@ -9176,12 +9267,38 @@ extension GenericParameterSyntax {
 
 public struct PrimaryAssociatedTypeSyntaxBuilder {
   private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+    Array<RawSyntax?>(repeating: nil, count: 6)
 
   internal init() {}
 
+  public mutating func addAttribute(_ elt: Syntax) {
+    let idx = PrimaryAssociatedTypeSyntax.Cursor.attributes.rawValue
+    if let list = layout[idx] {
+      layout[idx] = list.appending(elt.raw)
+    } else {
+      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
+        layout: [elt.raw], length: elt.raw.totalLength,
+        presence: SourcePresence.present)
+    }
+  }
+
   public mutating func useName(_ node: TokenSyntax) {
     let idx = PrimaryAssociatedTypeSyntax.Cursor.name.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useColon(_ node: TokenSyntax) {
+    let idx = PrimaryAssociatedTypeSyntax.Cursor.colon.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useInheritedType(_ node: TypeSyntax) {
+    let idx = PrimaryAssociatedTypeSyntax.Cursor.inheritedType.rawValue
+    layout[idx] = node.raw
+  }
+
+  public mutating func useInitializer(_ node: TypeInitializerClauseSyntax) {
+    let idx = PrimaryAssociatedTypeSyntax.Cursor.initializer.rawValue
     layout[idx] = node.raw
   }
 
@@ -9191,8 +9308,8 @@ public struct PrimaryAssociatedTypeSyntaxBuilder {
   }
 
   internal mutating func buildData() -> SyntaxData {
-    if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+    if (layout[1] == nil) {
+      layout[1] = RawSyntax.missingToken(TokenKind.identifier(""))
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .primaryAssociatedType,

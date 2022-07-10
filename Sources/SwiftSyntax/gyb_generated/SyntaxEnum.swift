@@ -119,6 +119,7 @@ public enum SyntaxEnum {
   case inheritedTypeList(InheritedTypeListSyntax)
   case typeInheritanceClause(TypeInheritanceClauseSyntax)
   case classDecl(ClassDeclSyntax)
+  case actorDecl(ActorDeclSyntax)
   case structDecl(StructDeclSyntax)
   case protocolDecl(ProtocolDeclSyntax)
   case extensionDecl(ExtensionDeclSyntax)
@@ -484,6 +485,8 @@ public extension Syntax {
       return .typeInheritanceClause(TypeInheritanceClauseSyntax(self)!)
     case .classDecl:
       return .classDecl(ClassDeclSyntax(self)!)
+    case .actorDecl:
+      return .actorDecl(ActorDeclSyntax(self)!)
     case .structDecl:
       return .structDecl(StructDeclSyntax(self)!)
     case .protocolDecl:

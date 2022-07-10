@@ -750,6 +750,13 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: ClassDeclSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ActorDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

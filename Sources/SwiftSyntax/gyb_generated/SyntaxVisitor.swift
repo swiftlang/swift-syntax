@@ -1012,6 +1012,16 @@ open class SyntaxVisitor {
   /// The function called after visiting `ClassDeclSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClassDeclSyntax) {}
+  /// Visiting `ActorDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `ActorDeclSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ActorDeclSyntax) {}
   /// Visiting `StructDeclSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3659,6 +3669,17 @@ open class SyntaxVisitor {
   }
 
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplActorDeclSyntax(_ data: SyntaxData) {
+      let node = ActorDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplStructDeclSyntax(_ data: SyntaxData) {
       let node = StructDeclSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
@@ -5523,6 +5544,8 @@ open class SyntaxVisitor {
       visitImplTypeInheritanceClauseSyntax(data)
     case .classDecl:
       visitImplClassDeclSyntax(data)
+    case .actorDecl:
+      visitImplActorDeclSyntax(data)
     case .structDecl:
       visitImplStructDeclSyntax(data)
     case .protocolDecl:

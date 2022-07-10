@@ -1875,11 +1875,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return TypeInheritanceClauseSyntax(data)
   }
-  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classOrActorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
+  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
-      classOrActorKeyword.raw,
+      classKeyword.raw,
       identifier.raw,
       genericParameterClause?.raw,
       inheritanceClause?.raw,
@@ -1905,6 +1905,37 @@ public enum SyntaxFactory {
       RawSyntax.missing(SyntaxKind.memberDeclBlock),
     ], length: .zero, presence: .present))
     return ClassDeclSyntax(data)
+  }
+  public static func makeActorDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, actorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
+    let layout: [RawSyntax?] = [
+      attributes?.raw,
+      modifiers?.raw,
+      actorKeyword.raw,
+      identifier.raw,
+      genericParameterClause?.raw,
+      inheritanceClause?.raw,
+      genericWhereClause?.raw,
+      members.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.actorDecl,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return ActorDeclSyntax(data)
+  }
+
+  public static func makeBlankActorDecl() -> ActorDeclSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .actorDecl,
+      layout: [
+      nil,
+      nil,
+      RawSyntax.missingToken(TokenKind.contextualKeyword("")),
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+      nil,
+      nil,
+      RawSyntax.missing(SyntaxKind.memberDeclBlock),
+    ], length: .zero, presence: .present))
+    return ActorDeclSyntax(data)
   }
   public static func makeStructDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, structKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
     let layout: [RawSyntax?] = [
@@ -4164,9 +4195,13 @@ public enum SyntaxFactory {
     ], length: .zero, presence: .present))
     return PrimaryAssociatedTypeListSyntax(data)
   }
-  public static func makePrimaryAssociatedType(name: TokenSyntax, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+  public static func makePrimaryAssociatedType(attributes: AttributeListSyntax?, name: TokenSyntax, colon: TokenSyntax?, inheritedType: TypeSyntax?, initializer: TypeInitializerClauseSyntax?, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
     let layout: [RawSyntax?] = [
+      attributes?.raw,
       name.raw,
+      colon?.raw,
+      inheritedType?.raw,
+      initializer?.raw,
       trailingComma?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
@@ -4178,7 +4213,11 @@ public enum SyntaxFactory {
   public static func makeBlankPrimaryAssociatedType() -> PrimaryAssociatedTypeSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedType,
       layout: [
+      nil,
       RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+      nil,
+      nil,
       nil,
     ], length: .zero, presence: .present))
     return PrimaryAssociatedTypeSyntax(data)

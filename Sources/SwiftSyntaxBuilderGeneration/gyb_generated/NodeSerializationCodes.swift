@@ -107,6 +107,7 @@ public let SYNTAX_NODE_SERIALIZATION_CODES: [String: Int] = [
   "CodeBlock": 93,
   "DeclNameArgument": 94,
   "DeclNameArguments": 95,
+  "ActorDecl": 96,
   "TupleExprElement": 97,
   "ArrayElement": 98,
   "DictionaryElement": 99,

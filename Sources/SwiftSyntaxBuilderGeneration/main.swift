@@ -16,6 +16,7 @@ import SwiftSyntaxBuilder
 
 /// SwiftSyntaxBuilder sources to be generated
 let sourceTemplates = [
+  (buildableBaseProtocolsFile, "BuildableBaseProtocols.swift"),
   (expressibleAsProtocolsFile, "ExpressibleAsProtocols.swift"),
   (tokensFile, "Tokens.swift"),
   (tokenSyntaxFile, "TokenSyntax.swift"),

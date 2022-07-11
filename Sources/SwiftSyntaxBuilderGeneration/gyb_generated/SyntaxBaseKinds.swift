@@ -1,3 +1,5 @@
+//// Automatically Generated From SyntaxBaseKinds.swift.gyb.
+//// Do Not Edit Directly!
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -10,17 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-let SYNTAX_NODES: [Node] = COMMON_NODES
-  + EXPR_NODES
-  + DECL_NODES
-  + ATTRIBUTE_NODES
-  + STMT_NODES
-  + GENERIC_NODES
-  + TYPE_NODES
-  + PATTERN_NODES
-  + AVAILABILITY_NODES
-
-/// A lookup table of nodes indexed by their kind.
-let SYNTAX_NODE_MAP: [String: Node] = Dictionary(
-  uniqueKeysWithValues: SYNTAX_NODES.map { node in (node.syntaxKind, node) }
-)
+let SYNTAX_BASE_KINDS: Set<String> = [
+  "Decl",
+  "Expr",
+  "Pattern",
+  "Stmt",
+  "Syntax",
+  "SyntaxCollection",
+  "Type",
+]

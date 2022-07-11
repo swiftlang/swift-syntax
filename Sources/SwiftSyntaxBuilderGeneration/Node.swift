@@ -28,18 +28,6 @@ class Node {
   let elementsSeparatedByNewline: Bool
   let collectionElement: String
 
-  var baseType: String {
-    if self.baseKind == "SyntaxCollection" {
-      return "Syntax"
-    } else {
-      return kindToType(kind: baseKind)
-    }
-  }
-
-  var collectionElementType: String {
-    return kindToType(kind: collectionElement)
-  }
-
   /// Returns `True` if this node declares one of the base syntax kinds.
   var isBase: Bool {
     return SyntaxBaseKinds.contains(syntaxKind)

@@ -51,3 +51,22 @@ func lowercaseFirstWord(name: String) -> String {
 
   return name.prefix(wordIndex).lowercased() + name[name.index(name.startIndex, offsetBy: wordIndex)..<name.endIndex]
 }
+
+/// Trims leading and trailing whitespace from each line.
+func dedented<Lines: Sequence>(lines: Lines) -> [String] where Lines.Element: StringProtocol {
+  lines.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+}
+
+/// Trims leading and trailing whitespace from each line.
+func dedented(string: String) -> String {
+  dedented(lines: string.split(separator: "\n"))
+    .joined(separator: "\n")
+}
+
+/// Creates a single-line documentation string from indented
+/// documentation as written in `gyb_syntax_support`.
+func flattened(indentedDocumentation: String) -> String {
+  dedented(string: indentedDocumentation)
+    .replacingOccurrences(of: "\n", with: "")
+    .trimmingCharacters(in: .whitespacesAndNewlines)
+}

@@ -445,7 +445,8 @@ fileprivate extension TriviaPiece {
         body(carriageReturnLineLength)
       }
       lineLength = .zero
-    case let .lineComment(text),
+    case let .shebang(text),
+         let .lineComment(text),
          let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
       assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")

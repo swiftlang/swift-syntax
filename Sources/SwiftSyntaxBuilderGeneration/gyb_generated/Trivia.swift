@@ -138,4 +138,7 @@ let TRIVIAS: [Trivia] = [
   Trivia(name: "GarbageText",
          comment: #"Any skipped garbage text."#,
          serializationCode: 12),
+  Trivia(name: "Shebang",
+         comment: #"A script command, starting with '#!'."#,
+         serializationCode: 13),
 ]

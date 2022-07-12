@@ -133,6 +133,12 @@ struct SyntaxBuildableType: Hashable {
     }
   }
 
+  /// Assuming that this is a base kind, return the corresponding `*ListBuildable` type.
+  var listBuildable: String {
+    assert(SYNTAX_BASE_KINDS.contains(syntaxKind), "ListBuildable types only exist for syntax base kinds")
+    return "\(syntaxKind)ListBuildable\(optionalQuestionMark)"
+  }
+
   /// Assuming that this is a collection type, the type of the result builder
   /// that can be used to build the collection.
   var resultBuilder: String {

@@ -12,8 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
 /// A contiguous stretch of a single kind of trivia. The constituent part of
 /// a `Trivia` collection.
 ///

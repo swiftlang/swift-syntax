@@ -134,7 +134,7 @@ public final class SourceLocationConverter {
   public init(file: String, source: String) {
     self.file = file
     (self.lines, endOfFile) = computeLines(source)
-    assert(source.lengthOfBytes(using: .utf8) == endOfFile.utf8Offset)
+    assert(source.utf8.count == endOfFile.utf8Offset)
   }
 
   /// Convert a `AbsolutePosition` to a `SourceLocation`. If the position is

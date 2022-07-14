@@ -82,7 +82,6 @@ let package = Package(
         "BuildableCollectionNodes.swift.gyb",
         "BuildableNodes.swift.gyb",
         "ResultBuilders.swift.gyb",
-        "TokenSyntax.swift.gyb",
       ]
     ),
     .target(

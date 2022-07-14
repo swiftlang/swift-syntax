@@ -36,11 +36,7 @@ let buildableBaseProtocolsFile = SourceFile {
     ProtocolDecl(
       modifiers: [TokenSyntax.public],
       identifier: type.listBuildable,
-      inheritanceClause: listConformances.isEmpty ? nil : TypeInheritanceClause {
-        for conformance in listConformances {
-          InheritedType(typeName: conformance)
-        }
-      }
+      inheritanceClause: createTypeInheritanceClause(conformances: listConformances)
     ) {
       FunctionDecl(
         leadingTrivia: [
@@ -60,11 +56,7 @@ let buildableBaseProtocolsFile = SourceFile {
     ProtocolDecl(
       modifiers: [TokenSyntax.public],
       identifier: type.buildable,
-      inheritanceClause: buildableConformances.isEmpty ? nil : TypeInheritanceClause {
-        for conformance in buildableConformances {
-          InheritedType(typeName: conformance)
-        }
-      }
+      inheritanceClause: createTypeInheritanceClause(conformances: buildableConformances)
     ) {
       FunctionDecl(
         leadingTrivia: [

@@ -40,11 +40,7 @@ let expressibleAsProtocolsFile = SourceFile {
     ProtocolDecl(
       modifiers: [TokenSyntax.public],
       identifier: type.expressibleAs,
-      inheritanceClause: declaredConformances.isEmpty ? nil : TypeInheritanceClause {
-        for conformance in declaredConformances {
-          InheritedType(typeName: conformance.expressibleAs)
-        }
-      }
+      inheritanceClause: createTypeInheritanceClause(conformances: declaredConformances.map(\.expressibleAs))
     ) {
       FunctionDecl(
         identifier: .identifier("create\(type.buildableBaseName)"),

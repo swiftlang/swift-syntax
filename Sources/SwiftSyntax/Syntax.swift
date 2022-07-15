@@ -81,6 +81,10 @@ extension Syntax: CustomReflectable {
   }
 }
 
+extension Syntax: Identifiable {
+  public typealias ID = SyntaxIdentifier
+}
+
 /// Protocol that provides a common Hashable implementation for all syntax nodes
 public protocol SyntaxHashable: Hashable {
   var _syntaxNode: Syntax { get }

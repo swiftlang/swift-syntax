@@ -44,8 +44,8 @@ final class FunctionTests: XCTestCase {
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
     XCTAssertEqual(syntax.description, """
-      ␣func fibonacci(_ n: Int)-> Int{
-          if n <= 1{
+      ␣func fibonacci(_ n: Int)-> Int {
+          if n <= 1 {
               return n
           }
           return fibonacci(n - 1) + self.fibonacci(n - 2)
@@ -74,7 +74,7 @@ final class FunctionTests: XCTestCase {
       TupleExprElement(expression: "42")
     }
     let syntax = buildable.buildSyntax(format: Format())
-    XCTAssertEqual(syntax.description, "test(42){\n}")
+    XCTAssertEqual(syntax.description, "test(42) {\n}")
   }
 
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
@@ -88,7 +88,7 @@ final class FunctionTests: XCTestCase {
     XCTAssertEqual(
       syntax.description,
       """
-      test{
+      test {
           f(a)
       }
       """)

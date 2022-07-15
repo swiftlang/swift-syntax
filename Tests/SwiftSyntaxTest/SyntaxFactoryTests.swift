@@ -3,7 +3,7 @@ import SwiftSyntax
 
 fileprivate func cannedStructDecl() -> StructDeclSyntax {
   let structKW = SyntaxFactory.makeStructKeyword(trailingTrivia: .space)
-  let fooID = SyntaxFactory.makeIdentifier("Foo", trailingTrivia: .space)
+  let fooID = SyntaxFactory.makeIdentifier("Foo")
   let rBrace = SyntaxFactory.makeRightBraceToken(leadingTrivia: .newline)
   let members = MemberDeclBlockSyntax {
     $0.useLeftBrace(SyntaxFactory.makeLeftBraceToken())
@@ -28,11 +28,7 @@ public class SyntaxFactoryTests: XCTestCase {
                    }
                    """)
 
-    let forType = SyntaxFactory.makeIdentifier("`for`",
-                                               leadingTrivia: [],
-                                               trailingTrivia: [
-                                                 .spaces(1)
-                                               ])
+    let forType = SyntaxFactory.makeIdentifier("`for`")
     let newBrace = SyntaxFactory.makeRightBraceToken(leadingTrivia: .newlines(2))
 
     let renamed = structDecl.withIdentifier(forType)

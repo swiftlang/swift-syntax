@@ -32,11 +32,11 @@ final class ExtensionDeclTests: XCTestCase {
     syntax.write(to: &text)
 
     XCTAssertEqual(text, """
-    extension TokenSyntax{
-        public var `associatedtype`: TokenSyntax{
+    extension TokenSyntax {
+        public var `associatedtype`: TokenSyntax {
             SyntaxFactory.makeassociatedtypeKeyword()
         }
-        public var `class`: TokenSyntax{
+        public var `class`: TokenSyntax {
             SyntaxFactory.makeclassKeyword()
         }
     }

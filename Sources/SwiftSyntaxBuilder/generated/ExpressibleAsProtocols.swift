@@ -14,1984 +14,1984 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-public protocol ExpressibleAsDeclBuildable: ExpressibleAsCodeBlockItem, ExpressibleAsMemberDeclListItem{
+public protocol ExpressibleAsDeclBuildable: ExpressibleAsCodeBlockItem, ExpressibleAsMemberDeclListItem {
   func createDeclBuildable()-> DeclBuildable
 }
-public extension ExpressibleAsDeclBuildable{
+public extension ExpressibleAsDeclBuildable {
   /// Conformance to ExpressibleAsCodeBlockItem
-func createCodeBlockItem()-> CodeBlockItem{
+func createCodeBlockItem()-> CodeBlockItem {
     return CodeBlockItem(item: self)
   }
   /// Conformance to ExpressibleAsMemberDeclListItem
-func createMemberDeclListItem()-> MemberDeclListItem{
+func createMemberDeclListItem()-> MemberDeclListItem {
     return MemberDeclListItem(decl: self)
   }
 }
-public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList{
+public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList {
   func createExprBuildable()-> ExprBuildable
 }
-public extension ExpressibleAsExprBuildable{
+public extension ExpressibleAsExprBuildable {
   /// Conformance to `ExpressibleAsExprList`
-func createExprList()-> ExprList{
+func createExprList()-> ExprList {
     return ExprList([self])
   }
 }
-public protocol ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsPatternBuildable {
   func createPatternBuildable()-> PatternBuildable
 }
-public protocol ExpressibleAsStmtBuildable: ExpressibleAsCodeBlockItem{
+public protocol ExpressibleAsStmtBuildable: ExpressibleAsCodeBlockItem {
   func createStmtBuildable()-> StmtBuildable
 }
-public extension ExpressibleAsStmtBuildable{
+public extension ExpressibleAsStmtBuildable {
   /// Conformance to ExpressibleAsCodeBlockItem
-func createCodeBlockItem()-> CodeBlockItem{
+func createCodeBlockItem()-> CodeBlockItem {
     return CodeBlockItem(item: self)
   }
 }
-public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList{
+public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsStringLiteralSegments, ExpressibleAsPrecedenceGroupAttributeList, ExpressibleAsAttributeList, ExpressibleAsSpecializeAttributeSpecList, ExpressibleAsSwitchCaseList {
   func createSyntaxBuildable()-> SyntaxBuildable
 }
-public extension ExpressibleAsSyntaxBuildable{
+public extension ExpressibleAsSyntaxBuildable {
   /// Conformance to `ExpressibleAsStringLiteralSegments`
-func createStringLiteralSegments()-> StringLiteralSegments{
+func createStringLiteralSegments()-> StringLiteralSegments {
     return StringLiteralSegments([self])
   }
   /// Conformance to `ExpressibleAsPrecedenceGroupAttributeList`
-func createPrecedenceGroupAttributeList()-> PrecedenceGroupAttributeList{
+func createPrecedenceGroupAttributeList()-> PrecedenceGroupAttributeList {
     return PrecedenceGroupAttributeList([self])
   }
   /// Conformance to `ExpressibleAsAttributeList`
-func createAttributeList()-> AttributeList{
+func createAttributeList()-> AttributeList {
     return AttributeList([self])
   }
   /// Conformance to `ExpressibleAsSpecializeAttributeSpecList`
-func createSpecializeAttributeSpecList()-> SpecializeAttributeSpecList{
+func createSpecializeAttributeSpecList()-> SpecializeAttributeSpecList {
     return SpecializeAttributeSpecList([self])
   }
   /// Conformance to `ExpressibleAsSwitchCaseList`
-func createSwitchCaseList()-> SwitchCaseList{
+func createSwitchCaseList()-> SwitchCaseList {
     return SwitchCaseList([self])
   }
 }
-public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause, ExpressibleAsTypeInitializerClause{
+public protocol ExpressibleAsTypeBuildable: ExpressibleAsReturnClause, ExpressibleAsTypeInitializerClause {
   func createTypeBuildable()-> TypeBuildable
 }
-public extension ExpressibleAsTypeBuildable{
+public extension ExpressibleAsTypeBuildable {
   /// Conformance to ExpressibleAsReturnClause
-func createReturnClause()-> ReturnClause{
+func createReturnClause()-> ReturnClause {
     return ReturnClause(returnType: self)
   }
   /// Conformance to ExpressibleAsTypeInitializerClause
-func createTypeInitializerClause()-> TypeInitializerClause{
+func createTypeInitializerClause()-> TypeInitializerClause {
     return TypeInitializerClause(value: self)
   }
 }
-public protocol ExpressibleAsCodeBlockItem: ExpressibleAsCodeBlockItemList{
+public protocol ExpressibleAsCodeBlockItem: ExpressibleAsCodeBlockItemList {
   func createCodeBlockItem()-> CodeBlockItem
 }
-public extension ExpressibleAsCodeBlockItem{
+public extension ExpressibleAsCodeBlockItem {
   /// Conformance to `ExpressibleAsCodeBlockItemList`
-func createCodeBlockItemList()-> CodeBlockItemList{
+func createCodeBlockItemList()-> CodeBlockItemList {
     return CodeBlockItemList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCodeBlockItem()
   }
 }
-public protocol ExpressibleAsCodeBlockItemList: ExpressibleAsCodeBlock{
+public protocol ExpressibleAsCodeBlockItemList: ExpressibleAsCodeBlock {
   func createCodeBlockItemList()-> CodeBlockItemList
 }
-public extension ExpressibleAsCodeBlockItemList{
+public extension ExpressibleAsCodeBlockItemList {
   /// Conformance to ExpressibleAsCodeBlock
-func createCodeBlock()-> CodeBlock{
+func createCodeBlock()-> CodeBlock {
     return CodeBlock(statements: self)
   }
 }
-public protocol ExpressibleAsCodeBlock: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsCodeBlock: ExpressibleAsSyntaxBuildable {
   func createCodeBlock()-> CodeBlock
 }
-public extension ExpressibleAsCodeBlock{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsCodeBlock {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCodeBlock()
   }
 }
-public protocol ExpressibleAsInOutExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsInOutExpr: ExpressibleAsExprBuildable {
   func createInOutExpr()-> InOutExpr
 }
-public extension ExpressibleAsInOutExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsInOutExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createInOutExpr()
   }
 }
-public protocol ExpressibleAsPoundColumnExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundColumnExpr: ExpressibleAsExprBuildable {
   func createPoundColumnExpr()-> PoundColumnExpr
 }
-public extension ExpressibleAsPoundColumnExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundColumnExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundColumnExpr()
   }
 }
-public protocol ExpressibleAsTupleExprElementList{
+public protocol ExpressibleAsTupleExprElementList {
   func createTupleExprElementList()-> TupleExprElementList
 }
-public protocol ExpressibleAsArrayElementList{
+public protocol ExpressibleAsArrayElementList {
   func createArrayElementList()-> ArrayElementList
 }
-public protocol ExpressibleAsDictionaryElementList{
+public protocol ExpressibleAsDictionaryElementList {
   func createDictionaryElementList()-> DictionaryElementList
 }
-public protocol ExpressibleAsStringLiteralSegments{
+public protocol ExpressibleAsStringLiteralSegments {
   func createStringLiteralSegments()-> StringLiteralSegments
 }
-public protocol ExpressibleAsTryExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsTryExpr: ExpressibleAsExprBuildable {
   func createTryExpr()-> TryExpr
 }
-public extension ExpressibleAsTryExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsTryExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createTryExpr()
   }
 }
-public protocol ExpressibleAsAwaitExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsAwaitExpr: ExpressibleAsExprBuildable {
   func createAwaitExpr()-> AwaitExpr
 }
-public extension ExpressibleAsAwaitExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsAwaitExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createAwaitExpr()
   }
 }
-public protocol ExpressibleAsDeclNameArgument: ExpressibleAsDeclNameArgumentList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDeclNameArgument: ExpressibleAsDeclNameArgumentList, ExpressibleAsSyntaxBuildable {
   func createDeclNameArgument()-> DeclNameArgument
 }
-public extension ExpressibleAsDeclNameArgument{
+public extension ExpressibleAsDeclNameArgument {
   /// Conformance to `ExpressibleAsDeclNameArgumentList`
-func createDeclNameArgumentList()-> DeclNameArgumentList{
+func createDeclNameArgumentList()-> DeclNameArgumentList {
     return DeclNameArgumentList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDeclNameArgument()
   }
 }
-public protocol ExpressibleAsDeclNameArgumentList{
+public protocol ExpressibleAsDeclNameArgumentList {
   func createDeclNameArgumentList()-> DeclNameArgumentList
 }
-public protocol ExpressibleAsDeclNameArguments: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDeclNameArguments: ExpressibleAsSyntaxBuildable {
   func createDeclNameArguments()-> DeclNameArguments
 }
-public extension ExpressibleAsDeclNameArguments{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsDeclNameArguments {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDeclNameArguments()
   }
 }
-public protocol ExpressibleAsIdentifierExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsIdentifierExpr: ExpressibleAsExprBuildable {
   func createIdentifierExpr()-> IdentifierExpr
 }
-public extension ExpressibleAsIdentifierExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsIdentifierExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createIdentifierExpr()
   }
 }
-public protocol ExpressibleAsSuperRefExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsSuperRefExpr: ExpressibleAsExprBuildable {
   func createSuperRefExpr()-> SuperRefExpr
 }
-public extension ExpressibleAsSuperRefExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsSuperRefExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createSuperRefExpr()
   }
 }
-public protocol ExpressibleAsNilLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsNilLiteralExpr: ExpressibleAsExprBuildable {
   func createNilLiteralExpr()-> NilLiteralExpr
 }
-public extension ExpressibleAsNilLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsNilLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createNilLiteralExpr()
   }
 }
-public protocol ExpressibleAsDiscardAssignmentExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsDiscardAssignmentExpr: ExpressibleAsExprBuildable {
   func createDiscardAssignmentExpr()-> DiscardAssignmentExpr
 }
-public extension ExpressibleAsDiscardAssignmentExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsDiscardAssignmentExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createDiscardAssignmentExpr()
   }
 }
-public protocol ExpressibleAsAssignmentExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsAssignmentExpr: ExpressibleAsExprBuildable {
   func createAssignmentExpr()-> AssignmentExpr
 }
-public extension ExpressibleAsAssignmentExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsAssignmentExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createAssignmentExpr()
   }
 }
-public protocol ExpressibleAsSequenceExpr: ExpressibleAsCodeBlockItem, ExpressibleAsTupleExprElement, ExpressibleAsExprBuildable{
+public protocol ExpressibleAsSequenceExpr: ExpressibleAsCodeBlockItem, ExpressibleAsTupleExprElement, ExpressibleAsExprBuildable {
   func createSequenceExpr()-> SequenceExpr
 }
-public extension ExpressibleAsSequenceExpr{
+public extension ExpressibleAsSequenceExpr {
   /// Conformance to ExpressibleAsCodeBlockItem
-func createCodeBlockItem()-> CodeBlockItem{
+func createCodeBlockItem()-> CodeBlockItem {
     return CodeBlockItem(item: self)
   }
   /// Conformance to ExpressibleAsTupleExprElement
-func createTupleExprElement()-> TupleExprElement{
+func createTupleExprElement()-> TupleExprElement {
     return TupleExprElement(expression: self)
   }
-  func createExprBuildable()-> ExprBuildable{
+  func createExprBuildable()-> ExprBuildable {
     return createSequenceExpr()
   }
 }
-public protocol ExpressibleAsExprList: ExpressibleAsConditionElement{
+public protocol ExpressibleAsExprList: ExpressibleAsConditionElement {
   func createExprList()-> ExprList
 }
-public extension ExpressibleAsExprList{
+public extension ExpressibleAsExprList {
   /// Conformance to ExpressibleAsConditionElement
-func createConditionElement()-> ConditionElement{
+func createConditionElement()-> ConditionElement {
     return ConditionElement(condition: self)
   }
 }
-public protocol ExpressibleAsPoundLineExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundLineExpr: ExpressibleAsExprBuildable {
   func createPoundLineExpr()-> PoundLineExpr
 }
-public extension ExpressibleAsPoundLineExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundLineExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundLineExpr()
   }
 }
-public protocol ExpressibleAsPoundFileExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundFileExpr: ExpressibleAsExprBuildable {
   func createPoundFileExpr()-> PoundFileExpr
 }
-public extension ExpressibleAsPoundFileExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundFileExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundFileExpr()
   }
 }
-public protocol ExpressibleAsPoundFileIDExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundFileIDExpr: ExpressibleAsExprBuildable {
   func createPoundFileIDExpr()-> PoundFileIDExpr
 }
-public extension ExpressibleAsPoundFileIDExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundFileIDExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundFileIDExpr()
   }
 }
-public protocol ExpressibleAsPoundFilePathExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundFilePathExpr: ExpressibleAsExprBuildable {
   func createPoundFilePathExpr()-> PoundFilePathExpr
 }
-public extension ExpressibleAsPoundFilePathExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundFilePathExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundFilePathExpr()
   }
 }
-public protocol ExpressibleAsPoundFunctionExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundFunctionExpr: ExpressibleAsExprBuildable {
   func createPoundFunctionExpr()-> PoundFunctionExpr
 }
-public extension ExpressibleAsPoundFunctionExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundFunctionExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundFunctionExpr()
   }
 }
-public protocol ExpressibleAsPoundDsohandleExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPoundDsohandleExpr: ExpressibleAsExprBuildable {
   func createPoundDsohandleExpr()-> PoundDsohandleExpr
 }
-public extension ExpressibleAsPoundDsohandleExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPoundDsohandleExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPoundDsohandleExpr()
   }
 }
-public protocol ExpressibleAsSymbolicReferenceExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsSymbolicReferenceExpr: ExpressibleAsExprBuildable {
   func createSymbolicReferenceExpr()-> SymbolicReferenceExpr
 }
-public extension ExpressibleAsSymbolicReferenceExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsSymbolicReferenceExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createSymbolicReferenceExpr()
   }
 }
-public protocol ExpressibleAsPrefixOperatorExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPrefixOperatorExpr: ExpressibleAsExprBuildable {
   func createPrefixOperatorExpr()-> PrefixOperatorExpr
 }
-public extension ExpressibleAsPrefixOperatorExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPrefixOperatorExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPrefixOperatorExpr()
   }
 }
-public protocol ExpressibleAsBinaryOperatorExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsBinaryOperatorExpr: ExpressibleAsExprBuildable {
   func createBinaryOperatorExpr()-> BinaryOperatorExpr
 }
-public extension ExpressibleAsBinaryOperatorExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsBinaryOperatorExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createBinaryOperatorExpr()
   }
 }
-public protocol ExpressibleAsArrowExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsArrowExpr: ExpressibleAsExprBuildable {
   func createArrowExpr()-> ArrowExpr
 }
-public extension ExpressibleAsArrowExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsArrowExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createArrowExpr()
   }
 }
-public protocol ExpressibleAsFloatLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsFloatLiteralExpr: ExpressibleAsExprBuildable {
   func createFloatLiteralExpr()-> FloatLiteralExpr
 }
-public extension ExpressibleAsFloatLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsFloatLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createFloatLiteralExpr()
   }
 }
-public protocol ExpressibleAsTupleExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsTupleExpr: ExpressibleAsExprBuildable {
   func createTupleExpr()-> TupleExpr
 }
-public extension ExpressibleAsTupleExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsTupleExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createTupleExpr()
   }
 }
-public protocol ExpressibleAsArrayExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsArrayExpr: ExpressibleAsExprBuildable {
   func createArrayExpr()-> ArrayExpr
 }
-public extension ExpressibleAsArrayExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsArrayExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createArrayExpr()
   }
 }
-public protocol ExpressibleAsDictionaryExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsDictionaryExpr: ExpressibleAsExprBuildable {
   func createDictionaryExpr()-> DictionaryExpr
 }
-public extension ExpressibleAsDictionaryExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsDictionaryExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createDictionaryExpr()
   }
 }
-public protocol ExpressibleAsTupleExprElement: ExpressibleAsTupleExprElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTupleExprElement: ExpressibleAsTupleExprElementList, ExpressibleAsSyntaxBuildable {
   func createTupleExprElement()-> TupleExprElement
 }
-public extension ExpressibleAsTupleExprElement{
+public extension ExpressibleAsTupleExprElement {
   /// Conformance to `ExpressibleAsTupleExprElementList`
-func createTupleExprElementList()-> TupleExprElementList{
+func createTupleExprElementList()-> TupleExprElementList {
     return TupleExprElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTupleExprElement()
   }
 }
-public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsArrayElement: ExpressibleAsArrayElementList, ExpressibleAsSyntaxBuildable {
   func createArrayElement()-> ArrayElement
 }
-public extension ExpressibleAsArrayElement{
+public extension ExpressibleAsArrayElement {
   /// Conformance to `ExpressibleAsArrayElementList`
-func createArrayElementList()-> ArrayElementList{
+func createArrayElementList()-> ArrayElementList {
     return ArrayElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createArrayElement()
   }
 }
-public protocol ExpressibleAsDictionaryElement: ExpressibleAsDictionaryElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDictionaryElement: ExpressibleAsDictionaryElementList, ExpressibleAsSyntaxBuildable {
   func createDictionaryElement()-> DictionaryElement
 }
-public extension ExpressibleAsDictionaryElement{
+public extension ExpressibleAsDictionaryElement {
   /// Conformance to `ExpressibleAsDictionaryElementList`
-func createDictionaryElementList()-> DictionaryElementList{
+func createDictionaryElementList()-> DictionaryElementList {
     return DictionaryElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDictionaryElement()
   }
 }
-public protocol ExpressibleAsIntegerLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsIntegerLiteralExpr: ExpressibleAsExprBuildable {
   func createIntegerLiteralExpr()-> IntegerLiteralExpr
 }
-public extension ExpressibleAsIntegerLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsIntegerLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createIntegerLiteralExpr()
   }
 }
-public protocol ExpressibleAsBooleanLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsBooleanLiteralExpr: ExpressibleAsExprBuildable {
   func createBooleanLiteralExpr()-> BooleanLiteralExpr
 }
-public extension ExpressibleAsBooleanLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsBooleanLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createBooleanLiteralExpr()
   }
 }
-public protocol ExpressibleAsTernaryExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsTernaryExpr: ExpressibleAsExprBuildable {
   func createTernaryExpr()-> TernaryExpr
 }
-public extension ExpressibleAsTernaryExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsTernaryExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createTernaryExpr()
   }
 }
-public protocol ExpressibleAsMemberAccessExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsMemberAccessExpr: ExpressibleAsExprBuildable {
   func createMemberAccessExpr()-> MemberAccessExpr
 }
-public extension ExpressibleAsMemberAccessExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsMemberAccessExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createMemberAccessExpr()
   }
 }
-public protocol ExpressibleAsIsExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsIsExpr: ExpressibleAsExprBuildable {
   func createIsExpr()-> IsExpr
 }
-public extension ExpressibleAsIsExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsIsExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createIsExpr()
   }
 }
-public protocol ExpressibleAsAsExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsAsExpr: ExpressibleAsExprBuildable {
   func createAsExpr()-> AsExpr
 }
-public extension ExpressibleAsAsExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsAsExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createAsExpr()
   }
 }
-public protocol ExpressibleAsTypeExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsTypeExpr: ExpressibleAsExprBuildable {
   func createTypeExpr()-> TypeExpr
 }
-public extension ExpressibleAsTypeExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsTypeExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createTypeExpr()
   }
 }
-public protocol ExpressibleAsClosureCaptureItem: ExpressibleAsClosureCaptureItemList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsClosureCaptureItem: ExpressibleAsClosureCaptureItemList, ExpressibleAsSyntaxBuildable {
   func createClosureCaptureItem()-> ClosureCaptureItem
 }
-public extension ExpressibleAsClosureCaptureItem{
+public extension ExpressibleAsClosureCaptureItem {
   /// Conformance to `ExpressibleAsClosureCaptureItemList`
-func createClosureCaptureItemList()-> ClosureCaptureItemList{
+func createClosureCaptureItemList()-> ClosureCaptureItemList {
     return ClosureCaptureItemList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createClosureCaptureItem()
   }
 }
-public protocol ExpressibleAsClosureCaptureItemList{
+public protocol ExpressibleAsClosureCaptureItemList {
   func createClosureCaptureItemList()-> ClosureCaptureItemList
 }
-public protocol ExpressibleAsClosureCaptureSignature: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsClosureCaptureSignature: ExpressibleAsSyntaxBuildable {
   func createClosureCaptureSignature()-> ClosureCaptureSignature
 }
-public extension ExpressibleAsClosureCaptureSignature{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsClosureCaptureSignature {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createClosureCaptureSignature()
   }
 }
-public protocol ExpressibleAsClosureParam: ExpressibleAsClosureParamList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsClosureParam: ExpressibleAsClosureParamList, ExpressibleAsSyntaxBuildable {
   func createClosureParam()-> ClosureParam
 }
-public extension ExpressibleAsClosureParam{
+public extension ExpressibleAsClosureParam {
   /// Conformance to `ExpressibleAsClosureParamList`
-func createClosureParamList()-> ClosureParamList{
+func createClosureParamList()-> ClosureParamList {
     return ClosureParamList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createClosureParam()
   }
 }
-public protocol ExpressibleAsClosureParamList{
+public protocol ExpressibleAsClosureParamList {
   func createClosureParamList()-> ClosureParamList
 }
-public protocol ExpressibleAsClosureSignature: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsClosureSignature: ExpressibleAsSyntaxBuildable {
   func createClosureSignature()-> ClosureSignature
 }
-public extension ExpressibleAsClosureSignature{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsClosureSignature {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createClosureSignature()
   }
 }
-public protocol ExpressibleAsClosureExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsClosureExpr: ExpressibleAsExprBuildable {
   func createClosureExpr()-> ClosureExpr
 }
-public extension ExpressibleAsClosureExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsClosureExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createClosureExpr()
   }
 }
-public protocol ExpressibleAsUnresolvedPatternExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsUnresolvedPatternExpr: ExpressibleAsExprBuildable {
   func createUnresolvedPatternExpr()-> UnresolvedPatternExpr
 }
-public extension ExpressibleAsUnresolvedPatternExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsUnresolvedPatternExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createUnresolvedPatternExpr()
   }
 }
-public protocol ExpressibleAsMultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsMultipleTrailingClosureElement: ExpressibleAsMultipleTrailingClosureElementList, ExpressibleAsSyntaxBuildable {
   func createMultipleTrailingClosureElement()-> MultipleTrailingClosureElement
 }
-public extension ExpressibleAsMultipleTrailingClosureElement{
+public extension ExpressibleAsMultipleTrailingClosureElement {
   /// Conformance to `ExpressibleAsMultipleTrailingClosureElementList`
-func createMultipleTrailingClosureElementList()-> MultipleTrailingClosureElementList{
+func createMultipleTrailingClosureElementList()-> MultipleTrailingClosureElementList {
     return MultipleTrailingClosureElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createMultipleTrailingClosureElement()
   }
 }
-public protocol ExpressibleAsMultipleTrailingClosureElementList{
+public protocol ExpressibleAsMultipleTrailingClosureElementList {
   func createMultipleTrailingClosureElementList()-> MultipleTrailingClosureElementList
 }
-public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable{
+public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable {
   func createFunctionCallExpr()-> FunctionCallExpr
 }
-public extension ExpressibleAsFunctionCallExpr{
+public extension ExpressibleAsFunctionCallExpr {
   /// Conformance to ExpressibleAsCodeBlockItem
-func createCodeBlockItem()-> CodeBlockItem{
+func createCodeBlockItem()-> CodeBlockItem {
     return CodeBlockItem(item: self)
   }
-  func createExprBuildable()-> ExprBuildable{
+  func createExprBuildable()-> ExprBuildable {
     return createFunctionCallExpr()
   }
 }
-public protocol ExpressibleAsSubscriptExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsSubscriptExpr: ExpressibleAsExprBuildable {
   func createSubscriptExpr()-> SubscriptExpr
 }
-public extension ExpressibleAsSubscriptExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsSubscriptExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createSubscriptExpr()
   }
 }
-public protocol ExpressibleAsOptionalChainingExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsOptionalChainingExpr: ExpressibleAsExprBuildable {
   func createOptionalChainingExpr()-> OptionalChainingExpr
 }
-public extension ExpressibleAsOptionalChainingExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsOptionalChainingExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createOptionalChainingExpr()
   }
 }
-public protocol ExpressibleAsForcedValueExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsForcedValueExpr: ExpressibleAsExprBuildable {
   func createForcedValueExpr()-> ForcedValueExpr
 }
-public extension ExpressibleAsForcedValueExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsForcedValueExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createForcedValueExpr()
   }
 }
-public protocol ExpressibleAsPostfixUnaryExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPostfixUnaryExpr: ExpressibleAsExprBuildable {
   func createPostfixUnaryExpr()-> PostfixUnaryExpr
 }
-public extension ExpressibleAsPostfixUnaryExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPostfixUnaryExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPostfixUnaryExpr()
   }
 }
-public protocol ExpressibleAsSpecializeExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsSpecializeExpr: ExpressibleAsExprBuildable {
   func createSpecializeExpr()-> SpecializeExpr
 }
-public extension ExpressibleAsSpecializeExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsSpecializeExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createSpecializeExpr()
   }
 }
-public protocol ExpressibleAsStringSegment: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsStringSegment: ExpressibleAsSyntaxBuildable {
   func createStringSegment()-> StringSegment
 }
-public extension ExpressibleAsStringSegment{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsStringSegment {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createStringSegment()
   }
 }
-public protocol ExpressibleAsExpressionSegment: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsExpressionSegment: ExpressibleAsSyntaxBuildable {
   func createExpressionSegment()-> ExpressionSegment
 }
-public extension ExpressibleAsExpressionSegment{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsExpressionSegment {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createExpressionSegment()
   }
 }
-public protocol ExpressibleAsStringLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsStringLiteralExpr: ExpressibleAsExprBuildable {
   func createStringLiteralExpr()-> StringLiteralExpr
 }
-public extension ExpressibleAsStringLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsStringLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createStringLiteralExpr()
   }
 }
-public protocol ExpressibleAsRegexLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsRegexLiteralExpr: ExpressibleAsExprBuildable {
   func createRegexLiteralExpr()-> RegexLiteralExpr
 }
-public extension ExpressibleAsRegexLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsRegexLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createRegexLiteralExpr()
   }
 }
-public protocol ExpressibleAsKeyPathExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsKeyPathExpr: ExpressibleAsExprBuildable {
   func createKeyPathExpr()-> KeyPathExpr
 }
-public extension ExpressibleAsKeyPathExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsKeyPathExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createKeyPathExpr()
   }
 }
-public protocol ExpressibleAsKeyPathBaseExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsKeyPathBaseExpr: ExpressibleAsExprBuildable {
   func createKeyPathBaseExpr()-> KeyPathBaseExpr
 }
-public extension ExpressibleAsKeyPathBaseExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsKeyPathBaseExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createKeyPathBaseExpr()
   }
 }
-public protocol ExpressibleAsObjcNamePiece: ExpressibleAsObjcName, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsObjcNamePiece: ExpressibleAsObjcName, ExpressibleAsSyntaxBuildable {
   func createObjcNamePiece()-> ObjcNamePiece
 }
-public extension ExpressibleAsObjcNamePiece{
+public extension ExpressibleAsObjcNamePiece {
   /// Conformance to `ExpressibleAsObjcName`
-func createObjcName()-> ObjcName{
+func createObjcName()-> ObjcName {
     return ObjcName([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createObjcNamePiece()
   }
 }
-public protocol ExpressibleAsObjcName{
+public protocol ExpressibleAsObjcName {
   func createObjcName()-> ObjcName
 }
-public protocol ExpressibleAsObjcKeyPathExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsObjcKeyPathExpr: ExpressibleAsExprBuildable {
   func createObjcKeyPathExpr()-> ObjcKeyPathExpr
 }
-public extension ExpressibleAsObjcKeyPathExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsObjcKeyPathExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createObjcKeyPathExpr()
   }
 }
-public protocol ExpressibleAsObjcSelectorExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsObjcSelectorExpr: ExpressibleAsExprBuildable {
   func createObjcSelectorExpr()-> ObjcSelectorExpr
 }
-public extension ExpressibleAsObjcSelectorExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsObjcSelectorExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createObjcSelectorExpr()
   }
 }
-public protocol ExpressibleAsPostfixIfConfigExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsPostfixIfConfigExpr: ExpressibleAsExprBuildable {
   func createPostfixIfConfigExpr()-> PostfixIfConfigExpr
 }
-public extension ExpressibleAsPostfixIfConfigExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsPostfixIfConfigExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createPostfixIfConfigExpr()
   }
 }
-public protocol ExpressibleAsEditorPlaceholderExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsEditorPlaceholderExpr: ExpressibleAsExprBuildable {
   func createEditorPlaceholderExpr()-> EditorPlaceholderExpr
 }
-public extension ExpressibleAsEditorPlaceholderExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsEditorPlaceholderExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createEditorPlaceholderExpr()
   }
 }
-public protocol ExpressibleAsObjectLiteralExpr: ExpressibleAsExprBuildable{
+public protocol ExpressibleAsObjectLiteralExpr: ExpressibleAsExprBuildable {
   func createObjectLiteralExpr()-> ObjectLiteralExpr
 }
-public extension ExpressibleAsObjectLiteralExpr{
-  func createExprBuildable()-> ExprBuildable{
+public extension ExpressibleAsObjectLiteralExpr {
+  func createExprBuildable()-> ExprBuildable {
     return createObjectLiteralExpr()
   }
 }
-public protocol ExpressibleAsTypeInitializerClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTypeInitializerClause: ExpressibleAsSyntaxBuildable {
   func createTypeInitializerClause()-> TypeInitializerClause
 }
-public extension ExpressibleAsTypeInitializerClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsTypeInitializerClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTypeInitializerClause()
   }
 }
-public protocol ExpressibleAsTypealiasDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsTypealiasDecl: ExpressibleAsDeclBuildable {
   func createTypealiasDecl()-> TypealiasDecl
 }
-public extension ExpressibleAsTypealiasDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsTypealiasDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createTypealiasDecl()
   }
 }
-public protocol ExpressibleAsAssociatedtypeDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsAssociatedtypeDecl: ExpressibleAsDeclBuildable {
   func createAssociatedtypeDecl()-> AssociatedtypeDecl
 }
-public extension ExpressibleAsAssociatedtypeDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsAssociatedtypeDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createAssociatedtypeDecl()
   }
 }
-public protocol ExpressibleAsFunctionParameterList{
+public protocol ExpressibleAsFunctionParameterList {
   func createFunctionParameterList()-> FunctionParameterList
 }
-public protocol ExpressibleAsParameterClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsParameterClause: ExpressibleAsSyntaxBuildable {
   func createParameterClause()-> ParameterClause
 }
-public extension ExpressibleAsParameterClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsParameterClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createParameterClause()
   }
 }
-public protocol ExpressibleAsReturnClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsReturnClause: ExpressibleAsSyntaxBuildable {
   func createReturnClause()-> ReturnClause
 }
-public extension ExpressibleAsReturnClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsReturnClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createReturnClause()
   }
 }
-public protocol ExpressibleAsFunctionSignature: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsFunctionSignature: ExpressibleAsSyntaxBuildable {
   func createFunctionSignature()-> FunctionSignature
 }
-public extension ExpressibleAsFunctionSignature{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsFunctionSignature {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createFunctionSignature()
   }
 }
-public protocol ExpressibleAsIfConfigClause: ExpressibleAsIfConfigClauseList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsIfConfigClause: ExpressibleAsIfConfigClauseList, ExpressibleAsSyntaxBuildable {
   func createIfConfigClause()-> IfConfigClause
 }
-public extension ExpressibleAsIfConfigClause{
+public extension ExpressibleAsIfConfigClause {
   /// Conformance to `ExpressibleAsIfConfigClauseList`
-func createIfConfigClauseList()-> IfConfigClauseList{
+func createIfConfigClauseList()-> IfConfigClauseList {
     return IfConfigClauseList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createIfConfigClause()
   }
 }
-public protocol ExpressibleAsIfConfigClauseList{
+public protocol ExpressibleAsIfConfigClauseList {
   func createIfConfigClauseList()-> IfConfigClauseList
 }
-public protocol ExpressibleAsIfConfigDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsIfConfigDecl: ExpressibleAsDeclBuildable {
   func createIfConfigDecl()-> IfConfigDecl
 }
-public extension ExpressibleAsIfConfigDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsIfConfigDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createIfConfigDecl()
   }
 }
-public protocol ExpressibleAsPoundErrorDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsPoundErrorDecl: ExpressibleAsDeclBuildable {
   func createPoundErrorDecl()-> PoundErrorDecl
 }
-public extension ExpressibleAsPoundErrorDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsPoundErrorDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createPoundErrorDecl()
   }
 }
-public protocol ExpressibleAsPoundWarningDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsPoundWarningDecl: ExpressibleAsDeclBuildable {
   func createPoundWarningDecl()-> PoundWarningDecl
 }
-public extension ExpressibleAsPoundWarningDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsPoundWarningDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createPoundWarningDecl()
   }
 }
-public protocol ExpressibleAsPoundSourceLocation: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsPoundSourceLocation: ExpressibleAsDeclBuildable {
   func createPoundSourceLocation()-> PoundSourceLocation
 }
-public extension ExpressibleAsPoundSourceLocation{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsPoundSourceLocation {
+  func createDeclBuildable()-> DeclBuildable {
     return createPoundSourceLocation()
   }
 }
-public protocol ExpressibleAsPoundSourceLocationArgs: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPoundSourceLocationArgs: ExpressibleAsSyntaxBuildable {
   func createPoundSourceLocationArgs()-> PoundSourceLocationArgs
 }
-public extension ExpressibleAsPoundSourceLocationArgs{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsPoundSourceLocationArgs {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPoundSourceLocationArgs()
   }
 }
-public protocol ExpressibleAsDeclModifier: ExpressibleAsModifierList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDeclModifier: ExpressibleAsModifierList, ExpressibleAsSyntaxBuildable {
   func createDeclModifier()-> DeclModifier
 }
-public extension ExpressibleAsDeclModifier{
+public extension ExpressibleAsDeclModifier {
   /// Conformance to `ExpressibleAsModifierList`
-func createModifierList()-> ModifierList{
+func createModifierList()-> ModifierList {
     return ModifierList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDeclModifier()
   }
 }
-public protocol ExpressibleAsInheritedType: ExpressibleAsInheritedTypeList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsInheritedType: ExpressibleAsInheritedTypeList, ExpressibleAsSyntaxBuildable {
   func createInheritedType()-> InheritedType
 }
-public extension ExpressibleAsInheritedType{
+public extension ExpressibleAsInheritedType {
   /// Conformance to `ExpressibleAsInheritedTypeList`
-func createInheritedTypeList()-> InheritedTypeList{
+func createInheritedTypeList()-> InheritedTypeList {
     return InheritedTypeList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createInheritedType()
   }
 }
-public protocol ExpressibleAsInheritedTypeList{
+public protocol ExpressibleAsInheritedTypeList {
   func createInheritedTypeList()-> InheritedTypeList
 }
-public protocol ExpressibleAsTypeInheritanceClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTypeInheritanceClause: ExpressibleAsSyntaxBuildable {
   func createTypeInheritanceClause()-> TypeInheritanceClause
 }
-public extension ExpressibleAsTypeInheritanceClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsTypeInheritanceClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTypeInheritanceClause()
   }
 }
-public protocol ExpressibleAsClassDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsClassDecl: ExpressibleAsDeclBuildable {
   func createClassDecl()-> ClassDecl
 }
-public extension ExpressibleAsClassDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsClassDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createClassDecl()
   }
 }
-public protocol ExpressibleAsStructDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsStructDecl: ExpressibleAsDeclBuildable {
   func createStructDecl()-> StructDecl
 }
-public extension ExpressibleAsStructDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsStructDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createStructDecl()
   }
 }
-public protocol ExpressibleAsProtocolDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsProtocolDecl: ExpressibleAsDeclBuildable {
   func createProtocolDecl()-> ProtocolDecl
 }
-public extension ExpressibleAsProtocolDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsProtocolDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createProtocolDecl()
   }
 }
-public protocol ExpressibleAsExtensionDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsExtensionDecl: ExpressibleAsDeclBuildable {
   func createExtensionDecl()-> ExtensionDecl
 }
-public extension ExpressibleAsExtensionDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsExtensionDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createExtensionDecl()
   }
 }
-public protocol ExpressibleAsMemberDeclBlock: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsMemberDeclBlock: ExpressibleAsSyntaxBuildable {
   func createMemberDeclBlock()-> MemberDeclBlock
 }
-public extension ExpressibleAsMemberDeclBlock{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsMemberDeclBlock {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createMemberDeclBlock()
   }
 }
-public protocol ExpressibleAsMemberDeclList: ExpressibleAsMemberDeclBlock{
+public protocol ExpressibleAsMemberDeclList: ExpressibleAsMemberDeclBlock {
   func createMemberDeclList()-> MemberDeclList
 }
-public extension ExpressibleAsMemberDeclList{
+public extension ExpressibleAsMemberDeclList {
   /// Conformance to ExpressibleAsMemberDeclBlock
-func createMemberDeclBlock()-> MemberDeclBlock{
+func createMemberDeclBlock()-> MemberDeclBlock {
     return MemberDeclBlock(members: self)
   }
 }
-public protocol ExpressibleAsMemberDeclListItem: ExpressibleAsMemberDeclList{
+public protocol ExpressibleAsMemberDeclListItem: ExpressibleAsMemberDeclList {
   func createMemberDeclListItem()-> MemberDeclListItem
 }
-public extension ExpressibleAsMemberDeclListItem{
+public extension ExpressibleAsMemberDeclListItem {
   /// Conformance to `ExpressibleAsMemberDeclList`
-func createMemberDeclList()-> MemberDeclList{
+func createMemberDeclList()-> MemberDeclList {
     return MemberDeclList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createMemberDeclListItem()
   }
 }
-public protocol ExpressibleAsSourceFile: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsSourceFile: ExpressibleAsSyntaxBuildable {
   func createSourceFile()-> SourceFile
 }
-public extension ExpressibleAsSourceFile{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsSourceFile {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createSourceFile()
   }
 }
-public protocol ExpressibleAsInitializerClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsInitializerClause: ExpressibleAsSyntaxBuildable {
   func createInitializerClause()-> InitializerClause
 }
-public extension ExpressibleAsInitializerClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsInitializerClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createInitializerClause()
   }
 }
-public protocol ExpressibleAsFunctionParameter: ExpressibleAsFunctionParameterList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsFunctionParameter: ExpressibleAsFunctionParameterList, ExpressibleAsSyntaxBuildable {
   func createFunctionParameter()-> FunctionParameter
 }
-public extension ExpressibleAsFunctionParameter{
+public extension ExpressibleAsFunctionParameter {
   /// Conformance to `ExpressibleAsFunctionParameterList`
-func createFunctionParameterList()-> FunctionParameterList{
+func createFunctionParameterList()-> FunctionParameterList {
     return FunctionParameterList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createFunctionParameter()
   }
 }
-public protocol ExpressibleAsModifierList{
+public protocol ExpressibleAsModifierList {
   func createModifierList()-> ModifierList
 }
-public protocol ExpressibleAsFunctionDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsFunctionDecl: ExpressibleAsDeclBuildable {
   func createFunctionDecl()-> FunctionDecl
 }
-public extension ExpressibleAsFunctionDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsFunctionDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createFunctionDecl()
   }
 }
-public protocol ExpressibleAsInitializerDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsInitializerDecl: ExpressibleAsDeclBuildable {
   func createInitializerDecl()-> InitializerDecl
 }
-public extension ExpressibleAsInitializerDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsInitializerDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createInitializerDecl()
   }
 }
-public protocol ExpressibleAsDeinitializerDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsDeinitializerDecl: ExpressibleAsDeclBuildable {
   func createDeinitializerDecl()-> DeinitializerDecl
 }
-public extension ExpressibleAsDeinitializerDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsDeinitializerDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createDeinitializerDecl()
   }
 }
-public protocol ExpressibleAsSubscriptDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsSubscriptDecl: ExpressibleAsDeclBuildable {
   func createSubscriptDecl()-> SubscriptDecl
 }
-public extension ExpressibleAsSubscriptDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsSubscriptDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createSubscriptDecl()
   }
 }
-public protocol ExpressibleAsAccessLevelModifier: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAccessLevelModifier: ExpressibleAsSyntaxBuildable {
   func createAccessLevelModifier()-> AccessLevelModifier
 }
-public extension ExpressibleAsAccessLevelModifier{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAccessLevelModifier {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAccessLevelModifier()
   }
 }
-public protocol ExpressibleAsAccessPathComponent: ExpressibleAsAccessPath, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAccessPathComponent: ExpressibleAsAccessPath, ExpressibleAsSyntaxBuildable {
   func createAccessPathComponent()-> AccessPathComponent
 }
-public extension ExpressibleAsAccessPathComponent{
+public extension ExpressibleAsAccessPathComponent {
   /// Conformance to `ExpressibleAsAccessPath`
-func createAccessPath()-> AccessPath{
+func createAccessPath()-> AccessPath {
     return AccessPath([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAccessPathComponent()
   }
 }
-public protocol ExpressibleAsAccessPath{
+public protocol ExpressibleAsAccessPath {
   func createAccessPath()-> AccessPath
 }
-public protocol ExpressibleAsImportDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsImportDecl: ExpressibleAsDeclBuildable {
   func createImportDecl()-> ImportDecl
 }
-public extension ExpressibleAsImportDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsImportDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createImportDecl()
   }
 }
-public protocol ExpressibleAsAccessorParameter: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAccessorParameter: ExpressibleAsSyntaxBuildable {
   func createAccessorParameter()-> AccessorParameter
 }
-public extension ExpressibleAsAccessorParameter{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAccessorParameter {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAccessorParameter()
   }
 }
-public protocol ExpressibleAsAccessorDecl: ExpressibleAsAccessorList, ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsAccessorDecl: ExpressibleAsAccessorList, ExpressibleAsDeclBuildable {
   func createAccessorDecl()-> AccessorDecl
 }
-public extension ExpressibleAsAccessorDecl{
+public extension ExpressibleAsAccessorDecl {
   /// Conformance to `ExpressibleAsAccessorList`
-func createAccessorList()-> AccessorList{
+func createAccessorList()-> AccessorList {
     return AccessorList([self])
   }
-  func createDeclBuildable()-> DeclBuildable{
+  func createDeclBuildable()-> DeclBuildable {
     return createAccessorDecl()
   }
 }
-public protocol ExpressibleAsAccessorList: ExpressibleAsAccessorBlock{
+public protocol ExpressibleAsAccessorList: ExpressibleAsAccessorBlock {
   func createAccessorList()-> AccessorList
 }
-public extension ExpressibleAsAccessorList{
+public extension ExpressibleAsAccessorList {
   /// Conformance to ExpressibleAsAccessorBlock
-func createAccessorBlock()-> AccessorBlock{
+func createAccessorBlock()-> AccessorBlock {
     return AccessorBlock(accessors: self)
   }
 }
-public protocol ExpressibleAsAccessorBlock: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAccessorBlock: ExpressibleAsSyntaxBuildable {
   func createAccessorBlock()-> AccessorBlock
 }
-public extension ExpressibleAsAccessorBlock{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAccessorBlock {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAccessorBlock()
   }
 }
-public protocol ExpressibleAsPatternBinding: ExpressibleAsPatternBindingList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPatternBinding: ExpressibleAsPatternBindingList, ExpressibleAsSyntaxBuildable {
   func createPatternBinding()-> PatternBinding
 }
-public extension ExpressibleAsPatternBinding{
+public extension ExpressibleAsPatternBinding {
   /// Conformance to `ExpressibleAsPatternBindingList`
-func createPatternBindingList()-> PatternBindingList{
+func createPatternBindingList()-> PatternBindingList {
     return PatternBindingList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPatternBinding()
   }
 }
-public protocol ExpressibleAsPatternBindingList{
+public protocol ExpressibleAsPatternBindingList {
   func createPatternBindingList()-> PatternBindingList
 }
-public protocol ExpressibleAsVariableDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsVariableDecl: ExpressibleAsDeclBuildable {
   func createVariableDecl()-> VariableDecl
 }
-public extension ExpressibleAsVariableDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsVariableDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createVariableDecl()
   }
 }
-public protocol ExpressibleAsEnumCaseElement: ExpressibleAsEnumCaseElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsEnumCaseElement: ExpressibleAsEnumCaseElementList, ExpressibleAsSyntaxBuildable {
   func createEnumCaseElement()-> EnumCaseElement
 }
-public extension ExpressibleAsEnumCaseElement{
+public extension ExpressibleAsEnumCaseElement {
   /// Conformance to `ExpressibleAsEnumCaseElementList`
-func createEnumCaseElementList()-> EnumCaseElementList{
+func createEnumCaseElementList()-> EnumCaseElementList {
     return EnumCaseElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createEnumCaseElement()
   }
 }
-public protocol ExpressibleAsEnumCaseElementList{
+public protocol ExpressibleAsEnumCaseElementList {
   func createEnumCaseElementList()-> EnumCaseElementList
 }
-public protocol ExpressibleAsEnumCaseDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsEnumCaseDecl: ExpressibleAsDeclBuildable {
   func createEnumCaseDecl()-> EnumCaseDecl
 }
-public extension ExpressibleAsEnumCaseDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsEnumCaseDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createEnumCaseDecl()
   }
 }
-public protocol ExpressibleAsEnumDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsEnumDecl: ExpressibleAsDeclBuildable {
   func createEnumDecl()-> EnumDecl
 }
-public extension ExpressibleAsEnumDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsEnumDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createEnumDecl()
   }
 }
-public protocol ExpressibleAsOperatorDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsOperatorDecl: ExpressibleAsDeclBuildable {
   func createOperatorDecl()-> OperatorDecl
 }
-public extension ExpressibleAsOperatorDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsOperatorDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createOperatorDecl()
   }
 }
-public protocol ExpressibleAsIdentifierList{
+public protocol ExpressibleAsIdentifierList {
   func createIdentifierList()-> IdentifierList
 }
-public protocol ExpressibleAsOperatorPrecedenceAndTypes: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsOperatorPrecedenceAndTypes: ExpressibleAsSyntaxBuildable {
   func createOperatorPrecedenceAndTypes()-> OperatorPrecedenceAndTypes
 }
-public extension ExpressibleAsOperatorPrecedenceAndTypes{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsOperatorPrecedenceAndTypes {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createOperatorPrecedenceAndTypes()
   }
 }
-public protocol ExpressibleAsPrecedenceGroupDecl: ExpressibleAsDeclBuildable{
+public protocol ExpressibleAsPrecedenceGroupDecl: ExpressibleAsDeclBuildable {
   func createPrecedenceGroupDecl()-> PrecedenceGroupDecl
 }
-public extension ExpressibleAsPrecedenceGroupDecl{
-  func createDeclBuildable()-> DeclBuildable{
+public extension ExpressibleAsPrecedenceGroupDecl {
+  func createDeclBuildable()-> DeclBuildable {
     return createPrecedenceGroupDecl()
   }
 }
-public protocol ExpressibleAsPrecedenceGroupAttributeList{
+public protocol ExpressibleAsPrecedenceGroupAttributeList {
   func createPrecedenceGroupAttributeList()-> PrecedenceGroupAttributeList
 }
-public protocol ExpressibleAsPrecedenceGroupRelation: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPrecedenceGroupRelation: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupRelation()-> PrecedenceGroupRelation
 }
-public extension ExpressibleAsPrecedenceGroupRelation{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsPrecedenceGroupRelation {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPrecedenceGroupRelation()
   }
 }
-public protocol ExpressibleAsPrecedenceGroupNameList{
+public protocol ExpressibleAsPrecedenceGroupNameList {
   func createPrecedenceGroupNameList()-> PrecedenceGroupNameList
 }
-public protocol ExpressibleAsPrecedenceGroupNameElement: ExpressibleAsPrecedenceGroupNameList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPrecedenceGroupNameElement: ExpressibleAsPrecedenceGroupNameList, ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupNameElement()-> PrecedenceGroupNameElement
 }
-public extension ExpressibleAsPrecedenceGroupNameElement{
+public extension ExpressibleAsPrecedenceGroupNameElement {
   /// Conformance to `ExpressibleAsPrecedenceGroupNameList`
-func createPrecedenceGroupNameList()-> PrecedenceGroupNameList{
+func createPrecedenceGroupNameList()-> PrecedenceGroupNameList {
     return PrecedenceGroupNameList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPrecedenceGroupNameElement()
   }
 }
-public protocol ExpressibleAsPrecedenceGroupAssignment: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPrecedenceGroupAssignment: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupAssignment()-> PrecedenceGroupAssignment
 }
-public extension ExpressibleAsPrecedenceGroupAssignment{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsPrecedenceGroupAssignment {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPrecedenceGroupAssignment()
   }
 }
-public protocol ExpressibleAsPrecedenceGroupAssociativity: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPrecedenceGroupAssociativity: ExpressibleAsSyntaxBuildable {
   func createPrecedenceGroupAssociativity()-> PrecedenceGroupAssociativity
 }
-public extension ExpressibleAsPrecedenceGroupAssociativity{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsPrecedenceGroupAssociativity {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPrecedenceGroupAssociativity()
   }
 }
-public protocol ExpressibleAsTokenList{
+public protocol ExpressibleAsTokenList {
   func createTokenList()-> TokenList
 }
-public protocol ExpressibleAsNonEmptyTokenList{
+public protocol ExpressibleAsNonEmptyTokenList {
   func createNonEmptyTokenList()-> NonEmptyTokenList
 }
-public protocol ExpressibleAsCustomAttribute: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsCustomAttribute: ExpressibleAsSyntaxBuildable {
   func createCustomAttribute()-> CustomAttribute
 }
-public extension ExpressibleAsCustomAttribute{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsCustomAttribute {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCustomAttribute()
   }
 }
-public protocol ExpressibleAsAttribute: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAttribute: ExpressibleAsSyntaxBuildable {
   func createAttribute()-> Attribute
 }
-public extension ExpressibleAsAttribute{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAttribute {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAttribute()
   }
 }
-public protocol ExpressibleAsAttributeList{
+public protocol ExpressibleAsAttributeList {
   func createAttributeList()-> AttributeList
 }
-public protocol ExpressibleAsSpecializeAttributeSpecList{
+public protocol ExpressibleAsSpecializeAttributeSpecList {
   func createSpecializeAttributeSpecList()-> SpecializeAttributeSpecList
 }
-public protocol ExpressibleAsAvailabilityEntry: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAvailabilityEntry: ExpressibleAsSyntaxBuildable {
   func createAvailabilityEntry()-> AvailabilityEntry
 }
-public extension ExpressibleAsAvailabilityEntry{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAvailabilityEntry {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAvailabilityEntry()
   }
 }
-public protocol ExpressibleAsLabeledSpecializeEntry: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsLabeledSpecializeEntry: ExpressibleAsSyntaxBuildable {
   func createLabeledSpecializeEntry()-> LabeledSpecializeEntry
 }
-public extension ExpressibleAsLabeledSpecializeEntry{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsLabeledSpecializeEntry {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createLabeledSpecializeEntry()
   }
 }
-public protocol ExpressibleAsTargetFunctionEntry: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTargetFunctionEntry: ExpressibleAsSyntaxBuildable {
   func createTargetFunctionEntry()-> TargetFunctionEntry
 }
-public extension ExpressibleAsTargetFunctionEntry{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsTargetFunctionEntry {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTargetFunctionEntry()
   }
 }
-public protocol ExpressibleAsNamedAttributeStringArgument: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsNamedAttributeStringArgument: ExpressibleAsSyntaxBuildable {
   func createNamedAttributeStringArgument()-> NamedAttributeStringArgument
 }
-public extension ExpressibleAsNamedAttributeStringArgument{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsNamedAttributeStringArgument {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createNamedAttributeStringArgument()
   }
 }
-public protocol ExpressibleAsDeclName: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDeclName: ExpressibleAsSyntaxBuildable {
   func createDeclName()-> DeclName
 }
-public extension ExpressibleAsDeclName{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsDeclName {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDeclName()
   }
 }
-public protocol ExpressibleAsImplementsAttributeArguments: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsImplementsAttributeArguments: ExpressibleAsSyntaxBuildable {
   func createImplementsAttributeArguments()-> ImplementsAttributeArguments
 }
-public extension ExpressibleAsImplementsAttributeArguments{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsImplementsAttributeArguments {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createImplementsAttributeArguments()
   }
 }
-public protocol ExpressibleAsObjCSelectorPiece: ExpressibleAsObjCSelector, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsObjCSelectorPiece: ExpressibleAsObjCSelector, ExpressibleAsSyntaxBuildable {
   func createObjCSelectorPiece()-> ObjCSelectorPiece
 }
-public extension ExpressibleAsObjCSelectorPiece{
+public extension ExpressibleAsObjCSelectorPiece {
   /// Conformance to `ExpressibleAsObjCSelector`
-func createObjCSelector()-> ObjCSelector{
+func createObjCSelector()-> ObjCSelector {
     return ObjCSelector([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createObjCSelectorPiece()
   }
 }
-public protocol ExpressibleAsObjCSelector{
+public protocol ExpressibleAsObjCSelector {
   func createObjCSelector()-> ObjCSelector
 }
-public protocol ExpressibleAsDifferentiableAttributeArguments: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDifferentiableAttributeArguments: ExpressibleAsSyntaxBuildable {
   func createDifferentiableAttributeArguments()-> DifferentiableAttributeArguments
 }
-public extension ExpressibleAsDifferentiableAttributeArguments{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsDifferentiableAttributeArguments {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDifferentiableAttributeArguments()
   }
 }
-public protocol ExpressibleAsDifferentiabilityParamsClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDifferentiabilityParamsClause: ExpressibleAsSyntaxBuildable {
   func createDifferentiabilityParamsClause()-> DifferentiabilityParamsClause
 }
-public extension ExpressibleAsDifferentiabilityParamsClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsDifferentiabilityParamsClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDifferentiabilityParamsClause()
   }
 }
-public protocol ExpressibleAsDifferentiabilityParams: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDifferentiabilityParams: ExpressibleAsSyntaxBuildable {
   func createDifferentiabilityParams()-> DifferentiabilityParams
 }
-public extension ExpressibleAsDifferentiabilityParams{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsDifferentiabilityParams {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDifferentiabilityParams()
   }
 }
-public protocol ExpressibleAsDifferentiabilityParamList{
+public protocol ExpressibleAsDifferentiabilityParamList {
   func createDifferentiabilityParamList()-> DifferentiabilityParamList
 }
-public protocol ExpressibleAsDifferentiabilityParam: ExpressibleAsDifferentiabilityParamList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDifferentiabilityParam: ExpressibleAsDifferentiabilityParamList, ExpressibleAsSyntaxBuildable {
   func createDifferentiabilityParam()-> DifferentiabilityParam
 }
-public extension ExpressibleAsDifferentiabilityParam{
+public extension ExpressibleAsDifferentiabilityParam {
   /// Conformance to `ExpressibleAsDifferentiabilityParamList`
-func createDifferentiabilityParamList()-> DifferentiabilityParamList{
+func createDifferentiabilityParamList()-> DifferentiabilityParamList {
     return DifferentiabilityParamList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDifferentiabilityParam()
   }
 }
-public protocol ExpressibleAsDerivativeRegistrationAttributeArguments: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsDerivativeRegistrationAttributeArguments: ExpressibleAsSyntaxBuildable {
   func createDerivativeRegistrationAttributeArguments()-> DerivativeRegistrationAttributeArguments
 }
-public extension ExpressibleAsDerivativeRegistrationAttributeArguments{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsDerivativeRegistrationAttributeArguments {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createDerivativeRegistrationAttributeArguments()
   }
 }
-public protocol ExpressibleAsQualifiedDeclName: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsQualifiedDeclName: ExpressibleAsSyntaxBuildable {
   func createQualifiedDeclName()-> QualifiedDeclName
 }
-public extension ExpressibleAsQualifiedDeclName{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsQualifiedDeclName {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createQualifiedDeclName()
   }
 }
-public protocol ExpressibleAsFunctionDeclName: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsFunctionDeclName: ExpressibleAsSyntaxBuildable {
   func createFunctionDeclName()-> FunctionDeclName
 }
-public extension ExpressibleAsFunctionDeclName{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsFunctionDeclName {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createFunctionDeclName()
   }
 }
-public protocol ExpressibleAsBackDeployAttributeSpecList: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsBackDeployAttributeSpecList: ExpressibleAsSyntaxBuildable {
   func createBackDeployAttributeSpecList()-> BackDeployAttributeSpecList
 }
-public extension ExpressibleAsBackDeployAttributeSpecList{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsBackDeployAttributeSpecList {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createBackDeployAttributeSpecList()
   }
 }
-public protocol ExpressibleAsBackDeployVersionList{
+public protocol ExpressibleAsBackDeployVersionList {
   func createBackDeployVersionList()-> BackDeployVersionList
 }
-public protocol ExpressibleAsBackDeployVersionArgument: ExpressibleAsBackDeployVersionList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsBackDeployVersionArgument: ExpressibleAsBackDeployVersionList, ExpressibleAsSyntaxBuildable {
   func createBackDeployVersionArgument()-> BackDeployVersionArgument
 }
-public extension ExpressibleAsBackDeployVersionArgument{
+public extension ExpressibleAsBackDeployVersionArgument {
   /// Conformance to `ExpressibleAsBackDeployVersionList`
-func createBackDeployVersionList()-> BackDeployVersionList{
+func createBackDeployVersionList()-> BackDeployVersionList {
     return BackDeployVersionList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createBackDeployVersionArgument()
   }
 }
-public protocol ExpressibleAsContinueStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsContinueStmt: ExpressibleAsStmtBuildable {
   func createContinueStmt()-> ContinueStmt
 }
-public extension ExpressibleAsContinueStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsContinueStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createContinueStmt()
   }
 }
-public protocol ExpressibleAsWhileStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsWhileStmt: ExpressibleAsStmtBuildable {
   func createWhileStmt()-> WhileStmt
 }
-public extension ExpressibleAsWhileStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsWhileStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createWhileStmt()
   }
 }
-public protocol ExpressibleAsDeferStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsDeferStmt: ExpressibleAsStmtBuildable {
   func createDeferStmt()-> DeferStmt
 }
-public extension ExpressibleAsDeferStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsDeferStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createDeferStmt()
   }
 }
-public protocol ExpressibleAsExpressionStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsExpressionStmt: ExpressibleAsStmtBuildable {
   func createExpressionStmt()-> ExpressionStmt
 }
-public extension ExpressibleAsExpressionStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsExpressionStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createExpressionStmt()
   }
 }
-public protocol ExpressibleAsSwitchCaseList{
+public protocol ExpressibleAsSwitchCaseList {
   func createSwitchCaseList()-> SwitchCaseList
 }
-public protocol ExpressibleAsRepeatWhileStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsRepeatWhileStmt: ExpressibleAsStmtBuildable {
   func createRepeatWhileStmt()-> RepeatWhileStmt
 }
-public extension ExpressibleAsRepeatWhileStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsRepeatWhileStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createRepeatWhileStmt()
   }
 }
-public protocol ExpressibleAsGuardStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsGuardStmt: ExpressibleAsStmtBuildable {
   func createGuardStmt()-> GuardStmt
 }
-public extension ExpressibleAsGuardStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsGuardStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createGuardStmt()
   }
 }
-public protocol ExpressibleAsWhereClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsWhereClause: ExpressibleAsSyntaxBuildable {
   func createWhereClause()-> WhereClause
 }
-public extension ExpressibleAsWhereClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsWhereClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createWhereClause()
   }
 }
-public protocol ExpressibleAsForInStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsForInStmt: ExpressibleAsStmtBuildable {
   func createForInStmt()-> ForInStmt
 }
-public extension ExpressibleAsForInStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsForInStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createForInStmt()
   }
 }
-public protocol ExpressibleAsSwitchStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsSwitchStmt: ExpressibleAsStmtBuildable {
   func createSwitchStmt()-> SwitchStmt
 }
-public extension ExpressibleAsSwitchStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsSwitchStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createSwitchStmt()
   }
 }
-public protocol ExpressibleAsCatchClauseList{
+public protocol ExpressibleAsCatchClauseList {
   func createCatchClauseList()-> CatchClauseList
 }
-public protocol ExpressibleAsDoStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsDoStmt: ExpressibleAsStmtBuildable {
   func createDoStmt()-> DoStmt
 }
-public extension ExpressibleAsDoStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsDoStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createDoStmt()
   }
 }
-public protocol ExpressibleAsReturnStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsReturnStmt: ExpressibleAsStmtBuildable {
   func createReturnStmt()-> ReturnStmt
 }
-public extension ExpressibleAsReturnStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsReturnStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createReturnStmt()
   }
 }
-public protocol ExpressibleAsYieldStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsYieldStmt: ExpressibleAsStmtBuildable {
   func createYieldStmt()-> YieldStmt
 }
-public extension ExpressibleAsYieldStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsYieldStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createYieldStmt()
   }
 }
-public protocol ExpressibleAsYieldList: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsYieldList: ExpressibleAsSyntaxBuildable {
   func createYieldList()-> YieldList
 }
-public extension ExpressibleAsYieldList{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsYieldList {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createYieldList()
   }
 }
-public protocol ExpressibleAsFallthroughStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsFallthroughStmt: ExpressibleAsStmtBuildable {
   func createFallthroughStmt()-> FallthroughStmt
 }
-public extension ExpressibleAsFallthroughStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsFallthroughStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createFallthroughStmt()
   }
 }
-public protocol ExpressibleAsBreakStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsBreakStmt: ExpressibleAsStmtBuildable {
   func createBreakStmt()-> BreakStmt
 }
-public extension ExpressibleAsBreakStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsBreakStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createBreakStmt()
   }
 }
-public protocol ExpressibleAsCaseItemList{
+public protocol ExpressibleAsCaseItemList {
   func createCaseItemList()-> CaseItemList
 }
-public protocol ExpressibleAsCatchItemList{
+public protocol ExpressibleAsCatchItemList {
   func createCatchItemList()-> CatchItemList
 }
-public protocol ExpressibleAsConditionElement: ExpressibleAsConditionElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsConditionElement: ExpressibleAsConditionElementList, ExpressibleAsSyntaxBuildable {
   func createConditionElement()-> ConditionElement
 }
-public extension ExpressibleAsConditionElement{
+public extension ExpressibleAsConditionElement {
   /// Conformance to `ExpressibleAsConditionElementList`
-func createConditionElementList()-> ConditionElementList{
+func createConditionElementList()-> ConditionElementList {
     return ConditionElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createConditionElement()
   }
 }
-public protocol ExpressibleAsAvailabilityCondition: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAvailabilityCondition: ExpressibleAsSyntaxBuildable {
   func createAvailabilityCondition()-> AvailabilityCondition
 }
-public extension ExpressibleAsAvailabilityCondition{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAvailabilityCondition {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAvailabilityCondition()
   }
 }
-public protocol ExpressibleAsMatchingPatternCondition: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsMatchingPatternCondition: ExpressibleAsSyntaxBuildable {
   func createMatchingPatternCondition()-> MatchingPatternCondition
 }
-public extension ExpressibleAsMatchingPatternCondition{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsMatchingPatternCondition {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createMatchingPatternCondition()
   }
 }
-public protocol ExpressibleAsOptionalBindingCondition: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsOptionalBindingCondition: ExpressibleAsSyntaxBuildable {
   func createOptionalBindingCondition()-> OptionalBindingCondition
 }
-public extension ExpressibleAsOptionalBindingCondition{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsOptionalBindingCondition {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createOptionalBindingCondition()
   }
 }
-public protocol ExpressibleAsUnavailabilityCondition: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsUnavailabilityCondition: ExpressibleAsSyntaxBuildable {
   func createUnavailabilityCondition()-> UnavailabilityCondition
 }
-public extension ExpressibleAsUnavailabilityCondition{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsUnavailabilityCondition {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createUnavailabilityCondition()
   }
 }
-public protocol ExpressibleAsConditionElementList{
+public protocol ExpressibleAsConditionElementList {
   func createConditionElementList()-> ConditionElementList
 }
-public protocol ExpressibleAsDeclarationStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsDeclarationStmt: ExpressibleAsStmtBuildable {
   func createDeclarationStmt()-> DeclarationStmt
 }
-public extension ExpressibleAsDeclarationStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsDeclarationStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createDeclarationStmt()
   }
 }
-public protocol ExpressibleAsThrowStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsThrowStmt: ExpressibleAsStmtBuildable {
   func createThrowStmt()-> ThrowStmt
 }
-public extension ExpressibleAsThrowStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsThrowStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createThrowStmt()
   }
 }
-public protocol ExpressibleAsIfStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsIfStmt: ExpressibleAsStmtBuildable {
   func createIfStmt()-> IfStmt
 }
-public extension ExpressibleAsIfStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsIfStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createIfStmt()
   }
 }
-public protocol ExpressibleAsElseIfContinuation: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsElseIfContinuation: ExpressibleAsSyntaxBuildable {
   func createElseIfContinuation()-> ElseIfContinuation
 }
-public extension ExpressibleAsElseIfContinuation{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsElseIfContinuation {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createElseIfContinuation()
   }
 }
-public protocol ExpressibleAsElseBlock: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsElseBlock: ExpressibleAsSyntaxBuildable {
   func createElseBlock()-> ElseBlock
 }
-public extension ExpressibleAsElseBlock{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsElseBlock {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createElseBlock()
   }
 }
-public protocol ExpressibleAsSwitchCase: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsSwitchCase: ExpressibleAsSyntaxBuildable {
   func createSwitchCase()-> SwitchCase
 }
-public extension ExpressibleAsSwitchCase{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsSwitchCase {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createSwitchCase()
   }
 }
-public protocol ExpressibleAsSwitchDefaultLabel: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsSwitchDefaultLabel: ExpressibleAsSyntaxBuildable {
   func createSwitchDefaultLabel()-> SwitchDefaultLabel
 }
-public extension ExpressibleAsSwitchDefaultLabel{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsSwitchDefaultLabel {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createSwitchDefaultLabel()
   }
 }
-public protocol ExpressibleAsCaseItem: ExpressibleAsCaseItemList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsCaseItem: ExpressibleAsCaseItemList, ExpressibleAsSyntaxBuildable {
   func createCaseItem()-> CaseItem
 }
-public extension ExpressibleAsCaseItem{
+public extension ExpressibleAsCaseItem {
   /// Conformance to `ExpressibleAsCaseItemList`
-func createCaseItemList()-> CaseItemList{
+func createCaseItemList()-> CaseItemList {
     return CaseItemList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCaseItem()
   }
 }
-public protocol ExpressibleAsCatchItem: ExpressibleAsCatchItemList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsCatchItem: ExpressibleAsCatchItemList, ExpressibleAsSyntaxBuildable {
   func createCatchItem()-> CatchItem
 }
-public extension ExpressibleAsCatchItem{
+public extension ExpressibleAsCatchItem {
   /// Conformance to `ExpressibleAsCatchItemList`
-func createCatchItemList()-> CatchItemList{
+func createCatchItemList()-> CatchItemList {
     return CatchItemList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCatchItem()
   }
 }
-public protocol ExpressibleAsSwitchCaseLabel: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsSwitchCaseLabel: ExpressibleAsSyntaxBuildable {
   func createSwitchCaseLabel()-> SwitchCaseLabel
 }
-public extension ExpressibleAsSwitchCaseLabel{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsSwitchCaseLabel {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createSwitchCaseLabel()
   }
 }
-public protocol ExpressibleAsCatchClause: ExpressibleAsCatchClauseList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsCatchClause: ExpressibleAsCatchClauseList, ExpressibleAsSyntaxBuildable {
   func createCatchClause()-> CatchClause
 }
-public extension ExpressibleAsCatchClause{
+public extension ExpressibleAsCatchClause {
   /// Conformance to `ExpressibleAsCatchClauseList`
-func createCatchClauseList()-> CatchClauseList{
+func createCatchClauseList()-> CatchClauseList {
     return CatchClauseList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCatchClause()
   }
 }
-public protocol ExpressibleAsPoundAssertStmt: ExpressibleAsStmtBuildable{
+public protocol ExpressibleAsPoundAssertStmt: ExpressibleAsStmtBuildable {
   func createPoundAssertStmt()-> PoundAssertStmt
 }
-public extension ExpressibleAsPoundAssertStmt{
-  func createStmtBuildable()-> StmtBuildable{
+public extension ExpressibleAsPoundAssertStmt {
+  func createStmtBuildable()-> StmtBuildable {
     return createPoundAssertStmt()
   }
 }
-public protocol ExpressibleAsGenericWhereClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsGenericWhereClause: ExpressibleAsSyntaxBuildable {
   func createGenericWhereClause()-> GenericWhereClause
 }
-public extension ExpressibleAsGenericWhereClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsGenericWhereClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createGenericWhereClause()
   }
 }
-public protocol ExpressibleAsGenericRequirementList{
+public protocol ExpressibleAsGenericRequirementList {
   func createGenericRequirementList()-> GenericRequirementList
 }
-public protocol ExpressibleAsGenericRequirement: ExpressibleAsGenericRequirementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsGenericRequirement: ExpressibleAsGenericRequirementList, ExpressibleAsSyntaxBuildable {
   func createGenericRequirement()-> GenericRequirement
 }
-public extension ExpressibleAsGenericRequirement{
+public extension ExpressibleAsGenericRequirement {
   /// Conformance to `ExpressibleAsGenericRequirementList`
-func createGenericRequirementList()-> GenericRequirementList{
+func createGenericRequirementList()-> GenericRequirementList {
     return GenericRequirementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createGenericRequirement()
   }
 }
-public protocol ExpressibleAsSameTypeRequirement: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsSameTypeRequirement: ExpressibleAsSyntaxBuildable {
   func createSameTypeRequirement()-> SameTypeRequirement
 }
-public extension ExpressibleAsSameTypeRequirement{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsSameTypeRequirement {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createSameTypeRequirement()
   }
 }
-public protocol ExpressibleAsGenericParameterList{
+public protocol ExpressibleAsGenericParameterList {
   func createGenericParameterList()-> GenericParameterList
 }
-public protocol ExpressibleAsGenericParameter: ExpressibleAsGenericParameterList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsGenericParameter: ExpressibleAsGenericParameterList, ExpressibleAsSyntaxBuildable {
   func createGenericParameter()-> GenericParameter
 }
-public extension ExpressibleAsGenericParameter{
+public extension ExpressibleAsGenericParameter {
   /// Conformance to `ExpressibleAsGenericParameterList`
-func createGenericParameterList()-> GenericParameterList{
+func createGenericParameterList()-> GenericParameterList {
     return GenericParameterList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createGenericParameter()
   }
 }
-public protocol ExpressibleAsPrimaryAssociatedTypeList{
+public protocol ExpressibleAsPrimaryAssociatedTypeList {
   func createPrimaryAssociatedTypeList()-> PrimaryAssociatedTypeList
 }
-public protocol ExpressibleAsPrimaryAssociatedType: ExpressibleAsPrimaryAssociatedTypeList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPrimaryAssociatedType: ExpressibleAsPrimaryAssociatedTypeList, ExpressibleAsSyntaxBuildable {
   func createPrimaryAssociatedType()-> PrimaryAssociatedType
 }
-public extension ExpressibleAsPrimaryAssociatedType{
+public extension ExpressibleAsPrimaryAssociatedType {
   /// Conformance to `ExpressibleAsPrimaryAssociatedTypeList`
-func createPrimaryAssociatedTypeList()-> PrimaryAssociatedTypeList{
+func createPrimaryAssociatedTypeList()-> PrimaryAssociatedTypeList {
     return PrimaryAssociatedTypeList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPrimaryAssociatedType()
   }
 }
-public protocol ExpressibleAsGenericParameterClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsGenericParameterClause: ExpressibleAsSyntaxBuildable {
   func createGenericParameterClause()-> GenericParameterClause
 }
-public extension ExpressibleAsGenericParameterClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsGenericParameterClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createGenericParameterClause()
   }
 }
-public protocol ExpressibleAsConformanceRequirement: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsConformanceRequirement: ExpressibleAsSyntaxBuildable {
   func createConformanceRequirement()-> ConformanceRequirement
 }
-public extension ExpressibleAsConformanceRequirement{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsConformanceRequirement {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createConformanceRequirement()
   }
 }
-public protocol ExpressibleAsPrimaryAssociatedTypeClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsPrimaryAssociatedTypeClause: ExpressibleAsSyntaxBuildable {
   func createPrimaryAssociatedTypeClause()-> PrimaryAssociatedTypeClause
 }
-public extension ExpressibleAsPrimaryAssociatedTypeClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsPrimaryAssociatedTypeClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createPrimaryAssociatedTypeClause()
   }
 }
-public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeAnnotation, ExpressibleAsTypeExpr, ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsSimpleTypeIdentifier: ExpressibleAsTypeAnnotation, ExpressibleAsTypeExpr, ExpressibleAsTypeBuildable {
   func createSimpleTypeIdentifier()-> SimpleTypeIdentifier
 }
-public extension ExpressibleAsSimpleTypeIdentifier{
+public extension ExpressibleAsSimpleTypeIdentifier {
   /// Conformance to ExpressibleAsTypeAnnotation
-func createTypeAnnotation()-> TypeAnnotation{
+func createTypeAnnotation()-> TypeAnnotation {
     return TypeAnnotation(type: self)
   }
   /// Conformance to ExpressibleAsTypeExpr
-func createTypeExpr()-> TypeExpr{
+func createTypeExpr()-> TypeExpr {
     return TypeExpr(type: self)
   }
-  func createTypeBuildable()-> TypeBuildable{
+  func createTypeBuildable()-> TypeBuildable {
     return createSimpleTypeIdentifier()
   }
 }
-public protocol ExpressibleAsMemberTypeIdentifier: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsMemberTypeIdentifier: ExpressibleAsTypeBuildable {
   func createMemberTypeIdentifier()-> MemberTypeIdentifier
 }
-public extension ExpressibleAsMemberTypeIdentifier{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsMemberTypeIdentifier {
+  func createTypeBuildable()-> TypeBuildable {
     return createMemberTypeIdentifier()
   }
 }
-public protocol ExpressibleAsClassRestrictionType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsClassRestrictionType: ExpressibleAsTypeBuildable {
   func createClassRestrictionType()-> ClassRestrictionType
 }
-public extension ExpressibleAsClassRestrictionType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsClassRestrictionType {
+  func createTypeBuildable()-> TypeBuildable {
     return createClassRestrictionType()
   }
 }
-public protocol ExpressibleAsArrayType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsArrayType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable {
   func createArrayType()-> ArrayType
 }
-public extension ExpressibleAsArrayType{
+public extension ExpressibleAsArrayType {
   /// Conformance to ExpressibleAsTypeAnnotation
-func createTypeAnnotation()-> TypeAnnotation{
+func createTypeAnnotation()-> TypeAnnotation {
     return TypeAnnotation(type: self)
   }
-  func createTypeBuildable()-> TypeBuildable{
+  func createTypeBuildable()-> TypeBuildable {
     return createArrayType()
   }
 }
-public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsDictionaryType: ExpressibleAsTypeAnnotation, ExpressibleAsTypeBuildable {
   func createDictionaryType()-> DictionaryType
 }
-public extension ExpressibleAsDictionaryType{
+public extension ExpressibleAsDictionaryType {
   /// Conformance to ExpressibleAsTypeAnnotation
-func createTypeAnnotation()-> TypeAnnotation{
+func createTypeAnnotation()-> TypeAnnotation {
     return TypeAnnotation(type: self)
   }
-  func createTypeBuildable()-> TypeBuildable{
+  func createTypeBuildable()-> TypeBuildable {
     return createDictionaryType()
   }
 }
-public protocol ExpressibleAsMetatypeType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsMetatypeType: ExpressibleAsTypeBuildable {
   func createMetatypeType()-> MetatypeType
 }
-public extension ExpressibleAsMetatypeType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsMetatypeType {
+  func createTypeBuildable()-> TypeBuildable {
     return createMetatypeType()
   }
 }
-public protocol ExpressibleAsOptionalType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsOptionalType: ExpressibleAsTypeBuildable {
   func createOptionalType()-> OptionalType
 }
-public extension ExpressibleAsOptionalType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsOptionalType {
+  func createTypeBuildable()-> TypeBuildable {
     return createOptionalType()
   }
 }
-public protocol ExpressibleAsConstrainedSugarType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsConstrainedSugarType: ExpressibleAsTypeBuildable {
   func createConstrainedSugarType()-> ConstrainedSugarType
 }
-public extension ExpressibleAsConstrainedSugarType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsConstrainedSugarType {
+  func createTypeBuildable()-> TypeBuildable {
     return createConstrainedSugarType()
   }
 }
-public protocol ExpressibleAsImplicitlyUnwrappedOptionalType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsImplicitlyUnwrappedOptionalType: ExpressibleAsTypeBuildable {
   func createImplicitlyUnwrappedOptionalType()-> ImplicitlyUnwrappedOptionalType
 }
-public extension ExpressibleAsImplicitlyUnwrappedOptionalType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsImplicitlyUnwrappedOptionalType {
+  func createTypeBuildable()-> TypeBuildable {
     return createImplicitlyUnwrappedOptionalType()
   }
 }
-public protocol ExpressibleAsCompositionTypeElement: ExpressibleAsCompositionTypeElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsCompositionTypeElement: ExpressibleAsCompositionTypeElementList, ExpressibleAsSyntaxBuildable {
   func createCompositionTypeElement()-> CompositionTypeElement
 }
-public extension ExpressibleAsCompositionTypeElement{
+public extension ExpressibleAsCompositionTypeElement {
   /// Conformance to `ExpressibleAsCompositionTypeElementList`
-func createCompositionTypeElementList()-> CompositionTypeElementList{
+func createCompositionTypeElementList()-> CompositionTypeElementList {
     return CompositionTypeElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createCompositionTypeElement()
   }
 }
-public protocol ExpressibleAsCompositionTypeElementList{
+public protocol ExpressibleAsCompositionTypeElementList {
   func createCompositionTypeElementList()-> CompositionTypeElementList
 }
-public protocol ExpressibleAsCompositionType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsCompositionType: ExpressibleAsTypeBuildable {
   func createCompositionType()-> CompositionType
 }
-public extension ExpressibleAsCompositionType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsCompositionType {
+  func createTypeBuildable()-> TypeBuildable {
     return createCompositionType()
   }
 }
-public protocol ExpressibleAsTupleTypeElement: ExpressibleAsTupleTypeElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTupleTypeElement: ExpressibleAsTupleTypeElementList, ExpressibleAsSyntaxBuildable {
   func createTupleTypeElement()-> TupleTypeElement
 }
-public extension ExpressibleAsTupleTypeElement{
+public extension ExpressibleAsTupleTypeElement {
   /// Conformance to `ExpressibleAsTupleTypeElementList`
-func createTupleTypeElementList()-> TupleTypeElementList{
+func createTupleTypeElementList()-> TupleTypeElementList {
     return TupleTypeElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTupleTypeElement()
   }
 }
-public protocol ExpressibleAsTupleTypeElementList{
+public protocol ExpressibleAsTupleTypeElementList {
   func createTupleTypeElementList()-> TupleTypeElementList
 }
-public protocol ExpressibleAsTupleType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsTupleType: ExpressibleAsTypeBuildable {
   func createTupleType()-> TupleType
 }
-public extension ExpressibleAsTupleType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsTupleType {
+  func createTypeBuildable()-> TypeBuildable {
     return createTupleType()
   }
 }
-public protocol ExpressibleAsFunctionType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsFunctionType: ExpressibleAsTypeBuildable {
   func createFunctionType()-> FunctionType
 }
-public extension ExpressibleAsFunctionType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsFunctionType {
+  func createTypeBuildable()-> TypeBuildable {
     return createFunctionType()
   }
 }
-public protocol ExpressibleAsAttributedType: ExpressibleAsTypeBuildable{
+public protocol ExpressibleAsAttributedType: ExpressibleAsTypeBuildable {
   func createAttributedType()-> AttributedType
 }
-public extension ExpressibleAsAttributedType{
-  func createTypeBuildable()-> TypeBuildable{
+public extension ExpressibleAsAttributedType {
+  func createTypeBuildable()-> TypeBuildable {
     return createAttributedType()
   }
 }
-public protocol ExpressibleAsGenericArgumentList{
+public protocol ExpressibleAsGenericArgumentList {
   func createGenericArgumentList()-> GenericArgumentList
 }
-public protocol ExpressibleAsGenericArgument: ExpressibleAsGenericArgumentList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsGenericArgument: ExpressibleAsGenericArgumentList, ExpressibleAsSyntaxBuildable {
   func createGenericArgument()-> GenericArgument
 }
-public extension ExpressibleAsGenericArgument{
+public extension ExpressibleAsGenericArgument {
   /// Conformance to `ExpressibleAsGenericArgumentList`
-func createGenericArgumentList()-> GenericArgumentList{
+func createGenericArgumentList()-> GenericArgumentList {
     return GenericArgumentList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createGenericArgument()
   }
 }
-public protocol ExpressibleAsGenericArgumentClause: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsGenericArgumentClause: ExpressibleAsSyntaxBuildable {
   func createGenericArgumentClause()-> GenericArgumentClause
 }
-public extension ExpressibleAsGenericArgumentClause{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsGenericArgumentClause {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createGenericArgumentClause()
   }
 }
-public protocol ExpressibleAsTypeAnnotation: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTypeAnnotation: ExpressibleAsSyntaxBuildable {
   func createTypeAnnotation()-> TypeAnnotation
 }
-public extension ExpressibleAsTypeAnnotation{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsTypeAnnotation {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTypeAnnotation()
   }
 }
-public protocol ExpressibleAsEnumCasePattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsEnumCasePattern: ExpressibleAsPatternBuildable {
   func createEnumCasePattern()-> EnumCasePattern
 }
-public extension ExpressibleAsEnumCasePattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsEnumCasePattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createEnumCasePattern()
   }
 }
-public protocol ExpressibleAsIsTypePattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsIsTypePattern: ExpressibleAsPatternBuildable {
   func createIsTypePattern()-> IsTypePattern
 }
-public extension ExpressibleAsIsTypePattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsIsTypePattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createIsTypePattern()
   }
 }
-public protocol ExpressibleAsOptionalPattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsOptionalPattern: ExpressibleAsPatternBuildable {
   func createOptionalPattern()-> OptionalPattern
 }
-public extension ExpressibleAsOptionalPattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsOptionalPattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createOptionalPattern()
   }
 }
-public protocol ExpressibleAsIdentifierPattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsIdentifierPattern: ExpressibleAsPatternBuildable {
   func createIdentifierPattern()-> IdentifierPattern
 }
-public extension ExpressibleAsIdentifierPattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsIdentifierPattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createIdentifierPattern()
   }
 }
-public protocol ExpressibleAsAsTypePattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsAsTypePattern: ExpressibleAsPatternBuildable {
   func createAsTypePattern()-> AsTypePattern
 }
-public extension ExpressibleAsAsTypePattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsAsTypePattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createAsTypePattern()
   }
 }
-public protocol ExpressibleAsTuplePattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsTuplePattern: ExpressibleAsPatternBuildable {
   func createTuplePattern()-> TuplePattern
 }
-public extension ExpressibleAsTuplePattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsTuplePattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createTuplePattern()
   }
 }
-public protocol ExpressibleAsWildcardPattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsWildcardPattern: ExpressibleAsPatternBuildable {
   func createWildcardPattern()-> WildcardPattern
 }
-public extension ExpressibleAsWildcardPattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsWildcardPattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createWildcardPattern()
   }
 }
-public protocol ExpressibleAsTuplePatternElement: ExpressibleAsTuplePatternElementList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsTuplePatternElement: ExpressibleAsTuplePatternElementList, ExpressibleAsSyntaxBuildable {
   func createTuplePatternElement()-> TuplePatternElement
 }
-public extension ExpressibleAsTuplePatternElement{
+public extension ExpressibleAsTuplePatternElement {
   /// Conformance to `ExpressibleAsTuplePatternElementList`
-func createTuplePatternElementList()-> TuplePatternElementList{
+func createTuplePatternElementList()-> TuplePatternElementList {
     return TuplePatternElementList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createTuplePatternElement()
   }
 }
-public protocol ExpressibleAsExpressionPattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsExpressionPattern: ExpressibleAsPatternBuildable {
   func createExpressionPattern()-> ExpressionPattern
 }
-public extension ExpressibleAsExpressionPattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsExpressionPattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createExpressionPattern()
   }
 }
-public protocol ExpressibleAsTuplePatternElementList{
+public protocol ExpressibleAsTuplePatternElementList {
   func createTuplePatternElementList()-> TuplePatternElementList
 }
-public protocol ExpressibleAsValueBindingPattern: ExpressibleAsPatternBuildable{
+public protocol ExpressibleAsValueBindingPattern: ExpressibleAsPatternBuildable {
   func createValueBindingPattern()-> ValueBindingPattern
 }
-public extension ExpressibleAsValueBindingPattern{
-  func createPatternBuildable()-> PatternBuildable{
+public extension ExpressibleAsValueBindingPattern {
+  func createPatternBuildable()-> PatternBuildable {
     return createValueBindingPattern()
   }
 }
-public protocol ExpressibleAsAvailabilitySpecList{
+public protocol ExpressibleAsAvailabilitySpecList {
   func createAvailabilitySpecList()-> AvailabilitySpecList
 }
-public protocol ExpressibleAsAvailabilityArgument: ExpressibleAsAvailabilitySpecList, ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAvailabilityArgument: ExpressibleAsAvailabilitySpecList, ExpressibleAsSyntaxBuildable {
   func createAvailabilityArgument()-> AvailabilityArgument
 }
-public extension ExpressibleAsAvailabilityArgument{
+public extension ExpressibleAsAvailabilityArgument {
   /// Conformance to `ExpressibleAsAvailabilitySpecList`
-func createAvailabilitySpecList()-> AvailabilitySpecList{
+func createAvailabilitySpecList()-> AvailabilitySpecList {
     return AvailabilitySpecList([self])
   }
-  func createSyntaxBuildable()-> SyntaxBuildable{
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAvailabilityArgument()
   }
 }
-public protocol ExpressibleAsAvailabilityLabeledArgument: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAvailabilityLabeledArgument: ExpressibleAsSyntaxBuildable {
   func createAvailabilityLabeledArgument()-> AvailabilityLabeledArgument
 }
-public extension ExpressibleAsAvailabilityLabeledArgument{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAvailabilityLabeledArgument {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAvailabilityLabeledArgument()
   }
 }
-public protocol ExpressibleAsAvailabilityVersionRestriction: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsAvailabilityVersionRestriction: ExpressibleAsSyntaxBuildable {
   func createAvailabilityVersionRestriction()-> AvailabilityVersionRestriction
 }
-public extension ExpressibleAsAvailabilityVersionRestriction{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsAvailabilityVersionRestriction {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createAvailabilityVersionRestriction()
   }
 }
-public protocol ExpressibleAsVersionTuple: ExpressibleAsSyntaxBuildable{
+public protocol ExpressibleAsVersionTuple: ExpressibleAsSyntaxBuildable {
   func createVersionTuple()-> VersionTuple
 }
-public extension ExpressibleAsVersionTuple{
-  func createSyntaxBuildable()-> SyntaxBuildable{
+public extension ExpressibleAsVersionTuple {
+  func createSyntaxBuildable()-> SyntaxBuildable {
     return createVersionTuple()
   }
 }

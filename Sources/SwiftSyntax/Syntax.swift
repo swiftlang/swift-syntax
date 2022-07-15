@@ -614,7 +614,9 @@ public struct SyntaxNode {
   public var totalLength: SourceLength {
     return raw.totalLength
   }
+}
 
+extension SyntaxNode: Identifiable {
   /// Returns a value representing the unique identity of the node.
   public var id: SyntaxIdentifier {
     return absoluteRaw.info.nodeId

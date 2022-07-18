@@ -114,11 +114,13 @@ public enum SyntaxEnum {
   case poundWarningDecl(PoundWarningDeclSyntax)
   case poundSourceLocation(PoundSourceLocationSyntax)
   case poundSourceLocationArgs(PoundSourceLocationArgsSyntax)
+  case declModifierDetail(DeclModifierDetailSyntax)
   case declModifier(DeclModifierSyntax)
   case inheritedType(InheritedTypeSyntax)
   case inheritedTypeList(InheritedTypeListSyntax)
   case typeInheritanceClause(TypeInheritanceClauseSyntax)
   case classDecl(ClassDeclSyntax)
+  case actorDecl(ActorDeclSyntax)
   case structDecl(StructDeclSyntax)
   case protocolDecl(ProtocolDeclSyntax)
   case extensionDecl(ExtensionDeclSyntax)
@@ -474,6 +476,8 @@ public extension Syntax {
       return .poundSourceLocation(PoundSourceLocationSyntax(self)!)
     case .poundSourceLocationArgs:
       return .poundSourceLocationArgs(PoundSourceLocationArgsSyntax(self)!)
+    case .declModifierDetail:
+      return .declModifierDetail(DeclModifierDetailSyntax(self)!)
     case .declModifier:
       return .declModifier(DeclModifierSyntax(self)!)
     case .inheritedType:
@@ -484,6 +488,8 @@ public extension Syntax {
       return .typeInheritanceClause(TypeInheritanceClauseSyntax(self)!)
     case .classDecl:
       return .classDecl(ClassDeclSyntax(self)!)
+    case .actorDecl:
+      return .actorDecl(ActorDeclSyntax(self)!)
     case .structDecl:
       return .structDecl(StructDeclSyntax(self)!)
     case .protocolDecl:

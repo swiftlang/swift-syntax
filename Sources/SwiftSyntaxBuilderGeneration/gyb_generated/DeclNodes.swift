@@ -44,8 +44,7 @@ let DECL_NODES: [Node] = [
                kind: "GenericParameterClause",
                isOptional: true),
          Child(name: "Initializer",
-               kind: "TypeInitializerClause",
-               isOptional: true),
+               kind: "TypeInitializerClause"),
          Child(name: "GenericWhereClause",
                kind: "GenericWhereClause",
                isOptional: true)
@@ -250,6 +249,20 @@ let DECL_NODES: [Node] = [
                kind: "IntegerLiteralToken")
        ]),
 
+  Node(name: "DeclModifierDetail",
+       kind: "Syntax",
+       traits: [
+         "Parenthesized"
+       ],
+       children: [
+         Child(name: "LeftParen",
+               kind: "LeftParenToken"),
+         Child(name: "Detail",
+               kind: "IdentifierToken"),
+         Child(name: "RightParen",
+               kind: "RightParenToken")
+       ]),
+
   Node(name: "DeclModifier",
        kind: "Syntax",
        children: [
@@ -281,17 +294,15 @@ let DECL_NODES: [Node] = [
                  "__consuming",
                  "actor",
                  "async",
-                 "distributed"
+                 "distributed",
+                 "isolated",
+                 "nonisolated",
+                 "_const",
+                 "_local"
                ],
                classification: "Attribute"),
-         Child(name: "DetailLeftParen",
-               kind: "LeftParenToken",
-               isOptional: true),
          Child(name: "Detail",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "DetailRightParen",
-               kind: "RightParenToken",
+               kind: "DeclModifierDetail",
                isOptional: true)
        ]),
 
@@ -337,11 +348,42 @@ let DECL_NODES: [Node] = [
                kind: "ModifierList",
                isOptional: true,
                collectionElementName: "Modifier"),
-         Child(name: "ClassOrActorKeyword",
-               kind: "Token",
-               tokenChoices: [
-                 "Class",
-                 "ContextualKeyword"
+         Child(name: "ClassKeyword",
+               kind: "ClassToken"),
+         Child(name: "Identifier",
+               kind: "IdentifierToken"),
+         Child(name: "GenericParameterClause",
+               kind: "GenericParameterClause",
+               isOptional: true),
+         Child(name: "InheritanceClause",
+               kind: "TypeInheritanceClause",
+               isOptional: true),
+         Child(name: "GenericWhereClause",
+               kind: "GenericWhereClause",
+               isOptional: true),
+         Child(name: "Members",
+               kind: "MemberDeclBlock")
+       ]),
+
+  Node(name: "ActorDecl",
+       kind: "Decl",
+       traits: [
+         "DeclGroup",
+         "IdentifiedDecl"
+       ],
+       children: [
+         Child(name: "Attributes",
+               kind: "AttributeList",
+               isOptional: true,
+               collectionElementName: "Attribute"),
+         Child(name: "Modifiers",
+               kind: "ModifierList",
+               isOptional: true,
+               collectionElementName: "Modifier"),
+         Child(name: "ActorKeyword",
+               kind: "ContextualKeywordToken",
+               textChoices: [
+                 "actor"
                ]),
          Child(name: "Identifier",
                kind: "IdentifierToken"),
@@ -617,15 +659,8 @@ let DECL_NODES: [Node] = [
          Child(name: "GenericParameterClause",
                kind: "GenericParameterClause",
                isOptional: true),
-         Child(name: "Parameters",
-               kind: "ParameterClause"),
-         Child(name: "ThrowsOrRethrowsKeyword",
-               kind: "Token",
-               isOptional: true,
-               tokenChoices: [
-                 "Throws",
-                 "Rethrows"
-               ]),
+         Child(name: "Signature",
+               kind: "FunctionSignature"),
          Child(name: "GenericWhereClause",
                kind: "GenericWhereClause",
                isOptional: true),
@@ -648,7 +683,8 @@ let DECL_NODES: [Node] = [
          Child(name: "DeinitKeyword",
                kind: "DeinitToken"),
          Child(name: "Body",
-               kind: "CodeBlock")
+               kind: "CodeBlock",
+               isOptional: true)
        ]),
 
   Node(name: "SubscriptDecl",
@@ -690,14 +726,8 @@ let DECL_NODES: [Node] = [
        children: [
          Child(name: "Name",
                kind: "IdentifierToken"),
-         Child(name: "LeftParen",
-               kind: "LeftParenToken",
-               isOptional: true),
          Child(name: "Modifier",
-               kind: "IdentifierToken",
-               isOptional: true),
-         Child(name: "RightParen",
-               kind: "RightParenToken",
+               kind: "DeclModifierDetail",
                isOptional: true)
        ]),
 

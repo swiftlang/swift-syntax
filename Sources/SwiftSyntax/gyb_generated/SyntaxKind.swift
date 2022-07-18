@@ -114,11 +114,13 @@ internal enum SyntaxKind: CSyntaxKind {
   case poundWarningDecl = 7
   case poundSourceLocation = 8
   case poundSourceLocationArgs = 112
+  case declModifierDetail = 238
   case declModifier = 113
   case inheritedType = 114
   case inheritedTypeList = 176
   case typeInheritanceClause = 115
   case classDecl = 9
+  case actorDecl = 96
   case structDecl = 10
   case protocolDecl = 11
   case extensionDecl = 12

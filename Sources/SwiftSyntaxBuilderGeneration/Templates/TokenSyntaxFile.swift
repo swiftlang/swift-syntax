@@ -25,11 +25,7 @@ let tokenSyntaxFile = SourceFile {
 
   ExtensionDecl(
     extendedType: "TokenSyntax",
-    inheritanceClause: TypeInheritanceClause {
-      for conformance in conformances {
-        InheritedType(typeName: conformance.expressibleAs)
-      }
-    }
+    inheritanceClause: createTypeInheritanceClause(conformances: conformances.map(\.expressibleAs))
   ) {
     for conformance in tokenType.elementInCollections {
       FunctionDecl(

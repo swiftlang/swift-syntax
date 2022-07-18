@@ -53,3 +53,11 @@ func createTokenSyntaxPatternBinding(_ pattern: ExpressibleAsPatternBuildable, a
                  initializer: nil,
                  accessor: accessor)
 }
+
+func createTypeInheritanceClause(conformances: [String]) -> TypeInheritanceClause? {
+  conformances.isEmpty ? nil : TypeInheritanceClause {
+    for conformance in conformances {
+      InheritedType(typeName: conformance)
+    }
+  }
+}

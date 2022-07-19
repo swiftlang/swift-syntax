@@ -30,8 +30,8 @@ let buildableBaseProtocolsFile = SourceFile {
     let syntaxType = SyntaxBuildableType(syntaxKind: "Syntax")
     let isSyntax = type == syntaxType
     // Types that the `*Buildable` conforms to
-    var buildableConformances: [String] = [type.expressibleAs, type.listBuildable] + (isSyntax ? [] : [syntaxType.buildable])
-    var listConformances: [String] = isSyntax ? [] : [syntaxType.listBuildable]
+    let buildableConformances: [String] = [type.expressibleAs, type.listBuildable] + (isSyntax ? [] : [syntaxType.buildable])
+    let listConformances: [String] = isSyntax ? [] : [syntaxType.listBuildable]
 
     ProtocolDecl(
       modifiers: [TokenSyntax.public],

@@ -5467,7 +5467,7 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makeLeftBraceToken(
-    leadingTrivia: Trivia = .space,
+    leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
     return makeToken(.leftBrace, presence: .present,

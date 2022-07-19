@@ -260,6 +260,15 @@ public struct Trivia {
   }
 }
 
+extension Trivia: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    if count == 1, let first {
+      return first.debugDescription
+    }
+    return "[" + map({ $0.debugDescription }).joined(separator: ", ") + "]"
+  }
+}
+
 extension Trivia: Equatable {}
 
 /// Conformance for Trivia to the Collection protocol.
@@ -280,7 +289,6 @@ extension Trivia: Collection {
     return pieces[index]
   }
 }
-
 
 extension Trivia: ExpressibleByArrayLiteral {
   /// Creates Trivia from the provided pieces.

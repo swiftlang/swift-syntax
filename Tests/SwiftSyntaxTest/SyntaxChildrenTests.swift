@@ -1,26 +1,27 @@
 import XCTest
 import SwiftSyntax
+import SwiftSyntaxSupport
 
 public class SyntaxChildrenTests: XCTestCase {
 
-  public func testIterateWithAllPresent() {
+  public func testIterateWithAllPresent() throws {
     let returnStmt = SyntaxFactory.makeReturnStmt(
       returnKeyword: SyntaxFactory.makeReturnKeyword(),
       expression: ExprSyntax(SyntaxFactory.makeBlankUnknownExpr()))
 
     var iterator = returnStmt.children.makeIterator()
-    XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
-    XCTAssertNext(&iterator) { $0.is(ExprSyntax.self) }
+    try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
+    try XCTAssertNext(&iterator) { $0.is(ExprSyntax.self) }
     XCTAssertNextIsNil(&iterator)
   }
 
-  public func testIterateWithSomeMissing() {
+  public func testIterateWithSomeMissing() throws {
     let returnStmt = SyntaxFactory.makeReturnStmt(
       returnKeyword: SyntaxFactory.makeReturnKeyword(),
       expression: nil)
 
     var iterator = returnStmt.children.makeIterator()
-    XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
+    try XCTAssertNext(&iterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
     XCTAssertNextIsNil(&iterator)
   }
 

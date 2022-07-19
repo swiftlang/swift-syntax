@@ -56,7 +56,7 @@ public struct ${type.buildable()}: ExpressibleByArrayLiteral, SyntaxBuildable, $
     let result = SyntaxFactory.make${type.base_name()}(elements)
 %   else:
 %     if node.elements_separated_by_newline():
-%       element_leading_trivia = 'Trivia.newline + format._makeIndent()'
+%       element_leading_trivia = 'format._makeNewline() + format._makeIndent()'
 %     else:
 %       element_leading_trivia = 'nil'
 %     end

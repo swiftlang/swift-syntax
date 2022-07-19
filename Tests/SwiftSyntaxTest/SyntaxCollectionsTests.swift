@@ -1,5 +1,6 @@
 import XCTest
 import SwiftSyntax
+import SwiftSyntaxSupport
 
 fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
     let literal = SyntaxFactory.makeIntegerLiteral("\(int)")

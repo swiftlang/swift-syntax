@@ -30,7 +30,7 @@ class SyntaxBuildableChild:
     """
     if self.type().is_token():
        if self.child.requires_leading_newline:
-         return var_name + '.withLeadingTrivia(.newline + ' + format_name + '._makeIndent() + (' + var_name + '.leadingTrivia ?? []))'
+         return var_name + '.withLeadingTrivia(' + format_name + '._makeNewline() + '  + format_name + '._makeIndent() + (' + var_name + '.leadingTrivia ?? []))'
        else:
          return var_name
     else:

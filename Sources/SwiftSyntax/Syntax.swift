@@ -81,6 +81,76 @@ extension Syntax: CustomReflectable {
   }
 }
 
+extension Syntax: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    return debugDescription()
+  }
+
+  public func debugDescription(includeChildren: Bool = true, includeTrivia: Bool = false,
+                               converter: SourceLocationConverter? = nil, mark: Syntax? = nil,
+                               indent: Int = 0) -> String {
+    var str = ""
+    debugWrite(to: &str, includeChildren: includeChildren, includeTrivia: includeTrivia, converter: converter, mark: mark, indent: indent)
+    return str
+  }
+
+  public func debugWrite<Target: TextOutputStream>(to target: inout Target,
+                                                   includeChildren: Bool = true, includeTrivia: Bool = false,
+                                                   converter: SourceLocationConverter? = nil, mark: Syntax? = nil,
+                                                   indent: Int = 0) {
+    var topLevelConverter = converter
+    if topLevelConverter == nil, let file = `as`(SourceFileSyntax.self) {
+      topLevelConverter = SourceLocationConverter(file: "", tree: file)
+    }
+
+    if self == mark {
+      target.write("*** ")
+    }
+
+    if isMissing {
+      target.write("- ")
+    }
+
+    if let token = `as`(TokenSyntax.self) {
+      target.write(String(describing: token.tokenKind))
+      if includeTrivia {
+        if let leadingTrivia, !leadingTrivia.isEmpty {
+          target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")
+        }
+        if let trailingTrivia, !trailingTrivia.isEmpty {
+          target.write(" trailingTrivia=\(trailingTrivia.debugDescription)")
+        }
+      }
+    } else {
+      target.write(String(describing: syntaxNodeType))
+    }
+
+    if !children.isEmpty {
+      target.write(" children=\(children.count)")
+    }
+
+    if let converter {
+      let range = sourceRange(converter: converter)
+      target.write(" [\(range.start)...\(range.end)]")
+    }
+
+    if self == mark {
+      target.write(" ***")
+    }
+
+    if includeChildren {
+      let childIndent = indent + 2
+      for (num, child) in children.enumerated() {
+        target.write("\n")
+        target.write(String(repeating: " ", count: childIndent))
+        target.write("\(num): ")
+        child.debugWrite(to: &target, includeChildren: includeChildren, includeTrivia: includeTrivia, converter: topLevelConverter, mark: mark, indent: childIndent)
+      }
+    }
+  }
+}
+
+
 extension Syntax: Identifiable {
   public typealias ID = SyntaxIdentifier
 }

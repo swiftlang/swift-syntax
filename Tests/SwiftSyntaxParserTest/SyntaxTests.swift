@@ -1,9 +1,9 @@
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxParser
+import SwiftSyntaxSupport
 
 public class SyntaxTests: XCTestCase {
-
   public func testSyntaxAPI() {
     let source = "struct A { func f() {} }"
     let tree = try! SyntaxParser.parse(source: source)

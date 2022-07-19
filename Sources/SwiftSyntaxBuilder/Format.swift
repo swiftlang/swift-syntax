@@ -14,11 +14,13 @@ import SwiftSyntax
 
 public struct Format {
   public let indentWidth: Int
+  public let autoFormat: Bool
 
   private var indents: Int = 0
 
-  public init(indentWidth: Int = 4) {
+  public init(indentWidth: Int = 2, autoFormat: Bool = true) {
     self.indentWidth = indentWidth
+    self.autoFormat = autoFormat
   }
 }
 
@@ -30,6 +32,10 @@ extension Format {
   }
 
   public func _makeIndent() -> Trivia {
-    return indents == 0 ? .zero : Trivia.spaces(indents * indentWidth)
+    return indents == 0 || !autoFormat ? .zero : Trivia.spaces(indents * indentWidth)
+  }
+
+  public func _makeNewline() -> Trivia {
+    return !autoFormat ? .zero : Trivia.newline
   }
 }

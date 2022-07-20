@@ -7,7 +7,7 @@ final class SourceFileTests: XCTestCase {
     let source = SourceFile {
       ImportDecl(path: "Foundation")
       ImportDecl(path: "UIKit")
-      ClassDecl(classOrActorKeyword: .class, identifier: "SomeViewController", membersBuilder: {
+      ClassDecl(classKeyword: .class, identifier: "SomeViewController", membersBuilder: {
         VariableDecl(.let, name: "tableView", type: "UITableView")
       })
     }

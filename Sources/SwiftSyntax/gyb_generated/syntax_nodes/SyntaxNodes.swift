@@ -3255,14 +3255,149 @@ extension PoundSourceLocationArgsSyntax: CustomReflectable {
   }
 }
 
+// MARK: - DeclModifierDetailSyntax
+
+public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
+  enum Cursor: Int {
+    case leftParen
+    case detail
+    case rightParen
+  }
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `DeclModifierDetailSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .declModifierDetail else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `DeclModifierDetailSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .declModifierDetail)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+  public var leftParen: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.leftParen,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withLeftParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `leftParen` replaced.
+  /// - param newChild: The new `leftParen` to replace the node's
+  ///                   current `leftParen`, if present.
+  public func withLeftParen(
+    _ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
+    let newData = data.replacingChild(raw, at: Cursor.leftParen)
+    return DeclModifierDetailSyntax(newData)
+  }
+
+  public var detail: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.detail,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withDetail(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `detail` replaced.
+  /// - param newChild: The new `detail` to replace the node's
+  ///                   current `detail`, if present.
+  public func withDetail(
+    _ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
+    let newData = data.replacingChild(raw, at: Cursor.detail)
+    return DeclModifierDetailSyntax(newData)
+  }
+
+  public var rightParen: TokenSyntax {
+    get {
+      let childData = data.child(at: Cursor.rightParen,
+                                 parent: Syntax(self))
+      return TokenSyntax(childData!)
+    }
+    set(value) {
+      self = withRightParen(value)
+    }
+  }
+
+  /// Returns a copy of the receiver with its `rightParen` replaced.
+  /// - param newChild: The new `rightParen` to replace the node's
+  ///                   current `rightParen`, if present.
+  public func withRightParen(
+    _ newChild: TokenSyntax?) -> DeclModifierDetailSyntax {
+    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
+    let newData = data.replacingChild(raw, at: Cursor.rightParen)
+    return DeclModifierDetailSyntax(newData)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 3)
+    // Check child #0 child is TokenSyntax 
+    assert(rawChildren[0].raw != nil)
+    if let raw = rawChildren[0].raw {
+      let info = rawChildren[0].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #1 child is TokenSyntax 
+    assert(rawChildren[1].raw != nil)
+    if let raw = rawChildren[1].raw {
+      let info = rawChildren[1].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+    // Check child #2 child is TokenSyntax 
+    assert(rawChildren[2].raw != nil)
+    if let raw = rawChildren[2].raw {
+      let info = rawChildren[2].syntaxInfo
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
+      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
+      let syntaxChild = Syntax(syntaxData)
+      assert(syntaxChild.is(TokenSyntax.self))
+    }
+  }
+}
+
+extension DeclModifierDetailSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
+      "detail": Syntax(detail).asProtocol(SyntaxProtocol.self),
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+    ])
+  }
+}
+
 // MARK: - DeclModifierSyntax
 
 public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
-    case detailLeftParen
     case detail
-    case detailRightParen
   }
 
   public let _syntaxNode: Syntax
@@ -3307,34 +3442,12 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
     return DeclModifierSyntax(newData)
   }
 
-  public var detailLeftParen: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.detailLeftParen,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withDetailLeftParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `detailLeftParen` replaced.
-  /// - param newChild: The new `detailLeftParen` to replace the node's
-  ///                   current `detailLeftParen`, if present.
-  public func withDetailLeftParen(
-    _ newChild: TokenSyntax?) -> DeclModifierSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.detailLeftParen)
-    return DeclModifierSyntax(newData)
-  }
-
-  public var detail: TokenSyntax? {
+  public var detail: DeclModifierDetailSyntax? {
     get {
       let childData = data.child(at: Cursor.detail,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return DeclModifierDetailSyntax(childData!)
     }
     set(value) {
       self = withDetail(value)
@@ -3345,38 +3458,16 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `detail` to replace the node's
   ///                   current `detail`, if present.
   public func withDetail(
-    _ newChild: TokenSyntax?) -> DeclModifierSyntax {
+    _ newChild: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.detail)
-    return DeclModifierSyntax(newData)
-  }
-
-  public var detailRightParen: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.detailRightParen,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withDetailRightParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `detailRightParen` replaced.
-  /// - param newChild: The new `detailRightParen` to replace the node's
-  ///                   current `detailRightParen`, if present.
-  public func withDetailRightParen(
-    _ newChild: TokenSyntax?) -> DeclModifierSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.detailRightParen)
     return DeclModifierSyntax(newData)
   }
 
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
+    assert(rawChildren.count == 2)
     // Check child #0 child is TokenSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -3386,29 +3477,13 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is DeclModifierDetailSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #3 child is TokenSyntax or missing
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(DeclModifierDetailSyntax.self))
     }
   }
 }
@@ -3417,9 +3492,7 @@ extension DeclModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "detailLeftParen": detailLeftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "detail": detail.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "detailRightParen": detailRightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
@@ -4470,9 +4543,7 @@ extension FunctionParameterSyntax: CustomReflectable {
 public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
   enum Cursor: Int {
     case name
-    case leftParen
     case modifier
-    case rightParen
   }
 
   public let _syntaxNode: Syntax
@@ -4517,34 +4588,12 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
     return AccessLevelModifierSyntax(newData)
   }
 
-  public var leftParen: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withLeftParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> AccessLevelModifierSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public var modifier: TokenSyntax? {
+  public var modifier: DeclModifierDetailSyntax? {
     get {
       let childData = data.child(at: Cursor.modifier,
                                  parent: Syntax(self))
       if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      return DeclModifierDetailSyntax(childData!)
     }
     set(value) {
       self = withModifier(value)
@@ -4555,38 +4604,16 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
   /// - param newChild: The new `modifier` to replace the node's
   ///                   current `modifier`, if present.
   public func withModifier(
-    _ newChild: TokenSyntax?) -> AccessLevelModifierSyntax {
+    _ newChild: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
     let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.modifier)
-    return AccessLevelModifierSyntax(newData)
-  }
-
-  public var rightParen: TokenSyntax? {
-    get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
-    }
-    set(value) {
-      self = withRightParen(value)
-    }
-  }
-
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> AccessLevelModifierSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
     return AccessLevelModifierSyntax(newData)
   }
 
 
   public func _validateLayout() {
     let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
+    assert(rawChildren.count == 2)
     // Check child #0 child is TokenSyntax 
     assert(rawChildren[0].raw != nil)
     if let raw = rawChildren[0].raw {
@@ -4596,29 +4623,13 @@ public struct AccessLevelModifierSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(TokenSyntax.self))
     }
-    // Check child #1 child is TokenSyntax or missing
+    // Check child #1 child is DeclModifierDetailSyntax or missing
     if let raw = rawChildren[1].raw {
       let info = rawChildren[1].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
       let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
       let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax or missing
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #3 child is TokenSyntax or missing
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
+      assert(syntaxChild.is(DeclModifierDetailSyntax.self))
     }
   }
 }
@@ -4627,9 +4638,7 @@ extension AccessLevelModifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
       "name": Syntax(name).asProtocol(SyntaxProtocol.self),
-      "leftParen": leftParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "modifier": modifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "rightParen": rightParen.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

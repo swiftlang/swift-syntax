@@ -674,6 +674,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node))
   }
 
+  /// Visit a `DeclModifierDetailSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DeclModifierDetailSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
   /// Visit a `DeclModifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -706,6 +713,13 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(visitChildren(node))
+  }
+
+  /// Visit a `ActorDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
     return DeclSyntax(visitChildren(node))
   }
 
@@ -2774,6 +2788,16 @@ open class SyntaxRewriter {
   }
 
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) -> Syntax {
+      let node = DeclModifierDetailSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclModifierSyntax(_ data: SyntaxData) -> Syntax {
       let node = DeclModifierSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -2816,6 +2840,16 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplClassDeclSyntax(_ data: SyntaxData) -> Syntax {
       let node = ClassDeclSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplActorDeclSyntax(_ data: SyntaxData) -> Syntax {
+      let node = ActorDeclSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4561,6 +4595,8 @@ open class SyntaxRewriter {
       return visitImplPoundSourceLocationSyntax
     case .poundSourceLocationArgs:
       return visitImplPoundSourceLocationArgsSyntax
+    case .declModifierDetail:
+      return visitImplDeclModifierDetailSyntax
     case .declModifier:
       return visitImplDeclModifierSyntax
     case .inheritedType:
@@ -4571,6 +4607,8 @@ open class SyntaxRewriter {
       return visitImplTypeInheritanceClauseSyntax
     case .classDecl:
       return visitImplClassDeclSyntax
+    case .actorDecl:
+      return visitImplActorDeclSyntax
     case .structDecl:
       return visitImplStructDeclSyntax
     case .protocolDecl:
@@ -5080,6 +5118,8 @@ open class SyntaxRewriter {
       return visitImplPoundSourceLocationSyntax(data)
     case .poundSourceLocationArgs:
       return visitImplPoundSourceLocationArgsSyntax(data)
+    case .declModifierDetail:
+      return visitImplDeclModifierDetailSyntax(data)
     case .declModifier:
       return visitImplDeclModifierSyntax(data)
     case .inheritedType:
@@ -5090,6 +5130,8 @@ open class SyntaxRewriter {
       return visitImplTypeInheritanceClauseSyntax(data)
     case .classDecl:
       return visitImplClassDeclSyntax(data)
+    case .actorDecl:
+      return visitImplActorDeclSyntax(data)
     case .structDecl:
       return visitImplStructDeclSyntax(data)
     case .protocolDecl:

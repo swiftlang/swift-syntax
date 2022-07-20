@@ -1513,14 +1513,14 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypeInitializerClauseSyntax(data)
   }
-  public static func makeTypealiasDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, typealiasKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, initializer: TypeInitializerClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
+  public static func makeTypealiasDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, typealiasKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, initializer: TypeInitializerClauseSyntax, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
       typealiasKeyword.raw,
       identifier.raw,
       genericParameterClause?.raw,
-      initializer?.raw,
+      initializer.raw,
       genericWhereClause?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typealiasDecl,
@@ -1537,7 +1537,7 @@ public enum SyntaxFactory {
       RawSyntax.missingToken(TokenKind.typealiasKeyword),
       RawSyntax.missingToken(TokenKind.identifier("")),
       nil,
-      nil,
+      RawSyntax.missing(SyntaxKind.typeInitializerClause),
       nil,
     ], length: .zero, presence: presence))
     return TypealiasDeclSyntax(data)
@@ -1800,12 +1800,31 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundSourceLocationArgsSyntax(data)
   }
-  public static func makeDeclModifier(name: TokenSyntax, detailLeftParen: TokenSyntax?, detail: TokenSyntax?, detailRightParen: TokenSyntax?) -> DeclModifierSyntax {
+  public static func makeDeclModifierDetail(leftParen: TokenSyntax, detail: TokenSyntax, rightParen: TokenSyntax) -> DeclModifierDetailSyntax {
+    let layout: [RawSyntax?] = [
+      leftParen.raw,
+      detail.raw,
+      rightParen.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifierDetail,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return DeclModifierDetailSyntax(data)
+  }
+
+  public static func makeBlankDeclModifierDetail(presence: SourcePresence = .present) -> DeclModifierDetailSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declModifierDetail,
+      layout: [
+      RawSyntax.missingToken(TokenKind.leftParen),
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.rightParen),
+    ], length: .zero, presence: presence))
+    return DeclModifierDetailSyntax(data)
+  }
+  public static func makeDeclModifier(name: TokenSyntax, detail: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
     let layout: [RawSyntax?] = [
       name.raw,
-      detailLeftParen?.raw,
       detail?.raw,
-      detailRightParen?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifier,
       layout: layout, presence: SourcePresence.present)
@@ -1817,8 +1836,6 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .declModifier,
       layout: [
       RawSyntax.missingToken(TokenKind.unknown("")),
-      nil,
-      nil,
       nil,
     ], length: .zero, presence: presence))
     return DeclModifierSyntax(data)
@@ -1875,11 +1892,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypeInheritanceClauseSyntax(data)
   }
-  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classOrActorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
+  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
-      classOrActorKeyword.raw,
+      classKeyword.raw,
       identifier.raw,
       genericParameterClause?.raw,
       inheritanceClause?.raw,
@@ -1905,6 +1922,37 @@ public enum SyntaxFactory {
       RawSyntax.missing(SyntaxKind.memberDeclBlock),
     ], length: .zero, presence: presence))
     return ClassDeclSyntax(data)
+  }
+  public static func makeActorDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, actorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
+    let layout: [RawSyntax?] = [
+      attributes?.raw,
+      modifiers?.raw,
+      actorKeyword.raw,
+      identifier.raw,
+      genericParameterClause?.raw,
+      inheritanceClause?.raw,
+      genericWhereClause?.raw,
+      members.raw,
+    ]
+    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.actorDecl,
+      layout: layout, presence: SourcePresence.present)
+    let data = SyntaxData.forRoot(raw)
+    return ActorDeclSyntax(data)
+  }
+
+  public static func makeBlankActorDecl(presence: SourcePresence = .present) -> ActorDeclSyntax {
+    let data = SyntaxData.forRoot(RawSyntax.create(kind: .actorDecl,
+      layout: [
+      nil,
+      nil,
+      RawSyntax.missingToken(TokenKind.contextualKeyword("")),
+      RawSyntax.missingToken(TokenKind.identifier("")),
+      nil,
+      nil,
+      nil,
+      RawSyntax.missing(SyntaxKind.memberDeclBlock),
+    ], length: .zero, presence: presence))
+    return ActorDeclSyntax(data)
   }
   public static func makeStructDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, structKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
     let layout: [RawSyntax?] = [
@@ -2165,15 +2213,14 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionDeclSyntax(data)
   }
-  public static func makeInitializerDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, initKeyword: TokenSyntax, optionalMark: TokenSyntax?, genericParameterClause: GenericParameterClauseSyntax?, parameters: ParameterClauseSyntax, throwsOrRethrowsKeyword: TokenSyntax?, genericWhereClause: GenericWhereClauseSyntax?, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
+  public static func makeInitializerDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, initKeyword: TokenSyntax, optionalMark: TokenSyntax?, genericParameterClause: GenericParameterClauseSyntax?, signature: FunctionSignatureSyntax, genericWhereClause: GenericWhereClauseSyntax?, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
       initKeyword.raw,
       optionalMark?.raw,
       genericParameterClause?.raw,
-      parameters.raw,
-      throwsOrRethrowsKeyword?.raw,
+      signature.raw,
       genericWhereClause?.raw,
       body?.raw,
     ]
@@ -2191,19 +2238,18 @@ public enum SyntaxFactory {
       RawSyntax.missingToken(TokenKind.initKeyword),
       nil,
       nil,
-      RawSyntax.missing(SyntaxKind.parameterClause),
-      nil,
+      RawSyntax.missing(SyntaxKind.functionSignature),
       nil,
       nil,
     ], length: .zero, presence: presence))
     return InitializerDeclSyntax(data)
   }
-  public static func makeDeinitializerDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, deinitKeyword: TokenSyntax, body: CodeBlockSyntax) -> DeinitializerDeclSyntax {
+  public static func makeDeinitializerDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, deinitKeyword: TokenSyntax, body: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
     let layout: [RawSyntax?] = [
       attributes?.raw,
       modifiers?.raw,
       deinitKeyword.raw,
-      body.raw,
+      body?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.deinitializerDecl,
       layout: layout, presence: SourcePresence.present)
@@ -2217,7 +2263,7 @@ public enum SyntaxFactory {
       nil,
       nil,
       RawSyntax.missingToken(TokenKind.deinitKeyword),
-      RawSyntax.missing(SyntaxKind.codeBlock),
+      nil,
     ], length: .zero, presence: presence))
     return DeinitializerDeclSyntax(data)
   }
@@ -2252,12 +2298,10 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SubscriptDeclSyntax(data)
   }
-  public static func makeAccessLevelModifier(name: TokenSyntax, leftParen: TokenSyntax?, modifier: TokenSyntax?, rightParen: TokenSyntax?) -> AccessLevelModifierSyntax {
+  public static func makeAccessLevelModifier(name: TokenSyntax, modifier: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
     let layout: [RawSyntax?] = [
       name.raw,
-      leftParen?.raw,
       modifier?.raw,
-      rightParen?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessLevelModifier,
       layout: layout, presence: SourcePresence.present)
@@ -2269,8 +2313,6 @@ public enum SyntaxFactory {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessLevelModifier,
       layout: [
       RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
       nil,
     ], length: .zero, presence: presence))
     return AccessLevelModifierSyntax(data)

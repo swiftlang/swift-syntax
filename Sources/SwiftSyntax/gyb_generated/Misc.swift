@@ -577,6 +577,12 @@ extension SyntaxNode {
     return PoundSourceLocationArgsSyntax(asSyntaxData)
   }
 
+  public var isDeclModifierDetail: Bool { return raw.kind == .declModifierDetail }
+  public var asDeclModifierDetail: DeclModifierDetailSyntax? {
+    guard isDeclModifierDetail else { return nil }
+    return DeclModifierDetailSyntax(asSyntaxData)
+  }
+
   public var isDeclModifier: Bool { return raw.kind == .declModifier }
   public var asDeclModifier: DeclModifierSyntax? {
     guard isDeclModifier else { return nil }
@@ -605,6 +611,12 @@ extension SyntaxNode {
   public var asClassDecl: ClassDeclSyntax? {
     guard isClassDecl else { return nil }
     return ClassDeclSyntax(asSyntaxData)
+  }
+
+  public var isActorDecl: Bool { return raw.kind == .actorDecl }
+  public var asActorDecl: ActorDeclSyntax? {
+    guard isActorDecl else { return nil }
+    return ActorDeclSyntax(asSyntaxData)
   }
 
   public var isStructDecl: Bool { return raw.kind == .structDecl }
@@ -1715,6 +1727,8 @@ extension Syntax {
       return node
     case .poundSourceLocationArgs(let node):
       return node
+    case .declModifierDetail(let node):
+      return node
     case .declModifier(let node):
       return node
     case .inheritedType(let node):
@@ -1724,6 +1738,8 @@ extension Syntax {
     case .typeInheritanceClause(let node):
       return node
     case .classDecl(let node):
+      return node
+    case .actorDecl(let node):
       return node
     case .structDecl(let node):
       return node

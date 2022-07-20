@@ -46,7 +46,7 @@ let buildableBaseProtocolsFile = SourceFile {
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)List"),
         signature: FunctionSignature(
-          input: formatLeadingTriviaParameters(),
+          input: createFormatLeadingTriviaParameters(),
           output: ArrayType(elementType: type.syntaxBaseName)
         ),
         body: nil
@@ -66,7 +66,7 @@ let buildableBaseProtocolsFile = SourceFile {
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)"),
         signature: FunctionSignature(
-          input: formatLeadingTriviaParameters(),
+          input: createFormatLeadingTriviaParameters(),
           output: type.syntaxBaseName
         ),
         body: nil
@@ -98,7 +98,7 @@ let buildableBaseProtocolsFile = SourceFile {
         ].map { .docLineComment($0) + .newline }.reduce([], +),
         identifier: .identifier("build\(type.baseName)List"),
         signature: FunctionSignature(
-          input: formatLeadingTriviaParameters(withDefaultTrivia: true),
+          input: createFormatLeadingTriviaParameters(withDefaultTrivia: true),
           output: ArrayType(elementType: type.syntaxBaseName)
         )
       ) {
@@ -122,7 +122,7 @@ let buildableBaseProtocolsFile = SourceFile {
         ].map { .docLineComment($0) + .newline }.reduce([], +),
           identifier: .identifier("buildSyntax"),
           signature: FunctionSignature(
-            input: formatLeadingTriviaParameters(withDefaultTrivia: true),
+            input: createFormatLeadingTriviaParameters(withDefaultTrivia: true),
             output: "Syntax"
           )
         ) {
@@ -136,25 +136,4 @@ let buildableBaseProtocolsFile = SourceFile {
       }
     }
   }
-}
-
-// Generate a (format: Format, leadingTrivia: Trivia?) parameter clause
-// to avoid duplication among the protocols above.
-private func formatLeadingTriviaParameters(withDefaultTrivia: Bool = false) -> ParameterClause {
-  ParameterClause(
-    parameterList: [
-      FunctionParameter(
-        firstName: .identifier("format"),
-        colon: .colon,
-        type: "Format",
-        trailingComma: .comma
-      ),
-      FunctionParameter(
-        firstName: .identifier("leadingTrivia"),
-        colon: .colon,
-        type: OptionalType(wrappedType: "Trivia"),
-        defaultArgument: withDefaultTrivia ? InitializerClause(value: NilLiteralExpr()) : nil
-      ),
-    ]
-  )
 }

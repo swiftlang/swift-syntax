@@ -46,7 +46,7 @@ extension TokenSyntax {
     return createIdentifierExpr()
   }
 }
-extension TokenSyntax: ExpressibleByStringLiteral {
+extension TokenSyntax: ExpressibleByStringLiteral, ExpressibleByStringInterpolation {
   public init (stringLiteral: String) {
     self = .identifier(stringLiteral)
   }

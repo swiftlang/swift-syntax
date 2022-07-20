@@ -82,7 +82,10 @@ let tokenSyntaxFile = SourceFile {
 
   ExtensionDecl(
     extendedType: "TokenSyntax",
-    inheritanceClause: createTypeInheritanceClause(conformances: ["ExpressibleByStringLiteral"])
+    inheritanceClause: createTypeInheritanceClause(conformances: [
+      "ExpressibleByStringLiteral",
+      "ExpressibleByStringInterpolation"
+    ])
   ) {
     InitializerDecl(
       modifiers: [TokenSyntax.public],

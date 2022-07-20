@@ -801,6 +801,14 @@ func createModifierList()-> ModifierList {
     return createDeclModifier()
   }
 }
+public protocol ExpressibleAsDeclModifierDetail: ExpressibleAsSyntaxBuildable {
+  func createDeclModifierDetail() -> DeclModifierDetail
+}
+public extension ExpressibleAsDeclModifierDetail {
+  func createSyntaxBuildable()-> SyntaxBuildable {
+    return createDeclModifierDetail()
+  }
+}
 public protocol ExpressibleAsInheritedType: ExpressibleAsInheritedTypeList, ExpressibleAsSyntaxBuildable {
   func createInheritedType()-> InheritedType
 }
@@ -830,6 +838,14 @@ public protocol ExpressibleAsClassDecl: ExpressibleAsDeclBuildable {
 public extension ExpressibleAsClassDecl {
   func createDeclBuildable()-> DeclBuildable {
     return createClassDecl()
+  }
+}
+public protocol ExpressibleAsActorDecl: ExpressibleAsDeclBuildable {
+  func createActorDecl()-> ActorDecl
+}
+public extension ExpressibleAsActorDecl {
+  func createDeclBuildable()-> DeclBuildable {
+    return createActorDecl()
   }
 }
 public protocol ExpressibleAsStructDecl: ExpressibleAsDeclBuildable {

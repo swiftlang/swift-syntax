@@ -7,14 +7,14 @@ final class FunctionTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let input = ParameterClause(parameterList: [
-      FunctionParameter(firstName: .wildcard, secondName: .identifier("n"), colon: .colon, type: "Int")
+      FunctionParameter(firstName: .wildcard, secondName: "n", colon: .colon, type: "Int")
     ])
 
     let ifCodeBlock = ReturnStmt(expression: IntegerLiteralExpr(digits: "n"))
     
     let signature = FunctionSignature(input: input, output: "Int")
     
-    let buildable = FunctionDecl(identifier: .identifier("fibonacci"), signature: signature) {
+    let buildable = FunctionDecl(identifier: "fibonacci", signature: signature) {
       IfStmt(conditions: ExprList([
         IntegerLiteralExpr(digits: "n"),
         BinaryOperatorExpr("<="),

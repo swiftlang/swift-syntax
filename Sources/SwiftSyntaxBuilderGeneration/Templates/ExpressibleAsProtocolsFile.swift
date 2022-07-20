@@ -43,7 +43,7 @@ let expressibleAsProtocolsFile = SourceFile {
       inheritanceClause: createTypeInheritanceClause(conformances: declaredConformances.map(\.expressibleAs))
     ) {
       FunctionDecl(
-        identifier: .identifier("create\(type.buildableBaseName)"),
+        identifier: "create\(type.buildableBaseName)",
         signature: FunctionSignature(
           input: ParameterClause(),
           output: type.buildable
@@ -60,7 +60,7 @@ let expressibleAsProtocolsFile = SourceFile {
         for conformance in type.elementInCollections {
           FunctionDecl(
             leadingTrivia: .docLineComment("/// Conformance to `\(conformance.expressibleAs)`") + .newline,
-            identifier: .identifier("create\(conformance.buildableBaseName)"),
+            identifier: "create\(conformance.buildableBaseName)",
             signature: FunctionSignature(
               input: ParameterClause(),
               output: conformance.buildable
@@ -77,7 +77,7 @@ let expressibleAsProtocolsFile = SourceFile {
           let param = Node.from(type: conformance).singleNonDefaultedChild
           FunctionDecl(
             leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAs)") + .newline,
-            identifier: .identifier("create\(conformance.buildableBaseName)"),
+            identifier: "create\(conformance.buildableBaseName)",
             signature: FunctionSignature(
               input: ParameterClause(),
               output: conformance.buildable
@@ -90,7 +90,7 @@ let expressibleAsProtocolsFile = SourceFile {
         }
         if let baseType = baseType, baseType.baseName != "SyntaxCollection" {
           FunctionDecl(
-            identifier: .identifier("create\(baseType.buildableBaseName)"),
+            identifier: "create\(baseType.buildableBaseName)",
             signature: FunctionSignature(
               input: ParameterClause(),
               output: baseType.buildable

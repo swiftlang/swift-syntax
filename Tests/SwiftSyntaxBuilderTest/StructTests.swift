@@ -30,7 +30,7 @@ final class StructTests: XCTestCase {
       genericWhereClause: GenericWhereClause {
         GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
         GenericRequirement(body: SameTypeRequirement(
-            leftTypeIdentifier: "A.P", equalityToken: .identifier("=="), rightTypeIdentifier: "D"))
+            leftTypeIdentifier: "A.P", equalityToken: "==", rightTypeIdentifier: "D"))
       }
     ) {}
     let testStruct = StructDecl(

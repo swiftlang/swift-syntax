@@ -7,7 +7,7 @@ final class IdentifierExprTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (ExpressibleAsIdentifierExpr, String)] = [
-      #line: (IdentifierExpr(identifier: .identifier("Test")), "␣Test"),
+      #line: (IdentifierExpr(identifier: "Test"), "␣Test"),
       #line: (IdentifierExpr("Test"), "␣Test"),
       #line: ("Test", "␣Test")
     ]

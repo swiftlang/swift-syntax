@@ -59,7 +59,7 @@ let tokensFile = SourceFile {
             parameterList: FunctionParameter(
               attributes: nil,
               firstName: .wildcard,
-              secondName: .identifier("text"),
+              secondName: "text",
               colon: .colon,
               type: "String"
             ),
@@ -70,7 +70,7 @@ let tokensFile = SourceFile {
 
         FunctionDecl(
           modifiers: [TokenSyntax.static],
-          identifier: .identifier("`\(token.name.withFirstCharacterLowercased)`"),
+          identifier: "`\(token.name.withFirstCharacterLowercased)`",
           signature: signature
         ) {
           FunctionCallExpr(MemberAccessExpr(base: "SyntaxFactory", name: "make\(token.name)")) {

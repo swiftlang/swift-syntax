@@ -44,7 +44,7 @@ let buildableBaseProtocolsFile = SourceFile {
           "/// - Parameter format: The `Format` to use.",
           "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
-        identifier: .identifier("build\(type.baseName)List"),
+        identifier: "build\(type.baseName)List",
         signature: FunctionSignature(
           input: formatLeadingTriviaParameters(),
           output: ArrayType(elementType: type.syntax)
@@ -64,7 +64,7 @@ let buildableBaseProtocolsFile = SourceFile {
           "/// - Parameter format: The `Format` to use.",
           "/// - Parameter leadingTrivia: Replaces the last leading trivia if not nil.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
-        identifier: .identifier("build\(type.baseName)"),
+        identifier: "build\(type.baseName)",
         signature: FunctionSignature(
           input: formatLeadingTriviaParameters(),
           output: type.syntax
@@ -79,7 +79,7 @@ let buildableBaseProtocolsFile = SourceFile {
     ) {
       FunctionDecl(
         leadingTrivia: .docLineComment("/// Satisfies conformance to `\(type.expressibleAs)`.") + .newline,
-        identifier: .identifier("create\(type.buildableBaseName)"),
+        identifier: "create\(type.buildableBaseName)",
         signature: FunctionSignature(
           input: ParameterClause(),
           output: type.buildable
@@ -96,7 +96,7 @@ let buildableBaseProtocolsFile = SourceFile {
           "///",
           "/// Satisfies conformance to `\(type.listBuildable)`",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
-        identifier: .identifier("build\(type.baseName)List"),
+        identifier: "build\(type.baseName)List",
         signature: FunctionSignature(
           input: formatLeadingTriviaParameters(withDefaultTrivia: true),
           output: ArrayType(elementType: type.syntax)
@@ -120,7 +120,7 @@ let buildableBaseProtocolsFile = SourceFile {
           "///",
           "/// Satisfies conformance to `SyntaxBuildable`.",
         ].map { .docLineComment($0) + .newline }.reduce([], +),
-          identifier: .identifier("buildSyntax"),
+          identifier: "buildSyntax",
           signature: FunctionSignature(
             input: formatLeadingTriviaParameters(withDefaultTrivia: true),
             output: "Syntax"
@@ -144,13 +144,13 @@ private func formatLeadingTriviaParameters(withDefaultTrivia: Bool = false) -> P
   ParameterClause(
     parameterList: [
       FunctionParameter(
-        firstName: .identifier("format"),
+        firstName: "format",
         colon: .colon,
         type: "Format",
         trailingComma: .comma
       ),
       FunctionParameter(
-        firstName: .identifier("leadingTrivia"),
+        firstName: "leadingTrivia",
         colon: .colon,
         type: OptionalType(wrappedType: "Trivia"),
         defaultArgument: withDefaultTrivia ? InitializerClause(value: "nil") : nil

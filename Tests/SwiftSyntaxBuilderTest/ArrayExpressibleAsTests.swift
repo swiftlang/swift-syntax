@@ -35,7 +35,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
           FunctionParameter(
             attributes: nil,
             firstName: .wildcard,
-            secondName: .identifier("args"),
+            secondName: "args",
             colon: .colon,
             type: ArrayType(elementType: "String")
           )

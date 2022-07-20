@@ -7,7 +7,7 @@ final class SimpleTypeIdentifierTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (ExpressibleAsSimpleTypeIdentifier, String)] = [
-      #line: (SimpleTypeIdentifier(name: .identifier("Foo")), "␣Foo"),
+      #line: (SimpleTypeIdentifier(name: "Foo"), "␣Foo"),
       #line: (SimpleTypeIdentifier("Foo"), "␣Foo"),
       #line: ("Foo", "␣Foo")
     ]

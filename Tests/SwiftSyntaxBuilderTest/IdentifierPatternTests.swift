@@ -7,7 +7,7 @@ final class IdentifierPatternTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (ExpressibleAsIdentifierPattern, String)] = [
-      #line: (IdentifierPattern(identifier: .identifier("Test")), "␣Test"),
+      #line: (IdentifierPattern(identifier: "Test"), "␣Test"),
       #line: (IdentifierPattern("Test"), "␣Test"),
       #line: ("Test", "␣Test")
     ]

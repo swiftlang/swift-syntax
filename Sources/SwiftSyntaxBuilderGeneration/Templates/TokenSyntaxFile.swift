@@ -31,7 +31,7 @@ let tokenSyntaxFile = SourceFile {
       FunctionDecl(
         leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAs)") + .newline,
         modifiers: [TokenSyntax.public],
-        identifier: .identifier("create\(conformance.buildableBaseName)"),
+        identifier: "create\(conformance.buildableBaseName)",
         signature: FunctionSignature(
           input: ParameterClause(),
           output: conformance.buildable
@@ -49,7 +49,7 @@ let tokenSyntaxFile = SourceFile {
       FunctionDecl(
         leadingTrivia: .docLineComment("/// Conformance to \(conformance.expressibleAs)") + .newline,
         modifiers: [TokenSyntax.public],
-        identifier: .identifier("create\(conformance.buildableBaseName)"),
+        identifier: "create\(conformance.buildableBaseName)",
         signature: FunctionSignature(
           input: ParameterClause(),
           output: conformance.buildable
@@ -69,7 +69,7 @@ let tokenSyntaxFile = SourceFile {
     for buildable in ["SyntaxBuildable", "ExprBuildable"] {
       FunctionDecl(
         modifiers: [TokenSyntax.public],
-        identifier: .identifier("create\(buildable)"),
+        identifier: "create\(buildable)",
         signature: FunctionSignature(
           input: ParameterClause(),
           output: buildable
@@ -92,7 +92,7 @@ let tokenSyntaxFile = SourceFile {
       parameters: ParameterClause(
         parameterList: [
           FunctionParameter(
-            firstName: .identifier("stringLiteral"),
+            firstName: "stringLiteral",
             colon: .colon,
             type: "String"
           )

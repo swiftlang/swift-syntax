@@ -79,4 +79,30 @@ let tokenSyntaxFile = SourceFile {
       }
     }
   }
+
+  ExtensionDecl(
+    extendedType: "TokenSyntax",
+    inheritanceClause: createTypeInheritanceClause(conformances: ["ExpressibleByStringLiteral"])
+  ) {
+    InitializerDecl(
+      modifiers: [TokenSyntax.public],
+      parameters: ParameterClause(
+        parameterList: [
+          FunctionParameter(
+            firstName: .identifier("stringLiteral"),
+            colon: .colon,
+            type: "String"
+          )
+        ]
+      )
+    ) {
+      SequenceExpr(elements: ExprList([
+        "self",
+        AssignmentExpr(),
+        FunctionCallExpr(MemberAccessExpr(name: "identifier")) {
+          TupleExprElement(expression: "stringLiteral")
+        }
+      ]))
+    }
+  }
 }

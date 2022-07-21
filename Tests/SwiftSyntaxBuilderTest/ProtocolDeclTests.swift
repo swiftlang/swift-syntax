@@ -22,7 +22,7 @@ final class ProtocolDeclTests: XCTestCase {
 
     XCTAssertEqual(text, """
     public protocol DeclListBuildable {
-        func buildDeclList(format: Format, leadingTrivia: Trivia?)-> [DeclSyntax]
+        func buildDeclList(format: Format, leadingTrivia: Trivia?) -> [DeclSyntax]
     }
     """)
   }

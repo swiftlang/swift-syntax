@@ -7,8 +7,8 @@ final class ArrowExprTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (ExpressibleAsArrowExpr, String)] = [
-      #line: (ArrowExpr(), "␣-> "),
-      #line: (ArrowExpr(asyncKeyword: "async"), "␣async-> ")
+      #line: (ArrowExpr(), "␣ -> "),
+      #line: (ArrowExpr(asyncKeyword: "async"), "␣async -> ")
     ]
 
     for (line, testCase) in testCases {

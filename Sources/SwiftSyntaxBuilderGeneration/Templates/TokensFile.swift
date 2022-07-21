@@ -62,8 +62,7 @@ let tokensFile = SourceFile {
               secondName: .identifier("text"),
               colon: .colon,
               type: "String"
-            ),
-            rightParen: .rightParen.withTrailingTrivia(.space)
+            )
           ),
           output: "TokenSyntax"
         )

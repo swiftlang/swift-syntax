@@ -39,8 +39,7 @@ final class ArrayExpressibleAsTests: XCTestCase {
             colon: .colon,
             type: ArrayType(elementType: "String")
           )
-        ],
-        rightParen: .rightParen.withTrailingTrivia(.space)
+        ]
       ),
       output: "Int"
     )

@@ -7,9 +7,9 @@ final class ReturnClauseTests: XCTestCase {
     let leadingTrivia = Trivia.garbageText("␣")
 
     let testCases: [UInt: (ExpressibleAsReturnClause, String)] = [
-      #line: (ReturnClause(returnType: "Int"), "␣-> Int"),
-      #line: (ArrayType(elementType: "Int"), "␣-> [Int]"),
-      #line: ("Int", "␣-> Int"),
+      #line: (ReturnClause(returnType: "Int"), "␣ -> Int"),
+      #line: (ArrayType(elementType: "Int"), "␣ -> [Int]"),
+      #line: ("Int", "␣ -> Int"),
     ]
 
     for (line, testCase) in testCases {

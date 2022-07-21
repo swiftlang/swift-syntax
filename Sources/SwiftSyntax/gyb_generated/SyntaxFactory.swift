@@ -5637,7 +5637,7 @@ public enum SyntaxFactory {
                      trailingTrivia: trailingTrivia)
   }
   public static func makeArrowToken(
-    leadingTrivia: Trivia = [],
+    leadingTrivia: Trivia = .space,
     trailingTrivia: Trivia = .space
   ) -> TokenSyntax {
     return makeToken(.arrow, presence: .present,

@@ -55,7 +55,7 @@ let buildableCollectionNodesFile = SourceFile {
         inheritanceClause: TypeInheritanceClause {
           InheritedType(typeName: type.expressibleAs)
         },
-        genericWhereClause: GenericWhereClause(leadingTrivia: .space) {
+        genericWhereClause: GenericWhereClause {
           GenericRequirement(body: SameTypeRequirement(
             leftTypeIdentifier: "Element",
             equalityToken: .spacedBinaryOperator("=="),

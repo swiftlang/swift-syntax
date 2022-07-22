@@ -689,6 +689,7 @@ def verify_source_code_command(args):
             "SwiftSyntax project and merge it alongside the main PR."
             "$ swift-syntax/build-script.py generate-source-code --toolchain /path/to/toolchain.xctoolchain/usr"
         )
+        raise SystemExit(1)
 
 
 def build_command(args):

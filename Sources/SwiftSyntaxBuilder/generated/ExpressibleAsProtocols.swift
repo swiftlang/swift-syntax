@@ -789,6 +789,14 @@ public extension ExpressibleAsPoundSourceLocationArgs {
     return createPoundSourceLocationArgs()
   }
 }
+public protocol ExpressibleAsDeclModifierDetail: ExpressibleAsSyntaxBuildable {
+  func createDeclModifierDetail() -> DeclModifierDetail
+}
+public extension ExpressibleAsDeclModifierDetail {
+  func createSyntaxBuildable() -> SyntaxBuildable {
+    return createDeclModifierDetail()
+  }
+}
 public protocol ExpressibleAsDeclModifier: ExpressibleAsModifierList, ExpressibleAsSyntaxBuildable {
   func createDeclModifier() -> DeclModifier
 }
@@ -799,14 +807,6 @@ func createModifierList() -> ModifierList {
   }
   func createSyntaxBuildable() -> SyntaxBuildable {
     return createDeclModifier()
-  }
-}
-public protocol ExpressibleAsDeclModifierDetail: ExpressibleAsSyntaxBuildable {
-  func createDeclModifierDetail() -> DeclModifierDetail
-}
-public extension ExpressibleAsDeclModifierDetail {
-  func createSyntaxBuildable() -> SyntaxBuildable {
-    return createDeclModifierDetail()
   }
 }
 public protocol ExpressibleAsInheritedType: ExpressibleAsInheritedTypeList, ExpressibleAsSyntaxBuildable {

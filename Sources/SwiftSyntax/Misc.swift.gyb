@@ -19,19 +19,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension SyntaxNode {
-  public var isUnknown: Bool { return raw.kind.isUnknown }
+extension SyntaxProtocol {
   public var asUnknown: UnknownSyntax? {
-    guard isUnknown else { return nil }
-    return UnknownSyntax(asSyntaxData)
+    isUnknown ? UnknownSyntax(data: syntax.data) : nil
   }
 % for node in SYNTAX_NODES:
 %   if not node.is_base():
 
-  public var is${node.syntax_kind}: Bool { return raw.kind == .${node.swift_syntax_kind} }
+  public var is${node.syntax_kind}: Bool {
+    Raw${node.name}.isValid(syntaxKind: syntaxKind)
+  }
   public var as${node.syntax_kind}: ${node.name}? {
-    guard is${node.syntax_kind} else { return nil }
-    return ${node.name}(asSyntaxData)
+    is${node.syntax_kind} ? ${node.name}(data: syntax.data) : nil
   }
 %   end
 % end
@@ -50,13 +49,10 @@ extension Syntax {
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
     switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node
-    case .unknown(let node):
-      return node
+    case .token(let node): return node
+    case .unknown(let node): return node
 % for node in SYNTAX_NODES:
-    case .${node.swift_syntax_kind}(let node):
-      return node
+    case .${node.swift_syntax_kind}(let node): return node
 % end
     }
   }

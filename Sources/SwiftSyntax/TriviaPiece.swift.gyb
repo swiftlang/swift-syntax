@@ -53,7 +53,7 @@ extension TriviaPiece: TextOutputStreamable {
       printRepeated("${joined}", count: count)
 %   else:
     case let .${trivia.lower_name}(text):
-      target.write(text)
+      target.write(String(describing: text))
 %   end
 % end
     }
@@ -77,41 +77,7 @@ extension TriviaPiece: CustomDebugStringConvertible {
   }
 }
 
-/// A collection of leading or trailing trivia. This is the main data structure
-/// for thinking about trivia.
-public struct Trivia {
-  let pieces: [TriviaPiece]
-
-  /// Creates Trivia with the provided underlying pieces.
-  public init(pieces: [TriviaPiece]) {
-    self.pieces = pieces
-  }
-
-  /// Creates Trivia with no pieces.
-  public static var zero: Trivia {
-    return Trivia(pieces: [])
-  }
-
-  /// Whether the Trivia contains no pieces.
-  public var isEmpty: Bool {
-    pieces.isEmpty
-  }
-
-  /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
-  public func appending(_ piece: TriviaPiece) -> Trivia {
-    var copy = pieces
-    copy.append(piece)
-    return Trivia(pieces: copy)
-  }
-
-  public var sourceLength: SourceLength {
-    return pieces.map({ $0.sourceLength }).reduce(.zero, +)
-  }
-
-  /// Get the byteSize of this trivia
-  public var byteSize: Int {
-    return sourceLength.utf8Length
-  }
+extension Trivia {
 % for trivia in TRIVIAS:
 
 %   if trivia.is_collection():
@@ -134,133 +100,104 @@ public struct Trivia {
 % end
 }
 
-extension Trivia: Equatable {}
-
-/// Conformance for Trivia to the Collection protocol.
-extension Trivia: Collection {
-  public var startIndex: Int {
-    return pieces.startIndex
-  }
-
-  public var endIndex: Int {
-    return pieces.endIndex
-  }
-
-  public func index(after i: Int) -> Int {
-    return pieces.index(after: i)
-  }
-
-  public subscript(_ index: Int) -> TriviaPiece {
-    return pieces[index]
-  }
-}
-
-
-extension Trivia: ExpressibleByArrayLiteral {
-  /// Creates Trivia from the provided pieces.
-  public init(arrayLiteral elements: TriviaPiece...) {
-    self.pieces = elements
-  }
-}
-
-/// Concatenates two collections of `Trivia` into one collection.
-public func +(lhs: Trivia, rhs: Trivia) -> Trivia {
-  return Trivia(pieces: lhs.pieces + rhs.pieces)
-}
-
 extension TriviaPiece: Equatable {}
 
 extension TriviaPiece {
-  public var sourceLength: SourceLength {
+  public var byteLength: Int {
     switch self {
 % for trivia in TRIVIAS:
 %   if trivia.is_new_line:
     case let .${trivia.lower_name}s(count):
-      return SourceLength(utf8Length: count * ${trivia.characters_len()})
+      return count * ${trivia.characters_len()}
 %   elif trivia.is_collection():
     case let .${trivia.lower_name}s(count):
-      return SourceLength(utf8Length: count)
+      return count
 %   else:
     case let .${trivia.lower_name}(text):
-      return SourceLength(of: text)
+      return text.utf8.count
 %   end
 % end
     }
   }
 }
 
-extension TriviaPiece {
-  static func fromRawValue(_ piece: CTriviaPiece,
-                           textBuffer: UnsafeBufferPointer<UInt8>) -> TriviaPiece {
-    switch piece.kind {
+/// Trivia piece for token RawSyntax.
+public enum RawTriviaPiece {
 % for trivia in TRIVIAS:
-    case ${trivia.serialization_code}:
 %   if trivia.is_collection():
-      return .${trivia.lower_name}s(Int(piece.length)/${trivia.characters_len()})
+    case ${trivia.lower_name}s(Int)
 %   else:
-      return .${trivia.lower_name}(.fromBuffer(textBuffer))
+    case ${trivia.lower_name}(StringRef)
 %   end
 % end
-    default:
-      fatalError("unexpected trivia piece kind \(piece.kind)")
+
+  static func make(arena: SyntaxArena, _ piece: TriviaPiece) -> RawTriviaPiece {
+    switch piece {
+% for trivia in TRIVIAS:
+%   if trivia.is_collection():
+    case let .${trivia.lower_name}s(count): return .${trivia.lower_name}s(count)
+%   else:
+    case let .${trivia.lower_name}(text): return .${trivia.lower_name}(arena.intern(text))
+%   end
+% end
     }
   }
+}
 
-  static func hasText(kind: CTriviaKind) -> Bool {
+extension RawTriviaPiece: TextOutputStreamable {
+  public func write<Target: TextOutputStream>(to target: inout Target) {
+    TriviaPiece(raw: self).write(to: &target)
+  }
+}
+
+extension TriviaPiece {
+  init(raw: RawTriviaPiece) {
+    switch raw {
+% for trivia in TRIVIAS:
+%   if trivia.is_collection():
+    case let .${trivia.lower_name}s(count): self = .${trivia.lower_name}s(count)
+%   else:
+    case let .${trivia.lower_name}(text): self = .${trivia.lower_name}(String(stringRef: text))
+%   end
+% end
+    }
+  }
+}
+
+extension RawTriviaPiece {
+  public var byteLength: Int {
+    switch self {
+% for trivia in TRIVIAS:
+%   if trivia.is_new_line:
+    case let .${trivia.lower_name}s(count):
+      return count * ${trivia.characters_len()}
+%   elif trivia.is_collection():
+    case let .${trivia.lower_name}s(count):
+      return count
+%   else:
+    case let .${trivia.lower_name}(text):
+      return text.count
+%   end
+% end
+    }
+  }
+}
+
+
+extension RawTriviaPiece {
+  @_spi(RawSyntax)
+  public static func fromRawValue(kind: UInt8, text: StringRef) -> RawTriviaPiece {
     switch kind {
 % for trivia in TRIVIAS:
     case ${trivia.serialization_code}:
 %   if trivia.is_collection():
-      return false
+      return .${trivia.lower_name}s(text.count / ${trivia.characters_len()})
 %   else:
-      return true
+      return .${trivia.lower_name}(text)
 %   end
 % end
     default:
       fatalError("unexpected trivia piece kind \(kind)")
-    }
-  }
-}
-
-/// Plain trivia piece kind value, without an associated `String` value.
-internal enum TriviaPieceKind: CTriviaKind {
-% for trivia in TRIVIAS:
-    /// ${trivia.comment}
-%   if trivia.is_collection():
-    case ${trivia.lower_name}s = ${trivia.serialization_code}
-%   else:
-    case ${trivia.lower_name} = ${trivia.serialization_code}
-%   end
-% end
-
-  static func fromRawValue(_ rawValue: CTriviaKind) -> TriviaPieceKind {
-    return TriviaPieceKind(rawValue: rawValue)!
-  }
-}
-
-extension TriviaPiece {
-  internal func withUnsafeTriviaPiece<Result>(
-    _ body: (UnsafeTriviaPiece) -> Result
-  ) -> Result {
-    switch self {
-% for trivia in TRIVIAS:
-%   if trivia.is_new_line:
-    case let .${trivia.lower_name}s(count):
-      let length = count * ${trivia.characters_len()}
-      return body(.init(kind: .${trivia.lower_name}s, length: length))
-%   elif trivia.is_collection():
-    case let .${trivia.lower_name}s(count):
-      let length = count
-      return body(.init(kind: .${trivia.lower_name}s, length: length))
-%   else:
-    case var .${trivia.lower_name}(text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .${trivia.lower_name}, length: length, customText: buf))
-      })!
-%   end
-% end
     }
   }
 }

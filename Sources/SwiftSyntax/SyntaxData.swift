@@ -10,364 +10,281 @@
 //
 //===----------------------------------------------------------------------===//
 
-struct AbsoluteSyntaxPosition {
-  /// The UTF-8 offset of the syntax node in the source file
-  let offset: UInt32
-  let indexInParent: UInt32
+/// SyntaxData is a tree node built around RawSyntax.
+///
+/// In addtion to the `RawSyntax` information, each `SyntaxData` holds the
+/// reference to the parent node, and its absolute information in the tree,
+/// including byte offset from the root node.
+///
+/// `SyntaxData` is am implementation detail of `Syntax` nodes. It doesn't
+/// provide any public API.
+@usableFromInline
+struct SyntaxData {
+  /// SyntaxData information.
+  enum Info {
+    case root(Root)
+    indirect case edge(Edge)
 
-  func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxPosition {
-    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
-    let newIndexInParent = self.indexInParent + 1
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
+    /// Data for the root node.
+    struct Root {
+      // SyntaxArena where the root `RawSyntax` is managed.
+      var arena: SyntaxArena
+    }
+
+    /// Data for non-root nodes.
+    struct Edge {
+      // Parent node.
+      var parent: SyntaxData
+      // Index in parent's chilren. i.e. `parent.child(at: indexInParent) == self`.
+      var indexInParent: Int
+      // Byte offset from the root node.
+      var byteOffset: Int
+      // Index from the root node.
+      var indexInTree: Int
+    }
   }
 
-  func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxPosition {
-    let newOffset = self.offset - UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
-    let newIndexInParent = self.indexInParent - 1
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
+  private var _info: Info
+  var raw: RawSyntax
+
+  init(rootRaw: RawSyntax, arena: SyntaxArena) {
+    self._info = .root(.init(arena: arena))
+    self.raw = rootRaw
   }
 
-  func advancedToFirstChild() -> AbsoluteSyntaxPosition {
-    return .init(offset: self.offset, indexInParent: 0)
+  private init(raw: RawSyntax, parent: SyntaxData, at index: Int, byteOffset: Int, indexInTree: Int) {
+    self._info = .edge(.init(parent: parent, indexInParent: index, byteOffset: byteOffset, indexInTree: indexInTree))
+    self.raw = raw
   }
 
-  static var forRoot: AbsoluteSyntaxPosition {
-    return .init(offset: 0, indexInParent: 0)
+  var edgeInfo: Info.Edge? {
+    switch _info {
+    case .root(_): return nil
+    case .edge(let parent): return parent
+    }
+  }
+
+  var rootInfo: Info.Root {
+    var current = self
+    while true {
+      switch current._info {
+      case .edge(let edge):
+        current = edge.parent
+      case .root(let _root):
+        return _root
+      }
+    }
+  }
+
+  /// Absolute byte offset based on the root node.
+  var byteOffset: Int {
+    return edgeInfo?.byteOffset ?? 0
+  }
+
+  /// Absolute node index based on the root node.
+  var indexInTree: Int {
+    return edgeInfo?.indexInTree ?? 0
+  }
+
+  /// Total "width" of the decendent nodes.
+  var byteLength: Int {
+    return raw.byteLength
+  }
+
+  /// Total number of node including `self`.
+  var nodeCount: Int {
+    return raw.nodeCount
+  }
+
+  var root: SyntaxData {
+    var current = self
+    while let edgeInfo = current.edgeInfo {
+      current = edgeInfo.parent
+    }
+    return current
+  }
+
+  /// SyntaxArena where the root resides.
+  ///
+  /// This arena may be different from the arena where the curent node resides.
+  /// In such cases, this 'arena'
+  var arena: SyntaxArena {
+    rootInfo.arena
   }
 }
 
-/// AbsoluteSyntaxInfo represents the information that relates a RawSyntax to a
-/// source file tree, like its absolute source offset.
-struct AbsoluteSyntaxInfo {
-  let position: AbsoluteSyntaxPosition
-  let nodeId: SyntaxIdentifier
-
-  /// The UTF-8 offset of the syntax node in the source file
-  var offset: UInt32 { return position.offset }
-  var indexInParent: UInt32 { return position.indexInParent }
-
-  func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
-    let newPosition = position.advancedBySibling(raw)
-    let newNodeId = nodeId.advancedBySibling(raw)
-    return .init(position: newPosition, nodeId: newNodeId)
+extension SyntaxData: Hashable {
+  @usableFromInline
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(indexInTree)
+    hasher.combine(root.raw.id)
   }
-
-  func reversedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
-    let newPosition = position.reversedBySibling(raw)
-    let newNodeId = nodeId.reversedBySibling(raw)
-    return .init(position: newPosition, nodeId: newNodeId)
-  }
-
-  func advancedToFirstChild() -> AbsoluteSyntaxInfo {
-    let newPosition = position.advancedToFirstChild()
-    let newNodeId = nodeId.advancedToFirstChild()
-    return .init(position: newPosition, nodeId: newNodeId)
-  }
-
-  static var forRoot: AbsoluteSyntaxInfo {
-    return .init(position: .forRoot, nodeId: .newRoot())
-  }
-}
-
-/// Represents a unique value for a node within its own tree.
-struct SyntaxIndexInTree: Hashable {
-  let indexInTree: UInt32
-
-  static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
-
-  /// Assuming that this index points to the start of `Raw`, so that it points
-  /// to the next sibling of `Raw`.
-  func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree +
-                         UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-    return .init(indexInTree: newIndexInTree)
-  }
-
-  /// Assuming that this index points to the next sibling of `Raw`, reverse it
-  /// so that it points to the start of `Raw`.
-  func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree -
-                         UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-    return .init(indexInTree: newIndexInTree)
-  }
-
-  func advancedToFirstChild() -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree + 1
-    return .init(indexInTree: newIndexInTree)
-  }
-
-  init(indexInTree: UInt32) {
-    self.indexInTree = indexInTree
+  @usableFromInline
+  static func ==(lhs: SyntaxData, rhs: SyntaxData) -> Bool {
+    return lhs.indexInTree == rhs.indexInTree && lhs.root.raw === rhs.root.raw
   }
 }
 
 /// Provides a stable and unique identity for `Syntax` nodes.
 public struct SyntaxIdentifier: Hashable {
-  /// Unique value for each root node created.
-  let rootId: UInt32
-  /// Unique value for a node within its own tree.
-  let indexInTree: SyntaxIndexInTree
+  var rawId: Int
+  var indexInTree: Int
+}
 
-  func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = indexInTree.advancedBy(raw)
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
-  func reversedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree.reversedBy(raw)
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
-  func advancedToFirstChild() -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree.advancedToFirstChild()
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
-  static func newRoot() -> SyntaxIdentifier {
-    return .init(rootId: UInt32(truncatingIfNeeded: AtomicCounter.next()),
-                 indexInTree: .zero)
+extension SyntaxData: Identifiable {
+  public var id: SyntaxIdentifier {
+    return .init(rawId: raw.id, indexInTree: indexInTree)
   }
 }
 
-struct AbsoluteRawSyntax {
-  let raw: RawSyntax
-  let info: AbsoluteSyntaxInfo
+// MARK: - Traverse the tree.
 
-  /// The position of the start of this node's leading trivia
-  var position: AbsolutePosition {
-    return AbsolutePosition(utf8Offset: Int(info.offset))
-  }
-
-  /// The end position of this node, including its trivia.
-  var endPosition: AbsolutePosition {
-    return position + raw.totalLength
-  }
-
-  /// Returns first `present` child.
-  var firstChild: AbsoluteRawSyntax? {
-    var curInfo = info.advancedToFirstChild()
-    for i in 0..<raw.numberOfChildren {
-      let childOpt = raw.child(at: i)
-      if let child = childOpt, child.isPresent {
-        return AbsoluteRawSyntax(raw: child, info: curInfo)
-      }
-      curInfo = curInfo.advancedBySibling(childOpt)
-    }
-    return nil
-  }
-
-  /// Returns next `present` sibling.
-  func nextSibling(parent: AbsoluteRawSyntax) -> AbsoluteRawSyntax? {
-    var curInfo = info.advancedBySibling(raw)
-    for i in Int(info.indexInParent+1) ..< parent.raw.numberOfChildren {
-      let siblingOpt = parent.raw.child(at: i)
-      if let sibling = siblingOpt, sibling.isPresent {
-        return AbsoluteRawSyntax(raw: sibling, info: curInfo)
-      }
-      curInfo = curInfo.advancedBySibling(siblingOpt)
-    }
-    return nil
-  }
-
-  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt32) -> AbsoluteRawSyntax {
-    let nodeId = SyntaxIdentifier(rootId: newRootId, indexInTree: info.nodeId.indexInTree)
-    let newInfo = AbsoluteSyntaxInfo(position: info.position, nodeId: nodeId)
-    return .init(raw: newRaw, info: newInfo)
-  }
-
-  static func forRoot(_ raw: RawSyntax) -> AbsoluteRawSyntax {
-    return .init(raw: raw, info: .forRoot)
-  }
-}
-
-/// Indirect wrapper for a `Syntax` node to avoid cyclic inclusion of the 
-/// `Syntax` struct in `SyntaxData`
-class SyntaxBox: CustomStringConvertible, 
-    CustomDebugStringConvertible, TextOutputStreamable {
-  let value: Syntax
-
-  init(_ value: Syntax) {
-    self.value = value
-  }
-
-  // SyntaxBox should be transparent in all descriptions
-
-  /// A source-accurate description of this node.
-  var description: String {
-    return value.description
-  }
-
-  /// Returns a description used by dump.
-  var debugDescription: String {
-    return value.debugDescription
-  }
-
-  /// Prints the raw value of this node to the provided stream.
-  /// - Parameter stream: The stream to which to print the raw tree.
-  func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
-    return value.write(to: &target)
-  }
-}
-
-/// SyntaxData is the underlying storage for each Syntax node.
+/// SyntaxData have a refernce to the parent node, so when the user has a node,
+/// they can access to any node in the tree.
 ///
-/// SyntaxData is an implementation detail, and should not be exposed to clients
-/// of SwiftSyntax.
-struct SyntaxData {
-  private let parentBox: SyntaxBox?
-  var parent: Syntax? {
-    return parentBox?.value
-  }
-  let absoluteRaw: AbsoluteRawSyntax
-
-  var raw: RawSyntax { return absoluteRaw.raw }
-
-  var indexInParent: Int { return Int(absoluteRaw.info.indexInParent) }
-
-  var nodeId: SyntaxIdentifier { return absoluteRaw.info.nodeId }
-
-  /// The position of the start of this node's leading trivia
-  var position: AbsolutePosition {
-    return absoluteRaw.position
-  }
-
-  /// The position of the start of this node's content, skipping its trivia
-  var positionAfterSkippingLeadingTrivia: AbsolutePosition {
-    return position + raw.leadingTriviaLength
-  }
-
-  /// The end position of this node's content, before any trailing trivia.
-  var endPositionBeforeTrailingTrivia: AbsolutePosition {
-    return endPosition - raw.trailingTriviaLength
+/// For example, given this tree.
+///
+///   [root]
+///     +- [a]
+///     |   +- [b]
+///     |   |   |- [c]
+///     |   |   `- [d]
+///     |   `- [e]
+///     |       `- [f]
+///     `- [g]
+///
+/// From [b]'s perspective,
+/// - `nextNonNilChild()` -> [c]
+/// - `nextSibling()` -> [e]
+/// - `nextAncestorSiblig()` -> [g]
+/// So, if you want to traverse the tree from [root] in source order(i.e.
+/// `[a] ... [g]`), you can check
+/// `nextNonNilChild() ?? nextSibling() ?? nextAncestorSibling()` to get the
+/// "next" node from each node.
+extension SyntaxData {
+  var parent: SyntaxData? {
+    edgeInfo?.parent
   }
 
-  /// The end position of this node, including its trivia.
-  var endPosition: AbsolutePosition {
-    return absoluteRaw.endPosition
-  }
-
-  /// Creates a `SyntaxData` with the provided raw syntax and parent.
-  /// - Parameters:
-  ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
-  ///   - parent: The parent of this node, or `nil` if this node is the root.
-  init(_ absoluteRaw: AbsoluteRawSyntax, parent: Syntax?) {
-    self.absoluteRaw = absoluteRaw
-    self.parentBox = parent.map(SyntaxBox.init)
-  }
-
-  /// Creates a `SyntaxData` with the provided raw syntax and parent.
-  /// - Parameters:
-  ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
-  ///   - parentBox: The boxed parent of this node, or `nil` if this node is the 
-  ///                root.
-  init(_ absoluteRaw: AbsoluteRawSyntax, parentBox: SyntaxBox?) {
-    self.absoluteRaw = absoluteRaw
-    self.parentBox = parentBox
-  }
-
-  /// Creates a `SyntaxData` for a root raw node.
-  static func forRoot(_ raw: RawSyntax) -> SyntaxData {
-    return SyntaxData(.forRoot(raw), parent: nil)
-  }
-
-  /// Returns the child data at the provided index in this data's layout.
-  /// - Note: This has O(n) performance, prefer using a proper Sequence type
-  ///         if applicable, instead of this.
-  /// - Note: This function traps if the index is out of the bounds of the
-  ///         data's layout.
+  /// Index in the parent's *layout* buffer.
   ///
-  /// - Parameter index: The index to create and cache.
-  /// - Parameter parent: The parent to associate the child with. This is
-  ///             normally the Syntax node that this `SyntaxData` belongs to.
-  /// - Returns: The child's data at the provided index.
-  func child(at index: Int, parent: Syntax) -> SyntaxData? {
-    if !raw.hasChild(at: index) { return nil }
-    var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
-    for _ in 0..<index { _ = iter.next() }
-    let (raw, info) = iter.next()!
-    return SyntaxData(AbsoluteRawSyntax(raw: raw!, info: info), parent: parent)
+  /// This doesn't skip `nil` children. I.e. for `[a, <nil>, b]`,
+  /// `b.indexInParent` is `2`. Also, given a non-root node,
+  /// `node.parent!.child(at: node.indexInParent!)` must be identical to `node`
+  var indexInParent: Int? {
+    edgeInfo?.indexInParent
   }
 
-  /// Returns the child data at the provided cursor in this data's layout.
-  /// - Note: This has O(n) performance, prefer using a proper Sequence type
-  ///         if applicable, instead of this.
-  /// - Note: This function traps if the cursor is out of the bounds of the
-  ///         data's layout.
-  ///
-  /// - Parameter cursor: The cursor to create and cache.
-  /// - Parameter parent: The parent to associate the child with. This is
-  ///             normally the Syntax node that this `SyntaxData` belongs to.
-  /// - Returns: The child's data at the provided cursor.
-  func child<CursorType: RawRepresentable>(
-    at cursor: CursorType, parent: Syntax) -> SyntaxData?
-    where CursorType.RawValue == Int {
-    return child(at: cursor.rawValue, parent: parent)
-  }
+  /// The child node at index in the *layout* buffer.
+  func child(at index: Int) -> SyntaxData? {
+    guard let childRaw = raw.children[index] else { return nil }
 
-  /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
-  /// the root.
-  /// - parameter newRaw: The new RawSyntax that will back the new `Data`
-  /// - returns: A tuple of both the new root node and the new data with the raw
-  ///            layout replaced.
-  func replacingSelf(
-    _ newRaw: RawSyntax) -> SyntaxData {
-    // If we have a parent already, then ask our current parent to copy itself
-    // recursively up to the root.
-    if let parent = parent {
-      let parentData = parent.data.replacingChild(newRaw, at: indexInParent)
-      let newParent = Syntax(parentData)
-      return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
-    } else {
-      // Otherwise, we're already the root, so return the new root data.
-      return .forRoot(newRaw)
+    var byteOffset = byteOffset
+    var indexInTree = indexInTree + 1
+
+    // Calculate position data of the child.
+    for case let sibling? in raw.children[0..<index] {
+      byteOffset += sibling.byteLength
+      indexInTree += sibling.nodeCount
     }
+    return SyntaxData(raw: childRaw, parent: self, at: index, byteOffset: byteOffset, indexInTree: indexInTree)
   }
 
-  /// Creates a copy of `self` with the child at the provided index replaced
-  /// with a new SyntaxData containing the raw syntax provided.
-  ///
-  /// - Parameters:
-  ///   - child: The raw syntax for the new child to replace.
-  ///   - index: The index pointing to where in the raw layout to place this
-  ///            child.
-  /// - Returns: The new root node created by this operation, and the new child
-  ///            syntax data.
-  /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
-    let newRaw = raw.replacingChild(index, with: child)
-    return replacingSelf(newRaw)
+  /// The first present child. `nil` if there is no child.
+  var firstNonNilChild: SyntaxData? {
+    guard nodeCount > 1 else { return nil }
+    return raw.children
+      .firstIndex { $0.map{ !$0.isMissing } == true }
+      .map { child(at: $0)! }
   }
 
-  /// Creates a copy of `self` with the child at the provided cursor replaced
-  /// with a new SyntaxData containing the raw syntax provided.
-  ///
-  /// - Parameters:
-  ///   - child: The raw syntax for the new child to replace.
-  ///   - cursor: A cursor that points to the index of the child you wish to
-  ///             replace
-  /// - Returns: The new root node created by this operation, and the new child
-  ///            syntax data.
-  /// - SeeAlso: replacingSelf(_:)
-  func replacingChild<CursorType: RawRepresentable>(_ child: RawSyntax?,
-    at cursor: CursorType) -> SyntaxData
-    where CursorType.RawValue == Int {
-    return replacingChild(child, at: cursor.rawValue)
+  var lastNonNilChild: SyntaxData? {
+    guard nodeCount > 1 else { return nil }
+    return raw.children
+      .lastIndex { $0.map{ !$0.isMissing } == true }
+      .map { child(at: $0)! }
   }
 
-  func withLeadingTrivia(_ leadingTrivia: Trivia) -> SyntaxData {
-    if let raw = raw.withLeadingTrivia(leadingTrivia) {
-      return replacingSelf(raw)
-    } else {
-      return self
+  /// Next present node in the parent.
+  var nextSibling: SyntaxData? {
+    guard let edgeInfo = edgeInfo else { return nil }
+    let parent = edgeInfo.parent
+    let rawSiblings = parent.raw.children
+
+    for i in (edgeInfo.indexInParent + 1) ..< rawSiblings.count {
+      guard let sibling = rawSiblings[i], !sibling.isMissing else { continue }
+      let byteOffset = self.byteOffset + self.byteLength
+      let indexInTree = self.indexInTree + self.nodeCount
+      return SyntaxData(raw: sibling, parent: parent, at: i, byteOffset: byteOffset, indexInTree: indexInTree)
     }
+    return nil
   }
 
-  func withTrailingTrivia(_ trailingTrivia: Trivia) -> SyntaxData {
-    if let raw = raw.withTrailingTrivia(trailingTrivia) {
-      return replacingSelf(raw)
+  /// Previous present node in the parent.
+  var previousSibling: SyntaxData? {
+    guard let edgeInfo = edgeInfo else { return nil }
+    let parent = edgeInfo.parent
+    let rawSiblings = parent.raw.children
+
+    for i in (0 ..< edgeInfo.indexInParent).reversed() {
+      guard let sibling = rawSiblings[i], !sibling.isMissing else { continue }
+      let byteOffset = self.byteOffset - sibling.byteLength
+      let indexInTree = self.indexInTree - sibling.nodeCount
+      return SyntaxData(raw: sibling, parent: parent, at: i, byteOffset: byteOffset, indexInTree: indexInTree)
+    }
+    return nil
+  }
+
+  // The next sibling node of the parent node. If the parent doesn't have it,
+  // grand parent's next sibling node, and so on.
+  var nextAncestorSibling: SyntaxData? {
+    var current = parent
+    while let cur = current {
+      if let sibling = cur.nextSibling {
+        return sibling
+      }
+      current = cur.parent
+    }
+    return nil
+  }
+
+  // The previous sibling node of the parent node. If the parent doesn't have it,
+  // parent's parent's previous sibling node, and so on.
+  var previousAncestorSibling: SyntaxData? {
+    var current = parent
+    while let cur = current {
+      if let sibling = cur.previousSibling {
+        return sibling
+      }
+      current = cur.parent
+    }
+    return nil
+  }
+
+  var nextNode: SyntaxData? {
+    return firstNonNilChild ?? nextSibling ?? nextAncestorSibling
+  }
+
+  var previousNode: SyntaxData? {
+    return (previousSibling.map { $0.lastNonNilChild ?? $0 } ??
+            previousAncestorSibling.map { $0.lastNonNilChild ?? $0 })
+  }
+}
+
+// MARK: - Editing the tree.
+extension SyntaxData {
+  func replacingChild(at index: Int, with childRaw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
+    let newRaw = raw.replacingChild(at: index, with: childRaw, arena: arena)
+    return self.replacingSelf(with: newRaw, arena: arena)
+  }
+
+  func replacingSelf(with newRaw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
+    if let edgeInfo = edgeInfo {
+      let parentData = edgeInfo.parent.replacingChild(
+        at: edgeInfo.indexInParent, with: newRaw, arena: arena)
+      return parentData.child(at: edgeInfo.indexInParent)!
     } else {
-      return self
+      return SyntaxData(rootRaw: newRaw, arena: arena)
     }
   }
 }

@@ -54,31 +54,30 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   // MARK: Override type specific visit methods
 
   override open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(token._syntaxNode)
+    return visitAny(token.syntax)
   }
 
   override open func visitPost(_ node: TokenSyntax) {
-    visitAnyPost(node._syntaxNode)
+    visitAnyPost(node.syntax)
   }
 
   override open func visit(_ node: UnknownSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
+    return visitAny(node.syntax)
   }
 
   override open func visitPost(_ node: UnknownSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-% for node in SYNTAX_NODES:
-%   if is_visitable(node):
-  override open func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
+    visitAnyPost(node.syntax)
   }
 
+% for node in SYNTAX_NODES:
+%   if is_visitable(node):
+
+  override open func visit(_ node: ${node.name}) -> SyntaxVisitorContinueKind {
+    return visitAny(node.syntax)
+  }
   override open func visitPost(_ node: ${node.name}) {
-    visitAnyPost(node._syntaxNode)
+    visitAnyPost(node.syntax)
   }
 %   end
 % end
-
 }

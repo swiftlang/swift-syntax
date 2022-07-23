@@ -1,0 +1,205 @@
+%{
+  from gyb_syntax_support import *
+  NODE_MAP = create_node_map()
+  # -*- mode: Swift -*-
+  # Ignore the following admonition; it applies to the resulting .swift file only
+}%
+//// Automatically Generated From RawSyntaxNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===------ RawSyntaxNodes.swift - Typed Raw Syntax Node definitions  ------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+%{
+BASE_NODES = []
+COLLECTION_NODES = []
+LAYOUT_NODES = []
+UNKNOWN_NODES = []
+for node in SYNTAX_NODES:
+  if node.is_base():
+    BASE_NODES.append(node)
+  elif node.is_syntax_collection():
+    COLLECTION_NODES.append(node)
+  elif node.is_unknown():
+    UNKNOWN_NODES.append(node)
+  elif node.is_buildable():
+    LAYOUT_NODES.append(node)
+}%
+
+% for node in BASE_NODES:
+@_spi(RawSyntax)
+public protocol Raw${node.name}NodeProtocol: Raw${node.base_type}NodeProtocol {}
+% end
+
+% for node in SYNTAX_NODES:
+
+@_spi(RawSyntax)
+public struct Raw${node.name}: Raw${node.base_type}NodeProtocol {
+  public static let syntaxKind: SyntaxKind = .${node.swift_syntax_kind}
+  public var raw: RawSyntax
+  @usableFromInline init(raw: RawSyntax) {
+    assert(Self.isValid(syntaxKind: raw.syntaxKind))
+    self.raw = raw
+  }
+
+  public init?<Node: RawSyntaxNodeProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntaxKind) else { return nil }
+    self.init(raw: other.raw)
+  }
+
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+%   if node.is_base():
+%     sub_kinds = ['.' + n.swift_syntax_kind for n in SYNTAX_NODES if n.base_kind == node.syntax_kind]
+    switch syntaxKind {
+    case ${', '. join(sub_kinds)}: return true
+    default: return false
+    }
+%    else:
+    return syntaxKind == .${node.swift_syntax_kind}
+%   end
+  }
+}
+% end
+
+% for node in BASE_NODES:
+
+extension Raw${node.name} {
+  /// Upcast a Raw${node.name} subtypes.
+  @inlinable
+  public init<T: Raw${node.name}NodeProtocol>(_ other: T) {
+    self.init(raw: other.raw)
+  }
+
+  public static func makeBlank(arena: SyntaxArena) -> Raw${node.name} {
+    let raw = RawSyntax.makeEmptyLayout(arena: arena, kind: syntaxKind)
+    return Raw${node.name}(raw: raw)
+  }
+}
+% end
+
+% for node in UNKNOWN_NODES:
+
+extension Raw${node.name} {
+  public static func makeBlank(arena: SyntaxArena) -> Raw${node.name} {
+    let raw = RawSyntax.makeEmptyLayout(arena: arena, kind: syntaxKind)
+    return Raw${node.name}(raw: raw)
+  }
+}
+% end
+
+% for node in COLLECTION_NODES:
+
+extension Raw${node.name} {
+  public struct Builder {
+    @usableFromInline
+    var elements: [Raw${node.collection_element_type}] = []
+
+    @inlinable
+    public init() {}
+
+    @inlinable
+    mutating func append(_ element: Raw${node.collection_element_type}) {
+      elements.append(element)
+    }
+
+    @inlinable
+    mutating func build(arena: SyntaxArena) -> Raw${node.name} {
+      Raw${node.name}.make(arena: arena, elements: elements)
+    }
+  }
+
+  public static func make(arena: SyntaxArena, elements: [Raw${node.collection_element_type}]) -> Self {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: syntaxKind,
+                                   uninitializedCount: elements.count) { layout in
+      _ = layout.initialize(from: elements.map { $0.raw })
+    }
+    return .init(raw: raw)
+  }
+
+  public static func makeBlank(arena: SyntaxArena) -> Self {
+    let raw = RawSyntax.makeEmptyLayout(arena: arena, kind: syntaxKind)
+    return .init(raw: raw)
+  }
+}
+% end
+
+extension RawSyntaxNodeProtocol {
+  fileprivate func elem<Cursor: RawRepresentable>(at index: Cursor) -> RawSyntax? where Cursor.RawValue == Int {
+    raw.children[index.rawValue]
+  }
+}
+% for node in LAYOUT_NODES:
+
+extension Raw${node.name} {
+  typealias Cursor = ${node.name}.Cursor
+%   for child in node.children:
+%     optional_mark = "?" if child.is_optional else ""
+%     iuo_mark = "!" if not child.is_optional else ""
+  public var ${child.swift_name}: Raw${child.type_name + optional_mark} {
+    elem(at: Cursor.${child.swift_name}).map(Raw${child.type_name}.init(raw:))${iuo_mark}
+  }
+%   end
+
+  public struct Builder {
+%   for child in node.children:
+    public var ${child.swift_name}: Raw${child.type_name}? = nil
+%   end
+
+    @inlinable
+    public init() {}
+
+    @inlinable
+    public mutating func build(arena: SyntaxArena) -> Raw${node.name} {
+      .make(arena: arena
+%   for child in node.children:
+      , ${child.swift_name}: self.${child.swift_name}
+%     if not child.is_optional:
+%       child_node = NODE_MAP.get(child.syntax_kind)
+%       if child.is_token():
+%         token = child.main_token()
+%         tok_kind = token.swift_kind() if token else "unknown"
+          ?? .makeBlank(arena: arena, tokenKind: .${tok_kind})
+%       else:
+          ?? .makeBlank(arena: arena)
+%       end
+%     end
+%   end
+      )
+    }
+
+  }
+
+  @inlinable
+  public static func makeBlank(arena: SyntaxArena) -> Raw${node.name} {
+    var builder = Builder()
+    return builder.build(arena: arena)
+  }
+
+%     child_params = []
+%     for child in node.children:
+%       optional_mark = "?" if child.is_optional else ""
+%       param_type = "Raw" + child.type_name + optional_mark
+%       param_default = " = nil" if child.is_optional else ""
+%       child_params.append("%s: %s%s" % (child.swift_name, param_type, param_default))
+%     child_params = ', '.join(child_params)
+  @inlinable
+  public static func make(arena: SyntaxArena, ${child_params}) -> Raw${node.name} {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .${node.swift_syntax_kind},
+                                   uninitializedCount: ${len(node.children)}) { layout in
+      layout.initialize(repeating: nil)
+%     for idx, child in enumerate(node.children):
+%       optional_mark = "?" if child.is_optional else ""
+      layout[${idx}] = ${child.swift_name + optional_mark}.raw
+%     end
+    }
+    return .init(raw: raw)
+  }
+}
+% end

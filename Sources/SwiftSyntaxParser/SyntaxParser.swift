@@ -16,7 +16,7 @@
 
 @_implementationOnly import _InternalSwiftSyntaxParser
 import Foundation
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A list of possible errors that could be encountered while parsing a
 /// Syntax tree.
@@ -50,7 +50,6 @@ public enum SyntaxParser {
   /// Incompatibility can occur if the loaded `lib_InternalSwiftSyntaxParser.dylib/.so`
   /// is from a toolchain that is not compatible with this version of SwiftSyntax.
   fileprivate static var nodeHashVerifyResult: Bool = verifyNodeDeclarationHash()
-  fileprivate static var cnodeLayoutHashVerifyResult: Bool = verifyCNodeLayoutHash()
 
   /// Parses the string into a full-fidelity Syntax tree.
   ///
@@ -77,27 +76,15 @@ public enum SyntaxParser {
     enableBareSlashRegexLiteral: Bool? = nil,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
   ) throws -> SourceFileSyntax {
-    guard nodeHashVerifyResult && cnodeLayoutHashVerifyResult else {
-      throw ParserError.parserCompatibilityCheckFailed
-    }
-    // Get a native UTF8 string for efficient indexing with UTF8 byte offsets.
-    // If the string is backed by an NSString then such indexing will become
-    // extremely slow.
     var utf8Source = source
-    utf8Source.makeContiguousUTF8()
-
-    let rawSyntax = parseRaw(source: utf8Source,
-                             parseTransition: parseTransition,
-                             filenameForDiagnostics: filenameForDiagnostics,
-                             languageVersion: languageVersion,
-                             enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
-                             diagnosticHandler: diagnosticHandler)
-
-    let base = _SyntaxParserInterop.nodeFromRetainedOpaqueRawSyntax(rawSyntax)
-    guard let file = base.as(SourceFileSyntax.self) else {
-      throw ParserError.invalidSyntaxData
+    return try utf8Source.withUTF8 { utf8 in
+      try parseImpl(source: utf8,
+                parseTransition: parseTransition,
+                filenameForDiagnostics: filenameForDiagnostics,
+                languageVersion: languageVersion,
+                enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
+                diagnosticHandler: diagnosticHandler)
     }
-    return file
   }
 
   /// Parses the file `URL` into a full-fidelity Syntax tree.
@@ -120,31 +107,36 @@ public enum SyntaxParser {
     languageVersion: String? = nil,
     enableBareSlashRegexLiteral: Bool? = nil,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws -> SourceFileSyntax {
+  ) throws -> SourceFileSyntax  {
     // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
     let fileData = try Data(contentsOf: url)
-    let source = fileData.withUnsafeBytes { buf in
-      return String(decoding: buf.bindMemory(to: UInt8.self), as: UTF8.self)
+    return try fileData.withUnsafeBytes { rawBuffer in
+      try parseImpl(source: rawBuffer.bindMemory(to: UInt8.self),
+                    parseTransition: nil,
+                    filenameForDiagnostics: url.path,
+                    languageVersion: languageVersion,
+                    enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
+                    diagnosticHandler: diagnosticHandler)
     }
-    return try parse(source: source, filenameForDiagnostics: url.path,
-                     languageVersion: languageVersion,
-                     enableBareSlashRegexLiteral: enableBareSlashRegexLiteral,
-                     diagnosticHandler: diagnosticHandler)
   }
 
-  private static func parseRaw(
-    source: String,
+  private static func parseImpl(
+    source: UnsafeBufferPointer<UInt8>,
     parseTransition: IncrementalParseTransition?,
     filenameForDiagnostics: String,
     languageVersion: String?,
     enableBareSlashRegexLiteral: Bool?,
     diagnosticHandler: ((Diagnostic) -> Void)?
-  ) -> CClientNode {
-    precondition(source.isContiguousUTF8)
+  ) throws -> SourceFileSyntax {
+    guard nodeHashVerifyResult else {
+      throw ParserError.parserCompatibilityCheckFailed
+    }
+
     let c_parser = swiftparse_parser_create()
     defer {
       swiftparse_parser_dispose(c_parser)
     }
+
     if let languageVersion = languageVersion {
       languageVersion.withCString { languageVersionCString in
         swiftparse_parser_set_language_version(c_parser, languageVersionCString)
@@ -154,8 +146,12 @@ public enum SyntaxParser {
       swiftparse_parser_set_enable_bare_slash_regex_literal(c_parser, enableBareSlashRegexLiteral)
     }
 
+    let arena = SyntaxArena(triviaParser: parseTrivia)
+    let sourceBuffer = arena.internSourceBuffer(source)
+
     let nodeHandler = { (cnode: CSyntaxNodePtr!) -> UnsafeMutableRawPointer in
-      return _SyntaxParserInterop.getRetainedOpaqueRawSyntax(cnode: cnode, source: source)
+      let raw = RawSyntax.createFromCSyntaxNode(arena: arena, cnode, in: sourceBuffer)
+      return UnsafeMutableRawPointer(mutating: raw.toOpaque())
     }
     swiftparse_parser_set_node_handler(c_parser, nodeHandler);
 
@@ -163,13 +159,16 @@ public enum SyntaxParser {
       var parseLookup = IncrementalParseLookup(transition: parseTransition)
       let nodeLookup = {
             (offset: Int, kind: CSyntaxKind) -> CParseLookupResult in
+
         guard let foundNode =
-            parseLookup.lookUp(offset, kind: kind) else {
+            parseLookup.lookUp(offset, kind: SyntaxKind(rawValue: kind)!) else {
           return CParseLookupResult(length: 0, node: nil)
         }
-        let lengthToSkip = foundNode.byteSize
-        let opaqueNode = _SyntaxParserInterop.getRetainedOpaqueRawSyntax(node: foundNode)
-        return CParseLookupResult(length: lengthToSkip, node: opaqueNode)
+        let lengthToSkip = foundNode.byteLength
+        let opaqueNode = foundNode.raw.toOpaque()
+        return CParseLookupResult(
+          length: lengthToSkip,
+          node: UnsafeMutableRawPointer(mutating: opaqueNode))
       }
       swiftparse_parser_set_node_lookup(c_parser, nodeLookup);
     }
@@ -186,7 +185,7 @@ public enum SyntaxParser {
     }
     // Set up diagnostics consumer if requested by the caller.
     if let diagnosticHandler = diagnosticHandler {
-      let converter = SourceLocationConverter(file: filenameForDiagnostics, source: source)
+      let converter = SourceLocationConverter(file: filenameForDiagnostics, source: sourceBuffer)
       let diagHandler = { (diag: CDiagnostic!) in
         // If the coming diagnostic is a note, we cache the pending note
         if swiftparse_diagnostic_get_severity(diag) ==
@@ -206,11 +205,22 @@ public enum SyntaxParser {
       swiftparse_parser_set_diagnostic_handler(c_parser, diagHandler)
     }
 
-    let c_top = source.withCString { buf in
-      swiftparse_parse_string(c_parser, buf, source.utf8.count)
+    // Do parse!
+    let c_top = sourceBuffer.withMemoryRebound(to: CChar.self) { buffer in
+      swiftparse_parse_string(c_parser, buffer.baseAddress, sourceBuffer.count)
     }
 
-    return c_top!
+    // Convert the result to 'SourceFileSyntax'.
+    let rawSyntax = RawSyntax.fromOpaque(c_top!)
+    let syntax = Syntax(raw: rawSyntax, arena: arena)
+    guard let file = syntax.as(SourceFileSyntax.self) else {
+      throw ParserError.invalidSyntaxData
+    }
+    return file
+  }
+
+  static func parseTrivia(_ source: StringRef, _ isTrailing: Bool) -> [RawTriviaPiece] {
+    fatalError("Not implemented")
   }
 }
 
@@ -284,8 +294,4 @@ extension Diagnostic {
     self.init(message: diag.message, location: diag.location, notes: notes,
               highlights: diag.highlights, fixIts: diag.fixIts)
   }
-}
-
-fileprivate func verifyCNodeLayoutHash() -> Bool {
-  return cNodeLayoutHash() == SwiftSyntax.cNodeLayoutHash()
 }

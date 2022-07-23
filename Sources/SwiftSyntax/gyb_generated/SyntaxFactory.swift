@@ -22,6104 +22,5660 @@
 //
 //===----------------------------------------------------------------------===//
 
+
 public enum SyntaxFactory {
-  public static func makeToken(_ kind: TokenKind, presence: SourcePresence,
+  @available(*, deprecated, message: "use pure token kind with 'tokenText' argument")
+  public static func makeToken(_ kind: LegacyTokenKind, presence: SourcePresence,
                                leadingTrivia: Trivia = [],
                                trailingTrivia: Trivia = []) -> TokenSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: kind, leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia, presence: presence)
-    let data = SyntaxData.forRoot(raw)
-    return TokenSyntax(data)
+    let (kind, text) = kind.plain
+    if presence == .missing {
+      let raw = RawTokenSyntax.makeBlank(arena: .default, tokenKind: kind).raw
+      return TokenSyntax(data: SyntaxData(rootRaw: raw, arena: .default))
+    }
+
+    return makeToken(arena: .default, kind,
+                     tokenText: text,
+                     leadingTrivia: leadingTrivia,
+                     trailingTrivia: trailingTrivia)
   }
 
-  public static func makeUnknownSyntax(tokens: [TokenSyntax]) -> UnknownSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: .unknown,
-      layout: tokens.map { $0.raw }, presence: .present)
-    let data = SyntaxData.forRoot(raw)
-    return UnknownSyntax(data)
+
+  public static func makeToken(
+    arena: SyntaxArena = .default,
+    _ tokenKind: TokenKind,
+    tokenText: String = "",
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
+    let raw = RawSyntax.makeMaterializedToken(
+      arena: arena, kind: tokenKind,
+      text: tokenText,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+    return TokenSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeUnknownSyntax(
+    arena: SyntaxArena = .default,
+    tokens: [TokenSyntax]
+  ) -> UnknownSyntax {
+    let raw = RawSyntax.makeLayout(
+      arena: arena, kind: .unknown, uninitializedCount: tokens.count) { buffer in
+      _ = buffer.initialize(from: tokens.map { $0.raw })
+    }
+    return UnknownSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+}
 
 /// MARK: Syntax Node Creation APIs
 
+extension SyntaxFactory {
 
 
 
 
 
 
-  public static func makeBlankUnknownDecl(presence: SourcePresence = .present) -> UnknownDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unknownDecl,
-      layout: [
-    ], length: .zero, presence: presence))
-    return UnknownDeclSyntax(data)
+
+
+
+
+
+
+
+  public static func makeBlankUnknownDecl(arena: SyntaxArena = .default) -> UnknownDeclSyntax {
+    let raw = RawUnknownDeclSyntax.makeBlank(arena: arena).raw
+    return UnknownDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankUnknownExpr(presence: SourcePresence = .present) -> UnknownExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unknownExpr,
-      layout: [
-    ], length: .zero, presence: presence))
-    return UnknownExprSyntax(data)
+
+  public static func makeBlankUnknownExpr(arena: SyntaxArena = .default) -> UnknownExprSyntax {
+    let raw = RawUnknownExprSyntax.makeBlank(arena: arena).raw
+    return UnknownExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankUnknownStmt(presence: SourcePresence = .present) -> UnknownStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unknownStmt,
-      layout: [
-    ], length: .zero, presence: presence))
-    return UnknownStmtSyntax(data)
+
+  public static func makeBlankUnknownStmt(arena: SyntaxArena = .default) -> UnknownStmtSyntax {
+    let raw = RawUnknownStmtSyntax.makeBlank(arena: arena).raw
+    return UnknownStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankUnknownType(presence: SourcePresence = .present) -> UnknownTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unknownType,
-      layout: [
-    ], length: .zero, presence: presence))
-    return UnknownTypeSyntax(data)
+
+  public static func makeBlankUnknownType(arena: SyntaxArena = .default) -> UnknownTypeSyntax {
+    let raw = RawUnknownTypeSyntax.makeBlank(arena: arena).raw
+    return UnknownTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankUnknownPattern(presence: SourcePresence = .present) -> UnknownPatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unknownPattern,
-      layout: [
-    ], length: .zero, presence: presence))
-    return UnknownPatternSyntax(data)
-  }
-  public static func makeCodeBlockItem(item: Syntax, semicolon: TokenSyntax?, errorTokens: Syntax?) -> CodeBlockItemSyntax {
-    let layout: [RawSyntax?] = [
-      item.raw,
-      semicolon?.raw,
-      errorTokens?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItem,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CodeBlockItemSyntax(data)
+
+  public static func makeBlankUnknownPattern(arena: SyntaxArena = .default) -> UnknownPatternSyntax {
+    let raw = RawUnknownPatternSyntax.makeBlank(arena: arena).raw
+    return UnknownPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCodeBlockItem(presence: SourcePresence = .present) -> CodeBlockItemSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .codeBlockItem,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return CodeBlockItemSyntax(data)
+  public static func makeCodeBlockItem(
+    arena: SyntaxArena = .default, item: Syntax, semicolon: TokenSyntax?, errorTokens: Syntax?
+  ) -> CodeBlockItemSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItem,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = item.raw
+      buffer[1] = semicolon?.raw
+      buffer[2] = errorTokens?.raw
+    }
+    return CodeBlockItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankCodeBlockItem(arena: SyntaxArena = .default) -> CodeBlockItemSyntax {
+    let raw = RawCodeBlockItemSyntax.makeBlank(arena: arena).raw
+    return CodeBlockItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeCodeBlockItemList(
-    _ elements: [CodeBlockItemSyntax]) -> CodeBlockItemListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlockItemList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CodeBlockItemListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [CodeBlockItemSyntax]
+  ) -> CodeBlockItemListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItemList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return CodeBlockItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCodeBlockItemList(presence: SourcePresence = .present) -> CodeBlockItemListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .codeBlockItemList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return CodeBlockItemListSyntax(data)
-  }
-  public static func makeCodeBlock(leftBrace: TokenSyntax, statements: CodeBlockItemListSyntax, rightBrace: TokenSyntax) -> CodeBlockSyntax {
-    let layout: [RawSyntax?] = [
-      leftBrace.raw,
-      statements.raw,
-      rightBrace.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.codeBlock,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CodeBlockSyntax(data)
+  public static func makeBlankCodeBlockItemList(arena: SyntaxArena = .default) -> CodeBlockItemListSyntax {
+    let raw = RawCodeBlockItemListSyntax.makeBlank(arena: arena).raw
+    return CodeBlockItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCodeBlock(presence: SourcePresence = .present) -> CodeBlockSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .codeBlock,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftBrace),
-      RawSyntax.missing(SyntaxKind.codeBlockItemList),
-      RawSyntax.missingToken(TokenKind.rightBrace),
-    ], length: .zero, presence: presence))
-    return CodeBlockSyntax(data)
-  }
-  public static func makeInOutExpr(ampersand: TokenSyntax, expression: ExprSyntax) -> InOutExprSyntax {
-    let layout: [RawSyntax?] = [
-      ampersand.raw,
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inOutExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return InOutExprSyntax(data)
+  public static func makeCodeBlock(
+    arena: SyntaxArena = .default, leftBrace: TokenSyntax, statements: CodeBlockItemListSyntax, rightBrace: TokenSyntax
+  ) -> CodeBlockSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .codeBlock,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftBrace.raw
+      buffer[1] = statements.raw
+      buffer[2] = rightBrace.raw
+    }
+    return CodeBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankInOutExpr(presence: SourcePresence = .present) -> InOutExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .inOutExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.prefixAmpersand),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return InOutExprSyntax(data)
-  }
-  public static func makePoundColumnExpr(poundColumn: TokenSyntax) -> PoundColumnExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundColumn.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundColumnExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundColumnExprSyntax(data)
+  public static func makeBlankCodeBlock(arena: SyntaxArena = .default) -> CodeBlockSyntax {
+    let raw = RawCodeBlockSyntax.makeBlank(arena: arena).raw
+    return CodeBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundColumnExpr(presence: SourcePresence = .present) -> PoundColumnExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundColumnExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundColumnKeyword),
-    ], length: .zero, presence: presence))
-    return PoundColumnExprSyntax(data)
+  public static func makeInOutExpr(
+    arena: SyntaxArena = .default, ampersand: TokenSyntax, expression: ExprSyntax
+  ) -> InOutExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .inOutExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = ampersand.raw
+      buffer[1] = expression.raw
+    }
+    return InOutExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankInOutExpr(arena: SyntaxArena = .default) -> InOutExprSyntax {
+    let raw = RawInOutExprSyntax.makeBlank(arena: arena).raw
+    return InOutExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makePoundColumnExpr(
+    arena: SyntaxArena = .default, poundColumn: TokenSyntax
+  ) -> PoundColumnExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundColumnExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundColumn.raw
+    }
+    return PoundColumnExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankPoundColumnExpr(arena: SyntaxArena = .default) -> PoundColumnExprSyntax {
+    let raw = RawPoundColumnExprSyntax.makeBlank(arena: arena).raw
+    return PoundColumnExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeTupleExprElementList(
-    _ elements: [TupleExprElementSyntax]) -> TupleExprElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TupleExprElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [TupleExprElementSyntax]
+  ) -> TupleExprElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return TupleExprElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTupleExprElementList(presence: SourcePresence = .present) -> TupleExprElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tupleExprElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return TupleExprElementListSyntax(data)
+  public static func makeBlankTupleExprElementList(arena: SyntaxArena = .default) -> TupleExprElementListSyntax {
+    let raw = RawTupleExprElementListSyntax.makeBlank(arena: arena).raw
+    return TupleExprElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
   public static func makeArrayElementList(
-    _ elements: [ArrayElementSyntax]) -> ArrayElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ArrayElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ArrayElementSyntax]
+  ) -> ArrayElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ArrayElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankArrayElementList(presence: SourcePresence = .present) -> ArrayElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .arrayElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ArrayElementListSyntax(data)
+  public static func makeBlankArrayElementList(arena: SyntaxArena = .default) -> ArrayElementListSyntax {
+    let raw = RawArrayElementListSyntax.makeBlank(arena: arena).raw
+    return ArrayElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
   public static func makeDictionaryElementList(
-    _ elements: [DictionaryElementSyntax]) -> DictionaryElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DictionaryElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [DictionaryElementSyntax]
+  ) -> DictionaryElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return DictionaryElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDictionaryElementList(presence: SourcePresence = .present) -> DictionaryElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .dictionaryElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return DictionaryElementListSyntax(data)
+  public static func makeBlankDictionaryElementList(arena: SyntaxArena = .default) -> DictionaryElementListSyntax {
+    let raw = RawDictionaryElementListSyntax.makeBlank(arena: arena).raw
+    return DictionaryElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
   public static func makeStringLiteralSegments(
-    _ elements: [Syntax]) -> StringLiteralSegmentsSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringLiteralSegments,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return StringLiteralSegmentsSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [Syntax]
+  ) -> StringLiteralSegmentsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .stringLiteralSegments, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return StringLiteralSegmentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankStringLiteralSegments(presence: SourcePresence = .present) -> StringLiteralSegmentsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .stringLiteralSegments,
-      layout: [
-    ], length: .zero, presence: presence))
-    return StringLiteralSegmentsSyntax(data)
-  }
-  public static func makeTryExpr(tryKeyword: TokenSyntax, questionOrExclamationMark: TokenSyntax?, expression: ExprSyntax) -> TryExprSyntax {
-    let layout: [RawSyntax?] = [
-      tryKeyword.raw,
-      questionOrExclamationMark?.raw,
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tryExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TryExprSyntax(data)
+  public static func makeBlankStringLiteralSegments(arena: SyntaxArena = .default) -> StringLiteralSegmentsSyntax {
+    let raw = RawStringLiteralSegmentsSyntax.makeBlank(arena: arena).raw
+    return StringLiteralSegmentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTryExpr(presence: SourcePresence = .present) -> TryExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tryExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.tryKeyword),
-      nil,
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return TryExprSyntax(data)
-  }
-  public static func makeAwaitExpr(awaitKeyword: TokenSyntax, expression: ExprSyntax) -> AwaitExprSyntax {
-    let layout: [RawSyntax?] = [
-      awaitKeyword.raw,
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.awaitExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AwaitExprSyntax(data)
+  public static func makeTryExpr(
+    arena: SyntaxArena = .default, tryKeyword: TokenSyntax, questionOrExclamationMark: TokenSyntax?, expression: ExprSyntax
+  ) -> TryExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tryExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = tryKeyword.raw
+      buffer[1] = questionOrExclamationMark?.raw
+      buffer[2] = expression.raw
+    }
+    return TryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAwaitExpr(presence: SourcePresence = .present) -> AwaitExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .awaitExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return AwaitExprSyntax(data)
-  }
-  public static func makeDeclNameArgument(name: TokenSyntax, colon: TokenSyntax) -> DeclNameArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      colon.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgument,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclNameArgumentSyntax(data)
+  public static func makeBlankTryExpr(arena: SyntaxArena = .default) -> TryExprSyntax {
+    let raw = RawTryExprSyntax.makeBlank(arena: arena).raw
+    return TryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclNameArgument(presence: SourcePresence = .present) -> DeclNameArgumentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declNameArgument,
-      layout: [
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      RawSyntax.missingToken(TokenKind.colon),
-    ], length: .zero, presence: presence))
-    return DeclNameArgumentSyntax(data)
+  public static func makeAwaitExpr(
+    arena: SyntaxArena = .default, awaitKeyword: TokenSyntax, expression: ExprSyntax
+  ) -> AwaitExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .awaitExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = awaitKeyword.raw
+      buffer[1] = expression.raw
+    }
+    return AwaitExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankAwaitExpr(arena: SyntaxArena = .default) -> AwaitExprSyntax {
+    let raw = RawAwaitExprSyntax.makeBlank(arena: arena).raw
+    return AwaitExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDeclNameArgument(
+    arena: SyntaxArena = .default, name: TokenSyntax, colon: TokenSyntax
+  ) -> DeclNameArgumentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declNameArgument,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = colon.raw
+    }
+    return DeclNameArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDeclNameArgument(arena: SyntaxArena = .default) -> DeclNameArgumentSyntax {
+    let raw = RawDeclNameArgumentSyntax.makeBlank(arena: arena).raw
+    return DeclNameArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeDeclNameArgumentList(
-    _ elements: [DeclNameArgumentSyntax]) -> DeclNameArgumentListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArgumentList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclNameArgumentListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [DeclNameArgumentSyntax]
+  ) -> DeclNameArgumentListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declNameArgumentList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return DeclNameArgumentListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclNameArgumentList(presence: SourcePresence = .present) -> DeclNameArgumentListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declNameArgumentList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return DeclNameArgumentListSyntax(data)
-  }
-  public static func makeDeclNameArguments(leftParen: TokenSyntax, arguments: DeclNameArgumentListSyntax, rightParen: TokenSyntax) -> DeclNameArgumentsSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      arguments.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declNameArguments,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclNameArgumentsSyntax(data)
+  public static func makeBlankDeclNameArgumentList(arena: SyntaxArena = .default) -> DeclNameArgumentListSyntax {
+    let raw = RawDeclNameArgumentListSyntax.makeBlank(arena: arena).raw
+    return DeclNameArgumentListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclNameArguments(presence: SourcePresence = .present) -> DeclNameArgumentsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declNameArguments,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.declNameArgumentList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return DeclNameArgumentsSyntax(data)
-  }
-  public static func makeIdentifierExpr(identifier: TokenSyntax, declNameArguments: DeclNameArgumentsSyntax?) -> IdentifierExprSyntax {
-    let layout: [RawSyntax?] = [
-      identifier.raw,
-      declNameArguments?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IdentifierExprSyntax(data)
+  public static func makeDeclNameArguments(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, arguments: DeclNameArgumentListSyntax, rightParen: TokenSyntax
+  ) -> DeclNameArgumentsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declNameArguments,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = arguments.raw
+      buffer[2] = rightParen.raw
+    }
+    return DeclNameArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIdentifierExpr(presence: SourcePresence = .present) -> IdentifierExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .identifierExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return IdentifierExprSyntax(data)
-  }
-  public static func makeSuperRefExpr(superKeyword: TokenSyntax) -> SuperRefExprSyntax {
-    let layout: [RawSyntax?] = [
-      superKeyword.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.superRefExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SuperRefExprSyntax(data)
+  public static func makeBlankDeclNameArguments(arena: SyntaxArena = .default) -> DeclNameArgumentsSyntax {
+    let raw = RawDeclNameArgumentsSyntax.makeBlank(arena: arena).raw
+    return DeclNameArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSuperRefExpr(presence: SourcePresence = .present) -> SuperRefExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .superRefExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.superKeyword),
-    ], length: .zero, presence: presence))
-    return SuperRefExprSyntax(data)
-  }
-  public static func makeNilLiteralExpr(nilKeyword: TokenSyntax) -> NilLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      nilKeyword.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.nilLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return NilLiteralExprSyntax(data)
+  public static func makeIdentifierExpr(
+    arena: SyntaxArena = .default, identifier: TokenSyntax, declNameArguments: DeclNameArgumentsSyntax?
+  ) -> IdentifierExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .identifierExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = identifier.raw
+      buffer[1] = declNameArguments?.raw
+    }
+    return IdentifierExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankNilLiteralExpr(presence: SourcePresence = .present) -> NilLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .nilLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.nilKeyword),
-    ], length: .zero, presence: presence))
-    return NilLiteralExprSyntax(data)
-  }
-  public static func makeDiscardAssignmentExpr(wildcard: TokenSyntax) -> DiscardAssignmentExprSyntax {
-    let layout: [RawSyntax?] = [
-      wildcard.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.discardAssignmentExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DiscardAssignmentExprSyntax(data)
+  public static func makeBlankIdentifierExpr(arena: SyntaxArena = .default) -> IdentifierExprSyntax {
+    let raw = RawIdentifierExprSyntax.makeBlank(arena: arena).raw
+    return IdentifierExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDiscardAssignmentExpr(presence: SourcePresence = .present) -> DiscardAssignmentExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .discardAssignmentExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.wildcardKeyword),
-    ], length: .zero, presence: presence))
-    return DiscardAssignmentExprSyntax(data)
-  }
-  public static func makeAssignmentExpr(assignToken: TokenSyntax) -> AssignmentExprSyntax {
-    let layout: [RawSyntax?] = [
-      assignToken.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.assignmentExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AssignmentExprSyntax(data)
+  public static func makeSuperRefExpr(
+    arena: SyntaxArena = .default, superKeyword: TokenSyntax
+  ) -> SuperRefExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .superRefExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = superKeyword.raw
+    }
+    return SuperRefExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAssignmentExpr(presence: SourcePresence = .present) -> AssignmentExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .assignmentExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.equal),
-    ], length: .zero, presence: presence))
-    return AssignmentExprSyntax(data)
-  }
-  public static func makeSequenceExpr(elements: ExprListSyntax) -> SequenceExprSyntax {
-    let layout: [RawSyntax?] = [
-      elements.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sequenceExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SequenceExprSyntax(data)
+  public static func makeBlankSuperRefExpr(arena: SyntaxArena = .default) -> SuperRefExprSyntax {
+    let raw = RawSuperRefExprSyntax.makeBlank(arena: arena).raw
+    return SuperRefExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSequenceExpr(presence: SourcePresence = .present) -> SequenceExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .sequenceExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.exprList),
-    ], length: .zero, presence: presence))
-    return SequenceExprSyntax(data)
+  public static func makeNilLiteralExpr(
+    arena: SyntaxArena = .default, nilKeyword: TokenSyntax
+  ) -> NilLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .nilLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = nilKeyword.raw
+    }
+    return NilLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankNilLiteralExpr(arena: SyntaxArena = .default) -> NilLiteralExprSyntax {
+    let raw = RawNilLiteralExprSyntax.makeBlank(arena: arena).raw
+    return NilLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDiscardAssignmentExpr(
+    arena: SyntaxArena = .default, wildcard: TokenSyntax
+  ) -> DiscardAssignmentExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .discardAssignmentExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = wildcard.raw
+    }
+    return DiscardAssignmentExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDiscardAssignmentExpr(arena: SyntaxArena = .default) -> DiscardAssignmentExprSyntax {
+    let raw = RawDiscardAssignmentExprSyntax.makeBlank(arena: arena).raw
+    return DiscardAssignmentExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAssignmentExpr(
+    arena: SyntaxArena = .default, assignToken: TokenSyntax
+  ) -> AssignmentExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .assignmentExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = assignToken.raw
+    }
+    return AssignmentExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAssignmentExpr(arena: SyntaxArena = .default) -> AssignmentExprSyntax {
+    let raw = RawAssignmentExprSyntax.makeBlank(arena: arena).raw
+    return AssignmentExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeSequenceExpr(
+    arena: SyntaxArena = .default, elements: ExprListSyntax
+  ) -> SequenceExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .sequenceExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = elements.raw
+    }
+    return SequenceExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankSequenceExpr(arena: SyntaxArena = .default) -> SequenceExprSyntax {
+    let raw = RawSequenceExprSyntax.makeBlank(arena: arena).raw
+    return SequenceExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeExprList(
-    _ elements: [ExprSyntax]) -> ExprListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.exprList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ExprListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ExprSyntax]
+  ) -> ExprListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .exprList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ExprListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankExprList(presence: SourcePresence = .present) -> ExprListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .exprList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ExprListSyntax(data)
-  }
-  public static func makePoundLineExpr(poundLine: TokenSyntax) -> PoundLineExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundLine.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundLineExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundLineExprSyntax(data)
+  public static func makeBlankExprList(arena: SyntaxArena = .default) -> ExprListSyntax {
+    let raw = RawExprListSyntax.makeBlank(arena: arena).raw
+    return ExprListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundLineExpr(presence: SourcePresence = .present) -> PoundLineExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundLineExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundLineKeyword),
-    ], length: .zero, presence: presence))
-    return PoundLineExprSyntax(data)
-  }
-  public static func makePoundFileExpr(poundFile: TokenSyntax) -> PoundFileExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundFile.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFileExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundFileExprSyntax(data)
+  public static func makePoundLineExpr(
+    arena: SyntaxArena = .default, poundLine: TokenSyntax
+  ) -> PoundLineExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundLineExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundLine.raw
+    }
+    return PoundLineExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundFileExpr(presence: SourcePresence = .present) -> PoundFileExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundFileExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundFileKeyword),
-    ], length: .zero, presence: presence))
-    return PoundFileExprSyntax(data)
-  }
-  public static func makePoundFileIDExpr(poundFileID: TokenSyntax) -> PoundFileIDExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundFileID.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFileIDExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundFileIDExprSyntax(data)
+  public static func makeBlankPoundLineExpr(arena: SyntaxArena = .default) -> PoundLineExprSyntax {
+    let raw = RawPoundLineExprSyntax.makeBlank(arena: arena).raw
+    return PoundLineExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundFileIDExpr(presence: SourcePresence = .present) -> PoundFileIDExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundFileIDExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundFileIDKeyword),
-    ], length: .zero, presence: presence))
-    return PoundFileIDExprSyntax(data)
-  }
-  public static func makePoundFilePathExpr(poundFilePath: TokenSyntax) -> PoundFilePathExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundFilePath.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFilePathExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundFilePathExprSyntax(data)
+  public static func makePoundFileExpr(
+    arena: SyntaxArena = .default, poundFile: TokenSyntax
+  ) -> PoundFileExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFileExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundFile.raw
+    }
+    return PoundFileExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundFilePathExpr(presence: SourcePresence = .present) -> PoundFilePathExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundFilePathExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundFilePathKeyword),
-    ], length: .zero, presence: presence))
-    return PoundFilePathExprSyntax(data)
-  }
-  public static func makePoundFunctionExpr(poundFunction: TokenSyntax) -> PoundFunctionExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundFunction.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundFunctionExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundFunctionExprSyntax(data)
+  public static func makeBlankPoundFileExpr(arena: SyntaxArena = .default) -> PoundFileExprSyntax {
+    let raw = RawPoundFileExprSyntax.makeBlank(arena: arena).raw
+    return PoundFileExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundFunctionExpr(presence: SourcePresence = .present) -> PoundFunctionExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundFunctionExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundFunctionKeyword),
-    ], length: .zero, presence: presence))
-    return PoundFunctionExprSyntax(data)
-  }
-  public static func makePoundDsohandleExpr(poundDsohandle: TokenSyntax) -> PoundDsohandleExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundDsohandle.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundDsohandleExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundDsohandleExprSyntax(data)
+  public static func makePoundFileIDExpr(
+    arena: SyntaxArena = .default, poundFileID: TokenSyntax
+  ) -> PoundFileIDExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFileIDExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundFileID.raw
+    }
+    return PoundFileIDExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundDsohandleExpr(presence: SourcePresence = .present) -> PoundDsohandleExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundDsohandleExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundDsohandleKeyword),
-    ], length: .zero, presence: presence))
-    return PoundDsohandleExprSyntax(data)
-  }
-  public static func makeSymbolicReferenceExpr(identifier: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?) -> SymbolicReferenceExprSyntax {
-    let layout: [RawSyntax?] = [
-      identifier.raw,
-      genericArgumentClause?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.symbolicReferenceExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SymbolicReferenceExprSyntax(data)
+  public static func makeBlankPoundFileIDExpr(arena: SyntaxArena = .default) -> PoundFileIDExprSyntax {
+    let raw = RawPoundFileIDExprSyntax.makeBlank(arena: arena).raw
+    return PoundFileIDExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSymbolicReferenceExpr(presence: SourcePresence = .present) -> SymbolicReferenceExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .symbolicReferenceExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return SymbolicReferenceExprSyntax(data)
-  }
-  public static func makePrefixOperatorExpr(operatorToken: TokenSyntax?, postfixExpression: ExprSyntax) -> PrefixOperatorExprSyntax {
-    let layout: [RawSyntax?] = [
-      operatorToken?.raw,
-      postfixExpression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.prefixOperatorExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrefixOperatorExprSyntax(data)
+  public static func makePoundFilePathExpr(
+    arena: SyntaxArena = .default, poundFilePath: TokenSyntax
+  ) -> PoundFilePathExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFilePathExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundFilePath.raw
+    }
+    return PoundFilePathExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrefixOperatorExpr(presence: SourcePresence = .present) -> PrefixOperatorExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .prefixOperatorExpr,
-      layout: [
-      nil,
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return PrefixOperatorExprSyntax(data)
-  }
-  public static func makeBinaryOperatorExpr(operatorToken: TokenSyntax) -> BinaryOperatorExprSyntax {
-    let layout: [RawSyntax?] = [
-      operatorToken.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.binaryOperatorExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return BinaryOperatorExprSyntax(data)
+  public static func makeBlankPoundFilePathExpr(arena: SyntaxArena = .default) -> PoundFilePathExprSyntax {
+    let raw = RawPoundFilePathExprSyntax.makeBlank(arena: arena).raw
+    return PoundFilePathExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankBinaryOperatorExpr(presence: SourcePresence = .present) -> BinaryOperatorExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .binaryOperatorExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.unknown("")),
-    ], length: .zero, presence: presence))
-    return BinaryOperatorExprSyntax(data)
-  }
-  public static func makeArrowExpr(asyncKeyword: TokenSyntax?, throwsToken: TokenSyntax?, arrowToken: TokenSyntax) -> ArrowExprSyntax {
-    let layout: [RawSyntax?] = [
-      asyncKeyword?.raw,
-      throwsToken?.raw,
-      arrowToken.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrowExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ArrowExprSyntax(data)
+  public static func makePoundFunctionExpr(
+    arena: SyntaxArena = .default, poundFunction: TokenSyntax
+  ) -> PoundFunctionExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFunctionExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundFunction.raw
+    }
+    return PoundFunctionExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankArrowExpr(presence: SourcePresence = .present) -> ArrowExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .arrowExpr,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.arrow),
-    ], length: .zero, presence: presence))
-    return ArrowExprSyntax(data)
-  }
-  public static func makeFloatLiteralExpr(floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      floatingDigits.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.floatLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FloatLiteralExprSyntax(data)
+  public static func makeBlankPoundFunctionExpr(arena: SyntaxArena = .default) -> PoundFunctionExprSyntax {
+    let raw = RawPoundFunctionExprSyntax.makeBlank(arena: arena).raw
+    return PoundFunctionExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFloatLiteralExpr(presence: SourcePresence = .present) -> FloatLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .floatLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.floatingLiteral("")),
-    ], length: .zero, presence: presence))
-    return FloatLiteralExprSyntax(data)
-  }
-  public static func makeTupleExpr(leftParen: TokenSyntax, elementList: TupleExprElementListSyntax, rightParen: TokenSyntax) -> TupleExprSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      elementList.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TupleExprSyntax(data)
+  public static func makePoundDsohandleExpr(
+    arena: SyntaxArena = .default, poundDsohandle: TokenSyntax
+  ) -> PoundDsohandleExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundDsohandleExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundDsohandle.raw
+    }
+    return PoundDsohandleExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTupleExpr(presence: SourcePresence = .present) -> TupleExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tupleExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.tupleExprElementList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return TupleExprSyntax(data)
-  }
-  public static func makeArrayExpr(leftSquare: TokenSyntax, elements: ArrayElementListSyntax, rightSquare: TokenSyntax) -> ArrayExprSyntax {
-    let layout: [RawSyntax?] = [
-      leftSquare.raw,
-      elements.raw,
-      rightSquare.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ArrayExprSyntax(data)
+  public static func makeBlankPoundDsohandleExpr(arena: SyntaxArena = .default) -> PoundDsohandleExprSyntax {
+    let raw = RawPoundDsohandleExprSyntax.makeBlank(arena: arena).raw
+    return PoundDsohandleExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankArrayExpr(presence: SourcePresence = .present) -> ArrayExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .arrayExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftSquareBracket),
-      RawSyntax.missing(SyntaxKind.arrayElementList),
-      RawSyntax.missingToken(TokenKind.rightSquareBracket),
-    ], length: .zero, presence: presence))
-    return ArrayExprSyntax(data)
-  }
-  public static func makeDictionaryExpr(leftSquare: TokenSyntax, content: Syntax, rightSquare: TokenSyntax) -> DictionaryExprSyntax {
-    let layout: [RawSyntax?] = [
-      leftSquare.raw,
-      content.raw,
-      rightSquare.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DictionaryExprSyntax(data)
+  public static func makeSymbolicReferenceExpr(
+    arena: SyntaxArena = .default, identifier: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?
+  ) -> SymbolicReferenceExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .symbolicReferenceExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = identifier.raw
+      buffer[1] = genericArgumentClause?.raw
+    }
+    return SymbolicReferenceExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDictionaryExpr(presence: SourcePresence = .present) -> DictionaryExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .dictionaryExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftSquareBracket),
-      RawSyntax.missing(SyntaxKind.unknown),
-      RawSyntax.missingToken(TokenKind.rightSquareBracket),
-    ], length: .zero, presence: presence))
-    return DictionaryExprSyntax(data)
-  }
-  public static func makeTupleExprElement(label: TokenSyntax?, colon: TokenSyntax?, expression: ExprSyntax, trailingComma: TokenSyntax?) -> TupleExprElementSyntax {
-    let layout: [RawSyntax?] = [
-      label?.raw,
-      colon?.raw,
-      expression.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleExprElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TupleExprElementSyntax(data)
+  public static func makeBlankSymbolicReferenceExpr(arena: SyntaxArena = .default) -> SymbolicReferenceExprSyntax {
+    let raw = RawSymbolicReferenceExprSyntax.makeBlank(arena: arena).raw
+    return SymbolicReferenceExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTupleExprElement(presence: SourcePresence = .present) -> TupleExprElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tupleExprElement,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-    ], length: .zero, presence: presence))
-    return TupleExprElementSyntax(data)
-  }
-  public static func makeArrayElement(expression: ExprSyntax, trailingComma: TokenSyntax?) -> ArrayElementSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ArrayElementSyntax(data)
+  public static func makePrefixOperatorExpr(
+    arena: SyntaxArena = .default, operatorToken: TokenSyntax?, postfixExpression: ExprSyntax
+  ) -> PrefixOperatorExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .prefixOperatorExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = operatorToken?.raw
+      buffer[1] = postfixExpression.raw
+    }
+    return PrefixOperatorExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankArrayElement(presence: SourcePresence = .present) -> ArrayElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .arrayElement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-    ], length: .zero, presence: presence))
-    return ArrayElementSyntax(data)
-  }
-  public static func makeDictionaryElement(keyExpression: ExprSyntax, colon: TokenSyntax, valueExpression: ExprSyntax, trailingComma: TokenSyntax?) -> DictionaryElementSyntax {
-    let layout: [RawSyntax?] = [
-      keyExpression.raw,
-      colon.raw,
-      valueExpression.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DictionaryElementSyntax(data)
+  public static func makeBlankPrefixOperatorExpr(arena: SyntaxArena = .default) -> PrefixOperatorExprSyntax {
+    let raw = RawPrefixOperatorExprSyntax.makeBlank(arena: arena).raw
+    return PrefixOperatorExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDictionaryElement(presence: SourcePresence = .present) -> DictionaryElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .dictionaryElement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-    ], length: .zero, presence: presence))
-    return DictionaryElementSyntax(data)
-  }
-  public static func makeIntegerLiteralExpr(digits: TokenSyntax) -> IntegerLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      digits.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.integerLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IntegerLiteralExprSyntax(data)
+  public static func makeBinaryOperatorExpr(
+    arena: SyntaxArena = .default, operatorToken: TokenSyntax
+  ) -> BinaryOperatorExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .binaryOperatorExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = operatorToken.raw
+    }
+    return BinaryOperatorExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIntegerLiteralExpr(presence: SourcePresence = .present) -> IntegerLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .integerLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.integerLiteral("")),
-    ], length: .zero, presence: presence))
-    return IntegerLiteralExprSyntax(data)
-  }
-  public static func makeBooleanLiteralExpr(booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      booleanLiteral.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.booleanLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return BooleanLiteralExprSyntax(data)
+  public static func makeBlankBinaryOperatorExpr(arena: SyntaxArena = .default) -> BinaryOperatorExprSyntax {
+    let raw = RawBinaryOperatorExprSyntax.makeBlank(arena: arena).raw
+    return BinaryOperatorExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankBooleanLiteralExpr(presence: SourcePresence = .present) -> BooleanLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .booleanLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.trueKeyword),
-    ], length: .zero, presence: presence))
-    return BooleanLiteralExprSyntax(data)
-  }
-  public static func makeTernaryExpr(conditionExpression: ExprSyntax, questionMark: TokenSyntax, firstChoice: ExprSyntax, colonMark: TokenSyntax, secondChoice: ExprSyntax) -> TernaryExprSyntax {
-    let layout: [RawSyntax?] = [
-      conditionExpression.raw,
-      questionMark.raw,
-      firstChoice.raw,
-      colonMark.raw,
-      secondChoice.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ternaryExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TernaryExprSyntax(data)
+  public static func makeArrowExpr(
+    arena: SyntaxArena = .default, asyncKeyword: TokenSyntax?, throwsToken: TokenSyntax?, arrowToken: TokenSyntax
+  ) -> ArrowExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrowExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = asyncKeyword?.raw
+      buffer[1] = throwsToken?.raw
+      buffer[2] = arrowToken.raw
+    }
+    return ArrowExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTernaryExpr(presence: SourcePresence = .present) -> TernaryExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .ternaryExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.infixQuestionMark),
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return TernaryExprSyntax(data)
-  }
-  public static func makeMemberAccessExpr(base: ExprSyntax?, dot: TokenSyntax, name: TokenSyntax, declNameArguments: DeclNameArgumentsSyntax?) -> MemberAccessExprSyntax {
-    let layout: [RawSyntax?] = [
-      base?.raw,
-      dot.raw,
-      name.raw,
-      declNameArguments?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberAccessExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MemberAccessExprSyntax(data)
+  public static func makeBlankArrowExpr(arena: SyntaxArena = .default) -> ArrowExprSyntax {
+    let raw = RawArrowExprSyntax.makeBlank(arena: arena).raw
+    return ArrowExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMemberAccessExpr(presence: SourcePresence = .present) -> MemberAccessExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .memberAccessExpr,
-      layout: [
-      nil,
-      RawSyntax.missingToken(TokenKind.period),
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return MemberAccessExprSyntax(data)
-  }
-  public static func makeIsExpr(isTok: TokenSyntax, typeName: TypeSyntax) -> IsExprSyntax {
-    let layout: [RawSyntax?] = [
-      isTok.raw,
-      typeName.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IsExprSyntax(data)
+  public static func makeFloatLiteralExpr(
+    arena: SyntaxArena = .default, floatingDigits: TokenSyntax
+  ) -> FloatLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .floatLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = floatingDigits.raw
+    }
+    return FloatLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIsExpr(presence: SourcePresence = .present) -> IsExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .isExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.isKeyword),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return IsExprSyntax(data)
-  }
-  public static func makeAsExpr(asTok: TokenSyntax, questionOrExclamationMark: TokenSyntax?, typeName: TypeSyntax) -> AsExprSyntax {
-    let layout: [RawSyntax?] = [
-      asTok.raw,
-      questionOrExclamationMark?.raw,
-      typeName.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AsExprSyntax(data)
+  public static func makeBlankFloatLiteralExpr(arena: SyntaxArena = .default) -> FloatLiteralExprSyntax {
+    let raw = RawFloatLiteralExprSyntax.makeBlank(arena: arena).raw
+    return FloatLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAsExpr(presence: SourcePresence = .present) -> AsExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .asExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.asKeyword),
-      nil,
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return AsExprSyntax(data)
-  }
-  public static func makeTypeExpr(type: TypeSyntax) -> TypeExprSyntax {
-    let layout: [RawSyntax?] = [
-      type.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TypeExprSyntax(data)
+  public static func makeTupleExpr(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, elementList: TupleExprElementListSyntax, rightParen: TokenSyntax
+  ) -> TupleExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = elementList.raw
+      buffer[2] = rightParen.raw
+    }
+    return TupleExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTypeExpr(presence: SourcePresence = .present) -> TypeExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .typeExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return TypeExprSyntax(data)
-  }
-  public static func makeClosureCaptureItem(specifier: TokenListSyntax?, name: TokenSyntax?, assignToken: TokenSyntax?, expression: ExprSyntax, trailingComma: TokenSyntax?) -> ClosureCaptureItemSyntax {
-    let layout: [RawSyntax?] = [
-      specifier?.raw,
-      name?.raw,
-      assignToken?.raw,
-      expression.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItem,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureCaptureItemSyntax(data)
+  public static func makeBlankTupleExpr(arena: SyntaxArena = .default) -> TupleExprSyntax {
+    let raw = RawTupleExprSyntax.makeBlank(arena: arena).raw
+    return TupleExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureCaptureItem(presence: SourcePresence = .present) -> ClosureCaptureItemSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureCaptureItem,
-      layout: [
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-    ], length: .zero, presence: presence))
-    return ClosureCaptureItemSyntax(data)
+  public static func makeArrayExpr(
+    arena: SyntaxArena = .default, leftSquare: TokenSyntax, elements: ArrayElementListSyntax, rightSquare: TokenSyntax
+  ) -> ArrayExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftSquare.raw
+      buffer[1] = elements.raw
+      buffer[2] = rightSquare.raw
+    }
+    return ArrayExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankArrayExpr(arena: SyntaxArena = .default) -> ArrayExprSyntax {
+    let raw = RawArrayExprSyntax.makeBlank(arena: arena).raw
+    return ArrayExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDictionaryExpr(
+    arena: SyntaxArena = .default, leftSquare: TokenSyntax, content: Syntax, rightSquare: TokenSyntax
+  ) -> DictionaryExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftSquare.raw
+      buffer[1] = content.raw
+      buffer[2] = rightSquare.raw
+    }
+    return DictionaryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDictionaryExpr(arena: SyntaxArena = .default) -> DictionaryExprSyntax {
+    let raw = RawDictionaryExprSyntax.makeBlank(arena: arena).raw
+    return DictionaryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTupleExprElement(
+    arena: SyntaxArena = .default, label: TokenSyntax?, colon: TokenSyntax?, expression: ExprSyntax, trailingComma: TokenSyntax?
+  ) -> TupleExprElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElement,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = label?.raw
+      buffer[1] = colon?.raw
+      buffer[2] = expression.raw
+      buffer[3] = trailingComma?.raw
+    }
+    return TupleExprElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTupleExprElement(arena: SyntaxArena = .default) -> TupleExprElementSyntax {
+    let raw = RawTupleExprElementSyntax.makeBlank(arena: arena).raw
+    return TupleExprElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeArrayElement(
+    arena: SyntaxArena = .default, expression: ExprSyntax, trailingComma: TokenSyntax?
+  ) -> ArrayElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayElement,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return ArrayElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankArrayElement(arena: SyntaxArena = .default) -> ArrayElementSyntax {
+    let raw = RawArrayElementSyntax.makeBlank(arena: arena).raw
+    return ArrayElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDictionaryElement(
+    arena: SyntaxArena = .default, keyExpression: ExprSyntax, colon: TokenSyntax, valueExpression: ExprSyntax, trailingComma: TokenSyntax?
+  ) -> DictionaryElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryElement,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = keyExpression.raw
+      buffer[1] = colon.raw
+      buffer[2] = valueExpression.raw
+      buffer[3] = trailingComma?.raw
+    }
+    return DictionaryElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDictionaryElement(arena: SyntaxArena = .default) -> DictionaryElementSyntax {
+    let raw = RawDictionaryElementSyntax.makeBlank(arena: arena).raw
+    return DictionaryElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeIntegerLiteralExpr(
+    arena: SyntaxArena = .default, digits: TokenSyntax
+  ) -> IntegerLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .integerLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = digits.raw
+    }
+    return IntegerLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankIntegerLiteralExpr(arena: SyntaxArena = .default) -> IntegerLiteralExprSyntax {
+    let raw = RawIntegerLiteralExprSyntax.makeBlank(arena: arena).raw
+    return IntegerLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBooleanLiteralExpr(
+    arena: SyntaxArena = .default, booleanLiteral: TokenSyntax
+  ) -> BooleanLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .booleanLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = booleanLiteral.raw
+    }
+    return BooleanLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankBooleanLiteralExpr(arena: SyntaxArena = .default) -> BooleanLiteralExprSyntax {
+    let raw = RawBooleanLiteralExprSyntax.makeBlank(arena: arena).raw
+    return BooleanLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTernaryExpr(
+    arena: SyntaxArena = .default, conditionExpression: ExprSyntax, questionMark: TokenSyntax, firstChoice: ExprSyntax, colonMark: TokenSyntax, secondChoice: ExprSyntax
+  ) -> TernaryExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ternaryExpr,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = conditionExpression.raw
+      buffer[1] = questionMark.raw
+      buffer[2] = firstChoice.raw
+      buffer[3] = colonMark.raw
+      buffer[4] = secondChoice.raw
+    }
+    return TernaryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTernaryExpr(arena: SyntaxArena = .default) -> TernaryExprSyntax {
+    let raw = RawTernaryExprSyntax.makeBlank(arena: arena).raw
+    return TernaryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeMemberAccessExpr(
+    arena: SyntaxArena = .default, base: ExprSyntax?, dot: TokenSyntax, name: TokenSyntax, declNameArguments: DeclNameArgumentsSyntax?
+  ) -> MemberAccessExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberAccessExpr,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = base?.raw
+      buffer[1] = dot.raw
+      buffer[2] = name.raw
+      buffer[3] = declNameArguments?.raw
+    }
+    return MemberAccessExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankMemberAccessExpr(arena: SyntaxArena = .default) -> MemberAccessExprSyntax {
+    let raw = RawMemberAccessExprSyntax.makeBlank(arena: arena).raw
+    return MemberAccessExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeIsExpr(
+    arena: SyntaxArena = .default, isTok: TokenSyntax, typeName: TypeSyntax
+  ) -> IsExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .isExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = isTok.raw
+      buffer[1] = typeName.raw
+    }
+    return IsExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankIsExpr(arena: SyntaxArena = .default) -> IsExprSyntax {
+    let raw = RawIsExprSyntax.makeBlank(arena: arena).raw
+    return IsExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAsExpr(
+    arena: SyntaxArena = .default, asTok: TokenSyntax, questionOrExclamationMark: TokenSyntax?, typeName: TypeSyntax
+  ) -> AsExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .asExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = asTok.raw
+      buffer[1] = questionOrExclamationMark?.raw
+      buffer[2] = typeName.raw
+    }
+    return AsExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAsExpr(arena: SyntaxArena = .default) -> AsExprSyntax {
+    let raw = RawAsExprSyntax.makeBlank(arena: arena).raw
+    return AsExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTypeExpr(
+    arena: SyntaxArena = .default, type: TypeSyntax
+  ) -> TypeExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = type.raw
+    }
+    return TypeExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTypeExpr(arena: SyntaxArena = .default) -> TypeExprSyntax {
+    let raw = RawTypeExprSyntax.makeBlank(arena: arena).raw
+    return TypeExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeClosureCaptureItem(
+    arena: SyntaxArena = .default, specifier: TokenListSyntax?, name: TokenSyntax?, assignToken: TokenSyntax?, expression: ExprSyntax, trailingComma: TokenSyntax?
+  ) -> ClosureCaptureItemSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureCaptureItem,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = specifier?.raw
+      buffer[1] = name?.raw
+      buffer[2] = assignToken?.raw
+      buffer[3] = expression.raw
+      buffer[4] = trailingComma?.raw
+    }
+    return ClosureCaptureItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankClosureCaptureItem(arena: SyntaxArena = .default) -> ClosureCaptureItemSyntax {
+    let raw = RawClosureCaptureItemSyntax.makeBlank(arena: arena).raw
+    return ClosureCaptureItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeClosureCaptureItemList(
-    _ elements: [ClosureCaptureItemSyntax]) -> ClosureCaptureItemListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureItemList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureCaptureItemListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ClosureCaptureItemSyntax]
+  ) -> ClosureCaptureItemListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureCaptureItemList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ClosureCaptureItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureCaptureItemList(presence: SourcePresence = .present) -> ClosureCaptureItemListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureCaptureItemList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ClosureCaptureItemListSyntax(data)
-  }
-  public static func makeClosureCaptureSignature(leftSquare: TokenSyntax, items: ClosureCaptureItemListSyntax?, rightSquare: TokenSyntax) -> ClosureCaptureSignatureSyntax {
-    let layout: [RawSyntax?] = [
-      leftSquare.raw,
-      items?.raw,
-      rightSquare.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureCaptureSignature,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureCaptureSignatureSyntax(data)
+  public static func makeBlankClosureCaptureItemList(arena: SyntaxArena = .default) -> ClosureCaptureItemListSyntax {
+    let raw = RawClosureCaptureItemListSyntax.makeBlank(arena: arena).raw
+    return ClosureCaptureItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureCaptureSignature(presence: SourcePresence = .present) -> ClosureCaptureSignatureSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureCaptureSignature,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftSquareBracket),
-      nil,
-      RawSyntax.missingToken(TokenKind.rightSquareBracket),
-    ], length: .zero, presence: presence))
-    return ClosureCaptureSignatureSyntax(data)
-  }
-  public static func makeClosureParam(name: TokenSyntax, trailingComma: TokenSyntax?) -> ClosureParamSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParam,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureParamSyntax(data)
+  public static func makeClosureCaptureSignature(
+    arena: SyntaxArena = .default, leftSquare: TokenSyntax, items: ClosureCaptureItemListSyntax?, rightSquare: TokenSyntax
+  ) -> ClosureCaptureSignatureSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureCaptureSignature,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftSquare.raw
+      buffer[1] = items?.raw
+      buffer[2] = rightSquare.raw
+    }
+    return ClosureCaptureSignatureSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureParam(presence: SourcePresence = .present) -> ClosureParamSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureParam,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return ClosureParamSyntax(data)
+  public static func makeBlankClosureCaptureSignature(arena: SyntaxArena = .default) -> ClosureCaptureSignatureSyntax {
+    let raw = RawClosureCaptureSignatureSyntax.makeBlank(arena: arena).raw
+    return ClosureCaptureSignatureSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeClosureParam(
+    arena: SyntaxArena = .default, name: TokenSyntax, trailingComma: TokenSyntax?
+  ) -> ClosureParamSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureParam,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return ClosureParamSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankClosureParam(arena: SyntaxArena = .default) -> ClosureParamSyntax {
+    let raw = RawClosureParamSyntax.makeBlank(arena: arena).raw
+    return ClosureParamSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeClosureParamList(
-    _ elements: [ClosureParamSyntax]) -> ClosureParamListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureParamList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureParamListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ClosureParamSyntax]
+  ) -> ClosureParamListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureParamList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ClosureParamListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureParamList(presence: SourcePresence = .present) -> ClosureParamListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureParamList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ClosureParamListSyntax(data)
-  }
-  public static func makeClosureSignature(attributes: AttributeListSyntax?, capture: ClosureCaptureSignatureSyntax?, input: Syntax?, asyncKeyword: TokenSyntax?, throwsTok: TokenSyntax?, output: ReturnClauseSyntax?, inTok: TokenSyntax) -> ClosureSignatureSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      capture?.raw,
-      input?.raw,
-      asyncKeyword?.raw,
-      throwsTok?.raw,
-      output?.raw,
-      inTok.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureSignature,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureSignatureSyntax(data)
+  public static func makeBlankClosureParamList(arena: SyntaxArena = .default) -> ClosureParamListSyntax {
+    let raw = RawClosureParamListSyntax.makeBlank(arena: arena).raw
+    return ClosureParamListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureSignature(presence: SourcePresence = .present) -> ClosureSignatureSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureSignature,
-      layout: [
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.inKeyword),
-    ], length: .zero, presence: presence))
-    return ClosureSignatureSyntax(data)
-  }
-  public static func makeClosureExpr(leftBrace: TokenSyntax, signature: ClosureSignatureSyntax?, statements: CodeBlockItemListSyntax, rightBrace: TokenSyntax) -> ClosureExprSyntax {
-    let layout: [RawSyntax?] = [
-      leftBrace.raw,
-      signature?.raw,
-      statements.raw,
-      rightBrace.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.closureExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClosureExprSyntax(data)
+  public static func makeClosureSignature(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, capture: ClosureCaptureSignatureSyntax?, input: Syntax?, asyncKeyword: TokenSyntax?, throwsTok: TokenSyntax?, output: ReturnClauseSyntax?, inTok: TokenSyntax
+  ) -> ClosureSignatureSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureSignature,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = capture?.raw
+      buffer[2] = input?.raw
+      buffer[3] = asyncKeyword?.raw
+      buffer[4] = throwsTok?.raw
+      buffer[5] = output?.raw
+      buffer[6] = inTok.raw
+    }
+    return ClosureSignatureSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClosureExpr(presence: SourcePresence = .present) -> ClosureExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .closureExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftBrace),
-      nil,
-      RawSyntax.missing(SyntaxKind.codeBlockItemList),
-      RawSyntax.missingToken(TokenKind.rightBrace),
-    ], length: .zero, presence: presence))
-    return ClosureExprSyntax(data)
-  }
-  public static func makeUnresolvedPatternExpr(pattern: PatternSyntax) -> UnresolvedPatternExprSyntax {
-    let layout: [RawSyntax?] = [
-      pattern.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unresolvedPatternExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return UnresolvedPatternExprSyntax(data)
+  public static func makeBlankClosureSignature(arena: SyntaxArena = .default) -> ClosureSignatureSyntax {
+    let raw = RawClosureSignatureSyntax.makeBlank(arena: arena).raw
+    return ClosureSignatureSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankUnresolvedPatternExpr(presence: SourcePresence = .present) -> UnresolvedPatternExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unresolvedPatternExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.pattern),
-    ], length: .zero, presence: presence))
-    return UnresolvedPatternExprSyntax(data)
-  }
-  public static func makeMultipleTrailingClosureElement(label: TokenSyntax, colon: TokenSyntax, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
-    let layout: [RawSyntax?] = [
-      label.raw,
-      colon.raw,
-      closure.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MultipleTrailingClosureElementSyntax(data)
+  public static func makeClosureExpr(
+    arena: SyntaxArena = .default, leftBrace: TokenSyntax, signature: ClosureSignatureSyntax?, statements: CodeBlockItemListSyntax, rightBrace: TokenSyntax
+  ) -> ClosureExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureExpr,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftBrace.raw
+      buffer[1] = signature?.raw
+      buffer[2] = statements.raw
+      buffer[3] = rightBrace.raw
+    }
+    return ClosureExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMultipleTrailingClosureElement(presence: SourcePresence = .present) -> MultipleTrailingClosureElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureElement,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.closureExpr),
-    ], length: .zero, presence: presence))
-    return MultipleTrailingClosureElementSyntax(data)
+  public static func makeBlankClosureExpr(arena: SyntaxArena = .default) -> ClosureExprSyntax {
+    let raw = RawClosureExprSyntax.makeBlank(arena: arena).raw
+    return ClosureExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeUnresolvedPatternExpr(
+    arena: SyntaxArena = .default, pattern: PatternSyntax
+  ) -> UnresolvedPatternExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .unresolvedPatternExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = pattern.raw
+    }
+    return UnresolvedPatternExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankUnresolvedPatternExpr(arena: SyntaxArena = .default) -> UnresolvedPatternExprSyntax {
+    let raw = RawUnresolvedPatternExprSyntax.makeBlank(arena: arena).raw
+    return UnresolvedPatternExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeMultipleTrailingClosureElement(
+    arena: SyntaxArena = .default, label: TokenSyntax, colon: TokenSyntax, closure: ClosureExprSyntax
+  ) -> MultipleTrailingClosureElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .multipleTrailingClosureElement,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = label.raw
+      buffer[1] = colon.raw
+      buffer[2] = closure.raw
+    }
+    return MultipleTrailingClosureElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankMultipleTrailingClosureElement(arena: SyntaxArena = .default) -> MultipleTrailingClosureElementSyntax {
+    let raw = RawMultipleTrailingClosureElementSyntax.makeBlank(arena: arena).raw
+    return MultipleTrailingClosureElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeMultipleTrailingClosureElementList(
-    _ elements: [MultipleTrailingClosureElementSyntax]) -> MultipleTrailingClosureElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.multipleTrailingClosureElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MultipleTrailingClosureElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [MultipleTrailingClosureElementSyntax]
+  ) -> MultipleTrailingClosureElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .multipleTrailingClosureElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return MultipleTrailingClosureElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMultipleTrailingClosureElementList(presence: SourcePresence = .present) -> MultipleTrailingClosureElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .multipleTrailingClosureElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return MultipleTrailingClosureElementListSyntax(data)
-  }
-  public static func makeFunctionCallExpr(calledExpression: ExprSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax, rightParen: TokenSyntax?, trailingClosure: ClosureExprSyntax?, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
-    let layout: [RawSyntax?] = [
-      calledExpression.raw,
-      leftParen?.raw,
-      argumentList.raw,
-      rightParen?.raw,
-      trailingClosure?.raw,
-      additionalTrailingClosures?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionCallExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionCallExprSyntax(data)
+  public static func makeBlankMultipleTrailingClosureElementList(arena: SyntaxArena = .default) -> MultipleTrailingClosureElementListSyntax {
+    let raw = RawMultipleTrailingClosureElementListSyntax.makeBlank(arena: arena).raw
+    return MultipleTrailingClosureElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionCallExpr(presence: SourcePresence = .present) -> FunctionCallExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionCallExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-      RawSyntax.missing(SyntaxKind.tupleExprElementList),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return FunctionCallExprSyntax(data)
-  }
-  public static func makeSubscriptExpr(calledExpression: ExprSyntax, leftBracket: TokenSyntax, argumentList: TupleExprElementListSyntax, rightBracket: TokenSyntax, trailingClosure: ClosureExprSyntax?, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
-    let layout: [RawSyntax?] = [
-      calledExpression.raw,
-      leftBracket.raw,
-      argumentList.raw,
-      rightBracket.raw,
-      trailingClosure?.raw,
-      additionalTrailingClosures?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.subscriptExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SubscriptExprSyntax(data)
+  public static func makeFunctionCallExpr(
+    arena: SyntaxArena = .default, calledExpression: ExprSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax, rightParen: TokenSyntax?, trailingClosure: ClosureExprSyntax?, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?
+  ) -> FunctionCallExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionCallExpr,
+                                   uninitializedCount: 6) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = calledExpression.raw
+      buffer[1] = leftParen?.raw
+      buffer[2] = argumentList.raw
+      buffer[3] = rightParen?.raw
+      buffer[4] = trailingClosure?.raw
+      buffer[5] = additionalTrailingClosures?.raw
+    }
+    return FunctionCallExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSubscriptExpr(presence: SourcePresence = .present) -> SubscriptExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .subscriptExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.leftSquareBracket),
-      RawSyntax.missing(SyntaxKind.tupleExprElementList),
-      RawSyntax.missingToken(TokenKind.rightSquareBracket),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return SubscriptExprSyntax(data)
-  }
-  public static func makeOptionalChainingExpr(expression: ExprSyntax, questionMark: TokenSyntax) -> OptionalChainingExprSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-      questionMark.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalChainingExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return OptionalChainingExprSyntax(data)
+  public static func makeBlankFunctionCallExpr(arena: SyntaxArena = .default) -> FunctionCallExprSyntax {
+    let raw = RawFunctionCallExprSyntax.makeBlank(arena: arena).raw
+    return FunctionCallExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankOptionalChainingExpr(presence: SourcePresence = .present) -> OptionalChainingExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .optionalChainingExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.postfixQuestionMark),
-    ], length: .zero, presence: presence))
-    return OptionalChainingExprSyntax(data)
-  }
-  public static func makeForcedValueExpr(expression: ExprSyntax, exclamationMark: TokenSyntax) -> ForcedValueExprSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-      exclamationMark.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.forcedValueExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ForcedValueExprSyntax(data)
+  public static func makeSubscriptExpr(
+    arena: SyntaxArena = .default, calledExpression: ExprSyntax, leftBracket: TokenSyntax, argumentList: TupleExprElementListSyntax, rightBracket: TokenSyntax, trailingClosure: ClosureExprSyntax?, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?
+  ) -> SubscriptExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .subscriptExpr,
+                                   uninitializedCount: 6) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = calledExpression.raw
+      buffer[1] = leftBracket.raw
+      buffer[2] = argumentList.raw
+      buffer[3] = rightBracket.raw
+      buffer[4] = trailingClosure?.raw
+      buffer[5] = additionalTrailingClosures?.raw
+    }
+    return SubscriptExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankForcedValueExpr(presence: SourcePresence = .present) -> ForcedValueExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .forcedValueExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.exclamationMark),
-    ], length: .zero, presence: presence))
-    return ForcedValueExprSyntax(data)
-  }
-  public static func makePostfixUnaryExpr(expression: ExprSyntax, operatorToken: TokenSyntax) -> PostfixUnaryExprSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-      operatorToken.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixUnaryExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PostfixUnaryExprSyntax(data)
+  public static func makeBlankSubscriptExpr(arena: SyntaxArena = .default) -> SubscriptExprSyntax {
+    let raw = RawSubscriptExprSyntax.makeBlank(arena: arena).raw
+    return SubscriptExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPostfixUnaryExpr(presence: SourcePresence = .present) -> PostfixUnaryExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .postfixUnaryExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.postfixOperator("")),
-    ], length: .zero, presence: presence))
-    return PostfixUnaryExprSyntax(data)
-  }
-  public static func makeSpecializeExpr(expression: ExprSyntax, genericArgumentClause: GenericArgumentClauseSyntax) -> SpecializeExprSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-      genericArgumentClause.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.specializeExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SpecializeExprSyntax(data)
+  public static func makeOptionalChainingExpr(
+    arena: SyntaxArena = .default, expression: ExprSyntax, questionMark: TokenSyntax
+  ) -> OptionalChainingExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalChainingExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+      buffer[1] = questionMark.raw
+    }
+    return OptionalChainingExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSpecializeExpr(presence: SourcePresence = .present) -> SpecializeExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .specializeExpr,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missing(SyntaxKind.genericArgumentClause),
-    ], length: .zero, presence: presence))
-    return SpecializeExprSyntax(data)
-  }
-  public static func makeStringSegment(content: TokenSyntax) -> StringSegmentSyntax {
-    let layout: [RawSyntax?] = [
-      content.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringSegment,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return StringSegmentSyntax(data)
+  public static func makeBlankOptionalChainingExpr(arena: SyntaxArena = .default) -> OptionalChainingExprSyntax {
+    let raw = RawOptionalChainingExprSyntax.makeBlank(arena: arena).raw
+    return OptionalChainingExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankStringSegment(presence: SourcePresence = .present) -> StringSegmentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .stringSegment,
-      layout: [
-      RawSyntax.missingToken(TokenKind.stringSegment("")),
-    ], length: .zero, presence: presence))
-    return StringSegmentSyntax(data)
-  }
-  public static func makeExpressionSegment(backslash: TokenSyntax, delimiter: TokenSyntax?, leftParen: TokenSyntax, expressions: TupleExprElementListSyntax, rightParen: TokenSyntax) -> ExpressionSegmentSyntax {
-    let layout: [RawSyntax?] = [
-      backslash.raw,
-      delimiter?.raw,
-      leftParen.raw,
-      expressions.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionSegment,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ExpressionSegmentSyntax(data)
+  public static func makeForcedValueExpr(
+    arena: SyntaxArena = .default, expression: ExprSyntax, exclamationMark: TokenSyntax
+  ) -> ForcedValueExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .forcedValueExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+      buffer[1] = exclamationMark.raw
+    }
+    return ForcedValueExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankExpressionSegment(presence: SourcePresence = .present) -> ExpressionSegmentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .expressionSegment,
-      layout: [
-      RawSyntax.missingToken(TokenKind.backslash),
-      nil,
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.tupleExprElementList),
-      RawSyntax.missingToken(TokenKind.stringInterpolationAnchor),
-    ], length: .zero, presence: presence))
-    return ExpressionSegmentSyntax(data)
-  }
-  public static func makeStringLiteralExpr(openDelimiter: TokenSyntax?, openQuote: TokenSyntax, segments: StringLiteralSegmentsSyntax, closeQuote: TokenSyntax, closeDelimiter: TokenSyntax?) -> StringLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      openDelimiter?.raw,
-      openQuote.raw,
-      segments.raw,
-      closeQuote.raw,
-      closeDelimiter?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.stringLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return StringLiteralExprSyntax(data)
+  public static func makeBlankForcedValueExpr(arena: SyntaxArena = .default) -> ForcedValueExprSyntax {
+    let raw = RawForcedValueExprSyntax.makeBlank(arena: arena).raw
+    return ForcedValueExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankStringLiteralExpr(presence: SourcePresence = .present) -> StringLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .stringLiteralExpr,
-      layout: [
-      nil,
-      RawSyntax.missingToken(TokenKind.stringQuote),
-      RawSyntax.missing(SyntaxKind.stringLiteralSegments),
-      RawSyntax.missingToken(TokenKind.stringQuote),
-      nil,
-    ], length: .zero, presence: presence))
-    return StringLiteralExprSyntax(data)
-  }
-  public static func makeRegexLiteralExpr(regex: TokenSyntax) -> RegexLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      regex.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.regexLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return RegexLiteralExprSyntax(data)
+  public static func makePostfixUnaryExpr(
+    arena: SyntaxArena = .default, expression: ExprSyntax, operatorToken: TokenSyntax
+  ) -> PostfixUnaryExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .postfixUnaryExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+      buffer[1] = operatorToken.raw
+    }
+    return PostfixUnaryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankRegexLiteralExpr(presence: SourcePresence = .present) -> RegexLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .regexLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.regexLiteral("")),
-    ], length: .zero, presence: presence))
-    return RegexLiteralExprSyntax(data)
-  }
-  public static func makeKeyPathExpr(backslash: TokenSyntax, rootExpr: ExprSyntax?, expression: ExprSyntax) -> KeyPathExprSyntax {
-    let layout: [RawSyntax?] = [
-      backslash.raw,
-      rootExpr?.raw,
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.keyPathExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return KeyPathExprSyntax(data)
+  public static func makeBlankPostfixUnaryExpr(arena: SyntaxArena = .default) -> PostfixUnaryExprSyntax {
+    let raw = RawPostfixUnaryExprSyntax.makeBlank(arena: arena).raw
+    return PostfixUnaryExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankKeyPathExpr(presence: SourcePresence = .present) -> KeyPathExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .keyPathExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.backslash),
-      nil,
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return KeyPathExprSyntax(data)
-  }
-  public static func makeKeyPathBaseExpr(period: TokenSyntax) -> KeyPathBaseExprSyntax {
-    let layout: [RawSyntax?] = [
-      period.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.keyPathBaseExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return KeyPathBaseExprSyntax(data)
+  public static func makeSpecializeExpr(
+    arena: SyntaxArena = .default, expression: ExprSyntax, genericArgumentClause: GenericArgumentClauseSyntax
+  ) -> SpecializeExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .specializeExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+      buffer[1] = genericArgumentClause.raw
+    }
+    return SpecializeExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankKeyPathBaseExpr(presence: SourcePresence = .present) -> KeyPathBaseExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .keyPathBaseExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.period),
-    ], length: .zero, presence: presence))
-    return KeyPathBaseExprSyntax(data)
-  }
-  public static func makeObjcNamePiece(name: TokenSyntax, dot: TokenSyntax?) -> ObjcNamePieceSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      dot?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcNamePiece,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjcNamePieceSyntax(data)
+  public static func makeBlankSpecializeExpr(arena: SyntaxArena = .default) -> SpecializeExprSyntax {
+    let raw = RawSpecializeExprSyntax.makeBlank(arena: arena).raw
+    return SpecializeExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjcNamePiece(presence: SourcePresence = .present) -> ObjcNamePieceSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objcNamePiece,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return ObjcNamePieceSyntax(data)
+  public static func makeStringSegment(
+    arena: SyntaxArena = .default, content: TokenSyntax
+  ) -> StringSegmentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .stringSegment,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = content.raw
+    }
+    return StringSegmentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankStringSegment(arena: SyntaxArena = .default) -> StringSegmentSyntax {
+    let raw = RawStringSegmentSyntax.makeBlank(arena: arena).raw
+    return StringSegmentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeExpressionSegment(
+    arena: SyntaxArena = .default, backslash: TokenSyntax, delimiter: TokenSyntax?, leftParen: TokenSyntax, expressions: TupleExprElementListSyntax, rightParen: TokenSyntax
+  ) -> ExpressionSegmentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .expressionSegment,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = backslash.raw
+      buffer[1] = delimiter?.raw
+      buffer[2] = leftParen.raw
+      buffer[3] = expressions.raw
+      buffer[4] = rightParen.raw
+    }
+    return ExpressionSegmentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankExpressionSegment(arena: SyntaxArena = .default) -> ExpressionSegmentSyntax {
+    let raw = RawExpressionSegmentSyntax.makeBlank(arena: arena).raw
+    return ExpressionSegmentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeStringLiteralExpr(
+    arena: SyntaxArena = .default, openDelimiter: TokenSyntax?, openQuote: TokenSyntax, segments: StringLiteralSegmentsSyntax, closeQuote: TokenSyntax, closeDelimiter: TokenSyntax?
+  ) -> StringLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .stringLiteralExpr,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = openDelimiter?.raw
+      buffer[1] = openQuote.raw
+      buffer[2] = segments.raw
+      buffer[3] = closeQuote.raw
+      buffer[4] = closeDelimiter?.raw
+    }
+    return StringLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankStringLiteralExpr(arena: SyntaxArena = .default) -> StringLiteralExprSyntax {
+    let raw = RawStringLiteralExprSyntax.makeBlank(arena: arena).raw
+    return StringLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeRegexLiteralExpr(
+    arena: SyntaxArena = .default, regex: TokenSyntax
+  ) -> RegexLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .regexLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = regex.raw
+    }
+    return RegexLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankRegexLiteralExpr(arena: SyntaxArena = .default) -> RegexLiteralExprSyntax {
+    let raw = RawRegexLiteralExprSyntax.makeBlank(arena: arena).raw
+    return RegexLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeKeyPathExpr(
+    arena: SyntaxArena = .default, backslash: TokenSyntax, rootExpr: ExprSyntax?, expression: ExprSyntax
+  ) -> KeyPathExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .keyPathExpr,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = backslash.raw
+      buffer[1] = rootExpr?.raw
+      buffer[2] = expression.raw
+    }
+    return KeyPathExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankKeyPathExpr(arena: SyntaxArena = .default) -> KeyPathExprSyntax {
+    let raw = RawKeyPathExprSyntax.makeBlank(arena: arena).raw
+    return KeyPathExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeKeyPathBaseExpr(
+    arena: SyntaxArena = .default, period: TokenSyntax
+  ) -> KeyPathBaseExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .keyPathBaseExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = period.raw
+    }
+    return KeyPathBaseExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankKeyPathBaseExpr(arena: SyntaxArena = .default) -> KeyPathBaseExprSyntax {
+    let raw = RawKeyPathBaseExprSyntax.makeBlank(arena: arena).raw
+    return KeyPathBaseExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeObjcNamePiece(
+    arena: SyntaxArena = .default, name: TokenSyntax, dot: TokenSyntax?
+  ) -> ObjcNamePieceSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcNamePiece,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = dot?.raw
+    }
+    return ObjcNamePieceSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankObjcNamePiece(arena: SyntaxArena = .default) -> ObjcNamePieceSyntax {
+    let raw = RawObjcNamePieceSyntax.makeBlank(arena: arena).raw
+    return ObjcNamePieceSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeObjcName(
-    _ elements: [ObjcNamePieceSyntax]) -> ObjcNameSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcName,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjcNameSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ObjcNamePieceSyntax]
+  ) -> ObjcNameSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcName, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ObjcNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjcName(presence: SourcePresence = .present) -> ObjcNameSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objcName,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ObjcNameSyntax(data)
-  }
-  public static func makeObjcKeyPathExpr(keyPath: TokenSyntax, leftParen: TokenSyntax, name: ObjcNameSyntax, rightParen: TokenSyntax) -> ObjcKeyPathExprSyntax {
-    let layout: [RawSyntax?] = [
-      keyPath.raw,
-      leftParen.raw,
-      name.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcKeyPathExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjcKeyPathExprSyntax(data)
+  public static func makeBlankObjcName(arena: SyntaxArena = .default) -> ObjcNameSyntax {
+    let raw = RawObjcNameSyntax.makeBlank(arena: arena).raw
+    return ObjcNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjcKeyPathExpr(presence: SourcePresence = .present) -> ObjcKeyPathExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objcKeyPathExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundKeyPathKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.objcName),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return ObjcKeyPathExprSyntax(data)
-  }
-  public static func makeObjcSelectorExpr(poundSelector: TokenSyntax, leftParen: TokenSyntax, kind: TokenSyntax?, colon: TokenSyntax?, name: ExprSyntax, rightParen: TokenSyntax) -> ObjcSelectorExprSyntax {
-    let layout: [RawSyntax?] = [
-      poundSelector.raw,
-      leftParen.raw,
-      kind?.raw,
-      colon?.raw,
-      name.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objcSelectorExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjcSelectorExprSyntax(data)
+  public static func makeObjcKeyPathExpr(
+    arena: SyntaxArena = .default, keyPath: TokenSyntax, leftParen: TokenSyntax, name: ObjcNameSyntax, rightParen: TokenSyntax
+  ) -> ObjcKeyPathExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcKeyPathExpr,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = keyPath.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = name.raw
+      buffer[3] = rightParen.raw
+    }
+    return ObjcKeyPathExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjcSelectorExpr(presence: SourcePresence = .present) -> ObjcSelectorExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objcSelectorExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundSelectorKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return ObjcSelectorExprSyntax(data)
-  }
-  public static func makePostfixIfConfigExpr(base: ExprSyntax?, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
-    let layout: [RawSyntax?] = [
-      base?.raw,
-      config.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.postfixIfConfigExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PostfixIfConfigExprSyntax(data)
+  public static func makeBlankObjcKeyPathExpr(arena: SyntaxArena = .default) -> ObjcKeyPathExprSyntax {
+    let raw = RawObjcKeyPathExprSyntax.makeBlank(arena: arena).raw
+    return ObjcKeyPathExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPostfixIfConfigExpr(presence: SourcePresence = .present) -> PostfixIfConfigExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .postfixIfConfigExpr,
-      layout: [
-      nil,
-      RawSyntax.missing(SyntaxKind.ifConfigDecl),
-    ], length: .zero, presence: presence))
-    return PostfixIfConfigExprSyntax(data)
-  }
-  public static func makeEditorPlaceholderExpr(identifier: TokenSyntax) -> EditorPlaceholderExprSyntax {
-    let layout: [RawSyntax?] = [
-      identifier.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.editorPlaceholderExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return EditorPlaceholderExprSyntax(data)
+  public static func makeObjcSelectorExpr(
+    arena: SyntaxArena = .default, poundSelector: TokenSyntax, leftParen: TokenSyntax, kind: TokenSyntax?, colon: TokenSyntax?, name: ExprSyntax, rightParen: TokenSyntax
+  ) -> ObjcSelectorExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcSelectorExpr,
+                                   uninitializedCount: 6) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundSelector.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = kind?.raw
+      buffer[3] = colon?.raw
+      buffer[4] = name.raw
+      buffer[5] = rightParen.raw
+    }
+    return ObjcSelectorExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankEditorPlaceholderExpr(presence: SourcePresence = .present) -> EditorPlaceholderExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .editorPlaceholderExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-    ], length: .zero, presence: presence))
-    return EditorPlaceholderExprSyntax(data)
-  }
-  public static func makeObjectLiteralExpr(identifier: TokenSyntax, leftParen: TokenSyntax, arguments: TupleExprElementListSyntax, rightParen: TokenSyntax) -> ObjectLiteralExprSyntax {
-    let layout: [RawSyntax?] = [
-      identifier.raw,
-      leftParen.raw,
-      arguments.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objectLiteralExpr,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjectLiteralExprSyntax(data)
+  public static func makeBlankObjcSelectorExpr(arena: SyntaxArena = .default) -> ObjcSelectorExprSyntax {
+    let raw = RawObjcSelectorExprSyntax.makeBlank(arena: arena).raw
+    return ObjcSelectorExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjectLiteralExpr(presence: SourcePresence = .present) -> ObjectLiteralExprSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objectLiteralExpr,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundColorLiteralKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.tupleExprElementList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return ObjectLiteralExprSyntax(data)
-  }
-  public static func makeTypeInitializerClause(equal: TokenSyntax, value: TypeSyntax) -> TypeInitializerClauseSyntax {
-    let layout: [RawSyntax?] = [
-      equal.raw,
-      value.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInitializerClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TypeInitializerClauseSyntax(data)
+  public static func makePostfixIfConfigExpr(
+    arena: SyntaxArena = .default, base: ExprSyntax?, config: IfConfigDeclSyntax
+  ) -> PostfixIfConfigExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .postfixIfConfigExpr,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = base?.raw
+      buffer[1] = config.raw
+    }
+    return PostfixIfConfigExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTypeInitializerClause(presence: SourcePresence = .present) -> TypeInitializerClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .typeInitializerClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.equal),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return TypeInitializerClauseSyntax(data)
-  }
-  public static func makeTypealiasDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, typealiasKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, initializer: TypeInitializerClauseSyntax, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      typealiasKeyword.raw,
-      identifier.raw,
-      genericParameterClause?.raw,
-      initializer.raw,
-      genericWhereClause?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typealiasDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TypealiasDeclSyntax(data)
+  public static func makeBlankPostfixIfConfigExpr(arena: SyntaxArena = .default) -> PostfixIfConfigExprSyntax {
+    let raw = RawPostfixIfConfigExprSyntax.makeBlank(arena: arena).raw
+    return PostfixIfConfigExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTypealiasDecl(presence: SourcePresence = .present) -> TypealiasDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .typealiasDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.typealiasKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      RawSyntax.missing(SyntaxKind.typeInitializerClause),
-      nil,
-    ], length: .zero, presence: presence))
-    return TypealiasDeclSyntax(data)
-  }
-  public static func makeAssociatedtypeDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, associatedtypeKeyword: TokenSyntax, identifier: TokenSyntax, inheritanceClause: TypeInheritanceClauseSyntax?, initializer: TypeInitializerClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      associatedtypeKeyword.raw,
-      identifier.raw,
-      inheritanceClause?.raw,
-      initializer?.raw,
-      genericWhereClause?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.associatedtypeDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AssociatedtypeDeclSyntax(data)
+  public static func makeEditorPlaceholderExpr(
+    arena: SyntaxArena = .default, identifier: TokenSyntax
+  ) -> EditorPlaceholderExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .editorPlaceholderExpr,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = identifier.raw
+    }
+    return EditorPlaceholderExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAssociatedtypeDecl(presence: SourcePresence = .present) -> AssociatedtypeDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .associatedtypeDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.associatedtypeKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return AssociatedtypeDeclSyntax(data)
+  public static func makeBlankEditorPlaceholderExpr(arena: SyntaxArena = .default) -> EditorPlaceholderExprSyntax {
+    let raw = RawEditorPlaceholderExprSyntax.makeBlank(arena: arena).raw
+    return EditorPlaceholderExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeObjectLiteralExpr(
+    arena: SyntaxArena = .default, identifier: TokenSyntax, leftParen: TokenSyntax, arguments: TupleExprElementListSyntax, rightParen: TokenSyntax
+  ) -> ObjectLiteralExprSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objectLiteralExpr,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = identifier.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = arguments.raw
+      buffer[3] = rightParen.raw
+    }
+    return ObjectLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankObjectLiteralExpr(arena: SyntaxArena = .default) -> ObjectLiteralExprSyntax {
+    let raw = RawObjectLiteralExprSyntax.makeBlank(arena: arena).raw
+    return ObjectLiteralExprSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTypeInitializerClause(
+    arena: SyntaxArena = .default, equal: TokenSyntax, value: TypeSyntax
+  ) -> TypeInitializerClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeInitializerClause,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = equal.raw
+      buffer[1] = value.raw
+    }
+    return TypeInitializerClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTypeInitializerClause(arena: SyntaxArena = .default) -> TypeInitializerClauseSyntax {
+    let raw = RawTypeInitializerClauseSyntax.makeBlank(arena: arena).raw
+    return TypeInitializerClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTypealiasDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, typealiasKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, initializer: TypeInitializerClauseSyntax, genericWhereClause: GenericWhereClauseSyntax?
+  ) -> TypealiasDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typealiasDecl,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = typealiasKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = genericParameterClause?.raw
+      buffer[5] = initializer.raw
+      buffer[6] = genericWhereClause?.raw
+    }
+    return TypealiasDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTypealiasDecl(arena: SyntaxArena = .default) -> TypealiasDeclSyntax {
+    let raw = RawTypealiasDeclSyntax.makeBlank(arena: arena).raw
+    return TypealiasDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAssociatedtypeDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, associatedtypeKeyword: TokenSyntax, identifier: TokenSyntax, inheritanceClause: TypeInheritanceClauseSyntax?, initializer: TypeInitializerClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?
+  ) -> AssociatedtypeDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .associatedtypeDecl,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = associatedtypeKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = inheritanceClause?.raw
+      buffer[5] = initializer?.raw
+      buffer[6] = genericWhereClause?.raw
+    }
+    return AssociatedtypeDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAssociatedtypeDecl(arena: SyntaxArena = .default) -> AssociatedtypeDeclSyntax {
+    let raw = RawAssociatedtypeDeclSyntax.makeBlank(arena: arena).raw
+    return AssociatedtypeDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeFunctionParameterList(
-    _ elements: [FunctionParameterSyntax]) -> FunctionParameterListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameterList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionParameterListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [FunctionParameterSyntax]
+  ) -> FunctionParameterListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionParameterList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return FunctionParameterListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionParameterList(presence: SourcePresence = .present) -> FunctionParameterListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionParameterList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return FunctionParameterListSyntax(data)
-  }
-  public static func makeParameterClause(leftParen: TokenSyntax, parameterList: FunctionParameterListSyntax, rightParen: TokenSyntax) -> ParameterClauseSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      parameterList.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.parameterClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ParameterClauseSyntax(data)
+  public static func makeBlankFunctionParameterList(arena: SyntaxArena = .default) -> FunctionParameterListSyntax {
+    let raw = RawFunctionParameterListSyntax.makeBlank(arena: arena).raw
+    return FunctionParameterListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankParameterClause(presence: SourcePresence = .present) -> ParameterClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .parameterClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.functionParameterList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return ParameterClauseSyntax(data)
-  }
-  public static func makeReturnClause(arrow: TokenSyntax, returnType: TypeSyntax) -> ReturnClauseSyntax {
-    let layout: [RawSyntax?] = [
-      arrow.raw,
-      returnType.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ReturnClauseSyntax(data)
+  public static func makeParameterClause(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, parameterList: FunctionParameterListSyntax, rightParen: TokenSyntax
+  ) -> ParameterClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .parameterClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = parameterList.raw
+      buffer[2] = rightParen.raw
+    }
+    return ParameterClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankReturnClause(presence: SourcePresence = .present) -> ReturnClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .returnClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.arrow),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return ReturnClauseSyntax(data)
-  }
-  public static func makeFunctionSignature(input: ParameterClauseSyntax, asyncOrReasyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
-    let layout: [RawSyntax?] = [
-      input.raw,
-      asyncOrReasyncKeyword?.raw,
-      throwsOrRethrowsKeyword?.raw,
-      output?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionSignature,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionSignatureSyntax(data)
+  public static func makeBlankParameterClause(arena: SyntaxArena = .default) -> ParameterClauseSyntax {
+    let raw = RawParameterClauseSyntax.makeBlank(arena: arena).raw
+    return ParameterClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionSignature(presence: SourcePresence = .present) -> FunctionSignatureSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionSignature,
-      layout: [
-      RawSyntax.missing(SyntaxKind.parameterClause),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return FunctionSignatureSyntax(data)
-  }
-  public static func makeIfConfigClause(poundKeyword: TokenSyntax, condition: ExprSyntax?, elements: Syntax) -> IfConfigClauseSyntax {
-    let layout: [RawSyntax?] = [
-      poundKeyword.raw,
-      condition?.raw,
-      elements.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IfConfigClauseSyntax(data)
+  public static func makeReturnClause(
+    arena: SyntaxArena = .default, arrow: TokenSyntax, returnType: TypeSyntax
+  ) -> ReturnClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .returnClause,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = arrow.raw
+      buffer[1] = returnType.raw
+    }
+    return ReturnClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIfConfigClause(presence: SourcePresence = .present) -> IfConfigClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .ifConfigClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundIfKeyword),
-      nil,
-      RawSyntax.missing(SyntaxKind.unknown),
-    ], length: .zero, presence: presence))
-    return IfConfigClauseSyntax(data)
+  public static func makeBlankReturnClause(arena: SyntaxArena = .default) -> ReturnClauseSyntax {
+    let raw = RawReturnClauseSyntax.makeBlank(arena: arena).raw
+    return ReturnClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeFunctionSignature(
+    arena: SyntaxArena = .default, input: ParameterClauseSyntax, asyncOrReasyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, output: ReturnClauseSyntax?
+  ) -> FunctionSignatureSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionSignature,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = input.raw
+      buffer[1] = asyncOrReasyncKeyword?.raw
+      buffer[2] = throwsOrRethrowsKeyword?.raw
+      buffer[3] = output?.raw
+    }
+    return FunctionSignatureSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankFunctionSignature(arena: SyntaxArena = .default) -> FunctionSignatureSyntax {
+    let raw = RawFunctionSignatureSyntax.makeBlank(arena: arena).raw
+    return FunctionSignatureSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeIfConfigClause(
+    arena: SyntaxArena = .default, poundKeyword: TokenSyntax, condition: ExprSyntax?, elements: Syntax
+  ) -> IfConfigClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifConfigClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundKeyword.raw
+      buffer[1] = condition?.raw
+      buffer[2] = elements.raw
+    }
+    return IfConfigClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankIfConfigClause(arena: SyntaxArena = .default) -> IfConfigClauseSyntax {
+    let raw = RawIfConfigClauseSyntax.makeBlank(arena: arena).raw
+    return IfConfigClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeIfConfigClauseList(
-    _ elements: [IfConfigClauseSyntax]) -> IfConfigClauseListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClauseList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IfConfigClauseListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [IfConfigClauseSyntax]
+  ) -> IfConfigClauseListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifConfigClauseList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return IfConfigClauseListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIfConfigClauseList(presence: SourcePresence = .present) -> IfConfigClauseListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .ifConfigClauseList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return IfConfigClauseListSyntax(data)
-  }
-  public static func makeIfConfigDecl(clauses: IfConfigClauseListSyntax, poundEndif: TokenSyntax) -> IfConfigDeclSyntax {
-    let layout: [RawSyntax?] = [
-      clauses.raw,
-      poundEndif.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IfConfigDeclSyntax(data)
+  public static func makeBlankIfConfigClauseList(arena: SyntaxArena = .default) -> IfConfigClauseListSyntax {
+    let raw = RawIfConfigClauseListSyntax.makeBlank(arena: arena).raw
+    return IfConfigClauseListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIfConfigDecl(presence: SourcePresence = .present) -> IfConfigDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .ifConfigDecl,
-      layout: [
-      RawSyntax.missing(SyntaxKind.ifConfigClauseList),
-      RawSyntax.missingToken(TokenKind.poundEndifKeyword),
-    ], length: .zero, presence: presence))
-    return IfConfigDeclSyntax(data)
-  }
-  public static func makePoundErrorDecl(poundError: TokenSyntax, leftParen: TokenSyntax, message: StringLiteralExprSyntax, rightParen: TokenSyntax) -> PoundErrorDeclSyntax {
-    let layout: [RawSyntax?] = [
-      poundError.raw,
-      leftParen.raw,
-      message.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundErrorDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundErrorDeclSyntax(data)
+  public static func makeIfConfigDecl(
+    arena: SyntaxArena = .default, clauses: IfConfigClauseListSyntax, poundEndif: TokenSyntax
+  ) -> IfConfigDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifConfigDecl,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = clauses.raw
+      buffer[1] = poundEndif.raw
+    }
+    return IfConfigDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundErrorDecl(presence: SourcePresence = .present) -> PoundErrorDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundErrorDecl,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundErrorKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.stringLiteralExpr),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return PoundErrorDeclSyntax(data)
-  }
-  public static func makePoundWarningDecl(poundWarning: TokenSyntax, leftParen: TokenSyntax, message: StringLiteralExprSyntax, rightParen: TokenSyntax) -> PoundWarningDeclSyntax {
-    let layout: [RawSyntax?] = [
-      poundWarning.raw,
-      leftParen.raw,
-      message.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundWarningDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundWarningDeclSyntax(data)
+  public static func makeBlankIfConfigDecl(arena: SyntaxArena = .default) -> IfConfigDeclSyntax {
+    let raw = RawIfConfigDeclSyntax.makeBlank(arena: arena).raw
+    return IfConfigDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundWarningDecl(presence: SourcePresence = .present) -> PoundWarningDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundWarningDecl,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundWarningKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.stringLiteralExpr),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return PoundWarningDeclSyntax(data)
-  }
-  public static func makePoundSourceLocation(poundSourceLocation: TokenSyntax, leftParen: TokenSyntax, args: PoundSourceLocationArgsSyntax?, rightParen: TokenSyntax) -> PoundSourceLocationSyntax {
-    let layout: [RawSyntax?] = [
-      poundSourceLocation.raw,
-      leftParen.raw,
-      args?.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocation,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundSourceLocationSyntax(data)
+  public static func makePoundErrorDecl(
+    arena: SyntaxArena = .default, poundError: TokenSyntax, leftParen: TokenSyntax, message: StringLiteralExprSyntax, rightParen: TokenSyntax
+  ) -> PoundErrorDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundErrorDecl,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundError.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = message.raw
+      buffer[3] = rightParen.raw
+    }
+    return PoundErrorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundSourceLocation(presence: SourcePresence = .present) -> PoundSourceLocationSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundSourceLocation,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundSourceLocationKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      nil,
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return PoundSourceLocationSyntax(data)
-  }
-  public static func makePoundSourceLocationArgs(fileArgLabel: TokenSyntax, fileArgColon: TokenSyntax, fileName: TokenSyntax, comma: TokenSyntax, lineArgLabel: TokenSyntax, lineArgColon: TokenSyntax, lineNumber: TokenSyntax) -> PoundSourceLocationArgsSyntax {
-    let layout: [RawSyntax?] = [
-      fileArgLabel.raw,
-      fileArgColon.raw,
-      fileName.raw,
-      comma.raw,
-      lineArgLabel.raw,
-      lineArgColon.raw,
-      lineNumber.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundSourceLocationArgs,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundSourceLocationArgsSyntax(data)
+  public static func makeBlankPoundErrorDecl(arena: SyntaxArena = .default) -> PoundErrorDeclSyntax {
+    let raw = RawPoundErrorDeclSyntax.makeBlank(arena: arena).raw
+    return PoundErrorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundSourceLocationArgs(presence: SourcePresence = .present) -> PoundSourceLocationArgsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundSourceLocationArgs,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missingToken(TokenKind.stringLiteral("")),
-      RawSyntax.missingToken(TokenKind.comma),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missingToken(TokenKind.integerLiteral("")),
-    ], length: .zero, presence: presence))
-    return PoundSourceLocationArgsSyntax(data)
-  }
-  public static func makeDeclModifierDetail(leftParen: TokenSyntax, detail: TokenSyntax, rightParen: TokenSyntax) -> DeclModifierDetailSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      detail.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifierDetail,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclModifierDetailSyntax(data)
+  public static func makePoundWarningDecl(
+    arena: SyntaxArena = .default, poundWarning: TokenSyntax, leftParen: TokenSyntax, message: StringLiteralExprSyntax, rightParen: TokenSyntax
+  ) -> PoundWarningDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundWarningDecl,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundWarning.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = message.raw
+      buffer[3] = rightParen.raw
+    }
+    return PoundWarningDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclModifierDetail(presence: SourcePresence = .present) -> DeclModifierDetailSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declModifierDetail,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return DeclModifierDetailSyntax(data)
-  }
-  public static func makeDeclModifier(name: TokenSyntax, detail: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      detail?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declModifier,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclModifierSyntax(data)
+  public static func makeBlankPoundWarningDecl(arena: SyntaxArena = .default) -> PoundWarningDeclSyntax {
+    let raw = RawPoundWarningDeclSyntax.makeBlank(arena: arena).raw
+    return PoundWarningDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclModifier(presence: SourcePresence = .present) -> DeclModifierSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declModifier,
-      layout: [
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return DeclModifierSyntax(data)
-  }
-  public static func makeInheritedType(typeName: TypeSyntax, trailingComma: TokenSyntax?) -> InheritedTypeSyntax {
-    let layout: [RawSyntax?] = [
-      typeName.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return InheritedTypeSyntax(data)
+  public static func makePoundSourceLocation(
+    arena: SyntaxArena = .default, poundSourceLocation: TokenSyntax, leftParen: TokenSyntax, args: PoundSourceLocationArgsSyntax?, rightParen: TokenSyntax
+  ) -> PoundSourceLocationSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundSourceLocation,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundSourceLocation.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = args?.raw
+      buffer[3] = rightParen.raw
+    }
+    return PoundSourceLocationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankInheritedType(presence: SourcePresence = .present) -> InheritedTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .inheritedType,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      nil,
-    ], length: .zero, presence: presence))
-    return InheritedTypeSyntax(data)
+  public static func makeBlankPoundSourceLocation(arena: SyntaxArena = .default) -> PoundSourceLocationSyntax {
+    let raw = RawPoundSourceLocationSyntax.makeBlank(arena: arena).raw
+    return PoundSourceLocationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makePoundSourceLocationArgs(
+    arena: SyntaxArena = .default, fileArgLabel: TokenSyntax, fileArgColon: TokenSyntax, fileName: TokenSyntax, comma: TokenSyntax, lineArgLabel: TokenSyntax, lineArgColon: TokenSyntax, lineNumber: TokenSyntax
+  ) -> PoundSourceLocationArgsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundSourceLocationArgs,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = fileArgLabel.raw
+      buffer[1] = fileArgColon.raw
+      buffer[2] = fileName.raw
+      buffer[3] = comma.raw
+      buffer[4] = lineArgLabel.raw
+      buffer[5] = lineArgColon.raw
+      buffer[6] = lineNumber.raw
+    }
+    return PoundSourceLocationArgsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankPoundSourceLocationArgs(arena: SyntaxArena = .default) -> PoundSourceLocationArgsSyntax {
+    let raw = RawPoundSourceLocationArgsSyntax.makeBlank(arena: arena).raw
+    return PoundSourceLocationArgsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDeclModifierDetail(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, detail: TokenSyntax, rightParen: TokenSyntax
+  ) -> DeclModifierDetailSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declModifierDetail,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = detail.raw
+      buffer[2] = rightParen.raw
+    }
+    return DeclModifierDetailSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDeclModifierDetail(arena: SyntaxArena = .default) -> DeclModifierDetailSyntax {
+    let raw = RawDeclModifierDetailSyntax.makeBlank(arena: arena).raw
+    return DeclModifierDetailSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDeclModifier(
+    arena: SyntaxArena = .default, name: TokenSyntax, detail: DeclModifierDetailSyntax?
+  ) -> DeclModifierSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declModifier,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = detail?.raw
+    }
+    return DeclModifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDeclModifier(arena: SyntaxArena = .default) -> DeclModifierSyntax {
+    let raw = RawDeclModifierSyntax.makeBlank(arena: arena).raw
+    return DeclModifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeInheritedType(
+    arena: SyntaxArena = .default, typeName: TypeSyntax, trailingComma: TokenSyntax?
+  ) -> InheritedTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .inheritedType,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = typeName.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return InheritedTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankInheritedType(arena: SyntaxArena = .default) -> InheritedTypeSyntax {
+    let raw = RawInheritedTypeSyntax.makeBlank(arena: arena).raw
+    return InheritedTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeInheritedTypeList(
-    _ elements: [InheritedTypeSyntax]) -> InheritedTypeListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.inheritedTypeList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return InheritedTypeListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [InheritedTypeSyntax]
+  ) -> InheritedTypeListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .inheritedTypeList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return InheritedTypeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankInheritedTypeList(presence: SourcePresence = .present) -> InheritedTypeListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .inheritedTypeList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return InheritedTypeListSyntax(data)
-  }
-  public static func makeTypeInheritanceClause(colon: TokenSyntax, inheritedTypeCollection: InheritedTypeListSyntax) -> TypeInheritanceClauseSyntax {
-    let layout: [RawSyntax?] = [
-      colon.raw,
-      inheritedTypeCollection.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeInheritanceClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TypeInheritanceClauseSyntax(data)
+  public static func makeBlankInheritedTypeList(arena: SyntaxArena = .default) -> InheritedTypeListSyntax {
+    let raw = RawInheritedTypeListSyntax.makeBlank(arena: arena).raw
+    return InheritedTypeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTypeInheritanceClause(presence: SourcePresence = .present) -> TypeInheritanceClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .typeInheritanceClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.inheritedTypeList),
-    ], length: .zero, presence: presence))
-    return TypeInheritanceClauseSyntax(data)
-  }
-  public static func makeClassDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      classKeyword.raw,
-      identifier.raw,
-      genericParameterClause?.raw,
-      inheritanceClause?.raw,
-      genericWhereClause?.raw,
-      members.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.classDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClassDeclSyntax(data)
+  public static func makeTypeInheritanceClause(
+    arena: SyntaxArena = .default, colon: TokenSyntax, inheritedTypeCollection: InheritedTypeListSyntax
+  ) -> TypeInheritanceClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeInheritanceClause,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = colon.raw
+      buffer[1] = inheritedTypeCollection.raw
+    }
+    return TypeInheritanceClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClassDecl(presence: SourcePresence = .present) -> ClassDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .classDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.classKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.memberDeclBlock),
-    ], length: .zero, presence: presence))
-    return ClassDeclSyntax(data)
-  }
-  public static func makeActorDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, actorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      actorKeyword.raw,
-      identifier.raw,
-      genericParameterClause?.raw,
-      inheritanceClause?.raw,
-      genericWhereClause?.raw,
-      members.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.actorDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ActorDeclSyntax(data)
+  public static func makeBlankTypeInheritanceClause(arena: SyntaxArena = .default) -> TypeInheritanceClauseSyntax {
+    let raw = RawTypeInheritanceClauseSyntax.makeBlank(arena: arena).raw
+    return TypeInheritanceClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankActorDecl(presence: SourcePresence = .present) -> ActorDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .actorDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.contextualKeyword("")),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.memberDeclBlock),
-    ], length: .zero, presence: presence))
-    return ActorDeclSyntax(data)
-  }
-  public static func makeStructDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, structKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      structKeyword.raw,
-      identifier.raw,
-      genericParameterClause?.raw,
-      inheritanceClause?.raw,
-      genericWhereClause?.raw,
-      members.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.structDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return StructDeclSyntax(data)
+  public static func makeClassDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, classKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax
+  ) -> ClassDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .classDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = classKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = genericParameterClause?.raw
+      buffer[5] = inheritanceClause?.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = members.raw
+    }
+    return ClassDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankStructDecl(presence: SourcePresence = .present) -> StructDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .structDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.structKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.memberDeclBlock),
-    ], length: .zero, presence: presence))
-    return StructDeclSyntax(data)
-  }
-  public static func makeProtocolDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, protocolKeyword: TokenSyntax, identifier: TokenSyntax, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      protocolKeyword.raw,
-      identifier.raw,
-      primaryAssociatedTypeClause?.raw,
-      inheritanceClause?.raw,
-      genericWhereClause?.raw,
-      members.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.protocolDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ProtocolDeclSyntax(data)
+  public static func makeBlankClassDecl(arena: SyntaxArena = .default) -> ClassDeclSyntax {
+    let raw = RawClassDeclSyntax.makeBlank(arena: arena).raw
+    return ClassDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankProtocolDecl(presence: SourcePresence = .present) -> ProtocolDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .protocolDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.protocolKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.memberDeclBlock),
-    ], length: .zero, presence: presence))
-    return ProtocolDeclSyntax(data)
-  }
-  public static func makeExtensionDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, extensionKeyword: TokenSyntax, extendedType: TypeSyntax, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> ExtensionDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      extensionKeyword.raw,
-      extendedType.raw,
-      inheritanceClause?.raw,
-      genericWhereClause?.raw,
-      members.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.extensionDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ExtensionDeclSyntax(data)
+  public static func makeActorDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, actorKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax
+  ) -> ActorDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .actorDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = actorKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = genericParameterClause?.raw
+      buffer[5] = inheritanceClause?.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = members.raw
+    }
+    return ActorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankExtensionDecl(presence: SourcePresence = .present) -> ExtensionDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .extensionDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.extensionKeyword),
-      RawSyntax.missing(SyntaxKind.type),
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.memberDeclBlock),
-    ], length: .zero, presence: presence))
-    return ExtensionDeclSyntax(data)
-  }
-  public static func makeMemberDeclBlock(leftBrace: TokenSyntax, members: MemberDeclListSyntax, rightBrace: TokenSyntax) -> MemberDeclBlockSyntax {
-    let layout: [RawSyntax?] = [
-      leftBrace.raw,
-      members.raw,
-      rightBrace.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclBlock,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MemberDeclBlockSyntax(data)
+  public static func makeBlankActorDecl(arena: SyntaxArena = .default) -> ActorDeclSyntax {
+    let raw = RawActorDeclSyntax.makeBlank(arena: arena).raw
+    return ActorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMemberDeclBlock(presence: SourcePresence = .present) -> MemberDeclBlockSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .memberDeclBlock,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftBrace),
-      RawSyntax.missing(SyntaxKind.memberDeclList),
-      RawSyntax.missingToken(TokenKind.rightBrace),
-    ], length: .zero, presence: presence))
-    return MemberDeclBlockSyntax(data)
+  public static func makeStructDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, structKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax
+  ) -> StructDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .structDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = structKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = genericParameterClause?.raw
+      buffer[5] = inheritanceClause?.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = members.raw
+    }
+    return StructDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankStructDecl(arena: SyntaxArena = .default) -> StructDeclSyntax {
+    let raw = RawStructDeclSyntax.makeBlank(arena: arena).raw
+    return StructDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeProtocolDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, protocolKeyword: TokenSyntax, identifier: TokenSyntax, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax
+  ) -> ProtocolDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .protocolDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = protocolKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = primaryAssociatedTypeClause?.raw
+      buffer[5] = inheritanceClause?.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = members.raw
+    }
+    return ProtocolDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankProtocolDecl(arena: SyntaxArena = .default) -> ProtocolDeclSyntax {
+    let raw = RawProtocolDeclSyntax.makeBlank(arena: arena).raw
+    return ProtocolDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeExtensionDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, extensionKeyword: TokenSyntax, extendedType: TypeSyntax, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax
+  ) -> ExtensionDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .extensionDecl,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = extensionKeyword.raw
+      buffer[3] = extendedType.raw
+      buffer[4] = inheritanceClause?.raw
+      buffer[5] = genericWhereClause?.raw
+      buffer[6] = members.raw
+    }
+    return ExtensionDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankExtensionDecl(arena: SyntaxArena = .default) -> ExtensionDeclSyntax {
+    let raw = RawExtensionDeclSyntax.makeBlank(arena: arena).raw
+    return ExtensionDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeMemberDeclBlock(
+    arena: SyntaxArena = .default, leftBrace: TokenSyntax, members: MemberDeclListSyntax, rightBrace: TokenSyntax
+  ) -> MemberDeclBlockSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberDeclBlock,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftBrace.raw
+      buffer[1] = members.raw
+      buffer[2] = rightBrace.raw
+    }
+    return MemberDeclBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankMemberDeclBlock(arena: SyntaxArena = .default) -> MemberDeclBlockSyntax {
+    let raw = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
+    return MemberDeclBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeMemberDeclList(
-    _ elements: [MemberDeclListItemSyntax]) -> MemberDeclListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MemberDeclListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [MemberDeclListItemSyntax]
+  ) -> MemberDeclListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberDeclList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return MemberDeclListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMemberDeclList(presence: SourcePresence = .present) -> MemberDeclListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .memberDeclList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return MemberDeclListSyntax(data)
-  }
-  public static func makeMemberDeclListItem(decl: DeclSyntax, semicolon: TokenSyntax?) -> MemberDeclListItemSyntax {
-    let layout: [RawSyntax?] = [
-      decl.raw,
-      semicolon?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberDeclListItem,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MemberDeclListItemSyntax(data)
+  public static func makeBlankMemberDeclList(arena: SyntaxArena = .default) -> MemberDeclListSyntax {
+    let raw = RawMemberDeclListSyntax.makeBlank(arena: arena).raw
+    return MemberDeclListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMemberDeclListItem(presence: SourcePresence = .present) -> MemberDeclListItemSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .memberDeclListItem,
-      layout: [
-      RawSyntax.missing(SyntaxKind.decl),
-      nil,
-    ], length: .zero, presence: presence))
-    return MemberDeclListItemSyntax(data)
-  }
-  public static func makeSourceFile(statements: CodeBlockItemListSyntax, eofToken: TokenSyntax) -> SourceFileSyntax {
-    let layout: [RawSyntax?] = [
-      statements.raw,
-      eofToken.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sourceFile,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SourceFileSyntax(data)
+  public static func makeMemberDeclListItem(
+    arena: SyntaxArena = .default, decl: DeclSyntax, semicolon: TokenSyntax?
+  ) -> MemberDeclListItemSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberDeclListItem,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = decl.raw
+      buffer[1] = semicolon?.raw
+    }
+    return MemberDeclListItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSourceFile(presence: SourcePresence = .present) -> SourceFileSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .sourceFile,
-      layout: [
-      RawSyntax.missing(SyntaxKind.codeBlockItemList),
-      RawSyntax.missingToken(TokenKind.unknown("")),
-    ], length: .zero, presence: presence))
-    return SourceFileSyntax(data)
-  }
-  public static func makeInitializerClause(equal: TokenSyntax, value: ExprSyntax) -> InitializerClauseSyntax {
-    let layout: [RawSyntax?] = [
-      equal.raw,
-      value.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return InitializerClauseSyntax(data)
+  public static func makeBlankMemberDeclListItem(arena: SyntaxArena = .default) -> MemberDeclListItemSyntax {
+    let raw = RawMemberDeclListItemSyntax.makeBlank(arena: arena).raw
+    return MemberDeclListItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankInitializerClause(presence: SourcePresence = .present) -> InitializerClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .initializerClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.equal),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return InitializerClauseSyntax(data)
-  }
-  public static func makeFunctionParameter(attributes: AttributeListSyntax?, firstName: TokenSyntax?, secondName: TokenSyntax?, colon: TokenSyntax?, type: TypeSyntax?, ellipsis: TokenSyntax?, defaultArgument: InitializerClauseSyntax?, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      firstName?.raw,
-      secondName?.raw,
-      colon?.raw,
-      type?.raw,
-      ellipsis?.raw,
-      defaultArgument?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionParameter,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionParameterSyntax(data)
+  public static func makeSourceFile(
+    arena: SyntaxArena = .default, statements: CodeBlockItemListSyntax, eofToken: TokenSyntax
+  ) -> SourceFileSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .sourceFile,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = statements.raw
+      buffer[1] = eofToken.raw
+    }
+    return SourceFileSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionParameter(presence: SourcePresence = .present) -> FunctionParameterSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionParameter,
-      layout: [
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return FunctionParameterSyntax(data)
+  public static func makeBlankSourceFile(arena: SyntaxArena = .default) -> SourceFileSyntax {
+    let raw = RawSourceFileSyntax.makeBlank(arena: arena).raw
+    return SourceFileSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeInitializerClause(
+    arena: SyntaxArena = .default, equal: TokenSyntax, value: ExprSyntax
+  ) -> InitializerClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .initializerClause,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = equal.raw
+      buffer[1] = value.raw
+    }
+    return InitializerClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankInitializerClause(arena: SyntaxArena = .default) -> InitializerClauseSyntax {
+    let raw = RawInitializerClauseSyntax.makeBlank(arena: arena).raw
+    return InitializerClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeFunctionParameter(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, firstName: TokenSyntax?, secondName: TokenSyntax?, colon: TokenSyntax?, type: TypeSyntax?, ellipsis: TokenSyntax?, defaultArgument: InitializerClauseSyntax?, trailingComma: TokenSyntax?
+  ) -> FunctionParameterSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionParameter,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = firstName?.raw
+      buffer[2] = secondName?.raw
+      buffer[3] = colon?.raw
+      buffer[4] = type?.raw
+      buffer[5] = ellipsis?.raw
+      buffer[6] = defaultArgument?.raw
+      buffer[7] = trailingComma?.raw
+    }
+    return FunctionParameterSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankFunctionParameter(arena: SyntaxArena = .default) -> FunctionParameterSyntax {
+    let raw = RawFunctionParameterSyntax.makeBlank(arena: arena).raw
+    return FunctionParameterSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeModifierList(
-    _ elements: [DeclModifierSyntax]) -> ModifierListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.modifierList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ModifierListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [DeclModifierSyntax]
+  ) -> ModifierListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ModifierListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankModifierList(presence: SourcePresence = .present) -> ModifierListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .modifierList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ModifierListSyntax(data)
-  }
-  public static func makeFunctionDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, funcKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, signature: FunctionSignatureSyntax, genericWhereClause: GenericWhereClauseSyntax?, body: CodeBlockSyntax?) -> FunctionDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      funcKeyword.raw,
-      identifier.raw,
-      genericParameterClause?.raw,
-      signature.raw,
-      genericWhereClause?.raw,
-      body?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionDeclSyntax(data)
+  public static func makeBlankModifierList(arena: SyntaxArena = .default) -> ModifierListSyntax {
+    let raw = RawModifierListSyntax.makeBlank(arena: arena).raw
+    return ModifierListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionDecl(presence: SourcePresence = .present) -> FunctionDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.funcKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      RawSyntax.missing(SyntaxKind.functionSignature),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return FunctionDeclSyntax(data)
-  }
-  public static func makeInitializerDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, initKeyword: TokenSyntax, optionalMark: TokenSyntax?, genericParameterClause: GenericParameterClauseSyntax?, signature: FunctionSignatureSyntax, genericWhereClause: GenericWhereClauseSyntax?, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      initKeyword.raw,
-      optionalMark?.raw,
-      genericParameterClause?.raw,
-      signature.raw,
-      genericWhereClause?.raw,
-      body?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.initializerDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return InitializerDeclSyntax(data)
+  public static func makeFunctionDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, funcKeyword: TokenSyntax, identifier: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, signature: FunctionSignatureSyntax, genericWhereClause: GenericWhereClauseSyntax?, body: CodeBlockSyntax?
+  ) -> FunctionDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = funcKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = genericParameterClause?.raw
+      buffer[5] = signature.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = body?.raw
+    }
+    return FunctionDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankInitializerDecl(presence: SourcePresence = .present) -> InitializerDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .initializerDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.initKeyword),
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.functionSignature),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return InitializerDeclSyntax(data)
-  }
-  public static func makeDeinitializerDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, deinitKeyword: TokenSyntax, body: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      deinitKeyword.raw,
-      body?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.deinitializerDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeinitializerDeclSyntax(data)
+  public static func makeBlankFunctionDecl(arena: SyntaxArena = .default) -> FunctionDeclSyntax {
+    let raw = RawFunctionDeclSyntax.makeBlank(arena: arena).raw
+    return FunctionDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeinitializerDecl(presence: SourcePresence = .present) -> DeinitializerDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .deinitializerDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.deinitKeyword),
-      nil,
-    ], length: .zero, presence: presence))
-    return DeinitializerDeclSyntax(data)
-  }
-  public static func makeSubscriptDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, subscriptKeyword: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, indices: ParameterClauseSyntax, result: ReturnClauseSyntax, genericWhereClause: GenericWhereClauseSyntax?, accessor: Syntax?) -> SubscriptDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      subscriptKeyword.raw,
-      genericParameterClause?.raw,
-      indices.raw,
-      result.raw,
-      genericWhereClause?.raw,
-      accessor?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.subscriptDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SubscriptDeclSyntax(data)
+  public static func makeInitializerDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, initKeyword: TokenSyntax, optionalMark: TokenSyntax?, genericParameterClause: GenericParameterClauseSyntax?, signature: FunctionSignatureSyntax, genericWhereClause: GenericWhereClauseSyntax?, body: CodeBlockSyntax?
+  ) -> InitializerDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .initializerDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = initKeyword.raw
+      buffer[3] = optionalMark?.raw
+      buffer[4] = genericParameterClause?.raw
+      buffer[5] = signature.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = body?.raw
+    }
+    return InitializerDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSubscriptDecl(presence: SourcePresence = .present) -> SubscriptDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .subscriptDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.subscriptKeyword),
-      nil,
-      RawSyntax.missing(SyntaxKind.parameterClause),
-      RawSyntax.missing(SyntaxKind.returnClause),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return SubscriptDeclSyntax(data)
-  }
-  public static func makeAccessLevelModifier(name: TokenSyntax, modifier: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      modifier?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessLevelModifier,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessLevelModifierSyntax(data)
+  public static func makeBlankInitializerDecl(arena: SyntaxArena = .default) -> InitializerDeclSyntax {
+    let raw = RawInitializerDeclSyntax.makeBlank(arena: arena).raw
+    return InitializerDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessLevelModifier(presence: SourcePresence = .present) -> AccessLevelModifierSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessLevelModifier,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return AccessLevelModifierSyntax(data)
-  }
-  public static func makeAccessPathComponent(name: TokenSyntax, trailingDot: TokenSyntax?) -> AccessPathComponentSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      trailingDot?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPathComponent,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessPathComponentSyntax(data)
+  public static func makeDeinitializerDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, deinitKeyword: TokenSyntax, body: CodeBlockSyntax?
+  ) -> DeinitializerDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .deinitializerDecl,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = deinitKeyword.raw
+      buffer[3] = body?.raw
+    }
+    return DeinitializerDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessPathComponent(presence: SourcePresence = .present) -> AccessPathComponentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessPathComponent,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return AccessPathComponentSyntax(data)
+  public static func makeBlankDeinitializerDecl(arena: SyntaxArena = .default) -> DeinitializerDeclSyntax {
+    let raw = RawDeinitializerDeclSyntax.makeBlank(arena: arena).raw
+    return DeinitializerDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeSubscriptDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, subscriptKeyword: TokenSyntax, genericParameterClause: GenericParameterClauseSyntax?, indices: ParameterClauseSyntax, result: ReturnClauseSyntax, genericWhereClause: GenericWhereClauseSyntax?, accessor: Syntax?
+  ) -> SubscriptDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .subscriptDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = subscriptKeyword.raw
+      buffer[3] = genericParameterClause?.raw
+      buffer[4] = indices.raw
+      buffer[5] = result.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = accessor?.raw
+    }
+    return SubscriptDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankSubscriptDecl(arena: SyntaxArena = .default) -> SubscriptDeclSyntax {
+    let raw = RawSubscriptDeclSyntax.makeBlank(arena: arena).raw
+    return SubscriptDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAccessLevelModifier(
+    arena: SyntaxArena = .default, name: TokenSyntax, modifier: DeclModifierDetailSyntax?
+  ) -> AccessLevelModifierSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessLevelModifier,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = modifier?.raw
+    }
+    return AccessLevelModifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAccessLevelModifier(arena: SyntaxArena = .default) -> AccessLevelModifierSyntax {
+    let raw = RawAccessLevelModifierSyntax.makeBlank(arena: arena).raw
+    return AccessLevelModifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAccessPathComponent(
+    arena: SyntaxArena = .default, name: TokenSyntax, trailingDot: TokenSyntax?
+  ) -> AccessPathComponentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessPathComponent,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = trailingDot?.raw
+    }
+    return AccessPathComponentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAccessPathComponent(arena: SyntaxArena = .default) -> AccessPathComponentSyntax {
+    let raw = RawAccessPathComponentSyntax.makeBlank(arena: arena).raw
+    return AccessPathComponentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeAccessPath(
-    _ elements: [AccessPathComponentSyntax]) -> AccessPathSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessPath,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessPathSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [AccessPathComponentSyntax]
+  ) -> AccessPathSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessPath, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return AccessPathSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessPath(presence: SourcePresence = .present) -> AccessPathSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessPath,
-      layout: [
-    ], length: .zero, presence: presence))
-    return AccessPathSyntax(data)
-  }
-  public static func makeImportDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, importTok: TokenSyntax, importKind: TokenSyntax?, path: AccessPathSyntax) -> ImportDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      importTok.raw,
-      importKind?.raw,
-      path.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.importDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ImportDeclSyntax(data)
+  public static func makeBlankAccessPath(arena: SyntaxArena = .default) -> AccessPathSyntax {
+    let raw = RawAccessPathSyntax.makeBlank(arena: arena).raw
+    return AccessPathSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankImportDecl(presence: SourcePresence = .present) -> ImportDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .importDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.importKeyword),
-      nil,
-      RawSyntax.missing(SyntaxKind.accessPath),
-    ], length: .zero, presence: presence))
-    return ImportDeclSyntax(data)
-  }
-  public static func makeAccessorParameter(leftParen: TokenSyntax, name: TokenSyntax, rightParen: TokenSyntax) -> AccessorParameterSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      name.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorParameter,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessorParameterSyntax(data)
+  public static func makeImportDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, importTok: TokenSyntax, importKind: TokenSyntax?, path: AccessPathSyntax
+  ) -> ImportDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .importDecl,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = importTok.raw
+      buffer[3] = importKind?.raw
+      buffer[4] = path.raw
+    }
+    return ImportDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessorParameter(presence: SourcePresence = .present) -> AccessorParameterSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessorParameter,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return AccessorParameterSyntax(data)
-  }
-  public static func makeAccessorDecl(attributes: AttributeListSyntax?, modifier: DeclModifierSyntax?, accessorKind: TokenSyntax, parameter: AccessorParameterSyntax?, asyncKeyword: TokenSyntax?, throwsKeyword: TokenSyntax?, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifier?.raw,
-      accessorKind.raw,
-      parameter?.raw,
-      asyncKeyword?.raw,
-      throwsKeyword?.raw,
-      body?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessorDeclSyntax(data)
+  public static func makeBlankImportDecl(arena: SyntaxArena = .default) -> ImportDeclSyntax {
+    let raw = RawImportDeclSyntax.makeBlank(arena: arena).raw
+    return ImportDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessorDecl(presence: SourcePresence = .present) -> AccessorDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessorDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      nil,
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return AccessorDeclSyntax(data)
+  public static func makeAccessorParameter(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, name: TokenSyntax, rightParen: TokenSyntax
+  ) -> AccessorParameterSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorParameter,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = name.raw
+      buffer[2] = rightParen.raw
+    }
+    return AccessorParameterSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankAccessorParameter(arena: SyntaxArena = .default) -> AccessorParameterSyntax {
+    let raw = RawAccessorParameterSyntax.makeBlank(arena: arena).raw
+    return AccessorParameterSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAccessorDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifier: DeclModifierSyntax?, accessorKind: TokenSyntax, parameter: AccessorParameterSyntax?, asyncKeyword: TokenSyntax?, throwsKeyword: TokenSyntax?, body: CodeBlockSyntax?
+  ) -> AccessorDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorDecl,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifier?.raw
+      buffer[2] = accessorKind.raw
+      buffer[3] = parameter?.raw
+      buffer[4] = asyncKeyword?.raw
+      buffer[5] = throwsKeyword?.raw
+      buffer[6] = body?.raw
+    }
+    return AccessorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAccessorDecl(arena: SyntaxArena = .default) -> AccessorDeclSyntax {
+    let raw = RawAccessorDeclSyntax.makeBlank(arena: arena).raw
+    return AccessorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeAccessorList(
-    _ elements: [AccessorDeclSyntax]) -> AccessorListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessorListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [AccessorDeclSyntax]
+  ) -> AccessorListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return AccessorListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessorList(presence: SourcePresence = .present) -> AccessorListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessorList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return AccessorListSyntax(data)
-  }
-  public static func makeAccessorBlock(leftBrace: TokenSyntax, accessors: AccessorListSyntax, rightBrace: TokenSyntax) -> AccessorBlockSyntax {
-    let layout: [RawSyntax?] = [
-      leftBrace.raw,
-      accessors.raw,
-      rightBrace.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.accessorBlock,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AccessorBlockSyntax(data)
+  public static func makeBlankAccessorList(arena: SyntaxArena = .default) -> AccessorListSyntax {
+    let raw = RawAccessorListSyntax.makeBlank(arena: arena).raw
+    return AccessorListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAccessorBlock(presence: SourcePresence = .present) -> AccessorBlockSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .accessorBlock,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftBrace),
-      RawSyntax.missing(SyntaxKind.accessorList),
-      RawSyntax.missingToken(TokenKind.rightBrace),
-    ], length: .zero, presence: presence))
-    return AccessorBlockSyntax(data)
-  }
-  public static func makePatternBinding(pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax?, accessor: Syntax?, trailingComma: TokenSyntax?) -> PatternBindingSyntax {
-    let layout: [RawSyntax?] = [
-      pattern.raw,
-      typeAnnotation?.raw,
-      initializer?.raw,
-      accessor?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBinding,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PatternBindingSyntax(data)
+  public static func makeAccessorBlock(
+    arena: SyntaxArena = .default, leftBrace: TokenSyntax, accessors: AccessorListSyntax, rightBrace: TokenSyntax
+  ) -> AccessorBlockSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorBlock,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftBrace.raw
+      buffer[1] = accessors.raw
+      buffer[2] = rightBrace.raw
+    }
+    return AccessorBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPatternBinding(presence: SourcePresence = .present) -> PatternBindingSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .patternBinding,
-      layout: [
-      RawSyntax.missing(SyntaxKind.pattern),
-      nil,
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return PatternBindingSyntax(data)
+  public static func makeBlankAccessorBlock(arena: SyntaxArena = .default) -> AccessorBlockSyntax {
+    let raw = RawAccessorBlockSyntax.makeBlank(arena: arena).raw
+    return AccessorBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makePatternBinding(
+    arena: SyntaxArena = .default, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax?, accessor: Syntax?, trailingComma: TokenSyntax?
+  ) -> PatternBindingSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .patternBinding,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = pattern.raw
+      buffer[1] = typeAnnotation?.raw
+      buffer[2] = initializer?.raw
+      buffer[3] = accessor?.raw
+      buffer[4] = trailingComma?.raw
+    }
+    return PatternBindingSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankPatternBinding(arena: SyntaxArena = .default) -> PatternBindingSyntax {
+    let raw = RawPatternBindingSyntax.makeBlank(arena: arena).raw
+    return PatternBindingSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makePatternBindingList(
-    _ elements: [PatternBindingSyntax]) -> PatternBindingListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.patternBindingList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PatternBindingListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [PatternBindingSyntax]
+  ) -> PatternBindingListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .patternBindingList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return PatternBindingListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPatternBindingList(presence: SourcePresence = .present) -> PatternBindingListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .patternBindingList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return PatternBindingListSyntax(data)
-  }
-  public static func makeVariableDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, letOrVarKeyword: TokenSyntax, bindings: PatternBindingListSyntax) -> VariableDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      letOrVarKeyword.raw,
-      bindings.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.variableDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return VariableDeclSyntax(data)
+  public static func makeBlankPatternBindingList(arena: SyntaxArena = .default) -> PatternBindingListSyntax {
+    let raw = RawPatternBindingListSyntax.makeBlank(arena: arena).raw
+    return PatternBindingListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankVariableDecl(presence: SourcePresence = .present) -> VariableDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .variableDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.letKeyword),
-      RawSyntax.missing(SyntaxKind.patternBindingList),
-    ], length: .zero, presence: presence))
-    return VariableDeclSyntax(data)
-  }
-  public static func makeEnumCaseElement(identifier: TokenSyntax, associatedValue: ParameterClauseSyntax?, rawValue: InitializerClauseSyntax?, trailingComma: TokenSyntax?) -> EnumCaseElementSyntax {
-    let layout: [RawSyntax?] = [
-      identifier.raw,
-      associatedValue?.raw,
-      rawValue?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return EnumCaseElementSyntax(data)
+  public static func makeVariableDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, letOrVarKeyword: TokenSyntax, bindings: PatternBindingListSyntax
+  ) -> VariableDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .variableDecl,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = letOrVarKeyword.raw
+      buffer[3] = bindings.raw
+    }
+    return VariableDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankEnumCaseElement(presence: SourcePresence = .present) -> EnumCaseElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .enumCaseElement,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return EnumCaseElementSyntax(data)
+  public static func makeBlankVariableDecl(arena: SyntaxArena = .default) -> VariableDeclSyntax {
+    let raw = RawVariableDeclSyntax.makeBlank(arena: arena).raw
+    return VariableDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeEnumCaseElement(
+    arena: SyntaxArena = .default, identifier: TokenSyntax, associatedValue: ParameterClauseSyntax?, rawValue: InitializerClauseSyntax?, trailingComma: TokenSyntax?
+  ) -> EnumCaseElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCaseElement,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = identifier.raw
+      buffer[1] = associatedValue?.raw
+      buffer[2] = rawValue?.raw
+      buffer[3] = trailingComma?.raw
+    }
+    return EnumCaseElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankEnumCaseElement(arena: SyntaxArena = .default) -> EnumCaseElementSyntax {
+    let raw = RawEnumCaseElementSyntax.makeBlank(arena: arena).raw
+    return EnumCaseElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeEnumCaseElementList(
-    _ elements: [EnumCaseElementSyntax]) -> EnumCaseElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return EnumCaseElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [EnumCaseElementSyntax]
+  ) -> EnumCaseElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCaseElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return EnumCaseElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankEnumCaseElementList(presence: SourcePresence = .present) -> EnumCaseElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .enumCaseElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return EnumCaseElementListSyntax(data)
-  }
-  public static func makeEnumCaseDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, caseKeyword: TokenSyntax, elements: EnumCaseElementListSyntax) -> EnumCaseDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      caseKeyword.raw,
-      elements.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCaseDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return EnumCaseDeclSyntax(data)
+  public static func makeBlankEnumCaseElementList(arena: SyntaxArena = .default) -> EnumCaseElementListSyntax {
+    let raw = RawEnumCaseElementListSyntax.makeBlank(arena: arena).raw
+    return EnumCaseElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankEnumCaseDecl(presence: SourcePresence = .present) -> EnumCaseDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .enumCaseDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.caseKeyword),
-      RawSyntax.missing(SyntaxKind.enumCaseElementList),
-    ], length: .zero, presence: presence))
-    return EnumCaseDeclSyntax(data)
-  }
-  public static func makeEnumDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, enumKeyword: TokenSyntax, identifier: TokenSyntax, genericParameters: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax) -> EnumDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      enumKeyword.raw,
-      identifier.raw,
-      genericParameters?.raw,
-      inheritanceClause?.raw,
-      genericWhereClause?.raw,
-      members.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return EnumDeclSyntax(data)
+  public static func makeEnumCaseDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, caseKeyword: TokenSyntax, elements: EnumCaseElementListSyntax
+  ) -> EnumCaseDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCaseDecl,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = caseKeyword.raw
+      buffer[3] = elements.raw
+    }
+    return EnumCaseDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankEnumDecl(presence: SourcePresence = .present) -> EnumDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .enumDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.enumKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.memberDeclBlock),
-    ], length: .zero, presence: presence))
-    return EnumDeclSyntax(data)
-  }
-  public static func makeOperatorDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, operatorKeyword: TokenSyntax, identifier: TokenSyntax, operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      operatorKeyword.raw,
-      identifier.raw,
-      operatorPrecedenceAndTypes?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return OperatorDeclSyntax(data)
+  public static func makeBlankEnumCaseDecl(arena: SyntaxArena = .default) -> EnumCaseDeclSyntax {
+    let raw = RawEnumCaseDeclSyntax.makeBlank(arena: arena).raw
+    return EnumCaseDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankOperatorDecl(presence: SourcePresence = .present) -> OperatorDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .operatorDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.operatorKeyword),
-      RawSyntax.missingToken(TokenKind.unspacedBinaryOperator("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return OperatorDeclSyntax(data)
+  public static func makeEnumDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, enumKeyword: TokenSyntax, identifier: TokenSyntax, genericParameters: GenericParameterClauseSyntax?, inheritanceClause: TypeInheritanceClauseSyntax?, genericWhereClause: GenericWhereClauseSyntax?, members: MemberDeclBlockSyntax
+  ) -> EnumDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumDecl,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = enumKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = genericParameters?.raw
+      buffer[5] = inheritanceClause?.raw
+      buffer[6] = genericWhereClause?.raw
+      buffer[7] = members.raw
+    }
+    return EnumDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankEnumDecl(arena: SyntaxArena = .default) -> EnumDeclSyntax {
+    let raw = RawEnumDeclSyntax.makeBlank(arena: arena).raw
+    return EnumDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeOperatorDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, operatorKeyword: TokenSyntax, identifier: TokenSyntax, operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?
+  ) -> OperatorDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .operatorDecl,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = operatorKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = operatorPrecedenceAndTypes?.raw
+    }
+    return OperatorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankOperatorDecl(arena: SyntaxArena = .default) -> OperatorDeclSyntax {
+    let raw = RawOperatorDeclSyntax.makeBlank(arena: arena).raw
+    return OperatorDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeIdentifierList(
-    _ elements: [TokenSyntax]) -> IdentifierListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IdentifierListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [TokenSyntax]
+  ) -> IdentifierListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .identifierList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return IdentifierListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIdentifierList(presence: SourcePresence = .present) -> IdentifierListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .identifierList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return IdentifierListSyntax(data)
-  }
-  public static func makeOperatorPrecedenceAndTypes(colon: TokenSyntax, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
-    let layout: [RawSyntax?] = [
-      colon.raw,
-      precedenceGroupAndDesignatedTypes.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.operatorPrecedenceAndTypes,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return OperatorPrecedenceAndTypesSyntax(data)
+  public static func makeBlankIdentifierList(arena: SyntaxArena = .default) -> IdentifierListSyntax {
+    let raw = RawIdentifierListSyntax.makeBlank(arena: arena).raw
+    return IdentifierListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankOperatorPrecedenceAndTypes(presence: SourcePresence = .present) -> OperatorPrecedenceAndTypesSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .operatorPrecedenceAndTypes,
-      layout: [
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.identifierList),
-    ], length: .zero, presence: presence))
-    return OperatorPrecedenceAndTypesSyntax(data)
-  }
-  public static func makePrecedenceGroupDecl(attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, precedencegroupKeyword: TokenSyntax, identifier: TokenSyntax, leftBrace: TokenSyntax, groupAttributes: PrecedenceGroupAttributeListSyntax, rightBrace: TokenSyntax) -> PrecedenceGroupDeclSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      modifiers?.raw,
-      precedencegroupKeyword.raw,
-      identifier.raw,
-      leftBrace.raw,
-      groupAttributes.raw,
-      rightBrace.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupDecl,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupDeclSyntax(data)
+  public static func makeOperatorPrecedenceAndTypes(
+    arena: SyntaxArena = .default, colon: TokenSyntax, precedenceGroupAndDesignatedTypes: IdentifierListSyntax
+  ) -> OperatorPrecedenceAndTypesSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .operatorPrecedenceAndTypes,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = colon.raw
+      buffer[1] = precedenceGroupAndDesignatedTypes.raw
+    }
+    return OperatorPrecedenceAndTypesSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupDecl(presence: SourcePresence = .present) -> PrecedenceGroupDeclSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupDecl,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.precedencegroupKeyword),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.leftBrace),
-      RawSyntax.missing(SyntaxKind.precedenceGroupAttributeList),
-      RawSyntax.missingToken(TokenKind.rightBrace),
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupDeclSyntax(data)
+  public static func makeBlankOperatorPrecedenceAndTypes(arena: SyntaxArena = .default) -> OperatorPrecedenceAndTypesSyntax {
+    let raw = RawOperatorPrecedenceAndTypesSyntax.makeBlank(arena: arena).raw
+    return OperatorPrecedenceAndTypesSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makePrecedenceGroupDecl(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, modifiers: ModifierListSyntax?, precedencegroupKeyword: TokenSyntax, identifier: TokenSyntax, leftBrace: TokenSyntax, groupAttributes: PrecedenceGroupAttributeListSyntax, rightBrace: TokenSyntax
+  ) -> PrecedenceGroupDeclSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupDecl,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = modifiers?.raw
+      buffer[2] = precedencegroupKeyword.raw
+      buffer[3] = identifier.raw
+      buffer[4] = leftBrace.raw
+      buffer[5] = groupAttributes.raw
+      buffer[6] = rightBrace.raw
+    }
+    return PrecedenceGroupDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankPrecedenceGroupDecl(arena: SyntaxArena = .default) -> PrecedenceGroupDeclSyntax {
+    let raw = RawPrecedenceGroupDeclSyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupDeclSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makePrecedenceGroupAttributeList(
-    _ elements: [Syntax]) -> PrecedenceGroupAttributeListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAttributeList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupAttributeListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [Syntax]
+  ) -> PrecedenceGroupAttributeListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupAttributeList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return PrecedenceGroupAttributeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupAttributeList(presence: SourcePresence = .present) -> PrecedenceGroupAttributeListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupAttributeList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupAttributeListSyntax(data)
-  }
-  public static func makePrecedenceGroupRelation(higherThanOrLowerThan: TokenSyntax, colon: TokenSyntax, otherNames: PrecedenceGroupNameListSyntax) -> PrecedenceGroupRelationSyntax {
-    let layout: [RawSyntax?] = [
-      higherThanOrLowerThan.raw,
-      colon.raw,
-      otherNames.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupRelation,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupRelationSyntax(data)
+  public static func makeBlankPrecedenceGroupAttributeList(arena: SyntaxArena = .default) -> PrecedenceGroupAttributeListSyntax {
+    let raw = RawPrecedenceGroupAttributeListSyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupAttributeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupRelation(presence: SourcePresence = .present) -> PrecedenceGroupRelationSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupRelation,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.precedenceGroupNameList),
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupRelationSyntax(data)
+  public static func makePrecedenceGroupRelation(
+    arena: SyntaxArena = .default, higherThanOrLowerThan: TokenSyntax, colon: TokenSyntax, otherNames: PrecedenceGroupNameListSyntax
+  ) -> PrecedenceGroupRelationSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupRelation,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = higherThanOrLowerThan.raw
+      buffer[1] = colon.raw
+      buffer[2] = otherNames.raw
+    }
+    return PrecedenceGroupRelationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankPrecedenceGroupRelation(arena: SyntaxArena = .default) -> PrecedenceGroupRelationSyntax {
+    let raw = RawPrecedenceGroupRelationSyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupRelationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makePrecedenceGroupNameList(
-    _ elements: [PrecedenceGroupNameElementSyntax]) -> PrecedenceGroupNameListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupNameListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [PrecedenceGroupNameElementSyntax]
+  ) -> PrecedenceGroupNameListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupNameList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return PrecedenceGroupNameListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupNameList(presence: SourcePresence = .present) -> PrecedenceGroupNameListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupNameList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupNameListSyntax(data)
-  }
-  public static func makePrecedenceGroupNameElement(name: TokenSyntax, trailingComma: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupNameElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupNameElementSyntax(data)
+  public static func makeBlankPrecedenceGroupNameList(arena: SyntaxArena = .default) -> PrecedenceGroupNameListSyntax {
+    let raw = RawPrecedenceGroupNameListSyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupNameListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupNameElement(presence: SourcePresence = .present) -> PrecedenceGroupNameElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupNameElement,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupNameElementSyntax(data)
-  }
-  public static func makePrecedenceGroupAssignment(assignmentKeyword: TokenSyntax, colon: TokenSyntax, flag: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
-    let layout: [RawSyntax?] = [
-      assignmentKeyword.raw,
-      colon.raw,
-      flag.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssignment,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupAssignmentSyntax(data)
+  public static func makePrecedenceGroupNameElement(
+    arena: SyntaxArena = .default, name: TokenSyntax, trailingComma: TokenSyntax?
+  ) -> PrecedenceGroupNameElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupNameElement,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return PrecedenceGroupNameElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupAssignment(presence: SourcePresence = .present) -> PrecedenceGroupAssignmentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupAssignment,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missingToken(TokenKind.trueKeyword),
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupAssignmentSyntax(data)
-  }
-  public static func makePrecedenceGroupAssociativity(associativityKeyword: TokenSyntax, colon: TokenSyntax, value: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
-    let layout: [RawSyntax?] = [
-      associativityKeyword.raw,
-      colon.raw,
-      value.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.precedenceGroupAssociativity,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrecedenceGroupAssociativitySyntax(data)
+  public static func makeBlankPrecedenceGroupNameElement(arena: SyntaxArena = .default) -> PrecedenceGroupNameElementSyntax {
+    let raw = RawPrecedenceGroupNameElementSyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupNameElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrecedenceGroupAssociativity(presence: SourcePresence = .present) -> PrecedenceGroupAssociativitySyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .precedenceGroupAssociativity,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-    ], length: .zero, presence: presence))
-    return PrecedenceGroupAssociativitySyntax(data)
+  public static func makePrecedenceGroupAssignment(
+    arena: SyntaxArena = .default, assignmentKeyword: TokenSyntax, colon: TokenSyntax, flag: TokenSyntax
+  ) -> PrecedenceGroupAssignmentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupAssignment,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = assignmentKeyword.raw
+      buffer[1] = colon.raw
+      buffer[2] = flag.raw
+    }
+    return PrecedenceGroupAssignmentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankPrecedenceGroupAssignment(arena: SyntaxArena = .default) -> PrecedenceGroupAssignmentSyntax {
+    let raw = RawPrecedenceGroupAssignmentSyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupAssignmentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makePrecedenceGroupAssociativity(
+    arena: SyntaxArena = .default, associativityKeyword: TokenSyntax, colon: TokenSyntax, value: TokenSyntax
+  ) -> PrecedenceGroupAssociativitySyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupAssociativity,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = associativityKeyword.raw
+      buffer[1] = colon.raw
+      buffer[2] = value.raw
+    }
+    return PrecedenceGroupAssociativitySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankPrecedenceGroupAssociativity(arena: SyntaxArena = .default) -> PrecedenceGroupAssociativitySyntax {
+    let raw = RawPrecedenceGroupAssociativitySyntax.makeBlank(arena: arena).raw
+    return PrecedenceGroupAssociativitySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeTokenList(
-    _ elements: [TokenSyntax]) -> TokenListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tokenList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TokenListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [TokenSyntax]
+  ) -> TokenListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tokenList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return TokenListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTokenList(presence: SourcePresence = .present) -> TokenListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tokenList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return TokenListSyntax(data)
+  public static func makeBlankTokenList(arena: SyntaxArena = .default) -> TokenListSyntax {
+    let raw = RawTokenListSyntax.makeBlank(arena: arena).raw
+    return TokenListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
   public static func makeNonEmptyTokenList(
-    _ elements: [TokenSyntax]) -> NonEmptyTokenListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.nonEmptyTokenList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return NonEmptyTokenListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [TokenSyntax]
+  ) -> NonEmptyTokenListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .nonEmptyTokenList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return NonEmptyTokenListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankNonEmptyTokenList(presence: SourcePresence = .present) -> NonEmptyTokenListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .nonEmptyTokenList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return NonEmptyTokenListSyntax(data)
-  }
-  public static func makeCustomAttribute(atSignToken: TokenSyntax, attributeName: TypeSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax?, rightParen: TokenSyntax?) -> CustomAttributeSyntax {
-    let layout: [RawSyntax?] = [
-      atSignToken.raw,
-      attributeName.raw,
-      leftParen?.raw,
-      argumentList?.raw,
-      rightParen?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.customAttribute,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CustomAttributeSyntax(data)
+  public static func makeBlankNonEmptyTokenList(arena: SyntaxArena = .default) -> NonEmptyTokenListSyntax {
+    let raw = RawNonEmptyTokenListSyntax.makeBlank(arena: arena).raw
+    return NonEmptyTokenListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCustomAttribute(presence: SourcePresence = .present) -> CustomAttributeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .customAttribute,
-      layout: [
-      RawSyntax.missingToken(TokenKind.atSign),
-      RawSyntax.missing(SyntaxKind.type),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return CustomAttributeSyntax(data)
-  }
-  public static func makeAttribute(atSignToken: TokenSyntax, attributeName: TokenSyntax, leftParen: TokenSyntax?, argument: Syntax?, rightParen: TokenSyntax?, tokenList: TokenListSyntax?) -> AttributeSyntax {
-    let layout: [RawSyntax?] = [
-      atSignToken.raw,
-      attributeName.raw,
-      leftParen?.raw,
-      argument?.raw,
-      rightParen?.raw,
-      tokenList?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attribute,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AttributeSyntax(data)
+  public static func makeCustomAttribute(
+    arena: SyntaxArena = .default, atSignToken: TokenSyntax, attributeName: TypeSyntax, leftParen: TokenSyntax?, argumentList: TupleExprElementListSyntax?, rightParen: TokenSyntax?
+  ) -> CustomAttributeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .customAttribute,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = atSignToken.raw
+      buffer[1] = attributeName.raw
+      buffer[2] = leftParen?.raw
+      buffer[3] = argumentList?.raw
+      buffer[4] = rightParen?.raw
+    }
+    return CustomAttributeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAttribute(presence: SourcePresence = .present) -> AttributeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .attribute,
-      layout: [
-      RawSyntax.missingToken(TokenKind.atSign),
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      nil,
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return AttributeSyntax(data)
+  public static func makeBlankCustomAttribute(arena: SyntaxArena = .default) -> CustomAttributeSyntax {
+    let raw = RawCustomAttributeSyntax.makeBlank(arena: arena).raw
+    return CustomAttributeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeAttribute(
+    arena: SyntaxArena = .default, atSignToken: TokenSyntax, attributeName: TokenSyntax, leftParen: TokenSyntax?, argument: Syntax?, rightParen: TokenSyntax?, tokenList: TokenListSyntax?
+  ) -> AttributeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .attribute,
+                                   uninitializedCount: 6) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = atSignToken.raw
+      buffer[1] = attributeName.raw
+      buffer[2] = leftParen?.raw
+      buffer[3] = argument?.raw
+      buffer[4] = rightParen?.raw
+      buffer[5] = tokenList?.raw
+    }
+    return AttributeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAttribute(arena: SyntaxArena = .default) -> AttributeSyntax {
+    let raw = RawAttributeSyntax.makeBlank(arena: arena).raw
+    return AttributeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeAttributeList(
-    _ elements: [Syntax]) -> AttributeListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attributeList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AttributeListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [Syntax]
+  ) -> AttributeListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return AttributeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAttributeList(presence: SourcePresence = .present) -> AttributeListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .attributeList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return AttributeListSyntax(data)
+  public static func makeBlankAttributeList(arena: SyntaxArena = .default) -> AttributeListSyntax {
+    let raw = RawAttributeListSyntax.makeBlank(arena: arena).raw
+    return AttributeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
   public static func makeSpecializeAttributeSpecList(
-    _ elements: [Syntax]) -> SpecializeAttributeSpecListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.specializeAttributeSpecList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SpecializeAttributeSpecListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [Syntax]
+  ) -> SpecializeAttributeSpecListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .specializeAttributeSpecList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return SpecializeAttributeSpecListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSpecializeAttributeSpecList(presence: SourcePresence = .present) -> SpecializeAttributeSpecListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .specializeAttributeSpecList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return SpecializeAttributeSpecListSyntax(data)
-  }
-  public static func makeAvailabilityEntry(label: TokenSyntax, colon: TokenSyntax, availabilityList: AvailabilitySpecListSyntax, semicolon: TokenSyntax) -> AvailabilityEntrySyntax {
-    let layout: [RawSyntax?] = [
-      label.raw,
-      colon.raw,
-      availabilityList.raw,
-      semicolon.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityEntry,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AvailabilityEntrySyntax(data)
+  public static func makeBlankSpecializeAttributeSpecList(arena: SyntaxArena = .default) -> SpecializeAttributeSpecListSyntax {
+    let raw = RawSpecializeAttributeSpecListSyntax.makeBlank(arena: arena).raw
+    return SpecializeAttributeSpecListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAvailabilityEntry(presence: SourcePresence = .present) -> AvailabilityEntrySyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityEntry,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.availabilitySpecList),
-      RawSyntax.missingToken(TokenKind.semicolon),
-    ], length: .zero, presence: presence))
-    return AvailabilityEntrySyntax(data)
-  }
-  public static func makeLabeledSpecializeEntry(label: TokenSyntax, colon: TokenSyntax, value: TokenSyntax, trailingComma: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
-    let layout: [RawSyntax?] = [
-      label.raw,
-      colon.raw,
-      value.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.labeledSpecializeEntry,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return LabeledSpecializeEntrySyntax(data)
+  public static func makeAvailabilityEntry(
+    arena: SyntaxArena = .default, label: TokenSyntax, colon: TokenSyntax, availabilityList: AvailabilitySpecListSyntax, semicolon: TokenSyntax
+  ) -> AvailabilityEntrySyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityEntry,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = label.raw
+      buffer[1] = colon.raw
+      buffer[2] = availabilityList.raw
+      buffer[3] = semicolon.raw
+    }
+    return AvailabilityEntrySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankLabeledSpecializeEntry(presence: SourcePresence = .present) -> LabeledSpecializeEntrySyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .labeledSpecializeEntry,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return LabeledSpecializeEntrySyntax(data)
-  }
-  public static func makeTargetFunctionEntry(label: TokenSyntax, colon: TokenSyntax, declname: DeclNameSyntax, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
-    let layout: [RawSyntax?] = [
-      label.raw,
-      colon.raw,
-      declname.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.targetFunctionEntry,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TargetFunctionEntrySyntax(data)
+  public static func makeBlankAvailabilityEntry(arena: SyntaxArena = .default) -> AvailabilityEntrySyntax {
+    let raw = RawAvailabilityEntrySyntax.makeBlank(arena: arena).raw
+    return AvailabilityEntrySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTargetFunctionEntry(presence: SourcePresence = .present) -> TargetFunctionEntrySyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .targetFunctionEntry,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.declName),
-      nil,
-    ], length: .zero, presence: presence))
-    return TargetFunctionEntrySyntax(data)
-  }
-  public static func makeNamedAttributeStringArgument(nameTok: TokenSyntax, colon: TokenSyntax, stringOrDeclname: Syntax) -> NamedAttributeStringArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      nameTok.raw,
-      colon.raw,
-      stringOrDeclname.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.namedAttributeStringArgument,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return NamedAttributeStringArgumentSyntax(data)
+  public static func makeLabeledSpecializeEntry(
+    arena: SyntaxArena = .default, label: TokenSyntax, colon: TokenSyntax, value: TokenSyntax, trailingComma: TokenSyntax?
+  ) -> LabeledSpecializeEntrySyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .labeledSpecializeEntry,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = label.raw
+      buffer[1] = colon.raw
+      buffer[2] = value.raw
+      buffer[3] = trailingComma?.raw
+    }
+    return LabeledSpecializeEntrySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankNamedAttributeStringArgument(presence: SourcePresence = .present) -> NamedAttributeStringArgumentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .namedAttributeStringArgument,
-      layout: [
-      RawSyntax.missingToken(TokenKind.unknown("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.unknown),
-    ], length: .zero, presence: presence))
-    return NamedAttributeStringArgumentSyntax(data)
-  }
-  public static func makeDeclName(declBaseName: Syntax, declNameArguments: DeclNameArgumentsSyntax?) -> DeclNameSyntax {
-    let layout: [RawSyntax?] = [
-      declBaseName.raw,
-      declNameArguments?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declName,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclNameSyntax(data)
+  public static func makeBlankLabeledSpecializeEntry(arena: SyntaxArena = .default) -> LabeledSpecializeEntrySyntax {
+    let raw = RawLabeledSpecializeEntrySyntax.makeBlank(arena: arena).raw
+    return LabeledSpecializeEntrySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclName(presence: SourcePresence = .present) -> DeclNameSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declName,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return DeclNameSyntax(data)
-  }
-  public static func makeImplementsAttributeArguments(type: SimpleTypeIdentifierSyntax, comma: TokenSyntax, declBaseName: Syntax, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
-    let layout: [RawSyntax?] = [
-      type.raw,
-      comma.raw,
-      declBaseName.raw,
-      declNameArguments?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implementsAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ImplementsAttributeArgumentsSyntax(data)
+  public static func makeTargetFunctionEntry(
+    arena: SyntaxArena = .default, label: TokenSyntax, colon: TokenSyntax, declname: DeclNameSyntax, trailingComma: TokenSyntax?
+  ) -> TargetFunctionEntrySyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .targetFunctionEntry,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = label.raw
+      buffer[1] = colon.raw
+      buffer[2] = declname.raw
+      buffer[3] = trailingComma?.raw
+    }
+    return TargetFunctionEntrySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankImplementsAttributeArguments(presence: SourcePresence = .present) -> ImplementsAttributeArgumentsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .implementsAttributeArguments,
-      layout: [
-      RawSyntax.missing(SyntaxKind.simpleTypeIdentifier),
-      RawSyntax.missingToken(TokenKind.comma),
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return ImplementsAttributeArgumentsSyntax(data)
-  }
-  public static func makeObjCSelectorPiece(name: TokenSyntax?, colon: TokenSyntax?) -> ObjCSelectorPieceSyntax {
-    let layout: [RawSyntax?] = [
-      name?.raw,
-      colon?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelectorPiece,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjCSelectorPieceSyntax(data)
+  public static func makeBlankTargetFunctionEntry(arena: SyntaxArena = .default) -> TargetFunctionEntrySyntax {
+    let raw = RawTargetFunctionEntrySyntax.makeBlank(arena: arena).raw
+    return TargetFunctionEntrySyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjCSelectorPiece(presence: SourcePresence = .present) -> ObjCSelectorPieceSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objCSelectorPiece,
-      layout: [
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return ObjCSelectorPieceSyntax(data)
+  public static func makeNamedAttributeStringArgument(
+    arena: SyntaxArena = .default, nameTok: TokenSyntax, colon: TokenSyntax, stringOrDeclname: Syntax
+  ) -> NamedAttributeStringArgumentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .namedAttributeStringArgument,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = nameTok.raw
+      buffer[1] = colon.raw
+      buffer[2] = stringOrDeclname.raw
+    }
+    return NamedAttributeStringArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankNamedAttributeStringArgument(arena: SyntaxArena = .default) -> NamedAttributeStringArgumentSyntax {
+    let raw = RawNamedAttributeStringArgumentSyntax.makeBlank(arena: arena).raw
+    return NamedAttributeStringArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDeclName(
+    arena: SyntaxArena = .default, declBaseName: Syntax, declNameArguments: DeclNameArgumentsSyntax?
+  ) -> DeclNameSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declName,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = declBaseName.raw
+      buffer[1] = declNameArguments?.raw
+    }
+    return DeclNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDeclName(arena: SyntaxArena = .default) -> DeclNameSyntax {
+    let raw = RawDeclNameSyntax.makeBlank(arena: arena).raw
+    return DeclNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeImplementsAttributeArguments(
+    arena: SyntaxArena = .default, type: SimpleTypeIdentifierSyntax, comma: TokenSyntax, declBaseName: Syntax, declNameArguments: DeclNameArgumentsSyntax?
+  ) -> ImplementsAttributeArgumentsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .implementsAttributeArguments,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = type.raw
+      buffer[1] = comma.raw
+      buffer[2] = declBaseName.raw
+      buffer[3] = declNameArguments?.raw
+    }
+    return ImplementsAttributeArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankImplementsAttributeArguments(arena: SyntaxArena = .default) -> ImplementsAttributeArgumentsSyntax {
+    let raw = RawImplementsAttributeArgumentsSyntax.makeBlank(arena: arena).raw
+    return ImplementsAttributeArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeObjCSelectorPiece(
+    arena: SyntaxArena = .default, name: TokenSyntax?, colon: TokenSyntax?
+  ) -> ObjCSelectorPieceSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objCSelectorPiece,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name?.raw
+      buffer[1] = colon?.raw
+    }
+    return ObjCSelectorPieceSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankObjCSelectorPiece(arena: SyntaxArena = .default) -> ObjCSelectorPieceSyntax {
+    let raw = RawObjCSelectorPieceSyntax.makeBlank(arena: arena).raw
+    return ObjCSelectorPieceSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeObjCSelector(
-    _ elements: [ObjCSelectorPieceSyntax]) -> ObjCSelectorSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.objCSelector,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ObjCSelectorSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ObjCSelectorPieceSyntax]
+  ) -> ObjCSelectorSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objCSelector, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ObjCSelectorSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankObjCSelector(presence: SourcePresence = .present) -> ObjCSelectorSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .objCSelector,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ObjCSelectorSyntax(data)
-  }
-  public static func makeDifferentiableAttributeArguments(diffKind: TokenSyntax?, diffKindComma: TokenSyntax?, diffParams: DifferentiabilityParamsClauseSyntax?, diffParamsComma: TokenSyntax?, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
-    let layout: [RawSyntax?] = [
-      diffKind?.raw,
-      diffKindComma?.raw,
-      diffParams?.raw,
-      diffParamsComma?.raw,
-      whereClause?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiableAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DifferentiableAttributeArgumentsSyntax(data)
+  public static func makeBlankObjCSelector(arena: SyntaxArena = .default) -> ObjCSelectorSyntax {
+    let raw = RawObjCSelectorSyntax.makeBlank(arena: arena).raw
+    return ObjCSelectorSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDifferentiableAttributeArguments(presence: SourcePresence = .present) -> DifferentiableAttributeArgumentsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiableAttributeArguments,
-      layout: [
-      nil,
-      nil,
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return DifferentiableAttributeArgumentsSyntax(data)
-  }
-  public static func makeDifferentiabilityParamsClause(wrtLabel: TokenSyntax, colon: TokenSyntax, parameters: Syntax) -> DifferentiabilityParamsClauseSyntax {
-    let layout: [RawSyntax?] = [
-      wrtLabel.raw,
-      colon.raw,
-      parameters.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamsClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DifferentiabilityParamsClauseSyntax(data)
+  public static func makeDifferentiableAttributeArguments(
+    arena: SyntaxArena = .default, diffKind: TokenSyntax?, diffKindComma: TokenSyntax?, diffParams: DifferentiabilityParamsClauseSyntax?, diffParamsComma: TokenSyntax?, whereClause: GenericWhereClauseSyntax?
+  ) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiableAttributeArguments,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = diffKind?.raw
+      buffer[1] = diffKindComma?.raw
+      buffer[2] = diffParams?.raw
+      buffer[3] = diffParamsComma?.raw
+      buffer[4] = whereClause?.raw
+    }
+    return DifferentiableAttributeArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDifferentiabilityParamsClause(presence: SourcePresence = .present) -> DifferentiabilityParamsClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiabilityParamsClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.unknown),
-    ], length: .zero, presence: presence))
-    return DifferentiabilityParamsClauseSyntax(data)
-  }
-  public static func makeDifferentiabilityParams(leftParen: TokenSyntax, diffParams: DifferentiabilityParamListSyntax, rightParen: TokenSyntax) -> DifferentiabilityParamsSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      diffParams.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParams,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DifferentiabilityParamsSyntax(data)
+  public static func makeBlankDifferentiableAttributeArguments(arena: SyntaxArena = .default) -> DifferentiableAttributeArgumentsSyntax {
+    let raw = RawDifferentiableAttributeArgumentsSyntax.makeBlank(arena: arena).raw
+    return DifferentiableAttributeArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDifferentiabilityParams(presence: SourcePresence = .present) -> DifferentiabilityParamsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiabilityParams,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.differentiabilityParamList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return DifferentiabilityParamsSyntax(data)
+  public static func makeDifferentiabilityParamsClause(
+    arena: SyntaxArena = .default, wrtLabel: TokenSyntax, colon: TokenSyntax, parameters: Syntax
+  ) -> DifferentiabilityParamsClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParamsClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = wrtLabel.raw
+      buffer[1] = colon.raw
+      buffer[2] = parameters.raw
+    }
+    return DifferentiabilityParamsClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankDifferentiabilityParamsClause(arena: SyntaxArena = .default) -> DifferentiabilityParamsClauseSyntax {
+    let raw = RawDifferentiabilityParamsClauseSyntax.makeBlank(arena: arena).raw
+    return DifferentiabilityParamsClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDifferentiabilityParams(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, diffParams: DifferentiabilityParamListSyntax, rightParen: TokenSyntax
+  ) -> DifferentiabilityParamsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParams,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = diffParams.raw
+      buffer[2] = rightParen.raw
+    }
+    return DifferentiabilityParamsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDifferentiabilityParams(arena: SyntaxArena = .default) -> DifferentiabilityParamsSyntax {
+    let raw = RawDifferentiabilityParamsSyntax.makeBlank(arena: arena).raw
+    return DifferentiabilityParamsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeDifferentiabilityParamList(
-    _ elements: [DifferentiabilityParamSyntax]) -> DifferentiabilityParamListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParamList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DifferentiabilityParamListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [DifferentiabilityParamSyntax]
+  ) -> DifferentiabilityParamListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParamList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return DifferentiabilityParamListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDifferentiabilityParamList(presence: SourcePresence = .present) -> DifferentiabilityParamListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiabilityParamList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return DifferentiabilityParamListSyntax(data)
-  }
-  public static func makeDifferentiabilityParam(parameter: Syntax, trailingComma: TokenSyntax?) -> DifferentiabilityParamSyntax {
-    let layout: [RawSyntax?] = [
-      parameter.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.differentiabilityParam,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DifferentiabilityParamSyntax(data)
+  public static func makeBlankDifferentiabilityParamList(arena: SyntaxArena = .default) -> DifferentiabilityParamListSyntax {
+    let raw = RawDifferentiabilityParamListSyntax.makeBlank(arena: arena).raw
+    return DifferentiabilityParamListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDifferentiabilityParam(presence: SourcePresence = .present) -> DifferentiabilityParamSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .differentiabilityParam,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return DifferentiabilityParamSyntax(data)
-  }
-  public static func makeDerivativeRegistrationAttributeArguments(ofLabel: TokenSyntax, colon: TokenSyntax, originalDeclName: QualifiedDeclNameSyntax, period: TokenSyntax?, accessorKind: TokenSyntax?, comma: TokenSyntax?, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let layout: [RawSyntax?] = [
-      ofLabel.raw,
-      colon.raw,
-      originalDeclName.raw,
-      period?.raw,
-      accessorKind?.raw,
-      comma?.raw,
-      diffParams?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.derivativeRegistrationAttributeArguments,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DerivativeRegistrationAttributeArgumentsSyntax(data)
+  public static func makeDifferentiabilityParam(
+    arena: SyntaxArena = .default, parameter: Syntax, trailingComma: TokenSyntax?
+  ) -> DifferentiabilityParamSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParam,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = parameter.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return DifferentiabilityParamSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDerivativeRegistrationAttributeArguments(presence: SourcePresence = .present) -> DerivativeRegistrationAttributeArgumentsSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .derivativeRegistrationAttributeArguments,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.qualifiedDeclName),
-      nil,
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return DerivativeRegistrationAttributeArgumentsSyntax(data)
-  }
-  public static func makeQualifiedDeclName(baseType: TypeSyntax?, dot: TokenSyntax?, name: TokenSyntax, arguments: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
-    let layout: [RawSyntax?] = [
-      baseType?.raw,
-      dot?.raw,
-      name.raw,
-      arguments?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.qualifiedDeclName,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return QualifiedDeclNameSyntax(data)
+  public static func makeBlankDifferentiabilityParam(arena: SyntaxArena = .default) -> DifferentiabilityParamSyntax {
+    let raw = RawDifferentiabilityParamSyntax.makeBlank(arena: arena).raw
+    return DifferentiabilityParamSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankQualifiedDeclName(presence: SourcePresence = .present) -> QualifiedDeclNameSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .qualifiedDeclName,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return QualifiedDeclNameSyntax(data)
-  }
-  public static func makeFunctionDeclName(name: Syntax, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      arguments?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionDeclName,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionDeclNameSyntax(data)
+  public static func makeDerivativeRegistrationAttributeArguments(
+    arena: SyntaxArena = .default, ofLabel: TokenSyntax, colon: TokenSyntax, originalDeclName: QualifiedDeclNameSyntax, period: TokenSyntax?, accessorKind: TokenSyntax?, comma: TokenSyntax?, diffParams: DifferentiabilityParamsClauseSyntax?
+  ) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .derivativeRegistrationAttributeArguments,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = ofLabel.raw
+      buffer[1] = colon.raw
+      buffer[2] = originalDeclName.raw
+      buffer[3] = period?.raw
+      buffer[4] = accessorKind?.raw
+      buffer[5] = comma?.raw
+      buffer[6] = diffParams?.raw
+    }
+    return DerivativeRegistrationAttributeArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionDeclName(presence: SourcePresence = .present) -> FunctionDeclNameSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionDeclName,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return FunctionDeclNameSyntax(data)
-  }
-  public static func makeBackDeployAttributeSpecList(beforeLabel: TokenSyntax, colon: TokenSyntax, versionList: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
-    let layout: [RawSyntax?] = [
-      beforeLabel.raw,
-      colon.raw,
-      versionList.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployAttributeSpecList,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return BackDeployAttributeSpecListSyntax(data)
+  public static func makeBlankDerivativeRegistrationAttributeArguments(arena: SyntaxArena = .default) -> DerivativeRegistrationAttributeArgumentsSyntax {
+    let raw = RawDerivativeRegistrationAttributeArgumentsSyntax.makeBlank(arena: arena).raw
+    return DerivativeRegistrationAttributeArgumentsSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankBackDeployAttributeSpecList(presence: SourcePresence = .present) -> BackDeployAttributeSpecListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .backDeployAttributeSpecList,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.backDeployVersionList),
-    ], length: .zero, presence: presence))
-    return BackDeployAttributeSpecListSyntax(data)
+  public static func makeQualifiedDeclName(
+    arena: SyntaxArena = .default, baseType: TypeSyntax?, dot: TokenSyntax?, name: TokenSyntax, arguments: DeclNameArgumentsSyntax?
+  ) -> QualifiedDeclNameSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .qualifiedDeclName,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = baseType?.raw
+      buffer[1] = dot?.raw
+      buffer[2] = name.raw
+      buffer[3] = arguments?.raw
+    }
+    return QualifiedDeclNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankQualifiedDeclName(arena: SyntaxArena = .default) -> QualifiedDeclNameSyntax {
+    let raw = RawQualifiedDeclNameSyntax.makeBlank(arena: arena).raw
+    return QualifiedDeclNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeFunctionDeclName(
+    arena: SyntaxArena = .default, name: Syntax, arguments: DeclNameArgumentsSyntax?
+  ) -> FunctionDeclNameSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionDeclName,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = arguments?.raw
+    }
+    return FunctionDeclNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankFunctionDeclName(arena: SyntaxArena = .default) -> FunctionDeclNameSyntax {
+    let raw = RawFunctionDeclNameSyntax.makeBlank(arena: arena).raw
+    return FunctionDeclNameSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBackDeployAttributeSpecList(
+    arena: SyntaxArena = .default, beforeLabel: TokenSyntax, colon: TokenSyntax, versionList: BackDeployVersionListSyntax
+  ) -> BackDeployAttributeSpecListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .backDeployAttributeSpecList,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = beforeLabel.raw
+      buffer[1] = colon.raw
+      buffer[2] = versionList.raw
+    }
+    return BackDeployAttributeSpecListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankBackDeployAttributeSpecList(arena: SyntaxArena = .default) -> BackDeployAttributeSpecListSyntax {
+    let raw = RawBackDeployAttributeSpecListSyntax.makeBlank(arena: arena).raw
+    return BackDeployAttributeSpecListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeBackDeployVersionList(
-    _ elements: [BackDeployVersionArgumentSyntax]) -> BackDeployVersionListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return BackDeployVersionListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [BackDeployVersionArgumentSyntax]
+  ) -> BackDeployVersionListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .backDeployVersionList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return BackDeployVersionListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankBackDeployVersionList(presence: SourcePresence = .present) -> BackDeployVersionListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .backDeployVersionList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return BackDeployVersionListSyntax(data)
-  }
-  public static func makeBackDeployVersionArgument(availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, trailingComma: TokenSyntax?) -> BackDeployVersionArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      availabilityVersionRestriction.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.backDeployVersionArgument,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return BackDeployVersionArgumentSyntax(data)
+  public static func makeBlankBackDeployVersionList(arena: SyntaxArena = .default) -> BackDeployVersionListSyntax {
+    let raw = RawBackDeployVersionListSyntax.makeBlank(arena: arena).raw
+    return BackDeployVersionListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankBackDeployVersionArgument(presence: SourcePresence = .present) -> BackDeployVersionArgumentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .backDeployVersionArgument,
-      layout: [
-      RawSyntax.missing(SyntaxKind.availabilityVersionRestriction),
-      nil,
-    ], length: .zero, presence: presence))
-    return BackDeployVersionArgumentSyntax(data)
-  }
-  public static func makeContinueStmt(continueKeyword: TokenSyntax, label: TokenSyntax?) -> ContinueStmtSyntax {
-    let layout: [RawSyntax?] = [
-      continueKeyword.raw,
-      label?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.continueStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ContinueStmtSyntax(data)
+  public static func makeBackDeployVersionArgument(
+    arena: SyntaxArena = .default, availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, trailingComma: TokenSyntax?
+  ) -> BackDeployVersionArgumentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .backDeployVersionArgument,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = availabilityVersionRestriction.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return BackDeployVersionArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankContinueStmt(presence: SourcePresence = .present) -> ContinueStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .continueStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.continueKeyword),
-      nil,
-    ], length: .zero, presence: presence))
-    return ContinueStmtSyntax(data)
-  }
-  public static func makeWhileStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, whileKeyword: TokenSyntax, conditions: ConditionElementListSyntax, body: CodeBlockSyntax) -> WhileStmtSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      whileKeyword.raw,
-      conditions.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whileStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return WhileStmtSyntax(data)
+  public static func makeBlankBackDeployVersionArgument(arena: SyntaxArena = .default) -> BackDeployVersionArgumentSyntax {
+    let raw = RawBackDeployVersionArgumentSyntax.makeBlank(arena: arena).raw
+    return BackDeployVersionArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankWhileStmt(presence: SourcePresence = .present) -> WhileStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .whileStmt,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.whileKeyword),
-      RawSyntax.missing(SyntaxKind.conditionElementList),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-    ], length: .zero, presence: presence))
-    return WhileStmtSyntax(data)
-  }
-  public static func makeDeferStmt(deferKeyword: TokenSyntax, body: CodeBlockSyntax) -> DeferStmtSyntax {
-    let layout: [RawSyntax?] = [
-      deferKeyword.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.deferStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeferStmtSyntax(data)
+  public static func makeContinueStmt(
+    arena: SyntaxArena = .default, continueKeyword: TokenSyntax, label: TokenSyntax?
+  ) -> ContinueStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .continueStmt,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = continueKeyword.raw
+      buffer[1] = label?.raw
+    }
+    return ContinueStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeferStmt(presence: SourcePresence = .present) -> DeferStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .deferStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.deferKeyword),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-    ], length: .zero, presence: presence))
-    return DeferStmtSyntax(data)
-  }
-  public static func makeExpressionStmt(expression: ExprSyntax) -> ExpressionStmtSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ExpressionStmtSyntax(data)
+  public static func makeBlankContinueStmt(arena: SyntaxArena = .default) -> ContinueStmtSyntax {
+    let raw = RawContinueStmtSyntax.makeBlank(arena: arena).raw
+    return ContinueStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankExpressionStmt(presence: SourcePresence = .present) -> ExpressionStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .expressionStmt,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return ExpressionStmtSyntax(data)
+  public static func makeWhileStmt(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, whileKeyword: TokenSyntax, conditions: ConditionElementListSyntax, body: CodeBlockSyntax
+  ) -> WhileStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .whileStmt,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = whileKeyword.raw
+      buffer[3] = conditions.raw
+      buffer[4] = body.raw
+    }
+    return WhileStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankWhileStmt(arena: SyntaxArena = .default) -> WhileStmtSyntax {
+    let raw = RawWhileStmtSyntax.makeBlank(arena: arena).raw
+    return WhileStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDeferStmt(
+    arena: SyntaxArena = .default, deferKeyword: TokenSyntax, body: CodeBlockSyntax
+  ) -> DeferStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .deferStmt,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = deferKeyword.raw
+      buffer[1] = body.raw
+    }
+    return DeferStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDeferStmt(arena: SyntaxArena = .default) -> DeferStmtSyntax {
+    let raw = RawDeferStmtSyntax.makeBlank(arena: arena).raw
+    return DeferStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeExpressionStmt(
+    arena: SyntaxArena = .default, expression: ExprSyntax
+  ) -> ExpressionStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .expressionStmt,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+    }
+    return ExpressionStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankExpressionStmt(arena: SyntaxArena = .default) -> ExpressionStmtSyntax {
+    let raw = RawExpressionStmtSyntax.makeBlank(arena: arena).raw
+    return ExpressionStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeSwitchCaseList(
-    _ elements: [Syntax]) -> SwitchCaseListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SwitchCaseListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [Syntax]
+  ) -> SwitchCaseListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchCaseList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return SwitchCaseListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSwitchCaseList(presence: SourcePresence = .present) -> SwitchCaseListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .switchCaseList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return SwitchCaseListSyntax(data)
-  }
-  public static func makeRepeatWhileStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, repeatKeyword: TokenSyntax, body: CodeBlockSyntax, whileKeyword: TokenSyntax, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      repeatKeyword.raw,
-      body.raw,
-      whileKeyword.raw,
-      condition.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.repeatWhileStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return RepeatWhileStmtSyntax(data)
+  public static func makeBlankSwitchCaseList(arena: SyntaxArena = .default) -> SwitchCaseListSyntax {
+    let raw = RawSwitchCaseListSyntax.makeBlank(arena: arena).raw
+    return SwitchCaseListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankRepeatWhileStmt(presence: SourcePresence = .present) -> RepeatWhileStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .repeatWhileStmt,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.repeatKeyword),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-      RawSyntax.missingToken(TokenKind.whileKeyword),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return RepeatWhileStmtSyntax(data)
-  }
-  public static func makeGuardStmt(guardKeyword: TokenSyntax, conditions: ConditionElementListSyntax, elseKeyword: TokenSyntax, body: CodeBlockSyntax) -> GuardStmtSyntax {
-    let layout: [RawSyntax?] = [
-      guardKeyword.raw,
-      conditions.raw,
-      elseKeyword.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.guardStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GuardStmtSyntax(data)
+  public static func makeRepeatWhileStmt(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, repeatKeyword: TokenSyntax, body: CodeBlockSyntax, whileKeyword: TokenSyntax, condition: ExprSyntax
+  ) -> RepeatWhileStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .repeatWhileStmt,
+                                   uninitializedCount: 6) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = repeatKeyword.raw
+      buffer[3] = body.raw
+      buffer[4] = whileKeyword.raw
+      buffer[5] = condition.raw
+    }
+    return RepeatWhileStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGuardStmt(presence: SourcePresence = .present) -> GuardStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .guardStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.guardKeyword),
-      RawSyntax.missing(SyntaxKind.conditionElementList),
-      RawSyntax.missingToken(TokenKind.elseKeyword),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-    ], length: .zero, presence: presence))
-    return GuardStmtSyntax(data)
-  }
-  public static func makeWhereClause(whereKeyword: TokenSyntax, guardResult: ExprSyntax) -> WhereClauseSyntax {
-    let layout: [RawSyntax?] = [
-      whereKeyword.raw,
-      guardResult.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.whereClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return WhereClauseSyntax(data)
+  public static func makeBlankRepeatWhileStmt(arena: SyntaxArena = .default) -> RepeatWhileStmtSyntax {
+    let raw = RawRepeatWhileStmtSyntax.makeBlank(arena: arena).raw
+    return RepeatWhileStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankWhereClause(presence: SourcePresence = .present) -> WhereClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .whereClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.whereKeyword),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return WhereClauseSyntax(data)
-  }
-  public static func makeForInStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, forKeyword: TokenSyntax, tryKeyword: TokenSyntax?, awaitKeyword: TokenSyntax?, caseKeyword: TokenSyntax?, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, inKeyword: TokenSyntax, sequenceExpr: ExprSyntax, whereClause: WhereClauseSyntax?, body: CodeBlockSyntax) -> ForInStmtSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      forKeyword.raw,
-      tryKeyword?.raw,
-      awaitKeyword?.raw,
-      caseKeyword?.raw,
-      pattern.raw,
-      typeAnnotation?.raw,
-      inKeyword.raw,
-      sequenceExpr.raw,
-      whereClause?.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.forInStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ForInStmtSyntax(data)
+  public static func makeGuardStmt(
+    arena: SyntaxArena = .default, guardKeyword: TokenSyntax, conditions: ConditionElementListSyntax, elseKeyword: TokenSyntax, body: CodeBlockSyntax
+  ) -> GuardStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .guardStmt,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = guardKeyword.raw
+      buffer[1] = conditions.raw
+      buffer[2] = elseKeyword.raw
+      buffer[3] = body.raw
+    }
+    return GuardStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankForInStmt(presence: SourcePresence = .present) -> ForInStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .forInStmt,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.forKeyword),
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.pattern),
-      nil,
-      RawSyntax.missingToken(TokenKind.inKeyword),
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-      RawSyntax.missing(SyntaxKind.codeBlock),
-    ], length: .zero, presence: presence))
-    return ForInStmtSyntax(data)
-  }
-  public static func makeSwitchStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, switchKeyword: TokenSyntax, expression: ExprSyntax, leftBrace: TokenSyntax, cases: SwitchCaseListSyntax, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      switchKeyword.raw,
-      expression.raw,
-      leftBrace.raw,
-      cases.raw,
-      rightBrace.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SwitchStmtSyntax(data)
+  public static func makeBlankGuardStmt(arena: SyntaxArena = .default) -> GuardStmtSyntax {
+    let raw = RawGuardStmtSyntax.makeBlank(arena: arena).raw
+    return GuardStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSwitchStmt(presence: SourcePresence = .present) -> SwitchStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .switchStmt,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.switchKeyword),
-      RawSyntax.missing(SyntaxKind.expr),
-      RawSyntax.missingToken(TokenKind.leftBrace),
-      RawSyntax.missing(SyntaxKind.switchCaseList),
-      RawSyntax.missingToken(TokenKind.rightBrace),
-    ], length: .zero, presence: presence))
-    return SwitchStmtSyntax(data)
+  public static func makeWhereClause(
+    arena: SyntaxArena = .default, whereKeyword: TokenSyntax, guardResult: ExprSyntax
+  ) -> WhereClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .whereClause,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = whereKeyword.raw
+      buffer[1] = guardResult.raw
+    }
+    return WhereClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankWhereClause(arena: SyntaxArena = .default) -> WhereClauseSyntax {
+    let raw = RawWhereClauseSyntax.makeBlank(arena: arena).raw
+    return WhereClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeForInStmt(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, forKeyword: TokenSyntax, tryKeyword: TokenSyntax?, awaitKeyword: TokenSyntax?, caseKeyword: TokenSyntax?, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, inKeyword: TokenSyntax, sequenceExpr: ExprSyntax, whereClause: WhereClauseSyntax?, body: CodeBlockSyntax
+  ) -> ForInStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .forInStmt,
+                                   uninitializedCount: 12) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = forKeyword.raw
+      buffer[3] = tryKeyword?.raw
+      buffer[4] = awaitKeyword?.raw
+      buffer[5] = caseKeyword?.raw
+      buffer[6] = pattern.raw
+      buffer[7] = typeAnnotation?.raw
+      buffer[8] = inKeyword.raw
+      buffer[9] = sequenceExpr.raw
+      buffer[10] = whereClause?.raw
+      buffer[11] = body.raw
+    }
+    return ForInStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankForInStmt(arena: SyntaxArena = .default) -> ForInStmtSyntax {
+    let raw = RawForInStmtSyntax.makeBlank(arena: arena).raw
+    return ForInStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeSwitchStmt(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, switchKeyword: TokenSyntax, expression: ExprSyntax, leftBrace: TokenSyntax, cases: SwitchCaseListSyntax, rightBrace: TokenSyntax
+  ) -> SwitchStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchStmt,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = switchKeyword.raw
+      buffer[3] = expression.raw
+      buffer[4] = leftBrace.raw
+      buffer[5] = cases.raw
+      buffer[6] = rightBrace.raw
+    }
+    return SwitchStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankSwitchStmt(arena: SyntaxArena = .default) -> SwitchStmtSyntax {
+    let raw = RawSwitchStmtSyntax.makeBlank(arena: arena).raw
+    return SwitchStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeCatchClauseList(
-    _ elements: [CatchClauseSyntax]) -> CatchClauseListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClauseList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CatchClauseListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [CatchClauseSyntax]
+  ) -> CatchClauseListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .catchClauseList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return CatchClauseListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCatchClauseList(presence: SourcePresence = .present) -> CatchClauseListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchClauseList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return CatchClauseListSyntax(data)
-  }
-  public static func makeDoStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, doKeyword: TokenSyntax, body: CodeBlockSyntax, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      doKeyword.raw,
-      body.raw,
-      catchClauses?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.doStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DoStmtSyntax(data)
+  public static func makeBlankCatchClauseList(arena: SyntaxArena = .default) -> CatchClauseListSyntax {
+    let raw = RawCatchClauseListSyntax.makeBlank(arena: arena).raw
+    return CatchClauseListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDoStmt(presence: SourcePresence = .present) -> DoStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .doStmt,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.doKeyword),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-      nil,
-    ], length: .zero, presence: presence))
-    return DoStmtSyntax(data)
-  }
-  public static func makeReturnStmt(returnKeyword: TokenSyntax, expression: ExprSyntax?) -> ReturnStmtSyntax {
-    let layout: [RawSyntax?] = [
-      returnKeyword.raw,
-      expression?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.returnStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ReturnStmtSyntax(data)
+  public static func makeDoStmt(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, doKeyword: TokenSyntax, body: CodeBlockSyntax, catchClauses: CatchClauseListSyntax?
+  ) -> DoStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .doStmt,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = doKeyword.raw
+      buffer[3] = body.raw
+      buffer[4] = catchClauses?.raw
+    }
+    return DoStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankReturnStmt(presence: SourcePresence = .present) -> ReturnStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .returnStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.returnKeyword),
-      nil,
-    ], length: .zero, presence: presence))
-    return ReturnStmtSyntax(data)
-  }
-  public static func makeYieldStmt(yieldKeyword: TokenSyntax, yields: Syntax) -> YieldStmtSyntax {
-    let layout: [RawSyntax?] = [
-      yieldKeyword.raw,
-      yields.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return YieldStmtSyntax(data)
+  public static func makeBlankDoStmt(arena: SyntaxArena = .default) -> DoStmtSyntax {
+    let raw = RawDoStmtSyntax.makeBlank(arena: arena).raw
+    return DoStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankYieldStmt(presence: SourcePresence = .present) -> YieldStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .yieldStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.yield),
-      RawSyntax.missing(SyntaxKind.unknown),
-    ], length: .zero, presence: presence))
-    return YieldStmtSyntax(data)
-  }
-  public static func makeYieldList(leftParen: TokenSyntax, elementList: ExprListSyntax, trailingComma: TokenSyntax?, rightParen: TokenSyntax) -> YieldListSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      elementList.raw,
-      trailingComma?.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.yieldList,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return YieldListSyntax(data)
+  public static func makeReturnStmt(
+    arena: SyntaxArena = .default, returnKeyword: TokenSyntax, expression: ExprSyntax?
+  ) -> ReturnStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .returnStmt,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = returnKeyword.raw
+      buffer[1] = expression?.raw
+    }
+    return ReturnStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankYieldList(presence: SourcePresence = .present) -> YieldListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .yieldList,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.exprList),
-      nil,
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return YieldListSyntax(data)
-  }
-  public static func makeFallthroughStmt(fallthroughKeyword: TokenSyntax) -> FallthroughStmtSyntax {
-    let layout: [RawSyntax?] = [
-      fallthroughKeyword.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.fallthroughStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FallthroughStmtSyntax(data)
+  public static func makeBlankReturnStmt(arena: SyntaxArena = .default) -> ReturnStmtSyntax {
+    let raw = RawReturnStmtSyntax.makeBlank(arena: arena).raw
+    return ReturnStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFallthroughStmt(presence: SourcePresence = .present) -> FallthroughStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .fallthroughStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.fallthroughKeyword),
-    ], length: .zero, presence: presence))
-    return FallthroughStmtSyntax(data)
-  }
-  public static func makeBreakStmt(breakKeyword: TokenSyntax, label: TokenSyntax?) -> BreakStmtSyntax {
-    let layout: [RawSyntax?] = [
-      breakKeyword.raw,
-      label?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.breakStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return BreakStmtSyntax(data)
+  public static func makeYieldStmt(
+    arena: SyntaxArena = .default, yieldKeyword: TokenSyntax, yields: Syntax
+  ) -> YieldStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .yieldStmt,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = yieldKeyword.raw
+      buffer[1] = yields.raw
+    }
+    return YieldStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankBreakStmt(presence: SourcePresence = .present) -> BreakStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .breakStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.breakKeyword),
-      nil,
-    ], length: .zero, presence: presence))
-    return BreakStmtSyntax(data)
+  public static func makeBlankYieldStmt(arena: SyntaxArena = .default) -> YieldStmtSyntax {
+    let raw = RawYieldStmtSyntax.makeBlank(arena: arena).raw
+    return YieldStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeYieldList(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, elementList: ExprListSyntax, trailingComma: TokenSyntax?, rightParen: TokenSyntax
+  ) -> YieldListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .yieldList,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = elementList.raw
+      buffer[2] = trailingComma?.raw
+      buffer[3] = rightParen.raw
+    }
+    return YieldListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankYieldList(arena: SyntaxArena = .default) -> YieldListSyntax {
+    let raw = RawYieldListSyntax.makeBlank(arena: arena).raw
+    return YieldListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeFallthroughStmt(
+    arena: SyntaxArena = .default, fallthroughKeyword: TokenSyntax
+  ) -> FallthroughStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .fallthroughStmt,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = fallthroughKeyword.raw
+    }
+    return FallthroughStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankFallthroughStmt(arena: SyntaxArena = .default) -> FallthroughStmtSyntax {
+    let raw = RawFallthroughStmtSyntax.makeBlank(arena: arena).raw
+    return FallthroughStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBreakStmt(
+    arena: SyntaxArena = .default, breakKeyword: TokenSyntax, label: TokenSyntax?
+  ) -> BreakStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .breakStmt,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = breakKeyword.raw
+      buffer[1] = label?.raw
+    }
+    return BreakStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankBreakStmt(arena: SyntaxArena = .default) -> BreakStmtSyntax {
+    let raw = RawBreakStmtSyntax.makeBlank(arena: arena).raw
+    return BreakStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeCaseItemList(
-    _ elements: [CaseItemSyntax]) -> CaseItemListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItemList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CaseItemListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [CaseItemSyntax]
+  ) -> CaseItemListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .caseItemList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return CaseItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCaseItemList(presence: SourcePresence = .present) -> CaseItemListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .caseItemList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return CaseItemListSyntax(data)
+  public static func makeBlankCaseItemList(arena: SyntaxArena = .default) -> CaseItemListSyntax {
+    let raw = RawCaseItemListSyntax.makeBlank(arena: arena).raw
+    return CaseItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
   public static func makeCatchItemList(
-    _ elements: [CatchItemSyntax]) -> CatchItemListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItemList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CatchItemListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [CatchItemSyntax]
+  ) -> CatchItemListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .catchItemList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return CatchItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCatchItemList(presence: SourcePresence = .present) -> CatchItemListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchItemList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return CatchItemListSyntax(data)
-  }
-  public static func makeConditionElement(condition: Syntax, trailingComma: TokenSyntax?) -> ConditionElementSyntax {
-    let layout: [RawSyntax?] = [
-      condition.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ConditionElementSyntax(data)
+  public static func makeBlankCatchItemList(arena: SyntaxArena = .default) -> CatchItemListSyntax {
+    let raw = RawCatchItemListSyntax.makeBlank(arena: arena).raw
+    return CatchItemListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankConditionElement(presence: SourcePresence = .present) -> ConditionElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .conditionElement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return ConditionElementSyntax(data)
-  }
-  public static func makeAvailabilityCondition(poundAvailableKeyword: TokenSyntax, leftParen: TokenSyntax, availabilitySpec: AvailabilitySpecListSyntax, rightParen: TokenSyntax) -> AvailabilityConditionSyntax {
-    let layout: [RawSyntax?] = [
-      poundAvailableKeyword.raw,
-      leftParen.raw,
-      availabilitySpec.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityCondition,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AvailabilityConditionSyntax(data)
+  public static func makeConditionElement(
+    arena: SyntaxArena = .default, condition: Syntax, trailingComma: TokenSyntax?
+  ) -> ConditionElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .conditionElement,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = condition.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return ConditionElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAvailabilityCondition(presence: SourcePresence = .present) -> AvailabilityConditionSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityCondition,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundAvailableKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.availabilitySpecList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return AvailabilityConditionSyntax(data)
-  }
-  public static func makeMatchingPatternCondition(caseKeyword: TokenSyntax, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax) -> MatchingPatternConditionSyntax {
-    let layout: [RawSyntax?] = [
-      caseKeyword.raw,
-      pattern.raw,
-      typeAnnotation?.raw,
-      initializer.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.matchingPatternCondition,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MatchingPatternConditionSyntax(data)
+  public static func makeBlankConditionElement(arena: SyntaxArena = .default) -> ConditionElementSyntax {
+    let raw = RawConditionElementSyntax.makeBlank(arena: arena).raw
+    return ConditionElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMatchingPatternCondition(presence: SourcePresence = .present) -> MatchingPatternConditionSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .matchingPatternCondition,
-      layout: [
-      RawSyntax.missingToken(TokenKind.caseKeyword),
-      RawSyntax.missing(SyntaxKind.pattern),
-      nil,
-      RawSyntax.missing(SyntaxKind.initializerClause),
-    ], length: .zero, presence: presence))
-    return MatchingPatternConditionSyntax(data)
-  }
-  public static func makeOptionalBindingCondition(letOrVarKeyword: TokenSyntax, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
-    let layout: [RawSyntax?] = [
-      letOrVarKeyword.raw,
-      pattern.raw,
-      typeAnnotation?.raw,
-      initializer?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalBindingCondition,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return OptionalBindingConditionSyntax(data)
+  public static func makeAvailabilityCondition(
+    arena: SyntaxArena = .default, poundAvailableKeyword: TokenSyntax, leftParen: TokenSyntax, availabilitySpec: AvailabilitySpecListSyntax, rightParen: TokenSyntax
+  ) -> AvailabilityConditionSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityCondition,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundAvailableKeyword.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = availabilitySpec.raw
+      buffer[3] = rightParen.raw
+    }
+    return AvailabilityConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankOptionalBindingCondition(presence: SourcePresence = .present) -> OptionalBindingConditionSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .optionalBindingCondition,
-      layout: [
-      RawSyntax.missingToken(TokenKind.letKeyword),
-      RawSyntax.missing(SyntaxKind.pattern),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return OptionalBindingConditionSyntax(data)
-  }
-  public static func makeUnavailabilityCondition(poundUnavailableKeyword: TokenSyntax, leftParen: TokenSyntax, availabilitySpec: AvailabilitySpecListSyntax, rightParen: TokenSyntax) -> UnavailabilityConditionSyntax {
-    let layout: [RawSyntax?] = [
-      poundUnavailableKeyword.raw,
-      leftParen.raw,
-      availabilitySpec.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.unavailabilityCondition,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return UnavailabilityConditionSyntax(data)
+  public static func makeBlankAvailabilityCondition(arena: SyntaxArena = .default) -> AvailabilityConditionSyntax {
+    let raw = RawAvailabilityConditionSyntax.makeBlank(arena: arena).raw
+    return AvailabilityConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankUnavailabilityCondition(presence: SourcePresence = .present) -> UnavailabilityConditionSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .unavailabilityCondition,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundUnavailableKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.availabilitySpecList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return UnavailabilityConditionSyntax(data)
+  public static func makeMatchingPatternCondition(
+    arena: SyntaxArena = .default, caseKeyword: TokenSyntax, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax
+  ) -> MatchingPatternConditionSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .matchingPatternCondition,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = caseKeyword.raw
+      buffer[1] = pattern.raw
+      buffer[2] = typeAnnotation?.raw
+      buffer[3] = initializer.raw
+    }
+    return MatchingPatternConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankMatchingPatternCondition(arena: SyntaxArena = .default) -> MatchingPatternConditionSyntax {
+    let raw = RawMatchingPatternConditionSyntax.makeBlank(arena: arena).raw
+    return MatchingPatternConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeOptionalBindingCondition(
+    arena: SyntaxArena = .default, letOrVarKeyword: TokenSyntax, pattern: PatternSyntax, typeAnnotation: TypeAnnotationSyntax?, initializer: InitializerClauseSyntax?
+  ) -> OptionalBindingConditionSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalBindingCondition,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = letOrVarKeyword.raw
+      buffer[1] = pattern.raw
+      buffer[2] = typeAnnotation?.raw
+      buffer[3] = initializer?.raw
+    }
+    return OptionalBindingConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankOptionalBindingCondition(arena: SyntaxArena = .default) -> OptionalBindingConditionSyntax {
+    let raw = RawOptionalBindingConditionSyntax.makeBlank(arena: arena).raw
+    return OptionalBindingConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeUnavailabilityCondition(
+    arena: SyntaxArena = .default, poundUnavailableKeyword: TokenSyntax, leftParen: TokenSyntax, availabilitySpec: AvailabilitySpecListSyntax, rightParen: TokenSyntax
+  ) -> UnavailabilityConditionSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .unavailabilityCondition,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundUnavailableKeyword.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = availabilitySpec.raw
+      buffer[3] = rightParen.raw
+    }
+    return UnavailabilityConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankUnavailabilityCondition(arena: SyntaxArena = .default) -> UnavailabilityConditionSyntax {
+    let raw = RawUnavailabilityConditionSyntax.makeBlank(arena: arena).raw
+    return UnavailabilityConditionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeConditionElementList(
-    _ elements: [ConditionElementSyntax]) -> ConditionElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conditionElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ConditionElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [ConditionElementSyntax]
+  ) -> ConditionElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .conditionElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return ConditionElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankConditionElementList(presence: SourcePresence = .present) -> ConditionElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .conditionElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return ConditionElementListSyntax(data)
-  }
-  public static func makeDeclarationStmt(declaration: DeclSyntax) -> DeclarationStmtSyntax {
-    let layout: [RawSyntax?] = [
-      declaration.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.declarationStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DeclarationStmtSyntax(data)
+  public static func makeBlankConditionElementList(arena: SyntaxArena = .default) -> ConditionElementListSyntax {
+    let raw = RawConditionElementListSyntax.makeBlank(arena: arena).raw
+    return ConditionElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDeclarationStmt(presence: SourcePresence = .present) -> DeclarationStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .declarationStmt,
-      layout: [
-      RawSyntax.missing(SyntaxKind.decl),
-    ], length: .zero, presence: presence))
-    return DeclarationStmtSyntax(data)
-  }
-  public static func makeThrowStmt(throwKeyword: TokenSyntax, expression: ExprSyntax) -> ThrowStmtSyntax {
-    let layout: [RawSyntax?] = [
-      throwKeyword.raw,
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.throwStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ThrowStmtSyntax(data)
+  public static func makeDeclarationStmt(
+    arena: SyntaxArena = .default, declaration: DeclSyntax
+  ) -> DeclarationStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declarationStmt,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = declaration.raw
+    }
+    return DeclarationStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankThrowStmt(presence: SourcePresence = .present) -> ThrowStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .throwStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.throwKeyword),
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return ThrowStmtSyntax(data)
-  }
-  public static func makeIfStmt(labelName: TokenSyntax?, labelColon: TokenSyntax?, ifKeyword: TokenSyntax, conditions: ConditionElementListSyntax, body: CodeBlockSyntax, elseKeyword: TokenSyntax?, elseBody: Syntax?) -> IfStmtSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      ifKeyword.raw,
-      conditions.raw,
-      body.raw,
-      elseKeyword?.raw,
-      elseBody?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IfStmtSyntax(data)
+  public static func makeBlankDeclarationStmt(arena: SyntaxArena = .default) -> DeclarationStmtSyntax {
+    let raw = RawDeclarationStmtSyntax.makeBlank(arena: arena).raw
+    return DeclarationStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIfStmt(presence: SourcePresence = .present) -> IfStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .ifStmt,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.ifKeyword),
-      RawSyntax.missing(SyntaxKind.conditionElementList),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return IfStmtSyntax(data)
-  }
-  public static func makeElseIfContinuation(ifStatement: IfStmtSyntax) -> ElseIfContinuationSyntax {
-    let layout: [RawSyntax?] = [
-      ifStatement.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseIfContinuation,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ElseIfContinuationSyntax(data)
+  public static func makeThrowStmt(
+    arena: SyntaxArena = .default, throwKeyword: TokenSyntax, expression: ExprSyntax
+  ) -> ThrowStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .throwStmt,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = throwKeyword.raw
+      buffer[1] = expression.raw
+    }
+    return ThrowStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankElseIfContinuation(presence: SourcePresence = .present) -> ElseIfContinuationSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .elseIfContinuation,
-      layout: [
-      RawSyntax.missing(SyntaxKind.ifStmt),
-    ], length: .zero, presence: presence))
-    return ElseIfContinuationSyntax(data)
-  }
-  public static func makeElseBlock(elseKeyword: TokenSyntax, body: CodeBlockSyntax) -> ElseBlockSyntax {
-    let layout: [RawSyntax?] = [
-      elseKeyword.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.elseBlock,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ElseBlockSyntax(data)
+  public static func makeBlankThrowStmt(arena: SyntaxArena = .default) -> ThrowStmtSyntax {
+    let raw = RawThrowStmtSyntax.makeBlank(arena: arena).raw
+    return ThrowStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankElseBlock(presence: SourcePresence = .present) -> ElseBlockSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .elseBlock,
-      layout: [
-      RawSyntax.missingToken(TokenKind.elseKeyword),
-      RawSyntax.missing(SyntaxKind.codeBlock),
-    ], length: .zero, presence: presence))
-    return ElseBlockSyntax(data)
-  }
-  public static func makeSwitchCase(unknownAttr: AttributeSyntax?, label: Syntax, statements: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
-    let layout: [RawSyntax?] = [
-      unknownAttr?.raw,
-      label.raw,
-      statements.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCase,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SwitchCaseSyntax(data)
+  public static func makeIfStmt(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, ifKeyword: TokenSyntax, conditions: ConditionElementListSyntax, body: CodeBlockSyntax, elseKeyword: TokenSyntax?, elseBody: Syntax?
+  ) -> IfStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifStmt,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = ifKeyword.raw
+      buffer[3] = conditions.raw
+      buffer[4] = body.raw
+      buffer[5] = elseKeyword?.raw
+      buffer[6] = elseBody?.raw
+    }
+    return IfStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSwitchCase(presence: SourcePresence = .present) -> SwitchCaseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .switchCase,
-      layout: [
-      nil,
-      RawSyntax.missing(SyntaxKind.unknown),
-      RawSyntax.missing(SyntaxKind.codeBlockItemList),
-    ], length: .zero, presence: presence))
-    return SwitchCaseSyntax(data)
-  }
-  public static func makeSwitchDefaultLabel(defaultKeyword: TokenSyntax, colon: TokenSyntax) -> SwitchDefaultLabelSyntax {
-    let layout: [RawSyntax?] = [
-      defaultKeyword.raw,
-      colon.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchDefaultLabel,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SwitchDefaultLabelSyntax(data)
+  public static func makeBlankIfStmt(arena: SyntaxArena = .default) -> IfStmtSyntax {
+    let raw = RawIfStmtSyntax.makeBlank(arena: arena).raw
+    return IfStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSwitchDefaultLabel(presence: SourcePresence = .present) -> SwitchDefaultLabelSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .switchDefaultLabel,
-      layout: [
-      RawSyntax.missingToken(TokenKind.defaultKeyword),
-      RawSyntax.missingToken(TokenKind.colon),
-    ], length: .zero, presence: presence))
-    return SwitchDefaultLabelSyntax(data)
-  }
-  public static func makeCaseItem(pattern: PatternSyntax, whereClause: WhereClauseSyntax?, trailingComma: TokenSyntax?) -> CaseItemSyntax {
-    let layout: [RawSyntax?] = [
-      pattern.raw,
-      whereClause?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.caseItem,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CaseItemSyntax(data)
+  public static func makeElseIfContinuation(
+    arena: SyntaxArena = .default, ifStatement: IfStmtSyntax
+  ) -> ElseIfContinuationSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .elseIfContinuation,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = ifStatement.raw
+    }
+    return ElseIfContinuationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCaseItem(presence: SourcePresence = .present) -> CaseItemSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .caseItem,
-      layout: [
-      RawSyntax.missing(SyntaxKind.pattern),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return CaseItemSyntax(data)
-  }
-  public static func makeCatchItem(pattern: PatternSyntax?, whereClause: WhereClauseSyntax?, trailingComma: TokenSyntax?) -> CatchItemSyntax {
-    let layout: [RawSyntax?] = [
-      pattern?.raw,
-      whereClause?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchItem,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CatchItemSyntax(data)
+  public static func makeBlankElseIfContinuation(arena: SyntaxArena = .default) -> ElseIfContinuationSyntax {
+    let raw = RawElseIfContinuationSyntax.makeBlank(arena: arena).raw
+    return ElseIfContinuationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCatchItem(presence: SourcePresence = .present) -> CatchItemSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchItem,
-      layout: [
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return CatchItemSyntax(data)
-  }
-  public static func makeSwitchCaseLabel(caseKeyword: TokenSyntax, caseItems: CaseItemListSyntax, colon: TokenSyntax) -> SwitchCaseLabelSyntax {
-    let layout: [RawSyntax?] = [
-      caseKeyword.raw,
-      caseItems.raw,
-      colon.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.switchCaseLabel,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SwitchCaseLabelSyntax(data)
+  public static func makeElseBlock(
+    arena: SyntaxArena = .default, elseKeyword: TokenSyntax, body: CodeBlockSyntax
+  ) -> ElseBlockSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .elseBlock,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = elseKeyword.raw
+      buffer[1] = body.raw
+    }
+    return ElseBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSwitchCaseLabel(presence: SourcePresence = .present) -> SwitchCaseLabelSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .switchCaseLabel,
-      layout: [
-      RawSyntax.missingToken(TokenKind.caseKeyword),
-      RawSyntax.missing(SyntaxKind.caseItemList),
-      RawSyntax.missingToken(TokenKind.colon),
-    ], length: .zero, presence: presence))
-    return SwitchCaseLabelSyntax(data)
-  }
-  public static func makeCatchClause(catchKeyword: TokenSyntax, catchItems: CatchItemListSyntax?, body: CodeBlockSyntax) -> CatchClauseSyntax {
-    let layout: [RawSyntax?] = [
-      catchKeyword.raw,
-      catchItems?.raw,
-      body.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.catchClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CatchClauseSyntax(data)
+  public static func makeBlankElseBlock(arena: SyntaxArena = .default) -> ElseBlockSyntax {
+    let raw = RawElseBlockSyntax.makeBlank(arena: arena).raw
+    return ElseBlockSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCatchClause(presence: SourcePresence = .present) -> CatchClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .catchClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.catchKeyword),
-      nil,
-      RawSyntax.missing(SyntaxKind.codeBlock),
-    ], length: .zero, presence: presence))
-    return CatchClauseSyntax(data)
-  }
-  public static func makePoundAssertStmt(poundAssert: TokenSyntax, leftParen: TokenSyntax, condition: ExprSyntax, comma: TokenSyntax?, message: TokenSyntax?, rightParen: TokenSyntax) -> PoundAssertStmtSyntax {
-    let layout: [RawSyntax?] = [
-      poundAssert.raw,
-      leftParen.raw,
-      condition.raw,
-      comma?.raw,
-      message?.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.poundAssertStmt,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PoundAssertStmtSyntax(data)
+  public static func makeSwitchCase(
+    arena: SyntaxArena = .default, unknownAttr: AttributeSyntax?, label: Syntax, statements: CodeBlockItemListSyntax
+  ) -> SwitchCaseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchCase,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = unknownAttr?.raw
+      buffer[1] = label.raw
+      buffer[2] = statements.raw
+    }
+    return SwitchCaseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPoundAssertStmt(presence: SourcePresence = .present) -> PoundAssertStmtSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .poundAssertStmt,
-      layout: [
-      RawSyntax.missingToken(TokenKind.poundAssertKeyword),
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.expr),
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return PoundAssertStmtSyntax(data)
-  }
-  public static func makeGenericWhereClause(whereKeyword: TokenSyntax, requirementList: GenericRequirementListSyntax) -> GenericWhereClauseSyntax {
-    let layout: [RawSyntax?] = [
-      whereKeyword.raw,
-      requirementList.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericWhereClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericWhereClauseSyntax(data)
+  public static func makeBlankSwitchCase(arena: SyntaxArena = .default) -> SwitchCaseSyntax {
+    let raw = RawSwitchCaseSyntax.makeBlank(arena: arena).raw
+    return SwitchCaseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericWhereClause(presence: SourcePresence = .present) -> GenericWhereClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericWhereClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.whereKeyword),
-      RawSyntax.missing(SyntaxKind.genericRequirementList),
-    ], length: .zero, presence: presence))
-    return GenericWhereClauseSyntax(data)
+  public static func makeSwitchDefaultLabel(
+    arena: SyntaxArena = .default, defaultKeyword: TokenSyntax, colon: TokenSyntax
+  ) -> SwitchDefaultLabelSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchDefaultLabel,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = defaultKeyword.raw
+      buffer[1] = colon.raw
+    }
+    return SwitchDefaultLabelSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankSwitchDefaultLabel(arena: SyntaxArena = .default) -> SwitchDefaultLabelSyntax {
+    let raw = RawSwitchDefaultLabelSyntax.makeBlank(arena: arena).raw
+    return SwitchDefaultLabelSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeCaseItem(
+    arena: SyntaxArena = .default, pattern: PatternSyntax, whereClause: WhereClauseSyntax?, trailingComma: TokenSyntax?
+  ) -> CaseItemSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .caseItem,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = pattern.raw
+      buffer[1] = whereClause?.raw
+      buffer[2] = trailingComma?.raw
+    }
+    return CaseItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankCaseItem(arena: SyntaxArena = .default) -> CaseItemSyntax {
+    let raw = RawCaseItemSyntax.makeBlank(arena: arena).raw
+    return CaseItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeCatchItem(
+    arena: SyntaxArena = .default, pattern: PatternSyntax?, whereClause: WhereClauseSyntax?, trailingComma: TokenSyntax?
+  ) -> CatchItemSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .catchItem,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = pattern?.raw
+      buffer[1] = whereClause?.raw
+      buffer[2] = trailingComma?.raw
+    }
+    return CatchItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankCatchItem(arena: SyntaxArena = .default) -> CatchItemSyntax {
+    let raw = RawCatchItemSyntax.makeBlank(arena: arena).raw
+    return CatchItemSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeSwitchCaseLabel(
+    arena: SyntaxArena = .default, caseKeyword: TokenSyntax, caseItems: CaseItemListSyntax, colon: TokenSyntax
+  ) -> SwitchCaseLabelSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchCaseLabel,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = caseKeyword.raw
+      buffer[1] = caseItems.raw
+      buffer[2] = colon.raw
+    }
+    return SwitchCaseLabelSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankSwitchCaseLabel(arena: SyntaxArena = .default) -> SwitchCaseLabelSyntax {
+    let raw = RawSwitchCaseLabelSyntax.makeBlank(arena: arena).raw
+    return SwitchCaseLabelSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeCatchClause(
+    arena: SyntaxArena = .default, catchKeyword: TokenSyntax, catchItems: CatchItemListSyntax?, body: CodeBlockSyntax
+  ) -> CatchClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .catchClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = catchKeyword.raw
+      buffer[1] = catchItems?.raw
+      buffer[2] = body.raw
+    }
+    return CatchClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankCatchClause(arena: SyntaxArena = .default) -> CatchClauseSyntax {
+    let raw = RawCatchClauseSyntax.makeBlank(arena: arena).raw
+    return CatchClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makePoundAssertStmt(
+    arena: SyntaxArena = .default, poundAssert: TokenSyntax, leftParen: TokenSyntax, condition: ExprSyntax, comma: TokenSyntax?, message: TokenSyntax?, rightParen: TokenSyntax
+  ) -> PoundAssertStmtSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundAssertStmt,
+                                   uninitializedCount: 6) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = poundAssert.raw
+      buffer[1] = leftParen.raw
+      buffer[2] = condition.raw
+      buffer[3] = comma?.raw
+      buffer[4] = message?.raw
+      buffer[5] = rightParen.raw
+    }
+    return PoundAssertStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankPoundAssertStmt(arena: SyntaxArena = .default) -> PoundAssertStmtSyntax {
+    let raw = RawPoundAssertStmtSyntax.makeBlank(arena: arena).raw
+    return PoundAssertStmtSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeGenericWhereClause(
+    arena: SyntaxArena = .default, whereKeyword: TokenSyntax, requirementList: GenericRequirementListSyntax
+  ) -> GenericWhereClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericWhereClause,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = whereKeyword.raw
+      buffer[1] = requirementList.raw
+    }
+    return GenericWhereClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankGenericWhereClause(arena: SyntaxArena = .default) -> GenericWhereClauseSyntax {
+    let raw = RawGenericWhereClauseSyntax.makeBlank(arena: arena).raw
+    return GenericWhereClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeGenericRequirementList(
-    _ elements: [GenericRequirementSyntax]) -> GenericRequirementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericRequirementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [GenericRequirementSyntax]
+  ) -> GenericRequirementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericRequirementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return GenericRequirementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericRequirementList(presence: SourcePresence = .present) -> GenericRequirementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericRequirementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return GenericRequirementListSyntax(data)
-  }
-  public static func makeGenericRequirement(body: Syntax, trailingComma: TokenSyntax?) -> GenericRequirementSyntax {
-    let layout: [RawSyntax?] = [
-      body.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericRequirement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericRequirementSyntax(data)
+  public static func makeBlankGenericRequirementList(arena: SyntaxArena = .default) -> GenericRequirementListSyntax {
+    let raw = RawGenericRequirementListSyntax.makeBlank(arena: arena).raw
+    return GenericRequirementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericRequirement(presence: SourcePresence = .present) -> GenericRequirementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericRequirement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return GenericRequirementSyntax(data)
-  }
-  public static func makeSameTypeRequirement(leftTypeIdentifier: TypeSyntax, equalityToken: TokenSyntax, rightTypeIdentifier: TypeSyntax) -> SameTypeRequirementSyntax {
-    let layout: [RawSyntax?] = [
-      leftTypeIdentifier.raw,
-      equalityToken.raw,
-      rightTypeIdentifier.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.sameTypeRequirement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SameTypeRequirementSyntax(data)
+  public static func makeGenericRequirement(
+    arena: SyntaxArena = .default, body: Syntax, trailingComma: TokenSyntax?
+  ) -> GenericRequirementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericRequirement,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = body.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return GenericRequirementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSameTypeRequirement(presence: SourcePresence = .present) -> SameTypeRequirementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .sameTypeRequirement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.spacedBinaryOperator("")),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return SameTypeRequirementSyntax(data)
+  public static func makeBlankGenericRequirement(arena: SyntaxArena = .default) -> GenericRequirementSyntax {
+    let raw = RawGenericRequirementSyntax.makeBlank(arena: arena).raw
+    return GenericRequirementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeSameTypeRequirement(
+    arena: SyntaxArena = .default, leftTypeIdentifier: TypeSyntax, equalityToken: TokenSyntax, rightTypeIdentifier: TypeSyntax
+  ) -> SameTypeRequirementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .sameTypeRequirement,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftTypeIdentifier.raw
+      buffer[1] = equalityToken.raw
+      buffer[2] = rightTypeIdentifier.raw
+    }
+    return SameTypeRequirementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankSameTypeRequirement(arena: SyntaxArena = .default) -> SameTypeRequirementSyntax {
+    let raw = RawSameTypeRequirementSyntax.makeBlank(arena: arena).raw
+    return SameTypeRequirementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeGenericParameterList(
-    _ elements: [GenericParameterSyntax]) -> GenericParameterListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericParameterListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [GenericParameterSyntax]
+  ) -> GenericParameterListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericParameterList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return GenericParameterListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericParameterList(presence: SourcePresence = .present) -> GenericParameterListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericParameterList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return GenericParameterListSyntax(data)
-  }
-  public static func makeGenericParameter(attributes: AttributeListSyntax?, name: TokenSyntax, colon: TokenSyntax?, inheritedType: TypeSyntax?, trailingComma: TokenSyntax?) -> GenericParameterSyntax {
-    let layout: [RawSyntax?] = [
-      attributes?.raw,
-      name.raw,
-      colon?.raw,
-      inheritedType?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameter,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericParameterSyntax(data)
+  public static func makeBlankGenericParameterList(arena: SyntaxArena = .default) -> GenericParameterListSyntax {
+    let raw = RawGenericParameterListSyntax.makeBlank(arena: arena).raw
+    return GenericParameterListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericParameter(presence: SourcePresence = .present) -> GenericParameterSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericParameter,
-      layout: [
-      nil,
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return GenericParameterSyntax(data)
+  public static func makeGenericParameter(
+    arena: SyntaxArena = .default, attributes: AttributeListSyntax?, name: TokenSyntax, colon: TokenSyntax?, inheritedType: TypeSyntax?, trailingComma: TokenSyntax?
+  ) -> GenericParameterSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericParameter,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = attributes?.raw
+      buffer[1] = name.raw
+      buffer[2] = colon?.raw
+      buffer[3] = inheritedType?.raw
+      buffer[4] = trailingComma?.raw
+    }
+    return GenericParameterSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankGenericParameter(arena: SyntaxArena = .default) -> GenericParameterSyntax {
+    let raw = RawGenericParameterSyntax.makeBlank(arena: arena).raw
+    return GenericParameterSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makePrimaryAssociatedTypeList(
-    _ elements: [PrimaryAssociatedTypeSyntax]) -> PrimaryAssociatedTypeListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrimaryAssociatedTypeListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [PrimaryAssociatedTypeSyntax]
+  ) -> PrimaryAssociatedTypeListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .primaryAssociatedTypeList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return PrimaryAssociatedTypeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrimaryAssociatedTypeList(presence: SourcePresence = .present) -> PrimaryAssociatedTypeListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedTypeList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return PrimaryAssociatedTypeListSyntax(data)
-  }
-  public static func makePrimaryAssociatedType(name: TokenSyntax, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrimaryAssociatedTypeSyntax(data)
+  public static func makeBlankPrimaryAssociatedTypeList(arena: SyntaxArena = .default) -> PrimaryAssociatedTypeListSyntax {
+    let raw = RawPrimaryAssociatedTypeListSyntax.makeBlank(arena: arena).raw
+    return PrimaryAssociatedTypeListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrimaryAssociatedType(presence: SourcePresence = .present) -> PrimaryAssociatedTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return PrimaryAssociatedTypeSyntax(data)
-  }
-  public static func makeGenericParameterClause(leftAngleBracket: TokenSyntax, genericParameterList: GenericParameterListSyntax, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
-    let layout: [RawSyntax?] = [
-      leftAngleBracket.raw,
-      genericParameterList.raw,
-      rightAngleBracket.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericParameterClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericParameterClauseSyntax(data)
+  public static func makePrimaryAssociatedType(
+    arena: SyntaxArena = .default, name: TokenSyntax, trailingComma: TokenSyntax?
+  ) -> PrimaryAssociatedTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .primaryAssociatedType,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return PrimaryAssociatedTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericParameterClause(presence: SourcePresence = .present) -> GenericParameterClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericParameterClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftAngle),
-      RawSyntax.missing(SyntaxKind.genericParameterList),
-      RawSyntax.missingToken(TokenKind.rightAngle),
-    ], length: .zero, presence: presence))
-    return GenericParameterClauseSyntax(data)
-  }
-  public static func makeConformanceRequirement(leftTypeIdentifier: TypeSyntax, colon: TokenSyntax, rightTypeIdentifier: TypeSyntax) -> ConformanceRequirementSyntax {
-    let layout: [RawSyntax?] = [
-      leftTypeIdentifier.raw,
-      colon.raw,
-      rightTypeIdentifier.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.conformanceRequirement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ConformanceRequirementSyntax(data)
+  public static func makeBlankPrimaryAssociatedType(arena: SyntaxArena = .default) -> PrimaryAssociatedTypeSyntax {
+    let raw = RawPrimaryAssociatedTypeSyntax.makeBlank(arena: arena).raw
+    return PrimaryAssociatedTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankConformanceRequirement(presence: SourcePresence = .present) -> ConformanceRequirementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .conformanceRequirement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return ConformanceRequirementSyntax(data)
-  }
-  public static func makePrimaryAssociatedTypeClause(leftAngleBracket: TokenSyntax, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, rightAngleBracket: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
-    let layout: [RawSyntax?] = [
-      leftAngleBracket.raw,
-      primaryAssociatedTypeList.raw,
-      rightAngleBracket.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.primaryAssociatedTypeClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return PrimaryAssociatedTypeClauseSyntax(data)
+  public static func makeGenericParameterClause(
+    arena: SyntaxArena = .default, leftAngleBracket: TokenSyntax, genericParameterList: GenericParameterListSyntax, rightAngleBracket: TokenSyntax
+  ) -> GenericParameterClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericParameterClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftAngleBracket.raw
+      buffer[1] = genericParameterList.raw
+      buffer[2] = rightAngleBracket.raw
+    }
+    return GenericParameterClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankPrimaryAssociatedTypeClause(presence: SourcePresence = .present) -> PrimaryAssociatedTypeClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .primaryAssociatedTypeClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftAngle),
-      RawSyntax.missing(SyntaxKind.primaryAssociatedTypeList),
-      RawSyntax.missingToken(TokenKind.rightAngle),
-    ], length: .zero, presence: presence))
-    return PrimaryAssociatedTypeClauseSyntax(data)
-  }
-  public static func makeSimpleTypeIdentifier(name: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
-    let layout: [RawSyntax?] = [
-      name.raw,
-      genericArgumentClause?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.simpleTypeIdentifier,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return SimpleTypeIdentifierSyntax(data)
+  public static func makeBlankGenericParameterClause(arena: SyntaxArena = .default) -> GenericParameterClauseSyntax {
+    let raw = RawGenericParameterClauseSyntax.makeBlank(arena: arena).raw
+    return GenericParameterClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankSimpleTypeIdentifier(presence: SourcePresence = .present) -> SimpleTypeIdentifierSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .simpleTypeIdentifier,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return SimpleTypeIdentifierSyntax(data)
-  }
-  public static func makeMemberTypeIdentifier(baseType: TypeSyntax, period: TokenSyntax, name: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
-    let layout: [RawSyntax?] = [
-      baseType.raw,
-      period.raw,
-      name.raw,
-      genericArgumentClause?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.memberTypeIdentifier,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MemberTypeIdentifierSyntax(data)
+  public static func makeConformanceRequirement(
+    arena: SyntaxArena = .default, leftTypeIdentifier: TypeSyntax, colon: TokenSyntax, rightTypeIdentifier: TypeSyntax
+  ) -> ConformanceRequirementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .conformanceRequirement,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftTypeIdentifier.raw
+      buffer[1] = colon.raw
+      buffer[2] = rightTypeIdentifier.raw
+    }
+    return ConformanceRequirementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMemberTypeIdentifier(presence: SourcePresence = .present) -> MemberTypeIdentifierSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .memberTypeIdentifier,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.period),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return MemberTypeIdentifierSyntax(data)
-  }
-  public static func makeClassRestrictionType(classKeyword: TokenSyntax) -> ClassRestrictionTypeSyntax {
-    let layout: [RawSyntax?] = [
-      classKeyword.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.classRestrictionType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ClassRestrictionTypeSyntax(data)
+  public static func makeBlankConformanceRequirement(arena: SyntaxArena = .default) -> ConformanceRequirementSyntax {
+    let raw = RawConformanceRequirementSyntax.makeBlank(arena: arena).raw
+    return ConformanceRequirementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankClassRestrictionType(presence: SourcePresence = .present) -> ClassRestrictionTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .classRestrictionType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.classKeyword),
-    ], length: .zero, presence: presence))
-    return ClassRestrictionTypeSyntax(data)
-  }
-  public static func makeArrayType(leftSquareBracket: TokenSyntax, elementType: TypeSyntax, rightSquareBracket: TokenSyntax) -> ArrayTypeSyntax {
-    let layout: [RawSyntax?] = [
-      leftSquareBracket.raw,
-      elementType.raw,
-      rightSquareBracket.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.arrayType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ArrayTypeSyntax(data)
+  public static func makePrimaryAssociatedTypeClause(
+    arena: SyntaxArena = .default, leftAngleBracket: TokenSyntax, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, rightAngleBracket: TokenSyntax
+  ) -> PrimaryAssociatedTypeClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .primaryAssociatedTypeClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftAngleBracket.raw
+      buffer[1] = primaryAssociatedTypeList.raw
+      buffer[2] = rightAngleBracket.raw
+    }
+    return PrimaryAssociatedTypeClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankArrayType(presence: SourcePresence = .present) -> ArrayTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .arrayType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftSquareBracket),
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.rightSquareBracket),
-    ], length: .zero, presence: presence))
-    return ArrayTypeSyntax(data)
-  }
-  public static func makeDictionaryType(leftSquareBracket: TokenSyntax, keyType: TypeSyntax, colon: TokenSyntax, valueType: TypeSyntax, rightSquareBracket: TokenSyntax) -> DictionaryTypeSyntax {
-    let layout: [RawSyntax?] = [
-      leftSquareBracket.raw,
-      keyType.raw,
-      colon.raw,
-      valueType.raw,
-      rightSquareBracket.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.dictionaryType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return DictionaryTypeSyntax(data)
+  public static func makeBlankPrimaryAssociatedTypeClause(arena: SyntaxArena = .default) -> PrimaryAssociatedTypeClauseSyntax {
+    let raw = RawPrimaryAssociatedTypeClauseSyntax.makeBlank(arena: arena).raw
+    return PrimaryAssociatedTypeClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankDictionaryType(presence: SourcePresence = .present) -> DictionaryTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .dictionaryType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftSquareBracket),
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.rightSquareBracket),
-    ], length: .zero, presence: presence))
-    return DictionaryTypeSyntax(data)
-  }
-  public static func makeMetatypeType(baseType: TypeSyntax, period: TokenSyntax, typeOrProtocol: TokenSyntax) -> MetatypeTypeSyntax {
-    let layout: [RawSyntax?] = [
-      baseType.raw,
-      period.raw,
-      typeOrProtocol.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.metatypeType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return MetatypeTypeSyntax(data)
+  public static func makeSimpleTypeIdentifier(
+    arena: SyntaxArena = .default, name: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?
+  ) -> SimpleTypeIdentifierSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .simpleTypeIdentifier,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = name.raw
+      buffer[1] = genericArgumentClause?.raw
+    }
+    return SimpleTypeIdentifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankMetatypeType(presence: SourcePresence = .present) -> MetatypeTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .metatypeType,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.period),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-    ], length: .zero, presence: presence))
-    return MetatypeTypeSyntax(data)
-  }
-  public static func makeOptionalType(wrappedType: TypeSyntax, questionMark: TokenSyntax) -> OptionalTypeSyntax {
-    let layout: [RawSyntax?] = [
-      wrappedType.raw,
-      questionMark.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return OptionalTypeSyntax(data)
+  public static func makeBlankSimpleTypeIdentifier(arena: SyntaxArena = .default) -> SimpleTypeIdentifierSyntax {
+    let raw = RawSimpleTypeIdentifierSyntax.makeBlank(arena: arena).raw
+    return SimpleTypeIdentifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankOptionalType(presence: SourcePresence = .present) -> OptionalTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .optionalType,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.postfixQuestionMark),
-    ], length: .zero, presence: presence))
-    return OptionalTypeSyntax(data)
-  }
-  public static func makeConstrainedSugarType(someOrAnySpecifier: TokenSyntax, baseType: TypeSyntax) -> ConstrainedSugarTypeSyntax {
-    let layout: [RawSyntax?] = [
-      someOrAnySpecifier.raw,
-      baseType.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.constrainedSugarType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ConstrainedSugarTypeSyntax(data)
+  public static func makeMemberTypeIdentifier(
+    arena: SyntaxArena = .default, baseType: TypeSyntax, period: TokenSyntax, name: TokenSyntax, genericArgumentClause: GenericArgumentClauseSyntax?
+  ) -> MemberTypeIdentifierSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberTypeIdentifier,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = baseType.raw
+      buffer[1] = period.raw
+      buffer[2] = name.raw
+      buffer[3] = genericArgumentClause?.raw
+    }
+    return MemberTypeIdentifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankConstrainedSugarType(presence: SourcePresence = .present) -> ConstrainedSugarTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .constrainedSugarType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return ConstrainedSugarTypeSyntax(data)
-  }
-  public static func makeImplicitlyUnwrappedOptionalType(wrappedType: TypeSyntax, exclamationMark: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let layout: [RawSyntax?] = [
-      wrappedType.raw,
-      exclamationMark.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.implicitlyUnwrappedOptionalType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(data)
+  public static func makeBlankMemberTypeIdentifier(arena: SyntaxArena = .default) -> MemberTypeIdentifierSyntax {
+    let raw = RawMemberTypeIdentifierSyntax.makeBlank(arena: arena).raw
+    return MemberTypeIdentifierSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankImplicitlyUnwrappedOptionalType(presence: SourcePresence = .present) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .implicitlyUnwrappedOptionalType,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      RawSyntax.missingToken(TokenKind.exclamationMark),
-    ], length: .zero, presence: presence))
-    return ImplicitlyUnwrappedOptionalTypeSyntax(data)
-  }
-  public static func makeCompositionTypeElement(type: TypeSyntax, ampersand: TokenSyntax?) -> CompositionTypeElementSyntax {
-    let layout: [RawSyntax?] = [
-      type.raw,
-      ampersand?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CompositionTypeElementSyntax(data)
+  public static func makeClassRestrictionType(
+    arena: SyntaxArena = .default, classKeyword: TokenSyntax
+  ) -> ClassRestrictionTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .classRestrictionType,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = classKeyword.raw
+    }
+    return ClassRestrictionTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCompositionTypeElement(presence: SourcePresence = .present) -> CompositionTypeElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .compositionTypeElement,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      nil,
-    ], length: .zero, presence: presence))
-    return CompositionTypeElementSyntax(data)
+  public static func makeBlankClassRestrictionType(arena: SyntaxArena = .default) -> ClassRestrictionTypeSyntax {
+    let raw = RawClassRestrictionTypeSyntax.makeBlank(arena: arena).raw
+    return ClassRestrictionTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeArrayType(
+    arena: SyntaxArena = .default, leftSquareBracket: TokenSyntax, elementType: TypeSyntax, rightSquareBracket: TokenSyntax
+  ) -> ArrayTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayType,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftSquareBracket.raw
+      buffer[1] = elementType.raw
+      buffer[2] = rightSquareBracket.raw
+    }
+    return ArrayTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankArrayType(arena: SyntaxArena = .default) -> ArrayTypeSyntax {
+    let raw = RawArrayTypeSyntax.makeBlank(arena: arena).raw
+    return ArrayTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeDictionaryType(
+    arena: SyntaxArena = .default, leftSquareBracket: TokenSyntax, keyType: TypeSyntax, colon: TokenSyntax, valueType: TypeSyntax, rightSquareBracket: TokenSyntax
+  ) -> DictionaryTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryType,
+                                   uninitializedCount: 5) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftSquareBracket.raw
+      buffer[1] = keyType.raw
+      buffer[2] = colon.raw
+      buffer[3] = valueType.raw
+      buffer[4] = rightSquareBracket.raw
+    }
+    return DictionaryTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankDictionaryType(arena: SyntaxArena = .default) -> DictionaryTypeSyntax {
+    let raw = RawDictionaryTypeSyntax.makeBlank(arena: arena).raw
+    return DictionaryTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeMetatypeType(
+    arena: SyntaxArena = .default, baseType: TypeSyntax, period: TokenSyntax, typeOrProtocol: TokenSyntax
+  ) -> MetatypeTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .metatypeType,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = baseType.raw
+      buffer[1] = period.raw
+      buffer[2] = typeOrProtocol.raw
+    }
+    return MetatypeTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankMetatypeType(arena: SyntaxArena = .default) -> MetatypeTypeSyntax {
+    let raw = RawMetatypeTypeSyntax.makeBlank(arena: arena).raw
+    return MetatypeTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeOptionalType(
+    arena: SyntaxArena = .default, wrappedType: TypeSyntax, questionMark: TokenSyntax
+  ) -> OptionalTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalType,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = wrappedType.raw
+      buffer[1] = questionMark.raw
+    }
+    return OptionalTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankOptionalType(arena: SyntaxArena = .default) -> OptionalTypeSyntax {
+    let raw = RawOptionalTypeSyntax.makeBlank(arena: arena).raw
+    return OptionalTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeConstrainedSugarType(
+    arena: SyntaxArena = .default, someOrAnySpecifier: TokenSyntax, baseType: TypeSyntax
+  ) -> ConstrainedSugarTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .constrainedSugarType,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = someOrAnySpecifier.raw
+      buffer[1] = baseType.raw
+    }
+    return ConstrainedSugarTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankConstrainedSugarType(arena: SyntaxArena = .default) -> ConstrainedSugarTypeSyntax {
+    let raw = RawConstrainedSugarTypeSyntax.makeBlank(arena: arena).raw
+    return ConstrainedSugarTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeImplicitlyUnwrappedOptionalType(
+    arena: SyntaxArena = .default, wrappedType: TypeSyntax, exclamationMark: TokenSyntax
+  ) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .implicitlyUnwrappedOptionalType,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = wrappedType.raw
+      buffer[1] = exclamationMark.raw
+    }
+    return ImplicitlyUnwrappedOptionalTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankImplicitlyUnwrappedOptionalType(arena: SyntaxArena = .default) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+    let raw = RawImplicitlyUnwrappedOptionalTypeSyntax.makeBlank(arena: arena).raw
+    return ImplicitlyUnwrappedOptionalTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeCompositionTypeElement(
+    arena: SyntaxArena = .default, type: TypeSyntax, ampersand: TokenSyntax?
+  ) -> CompositionTypeElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .compositionTypeElement,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = type.raw
+      buffer[1] = ampersand?.raw
+    }
+    return CompositionTypeElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankCompositionTypeElement(arena: SyntaxArena = .default) -> CompositionTypeElementSyntax {
+    let raw = RawCompositionTypeElementSyntax.makeBlank(arena: arena).raw
+    return CompositionTypeElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeCompositionTypeElementList(
-    _ elements: [CompositionTypeElementSyntax]) -> CompositionTypeElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionTypeElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CompositionTypeElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [CompositionTypeElementSyntax]
+  ) -> CompositionTypeElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .compositionTypeElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return CompositionTypeElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCompositionTypeElementList(presence: SourcePresence = .present) -> CompositionTypeElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .compositionTypeElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return CompositionTypeElementListSyntax(data)
-  }
-  public static func makeCompositionType(elements: CompositionTypeElementListSyntax) -> CompositionTypeSyntax {
-    let layout: [RawSyntax?] = [
-      elements.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.compositionType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return CompositionTypeSyntax(data)
+  public static func makeBlankCompositionTypeElementList(arena: SyntaxArena = .default) -> CompositionTypeElementListSyntax {
+    let raw = RawCompositionTypeElementListSyntax.makeBlank(arena: arena).raw
+    return CompositionTypeElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankCompositionType(presence: SourcePresence = .present) -> CompositionTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .compositionType,
-      layout: [
-      RawSyntax.missing(SyntaxKind.compositionTypeElementList),
-    ], length: .zero, presence: presence))
-    return CompositionTypeSyntax(data)
-  }
-  public static func makeTupleTypeElement(inOut: TokenSyntax?, name: TokenSyntax?, secondName: TokenSyntax?, colon: TokenSyntax?, type: TypeSyntax, ellipsis: TokenSyntax?, initializer: InitializerClauseSyntax?, trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
-    let layout: [RawSyntax?] = [
-      inOut?.raw,
-      name?.raw,
-      secondName?.raw,
-      colon?.raw,
-      type.raw,
-      ellipsis?.raw,
-      initializer?.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TupleTypeElementSyntax(data)
+  public static func makeCompositionType(
+    arena: SyntaxArena = .default, elements: CompositionTypeElementListSyntax
+  ) -> CompositionTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .compositionType,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = elements.raw
+    }
+    return CompositionTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTupleTypeElement(presence: SourcePresence = .present) -> TupleTypeElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tupleTypeElement,
-      layout: [
-      nil,
-      nil,
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.type),
-      nil,
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return TupleTypeElementSyntax(data)
+  public static func makeBlankCompositionType(arena: SyntaxArena = .default) -> CompositionTypeSyntax {
+    let raw = RawCompositionTypeSyntax.makeBlank(arena: arena).raw
+    return CompositionTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeTupleTypeElement(
+    arena: SyntaxArena = .default, inOut: TokenSyntax?, name: TokenSyntax?, secondName: TokenSyntax?, colon: TokenSyntax?, type: TypeSyntax, ellipsis: TokenSyntax?, initializer: InitializerClauseSyntax?, trailingComma: TokenSyntax?
+  ) -> TupleTypeElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleTypeElement,
+                                   uninitializedCount: 8) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = inOut?.raw
+      buffer[1] = name?.raw
+      buffer[2] = secondName?.raw
+      buffer[3] = colon?.raw
+      buffer[4] = type.raw
+      buffer[5] = ellipsis?.raw
+      buffer[6] = initializer?.raw
+      buffer[7] = trailingComma?.raw
+    }
+    return TupleTypeElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTupleTypeElement(arena: SyntaxArena = .default) -> TupleTypeElementSyntax {
+    let raw = RawTupleTypeElementSyntax.makeBlank(arena: arena).raw
+    return TupleTypeElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeTupleTypeElementList(
-    _ elements: [TupleTypeElementSyntax]) -> TupleTypeElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleTypeElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TupleTypeElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [TupleTypeElementSyntax]
+  ) -> TupleTypeElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleTypeElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return TupleTypeElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTupleTypeElementList(presence: SourcePresence = .present) -> TupleTypeElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tupleTypeElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return TupleTypeElementListSyntax(data)
-  }
-  public static func makeTupleType(leftParen: TokenSyntax, elements: TupleTypeElementListSyntax, rightParen: TokenSyntax) -> TupleTypeSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      elements.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tupleType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TupleTypeSyntax(data)
+  public static func makeBlankTupleTypeElementList(arena: SyntaxArena = .default) -> TupleTypeElementListSyntax {
+    let raw = RawTupleTypeElementListSyntax.makeBlank(arena: arena).raw
+    return TupleTypeElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTupleType(presence: SourcePresence = .present) -> TupleTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tupleType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.tupleTypeElementList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return TupleTypeSyntax(data)
-  }
-  public static func makeFunctionType(leftParen: TokenSyntax, arguments: TupleTypeElementListSyntax, rightParen: TokenSyntax, asyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, arrow: TokenSyntax, returnType: TypeSyntax) -> FunctionTypeSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      arguments.raw,
-      rightParen.raw,
-      asyncKeyword?.raw,
-      throwsOrRethrowsKeyword?.raw,
-      arrow.raw,
-      returnType.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.functionType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return FunctionTypeSyntax(data)
+  public static func makeTupleType(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, elements: TupleTypeElementListSyntax, rightParen: TokenSyntax
+  ) -> TupleTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleType,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = elements.raw
+      buffer[2] = rightParen.raw
+    }
+    return TupleTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankFunctionType(presence: SourcePresence = .present) -> FunctionTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .functionType,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.tupleTypeElementList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-      nil,
-      nil,
-      RawSyntax.missingToken(TokenKind.arrow),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return FunctionTypeSyntax(data)
-  }
-  public static func makeAttributedType(specifier: TokenSyntax?, attributes: AttributeListSyntax?, baseType: TypeSyntax) -> AttributedTypeSyntax {
-    let layout: [RawSyntax?] = [
-      specifier?.raw,
-      attributes?.raw,
-      baseType.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.attributedType,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AttributedTypeSyntax(data)
+  public static func makeBlankTupleType(arena: SyntaxArena = .default) -> TupleTypeSyntax {
+    let raw = RawTupleTypeSyntax.makeBlank(arena: arena).raw
+    return TupleTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAttributedType(presence: SourcePresence = .present) -> AttributedTypeSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .attributedType,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return AttributedTypeSyntax(data)
+  public static func makeFunctionType(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, arguments: TupleTypeElementListSyntax, rightParen: TokenSyntax, asyncKeyword: TokenSyntax?, throwsOrRethrowsKeyword: TokenSyntax?, arrow: TokenSyntax, returnType: TypeSyntax
+  ) -> FunctionTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionType,
+                                   uninitializedCount: 7) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = arguments.raw
+      buffer[2] = rightParen.raw
+      buffer[3] = asyncKeyword?.raw
+      buffer[4] = throwsOrRethrowsKeyword?.raw
+      buffer[5] = arrow.raw
+      buffer[6] = returnType.raw
+    }
+    return FunctionTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankFunctionType(arena: SyntaxArena = .default) -> FunctionTypeSyntax {
+    let raw = RawFunctionTypeSyntax.makeBlank(arena: arena).raw
+    return FunctionTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAttributedType(
+    arena: SyntaxArena = .default, specifier: TokenSyntax?, attributes: AttributeListSyntax?, baseType: TypeSyntax
+  ) -> AttributedTypeSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .attributedType,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = specifier?.raw
+      buffer[1] = attributes?.raw
+      buffer[2] = baseType.raw
+    }
+    return AttributedTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAttributedType(arena: SyntaxArena = .default) -> AttributedTypeSyntax {
+    let raw = RawAttributedTypeSyntax.makeBlank(arena: arena).raw
+    return AttributedTypeSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeGenericArgumentList(
-    _ elements: [GenericArgumentSyntax]) -> GenericArgumentListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericArgumentListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [GenericArgumentSyntax]
+  ) -> GenericArgumentListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericArgumentList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return GenericArgumentListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericArgumentList(presence: SourcePresence = .present) -> GenericArgumentListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericArgumentList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return GenericArgumentListSyntax(data)
-  }
-  public static func makeGenericArgument(argumentType: TypeSyntax, trailingComma: TokenSyntax?) -> GenericArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      argumentType.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgument,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericArgumentSyntax(data)
+  public static func makeBlankGenericArgumentList(arena: SyntaxArena = .default) -> GenericArgumentListSyntax {
+    let raw = RawGenericArgumentListSyntax.makeBlank(arena: arena).raw
+    return GenericArgumentListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericArgument(presence: SourcePresence = .present) -> GenericArgumentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericArgument,
-      layout: [
-      RawSyntax.missing(SyntaxKind.type),
-      nil,
-    ], length: .zero, presence: presence))
-    return GenericArgumentSyntax(data)
-  }
-  public static func makeGenericArgumentClause(leftAngleBracket: TokenSyntax, arguments: GenericArgumentListSyntax, rightAngleBracket: TokenSyntax) -> GenericArgumentClauseSyntax {
-    let layout: [RawSyntax?] = [
-      leftAngleBracket.raw,
-      arguments.raw,
-      rightAngleBracket.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.genericArgumentClause,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return GenericArgumentClauseSyntax(data)
+  public static func makeGenericArgument(
+    arena: SyntaxArena = .default, argumentType: TypeSyntax, trailingComma: TokenSyntax?
+  ) -> GenericArgumentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericArgument,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = argumentType.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return GenericArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankGenericArgumentClause(presence: SourcePresence = .present) -> GenericArgumentClauseSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .genericArgumentClause,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftAngle),
-      RawSyntax.missing(SyntaxKind.genericArgumentList),
-      RawSyntax.missingToken(TokenKind.rightAngle),
-    ], length: .zero, presence: presence))
-    return GenericArgumentClauseSyntax(data)
-  }
-  public static func makeTypeAnnotation(colon: TokenSyntax, type: TypeSyntax) -> TypeAnnotationSyntax {
-    let layout: [RawSyntax?] = [
-      colon.raw,
-      type.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.typeAnnotation,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TypeAnnotationSyntax(data)
+  public static func makeBlankGenericArgument(arena: SyntaxArena = .default) -> GenericArgumentSyntax {
+    let raw = RawGenericArgumentSyntax.makeBlank(arena: arena).raw
+    return GenericArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTypeAnnotation(presence: SourcePresence = .present) -> TypeAnnotationSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .typeAnnotation,
-      layout: [
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return TypeAnnotationSyntax(data)
-  }
-  public static func makeEnumCasePattern(type: TypeSyntax?, period: TokenSyntax, caseName: TokenSyntax, associatedTuple: TuplePatternSyntax?) -> EnumCasePatternSyntax {
-    let layout: [RawSyntax?] = [
-      type?.raw,
-      period.raw,
-      caseName.raw,
-      associatedTuple?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.enumCasePattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return EnumCasePatternSyntax(data)
+  public static func makeGenericArgumentClause(
+    arena: SyntaxArena = .default, leftAngleBracket: TokenSyntax, arguments: GenericArgumentListSyntax, rightAngleBracket: TokenSyntax
+  ) -> GenericArgumentClauseSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericArgumentClause,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftAngleBracket.raw
+      buffer[1] = arguments.raw
+      buffer[2] = rightAngleBracket.raw
+    }
+    return GenericArgumentClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankEnumCasePattern(presence: SourcePresence = .present) -> EnumCasePatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .enumCasePattern,
-      layout: [
-      nil,
-      RawSyntax.missingToken(TokenKind.period),
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return EnumCasePatternSyntax(data)
-  }
-  public static func makeIsTypePattern(isKeyword: TokenSyntax, type: TypeSyntax) -> IsTypePatternSyntax {
-    let layout: [RawSyntax?] = [
-      isKeyword.raw,
-      type.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.isTypePattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IsTypePatternSyntax(data)
+  public static func makeBlankGenericArgumentClause(arena: SyntaxArena = .default) -> GenericArgumentClauseSyntax {
+    let raw = RawGenericArgumentClauseSyntax.makeBlank(arena: arena).raw
+    return GenericArgumentClauseSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIsTypePattern(presence: SourcePresence = .present) -> IsTypePatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .isTypePattern,
-      layout: [
-      RawSyntax.missingToken(TokenKind.isKeyword),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return IsTypePatternSyntax(data)
-  }
-  public static func makeOptionalPattern(subPattern: PatternSyntax, questionMark: TokenSyntax) -> OptionalPatternSyntax {
-    let layout: [RawSyntax?] = [
-      subPattern.raw,
-      questionMark.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.optionalPattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return OptionalPatternSyntax(data)
+  public static func makeTypeAnnotation(
+    arena: SyntaxArena = .default, colon: TokenSyntax, type: TypeSyntax
+  ) -> TypeAnnotationSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeAnnotation,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = colon.raw
+      buffer[1] = type.raw
+    }
+    return TypeAnnotationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankOptionalPattern(presence: SourcePresence = .present) -> OptionalPatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .optionalPattern,
-      layout: [
-      RawSyntax.missing(SyntaxKind.pattern),
-      RawSyntax.missingToken(TokenKind.postfixQuestionMark),
-    ], length: .zero, presence: presence))
-    return OptionalPatternSyntax(data)
-  }
-  public static func makeIdentifierPattern(identifier: TokenSyntax) -> IdentifierPatternSyntax {
-    let layout: [RawSyntax?] = [
-      identifier.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.identifierPattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return IdentifierPatternSyntax(data)
+  public static func makeBlankTypeAnnotation(arena: SyntaxArena = .default) -> TypeAnnotationSyntax {
+    let raw = RawTypeAnnotationSyntax.makeBlank(arena: arena).raw
+    return TypeAnnotationSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankIdentifierPattern(presence: SourcePresence = .present) -> IdentifierPatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .identifierPattern,
-      layout: [
-      RawSyntax.missingToken(TokenKind.selfKeyword),
-    ], length: .zero, presence: presence))
-    return IdentifierPatternSyntax(data)
-  }
-  public static func makeAsTypePattern(pattern: PatternSyntax, asKeyword: TokenSyntax, type: TypeSyntax) -> AsTypePatternSyntax {
-    let layout: [RawSyntax?] = [
-      pattern.raw,
-      asKeyword.raw,
-      type.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.asTypePattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AsTypePatternSyntax(data)
+  public static func makeEnumCasePattern(
+    arena: SyntaxArena = .default, type: TypeSyntax?, period: TokenSyntax, caseName: TokenSyntax, associatedTuple: TuplePatternSyntax?
+  ) -> EnumCasePatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCasePattern,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = type?.raw
+      buffer[1] = period.raw
+      buffer[2] = caseName.raw
+      buffer[3] = associatedTuple?.raw
+    }
+    return EnumCasePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAsTypePattern(presence: SourcePresence = .present) -> AsTypePatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .asTypePattern,
-      layout: [
-      RawSyntax.missing(SyntaxKind.pattern),
-      RawSyntax.missingToken(TokenKind.asKeyword),
-      RawSyntax.missing(SyntaxKind.type),
-    ], length: .zero, presence: presence))
-    return AsTypePatternSyntax(data)
-  }
-  public static func makeTuplePattern(leftParen: TokenSyntax, elements: TuplePatternElementListSyntax, rightParen: TokenSyntax) -> TuplePatternSyntax {
-    let layout: [RawSyntax?] = [
-      leftParen.raw,
-      elements.raw,
-      rightParen.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TuplePatternSyntax(data)
+  public static func makeBlankEnumCasePattern(arena: SyntaxArena = .default) -> EnumCasePatternSyntax {
+    let raw = RawEnumCasePatternSyntax.makeBlank(arena: arena).raw
+    return EnumCasePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTuplePattern(presence: SourcePresence = .present) -> TuplePatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tuplePattern,
-      layout: [
-      RawSyntax.missingToken(TokenKind.leftParen),
-      RawSyntax.missing(SyntaxKind.tuplePatternElementList),
-      RawSyntax.missingToken(TokenKind.rightParen),
-    ], length: .zero, presence: presence))
-    return TuplePatternSyntax(data)
-  }
-  public static func makeWildcardPattern(wildcard: TokenSyntax, typeAnnotation: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
-    let layout: [RawSyntax?] = [
-      wildcard.raw,
-      typeAnnotation?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.wildcardPattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return WildcardPatternSyntax(data)
+  public static func makeIsTypePattern(
+    arena: SyntaxArena = .default, isKeyword: TokenSyntax, type: TypeSyntax
+  ) -> IsTypePatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .isTypePattern,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = isKeyword.raw
+      buffer[1] = type.raw
+    }
+    return IsTypePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankWildcardPattern(presence: SourcePresence = .present) -> WildcardPatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .wildcardPattern,
-      layout: [
-      RawSyntax.missingToken(TokenKind.wildcardKeyword),
-      nil,
-    ], length: .zero, presence: presence))
-    return WildcardPatternSyntax(data)
-  }
-  public static func makeTuplePatternElement(labelName: TokenSyntax?, labelColon: TokenSyntax?, pattern: PatternSyntax, trailingComma: TokenSyntax?) -> TuplePatternElementSyntax {
-    let layout: [RawSyntax?] = [
-      labelName?.raw,
-      labelColon?.raw,
-      pattern.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElement,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TuplePatternElementSyntax(data)
+  public static func makeBlankIsTypePattern(arena: SyntaxArena = .default) -> IsTypePatternSyntax {
+    let raw = RawIsTypePatternSyntax.makeBlank(arena: arena).raw
+    return IsTypePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTuplePatternElement(presence: SourcePresence = .present) -> TuplePatternElementSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tuplePatternElement,
-      layout: [
-      nil,
-      nil,
-      RawSyntax.missing(SyntaxKind.pattern),
-      nil,
-    ], length: .zero, presence: presence))
-    return TuplePatternElementSyntax(data)
-  }
-  public static func makeExpressionPattern(expression: ExprSyntax) -> ExpressionPatternSyntax {
-    let layout: [RawSyntax?] = [
-      expression.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.expressionPattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ExpressionPatternSyntax(data)
+  public static func makeOptionalPattern(
+    arena: SyntaxArena = .default, subPattern: PatternSyntax, questionMark: TokenSyntax
+  ) -> OptionalPatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalPattern,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = subPattern.raw
+      buffer[1] = questionMark.raw
+    }
+    return OptionalPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankExpressionPattern(presence: SourcePresence = .present) -> ExpressionPatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .expressionPattern,
-      layout: [
-      RawSyntax.missing(SyntaxKind.expr),
-    ], length: .zero, presence: presence))
-    return ExpressionPatternSyntax(data)
+  public static func makeBlankOptionalPattern(arena: SyntaxArena = .default) -> OptionalPatternSyntax {
+    let raw = RawOptionalPatternSyntax.makeBlank(arena: arena).raw
+    return OptionalPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeIdentifierPattern(
+    arena: SyntaxArena = .default, identifier: TokenSyntax
+  ) -> IdentifierPatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .identifierPattern,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = identifier.raw
+    }
+    return IdentifierPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankIdentifierPattern(arena: SyntaxArena = .default) -> IdentifierPatternSyntax {
+    let raw = RawIdentifierPatternSyntax.makeBlank(arena: arena).raw
+    return IdentifierPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeAsTypePattern(
+    arena: SyntaxArena = .default, pattern: PatternSyntax, asKeyword: TokenSyntax, type: TypeSyntax
+  ) -> AsTypePatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .asTypePattern,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = pattern.raw
+      buffer[1] = asKeyword.raw
+      buffer[2] = type.raw
+    }
+    return AsTypePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAsTypePattern(arena: SyntaxArena = .default) -> AsTypePatternSyntax {
+    let raw = RawAsTypePatternSyntax.makeBlank(arena: arena).raw
+    return AsTypePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTuplePattern(
+    arena: SyntaxArena = .default, leftParen: TokenSyntax, elements: TuplePatternElementListSyntax, rightParen: TokenSyntax
+  ) -> TuplePatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tuplePattern,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = leftParen.raw
+      buffer[1] = elements.raw
+      buffer[2] = rightParen.raw
+    }
+    return TuplePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTuplePattern(arena: SyntaxArena = .default) -> TuplePatternSyntax {
+    let raw = RawTuplePatternSyntax.makeBlank(arena: arena).raw
+    return TuplePatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeWildcardPattern(
+    arena: SyntaxArena = .default, wildcard: TokenSyntax, typeAnnotation: TypeAnnotationSyntax?
+  ) -> WildcardPatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .wildcardPattern,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = wildcard.raw
+      buffer[1] = typeAnnotation?.raw
+    }
+    return WildcardPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankWildcardPattern(arena: SyntaxArena = .default) -> WildcardPatternSyntax {
+    let raw = RawWildcardPatternSyntax.makeBlank(arena: arena).raw
+    return WildcardPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeTuplePatternElement(
+    arena: SyntaxArena = .default, labelName: TokenSyntax?, labelColon: TokenSyntax?, pattern: PatternSyntax, trailingComma: TokenSyntax?
+  ) -> TuplePatternElementSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tuplePatternElement,
+                                   uninitializedCount: 4) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = labelName?.raw
+      buffer[1] = labelColon?.raw
+      buffer[2] = pattern.raw
+      buffer[3] = trailingComma?.raw
+    }
+    return TuplePatternElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankTuplePatternElement(arena: SyntaxArena = .default) -> TuplePatternElementSyntax {
+    let raw = RawTuplePatternElementSyntax.makeBlank(arena: arena).raw
+    return TuplePatternElementSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeExpressionPattern(
+    arena: SyntaxArena = .default, expression: ExprSyntax
+  ) -> ExpressionPatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .expressionPattern,
+                                   uninitializedCount: 1) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = expression.raw
+    }
+    return ExpressionPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankExpressionPattern(arena: SyntaxArena = .default) -> ExpressionPatternSyntax {
+    let raw = RawExpressionPatternSyntax.makeBlank(arena: arena).raw
+    return ExpressionPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeTuplePatternElementList(
-    _ elements: [TuplePatternElementSyntax]) -> TuplePatternElementListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.tuplePatternElementList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return TuplePatternElementListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [TuplePatternElementSyntax]
+  ) -> TuplePatternElementListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tuplePatternElementList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return TuplePatternElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankTuplePatternElementList(presence: SourcePresence = .present) -> TuplePatternElementListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .tuplePatternElementList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return TuplePatternElementListSyntax(data)
-  }
-  public static func makeValueBindingPattern(letOrVarKeyword: TokenSyntax, valuePattern: PatternSyntax) -> ValueBindingPatternSyntax {
-    let layout: [RawSyntax?] = [
-      letOrVarKeyword.raw,
-      valuePattern.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.valueBindingPattern,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return ValueBindingPatternSyntax(data)
+  public static func makeBlankTuplePatternElementList(arena: SyntaxArena = .default) -> TuplePatternElementListSyntax {
+    let raw = RawTuplePatternElementListSyntax.makeBlank(arena: arena).raw
+    return TuplePatternElementListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankValueBindingPattern(presence: SourcePresence = .present) -> ValueBindingPatternSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .valueBindingPattern,
-      layout: [
-      RawSyntax.missingToken(TokenKind.letKeyword),
-      RawSyntax.missing(SyntaxKind.pattern),
-    ], length: .zero, presence: presence))
-    return ValueBindingPatternSyntax(data)
+  public static func makeValueBindingPattern(
+    arena: SyntaxArena = .default, letOrVarKeyword: TokenSyntax, valuePattern: PatternSyntax
+  ) -> ValueBindingPatternSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .valueBindingPattern,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = letOrVarKeyword.raw
+      buffer[1] = valuePattern.raw
+    }
+    return ValueBindingPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeBlankValueBindingPattern(arena: SyntaxArena = .default) -> ValueBindingPatternSyntax {
+    let raw = RawValueBindingPatternSyntax.makeBlank(arena: arena).raw
+    return ValueBindingPatternSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
   public static func makeAvailabilitySpecList(
-    _ elements: [AvailabilityArgumentSyntax]) -> AvailabilitySpecListSyntax {
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilitySpecList,
-      layout: elements.map { $0.raw }, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AvailabilitySpecListSyntax(data)
+    arena: SyntaxArena = .default, _ elements: [AvailabilityArgumentSyntax]
+  ) -> AvailabilitySpecListSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilitySpecList, uninitializedCount: elements.count) { buffer in
+      _ = buffer.initialize(from: elements.map { $0.raw })
+    }
+    return AvailabilitySpecListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAvailabilitySpecList(presence: SourcePresence = .present) -> AvailabilitySpecListSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilitySpecList,
-      layout: [
-    ], length: .zero, presence: presence))
-    return AvailabilitySpecListSyntax(data)
-  }
-  public static func makeAvailabilityArgument(entry: Syntax, trailingComma: TokenSyntax?) -> AvailabilityArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      entry.raw,
-      trailingComma?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityArgument,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AvailabilityArgumentSyntax(data)
+  public static func makeBlankAvailabilitySpecList(arena: SyntaxArena = .default) -> AvailabilitySpecListSyntax {
+    let raw = RawAvailabilitySpecListSyntax.makeBlank(arena: arena).raw
+    return AvailabilitySpecListSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAvailabilityArgument(presence: SourcePresence = .present) -> AvailabilityArgumentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityArgument,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-    ], length: .zero, presence: presence))
-    return AvailabilityArgumentSyntax(data)
-  }
-  public static func makeAvailabilityLabeledArgument(label: TokenSyntax, colon: TokenSyntax, value: Syntax) -> AvailabilityLabeledArgumentSyntax {
-    let layout: [RawSyntax?] = [
-      label.raw,
-      colon.raw,
-      value.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityLabeledArgument,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AvailabilityLabeledArgumentSyntax(data)
+  public static func makeAvailabilityArgument(
+    arena: SyntaxArena = .default, entry: Syntax, trailingComma: TokenSyntax?
+  ) -> AvailabilityArgumentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityArgument,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = entry.raw
+      buffer[1] = trailingComma?.raw
+    }
+    return AvailabilityArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAvailabilityLabeledArgument(presence: SourcePresence = .present) -> AvailabilityLabeledArgumentSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityLabeledArgument,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      RawSyntax.missingToken(TokenKind.colon),
-      RawSyntax.missing(SyntaxKind.unknown),
-    ], length: .zero, presence: presence))
-    return AvailabilityLabeledArgumentSyntax(data)
-  }
-  public static func makeAvailabilityVersionRestriction(platform: TokenSyntax, version: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
-    let layout: [RawSyntax?] = [
-      platform.raw,
-      version?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.availabilityVersionRestriction,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return AvailabilityVersionRestrictionSyntax(data)
+  public static func makeBlankAvailabilityArgument(arena: SyntaxArena = .default) -> AvailabilityArgumentSyntax {
+    let raw = RawAvailabilityArgumentSyntax.makeBlank(arena: arena).raw
+    return AvailabilityArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankAvailabilityVersionRestriction(presence: SourcePresence = .present) -> AvailabilityVersionRestrictionSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .availabilityVersionRestriction,
-      layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
-      nil,
-    ], length: .zero, presence: presence))
-    return AvailabilityVersionRestrictionSyntax(data)
-  }
-  public static func makeVersionTuple(majorMinor: Syntax, patchPeriod: TokenSyntax?, patchVersion: TokenSyntax?) -> VersionTupleSyntax {
-    let layout: [RawSyntax?] = [
-      majorMinor.raw,
-      patchPeriod?.raw,
-      patchVersion?.raw,
-    ]
-    let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.versionTuple,
-      layout: layout, presence: SourcePresence.present)
-    let data = SyntaxData.forRoot(raw)
-    return VersionTupleSyntax(data)
+  public static func makeAvailabilityLabeledArgument(
+    arena: SyntaxArena = .default, label: TokenSyntax, colon: TokenSyntax, value: Syntax
+  ) -> AvailabilityLabeledArgumentSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityLabeledArgument,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = label.raw
+      buffer[1] = colon.raw
+      buffer[2] = value.raw
+    }
+    return AvailabilityLabeledArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
 
-  public static func makeBlankVersionTuple(presence: SourcePresence = .present) -> VersionTupleSyntax {
-    let data = SyntaxData.forRoot(RawSyntax.create(kind: .versionTuple,
-      layout: [
-      RawSyntax.missing(SyntaxKind.unknown),
-      nil,
-      nil,
-    ], length: .zero, presence: presence))
-    return VersionTupleSyntax(data)
+  public static func makeBlankAvailabilityLabeledArgument(arena: SyntaxArena = .default) -> AvailabilityLabeledArgumentSyntax {
+    let raw = RawAvailabilityLabeledArgumentSyntax.makeBlank(arena: arena).raw
+    return AvailabilityLabeledArgumentSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
   }
+
+  public static func makeAvailabilityVersionRestriction(
+    arena: SyntaxArena = .default, platform: TokenSyntax, version: VersionTupleSyntax?
+  ) -> AvailabilityVersionRestrictionSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityVersionRestriction,
+                                   uninitializedCount: 2) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = platform.raw
+      buffer[1] = version?.raw
+    }
+    return AvailabilityVersionRestrictionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankAvailabilityVersionRestriction(arena: SyntaxArena = .default) -> AvailabilityVersionRestrictionSyntax {
+    let raw = RawAvailabilityVersionRestrictionSyntax.makeBlank(arena: arena).raw
+    return AvailabilityVersionRestrictionSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeVersionTuple(
+    arena: SyntaxArena = .default, majorMinor: Syntax, patchPeriod: TokenSyntax?, patchVersion: TokenSyntax?
+  ) -> VersionTupleSyntax {
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .versionTuple,
+                                   uninitializedCount: 3) { buffer in
+      buffer.initialize(repeating: nil)
+      buffer[0] = majorMinor.raw
+      buffer[1] = patchPeriod?.raw
+      buffer[2] = patchVersion?.raw
+    }
+    return VersionTupleSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+
+  public static func makeBlankVersionTuple(arena: SyntaxArena = .default) -> VersionTupleSyntax {
+    let raw = RawVersionTupleSyntax.makeBlank(arena: arena).raw
+    return VersionTupleSyntax(data: SyntaxData(rootRaw: raw, arena: arena))
+  }
+}
 
 /// MARK: Token Creation APIs
 
+extension SyntaxFactory {
 
   public static func makeAssociatedtypeKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.associatedtypeKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .associatedtypeKeyword, tokenText: "associatedtype",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeClassKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.classKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .classKeyword, tokenText: "class",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeDeinitKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.deinitKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .deinitKeyword, tokenText: "deinit",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeEnumKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.enumKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .enumKeyword, tokenText: "enum",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeExtensionKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.extensionKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .extensionKeyword, tokenText: "extension",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeFuncKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.funcKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .funcKeyword, tokenText: "func",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeImportKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.importKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .importKeyword, tokenText: "import",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeInitKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.initKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .initKeyword, tokenText: "init",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeInoutKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.inoutKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .inoutKeyword, tokenText: "inout",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeLetKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.letKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .letKeyword, tokenText: "let",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeOperatorKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.operatorKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .operatorKeyword, tokenText: "operator",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePrecedencegroupKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.precedencegroupKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .precedencegroupKeyword, tokenText: "precedencegroup",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeProtocolKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.protocolKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .protocolKeyword, tokenText: "protocol",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeStructKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.structKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .structKeyword, tokenText: "struct",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSubscriptKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.subscriptKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .subscriptKeyword, tokenText: "subscript",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeTypealiasKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.typealiasKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .typealiasKeyword, tokenText: "typealias",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeVarKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.varKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .varKeyword, tokenText: "var",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeFileprivateKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.fileprivateKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .fileprivateKeyword, tokenText: "fileprivate",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeInternalKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.internalKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .internalKeyword, tokenText: "internal",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePrivateKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.privateKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .privateKeyword, tokenText: "private",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePublicKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.publicKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .publicKeyword, tokenText: "public",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeStaticKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.staticKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .staticKeyword, tokenText: "static",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeDeferKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.deferKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .deferKeyword, tokenText: "defer",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeIfKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.ifKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .ifKeyword, tokenText: "if",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeGuardKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.guardKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .guardKeyword, tokenText: "guard",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeDoKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.doKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .doKeyword, tokenText: "do",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRepeatKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.repeatKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .repeatKeyword, tokenText: "repeat",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeElseKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.elseKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .elseKeyword, tokenText: "else",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeForKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.forKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .forKeyword, tokenText: "for",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeInKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.inKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .inKeyword, tokenText: "in",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeWhileKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.whileKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .whileKeyword, tokenText: "while",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeReturnKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.returnKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .returnKeyword, tokenText: "return",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeBreakKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.breakKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .breakKeyword, tokenText: "break",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeContinueKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.continueKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .continueKeyword, tokenText: "continue",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeFallthroughKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.fallthroughKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .fallthroughKeyword, tokenText: "fallthrough",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSwitchKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.switchKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .switchKeyword, tokenText: "switch",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeCaseKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.caseKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .caseKeyword, tokenText: "case",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeDefaultKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.defaultKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .defaultKeyword, tokenText: "default",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeWhereKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.whereKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .whereKeyword, tokenText: "where",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeCatchKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.catchKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .catchKeyword, tokenText: "catch",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeThrowKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.throwKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .throwKeyword, tokenText: "throw",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeAsKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.asKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .asKeyword, tokenText: "as",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeAnyKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.anyKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .anyKeyword, tokenText: "Any",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeFalseKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.falseKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .falseKeyword, tokenText: "false",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeIsKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.isKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .isKeyword, tokenText: "is",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeNilKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.nilKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .nilKeyword, tokenText: "nil",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRethrowsKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.rethrowsKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .rethrowsKeyword, tokenText: "rethrows",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSuperKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.superKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .superKeyword, tokenText: "super",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSelfKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.selfKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .selfKeyword, tokenText: "self",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeCapitalSelfKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.capitalSelfKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .capitalSelfKeyword, tokenText: "Self",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeTrueKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.trueKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .trueKeyword, tokenText: "true",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeTryKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.tryKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .tryKeyword, tokenText: "try",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeThrowsKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.throwsKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .throwsKeyword, tokenText: "throws",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func make__FILE__Keyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.__file__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .__file__Keyword, tokenText: "__FILE__",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func make__LINE__Keyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.__line__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .__line__Keyword, tokenText: "__LINE__",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func make__COLUMN__Keyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.__column__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .__column__Keyword, tokenText: "__COLUMN__",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func make__FUNCTION__Keyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.__function__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .__function__Keyword, tokenText: "__FUNCTION__",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func make__DSO_HANDLE__Keyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.__dso_handle__Keyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .__dso_handle__Keyword, tokenText: "__DSO_HANDLE__",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeWildcardKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.wildcardKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .wildcardKeyword, tokenText: "_",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeLeftParenToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.leftParen, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .leftParen, tokenText: "(",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRightParenToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.rightParen, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .rightParen, tokenText: ")",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeLeftBraceToken(
-    leadingTrivia: Trivia = .space,
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [.spaces(1)],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.leftBrace, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .leftBrace, tokenText: "{",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRightBraceToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.rightBrace, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .rightBrace, tokenText: "}",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeLeftSquareBracketToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.leftSquareBracket, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .leftSquareBracket, tokenText: "[",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRightSquareBracketToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.rightSquareBracket, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .rightSquareBracket, tokenText: "]",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeLeftAngleToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.leftAngle, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .leftAngle, tokenText: "<",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRightAngleToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.rightAngle, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .rightAngle, tokenText: ">",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePeriodToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.period, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .period, tokenText: ".",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePrefixPeriodToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.prefixPeriod, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .prefixPeriod, tokenText: ".",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeCommaToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.comma, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .comma, tokenText: ",",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeEllipsisToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.ellipsis, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .ellipsis, tokenText: "...",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeColonToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.colon, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .colon, tokenText: ":",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSemicolonToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.semicolon, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .semicolon, tokenText: ";",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeEqualToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.equal, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .equal, tokenText: "=",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeAtSignToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.atSign, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .atSign, tokenText: "@",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.pound, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .pound, tokenText: "#",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePrefixAmpersandToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.prefixAmpersand, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .prefixAmpersand, tokenText: "&",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeArrowToken(
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.arrow, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .arrow, tokenText: "->",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeBacktickToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.backtick, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .backtick, tokenText: "`",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeBackslashToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.backslash, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .backslash, tokenText: "\\",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeExclamationMarkToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.exclamationMark, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .exclamationMark, tokenText: "!",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePostfixQuestionMarkToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.postfixQuestionMark, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .postfixQuestionMark, tokenText: "?",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeInfixQuestionMarkToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.infixQuestionMark, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .infixQuestionMark, tokenText: "?",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeStringQuoteToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.stringQuote, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .stringQuote, tokenText: "\"",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSingleQuoteToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.singleQuote, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .singleQuote, tokenText: "\'",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeMultilineStringQuoteToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.multilineStringQuote, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .multilineStringQuote, tokenText: "\"\"\"",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundKeyPathKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundKeyPathKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundKeyPathKeyword, tokenText: "#keyPath",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundLineKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundLineKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundLineKeyword, tokenText: "#line",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundSelectorKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundSelectorKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundSelectorKeyword, tokenText: "#selector",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundFileKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundFileKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundFileKeyword, tokenText: "#file",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundFileIDKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundFileIDKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundFileIDKeyword, tokenText: "#fileID",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundFilePathKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundFilePathKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundFilePathKeyword, tokenText: "#filePath",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundColumnKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundColumnKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundColumnKeyword, tokenText: "#column",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundFunctionKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundFunctionKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundFunctionKeyword, tokenText: "#function",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundDsohandleKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundDsohandleKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundDsohandleKeyword, tokenText: "#dsohandle",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundAssertKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundAssertKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundAssertKeyword, tokenText: "#assert",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundSourceLocationKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundSourceLocationKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundSourceLocationKeyword, tokenText: "#sourceLocation",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundWarningKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundWarningKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundWarningKeyword, tokenText: "#warning",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundErrorKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundErrorKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundErrorKeyword, tokenText: "#error",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundIfKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundIfKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundIfKeyword, tokenText: "#if",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundElseKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundElseKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundElseKeyword, tokenText: "#else",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundElseifKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundElseifKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundElseifKeyword, tokenText: "#elseif",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundEndifKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundEndifKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundEndifKeyword, tokenText: "#endif",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundAvailableKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundAvailableKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundAvailableKeyword, tokenText: "#available",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundUnavailableKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundUnavailableKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundUnavailableKeyword, tokenText: "#unavailable",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundFileLiteralKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundFileLiteralKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundFileLiteralKeyword, tokenText: "#fileLiteral",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundImageLiteralKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundImageLiteralKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundImageLiteralKeyword, tokenText: "#imageLiteral",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePoundColorLiteralKeyword(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = .space
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.poundColorLiteralKeyword, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .poundColorLiteralKeyword, tokenText: "#colorLiteral",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeIntegerLiteral(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.integerLiteral(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .integerLiteral, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeFloatingLiteral(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.floatingLiteral(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .floatingLiteral, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeStringLiteral(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.stringLiteral(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .stringLiteral, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRegexLiteral(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.regexLiteral(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .regexLiteral, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeUnknown(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.unknown(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .unknown, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeIdentifier(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.identifier(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .identifier, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeUnspacedBinaryOperator(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.unspacedBinaryOperator(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .unspacedBinaryOperator, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeSpacedBinaryOperator(
+    arena: SyntaxArena = .default,
     _ text: String,
-    leadingTrivia: Trivia = .space,
-    trailingTrivia: Trivia = .space
+    leadingTrivia: Trivia = [.spaces(1)],
+    trailingTrivia: Trivia = [.spaces(1)]
   ) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .spacedBinaryOperator, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePostfixOperator(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.postfixOperator(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .postfixOperator, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makePrefixOperator(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.prefixOperator(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .prefixOperator, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeDollarIdentifier(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.dollarIdentifier(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .dollarIdentifier, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeContextualKeyword(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.contextualKeyword(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .contextualKeyword, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeRawStringDelimiter(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.rawStringDelimiter(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .rawStringDelimiter, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeStringSegment(
+    arena: SyntaxArena = .default,
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.stringSegment(text), presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .stringSegment, tokenText: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeStringInterpolationAnchorToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.stringInterpolationAnchor, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .stringInterpolationAnchor, tokenText: ")",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
   public static func makeYieldToken(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = []
   ) -> TokenSyntax {
-    return makeToken(.yield, presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    return makeToken(
+      arena: arena, .yield, tokenText: "yield",
+      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
   }
+}
+
 
 /// MARK: Convenience APIs
 
-  public static func makeVoidTupleType() -> TupleTypeSyntax {
-    return makeTupleType(leftParen: makeLeftParenToken(),
-                         elements: makeBlankTupleTypeElementList(),
-                         rightParen: makeRightParenToken())
+extension SyntaxFactory {
+
+  public static func makeVoidTupleType(arena: SyntaxArena = .default) -> TupleTypeSyntax {
+    return makeTupleType(
+      arena: arena,
+      leftParen: makeLeftParenToken(arena: arena),
+      elements: makeBlankTupleTypeElementList(arena: arena),
+      rightParen: makeRightParenToken(arena: arena))
   }
 
-  public static func makeTupleTypeElement(name: TokenSyntax?,
-    colon: TokenSyntax?, type: TypeSyntax,
+  public static func makeTupleTypeElement(
+    arena: SyntaxArena = .default,
+    name: TokenSyntax?,
+    colon: TokenSyntax?,
+    type: TypeSyntax,
     trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
-    return makeTupleTypeElement(inOut: nil, name: name, secondName: nil,
-                                colon: colon, type: type, ellipsis: nil,
-                                initializer: nil, trailingComma: trailingComma)
+    return makeTupleTypeElement(
+      arena: arena, inOut: nil, name: name, secondName: nil, colon: colon,
+      type: type, ellipsis: nil, initializer: nil, trailingComma: trailingComma)
   }
 
-  public static func makeTupleTypeElement(type: TypeSyntax,
-    trailingComma: TokenSyntax?) -> TupleTypeElementSyntax  {
-    return makeTupleTypeElement(name: nil, colon: nil, 
-                                type: type, trailingComma: trailingComma)
+  public static func makeTupleTypeElement(
+    arena: SyntaxArena = .default,
+    type: TypeSyntax,
+    trailingComma: TokenSyntax?
+  ) -> TupleTypeElementSyntax  {
+    return makeTupleTypeElement(
+    arena: arena, name: nil, colon: nil, type: type, trailingComma: trailingComma)
   }
 
-  public static func makeGenericParameter(name: TokenSyntax,
-      trailingComma: TokenSyntax) -> GenericParameterSyntax {
-    return makeGenericParameter(attributes: nil, name: name, colon: nil,
-                                inheritedType: nil,
-                                trailingComma: trailingComma)
+  public static func makeGenericParameter(
+    arena: SyntaxArena = .default,
+    name: TokenSyntax,
+    trailingComma: TokenSyntax
+  ) -> GenericParameterSyntax {
+    return makeGenericParameter(
+      arena: arena, attributes: nil, name: name, colon: nil,
+      inheritedType: nil, trailingComma: trailingComma)
   }
 
-  public static func makeTypeIdentifier(_ name: String,
+  public static func makeTypeIdentifier(
+    arena: SyntaxArena = .default,
+    _ name: String,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TypeSyntax {
-    let identifier = makeIdentifier(name, leadingTrivia: leadingTrivia, 
-                                    trailingTrivia: trailingTrivia)
-    let typeIdentifier = makeSimpleTypeIdentifier(name: identifier,
+    trailingTrivia: Trivia = []
+  ) -> TypeSyntax {
+    let identifier = makeIdentifier(
+      arena: arena,
+      name,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+    let typeIdentifier = makeSimpleTypeIdentifier(arena: arena,
+                                                  name: identifier,
                                                   genericArgumentClause: nil)
     return TypeSyntax(typeIdentifier)
   }
 
-  public static func makeAnyTypeIdentifier(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TypeSyntax {
-    return makeTypeIdentifier("Any", leadingTrivia: leadingTrivia, 
-                              trailingTrivia: trailingTrivia)
-  }
-
-  public static func makeSelfTypeIdentifier(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TypeSyntax {
-    return makeTypeIdentifier("Self", leadingTrivia: leadingTrivia, 
-                              trailingTrivia: trailingTrivia)
-  }
-
-  public static func makeTypeToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeIdentifier("Type", leadingTrivia: leadingTrivia, 
-                          trailingTrivia: trailingTrivia)
-  }
-
-  public static func makeProtocolToken(leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeIdentifier("Protocol", leadingTrivia: leadingTrivia,
-                          trailingTrivia: trailingTrivia)
-  }
-
-  public static func makeBinaryOperator(_ name: String,
+  public static func makeAnyTypeIdentifier(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> TokenSyntax {
-    return makeToken(.spacedBinaryOperator(name),
-                     presence: .present,
-                     leadingTrivia: leadingTrivia,
-                     trailingTrivia: trailingTrivia)
+    trailingTrivia: Trivia = []
+  ) -> TypeSyntax {
+    return makeTypeIdentifier(
+      arena: arena,
+      "Any",
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
   }
 
-  public static func makeStringLiteralExpr(_ text: String,
+  public static func makeSelfTypeIdentifier(
+    arena: SyntaxArena = .default,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> StringLiteralExprSyntax {
-    let string = makeStringSegment(text)
-    let segment = makeStringSegment(content: string)
-    let segments = makeStringLiteralSegments([Syntax(segment)])
-    let openQuote = makeStringQuoteToken(leadingTrivia: leadingTrivia)
-    let closeQuote = makeStringQuoteToken(trailingTrivia: trailingTrivia)
-    return makeStringLiteralExpr(openDelimiter: nil,
+    trailingTrivia: Trivia = []
+  ) -> TypeSyntax {
+    return makeTypeIdentifier(
+      arena: arena,
+      "Self",
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeTypeToken(
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
+    return makeIdentifier(
+      arena: arena,
+      "Type",
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeProtocolToken(
+    arena: SyntaxArena = .default,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
+    return makeIdentifier(
+      arena: arena,
+      "Protocol",
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeBinaryOperator(
+    arena: SyntaxArena = .default,
+    _ name: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> TokenSyntax {
+    return makeToken(
+      arena: arena,
+      .spacedBinaryOperator,
+      tokenText: name,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+  }
+
+  public static func makeStringLiteralExpr(
+    arena: SyntaxArena = .default,
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = []
+  ) -> StringLiteralExprSyntax {
+    let string = makeStringSegment(arena: arena, text)
+    let segment = makeStringSegment(arena: arena, content: string)
+    let segments = makeStringLiteralSegments(arena: arena, [Syntax(segment)])
+    let openQuote = makeStringQuoteToken(arena: arena, leadingTrivia: leadingTrivia)
+    let closeQuote = makeStringQuoteToken(arena: arena, trailingTrivia: trailingTrivia)
+    return makeStringLiteralExpr(arena: arena, openDelimiter: nil,
                                  openQuote: openQuote,
                                  segments: segments,
                                  closeQuote: closeQuote,
                                  closeDelimiter: nil)
   }
 
-  public static func makeVariableExpr(_ text: String,
+  public static func makeVariableExpr(
+    arena: SyntaxArena = .default,
+    _ text: String,
     leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = []) -> IdentifierExprSyntax {
-    let string = makeIdentifier(text,
-      leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia)
-    return makeIdentifierExpr(identifier: string,
+    trailingTrivia: Trivia = []
+  ) -> IdentifierExprSyntax {
+    let string = makeIdentifier(arena: arena, text,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia)
+    return makeIdentifierExpr(arena: arena, identifier: string,
                               declNameArguments: nil)
   }
 }

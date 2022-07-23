@@ -12,6 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+
 // MARK: - DeclSyntax
 
 /// Protocol to which all `DeclSyntax` nodes conform. Extension point to add
@@ -20,14 +21,14 @@
 public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
-  /// Check whether the non-type erased version of this syntax node conforms to 
-  /// DeclSyntaxProtocol. 
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// DeclSyntaxProtocol.
   /// Note that this will incur an existential conversion.
   func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(DeclSyntaxProtocol.self) != nil
   }
 
-  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// Return the non-type erased version of this syntax node if it conforms to
   /// DeclSyntaxProtocol. Otherwise return nil.
   /// Note that this will incur an existential conversion.
   func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol? {
@@ -35,80 +36,32 @@ public extension Syntax {
   }
 }
 
-public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
+
+public struct DeclSyntax: SyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
+
+  /// Initialize `DeclSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+
+  /// Checked cast `other` to `DeclSyntax` if possible.
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
+  }
 
   /// Create a `DeclSyntax` node from a specialized syntax node.
-  public init<S: DeclSyntaxProtocol>(_ syntax: S) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
-  }
-
-  /// Create a `DeclSyntax` node from a specialized optional syntax node.
-  public init?<S: DeclSyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self.init(syntax)
-  }
-
-  /// Converts the given `Syntax` node to a `DeclSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
-    case .unknownDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl:
-      self._syntaxNode = syntax
-    default:
-      return nil
-    }
-  }
-
-  /// Creates a `DeclSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    // Assert that the kind of the given data matches in debug builds.
-#if DEBUG
-    switch data.raw.kind {
-    case .unknownDecl, .typealiasDecl, .associatedtypeDecl, .ifConfigDecl, .poundErrorDecl, .poundWarningDecl, .poundSourceLocation, .classDecl, .actorDecl, .structDecl, .protocolDecl, .extensionDecl, .functionDecl, .initializerDecl, .deinitializerDecl, .subscriptDecl, .importDecl, .accessorDecl, .variableDecl, .enumCaseDecl, .enumDecl, .operatorDecl, .precedenceGroupDecl:
-      break
-    default:
-      fatalError("Unable to create DeclSyntax from \(data.raw.kind)")
-    }
-#endif
-
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
-  public func _validateLayout() {
-    // Check the layout of the concrete type
-    return Syntax(self)._validateLayout()
-  }
-
-  public func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
-  }
-
-  /// Syntax nodes always conform to `DeclSyntaxProtocol`. This API is just
-  /// added for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
-    return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
+  public init<Node: DeclSyntaxProtocol>(_ other: Node) {
+    // We know T is valid for this protocol.
+    self.init(data: other.data)
   }
 }
 
@@ -120,6 +73,7 @@ extension DeclSyntax: CustomReflectable {
   }
 }
 
+
 // MARK: - ExprSyntax
 
 /// Protocol to which all `ExprSyntax` nodes conform. Extension point to add
@@ -128,14 +82,14 @@ extension DeclSyntax: CustomReflectable {
 public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
-  /// Check whether the non-type erased version of this syntax node conforms to 
-  /// ExprSyntaxProtocol. 
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// ExprSyntaxProtocol.
   /// Note that this will incur an existential conversion.
   func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(ExprSyntaxProtocol.self) != nil
   }
 
-  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// Return the non-type erased version of this syntax node if it conforms to
   /// ExprSyntaxProtocol. Otherwise return nil.
   /// Note that this will incur an existential conversion.
   func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol? {
@@ -143,80 +97,32 @@ public extension Syntax {
   }
 }
 
-public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
+
+public struct ExprSyntax: SyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
+
+  /// Initialize `ExprSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+
+  /// Checked cast `other` to `ExprSyntax` if possible.
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
+  }
 
   /// Create a `ExprSyntax` node from a specialized syntax node.
-  public init<S: ExprSyntaxProtocol>(_ syntax: S) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
-  }
-
-  /// Create a `ExprSyntax` node from a specialized optional syntax node.
-  public init?<S: ExprSyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self.init(syntax)
-  }
-
-  /// Converts the given `Syntax` node to a `ExprSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
-    case .unknownExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .ternaryExpr, .memberAccessExpr, .isExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr:
-      self._syntaxNode = syntax
-    default:
-      return nil
-    }
-  }
-
-  /// Creates a `ExprSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    // Assert that the kind of the given data matches in debug builds.
-#if DEBUG
-    switch data.raw.kind {
-    case .unknownExpr, .inOutExpr, .poundColumnExpr, .tryExpr, .awaitExpr, .identifierExpr, .superRefExpr, .nilLiteralExpr, .discardAssignmentExpr, .assignmentExpr, .sequenceExpr, .poundLineExpr, .poundFileExpr, .poundFileIDExpr, .poundFilePathExpr, .poundFunctionExpr, .poundDsohandleExpr, .symbolicReferenceExpr, .prefixOperatorExpr, .binaryOperatorExpr, .arrowExpr, .floatLiteralExpr, .tupleExpr, .arrayExpr, .dictionaryExpr, .integerLiteralExpr, .booleanLiteralExpr, .ternaryExpr, .memberAccessExpr, .isExpr, .asExpr, .typeExpr, .closureExpr, .unresolvedPatternExpr, .functionCallExpr, .subscriptExpr, .optionalChainingExpr, .forcedValueExpr, .postfixUnaryExpr, .specializeExpr, .stringLiteralExpr, .regexLiteralExpr, .keyPathExpr, .keyPathBaseExpr, .objcKeyPathExpr, .objcSelectorExpr, .postfixIfConfigExpr, .editorPlaceholderExpr, .objectLiteralExpr:
-      break
-    default:
-      fatalError("Unable to create ExprSyntax from \(data.raw.kind)")
-    }
-#endif
-
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
-  public func _validateLayout() {
-    // Check the layout of the concrete type
-    return Syntax(self)._validateLayout()
-  }
-
-  public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
-  }
-
-  /// Syntax nodes always conform to `ExprSyntaxProtocol`. This API is just
-  /// added for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
-    return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
+  public init<Node: ExprSyntaxProtocol>(_ other: Node) {
+    // We know T is valid for this protocol.
+    self.init(data: other.data)
   }
 }
 
@@ -228,6 +134,7 @@ extension ExprSyntax: CustomReflectable {
   }
 }
 
+
 // MARK: - StmtSyntax
 
 /// Protocol to which all `StmtSyntax` nodes conform. Extension point to add
@@ -236,14 +143,14 @@ extension ExprSyntax: CustomReflectable {
 public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
-  /// Check whether the non-type erased version of this syntax node conforms to 
-  /// StmtSyntaxProtocol. 
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// StmtSyntaxProtocol.
   /// Note that this will incur an existential conversion.
   func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(StmtSyntaxProtocol.self) != nil
   }
 
-  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// Return the non-type erased version of this syntax node if it conforms to
   /// StmtSyntaxProtocol. Otherwise return nil.
   /// Note that this will incur an existential conversion.
   func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol? {
@@ -251,80 +158,32 @@ public extension Syntax {
   }
 }
 
-public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
+
+public struct StmtSyntax: SyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
+
+  /// Initialize `StmtSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+
+  /// Checked cast `other` to `StmtSyntax` if possible.
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
+  }
 
   /// Create a `StmtSyntax` node from a specialized syntax node.
-  public init<S: StmtSyntaxProtocol>(_ syntax: S) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
-  }
-
-  /// Create a `StmtSyntax` node from a specialized optional syntax node.
-  public init?<S: StmtSyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self.init(syntax)
-  }
-
-  /// Converts the given `Syntax` node to a `StmtSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
-    case .unknownStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
-      self._syntaxNode = syntax
-    default:
-      return nil
-    }
-  }
-
-  /// Creates a `StmtSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    // Assert that the kind of the given data matches in debug builds.
-#if DEBUG
-    switch data.raw.kind {
-    case .unknownStmt, .continueStmt, .whileStmt, .deferStmt, .expressionStmt, .repeatWhileStmt, .guardStmt, .forInStmt, .switchStmt, .doStmt, .returnStmt, .yieldStmt, .fallthroughStmt, .breakStmt, .declarationStmt, .throwStmt, .ifStmt, .poundAssertStmt:
-      break
-    default:
-      fatalError("Unable to create StmtSyntax from \(data.raw.kind)")
-    }
-#endif
-
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
-  public func _validateLayout() {
-    // Check the layout of the concrete type
-    return Syntax(self)._validateLayout()
-  }
-
-  public func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
-  }
-
-  /// Syntax nodes always conform to `StmtSyntaxProtocol`. This API is just
-  /// added for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
-    return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
+  public init<Node: StmtSyntaxProtocol>(_ other: Node) {
+    // We know T is valid for this protocol.
+    self.init(data: other.data)
   }
 }
 
@@ -336,6 +195,7 @@ extension StmtSyntax: CustomReflectable {
   }
 }
 
+
 // MARK: - TypeSyntax
 
 /// Protocol to which all `TypeSyntax` nodes conform. Extension point to add
@@ -344,14 +204,14 @@ extension StmtSyntax: CustomReflectable {
 public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
-  /// Check whether the non-type erased version of this syntax node conforms to 
-  /// TypeSyntaxProtocol. 
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// TypeSyntaxProtocol.
   /// Note that this will incur an existential conversion.
   func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(TypeSyntaxProtocol.self) != nil
   }
 
-  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// Return the non-type erased version of this syntax node if it conforms to
   /// TypeSyntaxProtocol. Otherwise return nil.
   /// Note that this will incur an existential conversion.
   func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
@@ -359,80 +219,32 @@ public extension Syntax {
   }
 }
 
-public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
+
+public struct TypeSyntax: SyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
+
+  /// Initialize `TypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+
+  /// Checked cast `other` to `TypeSyntax` if possible.
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
+  }
 
   /// Create a `TypeSyntax` node from a specialized syntax node.
-  public init<S: TypeSyntaxProtocol>(_ syntax: S) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
-  }
-
-  /// Create a `TypeSyntax` node from a specialized optional syntax node.
-  public init?<S: TypeSyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self.init(syntax)
-  }
-
-  /// Converts the given `Syntax` node to a `TypeSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
-    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
-      self._syntaxNode = syntax
-    default:
-      return nil
-    }
-  }
-
-  /// Creates a `TypeSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    // Assert that the kind of the given data matches in debug builds.
-#if DEBUG
-    switch data.raw.kind {
-    case .unknownType, .simpleTypeIdentifier, .memberTypeIdentifier, .classRestrictionType, .arrayType, .dictionaryType, .metatypeType, .optionalType, .constrainedSugarType, .implicitlyUnwrappedOptionalType, .compositionType, .tupleType, .functionType, .attributedType:
-      break
-    default:
-      fatalError("Unable to create TypeSyntax from \(data.raw.kind)")
-    }
-#endif
-
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
-  public func _validateLayout() {
-    // Check the layout of the concrete type
-    return Syntax(self)._validateLayout()
-  }
-
-  public func `is`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
-  }
-
-  /// Syntax nodes always conform to `TypeSyntaxProtocol`. This API is just
-  /// added for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
-    return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
+  public init<Node: TypeSyntaxProtocol>(_ other: Node) {
+    // We know T is valid for this protocol.
+    self.init(data: other.data)
   }
 }
 
@@ -444,6 +256,7 @@ extension TypeSyntax: CustomReflectable {
   }
 }
 
+
 // MARK: - PatternSyntax
 
 /// Protocol to which all `PatternSyntax` nodes conform. Extension point to add
@@ -452,14 +265,14 @@ extension TypeSyntax: CustomReflectable {
 public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
-  /// Check whether the non-type erased version of this syntax node conforms to 
-  /// PatternSyntaxProtocol. 
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// PatternSyntaxProtocol.
   /// Note that this will incur an existential conversion.
   func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(PatternSyntaxProtocol.self) != nil
   }
 
-  /// Return the non-type erased version of this syntax node if it conforms to 
+  /// Return the non-type erased version of this syntax node if it conforms to
   /// PatternSyntaxProtocol. Otherwise return nil.
   /// Note that this will incur an existential conversion.
   func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol? {
@@ -467,80 +280,32 @@ public extension Syntax {
   }
 }
 
-public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
+
+public struct PatternSyntax: SyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
+
+  /// Initialize `PatternSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+
+  /// Checked cast `other` to `PatternSyntax` if possible.
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
+  }
 
   /// Create a `PatternSyntax` node from a specialized syntax node.
-  public init<S: PatternSyntaxProtocol>(_ syntax: S) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
-  }
-
-  /// Create a `PatternSyntax` node from a specialized optional syntax node.
-  public init?<S: PatternSyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self.init(syntax)
-  }
-
-  /// Converts the given `Syntax` node to a `PatternSyntax` if possible. Returns
-  /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    switch syntax.raw.kind {
-    case .unknownPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
-      self._syntaxNode = syntax
-    default:
-      return nil
-    }
-  }
-
-  /// Creates a `PatternSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    // Assert that the kind of the given data matches in debug builds.
-#if DEBUG
-    switch data.raw.kind {
-    case .unknownPattern, .enumCasePattern, .isTypePattern, .optionalPattern, .identifierPattern, .asTypePattern, .tuplePattern, .wildcardPattern, .expressionPattern, .valueBindingPattern:
-      break
-    default:
-      fatalError("Unable to create PatternSyntax from \(data.raw.kind)")
-    }
-#endif
-
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return _syntaxNode.syntaxNodeType
-  }
-
-  public func _validateLayout() {
-    // Check the layout of the concrete type
-    return Syntax(self)._validateLayout()
-  }
-
-  public func `is`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(_syntaxNode)
-  }
-
-  /// Syntax nodes always conform to `PatternSyntaxProtocol`. This API is just
-  /// added for consistency.
-  /// Note that this will incur an existential conversion.
-  @available(*, deprecated, message: "Expression always evaluates to true")
-  public func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
-    return true
-  }
-
-  /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
-  public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
-    return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
+  public init<Node: PatternSyntaxProtocol>(_ other: Node) {
+    // We know T is valid for this protocol.
+    self.init(data: other.data)
   }
 }
 

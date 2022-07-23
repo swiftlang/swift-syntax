@@ -1,9 +1,8 @@
 %{
-  # -*- mode: Swift -*-
   from gyb_syntax_support import *
-  from gyb_syntax_support.Traits import TRAITS
   NODE_MAP = create_node_map()
-  # Ignore the following admonition it applies to the resulting .swift file only
+  # -*- mode: Swift -*-
+  # Ignore the following admonition; it applies to the resulting .swift file only
 }%
 //// Automatically Generated From SyntaxNodes.swift.gyb.
 //// Do Not Edit Directly!
@@ -19,16 +18,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-%{
-"""
-This gyb-file generates the syntax nodes for SwiftSyntax. To keep the generated
-files at a managable file size, it is to be invoked multiple times with the
-global variable EMIT_KIND set to a base kind listed in
-gyb_syntax_support/kinds.py:SYNTAX_BASE_KINDES. It then only emits those syntax
-nodes whose base kind are that specified kind.
-"""
-}%
-
 % for node in SYNTAX_NODES:
 %   base_type = node.base_type
 %   if node.is_base():
@@ -41,12 +30,14 @@ nodes whose base kind are that specified kind.
 %     pass
 %   else:
 %     # We are actually handling this node now
+
 // MARK: - ${node.name}
 
 %     for line in dedented_lines(node.description):
 /// ${line}
 %     end
-public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
+public struct ${node.name}: ${node.base_type}Protocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
 %     # ======
 %     # Cursor
 %     # ======
@@ -59,53 +50,51 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   }
 %     end
 
-%     # ==============
-%     # Initialization
-%     # ==============
+%   # ==============
+%   # Initialization
+%   # ==============
 %
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    Raw${node.name}.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `${node.name}` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .${node.swift_syntax_kind} else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `${node.name}` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .${node.swift_syntax_kind})
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `${node.name}` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 %     for child in node.children:
 %       child_node = NODE_MAP.get(child.syntax_kind)
-%
+%       optional_mark = '?' if child.is_optional else ''
+
 %       # ===================
 %       # Children properties
 %       # ===================
-%
-%       ret_type = child.type_name
-%       if child.is_optional:
-%         ret_type += '?'
-%       end
-
 %       for line in dedented_lines(child.description):
   /// ${line}
 %       end
-  public var ${child.swift_name}: ${ret_type} {
+  public var ${child.swift_name}: ${child.type_name + optional_mark} {
     get {
-      let childData = data.child(at: Cursor.${child.swift_name},
-                                 parent: Syntax(self))
+      let childData = data.child(at: Cursor.${child.swift_name}.rawValue)
 %       if child.is_optional:
-      if childData == nil { return nil }
+      return childData.map { ${child.type_name}(data: $0) }
+%       else:
+      return ${child.type_name}(data: childData!)
 %       end
-      return ${child.type_name}(childData!)
     }
     set(value) {
       self = with${child.name}(value)
@@ -130,62 +119,34 @@ public struct ${node.name}: ${base_type}Protocol, SyntaxHashable {
   ///            appended to its `${child.swift_name}` collection.
   public func add${child_elt}(_ element: ${child_elt_type}) -> ${node.name} {
     var collection: RawSyntax
-    if let col = raw[Cursor.${child.swift_name}] {
-      collection = col.appending(element.raw)
+    if let col = raw.children[Cursor.${child.swift_name}.rawValue] {
+      collection = col.appending(element.raw, arena: self.arena)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.${child_node.swift_syntax_kind},
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeEmptyLayout(arena: arena, kind: .${child_node.swift_syntax_kind})
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.${child.swift_name})
-    return ${node.name}(newData)
+    let newRaw = raw.replacingChild(at: Cursor.${child.swift_name}.rawValue,
+                                     with: collection, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 %       end
-
-%       # ===================
-%       # Replacing children
-%       # ===================
-  /// Returns a copy of the receiver with its `${child.swift_name}` replaced.
-  /// - param newChild: The new `${child.swift_name}` to replace the node's
-  ///                   current `${child.swift_name}`, if present.
-  public func with${child.name}(
-    _ newChild: ${child.type_name}?) -> ${node.name} {
-%       if child.is_optional:
-    let raw = newChild?.raw
-%       else:
-    let raw = newChild?.raw ?? ${make_missing_swift_child(child)}
-%       end
-    let newData = data.replacingChild(raw, at: Cursor.${child.swift_name})
-    return ${node.name}(newData)
-  }
-%     end
-
-%     # ===================
-%     # Validate layout
-%     # ===================
-
-  public func _validateLayout() {
-%     if node.is_unknown():
-    // We are verifying an unknown node. Since we don’t know anything about it
-    // we need to assume it’s valid.
-%     else:
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == ${len(node.children)})
-%       for i, child in enumerate(node.children):
-    // Check child #${i} child is ${child.type_name} ${"or missing" if child.is_optional else ""}
-%         if not child.is_optional:
-    assert(rawChildren[${i}].raw != nil)
+%
+  public func with${child.name}(_ newChild: ${child.type_name}?) -> Self {
+    let newChildRaw = newChild?.raw
+%       if not child.is_optional:
+%         if child.is_token():
+%           token = child.main_token()
+%           tok_kind = token.swift_kind() if token else "unknown"
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .${tok_kind}).raw
+%         else:
+      ?? Raw${child.type_name}.makeBlank(arena: arena).raw
 %         end
-    if let raw = rawChildren[${i}].raw {
-      let info = rawChildren[${i}].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(${child.type_name}.self))
-    }
 %       end
-%     end
+
+    let newRaw = raw.replacingChild(
+      at: Cursor.${child.swift_name}.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
+%     end
 }
 
 extension ${node.name}: CustomReflectable {
@@ -195,12 +156,11 @@ extension ${node.name}: CustomReflectable {
 %       if child.is_optional:
       "${child.swift_name}": ${child.swift_name}.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
 %       else:
-      "${child.swift_name}": Syntax(${child.swift_name}).asProtocol(SyntaxProtocol.self),
+      "${child.swift_name}": Syntax(${child.swift_name}).asProtocol(SyntaxProtocol.self) as Any,
 %       end
 %     end
     ])
   }
 }
-
 %   end
 % end

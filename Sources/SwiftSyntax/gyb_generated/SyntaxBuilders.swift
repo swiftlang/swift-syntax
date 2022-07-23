@@ -14,10 +14,10 @@
 
 
 public struct CodeBlockItemSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useItem(_ node: Syntax) {
     let idx = CodeBlockItemSyntax.Cursor.item.rawValue
@@ -36,11 +36,15 @@ public struct CodeBlockItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .codeBlockItem,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItem,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -53,19 +57,19 @@ extension CodeBlockItemSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CodeBlockItemSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CodeBlockItemSyntaxBuilder) -> Void) {
-    var builder = CodeBlockItemSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CodeBlockItemSyntaxBuilder) -> Void) {
+    var builder = CodeBlockItemSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CodeBlockSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftBrace(_ node: TokenSyntax) {
     let idx = CodeBlockSyntax.Cursor.leftBrace.rawValue
@@ -75,11 +79,11 @@ public struct CodeBlockSyntaxBuilder {
   public mutating func addStatement(_ elt: CodeBlockItemSyntax) {
     let idx = CodeBlockSyntax.Cursor.statements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -90,17 +94,21 @@ public struct CodeBlockSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftBrace)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftBrace).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.codeBlockItemList)
+      layout[1] = RawCodeBlockItemListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightBrace).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .codeBlock,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .codeBlock,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -113,19 +121,19 @@ extension CodeBlockSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CodeBlockSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CodeBlockSyntaxBuilder) -> Void) {
-    var builder = CodeBlockSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CodeBlockSyntaxBuilder) -> Void) {
+    var builder = CodeBlockSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct InOutExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAmpersand(_ node: TokenSyntax) {
     let idx = InOutExprSyntax.Cursor.ampersand.rawValue
@@ -139,14 +147,18 @@ public struct InOutExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.prefixAmpersand)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .prefixAmpersand).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .inOutExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .inOutExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -159,19 +171,19 @@ extension InOutExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `InOutExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout InOutExprSyntaxBuilder) -> Void) {
-    var builder = InOutExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout InOutExprSyntaxBuilder) -> Void) {
+    var builder = InOutExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundColumnExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundColumn(_ node: TokenSyntax) {
     let idx = PoundColumnExprSyntax.Cursor.poundColumn.rawValue
@@ -180,11 +192,15 @@ public struct PoundColumnExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundColumnKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundColumnKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundColumnExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundColumnExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -197,19 +213,19 @@ extension PoundColumnExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundColumnExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundColumnExprSyntaxBuilder) -> Void) {
-    var builder = PoundColumnExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundColumnExprSyntaxBuilder) -> Void) {
+    var builder = PoundColumnExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TryExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useTryKeyword(_ node: TokenSyntax) {
     let idx = TryExprSyntax.Cursor.tryKeyword.rawValue
@@ -228,14 +244,18 @@ public struct TryExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.tryKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .tryKeyword).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tryExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tryExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -248,19 +268,19 @@ extension TryExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TryExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TryExprSyntaxBuilder) -> Void) {
-    var builder = TryExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TryExprSyntaxBuilder) -> Void) {
+    var builder = TryExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AwaitExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAwaitKeyword(_ node: TokenSyntax) {
     let idx = AwaitExprSyntax.Cursor.awaitKeyword.rawValue
@@ -274,14 +294,18 @@ public struct AwaitExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .awaitExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .awaitExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -294,19 +318,19 @@ extension AwaitExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AwaitExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AwaitExprSyntaxBuilder) -> Void) {
-    var builder = AwaitExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AwaitExprSyntaxBuilder) -> Void) {
+    var builder = AwaitExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeclNameArgumentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = DeclNameArgumentSyntax.Cursor.name.rawValue
@@ -320,14 +344,18 @@ public struct DeclNameArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .declNameArgument,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declNameArgument,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -340,19 +368,19 @@ extension DeclNameArgumentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeclNameArgumentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeclNameArgumentSyntaxBuilder) -> Void) {
-    var builder = DeclNameArgumentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeclNameArgumentSyntaxBuilder) -> Void) {
+    var builder = DeclNameArgumentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeclNameArgumentsSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = DeclNameArgumentsSyntax.Cursor.leftParen.rawValue
@@ -362,11 +390,11 @@ public struct DeclNameArgumentsSyntaxBuilder {
   public mutating func addArgument(_ elt: DeclNameArgumentSyntax) {
     let idx = DeclNameArgumentsSyntax.Cursor.arguments.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.declNameArgumentList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .declNameArgumentList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -377,17 +405,21 @@ public struct DeclNameArgumentsSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.declNameArgumentList)
+      layout[1] = RawDeclNameArgumentListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .declNameArguments,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declNameArguments,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -400,19 +432,19 @@ extension DeclNameArgumentsSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeclNameArgumentsSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeclNameArgumentsSyntaxBuilder) -> Void) {
-    var builder = DeclNameArgumentsSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeclNameArgumentsSyntaxBuilder) -> Void) {
+    var builder = DeclNameArgumentsSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IdentifierExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIdentifier(_ node: TokenSyntax) {
     let idx = IdentifierExprSyntax.Cursor.identifier.rawValue
@@ -426,11 +458,15 @@ public struct IdentifierExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .identifierExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .identifierExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -443,19 +479,19 @@ extension IdentifierExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IdentifierExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IdentifierExprSyntaxBuilder) -> Void) {
-    var builder = IdentifierExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IdentifierExprSyntaxBuilder) -> Void) {
+    var builder = IdentifierExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SuperRefExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useSuperKeyword(_ node: TokenSyntax) {
     let idx = SuperRefExprSyntax.Cursor.superKeyword.rawValue
@@ -464,11 +500,15 @@ public struct SuperRefExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.superKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .superKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .superRefExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .superRefExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -481,19 +521,19 @@ extension SuperRefExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SuperRefExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SuperRefExprSyntaxBuilder) -> Void) {
-    var builder = SuperRefExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SuperRefExprSyntaxBuilder) -> Void) {
+    var builder = SuperRefExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct NilLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useNilKeyword(_ node: TokenSyntax) {
     let idx = NilLiteralExprSyntax.Cursor.nilKeyword.rawValue
@@ -502,11 +542,15 @@ public struct NilLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.nilKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .nilKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .nilLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .nilLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -519,19 +563,19 @@ extension NilLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `NilLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout NilLiteralExprSyntaxBuilder) -> Void) {
-    var builder = NilLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout NilLiteralExprSyntaxBuilder) -> Void) {
+    var builder = NilLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DiscardAssignmentExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWildcard(_ node: TokenSyntax) {
     let idx = DiscardAssignmentExprSyntax.Cursor.wildcard.rawValue
@@ -540,11 +584,15 @@ public struct DiscardAssignmentExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.wildcardKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .wildcardKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .discardAssignmentExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .discardAssignmentExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -557,19 +605,19 @@ extension DiscardAssignmentExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DiscardAssignmentExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DiscardAssignmentExprSyntaxBuilder) -> Void) {
-    var builder = DiscardAssignmentExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DiscardAssignmentExprSyntaxBuilder) -> Void) {
+    var builder = DiscardAssignmentExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AssignmentExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAssignToken(_ node: TokenSyntax) {
     let idx = AssignmentExprSyntax.Cursor.assignToken.rawValue
@@ -578,11 +626,15 @@ public struct AssignmentExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.equal)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .equal).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .assignmentExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .assignmentExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -595,38 +647,42 @@ extension AssignmentExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AssignmentExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AssignmentExprSyntaxBuilder) -> Void) {
-    var builder = AssignmentExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AssignmentExprSyntaxBuilder) -> Void) {
+    var builder = AssignmentExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SequenceExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addElement(_ elt: ExprSyntax) {
     let idx = SequenceExprSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.exprList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .exprList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.exprList)
+      layout[0] = RawExprListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .sequenceExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .sequenceExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -639,19 +695,19 @@ extension SequenceExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SequenceExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SequenceExprSyntaxBuilder) -> Void) {
-    var builder = SequenceExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SequenceExprSyntaxBuilder) -> Void) {
+    var builder = SequenceExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundLineExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundLine(_ node: TokenSyntax) {
     let idx = PoundLineExprSyntax.Cursor.poundLine.rawValue
@@ -660,11 +716,15 @@ public struct PoundLineExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundLineKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundLineKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundLineExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundLineExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -677,19 +737,19 @@ extension PoundLineExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundLineExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundLineExprSyntaxBuilder) -> Void) {
-    var builder = PoundLineExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundLineExprSyntaxBuilder) -> Void) {
+    var builder = PoundLineExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundFileExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundFile(_ node: TokenSyntax) {
     let idx = PoundFileExprSyntax.Cursor.poundFile.rawValue
@@ -698,11 +758,15 @@ public struct PoundFileExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundFileKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundFileKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundFileExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFileExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -715,19 +779,19 @@ extension PoundFileExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundFileExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundFileExprSyntaxBuilder) -> Void) {
-    var builder = PoundFileExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundFileExprSyntaxBuilder) -> Void) {
+    var builder = PoundFileExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundFileIDExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundFileID(_ node: TokenSyntax) {
     let idx = PoundFileIDExprSyntax.Cursor.poundFileID.rawValue
@@ -736,11 +800,15 @@ public struct PoundFileIDExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundFileIDKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundFileIDKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundFileIDExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFileIDExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -753,19 +821,19 @@ extension PoundFileIDExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundFileIDExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundFileIDExprSyntaxBuilder) -> Void) {
-    var builder = PoundFileIDExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundFileIDExprSyntaxBuilder) -> Void) {
+    var builder = PoundFileIDExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundFilePathExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundFilePath(_ node: TokenSyntax) {
     let idx = PoundFilePathExprSyntax.Cursor.poundFilePath.rawValue
@@ -774,11 +842,15 @@ public struct PoundFilePathExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundFilePathKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundFilePathKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundFilePathExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFilePathExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -791,19 +863,19 @@ extension PoundFilePathExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundFilePathExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundFilePathExprSyntaxBuilder) -> Void) {
-    var builder = PoundFilePathExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundFilePathExprSyntaxBuilder) -> Void) {
+    var builder = PoundFilePathExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundFunctionExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundFunction(_ node: TokenSyntax) {
     let idx = PoundFunctionExprSyntax.Cursor.poundFunction.rawValue
@@ -812,11 +884,15 @@ public struct PoundFunctionExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundFunctionKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundFunctionKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundFunctionExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundFunctionExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -829,19 +905,19 @@ extension PoundFunctionExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundFunctionExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundFunctionExprSyntaxBuilder) -> Void) {
-    var builder = PoundFunctionExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundFunctionExprSyntaxBuilder) -> Void) {
+    var builder = PoundFunctionExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundDsohandleExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundDsohandle(_ node: TokenSyntax) {
     let idx = PoundDsohandleExprSyntax.Cursor.poundDsohandle.rawValue
@@ -850,11 +926,15 @@ public struct PoundDsohandleExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundDsohandleKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundDsohandleKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundDsohandleExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundDsohandleExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -867,19 +947,19 @@ extension PoundDsohandleExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundDsohandleExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundDsohandleExprSyntaxBuilder) -> Void) {
-    var builder = PoundDsohandleExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundDsohandleExprSyntaxBuilder) -> Void) {
+    var builder = PoundDsohandleExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SymbolicReferenceExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIdentifier(_ node: TokenSyntax) {
     let idx = SymbolicReferenceExprSyntax.Cursor.identifier.rawValue
@@ -893,11 +973,15 @@ public struct SymbolicReferenceExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .symbolicReferenceExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .symbolicReferenceExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -910,19 +994,19 @@ extension SymbolicReferenceExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SymbolicReferenceExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SymbolicReferenceExprSyntaxBuilder) -> Void) {
-    var builder = SymbolicReferenceExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SymbolicReferenceExprSyntaxBuilder) -> Void) {
+    var builder = SymbolicReferenceExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrefixOperatorExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useOperatorToken(_ node: TokenSyntax) {
     let idx = PrefixOperatorExprSyntax.Cursor.operatorToken.rawValue
@@ -936,11 +1020,15 @@ public struct PrefixOperatorExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .prefixOperatorExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .prefixOperatorExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -953,19 +1041,19 @@ extension PrefixOperatorExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrefixOperatorExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrefixOperatorExprSyntaxBuilder) -> Void) {
-    var builder = PrefixOperatorExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrefixOperatorExprSyntaxBuilder) -> Void) {
+    var builder = PrefixOperatorExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct BinaryOperatorExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useOperatorToken(_ node: TokenSyntax) {
     let idx = BinaryOperatorExprSyntax.Cursor.operatorToken.rawValue
@@ -974,11 +1062,15 @@ public struct BinaryOperatorExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .binaryOperatorExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .binaryOperatorExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -991,19 +1083,19 @@ extension BinaryOperatorExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `BinaryOperatorExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout BinaryOperatorExprSyntaxBuilder) -> Void) {
-    var builder = BinaryOperatorExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout BinaryOperatorExprSyntaxBuilder) -> Void) {
+    var builder = BinaryOperatorExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ArrowExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAsyncKeyword(_ node: TokenSyntax) {
     let idx = ArrowExprSyntax.Cursor.asyncKeyword.rawValue
@@ -1022,11 +1114,15 @@ public struct ArrowExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.arrow)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .arrow).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .arrowExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrowExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1039,19 +1135,19 @@ extension ArrowExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ArrowExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ArrowExprSyntaxBuilder) -> Void) {
-    var builder = ArrowExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ArrowExprSyntaxBuilder) -> Void) {
+    var builder = ArrowExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FloatLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useFloatingDigits(_ node: TokenSyntax) {
     let idx = FloatLiteralExprSyntax.Cursor.floatingDigits.rawValue
@@ -1060,11 +1156,15 @@ public struct FloatLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.floatingLiteral(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .floatingLiteral).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .floatLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .floatLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1077,19 +1177,19 @@ extension FloatLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FloatLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FloatLiteralExprSyntaxBuilder) -> Void) {
-    var builder = FloatLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FloatLiteralExprSyntaxBuilder) -> Void) {
+    var builder = FloatLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TupleExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = TupleExprSyntax.Cursor.leftParen.rawValue
@@ -1099,11 +1199,11 @@ public struct TupleExprSyntaxBuilder {
   public mutating func addElement(_ elt: TupleExprElementSyntax) {
     let idx = TupleExprSyntax.Cursor.elementList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -1114,17 +1214,21 @@ public struct TupleExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.tupleExprElementList)
+      layout[1] = RawTupleExprElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tupleExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1137,19 +1241,19 @@ extension TupleExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TupleExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TupleExprSyntaxBuilder) -> Void) {
-    var builder = TupleExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TupleExprSyntaxBuilder) -> Void) {
+    var builder = TupleExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ArrayExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftSquare(_ node: TokenSyntax) {
     let idx = ArrayExprSyntax.Cursor.leftSquare.rawValue
@@ -1159,11 +1263,11 @@ public struct ArrayExprSyntaxBuilder {
   public mutating func addElement(_ elt: ArrayElementSyntax) {
     let idx = ArrayExprSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.arrayElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .arrayElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -1174,17 +1278,21 @@ public struct ArrayExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.arrayElementList)
+      layout[1] = RawArrayElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .arrayExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1197,19 +1305,19 @@ extension ArrayExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ArrayExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ArrayExprSyntaxBuilder) -> Void) {
-    var builder = ArrayExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ArrayExprSyntaxBuilder) -> Void) {
+    var builder = ArrayExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DictionaryExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftSquare(_ node: TokenSyntax) {
     let idx = DictionaryExprSyntax.Cursor.leftSquare.rawValue
@@ -1228,17 +1336,21 @@ public struct DictionaryExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[1] = RawSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .dictionaryExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1251,19 +1363,19 @@ extension DictionaryExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DictionaryExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DictionaryExprSyntaxBuilder) -> Void) {
-    var builder = DictionaryExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DictionaryExprSyntaxBuilder) -> Void) {
+    var builder = DictionaryExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TupleExprElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabel(_ node: TokenSyntax) {
     let idx = TupleExprElementSyntax.Cursor.label.rawValue
@@ -1287,11 +1399,15 @@ public struct TupleExprElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tupleExprElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElement,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1304,19 +1420,19 @@ extension TupleExprElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TupleExprElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TupleExprElementSyntaxBuilder) -> Void) {
-    var builder = TupleExprElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TupleExprElementSyntaxBuilder) -> Void) {
+    var builder = TupleExprElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ArrayElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = ArrayElementSyntax.Cursor.expression.rawValue
@@ -1330,11 +1446,15 @@ public struct ArrayElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .arrayElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayElement,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1347,19 +1467,19 @@ extension ArrayElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ArrayElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ArrayElementSyntaxBuilder) -> Void) {
-    var builder = ArrayElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ArrayElementSyntaxBuilder) -> Void) {
+    var builder = ArrayElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DictionaryElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useKeyExpression(_ node: ExprSyntax) {
     let idx = DictionaryElementSyntax.Cursor.keyExpression.rawValue
@@ -1383,17 +1503,21 @@ public struct DictionaryElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .dictionaryElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryElement,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1406,19 +1530,19 @@ extension DictionaryElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DictionaryElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DictionaryElementSyntaxBuilder) -> Void) {
-    var builder = DictionaryElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DictionaryElementSyntaxBuilder) -> Void) {
+    var builder = DictionaryElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IntegerLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDigits(_ node: TokenSyntax) {
     let idx = IntegerLiteralExprSyntax.Cursor.digits.rawValue
@@ -1427,11 +1551,15 @@ public struct IntegerLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.integerLiteral(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .integerLiteral).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .integerLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .integerLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1444,19 +1572,19 @@ extension IntegerLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IntegerLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IntegerLiteralExprSyntaxBuilder) -> Void) {
-    var builder = IntegerLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IntegerLiteralExprSyntaxBuilder) -> Void) {
+    var builder = IntegerLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct BooleanLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBooleanLiteral(_ node: TokenSyntax) {
     let idx = BooleanLiteralExprSyntax.Cursor.booleanLiteral.rawValue
@@ -1465,11 +1593,15 @@ public struct BooleanLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.trueKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .trueKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .booleanLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .booleanLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1482,19 +1614,19 @@ extension BooleanLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `BooleanLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout BooleanLiteralExprSyntaxBuilder) -> Void) {
-    var builder = BooleanLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout BooleanLiteralExprSyntaxBuilder) -> Void) {
+    var builder = BooleanLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TernaryExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useConditionExpression(_ node: ExprSyntax) {
     let idx = TernaryExprSyntax.Cursor.conditionExpression.rawValue
@@ -1523,23 +1655,27 @@ public struct TernaryExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.infixQuestionMark)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .infixQuestionMark).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.colon)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.expr)
+      layout[4] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .ternaryExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ternaryExpr,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1552,19 +1688,19 @@ extension TernaryExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TernaryExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TernaryExprSyntaxBuilder) -> Void) {
-    var builder = TernaryExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TernaryExprSyntaxBuilder) -> Void) {
+    var builder = TernaryExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MemberAccessExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBase(_ node: ExprSyntax) {
     let idx = MemberAccessExprSyntax.Cursor.base.rawValue
@@ -1588,14 +1724,18 @@ public struct MemberAccessExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.period)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .memberAccessExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberAccessExpr,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1608,19 +1748,19 @@ extension MemberAccessExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MemberAccessExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MemberAccessExprSyntaxBuilder) -> Void) {
-    var builder = MemberAccessExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MemberAccessExprSyntaxBuilder) -> Void) {
+    var builder = MemberAccessExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IsExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIsTok(_ node: TokenSyntax) {
     let idx = IsExprSyntax.Cursor.isTok.rawValue
@@ -1634,14 +1774,18 @@ public struct IsExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.isKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .isKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .isExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .isExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1654,19 +1798,19 @@ extension IsExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IsExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IsExprSyntaxBuilder) -> Void) {
-    var builder = IsExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IsExprSyntaxBuilder) -> Void) {
+    var builder = IsExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AsExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAsTok(_ node: TokenSyntax) {
     let idx = AsExprSyntax.Cursor.asTok.rawValue
@@ -1685,14 +1829,18 @@ public struct AsExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.asKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .asKeyword).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .asExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .asExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1705,19 +1853,19 @@ extension AsExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AsExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AsExprSyntaxBuilder) -> Void) {
-    var builder = AsExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AsExprSyntaxBuilder) -> Void) {
+    var builder = AsExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TypeExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useType(_ node: TypeSyntax) {
     let idx = TypeExprSyntax.Cursor.type.rawValue
@@ -1726,11 +1874,15 @@ public struct TypeExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .typeExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1743,28 +1895,28 @@ extension TypeExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TypeExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TypeExprSyntaxBuilder) -> Void) {
-    var builder = TypeExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TypeExprSyntaxBuilder) -> Void) {
+    var builder = TypeExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClosureCaptureItemSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addSpecifierToken(_ elt: TokenSyntax) {
     let idx = ClosureCaptureItemSyntax.Cursor.specifier.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tokenList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tokenList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -1790,11 +1942,15 @@ public struct ClosureCaptureItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.expr)
+      layout[3] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .closureCaptureItem,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureCaptureItem,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1807,19 +1963,19 @@ extension ClosureCaptureItemSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClosureCaptureItemSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClosureCaptureItemSyntaxBuilder) -> Void) {
-    var builder = ClosureCaptureItemSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClosureCaptureItemSyntaxBuilder) -> Void) {
+    var builder = ClosureCaptureItemSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClosureCaptureSignatureSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftSquare(_ node: TokenSyntax) {
     let idx = ClosureCaptureSignatureSyntax.Cursor.leftSquare.rawValue
@@ -1829,11 +1985,11 @@ public struct ClosureCaptureSignatureSyntaxBuilder {
   public mutating func addItem(_ elt: ClosureCaptureItemSyntax) {
     let idx = ClosureCaptureSignatureSyntax.Cursor.items.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.closureCaptureItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .closureCaptureItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -1844,14 +2000,18 @@ public struct ClosureCaptureSignatureSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .closureCaptureSignature,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureCaptureSignature,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1864,19 +2024,19 @@ extension ClosureCaptureSignatureSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClosureCaptureSignatureSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClosureCaptureSignatureSyntaxBuilder) -> Void) {
-    var builder = ClosureCaptureSignatureSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClosureCaptureSignatureSyntaxBuilder) -> Void) {
+    var builder = ClosureCaptureSignatureSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClosureParamSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = ClosureParamSyntax.Cursor.name.rawValue
@@ -1890,11 +2050,15 @@ public struct ClosureParamSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .closureParam,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureParam,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1907,28 +2071,28 @@ extension ClosureParamSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClosureParamSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClosureParamSyntaxBuilder) -> Void) {
-    var builder = ClosureParamSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClosureParamSyntaxBuilder) -> Void) {
+    var builder = ClosureParamSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClosureSignatureSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = ClosureSignatureSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -1964,11 +2128,15 @@ public struct ClosureSignatureSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missingToken(TokenKind.inKeyword)
+      layout[6] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .inKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .closureSignature,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureSignature,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -1981,19 +2149,19 @@ extension ClosureSignatureSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClosureSignatureSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClosureSignatureSyntaxBuilder) -> Void) {
-    var builder = ClosureSignatureSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClosureSignatureSyntaxBuilder) -> Void) {
+    var builder = ClosureSignatureSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClosureExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftBrace(_ node: TokenSyntax) {
     let idx = ClosureExprSyntax.Cursor.leftBrace.rawValue
@@ -2008,11 +2176,11 @@ public struct ClosureExprSyntaxBuilder {
   public mutating func addStatement(_ elt: CodeBlockItemSyntax) {
     let idx = ClosureExprSyntax.Cursor.statements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -2023,17 +2191,21 @@ public struct ClosureExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftBrace)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftBrace).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.codeBlockItemList)
+      layout[2] = RawCodeBlockItemListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightBrace).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .closureExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .closureExpr,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2046,19 +2218,19 @@ extension ClosureExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClosureExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClosureExprSyntaxBuilder) -> Void) {
-    var builder = ClosureExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClosureExprSyntaxBuilder) -> Void) {
+    var builder = ClosureExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct UnresolvedPatternExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePattern(_ node: PatternSyntax) {
     let idx = UnresolvedPatternExprSyntax.Cursor.pattern.rawValue
@@ -2067,11 +2239,15 @@ public struct UnresolvedPatternExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .unresolvedPatternExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .unresolvedPatternExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2084,19 +2260,19 @@ extension UnresolvedPatternExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `UnresolvedPatternExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout UnresolvedPatternExprSyntaxBuilder) -> Void) {
-    var builder = UnresolvedPatternExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout UnresolvedPatternExprSyntaxBuilder) -> Void) {
+    var builder = UnresolvedPatternExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MultipleTrailingClosureElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabel(_ node: TokenSyntax) {
     let idx = MultipleTrailingClosureElementSyntax.Cursor.label.rawValue
@@ -2115,17 +2291,21 @@ public struct MultipleTrailingClosureElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.closureExpr)
+      layout[2] = RawClosureExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .multipleTrailingClosureElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .multipleTrailingClosureElement,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2138,19 +2318,19 @@ extension MultipleTrailingClosureElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MultipleTrailingClosureElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MultipleTrailingClosureElementSyntaxBuilder) -> Void) {
-    var builder = MultipleTrailingClosureElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MultipleTrailingClosureElementSyntaxBuilder) -> Void) {
+    var builder = MultipleTrailingClosureElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FunctionCallExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 6)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useCalledExpression(_ node: ExprSyntax) {
     let idx = FunctionCallExprSyntax.Cursor.calledExpression.rawValue
@@ -2165,11 +2345,11 @@ public struct FunctionCallExprSyntaxBuilder {
   public mutating func addArgument(_ elt: TupleExprElementSyntax) {
     let idx = FunctionCallExprSyntax.Cursor.argumentList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -2186,24 +2366,28 @@ public struct FunctionCallExprSyntaxBuilder {
   public mutating func addAdditionalTrailingClosure(_ elt: MultipleTrailingClosureElementSyntax) {
     let idx = FunctionCallExprSyntax.Cursor.additionalTrailingClosures.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .multipleTrailingClosureElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.tupleExprElementList)
+      layout[2] = RawTupleExprElementListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionCallExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionCallExpr,
+                                   uninitializedCount: 6) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2216,19 +2400,19 @@ extension FunctionCallExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FunctionCallExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FunctionCallExprSyntaxBuilder) -> Void) {
-    var builder = FunctionCallExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FunctionCallExprSyntaxBuilder) -> Void) {
+    var builder = FunctionCallExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SubscriptExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 6)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useCalledExpression(_ node: ExprSyntax) {
     let idx = SubscriptExprSyntax.Cursor.calledExpression.rawValue
@@ -2243,11 +2427,11 @@ public struct SubscriptExprSyntaxBuilder {
   public mutating func addArgument(_ elt: TupleExprElementSyntax) {
     let idx = SubscriptExprSyntax.Cursor.argumentList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -2264,30 +2448,34 @@ public struct SubscriptExprSyntaxBuilder {
   public mutating func addAdditionalTrailingClosure(_ elt: MultipleTrailingClosureElementSyntax) {
     let idx = SubscriptExprSyntax.Cursor.additionalTrailingClosures.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.multipleTrailingClosureElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .multipleTrailingClosureElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.tupleExprElementList)
+      layout[2] = RawTupleExprElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .subscriptExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .subscriptExpr,
+                                   uninitializedCount: 6) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2300,19 +2488,19 @@ extension SubscriptExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SubscriptExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SubscriptExprSyntaxBuilder) -> Void) {
-    var builder = SubscriptExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SubscriptExprSyntaxBuilder) -> Void) {
+    var builder = SubscriptExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct OptionalChainingExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = OptionalChainingExprSyntax.Cursor.expression.rawValue
@@ -2326,14 +2514,18 @@ public struct OptionalChainingExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.postfixQuestionMark)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .postfixQuestionMark).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .optionalChainingExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalChainingExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2346,19 +2538,19 @@ extension OptionalChainingExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `OptionalChainingExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout OptionalChainingExprSyntaxBuilder) -> Void) {
-    var builder = OptionalChainingExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout OptionalChainingExprSyntaxBuilder) -> Void) {
+    var builder = OptionalChainingExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ForcedValueExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = ForcedValueExprSyntax.Cursor.expression.rawValue
@@ -2372,14 +2564,18 @@ public struct ForcedValueExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.exclamationMark)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .exclamationMark).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .forcedValueExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .forcedValueExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2392,19 +2588,19 @@ extension ForcedValueExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ForcedValueExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ForcedValueExprSyntaxBuilder) -> Void) {
-    var builder = ForcedValueExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ForcedValueExprSyntaxBuilder) -> Void) {
+    var builder = ForcedValueExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PostfixUnaryExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = PostfixUnaryExprSyntax.Cursor.expression.rawValue
@@ -2418,14 +2614,18 @@ public struct PostfixUnaryExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.postfixOperator(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .postfixOperator).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .postfixUnaryExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .postfixUnaryExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2438,19 +2638,19 @@ extension PostfixUnaryExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PostfixUnaryExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PostfixUnaryExprSyntaxBuilder) -> Void) {
-    var builder = PostfixUnaryExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PostfixUnaryExprSyntaxBuilder) -> Void) {
+    var builder = PostfixUnaryExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SpecializeExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = SpecializeExprSyntax.Cursor.expression.rawValue
@@ -2464,14 +2664,18 @@ public struct SpecializeExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.genericArgumentClause)
+      layout[1] = RawGenericArgumentClauseSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .specializeExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .specializeExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2484,19 +2688,19 @@ extension SpecializeExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SpecializeExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SpecializeExprSyntaxBuilder) -> Void) {
-    var builder = SpecializeExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SpecializeExprSyntaxBuilder) -> Void) {
+    var builder = SpecializeExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct StringSegmentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useContent(_ node: TokenSyntax) {
     let idx = StringSegmentSyntax.Cursor.content.rawValue
@@ -2505,11 +2709,15 @@ public struct StringSegmentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.stringSegment(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .stringSegment).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .stringSegment,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .stringSegment,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2522,19 +2730,19 @@ extension StringSegmentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `StringSegmentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout StringSegmentSyntaxBuilder) -> Void) {
-    var builder = StringSegmentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout StringSegmentSyntaxBuilder) -> Void) {
+    var builder = StringSegmentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ExpressionSegmentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBackslash(_ node: TokenSyntax) {
     let idx = ExpressionSegmentSyntax.Cursor.backslash.rawValue
@@ -2554,11 +2762,11 @@ public struct ExpressionSegmentSyntaxBuilder {
   public mutating func addExpression(_ elt: TupleExprElementSyntax) {
     let idx = ExpressionSegmentSyntax.Cursor.expressions.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -2569,20 +2777,24 @@ public struct ExpressionSegmentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.backslash)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .backslash).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.tupleExprElementList)
+      layout[3] = RawTupleExprElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.stringInterpolationAnchor)
+      layout[4] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .stringInterpolationAnchor).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .expressionSegment,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .expressionSegment,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2595,19 +2807,19 @@ extension ExpressionSegmentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ExpressionSegmentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ExpressionSegmentSyntaxBuilder) -> Void) {
-    var builder = ExpressionSegmentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ExpressionSegmentSyntaxBuilder) -> Void) {
+    var builder = ExpressionSegmentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct StringLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useOpenDelimiter(_ node: TokenSyntax) {
     let idx = StringLiteralExprSyntax.Cursor.openDelimiter.rawValue
@@ -2622,11 +2834,11 @@ public struct StringLiteralExprSyntaxBuilder {
   public mutating func addSegment(_ elt: Syntax) {
     let idx = StringLiteralExprSyntax.Cursor.segments.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.stringLiteralSegments,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .stringLiteralSegments, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -2642,17 +2854,21 @@ public struct StringLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.stringQuote)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .stringQuote).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.stringLiteralSegments)
+      layout[2] = RawStringLiteralSegmentsSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.stringQuote)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .stringQuote).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .stringLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .stringLiteralExpr,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2665,19 +2881,19 @@ extension StringLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `StringLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout StringLiteralExprSyntaxBuilder) -> Void) {
-    var builder = StringLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout StringLiteralExprSyntaxBuilder) -> Void) {
+    var builder = StringLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct RegexLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useRegex(_ node: TokenSyntax) {
     let idx = RegexLiteralExprSyntax.Cursor.regex.rawValue
@@ -2686,11 +2902,15 @@ public struct RegexLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.regexLiteral(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .regexLiteral).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .regexLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .regexLiteralExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2703,19 +2923,19 @@ extension RegexLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `RegexLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout RegexLiteralExprSyntaxBuilder) -> Void) {
-    var builder = RegexLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout RegexLiteralExprSyntaxBuilder) -> Void) {
+    var builder = RegexLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct KeyPathExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBackslash(_ node: TokenSyntax) {
     let idx = KeyPathExprSyntax.Cursor.backslash.rawValue
@@ -2734,14 +2954,18 @@ public struct KeyPathExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.backslash)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .backslash).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .keyPathExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .keyPathExpr,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2754,19 +2978,19 @@ extension KeyPathExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `KeyPathExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout KeyPathExprSyntaxBuilder) -> Void) {
-    var builder = KeyPathExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout KeyPathExprSyntaxBuilder) -> Void) {
+    var builder = KeyPathExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct KeyPathBaseExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePeriod(_ node: TokenSyntax) {
     let idx = KeyPathBaseExprSyntax.Cursor.period.rawValue
@@ -2775,11 +2999,15 @@ public struct KeyPathBaseExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.period)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .keyPathBaseExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .keyPathBaseExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2792,19 +3020,19 @@ extension KeyPathBaseExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `KeyPathBaseExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout KeyPathBaseExprSyntaxBuilder) -> Void) {
-    var builder = KeyPathBaseExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout KeyPathBaseExprSyntaxBuilder) -> Void) {
+    var builder = KeyPathBaseExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ObjcNamePieceSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = ObjcNamePieceSyntax.Cursor.name.rawValue
@@ -2818,11 +3046,15 @@ public struct ObjcNamePieceSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .objcNamePiece,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcNamePiece,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2835,19 +3067,19 @@ extension ObjcNamePieceSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ObjcNamePieceSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ObjcNamePieceSyntaxBuilder) -> Void) {
-    var builder = ObjcNamePieceSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ObjcNamePieceSyntaxBuilder) -> Void) {
+    var builder = ObjcNamePieceSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ObjcKeyPathExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useKeyPath(_ node: TokenSyntax) {
     let idx = ObjcKeyPathExprSyntax.Cursor.keyPath.rawValue
@@ -2862,11 +3094,11 @@ public struct ObjcKeyPathExprSyntaxBuilder {
   public mutating func addNamePiece(_ elt: ObjcNamePieceSyntax) {
     let idx = ObjcKeyPathExprSyntax.Cursor.name.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.objcName,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .objcName, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -2877,20 +3109,24 @@ public struct ObjcKeyPathExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundKeyPathKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundKeyPathKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.objcName)
+      layout[2] = RawObjcNameSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .objcKeyPathExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcKeyPathExpr,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2903,19 +3139,19 @@ extension ObjcKeyPathExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ObjcKeyPathExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ObjcKeyPathExprSyntaxBuilder) -> Void) {
-    var builder = ObjcKeyPathExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ObjcKeyPathExprSyntaxBuilder) -> Void) {
+    var builder = ObjcKeyPathExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ObjcSelectorExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 6)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundSelector(_ node: TokenSyntax) {
     let idx = ObjcSelectorExprSyntax.Cursor.poundSelector.rawValue
@@ -2949,20 +3185,24 @@ public struct ObjcSelectorExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundSelectorKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundSelectorKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.expr)
+      layout[4] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[5] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .objcSelectorExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objcSelectorExpr,
+                                   uninitializedCount: 6) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -2975,19 +3215,19 @@ extension ObjcSelectorExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ObjcSelectorExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ObjcSelectorExprSyntaxBuilder) -> Void) {
-    var builder = ObjcSelectorExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ObjcSelectorExprSyntaxBuilder) -> Void) {
+    var builder = ObjcSelectorExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PostfixIfConfigExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBase(_ node: ExprSyntax) {
     let idx = PostfixIfConfigExprSyntax.Cursor.base.rawValue
@@ -3001,11 +3241,15 @@ public struct PostfixIfConfigExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.ifConfigDecl)
+      layout[1] = RawIfConfigDeclSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .postfixIfConfigExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .postfixIfConfigExpr,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3018,19 +3262,19 @@ extension PostfixIfConfigExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PostfixIfConfigExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PostfixIfConfigExprSyntaxBuilder) -> Void) {
-    var builder = PostfixIfConfigExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PostfixIfConfigExprSyntaxBuilder) -> Void) {
+    var builder = PostfixIfConfigExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct EditorPlaceholderExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIdentifier(_ node: TokenSyntax) {
     let idx = EditorPlaceholderExprSyntax.Cursor.identifier.rawValue
@@ -3039,11 +3283,15 @@ public struct EditorPlaceholderExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .editorPlaceholderExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .editorPlaceholderExpr,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3056,19 +3304,19 @@ extension EditorPlaceholderExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `EditorPlaceholderExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout EditorPlaceholderExprSyntaxBuilder) -> Void) {
-    var builder = EditorPlaceholderExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout EditorPlaceholderExprSyntaxBuilder) -> Void) {
+    var builder = EditorPlaceholderExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ObjectLiteralExprSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIdentifier(_ node: TokenSyntax) {
     let idx = ObjectLiteralExprSyntax.Cursor.identifier.rawValue
@@ -3083,11 +3331,11 @@ public struct ObjectLiteralExprSyntaxBuilder {
   public mutating func addArgument(_ elt: TupleExprElementSyntax) {
     let idx = ObjectLiteralExprSyntax.Cursor.arguments.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -3098,20 +3346,24 @@ public struct ObjectLiteralExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundColorLiteralKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundColorLiteralKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.tupleExprElementList)
+      layout[2] = RawTupleExprElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .objectLiteralExpr,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objectLiteralExpr,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3124,19 +3376,19 @@ extension ObjectLiteralExprSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ObjectLiteralExprSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ObjectLiteralExprSyntaxBuilder) -> Void) {
-    var builder = ObjectLiteralExprSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ObjectLiteralExprSyntaxBuilder) -> Void) {
+    var builder = ObjectLiteralExprSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TypeInitializerClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useEqual(_ node: TokenSyntax) {
     let idx = TypeInitializerClauseSyntax.Cursor.equal.rawValue
@@ -3150,14 +3402,18 @@ public struct TypeInitializerClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.equal)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .equal).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .typeInitializerClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeInitializerClause,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3170,39 +3426,39 @@ extension TypeInitializerClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TypeInitializerClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TypeInitializerClauseSyntaxBuilder) -> Void) {
-    var builder = TypeInitializerClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TypeInitializerClauseSyntaxBuilder) -> Void) {
+    var builder = TypeInitializerClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TypealiasDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = TypealiasDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = TypealiasDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -3233,17 +3489,21 @@ public struct TypealiasDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.typealiasKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .typealiasKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.typeInitializerClause)
+      layout[5] = RawTypeInitializerClauseSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .typealiasDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typealiasDecl,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3256,39 +3516,39 @@ extension TypealiasDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TypealiasDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TypealiasDeclSyntaxBuilder) -> Void) {
-    var builder = TypealiasDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TypealiasDeclSyntaxBuilder) -> Void) {
+    var builder = TypealiasDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AssociatedtypeDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = AssociatedtypeDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = AssociatedtypeDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -3319,14 +3579,18 @@ public struct AssociatedtypeDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.associatedtypeKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .associatedtypeKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .associatedtypeDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .associatedtypeDecl,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3339,19 +3603,19 @@ extension AssociatedtypeDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AssociatedtypeDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AssociatedtypeDeclSyntaxBuilder) -> Void) {
-    var builder = AssociatedtypeDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AssociatedtypeDeclSyntaxBuilder) -> Void) {
+    var builder = AssociatedtypeDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ParameterClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = ParameterClauseSyntax.Cursor.leftParen.rawValue
@@ -3361,11 +3625,11 @@ public struct ParameterClauseSyntaxBuilder {
   public mutating func addParameter(_ elt: FunctionParameterSyntax) {
     let idx = ParameterClauseSyntax.Cursor.parameterList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.functionParameterList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .functionParameterList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -3376,17 +3640,21 @@ public struct ParameterClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.functionParameterList)
+      layout[1] = RawFunctionParameterListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .parameterClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .parameterClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3399,19 +3667,19 @@ extension ParameterClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ParameterClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ParameterClauseSyntaxBuilder) -> Void) {
-    var builder = ParameterClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ParameterClauseSyntaxBuilder) -> Void) {
+    var builder = ParameterClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ReturnClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useArrow(_ node: TokenSyntax) {
     let idx = ReturnClauseSyntax.Cursor.arrow.rawValue
@@ -3425,14 +3693,18 @@ public struct ReturnClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.arrow)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .arrow).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .returnClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .returnClause,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3445,19 +3717,19 @@ extension ReturnClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ReturnClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ReturnClauseSyntaxBuilder) -> Void) {
-    var builder = ReturnClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ReturnClauseSyntaxBuilder) -> Void) {
+    var builder = ReturnClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FunctionSignatureSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useInput(_ node: ParameterClauseSyntax) {
     let idx = FunctionSignatureSyntax.Cursor.input.rawValue
@@ -3481,11 +3753,15 @@ public struct FunctionSignatureSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.parameterClause)
+      layout[0] = RawParameterClauseSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionSignature,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionSignature,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3498,19 +3774,19 @@ extension FunctionSignatureSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FunctionSignatureSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FunctionSignatureSyntaxBuilder) -> Void) {
-    var builder = FunctionSignatureSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FunctionSignatureSyntaxBuilder) -> Void) {
+    var builder = FunctionSignatureSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IfConfigClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundKeyword(_ node: TokenSyntax) {
     let idx = IfConfigClauseSyntax.Cursor.poundKeyword.rawValue
@@ -3529,14 +3805,18 @@ public struct IfConfigClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundIfKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundIfKeyword).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[2] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .ifConfigClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifConfigClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3549,28 +3829,28 @@ extension IfConfigClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IfConfigClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IfConfigClauseSyntaxBuilder) -> Void) {
-    var builder = IfConfigClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IfConfigClauseSyntaxBuilder) -> Void) {
+    var builder = IfConfigClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IfConfigDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addClause(_ elt: IfConfigClauseSyntax) {
     let idx = IfConfigDeclSyntax.Cursor.clauses.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.ifConfigClauseList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .ifConfigClauseList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -3581,14 +3861,18 @@ public struct IfConfigDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.ifConfigClauseList)
+      layout[0] = RawIfConfigClauseListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.poundEndifKeyword)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundEndifKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .ifConfigDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifConfigDecl,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3601,19 +3885,19 @@ extension IfConfigDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IfConfigDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IfConfigDeclSyntaxBuilder) -> Void) {
-    var builder = IfConfigDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IfConfigDeclSyntaxBuilder) -> Void) {
+    var builder = IfConfigDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundErrorDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundError(_ node: TokenSyntax) {
     let idx = PoundErrorDeclSyntax.Cursor.poundError.rawValue
@@ -3637,20 +3921,24 @@ public struct PoundErrorDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundErrorKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundErrorKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.stringLiteralExpr)
+      layout[2] = RawStringLiteralExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundErrorDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundErrorDecl,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3663,19 +3951,19 @@ extension PoundErrorDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundErrorDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundErrorDeclSyntaxBuilder) -> Void) {
-    var builder = PoundErrorDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundErrorDeclSyntaxBuilder) -> Void) {
+    var builder = PoundErrorDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundWarningDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundWarning(_ node: TokenSyntax) {
     let idx = PoundWarningDeclSyntax.Cursor.poundWarning.rawValue
@@ -3699,20 +3987,24 @@ public struct PoundWarningDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundWarningKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundWarningKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.stringLiteralExpr)
+      layout[2] = RawStringLiteralExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundWarningDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundWarningDecl,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3725,19 +4017,19 @@ extension PoundWarningDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundWarningDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundWarningDeclSyntaxBuilder) -> Void) {
-    var builder = PoundWarningDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundWarningDeclSyntaxBuilder) -> Void) {
+    var builder = PoundWarningDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundSourceLocationSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundSourceLocation(_ node: TokenSyntax) {
     let idx = PoundSourceLocationSyntax.Cursor.poundSourceLocation.rawValue
@@ -3761,17 +4053,21 @@ public struct PoundSourceLocationSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundSourceLocationKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundSourceLocationKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundSourceLocation,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundSourceLocation,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3784,19 +4080,19 @@ extension PoundSourceLocationSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundSourceLocationSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundSourceLocationSyntaxBuilder) -> Void) {
-    var builder = PoundSourceLocationSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundSourceLocationSyntaxBuilder) -> Void) {
+    var builder = PoundSourceLocationSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundSourceLocationArgsSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useFileArgLabel(_ node: TokenSyntax) {
     let idx = PoundSourceLocationArgsSyntax.Cursor.fileArgLabel.rawValue
@@ -3835,29 +4131,33 @@ public struct PoundSourceLocationArgsSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.stringLiteral(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .stringLiteral).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.comma)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .comma).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[4] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.colon)
+      layout[5] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missingToken(TokenKind.integerLiteral(""))
+      layout[6] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .integerLiteral).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundSourceLocationArgs,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundSourceLocationArgs,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3870,19 +4170,19 @@ extension PoundSourceLocationArgsSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundSourceLocationArgsSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundSourceLocationArgsSyntaxBuilder) -> Void) {
-    var builder = PoundSourceLocationArgsSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundSourceLocationArgsSyntaxBuilder) -> Void) {
+    var builder = PoundSourceLocationArgsSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeclModifierDetailSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = DeclModifierDetailSyntax.Cursor.leftParen.rawValue
@@ -3901,17 +4201,21 @@ public struct DeclModifierDetailSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .declModifierDetail,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declModifierDetail,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3924,19 +4228,19 @@ extension DeclModifierDetailSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeclModifierDetailSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeclModifierDetailSyntaxBuilder) -> Void) {
-    var builder = DeclModifierDetailSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeclModifierDetailSyntaxBuilder) -> Void) {
+    var builder = DeclModifierDetailSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeclModifierSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = DeclModifierSyntax.Cursor.name.rawValue
@@ -3950,11 +4254,15 @@ public struct DeclModifierSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .declModifier,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declModifier,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -3967,19 +4275,19 @@ extension DeclModifierSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeclModifierSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeclModifierSyntaxBuilder) -> Void) {
-    var builder = DeclModifierSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeclModifierSyntaxBuilder) -> Void) {
+    var builder = DeclModifierSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct InheritedTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useTypeName(_ node: TypeSyntax) {
     let idx = InheritedTypeSyntax.Cursor.typeName.rawValue
@@ -3993,11 +4301,15 @@ public struct InheritedTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .inheritedType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .inheritedType,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4010,19 +4322,19 @@ extension InheritedTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `InheritedTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout InheritedTypeSyntaxBuilder) -> Void) {
-    var builder = InheritedTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout InheritedTypeSyntaxBuilder) -> Void) {
+    var builder = InheritedTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TypeInheritanceClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useColon(_ node: TokenSyntax) {
     let idx = TypeInheritanceClauseSyntax.Cursor.colon.rawValue
@@ -4032,24 +4344,28 @@ public struct TypeInheritanceClauseSyntaxBuilder {
   public mutating func addInheritedType(_ elt: InheritedTypeSyntax) {
     let idx = TypeInheritanceClauseSyntax.Cursor.inheritedTypeCollection.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.inheritedTypeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .inheritedTypeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.colon)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.inheritedTypeList)
+      layout[1] = RawInheritedTypeListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .typeInheritanceClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeInheritanceClause,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4062,39 +4378,39 @@ extension TypeInheritanceClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TypeInheritanceClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TypeInheritanceClauseSyntaxBuilder) -> Void) {
-    var builder = TypeInheritanceClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TypeInheritanceClauseSyntaxBuilder) -> Void) {
+    var builder = TypeInheritanceClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClassDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = ClassDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = ClassDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4130,17 +4446,21 @@ public struct ClassDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.classKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .classKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+      layout[7] = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .classDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .classDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4153,39 +4473,39 @@ extension ClassDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClassDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClassDeclSyntaxBuilder) -> Void) {
-    var builder = ClassDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClassDeclSyntaxBuilder) -> Void) {
+    var builder = ClassDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ActorDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = ActorDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = ActorDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4221,17 +4541,21 @@ public struct ActorDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.contextualKeyword(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .contextualKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+      layout[7] = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .actorDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .actorDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4244,39 +4568,39 @@ extension ActorDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ActorDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ActorDeclSyntaxBuilder) -> Void) {
-    var builder = ActorDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ActorDeclSyntaxBuilder) -> Void) {
+    var builder = ActorDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct StructDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = StructDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = StructDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4312,17 +4636,21 @@ public struct StructDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.structKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .structKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+      layout[7] = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .structDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .structDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4335,39 +4663,39 @@ extension StructDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `StructDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout StructDeclSyntaxBuilder) -> Void) {
-    var builder = StructDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout StructDeclSyntaxBuilder) -> Void) {
+    var builder = StructDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ProtocolDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = ProtocolDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = ProtocolDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4403,17 +4731,21 @@ public struct ProtocolDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.protocolKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .protocolKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+      layout[7] = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .protocolDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .protocolDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4426,39 +4758,39 @@ extension ProtocolDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ProtocolDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ProtocolDeclSyntaxBuilder) -> Void) {
-    var builder = ProtocolDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ProtocolDeclSyntaxBuilder) -> Void) {
+    var builder = ProtocolDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ExtensionDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = ExtensionDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = ExtensionDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4489,17 +4821,21 @@ public struct ExtensionDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.extensionKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .extensionKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.type)
+      layout[3] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+      layout[6] = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .extensionDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .extensionDecl,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4512,19 +4848,19 @@ extension ExtensionDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ExtensionDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ExtensionDeclSyntaxBuilder) -> Void) {
-    var builder = ExtensionDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ExtensionDeclSyntaxBuilder) -> Void) {
+    var builder = ExtensionDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MemberDeclBlockSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftBrace(_ node: TokenSyntax) {
     let idx = MemberDeclBlockSyntax.Cursor.leftBrace.rawValue
@@ -4534,11 +4870,11 @@ public struct MemberDeclBlockSyntaxBuilder {
   public mutating func addMember(_ elt: MemberDeclListItemSyntax) {
     let idx = MemberDeclBlockSyntax.Cursor.members.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.memberDeclList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .memberDeclList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4549,17 +4885,21 @@ public struct MemberDeclBlockSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftBrace)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftBrace).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.memberDeclList)
+      layout[1] = RawMemberDeclListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightBrace).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .memberDeclBlock,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberDeclBlock,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4572,19 +4912,19 @@ extension MemberDeclBlockSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MemberDeclBlockSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MemberDeclBlockSyntaxBuilder) -> Void) {
-    var builder = MemberDeclBlockSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MemberDeclBlockSyntaxBuilder) -> Void) {
+    var builder = MemberDeclBlockSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MemberDeclListItemSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDecl(_ node: DeclSyntax) {
     let idx = MemberDeclListItemSyntax.Cursor.decl.rawValue
@@ -4598,11 +4938,15 @@ public struct MemberDeclListItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.decl)
+      layout[0] = RawDeclSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .memberDeclListItem,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberDeclListItem,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4615,28 +4959,28 @@ extension MemberDeclListItemSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MemberDeclListItemSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MemberDeclListItemSyntaxBuilder) -> Void) {
-    var builder = MemberDeclListItemSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MemberDeclListItemSyntaxBuilder) -> Void) {
+    var builder = MemberDeclListItemSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SourceFileSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addStatement(_ elt: CodeBlockItemSyntax) {
     let idx = SourceFileSyntax.Cursor.statements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4647,14 +4991,18 @@ public struct SourceFileSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.codeBlockItemList)
+      layout[0] = RawCodeBlockItemListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .sourceFile,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .sourceFile,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4667,19 +5015,19 @@ extension SourceFileSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SourceFileSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SourceFileSyntaxBuilder) -> Void) {
-    var builder = SourceFileSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SourceFileSyntaxBuilder) -> Void) {
+    var builder = SourceFileSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct InitializerClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useEqual(_ node: TokenSyntax) {
     let idx = InitializerClauseSyntax.Cursor.equal.rawValue
@@ -4693,14 +5041,18 @@ public struct InitializerClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.equal)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .equal).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .initializerClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .initializerClause,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4713,28 +5065,28 @@ extension InitializerClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `InitializerClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout InitializerClauseSyntaxBuilder) -> Void) {
-    var builder = InitializerClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout InitializerClauseSyntaxBuilder) -> Void) {
+    var builder = InitializerClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FunctionParameterSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = FunctionParameterSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4775,8 +5127,12 @@ public struct FunctionParameterSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionParameter,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionParameter,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4789,39 +5145,39 @@ extension FunctionParameterSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FunctionParameterSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FunctionParameterSyntaxBuilder) -> Void) {
-    var builder = FunctionParameterSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FunctionParameterSyntaxBuilder) -> Void) {
+    var builder = FunctionParameterSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FunctionDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = FunctionDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = FunctionDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4857,17 +5213,21 @@ public struct FunctionDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.funcKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .funcKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.functionSignature)
+      layout[5] = RawFunctionSignatureSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4880,39 +5240,39 @@ extension FunctionDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FunctionDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FunctionDeclSyntaxBuilder) -> Void) {
-    var builder = FunctionDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FunctionDeclSyntaxBuilder) -> Void) {
+    var builder = FunctionDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct InitializerDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = InitializerDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = InitializerDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -4948,14 +5308,18 @@ public struct InitializerDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.initKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .initKeyword).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.functionSignature)
+      layout[5] = RawFunctionSignatureSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .initializerDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .initializerDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -4968,39 +5332,39 @@ extension InitializerDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `InitializerDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout InitializerDeclSyntaxBuilder) -> Void) {
-    var builder = InitializerDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout InitializerDeclSyntaxBuilder) -> Void) {
+    var builder = InitializerDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeinitializerDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = DeinitializerDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = DeinitializerDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5016,11 +5380,15 @@ public struct DeinitializerDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.deinitKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .deinitKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .deinitializerDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .deinitializerDecl,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5033,39 +5401,39 @@ extension DeinitializerDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeinitializerDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeinitializerDeclSyntaxBuilder) -> Void) {
-    var builder = DeinitializerDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeinitializerDeclSyntaxBuilder) -> Void) {
+    var builder = DeinitializerDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SubscriptDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = SubscriptDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = SubscriptDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5101,17 +5469,21 @@ public struct SubscriptDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.subscriptKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .subscriptKeyword).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.parameterClause)
+      layout[4] = RawParameterClauseSyntax.makeBlank(arena: arena).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.returnClause)
+      layout[5] = RawReturnClauseSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .subscriptDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .subscriptDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5124,19 +5496,19 @@ extension SubscriptDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SubscriptDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SubscriptDeclSyntaxBuilder) -> Void) {
-    var builder = SubscriptDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SubscriptDeclSyntaxBuilder) -> Void) {
+    var builder = SubscriptDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AccessLevelModifierSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = AccessLevelModifierSyntax.Cursor.name.rawValue
@@ -5150,11 +5522,15 @@ public struct AccessLevelModifierSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .accessLevelModifier,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessLevelModifier,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5167,19 +5543,19 @@ extension AccessLevelModifierSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AccessLevelModifierSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AccessLevelModifierSyntaxBuilder) -> Void) {
-    var builder = AccessLevelModifierSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AccessLevelModifierSyntaxBuilder) -> Void) {
+    var builder = AccessLevelModifierSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AccessPathComponentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = AccessPathComponentSyntax.Cursor.name.rawValue
@@ -5193,11 +5569,15 @@ public struct AccessPathComponentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .accessPathComponent,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessPathComponent,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5210,39 +5590,39 @@ extension AccessPathComponentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AccessPathComponentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AccessPathComponentSyntaxBuilder) -> Void) {
-    var builder = AccessPathComponentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AccessPathComponentSyntaxBuilder) -> Void) {
+    var builder = AccessPathComponentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ImportDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = ImportDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = ImportDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5259,24 +5639,28 @@ public struct ImportDeclSyntaxBuilder {
   public mutating func addPathComponent(_ elt: AccessPathComponentSyntax) {
     let idx = ImportDeclSyntax.Cursor.path.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.accessPath,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .accessPath, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.importKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .importKeyword).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.accessPath)
+      layout[4] = RawAccessPathSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .importDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .importDecl,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5289,19 +5673,19 @@ extension ImportDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ImportDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ImportDeclSyntaxBuilder) -> Void) {
-    var builder = ImportDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ImportDeclSyntaxBuilder) -> Void) {
+    var builder = ImportDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AccessorParameterSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = AccessorParameterSyntax.Cursor.leftParen.rawValue
@@ -5320,17 +5704,21 @@ public struct AccessorParameterSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .accessorParameter,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorParameter,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5343,28 +5731,28 @@ extension AccessorParameterSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AccessorParameterSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AccessorParameterSyntaxBuilder) -> Void) {
-    var builder = AccessorParameterSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AccessorParameterSyntaxBuilder) -> Void) {
+    var builder = AccessorParameterSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AccessorDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = AccessorDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5400,11 +5788,15 @@ public struct AccessorDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .accessorDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorDecl,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5417,19 +5809,19 @@ extension AccessorDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AccessorDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AccessorDeclSyntaxBuilder) -> Void) {
-    var builder = AccessorDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AccessorDeclSyntaxBuilder) -> Void) {
+    var builder = AccessorDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AccessorBlockSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftBrace(_ node: TokenSyntax) {
     let idx = AccessorBlockSyntax.Cursor.leftBrace.rawValue
@@ -5439,11 +5831,11 @@ public struct AccessorBlockSyntaxBuilder {
   public mutating func addAccessor(_ elt: AccessorDeclSyntax) {
     let idx = AccessorBlockSyntax.Cursor.accessors.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.accessorList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .accessorList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5454,17 +5846,21 @@ public struct AccessorBlockSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftBrace)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftBrace).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.accessorList)
+      layout[1] = RawAccessorListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightBrace).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .accessorBlock,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .accessorBlock,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5477,19 +5873,19 @@ extension AccessorBlockSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AccessorBlockSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AccessorBlockSyntaxBuilder) -> Void) {
-    var builder = AccessorBlockSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AccessorBlockSyntaxBuilder) -> Void) {
+    var builder = AccessorBlockSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PatternBindingSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePattern(_ node: PatternSyntax) {
     let idx = PatternBindingSyntax.Cursor.pattern.rawValue
@@ -5518,11 +5914,15 @@ public struct PatternBindingSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .patternBinding,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .patternBinding,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5535,39 +5935,39 @@ extension PatternBindingSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PatternBindingSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PatternBindingSyntaxBuilder) -> Void) {
-    var builder = PatternBindingSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PatternBindingSyntaxBuilder) -> Void) {
+    var builder = PatternBindingSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct VariableDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = VariableDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = VariableDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5579,24 +5979,28 @@ public struct VariableDeclSyntaxBuilder {
   public mutating func addBinding(_ elt: PatternBindingSyntax) {
     let idx = VariableDeclSyntax.Cursor.bindings.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.patternBindingList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .patternBindingList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.letKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .letKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.patternBindingList)
+      layout[3] = RawPatternBindingListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .variableDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .variableDecl,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5609,19 +6013,19 @@ extension VariableDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `VariableDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout VariableDeclSyntaxBuilder) -> Void) {
-    var builder = VariableDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout VariableDeclSyntaxBuilder) -> Void) {
+    var builder = VariableDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct EnumCaseElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIdentifier(_ node: TokenSyntax) {
     let idx = EnumCaseElementSyntax.Cursor.identifier.rawValue
@@ -5645,11 +6049,15 @@ public struct EnumCaseElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .enumCaseElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCaseElement,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5662,39 +6070,39 @@ extension EnumCaseElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `EnumCaseElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout EnumCaseElementSyntaxBuilder) -> Void) {
-    var builder = EnumCaseElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout EnumCaseElementSyntaxBuilder) -> Void) {
+    var builder = EnumCaseElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct EnumCaseDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = EnumCaseDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = EnumCaseDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5706,24 +6114,28 @@ public struct EnumCaseDeclSyntaxBuilder {
   public mutating func addElement(_ elt: EnumCaseElementSyntax) {
     let idx = EnumCaseDeclSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.enumCaseElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .enumCaseElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.caseKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .caseKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.enumCaseElementList)
+      layout[3] = RawEnumCaseElementListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .enumCaseDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCaseDecl,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5736,39 +6148,39 @@ extension EnumCaseDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `EnumCaseDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout EnumCaseDeclSyntaxBuilder) -> Void) {
-    var builder = EnumCaseDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout EnumCaseDeclSyntaxBuilder) -> Void) {
+    var builder = EnumCaseDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct EnumDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = EnumDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = EnumDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5804,17 +6216,21 @@ public struct EnumDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.enumKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .enumKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[7] == nil) {
-      layout[7] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
+      layout[7] = RawMemberDeclBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .enumDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumDecl,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5827,39 +6243,39 @@ extension EnumDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `EnumDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout EnumDeclSyntaxBuilder) -> Void) {
-    var builder = EnumDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout EnumDeclSyntaxBuilder) -> Void) {
+    var builder = EnumDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct OperatorDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = OperatorDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = OperatorDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -5880,14 +6296,18 @@ public struct OperatorDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.operatorKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .operatorKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.unspacedBinaryOperator(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unspacedBinaryOperator).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .operatorDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .operatorDecl,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5900,19 +6320,19 @@ extension OperatorDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `OperatorDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout OperatorDeclSyntaxBuilder) -> Void) {
-    var builder = OperatorDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout OperatorDeclSyntaxBuilder) -> Void) {
+    var builder = OperatorDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct OperatorPrecedenceAndTypesSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useColon(_ node: TokenSyntax) {
     let idx = OperatorPrecedenceAndTypesSyntax.Cursor.colon.rawValue
@@ -5922,24 +6342,28 @@ public struct OperatorPrecedenceAndTypesSyntaxBuilder {
   public mutating func addPrecedenceGroupAndDesignatedType(_ elt: TokenSyntax) {
     let idx = OperatorPrecedenceAndTypesSyntax.Cursor.precedenceGroupAndDesignatedTypes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.identifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .identifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.colon)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.identifierList)
+      layout[1] = RawIdentifierListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .operatorPrecedenceAndTypes,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .operatorPrecedenceAndTypes,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -5952,39 +6376,39 @@ extension OperatorPrecedenceAndTypesSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `OperatorPrecedenceAndTypesSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout OperatorPrecedenceAndTypesSyntaxBuilder) -> Void) {
-    var builder = OperatorPrecedenceAndTypesSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout OperatorPrecedenceAndTypesSyntaxBuilder) -> Void) {
+    var builder = OperatorPrecedenceAndTypesSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrecedenceGroupDeclSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = PrecedenceGroupDeclSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   public mutating func addModifier(_ elt: DeclModifierSyntax) {
     let idx = PrecedenceGroupDeclSyntax.Cursor.modifiers.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.modifierList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .modifierList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -6006,11 +6430,11 @@ public struct PrecedenceGroupDeclSyntaxBuilder {
   public mutating func addGroupAttribute(_ elt: Syntax) {
     let idx = PrecedenceGroupDeclSyntax.Cursor.groupAttributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.precedenceGroupAttributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupAttributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -6021,23 +6445,27 @@ public struct PrecedenceGroupDeclSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.precedencegroupKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .precedencegroupKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.leftBrace)
+      layout[4] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftBrace).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.precedenceGroupAttributeList)
+      layout[5] = RawPrecedenceGroupAttributeListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[6] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightBrace).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .precedenceGroupDecl,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupDecl,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6050,19 +6478,19 @@ extension PrecedenceGroupDeclSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrecedenceGroupDeclSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrecedenceGroupDeclSyntaxBuilder) -> Void) {
-    var builder = PrecedenceGroupDeclSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrecedenceGroupDeclSyntaxBuilder) -> Void) {
+    var builder = PrecedenceGroupDeclSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrecedenceGroupRelationSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useHigherThanOrLowerThan(_ node: TokenSyntax) {
     let idx = PrecedenceGroupRelationSyntax.Cursor.higherThanOrLowerThan.rawValue
@@ -6077,27 +6505,31 @@ public struct PrecedenceGroupRelationSyntaxBuilder {
   public mutating func addOtherName(_ elt: PrecedenceGroupNameElementSyntax) {
     let idx = PrecedenceGroupRelationSyntax.Cursor.otherNames.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.precedenceGroupNameList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupNameList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.precedenceGroupNameList)
+      layout[2] = RawPrecedenceGroupNameListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .precedenceGroupRelation,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupRelation,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6110,19 +6542,19 @@ extension PrecedenceGroupRelationSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrecedenceGroupRelationSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrecedenceGroupRelationSyntaxBuilder) -> Void) {
-    var builder = PrecedenceGroupRelationSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrecedenceGroupRelationSyntaxBuilder) -> Void) {
+    var builder = PrecedenceGroupRelationSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrecedenceGroupNameElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = PrecedenceGroupNameElementSyntax.Cursor.name.rawValue
@@ -6136,11 +6568,15 @@ public struct PrecedenceGroupNameElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .precedenceGroupNameElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupNameElement,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6153,19 +6589,19 @@ extension PrecedenceGroupNameElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrecedenceGroupNameElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrecedenceGroupNameElementSyntaxBuilder) -> Void) {
-    var builder = PrecedenceGroupNameElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrecedenceGroupNameElementSyntaxBuilder) -> Void) {
+    var builder = PrecedenceGroupNameElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrecedenceGroupAssignmentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAssignmentKeyword(_ node: TokenSyntax) {
     let idx = PrecedenceGroupAssignmentSyntax.Cursor.assignmentKeyword.rawValue
@@ -6184,17 +6620,21 @@ public struct PrecedenceGroupAssignmentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.trueKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .trueKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .precedenceGroupAssignment,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupAssignment,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6207,19 +6647,19 @@ extension PrecedenceGroupAssignmentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrecedenceGroupAssignmentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrecedenceGroupAssignmentSyntaxBuilder) -> Void) {
-    var builder = PrecedenceGroupAssignmentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrecedenceGroupAssignmentSyntaxBuilder) -> Void) {
+    var builder = PrecedenceGroupAssignmentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrecedenceGroupAssociativitySyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAssociativityKeyword(_ node: TokenSyntax) {
     let idx = PrecedenceGroupAssociativitySyntax.Cursor.associativityKeyword.rawValue
@@ -6238,17 +6678,21 @@ public struct PrecedenceGroupAssociativitySyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .precedenceGroupAssociativity,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .precedenceGroupAssociativity,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6261,19 +6705,19 @@ extension PrecedenceGroupAssociativitySyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrecedenceGroupAssociativitySyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrecedenceGroupAssociativitySyntaxBuilder) -> Void) {
-    var builder = PrecedenceGroupAssociativitySyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrecedenceGroupAssociativitySyntaxBuilder) -> Void) {
+    var builder = PrecedenceGroupAssociativitySyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CustomAttributeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAtSignToken(_ node: TokenSyntax) {
     let idx = CustomAttributeSyntax.Cursor.atSignToken.rawValue
@@ -6293,11 +6737,11 @@ public struct CustomAttributeSyntaxBuilder {
   public mutating func addArgument(_ elt: TupleExprElementSyntax) {
     let idx = CustomAttributeSyntax.Cursor.argumentList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleExprElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleExprElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -6308,14 +6752,18 @@ public struct CustomAttributeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.atSign)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .atSign).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .customAttribute,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .customAttribute,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6328,19 +6776,19 @@ extension CustomAttributeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CustomAttributeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CustomAttributeSyntaxBuilder) -> Void) {
-    var builder = CustomAttributeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CustomAttributeSyntaxBuilder) -> Void) {
+    var builder = CustomAttributeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AttributeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 6)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAtSignToken(_ node: TokenSyntax) {
     let idx = AttributeSyntax.Cursor.atSignToken.rawValue
@@ -6370,24 +6818,28 @@ public struct AttributeSyntaxBuilder {
   public mutating func addToken(_ elt: TokenSyntax) {
     let idx = AttributeSyntax.Cursor.tokenList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tokenList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tokenList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.atSign)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .atSign).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .attribute,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .attribute,
+                                   uninitializedCount: 6) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6400,19 +6852,19 @@ extension AttributeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AttributeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AttributeSyntaxBuilder) -> Void) {
-    var builder = AttributeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AttributeSyntaxBuilder) -> Void) {
+    var builder = AttributeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AvailabilityEntrySyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabel(_ node: TokenSyntax) {
     let idx = AvailabilityEntrySyntax.Cursor.label.rawValue
@@ -6427,11 +6879,11 @@ public struct AvailabilityEntrySyntaxBuilder {
   public mutating func addAvailability(_ elt: AvailabilityArgumentSyntax) {
     let idx = AvailabilityEntrySyntax.Cursor.availabilityList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .availabilitySpecList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -6442,20 +6894,24 @@ public struct AvailabilityEntrySyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.availabilitySpecList)
+      layout[2] = RawAvailabilitySpecListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.semicolon)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .semicolon).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityEntry,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityEntry,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6468,19 +6924,19 @@ extension AvailabilityEntrySyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AvailabilityEntrySyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AvailabilityEntrySyntaxBuilder) -> Void) {
-    var builder = AvailabilityEntrySyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AvailabilityEntrySyntaxBuilder) -> Void) {
+    var builder = AvailabilityEntrySyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct LabeledSpecializeEntrySyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabel(_ node: TokenSyntax) {
     let idx = LabeledSpecializeEntrySyntax.Cursor.label.rawValue
@@ -6504,17 +6960,21 @@ public struct LabeledSpecializeEntrySyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .labeledSpecializeEntry,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .labeledSpecializeEntry,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6527,19 +6987,19 @@ extension LabeledSpecializeEntrySyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `LabeledSpecializeEntrySyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout LabeledSpecializeEntrySyntaxBuilder) -> Void) {
-    var builder = LabeledSpecializeEntrySyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout LabeledSpecializeEntrySyntaxBuilder) -> Void) {
+    var builder = LabeledSpecializeEntrySyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TargetFunctionEntrySyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabel(_ node: TokenSyntax) {
     let idx = TargetFunctionEntrySyntax.Cursor.label.rawValue
@@ -6563,17 +7023,21 @@ public struct TargetFunctionEntrySyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.declName)
+      layout[2] = RawDeclNameSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .targetFunctionEntry,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .targetFunctionEntry,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6586,19 +7050,19 @@ extension TargetFunctionEntrySyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TargetFunctionEntrySyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TargetFunctionEntrySyntaxBuilder) -> Void) {
-    var builder = TargetFunctionEntrySyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TargetFunctionEntrySyntaxBuilder) -> Void) {
+    var builder = TargetFunctionEntrySyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct NamedAttributeStringArgumentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useNameTok(_ node: TokenSyntax) {
     let idx = NamedAttributeStringArgumentSyntax.Cursor.nameTok.rawValue
@@ -6617,17 +7081,21 @@ public struct NamedAttributeStringArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.unknown(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .unknown).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[2] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .namedAttributeStringArgument,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .namedAttributeStringArgument,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6640,19 +7108,19 @@ extension NamedAttributeStringArgumentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `NamedAttributeStringArgumentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout NamedAttributeStringArgumentSyntaxBuilder) -> Void) {
-    var builder = NamedAttributeStringArgumentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout NamedAttributeStringArgumentSyntaxBuilder) -> Void) {
+    var builder = NamedAttributeStringArgumentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeclNameSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDeclBaseName(_ node: Syntax) {
     let idx = DeclNameSyntax.Cursor.declBaseName.rawValue
@@ -6666,11 +7134,15 @@ public struct DeclNameSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .declName,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declName,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6683,19 +7155,19 @@ extension DeclNameSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeclNameSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeclNameSyntaxBuilder) -> Void) {
-    var builder = DeclNameSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeclNameSyntaxBuilder) -> Void) {
+    var builder = DeclNameSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ImplementsAttributeArgumentsSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useType(_ node: SimpleTypeIdentifierSyntax) {
     let idx = ImplementsAttributeArgumentsSyntax.Cursor.type.rawValue
@@ -6719,17 +7191,21 @@ public struct ImplementsAttributeArgumentsSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.simpleTypeIdentifier)
+      layout[0] = RawSimpleTypeIdentifierSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.comma)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .comma).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[2] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .implementsAttributeArguments,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .implementsAttributeArguments,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6742,19 +7218,19 @@ extension ImplementsAttributeArgumentsSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ImplementsAttributeArgumentsSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ImplementsAttributeArgumentsSyntaxBuilder) -> Void) {
-    var builder = ImplementsAttributeArgumentsSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ImplementsAttributeArgumentsSyntaxBuilder) -> Void) {
+    var builder = ImplementsAttributeArgumentsSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ObjCSelectorPieceSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = ObjCSelectorPieceSyntax.Cursor.name.rawValue
@@ -6768,8 +7244,12 @@ public struct ObjCSelectorPieceSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .objCSelectorPiece,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .objCSelectorPiece,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6782,19 +7262,19 @@ extension ObjCSelectorPieceSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ObjCSelectorPieceSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ObjCSelectorPieceSyntaxBuilder) -> Void) {
-    var builder = ObjCSelectorPieceSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ObjCSelectorPieceSyntaxBuilder) -> Void) {
+    var builder = ObjCSelectorPieceSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DifferentiableAttributeArgumentsSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDiffKind(_ node: TokenSyntax) {
     let idx = DifferentiableAttributeArgumentsSyntax.Cursor.diffKind.rawValue
@@ -6823,8 +7303,12 @@ public struct DifferentiableAttributeArgumentsSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiableAttributeArguments,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiableAttributeArguments,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6837,19 +7321,19 @@ extension DifferentiableAttributeArgumentsSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DifferentiableAttributeArgumentsSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DifferentiableAttributeArgumentsSyntaxBuilder) -> Void) {
-    var builder = DifferentiableAttributeArgumentsSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DifferentiableAttributeArgumentsSyntaxBuilder) -> Void) {
+    var builder = DifferentiableAttributeArgumentsSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DifferentiabilityParamsClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWrtLabel(_ node: TokenSyntax) {
     let idx = DifferentiabilityParamsClauseSyntax.Cursor.wrtLabel.rawValue
@@ -6868,17 +7352,21 @@ public struct DifferentiabilityParamsClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[2] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiabilityParamsClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParamsClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6891,19 +7379,19 @@ extension DifferentiabilityParamsClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DifferentiabilityParamsClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DifferentiabilityParamsClauseSyntaxBuilder) -> Void) {
-    var builder = DifferentiabilityParamsClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DifferentiabilityParamsClauseSyntaxBuilder) -> Void) {
+    var builder = DifferentiabilityParamsClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DifferentiabilityParamsSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = DifferentiabilityParamsSyntax.Cursor.leftParen.rawValue
@@ -6913,11 +7401,11 @@ public struct DifferentiabilityParamsSyntaxBuilder {
   public mutating func addDifferentiabilityParam(_ elt: DifferentiabilityParamSyntax) {
     let idx = DifferentiabilityParamsSyntax.Cursor.diffParams.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.differentiabilityParamList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParamList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -6928,17 +7416,21 @@ public struct DifferentiabilityParamsSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.differentiabilityParamList)
+      layout[1] = RawDifferentiabilityParamListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiabilityParams,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParams,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6951,19 +7443,19 @@ extension DifferentiabilityParamsSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DifferentiabilityParamsSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DifferentiabilityParamsSyntaxBuilder) -> Void) {
-    var builder = DifferentiabilityParamsSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DifferentiabilityParamsSyntaxBuilder) -> Void) {
+    var builder = DifferentiabilityParamsSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DifferentiabilityParamSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useParameter(_ node: Syntax) {
     let idx = DifferentiabilityParamSyntax.Cursor.parameter.rawValue
@@ -6977,11 +7469,15 @@ public struct DifferentiabilityParamSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .differentiabilityParam,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .differentiabilityParam,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -6994,19 +7490,19 @@ extension DifferentiabilityParamSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DifferentiabilityParamSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DifferentiabilityParamSyntaxBuilder) -> Void) {
-    var builder = DifferentiabilityParamSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DifferentiabilityParamSyntaxBuilder) -> Void) {
+    var builder = DifferentiabilityParamSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useOfLabel(_ node: TokenSyntax) {
     let idx = DerivativeRegistrationAttributeArgumentsSyntax.Cursor.ofLabel.rawValue
@@ -7045,17 +7541,21 @@ public struct DerivativeRegistrationAttributeArgumentsSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.qualifiedDeclName)
+      layout[2] = RawQualifiedDeclNameSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .derivativeRegistrationAttributeArguments,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .derivativeRegistrationAttributeArguments,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7068,19 +7568,19 @@ extension DerivativeRegistrationAttributeArgumentsSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DerivativeRegistrationAttributeArgumentsSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DerivativeRegistrationAttributeArgumentsSyntaxBuilder) -> Void) {
-    var builder = DerivativeRegistrationAttributeArgumentsSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DerivativeRegistrationAttributeArgumentsSyntaxBuilder) -> Void) {
+    var builder = DerivativeRegistrationAttributeArgumentsSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct QualifiedDeclNameSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBaseType(_ node: TypeSyntax) {
     let idx = QualifiedDeclNameSyntax.Cursor.baseType.rawValue
@@ -7104,11 +7604,15 @@ public struct QualifiedDeclNameSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .qualifiedDeclName,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .qualifiedDeclName,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7121,19 +7625,19 @@ extension QualifiedDeclNameSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `QualifiedDeclNameSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout QualifiedDeclNameSyntaxBuilder) -> Void) {
-    var builder = QualifiedDeclNameSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout QualifiedDeclNameSyntaxBuilder) -> Void) {
+    var builder = QualifiedDeclNameSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FunctionDeclNameSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: Syntax) {
     let idx = FunctionDeclNameSyntax.Cursor.name.rawValue
@@ -7147,11 +7651,15 @@ public struct FunctionDeclNameSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionDeclName,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionDeclName,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7164,19 +7672,19 @@ extension FunctionDeclNameSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FunctionDeclNameSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FunctionDeclNameSyntaxBuilder) -> Void) {
-    var builder = FunctionDeclNameSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FunctionDeclNameSyntaxBuilder) -> Void) {
+    var builder = FunctionDeclNameSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct BackDeployAttributeSpecListSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBeforeLabel(_ node: TokenSyntax) {
     let idx = BackDeployAttributeSpecListSyntax.Cursor.beforeLabel.rawValue
@@ -7191,27 +7699,31 @@ public struct BackDeployAttributeSpecListSyntaxBuilder {
   public mutating func addAvailability(_ elt: BackDeployVersionArgumentSyntax) {
     let idx = BackDeployAttributeSpecListSyntax.Cursor.versionList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.backDeployVersionList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .backDeployVersionList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.backDeployVersionList)
+      layout[2] = RawBackDeployVersionListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .backDeployAttributeSpecList,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .backDeployAttributeSpecList,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7224,19 +7736,19 @@ extension BackDeployAttributeSpecListSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `BackDeployAttributeSpecListSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout BackDeployAttributeSpecListSyntaxBuilder) -> Void) {
-    var builder = BackDeployAttributeSpecListSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout BackDeployAttributeSpecListSyntaxBuilder) -> Void) {
+    var builder = BackDeployAttributeSpecListSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct BackDeployVersionArgumentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useAvailabilityVersionRestriction(_ node: AvailabilityVersionRestrictionSyntax) {
     let idx = BackDeployVersionArgumentSyntax.Cursor.availabilityVersionRestriction.rawValue
@@ -7250,11 +7762,15 @@ public struct BackDeployVersionArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.availabilityVersionRestriction)
+      layout[0] = RawAvailabilityVersionRestrictionSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .backDeployVersionArgument,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .backDeployVersionArgument,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7267,19 +7783,19 @@ extension BackDeployVersionArgumentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `BackDeployVersionArgumentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout BackDeployVersionArgumentSyntaxBuilder) -> Void) {
-    var builder = BackDeployVersionArgumentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout BackDeployVersionArgumentSyntaxBuilder) -> Void) {
+    var builder = BackDeployVersionArgumentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ContinueStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useContinueKeyword(_ node: TokenSyntax) {
     let idx = ContinueStmtSyntax.Cursor.continueKeyword.rawValue
@@ -7293,11 +7809,15 @@ public struct ContinueStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.continueKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .continueKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .continueStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .continueStmt,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7310,19 +7830,19 @@ extension ContinueStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ContinueStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ContinueStmtSyntaxBuilder) -> Void) {
-    var builder = ContinueStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ContinueStmtSyntaxBuilder) -> Void) {
+    var builder = ContinueStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct WhileStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = WhileStmtSyntax.Cursor.labelName.rawValue
@@ -7342,11 +7862,11 @@ public struct WhileStmtSyntaxBuilder {
   public mutating func addCondition(_ elt: ConditionElementSyntax) {
     let idx = WhileStmtSyntax.Cursor.conditions.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.conditionElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .conditionElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -7357,17 +7877,21 @@ public struct WhileStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.whileKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .whileKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.conditionElementList)
+      layout[3] = RawConditionElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[4] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .whileStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .whileStmt,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7380,19 +7904,19 @@ extension WhileStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `WhileStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout WhileStmtSyntaxBuilder) -> Void) {
-    var builder = WhileStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout WhileStmtSyntaxBuilder) -> Void) {
+    var builder = WhileStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeferStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDeferKeyword(_ node: TokenSyntax) {
     let idx = DeferStmtSyntax.Cursor.deferKeyword.rawValue
@@ -7406,14 +7930,18 @@ public struct DeferStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.deferKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .deferKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[1] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .deferStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .deferStmt,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7426,19 +7954,19 @@ extension DeferStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeferStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeferStmtSyntaxBuilder) -> Void) {
-    var builder = DeferStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeferStmtSyntaxBuilder) -> Void) {
+    var builder = DeferStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ExpressionStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = ExpressionStmtSyntax.Cursor.expression.rawValue
@@ -7447,11 +7975,15 @@ public struct ExpressionStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .expressionStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .expressionStmt,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7464,19 +7996,19 @@ extension ExpressionStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ExpressionStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ExpressionStmtSyntaxBuilder) -> Void) {
-    var builder = ExpressionStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ExpressionStmtSyntaxBuilder) -> Void) {
+    var builder = ExpressionStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct RepeatWhileStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 6)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = RepeatWhileStmtSyntax.Cursor.labelName.rawValue
@@ -7510,20 +8042,24 @@ public struct RepeatWhileStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.repeatKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .repeatKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[3] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.whileKeyword)
+      layout[4] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .whileKeyword).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.expr)
+      layout[5] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .repeatWhileStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .repeatWhileStmt,
+                                   uninitializedCount: 6) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7536,19 +8072,19 @@ extension RepeatWhileStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `RepeatWhileStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout RepeatWhileStmtSyntaxBuilder) -> Void) {
-    var builder = RepeatWhileStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout RepeatWhileStmtSyntaxBuilder) -> Void) {
+    var builder = RepeatWhileStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GuardStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useGuardKeyword(_ node: TokenSyntax) {
     let idx = GuardStmtSyntax.Cursor.guardKeyword.rawValue
@@ -7558,11 +8094,11 @@ public struct GuardStmtSyntaxBuilder {
   public mutating func addCondition(_ elt: ConditionElementSyntax) {
     let idx = GuardStmtSyntax.Cursor.conditions.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.conditionElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .conditionElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -7578,20 +8114,24 @@ public struct GuardStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.guardKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .guardKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.conditionElementList)
+      layout[1] = RawConditionElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.elseKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .elseKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[3] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .guardStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .guardStmt,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7604,19 +8144,19 @@ extension GuardStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GuardStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GuardStmtSyntaxBuilder) -> Void) {
-    var builder = GuardStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GuardStmtSyntaxBuilder) -> Void) {
+    var builder = GuardStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct WhereClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWhereKeyword(_ node: TokenSyntax) {
     let idx = WhereClauseSyntax.Cursor.whereKeyword.rawValue
@@ -7630,14 +8170,18 @@ public struct WhereClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.whereKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .whereKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .whereClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .whereClause,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7650,19 +8194,19 @@ extension WhereClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `WhereClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout WhereClauseSyntaxBuilder) -> Void) {
-    var builder = WhereClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout WhereClauseSyntaxBuilder) -> Void) {
+    var builder = WhereClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ForInStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 12)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 12)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = ForInStmtSyntax.Cursor.labelName.rawValue
@@ -7726,23 +8270,27 @@ public struct ForInStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.forKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .forKeyword).raw
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[6] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
     if (layout[8] == nil) {
-      layout[8] = RawSyntax.missingToken(TokenKind.inKeyword)
+      layout[8] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .inKeyword).raw
     }
     if (layout[9] == nil) {
-      layout[9] = RawSyntax.missing(SyntaxKind.expr)
+      layout[9] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[11] == nil) {
-      layout[11] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[11] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .forInStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .forInStmt,
+                                   uninitializedCount: 12) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7755,19 +8303,19 @@ extension ForInStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ForInStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ForInStmtSyntaxBuilder) -> Void) {
-    var builder = ForInStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ForInStmtSyntaxBuilder) -> Void) {
+    var builder = ForInStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SwitchStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = SwitchStmtSyntax.Cursor.labelName.rawValue
@@ -7797,11 +8345,11 @@ public struct SwitchStmtSyntaxBuilder {
   public mutating func addCase(_ elt: Syntax) {
     let idx = SwitchStmtSyntax.Cursor.cases.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.switchCaseList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .switchCaseList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -7812,23 +8360,27 @@ public struct SwitchStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.switchKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .switchKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.expr)
+      layout[3] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.leftBrace)
+      layout[4] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftBrace).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.switchCaseList)
+      layout[5] = RawSwitchCaseListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missingToken(TokenKind.rightBrace)
+      layout[6] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightBrace).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .switchStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchStmt,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7841,19 +8393,19 @@ extension SwitchStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SwitchStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SwitchStmtSyntaxBuilder) -> Void) {
-    var builder = SwitchStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SwitchStmtSyntaxBuilder) -> Void) {
+    var builder = SwitchStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DoStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = DoStmtSyntax.Cursor.labelName.rawValue
@@ -7878,24 +8430,28 @@ public struct DoStmtSyntaxBuilder {
   public mutating func addCatchClause(_ elt: CatchClauseSyntax) {
     let idx = DoStmtSyntax.Cursor.catchClauses.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.catchClauseList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .catchClauseList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.doKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .doKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[3] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .doStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .doStmt,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7908,19 +8464,19 @@ extension DoStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DoStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DoStmtSyntaxBuilder) -> Void) {
-    var builder = DoStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DoStmtSyntaxBuilder) -> Void) {
+    var builder = DoStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ReturnStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useReturnKeyword(_ node: TokenSyntax) {
     let idx = ReturnStmtSyntax.Cursor.returnKeyword.rawValue
@@ -7934,11 +8490,15 @@ public struct ReturnStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.returnKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .returnKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .returnStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .returnStmt,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7951,19 +8511,19 @@ extension ReturnStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ReturnStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ReturnStmtSyntaxBuilder) -> Void) {
-    var builder = ReturnStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ReturnStmtSyntaxBuilder) -> Void) {
+    var builder = ReturnStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct YieldStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useYieldKeyword(_ node: TokenSyntax) {
     let idx = YieldStmtSyntax.Cursor.yieldKeyword.rawValue
@@ -7977,14 +8537,18 @@ public struct YieldStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.yield)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .yield).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[1] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .yieldStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .yieldStmt,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -7997,19 +8561,19 @@ extension YieldStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `YieldStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout YieldStmtSyntaxBuilder) -> Void) {
-    var builder = YieldStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout YieldStmtSyntaxBuilder) -> Void) {
+    var builder = YieldStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct YieldListSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = YieldListSyntax.Cursor.leftParen.rawValue
@@ -8019,11 +8583,11 @@ public struct YieldListSyntaxBuilder {
   public mutating func addElement(_ elt: ExprSyntax) {
     let idx = YieldListSyntax.Cursor.elementList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.exprList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .exprList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -8039,17 +8603,21 @@ public struct YieldListSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.exprList)
+      layout[1] = RawExprListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .yieldList,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .yieldList,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8062,19 +8630,19 @@ extension YieldListSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `YieldListSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout YieldListSyntaxBuilder) -> Void) {
-    var builder = YieldListSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout YieldListSyntaxBuilder) -> Void) {
+    var builder = YieldListSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FallthroughStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useFallthroughKeyword(_ node: TokenSyntax) {
     let idx = FallthroughStmtSyntax.Cursor.fallthroughKeyword.rawValue
@@ -8083,11 +8651,15 @@ public struct FallthroughStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.fallthroughKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .fallthroughKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .fallthroughStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .fallthroughStmt,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8100,19 +8672,19 @@ extension FallthroughStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FallthroughStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FallthroughStmtSyntaxBuilder) -> Void) {
-    var builder = FallthroughStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FallthroughStmtSyntaxBuilder) -> Void) {
+    var builder = FallthroughStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct BreakStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBreakKeyword(_ node: TokenSyntax) {
     let idx = BreakStmtSyntax.Cursor.breakKeyword.rawValue
@@ -8126,11 +8698,15 @@ public struct BreakStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.breakKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .breakKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .breakStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .breakStmt,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8143,19 +8719,19 @@ extension BreakStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `BreakStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout BreakStmtSyntaxBuilder) -> Void) {
-    var builder = BreakStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout BreakStmtSyntaxBuilder) -> Void) {
+    var builder = BreakStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ConditionElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useCondition(_ node: Syntax) {
     let idx = ConditionElementSyntax.Cursor.condition.rawValue
@@ -8169,11 +8745,15 @@ public struct ConditionElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .conditionElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .conditionElement,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8186,19 +8766,19 @@ extension ConditionElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ConditionElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ConditionElementSyntaxBuilder) -> Void) {
-    var builder = ConditionElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ConditionElementSyntaxBuilder) -> Void) {
+    var builder = ConditionElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AvailabilityConditionSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundAvailableKeyword(_ node: TokenSyntax) {
     let idx = AvailabilityConditionSyntax.Cursor.poundAvailableKeyword.rawValue
@@ -8213,11 +8793,11 @@ public struct AvailabilityConditionSyntaxBuilder {
   public mutating func addAvailabilityArgument(_ elt: AvailabilityArgumentSyntax) {
     let idx = AvailabilityConditionSyntax.Cursor.availabilitySpec.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .availabilitySpecList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -8228,20 +8808,24 @@ public struct AvailabilityConditionSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundAvailableKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundAvailableKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.availabilitySpecList)
+      layout[2] = RawAvailabilitySpecListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityCondition,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityCondition,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8254,19 +8838,19 @@ extension AvailabilityConditionSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AvailabilityConditionSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AvailabilityConditionSyntaxBuilder) -> Void) {
-    var builder = AvailabilityConditionSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AvailabilityConditionSyntaxBuilder) -> Void) {
+    var builder = AvailabilityConditionSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MatchingPatternConditionSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useCaseKeyword(_ node: TokenSyntax) {
     let idx = MatchingPatternConditionSyntax.Cursor.caseKeyword.rawValue
@@ -8290,17 +8874,21 @@ public struct MatchingPatternConditionSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.caseKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .caseKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[1] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.initializerClause)
+      layout[3] = RawInitializerClauseSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .matchingPatternCondition,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .matchingPatternCondition,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8313,19 +8901,19 @@ extension MatchingPatternConditionSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MatchingPatternConditionSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MatchingPatternConditionSyntaxBuilder) -> Void) {
-    var builder = MatchingPatternConditionSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MatchingPatternConditionSyntaxBuilder) -> Void) {
+    var builder = MatchingPatternConditionSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct OptionalBindingConditionSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLetOrVarKeyword(_ node: TokenSyntax) {
     let idx = OptionalBindingConditionSyntax.Cursor.letOrVarKeyword.rawValue
@@ -8349,14 +8937,18 @@ public struct OptionalBindingConditionSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.letKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .letKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[1] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .optionalBindingCondition,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalBindingCondition,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8369,19 +8961,19 @@ extension OptionalBindingConditionSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `OptionalBindingConditionSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout OptionalBindingConditionSyntaxBuilder) -> Void) {
-    var builder = OptionalBindingConditionSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout OptionalBindingConditionSyntaxBuilder) -> Void) {
+    var builder = OptionalBindingConditionSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct UnavailabilityConditionSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundUnavailableKeyword(_ node: TokenSyntax) {
     let idx = UnavailabilityConditionSyntax.Cursor.poundUnavailableKeyword.rawValue
@@ -8396,11 +8988,11 @@ public struct UnavailabilityConditionSyntaxBuilder {
   public mutating func addAvailabilityArgument(_ elt: AvailabilityArgumentSyntax) {
     let idx = UnavailabilityConditionSyntax.Cursor.availabilitySpec.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.availabilitySpecList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .availabilitySpecList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -8411,20 +9003,24 @@ public struct UnavailabilityConditionSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundUnavailableKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundUnavailableKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.availabilitySpecList)
+      layout[2] = RawAvailabilitySpecListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[3] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .unavailabilityCondition,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .unavailabilityCondition,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8437,19 +9033,19 @@ extension UnavailabilityConditionSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `UnavailabilityConditionSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout UnavailabilityConditionSyntaxBuilder) -> Void) {
-    var builder = UnavailabilityConditionSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout UnavailabilityConditionSyntaxBuilder) -> Void) {
+    var builder = UnavailabilityConditionSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DeclarationStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDeclaration(_ node: DeclSyntax) {
     let idx = DeclarationStmtSyntax.Cursor.declaration.rawValue
@@ -8458,11 +9054,15 @@ public struct DeclarationStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.decl)
+      layout[0] = RawDeclSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .declarationStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .declarationStmt,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8475,19 +9075,19 @@ extension DeclarationStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DeclarationStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DeclarationStmtSyntaxBuilder) -> Void) {
-    var builder = DeclarationStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DeclarationStmtSyntaxBuilder) -> Void) {
+    var builder = DeclarationStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ThrowStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useThrowKeyword(_ node: TokenSyntax) {
     let idx = ThrowStmtSyntax.Cursor.throwKeyword.rawValue
@@ -8501,14 +9101,18 @@ public struct ThrowStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.throwKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .throwKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .throwStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .throwStmt,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8521,19 +9125,19 @@ extension ThrowStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ThrowStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ThrowStmtSyntaxBuilder) -> Void) {
-    var builder = ThrowStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ThrowStmtSyntaxBuilder) -> Void) {
+    var builder = ThrowStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IfStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = IfStmtSyntax.Cursor.labelName.rawValue
@@ -8553,11 +9157,11 @@ public struct IfStmtSyntaxBuilder {
   public mutating func addCondition(_ elt: ConditionElementSyntax) {
     let idx = IfStmtSyntax.Cursor.conditions.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.conditionElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .conditionElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -8578,17 +9182,21 @@ public struct IfStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.ifKeyword)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .ifKeyword).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.conditionElementList)
+      layout[3] = RawConditionElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[4] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .ifStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .ifStmt,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8601,19 +9209,19 @@ extension IfStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IfStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IfStmtSyntaxBuilder) -> Void) {
-    var builder = IfStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IfStmtSyntaxBuilder) -> Void) {
+    var builder = IfStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ElseIfContinuationSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIfStatement(_ node: IfStmtSyntax) {
     let idx = ElseIfContinuationSyntax.Cursor.ifStatement.rawValue
@@ -8622,11 +9230,15 @@ public struct ElseIfContinuationSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.ifStmt)
+      layout[0] = RawIfStmtSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .elseIfContinuation,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .elseIfContinuation,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8639,19 +9251,19 @@ extension ElseIfContinuationSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ElseIfContinuationSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ElseIfContinuationSyntaxBuilder) -> Void) {
-    var builder = ElseIfContinuationSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ElseIfContinuationSyntaxBuilder) -> Void) {
+    var builder = ElseIfContinuationSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ElseBlockSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useElseKeyword(_ node: TokenSyntax) {
     let idx = ElseBlockSyntax.Cursor.elseKeyword.rawValue
@@ -8665,14 +9277,18 @@ public struct ElseBlockSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.elseKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .elseKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[1] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .elseBlock,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .elseBlock,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8685,19 +9301,19 @@ extension ElseBlockSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ElseBlockSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ElseBlockSyntaxBuilder) -> Void) {
-    var builder = ElseBlockSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ElseBlockSyntaxBuilder) -> Void) {
+    var builder = ElseBlockSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SwitchCaseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useUnknownAttr(_ node: AttributeSyntax) {
     let idx = SwitchCaseSyntax.Cursor.unknownAttr.rawValue
@@ -8712,24 +9328,28 @@ public struct SwitchCaseSyntaxBuilder {
   public mutating func addStatement(_ elt: CodeBlockItemSyntax) {
     let idx = SwitchCaseSyntax.Cursor.statements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.codeBlockItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .codeBlockItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[1] = RawSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.codeBlockItemList)
+      layout[2] = RawCodeBlockItemListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .switchCase,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchCase,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8742,19 +9362,19 @@ extension SwitchCaseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SwitchCaseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SwitchCaseSyntaxBuilder) -> Void) {
-    var builder = SwitchCaseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SwitchCaseSyntaxBuilder) -> Void) {
+    var builder = SwitchCaseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SwitchDefaultLabelSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useDefaultKeyword(_ node: TokenSyntax) {
     let idx = SwitchDefaultLabelSyntax.Cursor.defaultKeyword.rawValue
@@ -8768,14 +9388,18 @@ public struct SwitchDefaultLabelSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.defaultKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .defaultKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .switchDefaultLabel,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchDefaultLabel,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8788,19 +9412,19 @@ extension SwitchDefaultLabelSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SwitchDefaultLabelSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SwitchDefaultLabelSyntaxBuilder) -> Void) {
-    var builder = SwitchDefaultLabelSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SwitchDefaultLabelSyntaxBuilder) -> Void) {
+    var builder = SwitchDefaultLabelSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CaseItemSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePattern(_ node: PatternSyntax) {
     let idx = CaseItemSyntax.Cursor.pattern.rawValue
@@ -8819,11 +9443,15 @@ public struct CaseItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .caseItem,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .caseItem,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8836,19 +9464,19 @@ extension CaseItemSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CaseItemSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CaseItemSyntaxBuilder) -> Void) {
-    var builder = CaseItemSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CaseItemSyntaxBuilder) -> Void) {
+    var builder = CaseItemSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CatchItemSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePattern(_ node: PatternSyntax) {
     let idx = CatchItemSyntax.Cursor.pattern.rawValue
@@ -8867,8 +9495,12 @@ public struct CatchItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .catchItem,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .catchItem,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8881,19 +9513,19 @@ extension CatchItemSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CatchItemSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CatchItemSyntaxBuilder) -> Void) {
-    var builder = CatchItemSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CatchItemSyntaxBuilder) -> Void) {
+    var builder = CatchItemSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SwitchCaseLabelSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useCaseKeyword(_ node: TokenSyntax) {
     let idx = SwitchCaseLabelSyntax.Cursor.caseKeyword.rawValue
@@ -8903,11 +9535,11 @@ public struct SwitchCaseLabelSyntaxBuilder {
   public mutating func addCaseItem(_ elt: CaseItemSyntax) {
     let idx = SwitchCaseLabelSyntax.Cursor.caseItems.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.caseItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .caseItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -8918,17 +9550,21 @@ public struct SwitchCaseLabelSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.caseKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .caseKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.caseItemList)
+      layout[1] = RawCaseItemListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.colon)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .switchCaseLabel,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .switchCaseLabel,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8941,19 +9577,19 @@ extension SwitchCaseLabelSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SwitchCaseLabelSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SwitchCaseLabelSyntaxBuilder) -> Void) {
-    var builder = SwitchCaseLabelSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SwitchCaseLabelSyntaxBuilder) -> Void) {
+    var builder = SwitchCaseLabelSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CatchClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useCatchKeyword(_ node: TokenSyntax) {
     let idx = CatchClauseSyntax.Cursor.catchKeyword.rawValue
@@ -8963,11 +9599,11 @@ public struct CatchClauseSyntaxBuilder {
   public mutating func addCatchItem(_ elt: CatchItemSyntax) {
     let idx = CatchClauseSyntax.Cursor.catchItems.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.catchItemList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .catchItemList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -8978,14 +9614,18 @@ public struct CatchClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.catchKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .catchKeyword).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.codeBlock)
+      layout[2] = RawCodeBlockSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .catchClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .catchClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -8998,19 +9638,19 @@ extension CatchClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CatchClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CatchClauseSyntaxBuilder) -> Void) {
-    var builder = CatchClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CatchClauseSyntaxBuilder) -> Void) {
+    var builder = CatchClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PoundAssertStmtSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 6)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 6)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePoundAssert(_ node: TokenSyntax) {
     let idx = PoundAssertStmtSyntax.Cursor.poundAssert.rawValue
@@ -9044,20 +9684,24 @@ public struct PoundAssertStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.poundAssertKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .poundAssertKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawExprSyntax.makeBlank(arena: arena).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[5] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .poundAssertStmt,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .poundAssertStmt,
+                                   uninitializedCount: 6) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9070,19 +9714,19 @@ extension PoundAssertStmtSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PoundAssertStmtSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PoundAssertStmtSyntaxBuilder) -> Void) {
-    var builder = PoundAssertStmtSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PoundAssertStmtSyntaxBuilder) -> Void) {
+    var builder = PoundAssertStmtSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GenericWhereClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWhereKeyword(_ node: TokenSyntax) {
     let idx = GenericWhereClauseSyntax.Cursor.whereKeyword.rawValue
@@ -9092,24 +9736,28 @@ public struct GenericWhereClauseSyntaxBuilder {
   public mutating func addRequirement(_ elt: GenericRequirementSyntax) {
     let idx = GenericWhereClauseSyntax.Cursor.requirementList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.genericRequirementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .genericRequirementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.whereKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .whereKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.genericRequirementList)
+      layout[1] = RawGenericRequirementListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .genericWhereClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericWhereClause,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9122,19 +9770,19 @@ extension GenericWhereClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GenericWhereClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GenericWhereClauseSyntaxBuilder) -> Void) {
-    var builder = GenericWhereClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GenericWhereClauseSyntaxBuilder) -> Void) {
+    var builder = GenericWhereClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GenericRequirementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBody(_ node: Syntax) {
     let idx = GenericRequirementSyntax.Cursor.body.rawValue
@@ -9148,11 +9796,15 @@ public struct GenericRequirementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .genericRequirement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericRequirement,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9165,19 +9817,19 @@ extension GenericRequirementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GenericRequirementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GenericRequirementSyntaxBuilder) -> Void) {
-    var builder = GenericRequirementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GenericRequirementSyntaxBuilder) -> Void) {
+    var builder = GenericRequirementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SameTypeRequirementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftTypeIdentifier(_ node: TypeSyntax) {
     let idx = SameTypeRequirementSyntax.Cursor.leftTypeIdentifier.rawValue
@@ -9196,17 +9848,21 @@ public struct SameTypeRequirementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.spacedBinaryOperator(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .spacedBinaryOperator).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .sameTypeRequirement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .sameTypeRequirement,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9219,28 +9875,28 @@ extension SameTypeRequirementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SameTypeRequirementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SameTypeRequirementSyntaxBuilder) -> Void) {
-    var builder = SameTypeRequirementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SameTypeRequirementSyntaxBuilder) -> Void) {
+    var builder = SameTypeRequirementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GenericParameterSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = GenericParameterSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -9266,11 +9922,15 @@ public struct GenericParameterSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .genericParameter,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericParameter,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9283,19 +9943,19 @@ extension GenericParameterSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GenericParameterSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GenericParameterSyntaxBuilder) -> Void) {
-    var builder = GenericParameterSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GenericParameterSyntaxBuilder) -> Void) {
+    var builder = GenericParameterSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrimaryAssociatedTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = PrimaryAssociatedTypeSyntax.Cursor.name.rawValue
@@ -9309,11 +9969,15 @@ public struct PrimaryAssociatedTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .primaryAssociatedType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .primaryAssociatedType,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9326,19 +9990,19 @@ extension PrimaryAssociatedTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrimaryAssociatedTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrimaryAssociatedTypeSyntaxBuilder) -> Void) {
-    var builder = PrimaryAssociatedTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrimaryAssociatedTypeSyntaxBuilder) -> Void) {
+    var builder = PrimaryAssociatedTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GenericParameterClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftAngleBracket(_ node: TokenSyntax) {
     let idx = GenericParameterClauseSyntax.Cursor.leftAngleBracket.rawValue
@@ -9348,11 +10012,11 @@ public struct GenericParameterClauseSyntaxBuilder {
   public mutating func addGenericParameter(_ elt: GenericParameterSyntax) {
     let idx = GenericParameterClauseSyntax.Cursor.genericParameterList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.genericParameterList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .genericParameterList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -9363,17 +10027,21 @@ public struct GenericParameterClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftAngle)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftAngle).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.genericParameterList)
+      layout[1] = RawGenericParameterListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightAngle)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightAngle).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .genericParameterClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericParameterClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9386,19 +10054,19 @@ extension GenericParameterClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GenericParameterClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GenericParameterClauseSyntaxBuilder) -> Void) {
-    var builder = GenericParameterClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GenericParameterClauseSyntaxBuilder) -> Void) {
+    var builder = GenericParameterClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ConformanceRequirementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftTypeIdentifier(_ node: TypeSyntax) {
     let idx = ConformanceRequirementSyntax.Cursor.leftTypeIdentifier.rawValue
@@ -9417,17 +10085,21 @@ public struct ConformanceRequirementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .conformanceRequirement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .conformanceRequirement,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9440,19 +10112,19 @@ extension ConformanceRequirementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ConformanceRequirementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ConformanceRequirementSyntaxBuilder) -> Void) {
-    var builder = ConformanceRequirementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ConformanceRequirementSyntaxBuilder) -> Void) {
+    var builder = ConformanceRequirementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct PrimaryAssociatedTypeClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftAngleBracket(_ node: TokenSyntax) {
     let idx = PrimaryAssociatedTypeClauseSyntax.Cursor.leftAngleBracket.rawValue
@@ -9462,11 +10134,11 @@ public struct PrimaryAssociatedTypeClauseSyntaxBuilder {
   public mutating func addPrimaryAssociatedType(_ elt: PrimaryAssociatedTypeSyntax) {
     let idx = PrimaryAssociatedTypeClauseSyntax.Cursor.primaryAssociatedTypeList.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.primaryAssociatedTypeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .primaryAssociatedTypeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -9477,17 +10149,21 @@ public struct PrimaryAssociatedTypeClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftAngle)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftAngle).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.primaryAssociatedTypeList)
+      layout[1] = RawPrimaryAssociatedTypeListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightAngle)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightAngle).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .primaryAssociatedTypeClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .primaryAssociatedTypeClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9500,19 +10176,19 @@ extension PrimaryAssociatedTypeClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `PrimaryAssociatedTypeClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout PrimaryAssociatedTypeClauseSyntaxBuilder) -> Void) {
-    var builder = PrimaryAssociatedTypeClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout PrimaryAssociatedTypeClauseSyntaxBuilder) -> Void) {
+    var builder = PrimaryAssociatedTypeClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct SimpleTypeIdentifierSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useName(_ node: TokenSyntax) {
     let idx = SimpleTypeIdentifierSyntax.Cursor.name.rawValue
@@ -9526,11 +10202,15 @@ public struct SimpleTypeIdentifierSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .simpleTypeIdentifier,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .simpleTypeIdentifier,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9543,19 +10223,19 @@ extension SimpleTypeIdentifierSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `SimpleTypeIdentifierSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout SimpleTypeIdentifierSyntaxBuilder) -> Void) {
-    var builder = SimpleTypeIdentifierSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout SimpleTypeIdentifierSyntaxBuilder) -> Void) {
+    var builder = SimpleTypeIdentifierSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MemberTypeIdentifierSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBaseType(_ node: TypeSyntax) {
     let idx = MemberTypeIdentifierSyntax.Cursor.baseType.rawValue
@@ -9579,17 +10259,21 @@ public struct MemberTypeIdentifierSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.period)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .memberTypeIdentifier,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .memberTypeIdentifier,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9602,19 +10286,19 @@ extension MemberTypeIdentifierSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MemberTypeIdentifierSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MemberTypeIdentifierSyntaxBuilder) -> Void) {
-    var builder = MemberTypeIdentifierSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MemberTypeIdentifierSyntaxBuilder) -> Void) {
+    var builder = MemberTypeIdentifierSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ClassRestrictionTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useClassKeyword(_ node: TokenSyntax) {
     let idx = ClassRestrictionTypeSyntax.Cursor.classKeyword.rawValue
@@ -9623,11 +10307,15 @@ public struct ClassRestrictionTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.classKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .classKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .classRestrictionType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .classRestrictionType,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9640,19 +10328,19 @@ extension ClassRestrictionTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ClassRestrictionTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ClassRestrictionTypeSyntaxBuilder) -> Void) {
-    var builder = ClassRestrictionTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ClassRestrictionTypeSyntaxBuilder) -> Void) {
+    var builder = ClassRestrictionTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ArrayTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftSquareBracket(_ node: TokenSyntax) {
     let idx = ArrayTypeSyntax.Cursor.leftSquareBracket.rawValue
@@ -9671,17 +10359,21 @@ public struct ArrayTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .arrayType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .arrayType,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9694,19 +10386,19 @@ extension ArrayTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ArrayTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ArrayTypeSyntaxBuilder) -> Void) {
-    var builder = ArrayTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ArrayTypeSyntaxBuilder) -> Void) {
+    var builder = ArrayTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct DictionaryTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 5)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 5)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftSquareBracket(_ node: TokenSyntax) {
     let idx = DictionaryTypeSyntax.Cursor.leftSquareBracket.rawValue
@@ -9735,23 +10427,27 @@ public struct DictionaryTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.colon)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.type)
+      layout[3] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
+      layout[4] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .dictionaryType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .dictionaryType,
+                                   uninitializedCount: 5) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9764,19 +10460,19 @@ extension DictionaryTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `DictionaryTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout DictionaryTypeSyntaxBuilder) -> Void) {
-    var builder = DictionaryTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout DictionaryTypeSyntaxBuilder) -> Void) {
+    var builder = DictionaryTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct MetatypeTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useBaseType(_ node: TypeSyntax) {
     let idx = MetatypeTypeSyntax.Cursor.baseType.rawValue
@@ -9795,17 +10491,21 @@ public struct MetatypeTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.period)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .metatypeType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .metatypeType,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9818,19 +10518,19 @@ extension MetatypeTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `MetatypeTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout MetatypeTypeSyntaxBuilder) -> Void) {
-    var builder = MetatypeTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout MetatypeTypeSyntaxBuilder) -> Void) {
+    var builder = MetatypeTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct OptionalTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWrappedType(_ node: TypeSyntax) {
     let idx = OptionalTypeSyntax.Cursor.wrappedType.rawValue
@@ -9844,14 +10544,18 @@ public struct OptionalTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.postfixQuestionMark)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .postfixQuestionMark).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .optionalType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalType,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9864,19 +10568,19 @@ extension OptionalTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `OptionalTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout OptionalTypeSyntaxBuilder) -> Void) {
-    var builder = OptionalTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout OptionalTypeSyntaxBuilder) -> Void) {
+    var builder = OptionalTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ConstrainedSugarTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useSomeOrAnySpecifier(_ node: TokenSyntax) {
     let idx = ConstrainedSugarTypeSyntax.Cursor.someOrAnySpecifier.rawValue
@@ -9890,14 +10594,18 @@ public struct ConstrainedSugarTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .constrainedSugarType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .constrainedSugarType,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9910,19 +10618,19 @@ extension ConstrainedSugarTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ConstrainedSugarTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ConstrainedSugarTypeSyntaxBuilder) -> Void) {
-    var builder = ConstrainedSugarTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ConstrainedSugarTypeSyntaxBuilder) -> Void) {
+    var builder = ConstrainedSugarTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ImplicitlyUnwrappedOptionalTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWrappedType(_ node: TypeSyntax) {
     let idx = ImplicitlyUnwrappedOptionalTypeSyntax.Cursor.wrappedType.rawValue
@@ -9936,14 +10644,18 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.exclamationMark)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .exclamationMark).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .implicitlyUnwrappedOptionalType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .implicitlyUnwrappedOptionalType,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9956,19 +10668,19 @@ extension ImplicitlyUnwrappedOptionalTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ImplicitlyUnwrappedOptionalTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ImplicitlyUnwrappedOptionalTypeSyntaxBuilder) -> Void) {
-    var builder = ImplicitlyUnwrappedOptionalTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ImplicitlyUnwrappedOptionalTypeSyntaxBuilder) -> Void) {
+    var builder = ImplicitlyUnwrappedOptionalTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CompositionTypeElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useType(_ node: TypeSyntax) {
     let idx = CompositionTypeElementSyntax.Cursor.type.rawValue
@@ -9982,11 +10694,15 @@ public struct CompositionTypeElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .compositionTypeElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .compositionTypeElement,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -9999,38 +10715,42 @@ extension CompositionTypeElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CompositionTypeElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CompositionTypeElementSyntaxBuilder) -> Void) {
-    var builder = CompositionTypeElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CompositionTypeElementSyntaxBuilder) -> Void) {
+    var builder = CompositionTypeElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct CompositionTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func addElement(_ elt: CompositionTypeElementSyntax) {
     let idx = CompositionTypeSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.compositionTypeElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .compositionTypeElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.compositionTypeElementList)
+      layout[0] = RawCompositionTypeElementListSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .compositionType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .compositionType,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10043,19 +10763,19 @@ extension CompositionTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `CompositionTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout CompositionTypeSyntaxBuilder) -> Void) {
-    var builder = CompositionTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout CompositionTypeSyntaxBuilder) -> Void) {
+    var builder = CompositionTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TupleTypeElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 8)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 8)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useInOut(_ node: TokenSyntax) {
     let idx = TupleTypeElementSyntax.Cursor.inOut.rawValue
@@ -10099,11 +10819,15 @@ public struct TupleTypeElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.type)
+      layout[4] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tupleTypeElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleTypeElement,
+                                   uninitializedCount: 8) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10116,19 +10840,19 @@ extension TupleTypeElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TupleTypeElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TupleTypeElementSyntaxBuilder) -> Void) {
-    var builder = TupleTypeElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TupleTypeElementSyntaxBuilder) -> Void) {
+    var builder = TupleTypeElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TupleTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = TupleTypeSyntax.Cursor.leftParen.rawValue
@@ -10138,11 +10862,11 @@ public struct TupleTypeSyntaxBuilder {
   public mutating func addElement(_ elt: TupleTypeElementSyntax) {
     let idx = TupleTypeSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleTypeElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -10153,17 +10877,21 @@ public struct TupleTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.tupleTypeElementList)
+      layout[1] = RawTupleTypeElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tupleType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tupleType,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10176,19 +10904,19 @@ extension TupleTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TupleTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TupleTypeSyntaxBuilder) -> Void) {
-    var builder = TupleTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TupleTypeSyntaxBuilder) -> Void) {
+    var builder = TupleTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct FunctionTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 7)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 7)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = FunctionTypeSyntax.Cursor.leftParen.rawValue
@@ -10198,11 +10926,11 @@ public struct FunctionTypeSyntaxBuilder {
   public mutating func addArgument(_ elt: TupleTypeElementSyntax) {
     let idx = FunctionTypeSyntax.Cursor.arguments.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tupleTypeElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -10233,23 +10961,27 @@ public struct FunctionTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.tupleTypeElementList)
+      layout[1] = RawTupleTypeElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missingToken(TokenKind.arrow)
+      layout[5] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .arrow).raw
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missing(SyntaxKind.type)
+      layout[6] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .functionType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .functionType,
+                                   uninitializedCount: 7) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10262,19 +10994,19 @@ extension FunctionTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `FunctionTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout FunctionTypeSyntaxBuilder) -> Void) {
-    var builder = FunctionTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout FunctionTypeSyntaxBuilder) -> Void) {
+    var builder = FunctionTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AttributedTypeSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useSpecifier(_ node: TokenSyntax) {
     let idx = AttributedTypeSyntax.Cursor.specifier.rawValue
@@ -10284,11 +11016,11 @@ public struct AttributedTypeSyntaxBuilder {
   public mutating func addAttribute(_ elt: Syntax) {
     let idx = AttributedTypeSyntax.Cursor.attributes.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .attributeList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -10299,11 +11031,15 @@ public struct AttributedTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .attributedType,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .attributedType,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10316,19 +11052,19 @@ extension AttributedTypeSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AttributedTypeSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AttributedTypeSyntaxBuilder) -> Void) {
-    var builder = AttributedTypeSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AttributedTypeSyntaxBuilder) -> Void) {
+    var builder = AttributedTypeSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GenericArgumentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useArgumentType(_ node: TypeSyntax) {
     let idx = GenericArgumentSyntax.Cursor.argumentType.rawValue
@@ -10342,11 +11078,15 @@ public struct GenericArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .genericArgument,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericArgument,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10359,19 +11099,19 @@ extension GenericArgumentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GenericArgumentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GenericArgumentSyntaxBuilder) -> Void) {
-    var builder = GenericArgumentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GenericArgumentSyntaxBuilder) -> Void) {
+    var builder = GenericArgumentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct GenericArgumentClauseSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftAngleBracket(_ node: TokenSyntax) {
     let idx = GenericArgumentClauseSyntax.Cursor.leftAngleBracket.rawValue
@@ -10381,11 +11121,11 @@ public struct GenericArgumentClauseSyntaxBuilder {
   public mutating func addArgument(_ elt: GenericArgumentSyntax) {
     let idx = GenericArgumentClauseSyntax.Cursor.arguments.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.genericArgumentList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .genericArgumentList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -10396,17 +11136,21 @@ public struct GenericArgumentClauseSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftAngle)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftAngle).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.genericArgumentList)
+      layout[1] = RawGenericArgumentListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightAngle)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightAngle).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .genericArgumentClause,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .genericArgumentClause,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10419,19 +11163,19 @@ extension GenericArgumentClauseSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `GenericArgumentClauseSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout GenericArgumentClauseSyntaxBuilder) -> Void) {
-    var builder = GenericArgumentClauseSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout GenericArgumentClauseSyntaxBuilder) -> Void) {
+    var builder = GenericArgumentClauseSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TypeAnnotationSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useColon(_ node: TokenSyntax) {
     let idx = TypeAnnotationSyntax.Cursor.colon.rawValue
@@ -10445,14 +11189,18 @@ public struct TypeAnnotationSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.colon)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .typeAnnotation,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .typeAnnotation,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10465,19 +11213,19 @@ extension TypeAnnotationSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TypeAnnotationSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TypeAnnotationSyntaxBuilder) -> Void) {
-    var builder = TypeAnnotationSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TypeAnnotationSyntaxBuilder) -> Void) {
+    var builder = TypeAnnotationSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct EnumCasePatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useType(_ node: TypeSyntax) {
     let idx = EnumCasePatternSyntax.Cursor.type.rawValue
@@ -10501,14 +11249,18 @@ public struct EnumCasePatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.period)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .enumCasePattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .enumCasePattern,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10521,19 +11273,19 @@ extension EnumCasePatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `EnumCasePatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout EnumCasePatternSyntaxBuilder) -> Void) {
-    var builder = EnumCasePatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout EnumCasePatternSyntaxBuilder) -> Void) {
+    var builder = EnumCasePatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IsTypePatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIsKeyword(_ node: TokenSyntax) {
     let idx = IsTypePatternSyntax.Cursor.isKeyword.rawValue
@@ -10547,14 +11299,18 @@ public struct IsTypePatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.isKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .isKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .isTypePattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .isTypePattern,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10567,19 +11323,19 @@ extension IsTypePatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IsTypePatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IsTypePatternSyntaxBuilder) -> Void) {
-    var builder = IsTypePatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IsTypePatternSyntaxBuilder) -> Void) {
+    var builder = IsTypePatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct OptionalPatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useSubPattern(_ node: PatternSyntax) {
     let idx = OptionalPatternSyntax.Cursor.subPattern.rawValue
@@ -10593,14 +11349,18 @@ public struct OptionalPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.postfixQuestionMark)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .postfixQuestionMark).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .optionalPattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .optionalPattern,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10613,19 +11373,19 @@ extension OptionalPatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `OptionalPatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout OptionalPatternSyntaxBuilder) -> Void) {
-    var builder = OptionalPatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout OptionalPatternSyntaxBuilder) -> Void) {
+    var builder = OptionalPatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct IdentifierPatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useIdentifier(_ node: TokenSyntax) {
     let idx = IdentifierPatternSyntax.Cursor.identifier.rawValue
@@ -10634,11 +11394,15 @@ public struct IdentifierPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.selfKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .selfKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .identifierPattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .identifierPattern,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10651,19 +11415,19 @@ extension IdentifierPatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `IdentifierPatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout IdentifierPatternSyntaxBuilder) -> Void) {
-    var builder = IdentifierPatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout IdentifierPatternSyntaxBuilder) -> Void) {
+    var builder = IdentifierPatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AsTypePatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePattern(_ node: PatternSyntax) {
     let idx = AsTypePatternSyntax.Cursor.pattern.rawValue
@@ -10682,17 +11446,21 @@ public struct AsTypePatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.asKeyword)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .asKeyword).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawTypeSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .asTypePattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .asTypePattern,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10705,19 +11473,19 @@ extension AsTypePatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AsTypePatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AsTypePatternSyntaxBuilder) -> Void) {
-    var builder = AsTypePatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AsTypePatternSyntaxBuilder) -> Void) {
+    var builder = AsTypePatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TuplePatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLeftParen(_ node: TokenSyntax) {
     let idx = TuplePatternSyntax.Cursor.leftParen.rawValue
@@ -10727,11 +11495,11 @@ public struct TuplePatternSyntaxBuilder {
   public mutating func addElement(_ elt: TuplePatternElementSyntax) {
     let idx = TuplePatternSyntax.Cursor.elements.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.tuplePatternElementList,
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .tuplePatternElementList, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 
@@ -10742,17 +11510,21 @@ public struct TuplePatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.leftParen)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.tuplePatternElementList)
+      layout[1] = RawTuplePatternElementListSyntax.makeBlank(arena: arena).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missingToken(TokenKind.rightParen)
+      layout[2] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tuplePattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tuplePattern,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10765,19 +11537,19 @@ extension TuplePatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TuplePatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TuplePatternSyntaxBuilder) -> Void) {
-    var builder = TuplePatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TuplePatternSyntaxBuilder) -> Void) {
+    var builder = TuplePatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct WildcardPatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useWildcard(_ node: TokenSyntax) {
     let idx = WildcardPatternSyntax.Cursor.wildcard.rawValue
@@ -10791,11 +11563,15 @@ public struct WildcardPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.wildcardKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .wildcardKeyword).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .wildcardPattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .wildcardPattern,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10808,19 +11584,19 @@ extension WildcardPatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `WildcardPatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout WildcardPatternSyntaxBuilder) -> Void) {
-    var builder = WildcardPatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout WildcardPatternSyntaxBuilder) -> Void) {
+    var builder = WildcardPatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct TuplePatternElementSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 4)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 4)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabelName(_ node: TokenSyntax) {
     let idx = TuplePatternElementSyntax.Cursor.labelName.rawValue
@@ -10844,11 +11620,15 @@ public struct TuplePatternElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[2] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .tuplePatternElement,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .tuplePatternElement,
+                                   uninitializedCount: 4) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10861,19 +11641,19 @@ extension TuplePatternElementSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `TuplePatternElementSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout TuplePatternElementSyntaxBuilder) -> Void) {
-    var builder = TuplePatternElementSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout TuplePatternElementSyntaxBuilder) -> Void) {
+    var builder = TuplePatternElementSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ExpressionPatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 1)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 1)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useExpression(_ node: ExprSyntax) {
     let idx = ExpressionPatternSyntax.Cursor.expression.rawValue
@@ -10882,11 +11662,15 @@ public struct ExpressionPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawExprSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .expressionPattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .expressionPattern,
+                                   uninitializedCount: 1) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10899,19 +11683,19 @@ extension ExpressionPatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ExpressionPatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ExpressionPatternSyntaxBuilder) -> Void) {
-    var builder = ExpressionPatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ExpressionPatternSyntaxBuilder) -> Void) {
+    var builder = ExpressionPatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct ValueBindingPatternSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLetOrVarKeyword(_ node: TokenSyntax) {
     let idx = ValueBindingPatternSyntax.Cursor.letOrVarKeyword.rawValue
@@ -10925,14 +11709,18 @@ public struct ValueBindingPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.letKeyword)
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .letKeyword).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[1] = RawPatternSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .valueBindingPattern,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .valueBindingPattern,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10945,19 +11733,19 @@ extension ValueBindingPatternSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `ValueBindingPatternSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ValueBindingPatternSyntaxBuilder) -> Void) {
-    var builder = ValueBindingPatternSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout ValueBindingPatternSyntaxBuilder) -> Void) {
+    var builder = ValueBindingPatternSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AvailabilityArgumentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useEntry(_ node: Syntax) {
     let idx = AvailabilityArgumentSyntax.Cursor.entry.rawValue
@@ -10971,11 +11759,15 @@ public struct AvailabilityArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityArgument,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityArgument,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -10988,19 +11780,19 @@ extension AvailabilityArgumentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AvailabilityArgumentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AvailabilityArgumentSyntaxBuilder) -> Void) {
-    var builder = AvailabilityArgumentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AvailabilityArgumentSyntaxBuilder) -> Void) {
+    var builder = AvailabilityArgumentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AvailabilityLabeledArgumentSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useLabel(_ node: TokenSyntax) {
     let idx = AvailabilityLabeledArgumentSyntax.Cursor.label.rawValue
@@ -11019,17 +11811,21 @@ public struct AvailabilityLabeledArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missingToken(TokenKind.colon)
+      layout[1] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[2] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityLabeledArgument,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityLabeledArgument,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -11042,19 +11838,19 @@ extension AvailabilityLabeledArgumentSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AvailabilityLabeledArgumentSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AvailabilityLabeledArgumentSyntaxBuilder) -> Void) {
-    var builder = AvailabilityLabeledArgumentSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AvailabilityLabeledArgumentSyntaxBuilder) -> Void) {
+    var builder = AvailabilityLabeledArgumentSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct AvailabilityVersionRestrictionSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 2)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 2)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func usePlatform(_ node: TokenSyntax) {
     let idx = AvailabilityVersionRestrictionSyntax.Cursor.platform.rawValue
@@ -11068,11 +11864,15 @@ public struct AvailabilityVersionRestrictionSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
+      layout[0] = RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .availabilityVersionRestriction,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .availabilityVersionRestriction,
+                                   uninitializedCount: 2) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -11085,19 +11885,19 @@ extension AvailabilityVersionRestrictionSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `AvailabilityVersionRestrictionSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout AvailabilityVersionRestrictionSyntaxBuilder) -> Void) {
-    var builder = AvailabilityVersionRestrictionSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout AvailabilityVersionRestrictionSyntaxBuilder) -> Void) {
+    var builder = AvailabilityVersionRestrictionSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 
 public struct VersionTupleSyntaxBuilder {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: 3)
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: 3)
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 
   public mutating func useMajorMinor(_ node: Syntax) {
     let idx = VersionTupleSyntax.Cursor.majorMinor.rawValue
@@ -11116,11 +11916,15 @@ public struct VersionTupleSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.unknown)
+      layout[0] = RawSyntax.makeBlank(arena: arena).raw
     }
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .versionTuple,
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .versionTuple,
+                                   uninitializedCount: 3) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -11133,11 +11937,11 @@ extension VersionTupleSyntax {
   ///            incrementally build the structure of the node.
   /// - Returns: A `VersionTupleSyntax` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout VersionTupleSyntaxBuilder) -> Void) {
-    var builder = VersionTupleSyntaxBuilder()
+  public init(arena: SyntaxArena = .default, _ build: (inout VersionTupleSyntaxBuilder) -> Void) {
+    var builder = VersionTupleSyntaxBuilder(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 

@@ -13,263 +13,275 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-internal enum SyntaxKind: CSyntaxKind {
-  case token = 0
-  case unknown = 1
-  case decl = 87
-  case expr = 88
-  case stmt = 89
-  case type = 90
-  case pattern = 91
-  case unknownDecl = 2
-  case unknownExpr = 24
-  case unknownStmt = 71
-  case unknownType = 211
-  case unknownPattern = 201
-  case codeBlockItem = 92
-  case codeBlockItemList = 163
-  case codeBlock = 93
-  case inOutExpr = 25
-  case poundColumnExpr = 26
-  case tupleExprElementList = 165
-  case arrayElementList = 166
-  case dictionaryElementList = 167
-  case stringLiteralSegments = 168
-  case tryExpr = 27
-  case awaitExpr = 249
-  case declNameArgument = 94
-  case declNameArgumentList = 169
-  case declNameArguments = 95
-  case identifierExpr = 28
-  case superRefExpr = 29
-  case nilLiteralExpr = 30
-  case discardAssignmentExpr = 31
-  case assignmentExpr = 32
-  case sequenceExpr = 33
-  case exprList = 170
-  case poundLineExpr = 34
-  case poundFileExpr = 35
-  case poundFileIDExpr = 247
-  case poundFilePathExpr = 240
-  case poundFunctionExpr = 36
-  case poundDsohandleExpr = 37
-  case symbolicReferenceExpr = 38
-  case prefixOperatorExpr = 39
-  case binaryOperatorExpr = 40
-  case arrowExpr = 41
-  case floatLiteralExpr = 42
-  case tupleExpr = 43
-  case arrayExpr = 44
-  case dictionaryExpr = 45
-  case tupleExprElement = 97
-  case arrayElement = 98
-  case dictionaryElement = 99
-  case integerLiteralExpr = 47
-  case booleanLiteralExpr = 49
-  case ternaryExpr = 50
-  case memberAccessExpr = 51
-  case isExpr = 53
-  case asExpr = 54
-  case typeExpr = 55
-  case closureCaptureItem = 100
-  case closureCaptureItemList = 171
-  case closureCaptureSignature = 101
-  case closureParam = 102
-  case closureParamList = 172
-  case closureSignature = 103
-  case closureExpr = 56
-  case unresolvedPatternExpr = 57
-  case multipleTrailingClosureElement = 246
-  case multipleTrailingClosureElementList = 245
-  case functionCallExpr = 58
-  case subscriptExpr = 59
-  case optionalChainingExpr = 60
-  case forcedValueExpr = 61
-  case postfixUnaryExpr = 62
-  case specializeExpr = 63
-  case stringSegment = 104
-  case expressionSegment = 105
-  case stringLiteralExpr = 48
-  case regexLiteralExpr = 253
-  case keyPathExpr = 65
-  case keyPathBaseExpr = 66
-  case objcNamePiece = 106
-  case objcName = 173
-  case objcKeyPathExpr = 67
-  case objcSelectorExpr = 68
-  case postfixIfConfigExpr = 250
-  case editorPlaceholderExpr = 69
-  case objectLiteralExpr = 70
-  case typeInitializerClause = 107
-  case typealiasDecl = 3
-  case associatedtypeDecl = 4
-  case functionParameterList = 174
-  case parameterClause = 108
-  case returnClause = 109
-  case functionSignature = 110
-  case ifConfigClause = 111
-  case ifConfigClauseList = 175
-  case ifConfigDecl = 5
-  case poundErrorDecl = 6
-  case poundWarningDecl = 7
-  case poundSourceLocation = 8
-  case poundSourceLocationArgs = 112
-  case declModifierDetail = 238
-  case declModifier = 113
-  case inheritedType = 114
-  case inheritedTypeList = 176
-  case typeInheritanceClause = 115
-  case classDecl = 9
-  case actorDecl = 96
-  case structDecl = 10
-  case protocolDecl = 11
-  case extensionDecl = 12
-  case memberDeclBlock = 116
-  case memberDeclList = 177
-  case memberDeclListItem = 117
-  case sourceFile = 118
-  case initializerClause = 119
-  case functionParameter = 120
-  case modifierList = 178
-  case functionDecl = 13
-  case initializerDecl = 14
-  case deinitializerDecl = 15
-  case subscriptDecl = 16
-  case accessLevelModifier = 121
-  case accessPathComponent = 122
-  case accessPath = 179
-  case importDecl = 17
-  case accessorParameter = 123
-  case accessorDecl = 18
-  case accessorList = 180
-  case accessorBlock = 124
-  case patternBinding = 125
-  case patternBindingList = 181
-  case variableDecl = 19
-  case enumCaseElement = 126
-  case enumCaseElementList = 182
-  case enumCaseDecl = 20
-  case enumDecl = 21
-  case operatorDecl = 22
-  case identifierList = 226
-  case operatorPrecedenceAndTypes = 127
-  case precedenceGroupDecl = 23
-  case precedenceGroupAttributeList = 183
-  case precedenceGroupRelation = 128
-  case precedenceGroupNameList = 184
-  case precedenceGroupNameElement = 129
-  case precedenceGroupAssignment = 130
-  case precedenceGroupAssociativity = 131
-  case tokenList = 185
-  case nonEmptyTokenList = 186
-  case customAttribute = 231
-  case attribute = 132
-  case attributeList = 187
-  case specializeAttributeSpecList = 188
-  case availabilityEntry = 252
-  case labeledSpecializeEntry = 133
-  case targetFunctionEntry = 248
-  case namedAttributeStringArgument = 227
-  case declName = 228
-  case implementsAttributeArguments = 134
-  case objCSelectorPiece = 135
-  case objCSelector = 189
-  case differentiableAttributeArguments = 233
-  case differentiabilityParamsClause = 234
-  case differentiabilityParams = 235
-  case differentiabilityParamList = 236
-  case differentiabilityParam = 237
-  case derivativeRegistrationAttributeArguments = 241
-  case qualifiedDeclName = 242
-  case functionDeclName = 239
-  case backDeployAttributeSpecList = 257
-  case backDeployVersionList = 258
-  case backDeployVersionArgument = 259
-  case continueStmt = 72
-  case whileStmt = 73
-  case deferStmt = 74
-  case expressionStmt = 75
-  case switchCaseList = 190
-  case repeatWhileStmt = 76
-  case guardStmt = 77
-  case whereClause = 136
-  case forInStmt = 78
-  case switchStmt = 79
-  case catchClauseList = 191
-  case doStmt = 80
-  case returnStmt = 81
-  case yieldStmt = 224
-  case yieldList = 225
-  case fallthroughStmt = 82
-  case breakStmt = 83
-  case caseItemList = 192
-  case catchItemList = 244
-  case conditionElement = 137
-  case availabilityCondition = 138
-  case matchingPatternCondition = 139
-  case optionalBindingCondition = 140
-  case unavailabilityCondition = 251
-  case conditionElementList = 193
-  case declarationStmt = 84
-  case throwStmt = 85
-  case ifStmt = 86
-  case elseIfContinuation = 141
-  case elseBlock = 142
-  case switchCase = 143
-  case switchDefaultLabel = 144
-  case caseItem = 145
-  case catchItem = 243
-  case switchCaseLabel = 146
-  case catchClause = 147
-  case poundAssertStmt = 229
-  case genericWhereClause = 148
-  case genericRequirementList = 194
-  case genericRequirement = 232
-  case sameTypeRequirement = 149
-  case genericParameterList = 195
-  case genericParameter = 150
-  case primaryAssociatedTypeList = 254
-  case primaryAssociatedType = 255
-  case genericParameterClause = 151
-  case conformanceRequirement = 152
-  case primaryAssociatedTypeClause = 256
-  case simpleTypeIdentifier = 212
-  case memberTypeIdentifier = 213
-  case classRestrictionType = 214
-  case arrayType = 215
-  case dictionaryType = 216
-  case metatypeType = 217
-  case optionalType = 218
-  case constrainedSugarType = 230
-  case implicitlyUnwrappedOptionalType = 219
-  case compositionTypeElement = 153
-  case compositionTypeElementList = 196
-  case compositionType = 220
-  case tupleTypeElement = 154
-  case tupleTypeElementList = 197
-  case tupleType = 221
-  case functionType = 222
-  case attributedType = 223
-  case genericArgumentList = 198
-  case genericArgument = 155
-  case genericArgumentClause = 156
-  case typeAnnotation = 157
-  case enumCasePattern = 202
-  case isTypePattern = 203
-  case optionalPattern = 204
-  case identifierPattern = 205
-  case asTypePattern = 206
-  case tuplePattern = 207
-  case wildcardPattern = 208
-  case tuplePatternElement = 158
-  case expressionPattern = 209
-  case tuplePatternElementList = 199
-  case valueBindingPattern = 210
-  case availabilitySpecList = 200
-  case availabilityArgument = 159
-  case availabilityLabeledArgument = 160
-  case availabilityVersionRestriction = 161
-  case versionTuple = 162
+public enum SyntaxKind: UInt16 {
+  case token
+  case unknown
+  case decl
+  case expr
+  case stmt
+  case type
+  case pattern
+  case unknownDecl
+  case unknownExpr
+  case unknownStmt
+  case unknownType
+  case unknownPattern
+  case codeBlockItem
+  case codeBlockItemList
+  case codeBlock
+  case inOutExpr
+  case poundColumnExpr
+  case tupleExprElementList
+  case arrayElementList
+  case dictionaryElementList
+  case stringLiteralSegments
+  case tryExpr
+  case awaitExpr
+  case declNameArgument
+  case declNameArgumentList
+  case declNameArguments
+  case identifierExpr
+  case superRefExpr
+  case nilLiteralExpr
+  case discardAssignmentExpr
+  case assignmentExpr
+  case sequenceExpr
+  case exprList
+  case poundLineExpr
+  case poundFileExpr
+  case poundFileIDExpr
+  case poundFilePathExpr
+  case poundFunctionExpr
+  case poundDsohandleExpr
+  case symbolicReferenceExpr
+  case prefixOperatorExpr
+  case binaryOperatorExpr
+  case arrowExpr
+  case floatLiteralExpr
+  case tupleExpr
+  case arrayExpr
+  case dictionaryExpr
+  case tupleExprElement
+  case arrayElement
+  case dictionaryElement
+  case integerLiteralExpr
+  case booleanLiteralExpr
+  case ternaryExpr
+  case memberAccessExpr
+  case isExpr
+  case asExpr
+  case typeExpr
+  case closureCaptureItem
+  case closureCaptureItemList
+  case closureCaptureSignature
+  case closureParam
+  case closureParamList
+  case closureSignature
+  case closureExpr
+  case unresolvedPatternExpr
+  case multipleTrailingClosureElement
+  case multipleTrailingClosureElementList
+  case functionCallExpr
+  case subscriptExpr
+  case optionalChainingExpr
+  case forcedValueExpr
+  case postfixUnaryExpr
+  case specializeExpr
+  case stringSegment
+  case expressionSegment
+  case stringLiteralExpr
+  case regexLiteralExpr
+  case keyPathExpr
+  case keyPathBaseExpr
+  case objcNamePiece
+  case objcName
+  case objcKeyPathExpr
+  case objcSelectorExpr
+  case postfixIfConfigExpr
+  case editorPlaceholderExpr
+  case objectLiteralExpr
+  case typeInitializerClause
+  case typealiasDecl
+  case associatedtypeDecl
+  case functionParameterList
+  case parameterClause
+  case returnClause
+  case functionSignature
+  case ifConfigClause
+  case ifConfigClauseList
+  case ifConfigDecl
+  case poundErrorDecl
+  case poundWarningDecl
+  case poundSourceLocation
+  case poundSourceLocationArgs
+  case declModifierDetail
+  case declModifier
+  case inheritedType
+  case inheritedTypeList
+  case typeInheritanceClause
+  case classDecl
+  case actorDecl
+  case structDecl
+  case protocolDecl
+  case extensionDecl
+  case memberDeclBlock
+  case memberDeclList
+  case memberDeclListItem
+  case sourceFile
+  case initializerClause
+  case functionParameter
+  case modifierList
+  case functionDecl
+  case initializerDecl
+  case deinitializerDecl
+  case subscriptDecl
+  case accessLevelModifier
+  case accessPathComponent
+  case accessPath
+  case importDecl
+  case accessorParameter
+  case accessorDecl
+  case accessorList
+  case accessorBlock
+  case patternBinding
+  case patternBindingList
+  case variableDecl
+  case enumCaseElement
+  case enumCaseElementList
+  case enumCaseDecl
+  case enumDecl
+  case operatorDecl
+  case identifierList
+  case operatorPrecedenceAndTypes
+  case precedenceGroupDecl
+  case precedenceGroupAttributeList
+  case precedenceGroupRelation
+  case precedenceGroupNameList
+  case precedenceGroupNameElement
+  case precedenceGroupAssignment
+  case precedenceGroupAssociativity
+  case tokenList
+  case nonEmptyTokenList
+  case customAttribute
+  case attribute
+  case attributeList
+  case specializeAttributeSpecList
+  case availabilityEntry
+  case labeledSpecializeEntry
+  case targetFunctionEntry
+  case namedAttributeStringArgument
+  case declName
+  case implementsAttributeArguments
+  case objCSelectorPiece
+  case objCSelector
+  case differentiableAttributeArguments
+  case differentiabilityParamsClause
+  case differentiabilityParams
+  case differentiabilityParamList
+  case differentiabilityParam
+  case derivativeRegistrationAttributeArguments
+  case qualifiedDeclName
+  case functionDeclName
+  case backDeployAttributeSpecList
+  case backDeployVersionList
+  case backDeployVersionArgument
+  case continueStmt
+  case whileStmt
+  case deferStmt
+  case expressionStmt
+  case switchCaseList
+  case repeatWhileStmt
+  case guardStmt
+  case whereClause
+  case forInStmt
+  case switchStmt
+  case catchClauseList
+  case doStmt
+  case returnStmt
+  case yieldStmt
+  case yieldList
+  case fallthroughStmt
+  case breakStmt
+  case caseItemList
+  case catchItemList
+  case conditionElement
+  case availabilityCondition
+  case matchingPatternCondition
+  case optionalBindingCondition
+  case unavailabilityCondition
+  case conditionElementList
+  case declarationStmt
+  case throwStmt
+  case ifStmt
+  case elseIfContinuation
+  case elseBlock
+  case switchCase
+  case switchDefaultLabel
+  case caseItem
+  case catchItem
+  case switchCaseLabel
+  case catchClause
+  case poundAssertStmt
+  case genericWhereClause
+  case genericRequirementList
+  case genericRequirement
+  case sameTypeRequirement
+  case genericParameterList
+  case genericParameter
+  case primaryAssociatedTypeList
+  case primaryAssociatedType
+  case genericParameterClause
+  case conformanceRequirement
+  case primaryAssociatedTypeClause
+  case simpleTypeIdentifier
+  case memberTypeIdentifier
+  case classRestrictionType
+  case arrayType
+  case dictionaryType
+  case metatypeType
+  case optionalType
+  case constrainedSugarType
+  case implicitlyUnwrappedOptionalType
+  case compositionTypeElement
+  case compositionTypeElementList
+  case compositionType
+  case tupleTypeElement
+  case tupleTypeElementList
+  case tupleType
+  case functionType
+  case attributedType
+  case genericArgumentList
+  case genericArgument
+  case genericArgumentClause
+  case typeAnnotation
+  case enumCasePattern
+  case isTypePattern
+  case optionalPattern
+  case identifierPattern
+  case asTypePattern
+  case tuplePattern
+  case wildcardPattern
+  case tuplePatternElement
+  case expressionPattern
+  case tuplePatternElementList
+  case valueBindingPattern
+  case availabilitySpecList
+  case availabilityArgument
+  case availabilityLabeledArgument
+  case availabilityVersionRestriction
+  case versionTuple
+
+  var isBase: Bool {
+    switch self {
+    case .decl: return true
+    case .expr: return true
+    case .stmt: return true
+    case .type: return true
+    case .pattern: return true
+    case .unknown: return true
+    default: return false
+    }
+  }
 
   var isSyntaxCollection: Bool {
     switch self {
@@ -331,11 +343,5 @@ internal enum SyntaxKind: CSyntaxKind {
     case .unknown: return true
     default: return false
     }
-  }
-}
-
-extension SyntaxKind {
-  static func fromRawValue(_ rawValue: CSyntaxKind) -> SyntaxKind {
-    return SyntaxKind(rawValue: rawValue)!
   }
 }

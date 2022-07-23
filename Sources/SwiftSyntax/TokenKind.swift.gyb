@@ -18,46 +18,23 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the kinds of tokens in the Swift language.
-public enum TokenKind {
+public enum TokenKind: UInt16 {
   case eof
 % for token in SYNTAX_TOKENS:
-%   kind = token.swift_kind()
-%
-%   # Tokens that don't have a set text have an associated value that
-%   # contains their text.
-%   if not token.text:
-%     kind += '(String)'
-%   end
-  case ${kind}
+  case ${token.swift_kind()}
 % end
 
   /// Initializes a keyword token kind from its string representation. If the
   /// given string is not a keyword, this function returns `nil`.
-  public init?(keyword: String) {
+  public init?(keyword: StringRef) {
     switch keyword {
 % for token in SYNTAX_TOKENS:
 %   if token.is_keyword:
-    case "${token.text}":
-      self = .${token.swift_kind()}
+    case "${token.text}": self = .${token.swift_kind()}
 %   end
 % end
     default:
       return nil
-    }
-  }
-
-  /// The textual representation of this token kind.
-  @_spi(Testing)
-  public var text: String {
-    switch self {
-    case .eof: return ""
-% for token in SYNTAX_TOKENS:
-%   if token.text:
-    case .${token.swift_kind()}: return "${token.text}"
-%   else:
-    case .${token.swift_kind()}(let text): return text
-%   end
-% end
     }
   }
 
@@ -96,128 +73,52 @@ public enum TokenKind {
 % end
     }
   }
-  
+
   var kind: String {
     switch self {
     case .eof: return "eof"
 % for token in SYNTAX_TOKENS:
+    case .${token.swift_kind()}: return "${token.kind}"
+% end
+    }
+  }
+
+  var defaultText: StringRef? {
+    switch self {
+% for token in SYNTAX_TOKENS:
+%   if token.text:
+    case .${token.swift_kind()}: return "${token.text}"
+%   end
+% end
+    default: return nil
+    }
+  }
+}
+
+@available(*, deprecated, message: "Use plain TokenKind")
+public enum LegacyTokenKind {
+  case eof
+% for token in SYNTAX_TOKENS:
 %   kind = token.swift_kind()
+%
+%   # Tokens that don't have a set text have an associated value that
+%   # contains their text.
 %   if not token.text:
-%     kind += '(_)'
+%     kind += '(String)'
 %   end
-    case .${kind}: return "${token.kind}"
+  case ${kind}
 % end
-    }
-  }
-
-  var sourceLength: SourceLength {
+  var plain: (TokenKind, String) {
     switch self {
-    case .eof: return .zero
+    case .eof: return (.eof, "")
 % for token in SYNTAX_TOKENS:
 %   if token.text:
-    case .${token.swift_kind()}: return SourceLength(utf8Length: ${len(token.text.encode('utf-8').decode('unicode-escape'))})
+    case .${token.swift_kind()}: return (.${token.swift_kind()}, "${token.text}")
 %   else:
-    case .${token.swift_kind()}(let text): return SourceLength(of: text)
+    case .${token.swift_kind()}(let text): return (.${token.swift_kind()}, text)
 %   end
 % end
     }
   }
 }
 
-extension TokenKind: Equatable {
-  public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool {
-    switch (lhs, rhs) {
-    case (.eof, .eof): return true
-% for token in SYNTAX_TOKENS:
-%   kind = token.swift_kind()
-%   if token.text:
-    case (.${kind}, .${kind}): return true
-%   else:
-    case (.${kind}(let lhsText), .${kind}(let rhsText)):
-      return lhsText == rhsText
-%   end
-% end
-    default: return false
-    }
-  }
-}
-
-extension TokenKind {
-  static func fromRawValue(kind: CTokenKind,
-                           textBuffer: UnsafeBufferPointer<UInt8>) -> TokenKind {
-    switch kind {
-    case 0: return .eof
-% for token in SYNTAX_TOKENS:
-    case ${token.serialization_code}:
-%   if token.text: # The token does not have text associated with it
-      return .${token.swift_kind()}
-%   else:
-      return .${token.swift_kind()}(.fromBuffer(textBuffer))
-%   end
-% end
-    default:
-      if !textBuffer.isEmpty {
-        // Default to an unknown token with the passed text if we don't know
-        // its kind.
-        return .unknown(.fromBuffer(textBuffer))
-      } else {
-        // If we were not passed the token's text, we cannot recover since we
-        // would lose roundtripness.
-        fatalError("unexpected token kind \(kind)")
-      }
-    }
-  }
-
-  static func hasText(kind: CTokenKind) -> Bool {
-    switch kind {
-    case 0: return false
-% for token in SYNTAX_TOKENS:
-    case ${token.serialization_code}:
-%   if token.text: # The token does not have text associated with it
-      return false
-%   else:
-      return true
-%   end
-% end
-    default:
-      fatalError("unexpected token kind \(kind)")
-    }
-  }
-}
-
-/// Plain token kind value, without an associated `String` value.
-internal enum RawTokenKind: CTokenKind {
-  case eof = 0
-% for token in SYNTAX_TOKENS:
-  case ${token.swift_kind()} = ${token.serialization_code}
-% end
-
-  static func fromRawValue(_ rawValue: CTokenKind) -> RawTokenKind {
-    return RawTokenKind(rawValue: rawValue)!
-  }
-}
-
-extension TokenKind {
-  internal func withUnsafeTokenText<Result>(
-    _ body: (UnsafeTokenText) -> Result
-  ) -> Result {
-    switch self {
-    case .eof:
-      return body(.init(kind: .eof, length: 0))
-% for token in SYNTAX_TOKENS:
-%   if token.text:
-    case .${token.swift_kind()}:
-      let length = ${len(token.text.encode('utf-8').decode('unicode-escape'))}
-      return body(.init(kind: .${token.swift_kind()}, length: length))
-%   else:
-    case .${token.swift_kind()}(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .${token.swift_kind()}, length: length, customText: buf))
-      })!
-%   end
-% end
-    }
-  }
-}

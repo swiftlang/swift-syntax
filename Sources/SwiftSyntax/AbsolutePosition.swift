@@ -25,3 +25,30 @@ public struct AbsolutePosition: Comparable {
     return lhs.utf8Offset < rhs.utf8Offset
   }
 }
+
+
+extension SyntaxProtocol {
+  public var position: AbsolutePosition {
+    AbsolutePosition(utf8Offset: byteOffset)
+  }
+
+  public var positionAfterSkippingLeadingTrivia: AbsolutePosition {
+    guard let tok = self.isToken ? self.syntax : firstToken?.syntax else {
+      return position
+    }
+    return AbsolutePosition(
+      utf8Offset: byteOffset + tok.raw.leadingTriviaByteLength)
+  }
+
+  public var endPositionBeforeTrailingTrivia: AbsolutePosition {
+    guard let tok = self.isToken ? self.syntax : lastToken?.syntax else {
+      return endPosition
+    }
+    return AbsolutePosition(
+      utf8Offset: byteOffset + byteLength - tok.raw.trailingTriviaByteLength)
+  }
+
+  public var endPosition: AbsolutePosition {
+    AbsolutePosition(utf8Offset: byteOffset + byteLength)
+  }
+}

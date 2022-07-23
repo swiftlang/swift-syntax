@@ -12,1505 +12,1752 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension SyntaxNode {
-  public var isUnknown: Bool { return raw.kind.isUnknown }
+extension SyntaxProtocol {
   public var asUnknown: UnknownSyntax? {
-    guard isUnknown else { return nil }
-    return UnknownSyntax(asSyntaxData)
+    isUnknown ? UnknownSyntax(data: syntax.data) : nil
   }
 
-  public var isUnknownDecl: Bool { return raw.kind == .unknownDecl }
+  public var isUnknownDecl: Bool {
+    RawUnknownDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnknownDecl: UnknownDeclSyntax? {
-    guard isUnknownDecl else { return nil }
-    return UnknownDeclSyntax(asSyntaxData)
+    isUnknownDecl ? UnknownDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isUnknownExpr: Bool { return raw.kind == .unknownExpr }
+  public var isUnknownExpr: Bool {
+    RawUnknownExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnknownExpr: UnknownExprSyntax? {
-    guard isUnknownExpr else { return nil }
-    return UnknownExprSyntax(asSyntaxData)
+    isUnknownExpr ? UnknownExprSyntax(data: syntax.data) : nil
   }
 
-  public var isUnknownStmt: Bool { return raw.kind == .unknownStmt }
+  public var isUnknownStmt: Bool {
+    RawUnknownStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnknownStmt: UnknownStmtSyntax? {
-    guard isUnknownStmt else { return nil }
-    return UnknownStmtSyntax(asSyntaxData)
+    isUnknownStmt ? UnknownStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isUnknownType: Bool { return raw.kind == .unknownType }
+  public var isUnknownType: Bool {
+    RawUnknownTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnknownType: UnknownTypeSyntax? {
-    guard isUnknownType else { return nil }
-    return UnknownTypeSyntax(asSyntaxData)
+    isUnknownType ? UnknownTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isUnknownPattern: Bool { return raw.kind == .unknownPattern }
+  public var isUnknownPattern: Bool {
+    RawUnknownPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnknownPattern: UnknownPatternSyntax? {
-    guard isUnknownPattern else { return nil }
-    return UnknownPatternSyntax(asSyntaxData)
+    isUnknownPattern ? UnknownPatternSyntax(data: syntax.data) : nil
   }
 
-  public var isCodeBlockItem: Bool { return raw.kind == .codeBlockItem }
+  public var isCodeBlockItem: Bool {
+    RawCodeBlockItemSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCodeBlockItem: CodeBlockItemSyntax? {
-    guard isCodeBlockItem else { return nil }
-    return CodeBlockItemSyntax(asSyntaxData)
+    isCodeBlockItem ? CodeBlockItemSyntax(data: syntax.data) : nil
   }
 
-  public var isCodeBlockItemList: Bool { return raw.kind == .codeBlockItemList }
+  public var isCodeBlockItemList: Bool {
+    RawCodeBlockItemListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCodeBlockItemList: CodeBlockItemListSyntax? {
-    guard isCodeBlockItemList else { return nil }
-    return CodeBlockItemListSyntax(asSyntaxData)
+    isCodeBlockItemList ? CodeBlockItemListSyntax(data: syntax.data) : nil
   }
 
-  public var isCodeBlock: Bool { return raw.kind == .codeBlock }
+  public var isCodeBlock: Bool {
+    RawCodeBlockSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCodeBlock: CodeBlockSyntax? {
-    guard isCodeBlock else { return nil }
-    return CodeBlockSyntax(asSyntaxData)
+    isCodeBlock ? CodeBlockSyntax(data: syntax.data) : nil
   }
 
-  public var isInOutExpr: Bool { return raw.kind == .inOutExpr }
+  public var isInOutExpr: Bool {
+    RawInOutExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asInOutExpr: InOutExprSyntax? {
-    guard isInOutExpr else { return nil }
-    return InOutExprSyntax(asSyntaxData)
+    isInOutExpr ? InOutExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundColumnExpr: Bool { return raw.kind == .poundColumnExpr }
+  public var isPoundColumnExpr: Bool {
+    RawPoundColumnExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundColumnExpr: PoundColumnExprSyntax? {
-    guard isPoundColumnExpr else { return nil }
-    return PoundColumnExprSyntax(asSyntaxData)
+    isPoundColumnExpr ? PoundColumnExprSyntax(data: syntax.data) : nil
   }
 
-  public var isTupleExprElementList: Bool { return raw.kind == .tupleExprElementList }
+  public var isTupleExprElementList: Bool {
+    RawTupleExprElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTupleExprElementList: TupleExprElementListSyntax? {
-    guard isTupleExprElementList else { return nil }
-    return TupleExprElementListSyntax(asSyntaxData)
+    isTupleExprElementList ? TupleExprElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isArrayElementList: Bool { return raw.kind == .arrayElementList }
+  public var isArrayElementList: Bool {
+    RawArrayElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asArrayElementList: ArrayElementListSyntax? {
-    guard isArrayElementList else { return nil }
-    return ArrayElementListSyntax(asSyntaxData)
+    isArrayElementList ? ArrayElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isDictionaryElementList: Bool { return raw.kind == .dictionaryElementList }
+  public var isDictionaryElementList: Bool {
+    RawDictionaryElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDictionaryElementList: DictionaryElementListSyntax? {
-    guard isDictionaryElementList else { return nil }
-    return DictionaryElementListSyntax(asSyntaxData)
+    isDictionaryElementList ? DictionaryElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isStringLiteralSegments: Bool { return raw.kind == .stringLiteralSegments }
+  public var isStringLiteralSegments: Bool {
+    RawStringLiteralSegmentsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asStringLiteralSegments: StringLiteralSegmentsSyntax? {
-    guard isStringLiteralSegments else { return nil }
-    return StringLiteralSegmentsSyntax(asSyntaxData)
+    isStringLiteralSegments ? StringLiteralSegmentsSyntax(data: syntax.data) : nil
   }
 
-  public var isTryExpr: Bool { return raw.kind == .tryExpr }
+  public var isTryExpr: Bool {
+    RawTryExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTryExpr: TryExprSyntax? {
-    guard isTryExpr else { return nil }
-    return TryExprSyntax(asSyntaxData)
+    isTryExpr ? TryExprSyntax(data: syntax.data) : nil
   }
 
-  public var isAwaitExpr: Bool { return raw.kind == .awaitExpr }
+  public var isAwaitExpr: Bool {
+    RawAwaitExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAwaitExpr: AwaitExprSyntax? {
-    guard isAwaitExpr else { return nil }
-    return AwaitExprSyntax(asSyntaxData)
+    isAwaitExpr ? AwaitExprSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclNameArgument: Bool { return raw.kind == .declNameArgument }
+  public var isDeclNameArgument: Bool {
+    RawDeclNameArgumentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclNameArgument: DeclNameArgumentSyntax? {
-    guard isDeclNameArgument else { return nil }
-    return DeclNameArgumentSyntax(asSyntaxData)
+    isDeclNameArgument ? DeclNameArgumentSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclNameArgumentList: Bool { return raw.kind == .declNameArgumentList }
+  public var isDeclNameArgumentList: Bool {
+    RawDeclNameArgumentListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclNameArgumentList: DeclNameArgumentListSyntax? {
-    guard isDeclNameArgumentList else { return nil }
-    return DeclNameArgumentListSyntax(asSyntaxData)
+    isDeclNameArgumentList ? DeclNameArgumentListSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclNameArguments: Bool { return raw.kind == .declNameArguments }
+  public var isDeclNameArguments: Bool {
+    RawDeclNameArgumentsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclNameArguments: DeclNameArgumentsSyntax? {
-    guard isDeclNameArguments else { return nil }
-    return DeclNameArgumentsSyntax(asSyntaxData)
+    isDeclNameArguments ? DeclNameArgumentsSyntax(data: syntax.data) : nil
   }
 
-  public var isIdentifierExpr: Bool { return raw.kind == .identifierExpr }
+  public var isIdentifierExpr: Bool {
+    RawIdentifierExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIdentifierExpr: IdentifierExprSyntax? {
-    guard isIdentifierExpr else { return nil }
-    return IdentifierExprSyntax(asSyntaxData)
+    isIdentifierExpr ? IdentifierExprSyntax(data: syntax.data) : nil
   }
 
-  public var isSuperRefExpr: Bool { return raw.kind == .superRefExpr }
+  public var isSuperRefExpr: Bool {
+    RawSuperRefExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSuperRefExpr: SuperRefExprSyntax? {
-    guard isSuperRefExpr else { return nil }
-    return SuperRefExprSyntax(asSyntaxData)
+    isSuperRefExpr ? SuperRefExprSyntax(data: syntax.data) : nil
   }
 
-  public var isNilLiteralExpr: Bool { return raw.kind == .nilLiteralExpr }
+  public var isNilLiteralExpr: Bool {
+    RawNilLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asNilLiteralExpr: NilLiteralExprSyntax? {
-    guard isNilLiteralExpr else { return nil }
-    return NilLiteralExprSyntax(asSyntaxData)
+    isNilLiteralExpr ? NilLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isDiscardAssignmentExpr: Bool { return raw.kind == .discardAssignmentExpr }
+  public var isDiscardAssignmentExpr: Bool {
+    RawDiscardAssignmentExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDiscardAssignmentExpr: DiscardAssignmentExprSyntax? {
-    guard isDiscardAssignmentExpr else { return nil }
-    return DiscardAssignmentExprSyntax(asSyntaxData)
+    isDiscardAssignmentExpr ? DiscardAssignmentExprSyntax(data: syntax.data) : nil
   }
 
-  public var isAssignmentExpr: Bool { return raw.kind == .assignmentExpr }
+  public var isAssignmentExpr: Bool {
+    RawAssignmentExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAssignmentExpr: AssignmentExprSyntax? {
-    guard isAssignmentExpr else { return nil }
-    return AssignmentExprSyntax(asSyntaxData)
+    isAssignmentExpr ? AssignmentExprSyntax(data: syntax.data) : nil
   }
 
-  public var isSequenceExpr: Bool { return raw.kind == .sequenceExpr }
+  public var isSequenceExpr: Bool {
+    RawSequenceExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSequenceExpr: SequenceExprSyntax? {
-    guard isSequenceExpr else { return nil }
-    return SequenceExprSyntax(asSyntaxData)
+    isSequenceExpr ? SequenceExprSyntax(data: syntax.data) : nil
   }
 
-  public var isExprList: Bool { return raw.kind == .exprList }
+  public var isExprList: Bool {
+    RawExprListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asExprList: ExprListSyntax? {
-    guard isExprList else { return nil }
-    return ExprListSyntax(asSyntaxData)
+    isExprList ? ExprListSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundLineExpr: Bool { return raw.kind == .poundLineExpr }
+  public var isPoundLineExpr: Bool {
+    RawPoundLineExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundLineExpr: PoundLineExprSyntax? {
-    guard isPoundLineExpr else { return nil }
-    return PoundLineExprSyntax(asSyntaxData)
+    isPoundLineExpr ? PoundLineExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundFileExpr: Bool { return raw.kind == .poundFileExpr }
+  public var isPoundFileExpr: Bool {
+    RawPoundFileExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundFileExpr: PoundFileExprSyntax? {
-    guard isPoundFileExpr else { return nil }
-    return PoundFileExprSyntax(asSyntaxData)
+    isPoundFileExpr ? PoundFileExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundFileIDExpr: Bool { return raw.kind == .poundFileIDExpr }
+  public var isPoundFileIDExpr: Bool {
+    RawPoundFileIDExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundFileIDExpr: PoundFileIDExprSyntax? {
-    guard isPoundFileIDExpr else { return nil }
-    return PoundFileIDExprSyntax(asSyntaxData)
+    isPoundFileIDExpr ? PoundFileIDExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundFilePathExpr: Bool { return raw.kind == .poundFilePathExpr }
+  public var isPoundFilePathExpr: Bool {
+    RawPoundFilePathExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundFilePathExpr: PoundFilePathExprSyntax? {
-    guard isPoundFilePathExpr else { return nil }
-    return PoundFilePathExprSyntax(asSyntaxData)
+    isPoundFilePathExpr ? PoundFilePathExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundFunctionExpr: Bool { return raw.kind == .poundFunctionExpr }
+  public var isPoundFunctionExpr: Bool {
+    RawPoundFunctionExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundFunctionExpr: PoundFunctionExprSyntax? {
-    guard isPoundFunctionExpr else { return nil }
-    return PoundFunctionExprSyntax(asSyntaxData)
+    isPoundFunctionExpr ? PoundFunctionExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundDsohandleExpr: Bool { return raw.kind == .poundDsohandleExpr }
+  public var isPoundDsohandleExpr: Bool {
+    RawPoundDsohandleExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundDsohandleExpr: PoundDsohandleExprSyntax? {
-    guard isPoundDsohandleExpr else { return nil }
-    return PoundDsohandleExprSyntax(asSyntaxData)
+    isPoundDsohandleExpr ? PoundDsohandleExprSyntax(data: syntax.data) : nil
   }
 
-  public var isSymbolicReferenceExpr: Bool { return raw.kind == .symbolicReferenceExpr }
+  public var isSymbolicReferenceExpr: Bool {
+    RawSymbolicReferenceExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSymbolicReferenceExpr: SymbolicReferenceExprSyntax? {
-    guard isSymbolicReferenceExpr else { return nil }
-    return SymbolicReferenceExprSyntax(asSyntaxData)
+    isSymbolicReferenceExpr ? SymbolicReferenceExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPrefixOperatorExpr: Bool { return raw.kind == .prefixOperatorExpr }
+  public var isPrefixOperatorExpr: Bool {
+    RawPrefixOperatorExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrefixOperatorExpr: PrefixOperatorExprSyntax? {
-    guard isPrefixOperatorExpr else { return nil }
-    return PrefixOperatorExprSyntax(asSyntaxData)
+    isPrefixOperatorExpr ? PrefixOperatorExprSyntax(data: syntax.data) : nil
   }
 
-  public var isBinaryOperatorExpr: Bool { return raw.kind == .binaryOperatorExpr }
+  public var isBinaryOperatorExpr: Bool {
+    RawBinaryOperatorExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asBinaryOperatorExpr: BinaryOperatorExprSyntax? {
-    guard isBinaryOperatorExpr else { return nil }
-    return BinaryOperatorExprSyntax(asSyntaxData)
+    isBinaryOperatorExpr ? BinaryOperatorExprSyntax(data: syntax.data) : nil
   }
 
-  public var isArrowExpr: Bool { return raw.kind == .arrowExpr }
+  public var isArrowExpr: Bool {
+    RawArrowExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asArrowExpr: ArrowExprSyntax? {
-    guard isArrowExpr else { return nil }
-    return ArrowExprSyntax(asSyntaxData)
+    isArrowExpr ? ArrowExprSyntax(data: syntax.data) : nil
   }
 
-  public var isFloatLiteralExpr: Bool { return raw.kind == .floatLiteralExpr }
+  public var isFloatLiteralExpr: Bool {
+    RawFloatLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFloatLiteralExpr: FloatLiteralExprSyntax? {
-    guard isFloatLiteralExpr else { return nil }
-    return FloatLiteralExprSyntax(asSyntaxData)
+    isFloatLiteralExpr ? FloatLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isTupleExpr: Bool { return raw.kind == .tupleExpr }
+  public var isTupleExpr: Bool {
+    RawTupleExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTupleExpr: TupleExprSyntax? {
-    guard isTupleExpr else { return nil }
-    return TupleExprSyntax(asSyntaxData)
+    isTupleExpr ? TupleExprSyntax(data: syntax.data) : nil
   }
 
-  public var isArrayExpr: Bool { return raw.kind == .arrayExpr }
+  public var isArrayExpr: Bool {
+    RawArrayExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asArrayExpr: ArrayExprSyntax? {
-    guard isArrayExpr else { return nil }
-    return ArrayExprSyntax(asSyntaxData)
+    isArrayExpr ? ArrayExprSyntax(data: syntax.data) : nil
   }
 
-  public var isDictionaryExpr: Bool { return raw.kind == .dictionaryExpr }
+  public var isDictionaryExpr: Bool {
+    RawDictionaryExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDictionaryExpr: DictionaryExprSyntax? {
-    guard isDictionaryExpr else { return nil }
-    return DictionaryExprSyntax(asSyntaxData)
+    isDictionaryExpr ? DictionaryExprSyntax(data: syntax.data) : nil
   }
 
-  public var isTupleExprElement: Bool { return raw.kind == .tupleExprElement }
+  public var isTupleExprElement: Bool {
+    RawTupleExprElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTupleExprElement: TupleExprElementSyntax? {
-    guard isTupleExprElement else { return nil }
-    return TupleExprElementSyntax(asSyntaxData)
+    isTupleExprElement ? TupleExprElementSyntax(data: syntax.data) : nil
   }
 
-  public var isArrayElement: Bool { return raw.kind == .arrayElement }
+  public var isArrayElement: Bool {
+    RawArrayElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asArrayElement: ArrayElementSyntax? {
-    guard isArrayElement else { return nil }
-    return ArrayElementSyntax(asSyntaxData)
+    isArrayElement ? ArrayElementSyntax(data: syntax.data) : nil
   }
 
-  public var isDictionaryElement: Bool { return raw.kind == .dictionaryElement }
+  public var isDictionaryElement: Bool {
+    RawDictionaryElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDictionaryElement: DictionaryElementSyntax? {
-    guard isDictionaryElement else { return nil }
-    return DictionaryElementSyntax(asSyntaxData)
+    isDictionaryElement ? DictionaryElementSyntax(data: syntax.data) : nil
   }
 
-  public var isIntegerLiteralExpr: Bool { return raw.kind == .integerLiteralExpr }
+  public var isIntegerLiteralExpr: Bool {
+    RawIntegerLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIntegerLiteralExpr: IntegerLiteralExprSyntax? {
-    guard isIntegerLiteralExpr else { return nil }
-    return IntegerLiteralExprSyntax(asSyntaxData)
+    isIntegerLiteralExpr ? IntegerLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isBooleanLiteralExpr: Bool { return raw.kind == .booleanLiteralExpr }
+  public var isBooleanLiteralExpr: Bool {
+    RawBooleanLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asBooleanLiteralExpr: BooleanLiteralExprSyntax? {
-    guard isBooleanLiteralExpr else { return nil }
-    return BooleanLiteralExprSyntax(asSyntaxData)
+    isBooleanLiteralExpr ? BooleanLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isTernaryExpr: Bool { return raw.kind == .ternaryExpr }
+  public var isTernaryExpr: Bool {
+    RawTernaryExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTernaryExpr: TernaryExprSyntax? {
-    guard isTernaryExpr else { return nil }
-    return TernaryExprSyntax(asSyntaxData)
+    isTernaryExpr ? TernaryExprSyntax(data: syntax.data) : nil
   }
 
-  public var isMemberAccessExpr: Bool { return raw.kind == .memberAccessExpr }
+  public var isMemberAccessExpr: Bool {
+    RawMemberAccessExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMemberAccessExpr: MemberAccessExprSyntax? {
-    guard isMemberAccessExpr else { return nil }
-    return MemberAccessExprSyntax(asSyntaxData)
+    isMemberAccessExpr ? MemberAccessExprSyntax(data: syntax.data) : nil
   }
 
-  public var isIsExpr: Bool { return raw.kind == .isExpr }
+  public var isIsExpr: Bool {
+    RawIsExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIsExpr: IsExprSyntax? {
-    guard isIsExpr else { return nil }
-    return IsExprSyntax(asSyntaxData)
+    isIsExpr ? IsExprSyntax(data: syntax.data) : nil
   }
 
-  public var isAsExpr: Bool { return raw.kind == .asExpr }
+  public var isAsExpr: Bool {
+    RawAsExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAsExpr: AsExprSyntax? {
-    guard isAsExpr else { return nil }
-    return AsExprSyntax(asSyntaxData)
+    isAsExpr ? AsExprSyntax(data: syntax.data) : nil
   }
 
-  public var isTypeExpr: Bool { return raw.kind == .typeExpr }
+  public var isTypeExpr: Bool {
+    RawTypeExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTypeExpr: TypeExprSyntax? {
-    guard isTypeExpr else { return nil }
-    return TypeExprSyntax(asSyntaxData)
+    isTypeExpr ? TypeExprSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureCaptureItem: Bool { return raw.kind == .closureCaptureItem }
+  public var isClosureCaptureItem: Bool {
+    RawClosureCaptureItemSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureCaptureItem: ClosureCaptureItemSyntax? {
-    guard isClosureCaptureItem else { return nil }
-    return ClosureCaptureItemSyntax(asSyntaxData)
+    isClosureCaptureItem ? ClosureCaptureItemSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureCaptureItemList: Bool { return raw.kind == .closureCaptureItemList }
+  public var isClosureCaptureItemList: Bool {
+    RawClosureCaptureItemListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureCaptureItemList: ClosureCaptureItemListSyntax? {
-    guard isClosureCaptureItemList else { return nil }
-    return ClosureCaptureItemListSyntax(asSyntaxData)
+    isClosureCaptureItemList ? ClosureCaptureItemListSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureCaptureSignature: Bool { return raw.kind == .closureCaptureSignature }
+  public var isClosureCaptureSignature: Bool {
+    RawClosureCaptureSignatureSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureCaptureSignature: ClosureCaptureSignatureSyntax? {
-    guard isClosureCaptureSignature else { return nil }
-    return ClosureCaptureSignatureSyntax(asSyntaxData)
+    isClosureCaptureSignature ? ClosureCaptureSignatureSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureParam: Bool { return raw.kind == .closureParam }
+  public var isClosureParam: Bool {
+    RawClosureParamSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureParam: ClosureParamSyntax? {
-    guard isClosureParam else { return nil }
-    return ClosureParamSyntax(asSyntaxData)
+    isClosureParam ? ClosureParamSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureParamList: Bool { return raw.kind == .closureParamList }
+  public var isClosureParamList: Bool {
+    RawClosureParamListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureParamList: ClosureParamListSyntax? {
-    guard isClosureParamList else { return nil }
-    return ClosureParamListSyntax(asSyntaxData)
+    isClosureParamList ? ClosureParamListSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureSignature: Bool { return raw.kind == .closureSignature }
+  public var isClosureSignature: Bool {
+    RawClosureSignatureSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureSignature: ClosureSignatureSyntax? {
-    guard isClosureSignature else { return nil }
-    return ClosureSignatureSyntax(asSyntaxData)
+    isClosureSignature ? ClosureSignatureSyntax(data: syntax.data) : nil
   }
 
-  public var isClosureExpr: Bool { return raw.kind == .closureExpr }
+  public var isClosureExpr: Bool {
+    RawClosureExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClosureExpr: ClosureExprSyntax? {
-    guard isClosureExpr else { return nil }
-    return ClosureExprSyntax(asSyntaxData)
+    isClosureExpr ? ClosureExprSyntax(data: syntax.data) : nil
   }
 
-  public var isUnresolvedPatternExpr: Bool { return raw.kind == .unresolvedPatternExpr }
+  public var isUnresolvedPatternExpr: Bool {
+    RawUnresolvedPatternExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnresolvedPatternExpr: UnresolvedPatternExprSyntax? {
-    guard isUnresolvedPatternExpr else { return nil }
-    return UnresolvedPatternExprSyntax(asSyntaxData)
+    isUnresolvedPatternExpr ? UnresolvedPatternExprSyntax(data: syntax.data) : nil
   }
 
-  public var isMultipleTrailingClosureElement: Bool { return raw.kind == .multipleTrailingClosureElement }
+  public var isMultipleTrailingClosureElement: Bool {
+    RawMultipleTrailingClosureElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMultipleTrailingClosureElement: MultipleTrailingClosureElementSyntax? {
-    guard isMultipleTrailingClosureElement else { return nil }
-    return MultipleTrailingClosureElementSyntax(asSyntaxData)
+    isMultipleTrailingClosureElement ? MultipleTrailingClosureElementSyntax(data: syntax.data) : nil
   }
 
-  public var isMultipleTrailingClosureElementList: Bool { return raw.kind == .multipleTrailingClosureElementList }
+  public var isMultipleTrailingClosureElementList: Bool {
+    RawMultipleTrailingClosureElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMultipleTrailingClosureElementList: MultipleTrailingClosureElementListSyntax? {
-    guard isMultipleTrailingClosureElementList else { return nil }
-    return MultipleTrailingClosureElementListSyntax(asSyntaxData)
+    isMultipleTrailingClosureElementList ? MultipleTrailingClosureElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionCallExpr: Bool { return raw.kind == .functionCallExpr }
+  public var isFunctionCallExpr: Bool {
+    RawFunctionCallExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionCallExpr: FunctionCallExprSyntax? {
-    guard isFunctionCallExpr else { return nil }
-    return FunctionCallExprSyntax(asSyntaxData)
+    isFunctionCallExpr ? FunctionCallExprSyntax(data: syntax.data) : nil
   }
 
-  public var isSubscriptExpr: Bool { return raw.kind == .subscriptExpr }
+  public var isSubscriptExpr: Bool {
+    RawSubscriptExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSubscriptExpr: SubscriptExprSyntax? {
-    guard isSubscriptExpr else { return nil }
-    return SubscriptExprSyntax(asSyntaxData)
+    isSubscriptExpr ? SubscriptExprSyntax(data: syntax.data) : nil
   }
 
-  public var isOptionalChainingExpr: Bool { return raw.kind == .optionalChainingExpr }
+  public var isOptionalChainingExpr: Bool {
+    RawOptionalChainingExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asOptionalChainingExpr: OptionalChainingExprSyntax? {
-    guard isOptionalChainingExpr else { return nil }
-    return OptionalChainingExprSyntax(asSyntaxData)
+    isOptionalChainingExpr ? OptionalChainingExprSyntax(data: syntax.data) : nil
   }
 
-  public var isForcedValueExpr: Bool { return raw.kind == .forcedValueExpr }
+  public var isForcedValueExpr: Bool {
+    RawForcedValueExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asForcedValueExpr: ForcedValueExprSyntax? {
-    guard isForcedValueExpr else { return nil }
-    return ForcedValueExprSyntax(asSyntaxData)
+    isForcedValueExpr ? ForcedValueExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPostfixUnaryExpr: Bool { return raw.kind == .postfixUnaryExpr }
+  public var isPostfixUnaryExpr: Bool {
+    RawPostfixUnaryExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPostfixUnaryExpr: PostfixUnaryExprSyntax? {
-    guard isPostfixUnaryExpr else { return nil }
-    return PostfixUnaryExprSyntax(asSyntaxData)
+    isPostfixUnaryExpr ? PostfixUnaryExprSyntax(data: syntax.data) : nil
   }
 
-  public var isSpecializeExpr: Bool { return raw.kind == .specializeExpr }
+  public var isSpecializeExpr: Bool {
+    RawSpecializeExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSpecializeExpr: SpecializeExprSyntax? {
-    guard isSpecializeExpr else { return nil }
-    return SpecializeExprSyntax(asSyntaxData)
+    isSpecializeExpr ? SpecializeExprSyntax(data: syntax.data) : nil
   }
 
-  public var isStringSegment: Bool { return raw.kind == .stringSegment }
+  public var isStringSegment: Bool {
+    RawStringSegmentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asStringSegment: StringSegmentSyntax? {
-    guard isStringSegment else { return nil }
-    return StringSegmentSyntax(asSyntaxData)
+    isStringSegment ? StringSegmentSyntax(data: syntax.data) : nil
   }
 
-  public var isExpressionSegment: Bool { return raw.kind == .expressionSegment }
+  public var isExpressionSegment: Bool {
+    RawExpressionSegmentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asExpressionSegment: ExpressionSegmentSyntax? {
-    guard isExpressionSegment else { return nil }
-    return ExpressionSegmentSyntax(asSyntaxData)
+    isExpressionSegment ? ExpressionSegmentSyntax(data: syntax.data) : nil
   }
 
-  public var isStringLiteralExpr: Bool { return raw.kind == .stringLiteralExpr }
+  public var isStringLiteralExpr: Bool {
+    RawStringLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asStringLiteralExpr: StringLiteralExprSyntax? {
-    guard isStringLiteralExpr else { return nil }
-    return StringLiteralExprSyntax(asSyntaxData)
+    isStringLiteralExpr ? StringLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isRegexLiteralExpr: Bool { return raw.kind == .regexLiteralExpr }
+  public var isRegexLiteralExpr: Bool {
+    RawRegexLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asRegexLiteralExpr: RegexLiteralExprSyntax? {
-    guard isRegexLiteralExpr else { return nil }
-    return RegexLiteralExprSyntax(asSyntaxData)
+    isRegexLiteralExpr ? RegexLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isKeyPathExpr: Bool { return raw.kind == .keyPathExpr }
+  public var isKeyPathExpr: Bool {
+    RawKeyPathExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asKeyPathExpr: KeyPathExprSyntax? {
-    guard isKeyPathExpr else { return nil }
-    return KeyPathExprSyntax(asSyntaxData)
+    isKeyPathExpr ? KeyPathExprSyntax(data: syntax.data) : nil
   }
 
-  public var isKeyPathBaseExpr: Bool { return raw.kind == .keyPathBaseExpr }
+  public var isKeyPathBaseExpr: Bool {
+    RawKeyPathBaseExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asKeyPathBaseExpr: KeyPathBaseExprSyntax? {
-    guard isKeyPathBaseExpr else { return nil }
-    return KeyPathBaseExprSyntax(asSyntaxData)
+    isKeyPathBaseExpr ? KeyPathBaseExprSyntax(data: syntax.data) : nil
   }
 
-  public var isObjcNamePiece: Bool { return raw.kind == .objcNamePiece }
+  public var isObjcNamePiece: Bool {
+    RawObjcNamePieceSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjcNamePiece: ObjcNamePieceSyntax? {
-    guard isObjcNamePiece else { return nil }
-    return ObjcNamePieceSyntax(asSyntaxData)
+    isObjcNamePiece ? ObjcNamePieceSyntax(data: syntax.data) : nil
   }
 
-  public var isObjcName: Bool { return raw.kind == .objcName }
+  public var isObjcName: Bool {
+    RawObjcNameSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjcName: ObjcNameSyntax? {
-    guard isObjcName else { return nil }
-    return ObjcNameSyntax(asSyntaxData)
+    isObjcName ? ObjcNameSyntax(data: syntax.data) : nil
   }
 
-  public var isObjcKeyPathExpr: Bool { return raw.kind == .objcKeyPathExpr }
+  public var isObjcKeyPathExpr: Bool {
+    RawObjcKeyPathExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjcKeyPathExpr: ObjcKeyPathExprSyntax? {
-    guard isObjcKeyPathExpr else { return nil }
-    return ObjcKeyPathExprSyntax(asSyntaxData)
+    isObjcKeyPathExpr ? ObjcKeyPathExprSyntax(data: syntax.data) : nil
   }
 
-  public var isObjcSelectorExpr: Bool { return raw.kind == .objcSelectorExpr }
+  public var isObjcSelectorExpr: Bool {
+    RawObjcSelectorExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjcSelectorExpr: ObjcSelectorExprSyntax? {
-    guard isObjcSelectorExpr else { return nil }
-    return ObjcSelectorExprSyntax(asSyntaxData)
+    isObjcSelectorExpr ? ObjcSelectorExprSyntax(data: syntax.data) : nil
   }
 
-  public var isPostfixIfConfigExpr: Bool { return raw.kind == .postfixIfConfigExpr }
+  public var isPostfixIfConfigExpr: Bool {
+    RawPostfixIfConfigExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPostfixIfConfigExpr: PostfixIfConfigExprSyntax? {
-    guard isPostfixIfConfigExpr else { return nil }
-    return PostfixIfConfigExprSyntax(asSyntaxData)
+    isPostfixIfConfigExpr ? PostfixIfConfigExprSyntax(data: syntax.data) : nil
   }
 
-  public var isEditorPlaceholderExpr: Bool { return raw.kind == .editorPlaceholderExpr }
+  public var isEditorPlaceholderExpr: Bool {
+    RawEditorPlaceholderExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asEditorPlaceholderExpr: EditorPlaceholderExprSyntax? {
-    guard isEditorPlaceholderExpr else { return nil }
-    return EditorPlaceholderExprSyntax(asSyntaxData)
+    isEditorPlaceholderExpr ? EditorPlaceholderExprSyntax(data: syntax.data) : nil
   }
 
-  public var isObjectLiteralExpr: Bool { return raw.kind == .objectLiteralExpr }
+  public var isObjectLiteralExpr: Bool {
+    RawObjectLiteralExprSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjectLiteralExpr: ObjectLiteralExprSyntax? {
-    guard isObjectLiteralExpr else { return nil }
-    return ObjectLiteralExprSyntax(asSyntaxData)
+    isObjectLiteralExpr ? ObjectLiteralExprSyntax(data: syntax.data) : nil
   }
 
-  public var isTypeInitializerClause: Bool { return raw.kind == .typeInitializerClause }
+  public var isTypeInitializerClause: Bool {
+    RawTypeInitializerClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTypeInitializerClause: TypeInitializerClauseSyntax? {
-    guard isTypeInitializerClause else { return nil }
-    return TypeInitializerClauseSyntax(asSyntaxData)
+    isTypeInitializerClause ? TypeInitializerClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isTypealiasDecl: Bool { return raw.kind == .typealiasDecl }
+  public var isTypealiasDecl: Bool {
+    RawTypealiasDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTypealiasDecl: TypealiasDeclSyntax? {
-    guard isTypealiasDecl else { return nil }
-    return TypealiasDeclSyntax(asSyntaxData)
+    isTypealiasDecl ? TypealiasDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isAssociatedtypeDecl: Bool { return raw.kind == .associatedtypeDecl }
+  public var isAssociatedtypeDecl: Bool {
+    RawAssociatedtypeDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAssociatedtypeDecl: AssociatedtypeDeclSyntax? {
-    guard isAssociatedtypeDecl else { return nil }
-    return AssociatedtypeDeclSyntax(asSyntaxData)
+    isAssociatedtypeDecl ? AssociatedtypeDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionParameterList: Bool { return raw.kind == .functionParameterList }
+  public var isFunctionParameterList: Bool {
+    RawFunctionParameterListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionParameterList: FunctionParameterListSyntax? {
-    guard isFunctionParameterList else { return nil }
-    return FunctionParameterListSyntax(asSyntaxData)
+    isFunctionParameterList ? FunctionParameterListSyntax(data: syntax.data) : nil
   }
 
-  public var isParameterClause: Bool { return raw.kind == .parameterClause }
+  public var isParameterClause: Bool {
+    RawParameterClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asParameterClause: ParameterClauseSyntax? {
-    guard isParameterClause else { return nil }
-    return ParameterClauseSyntax(asSyntaxData)
+    isParameterClause ? ParameterClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isReturnClause: Bool { return raw.kind == .returnClause }
+  public var isReturnClause: Bool {
+    RawReturnClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asReturnClause: ReturnClauseSyntax? {
-    guard isReturnClause else { return nil }
-    return ReturnClauseSyntax(asSyntaxData)
+    isReturnClause ? ReturnClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionSignature: Bool { return raw.kind == .functionSignature }
+  public var isFunctionSignature: Bool {
+    RawFunctionSignatureSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionSignature: FunctionSignatureSyntax? {
-    guard isFunctionSignature else { return nil }
-    return FunctionSignatureSyntax(asSyntaxData)
+    isFunctionSignature ? FunctionSignatureSyntax(data: syntax.data) : nil
   }
 
-  public var isIfConfigClause: Bool { return raw.kind == .ifConfigClause }
+  public var isIfConfigClause: Bool {
+    RawIfConfigClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIfConfigClause: IfConfigClauseSyntax? {
-    guard isIfConfigClause else { return nil }
-    return IfConfigClauseSyntax(asSyntaxData)
+    isIfConfigClause ? IfConfigClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isIfConfigClauseList: Bool { return raw.kind == .ifConfigClauseList }
+  public var isIfConfigClauseList: Bool {
+    RawIfConfigClauseListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIfConfigClauseList: IfConfigClauseListSyntax? {
-    guard isIfConfigClauseList else { return nil }
-    return IfConfigClauseListSyntax(asSyntaxData)
+    isIfConfigClauseList ? IfConfigClauseListSyntax(data: syntax.data) : nil
   }
 
-  public var isIfConfigDecl: Bool { return raw.kind == .ifConfigDecl }
+  public var isIfConfigDecl: Bool {
+    RawIfConfigDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIfConfigDecl: IfConfigDeclSyntax? {
-    guard isIfConfigDecl else { return nil }
-    return IfConfigDeclSyntax(asSyntaxData)
+    isIfConfigDecl ? IfConfigDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundErrorDecl: Bool { return raw.kind == .poundErrorDecl }
+  public var isPoundErrorDecl: Bool {
+    RawPoundErrorDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundErrorDecl: PoundErrorDeclSyntax? {
-    guard isPoundErrorDecl else { return nil }
-    return PoundErrorDeclSyntax(asSyntaxData)
+    isPoundErrorDecl ? PoundErrorDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundWarningDecl: Bool { return raw.kind == .poundWarningDecl }
+  public var isPoundWarningDecl: Bool {
+    RawPoundWarningDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundWarningDecl: PoundWarningDeclSyntax? {
-    guard isPoundWarningDecl else { return nil }
-    return PoundWarningDeclSyntax(asSyntaxData)
+    isPoundWarningDecl ? PoundWarningDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundSourceLocation: Bool { return raw.kind == .poundSourceLocation }
+  public var isPoundSourceLocation: Bool {
+    RawPoundSourceLocationSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundSourceLocation: PoundSourceLocationSyntax? {
-    guard isPoundSourceLocation else { return nil }
-    return PoundSourceLocationSyntax(asSyntaxData)
+    isPoundSourceLocation ? PoundSourceLocationSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundSourceLocationArgs: Bool { return raw.kind == .poundSourceLocationArgs }
+  public var isPoundSourceLocationArgs: Bool {
+    RawPoundSourceLocationArgsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundSourceLocationArgs: PoundSourceLocationArgsSyntax? {
-    guard isPoundSourceLocationArgs else { return nil }
-    return PoundSourceLocationArgsSyntax(asSyntaxData)
+    isPoundSourceLocationArgs ? PoundSourceLocationArgsSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclModifierDetail: Bool { return raw.kind == .declModifierDetail }
+  public var isDeclModifierDetail: Bool {
+    RawDeclModifierDetailSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclModifierDetail: DeclModifierDetailSyntax? {
-    guard isDeclModifierDetail else { return nil }
-    return DeclModifierDetailSyntax(asSyntaxData)
+    isDeclModifierDetail ? DeclModifierDetailSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclModifier: Bool { return raw.kind == .declModifier }
+  public var isDeclModifier: Bool {
+    RawDeclModifierSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclModifier: DeclModifierSyntax? {
-    guard isDeclModifier else { return nil }
-    return DeclModifierSyntax(asSyntaxData)
+    isDeclModifier ? DeclModifierSyntax(data: syntax.data) : nil
   }
 
-  public var isInheritedType: Bool { return raw.kind == .inheritedType }
+  public var isInheritedType: Bool {
+    RawInheritedTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asInheritedType: InheritedTypeSyntax? {
-    guard isInheritedType else { return nil }
-    return InheritedTypeSyntax(asSyntaxData)
+    isInheritedType ? InheritedTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isInheritedTypeList: Bool { return raw.kind == .inheritedTypeList }
+  public var isInheritedTypeList: Bool {
+    RawInheritedTypeListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asInheritedTypeList: InheritedTypeListSyntax? {
-    guard isInheritedTypeList else { return nil }
-    return InheritedTypeListSyntax(asSyntaxData)
+    isInheritedTypeList ? InheritedTypeListSyntax(data: syntax.data) : nil
   }
 
-  public var isTypeInheritanceClause: Bool { return raw.kind == .typeInheritanceClause }
+  public var isTypeInheritanceClause: Bool {
+    RawTypeInheritanceClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTypeInheritanceClause: TypeInheritanceClauseSyntax? {
-    guard isTypeInheritanceClause else { return nil }
-    return TypeInheritanceClauseSyntax(asSyntaxData)
+    isTypeInheritanceClause ? TypeInheritanceClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isClassDecl: Bool { return raw.kind == .classDecl }
+  public var isClassDecl: Bool {
+    RawClassDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClassDecl: ClassDeclSyntax? {
-    guard isClassDecl else { return nil }
-    return ClassDeclSyntax(asSyntaxData)
+    isClassDecl ? ClassDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isActorDecl: Bool { return raw.kind == .actorDecl }
+  public var isActorDecl: Bool {
+    RawActorDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asActorDecl: ActorDeclSyntax? {
-    guard isActorDecl else { return nil }
-    return ActorDeclSyntax(asSyntaxData)
+    isActorDecl ? ActorDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isStructDecl: Bool { return raw.kind == .structDecl }
+  public var isStructDecl: Bool {
+    RawStructDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asStructDecl: StructDeclSyntax? {
-    guard isStructDecl else { return nil }
-    return StructDeclSyntax(asSyntaxData)
+    isStructDecl ? StructDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isProtocolDecl: Bool { return raw.kind == .protocolDecl }
+  public var isProtocolDecl: Bool {
+    RawProtocolDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asProtocolDecl: ProtocolDeclSyntax? {
-    guard isProtocolDecl else { return nil }
-    return ProtocolDeclSyntax(asSyntaxData)
+    isProtocolDecl ? ProtocolDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isExtensionDecl: Bool { return raw.kind == .extensionDecl }
+  public var isExtensionDecl: Bool {
+    RawExtensionDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asExtensionDecl: ExtensionDeclSyntax? {
-    guard isExtensionDecl else { return nil }
-    return ExtensionDeclSyntax(asSyntaxData)
+    isExtensionDecl ? ExtensionDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isMemberDeclBlock: Bool { return raw.kind == .memberDeclBlock }
+  public var isMemberDeclBlock: Bool {
+    RawMemberDeclBlockSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMemberDeclBlock: MemberDeclBlockSyntax? {
-    guard isMemberDeclBlock else { return nil }
-    return MemberDeclBlockSyntax(asSyntaxData)
+    isMemberDeclBlock ? MemberDeclBlockSyntax(data: syntax.data) : nil
   }
 
-  public var isMemberDeclList: Bool { return raw.kind == .memberDeclList }
+  public var isMemberDeclList: Bool {
+    RawMemberDeclListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMemberDeclList: MemberDeclListSyntax? {
-    guard isMemberDeclList else { return nil }
-    return MemberDeclListSyntax(asSyntaxData)
+    isMemberDeclList ? MemberDeclListSyntax(data: syntax.data) : nil
   }
 
-  public var isMemberDeclListItem: Bool { return raw.kind == .memberDeclListItem }
+  public var isMemberDeclListItem: Bool {
+    RawMemberDeclListItemSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMemberDeclListItem: MemberDeclListItemSyntax? {
-    guard isMemberDeclListItem else { return nil }
-    return MemberDeclListItemSyntax(asSyntaxData)
+    isMemberDeclListItem ? MemberDeclListItemSyntax(data: syntax.data) : nil
   }
 
-  public var isSourceFile: Bool { return raw.kind == .sourceFile }
+  public var isSourceFile: Bool {
+    RawSourceFileSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSourceFile: SourceFileSyntax? {
-    guard isSourceFile else { return nil }
-    return SourceFileSyntax(asSyntaxData)
+    isSourceFile ? SourceFileSyntax(data: syntax.data) : nil
   }
 
-  public var isInitializerClause: Bool { return raw.kind == .initializerClause }
+  public var isInitializerClause: Bool {
+    RawInitializerClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asInitializerClause: InitializerClauseSyntax? {
-    guard isInitializerClause else { return nil }
-    return InitializerClauseSyntax(asSyntaxData)
+    isInitializerClause ? InitializerClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionParameter: Bool { return raw.kind == .functionParameter }
+  public var isFunctionParameter: Bool {
+    RawFunctionParameterSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionParameter: FunctionParameterSyntax? {
-    guard isFunctionParameter else { return nil }
-    return FunctionParameterSyntax(asSyntaxData)
+    isFunctionParameter ? FunctionParameterSyntax(data: syntax.data) : nil
   }
 
-  public var isModifierList: Bool { return raw.kind == .modifierList }
+  public var isModifierList: Bool {
+    RawModifierListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asModifierList: ModifierListSyntax? {
-    guard isModifierList else { return nil }
-    return ModifierListSyntax(asSyntaxData)
+    isModifierList ? ModifierListSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionDecl: Bool { return raw.kind == .functionDecl }
+  public var isFunctionDecl: Bool {
+    RawFunctionDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionDecl: FunctionDeclSyntax? {
-    guard isFunctionDecl else { return nil }
-    return FunctionDeclSyntax(asSyntaxData)
+    isFunctionDecl ? FunctionDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isInitializerDecl: Bool { return raw.kind == .initializerDecl }
+  public var isInitializerDecl: Bool {
+    RawInitializerDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asInitializerDecl: InitializerDeclSyntax? {
-    guard isInitializerDecl else { return nil }
-    return InitializerDeclSyntax(asSyntaxData)
+    isInitializerDecl ? InitializerDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isDeinitializerDecl: Bool { return raw.kind == .deinitializerDecl }
+  public var isDeinitializerDecl: Bool {
+    RawDeinitializerDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeinitializerDecl: DeinitializerDeclSyntax? {
-    guard isDeinitializerDecl else { return nil }
-    return DeinitializerDeclSyntax(asSyntaxData)
+    isDeinitializerDecl ? DeinitializerDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isSubscriptDecl: Bool { return raw.kind == .subscriptDecl }
+  public var isSubscriptDecl: Bool {
+    RawSubscriptDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSubscriptDecl: SubscriptDeclSyntax? {
-    guard isSubscriptDecl else { return nil }
-    return SubscriptDeclSyntax(asSyntaxData)
+    isSubscriptDecl ? SubscriptDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessLevelModifier: Bool { return raw.kind == .accessLevelModifier }
+  public var isAccessLevelModifier: Bool {
+    RawAccessLevelModifierSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessLevelModifier: AccessLevelModifierSyntax? {
-    guard isAccessLevelModifier else { return nil }
-    return AccessLevelModifierSyntax(asSyntaxData)
+    isAccessLevelModifier ? AccessLevelModifierSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessPathComponent: Bool { return raw.kind == .accessPathComponent }
+  public var isAccessPathComponent: Bool {
+    RawAccessPathComponentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessPathComponent: AccessPathComponentSyntax? {
-    guard isAccessPathComponent else { return nil }
-    return AccessPathComponentSyntax(asSyntaxData)
+    isAccessPathComponent ? AccessPathComponentSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessPath: Bool { return raw.kind == .accessPath }
+  public var isAccessPath: Bool {
+    RawAccessPathSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessPath: AccessPathSyntax? {
-    guard isAccessPath else { return nil }
-    return AccessPathSyntax(asSyntaxData)
+    isAccessPath ? AccessPathSyntax(data: syntax.data) : nil
   }
 
-  public var isImportDecl: Bool { return raw.kind == .importDecl }
+  public var isImportDecl: Bool {
+    RawImportDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asImportDecl: ImportDeclSyntax? {
-    guard isImportDecl else { return nil }
-    return ImportDeclSyntax(asSyntaxData)
+    isImportDecl ? ImportDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessorParameter: Bool { return raw.kind == .accessorParameter }
+  public var isAccessorParameter: Bool {
+    RawAccessorParameterSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessorParameter: AccessorParameterSyntax? {
-    guard isAccessorParameter else { return nil }
-    return AccessorParameterSyntax(asSyntaxData)
+    isAccessorParameter ? AccessorParameterSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessorDecl: Bool { return raw.kind == .accessorDecl }
+  public var isAccessorDecl: Bool {
+    RawAccessorDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessorDecl: AccessorDeclSyntax? {
-    guard isAccessorDecl else { return nil }
-    return AccessorDeclSyntax(asSyntaxData)
+    isAccessorDecl ? AccessorDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessorList: Bool { return raw.kind == .accessorList }
+  public var isAccessorList: Bool {
+    RawAccessorListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessorList: AccessorListSyntax? {
-    guard isAccessorList else { return nil }
-    return AccessorListSyntax(asSyntaxData)
+    isAccessorList ? AccessorListSyntax(data: syntax.data) : nil
   }
 
-  public var isAccessorBlock: Bool { return raw.kind == .accessorBlock }
+  public var isAccessorBlock: Bool {
+    RawAccessorBlockSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAccessorBlock: AccessorBlockSyntax? {
-    guard isAccessorBlock else { return nil }
-    return AccessorBlockSyntax(asSyntaxData)
+    isAccessorBlock ? AccessorBlockSyntax(data: syntax.data) : nil
   }
 
-  public var isPatternBinding: Bool { return raw.kind == .patternBinding }
+  public var isPatternBinding: Bool {
+    RawPatternBindingSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPatternBinding: PatternBindingSyntax? {
-    guard isPatternBinding else { return nil }
-    return PatternBindingSyntax(asSyntaxData)
+    isPatternBinding ? PatternBindingSyntax(data: syntax.data) : nil
   }
 
-  public var isPatternBindingList: Bool { return raw.kind == .patternBindingList }
+  public var isPatternBindingList: Bool {
+    RawPatternBindingListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPatternBindingList: PatternBindingListSyntax? {
-    guard isPatternBindingList else { return nil }
-    return PatternBindingListSyntax(asSyntaxData)
+    isPatternBindingList ? PatternBindingListSyntax(data: syntax.data) : nil
   }
 
-  public var isVariableDecl: Bool { return raw.kind == .variableDecl }
+  public var isVariableDecl: Bool {
+    RawVariableDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asVariableDecl: VariableDeclSyntax? {
-    guard isVariableDecl else { return nil }
-    return VariableDeclSyntax(asSyntaxData)
+    isVariableDecl ? VariableDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isEnumCaseElement: Bool { return raw.kind == .enumCaseElement }
+  public var isEnumCaseElement: Bool {
+    RawEnumCaseElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asEnumCaseElement: EnumCaseElementSyntax? {
-    guard isEnumCaseElement else { return nil }
-    return EnumCaseElementSyntax(asSyntaxData)
+    isEnumCaseElement ? EnumCaseElementSyntax(data: syntax.data) : nil
   }
 
-  public var isEnumCaseElementList: Bool { return raw.kind == .enumCaseElementList }
+  public var isEnumCaseElementList: Bool {
+    RawEnumCaseElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asEnumCaseElementList: EnumCaseElementListSyntax? {
-    guard isEnumCaseElementList else { return nil }
-    return EnumCaseElementListSyntax(asSyntaxData)
+    isEnumCaseElementList ? EnumCaseElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isEnumCaseDecl: Bool { return raw.kind == .enumCaseDecl }
+  public var isEnumCaseDecl: Bool {
+    RawEnumCaseDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asEnumCaseDecl: EnumCaseDeclSyntax? {
-    guard isEnumCaseDecl else { return nil }
-    return EnumCaseDeclSyntax(asSyntaxData)
+    isEnumCaseDecl ? EnumCaseDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isEnumDecl: Bool { return raw.kind == .enumDecl }
+  public var isEnumDecl: Bool {
+    RawEnumDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asEnumDecl: EnumDeclSyntax? {
-    guard isEnumDecl else { return nil }
-    return EnumDeclSyntax(asSyntaxData)
+    isEnumDecl ? EnumDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isOperatorDecl: Bool { return raw.kind == .operatorDecl }
+  public var isOperatorDecl: Bool {
+    RawOperatorDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asOperatorDecl: OperatorDeclSyntax? {
-    guard isOperatorDecl else { return nil }
-    return OperatorDeclSyntax(asSyntaxData)
+    isOperatorDecl ? OperatorDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isIdentifierList: Bool { return raw.kind == .identifierList }
+  public var isIdentifierList: Bool {
+    RawIdentifierListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIdentifierList: IdentifierListSyntax? {
-    guard isIdentifierList else { return nil }
-    return IdentifierListSyntax(asSyntaxData)
+    isIdentifierList ? IdentifierListSyntax(data: syntax.data) : nil
   }
 
-  public var isOperatorPrecedenceAndTypes: Bool { return raw.kind == .operatorPrecedenceAndTypes }
+  public var isOperatorPrecedenceAndTypes: Bool {
+    RawOperatorPrecedenceAndTypesSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asOperatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? {
-    guard isOperatorPrecedenceAndTypes else { return nil }
-    return OperatorPrecedenceAndTypesSyntax(asSyntaxData)
+    isOperatorPrecedenceAndTypes ? OperatorPrecedenceAndTypesSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupDecl: Bool { return raw.kind == .precedenceGroupDecl }
+  public var isPrecedenceGroupDecl: Bool {
+    RawPrecedenceGroupDeclSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupDecl: PrecedenceGroupDeclSyntax? {
-    guard isPrecedenceGroupDecl else { return nil }
-    return PrecedenceGroupDeclSyntax(asSyntaxData)
+    isPrecedenceGroupDecl ? PrecedenceGroupDeclSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupAttributeList: Bool { return raw.kind == .precedenceGroupAttributeList }
+  public var isPrecedenceGroupAttributeList: Bool {
+    RawPrecedenceGroupAttributeListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupAttributeList: PrecedenceGroupAttributeListSyntax? {
-    guard isPrecedenceGroupAttributeList else { return nil }
-    return PrecedenceGroupAttributeListSyntax(asSyntaxData)
+    isPrecedenceGroupAttributeList ? PrecedenceGroupAttributeListSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupRelation: Bool { return raw.kind == .precedenceGroupRelation }
+  public var isPrecedenceGroupRelation: Bool {
+    RawPrecedenceGroupRelationSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupRelation: PrecedenceGroupRelationSyntax? {
-    guard isPrecedenceGroupRelation else { return nil }
-    return PrecedenceGroupRelationSyntax(asSyntaxData)
+    isPrecedenceGroupRelation ? PrecedenceGroupRelationSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupNameList: Bool { return raw.kind == .precedenceGroupNameList }
+  public var isPrecedenceGroupNameList: Bool {
+    RawPrecedenceGroupNameListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupNameList: PrecedenceGroupNameListSyntax? {
-    guard isPrecedenceGroupNameList else { return nil }
-    return PrecedenceGroupNameListSyntax(asSyntaxData)
+    isPrecedenceGroupNameList ? PrecedenceGroupNameListSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupNameElement: Bool { return raw.kind == .precedenceGroupNameElement }
+  public var isPrecedenceGroupNameElement: Bool {
+    RawPrecedenceGroupNameElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupNameElement: PrecedenceGroupNameElementSyntax? {
-    guard isPrecedenceGroupNameElement else { return nil }
-    return PrecedenceGroupNameElementSyntax(asSyntaxData)
+    isPrecedenceGroupNameElement ? PrecedenceGroupNameElementSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupAssignment: Bool { return raw.kind == .precedenceGroupAssignment }
+  public var isPrecedenceGroupAssignment: Bool {
+    RawPrecedenceGroupAssignmentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupAssignment: PrecedenceGroupAssignmentSyntax? {
-    guard isPrecedenceGroupAssignment else { return nil }
-    return PrecedenceGroupAssignmentSyntax(asSyntaxData)
+    isPrecedenceGroupAssignment ? PrecedenceGroupAssignmentSyntax(data: syntax.data) : nil
   }
 
-  public var isPrecedenceGroupAssociativity: Bool { return raw.kind == .precedenceGroupAssociativity }
+  public var isPrecedenceGroupAssociativity: Bool {
+    RawPrecedenceGroupAssociativitySyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrecedenceGroupAssociativity: PrecedenceGroupAssociativitySyntax? {
-    guard isPrecedenceGroupAssociativity else { return nil }
-    return PrecedenceGroupAssociativitySyntax(asSyntaxData)
+    isPrecedenceGroupAssociativity ? PrecedenceGroupAssociativitySyntax(data: syntax.data) : nil
   }
 
-  public var isTokenList: Bool { return raw.kind == .tokenList }
+  public var isTokenList: Bool {
+    RawTokenListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTokenList: TokenListSyntax? {
-    guard isTokenList else { return nil }
-    return TokenListSyntax(asSyntaxData)
+    isTokenList ? TokenListSyntax(data: syntax.data) : nil
   }
 
-  public var isNonEmptyTokenList: Bool { return raw.kind == .nonEmptyTokenList }
+  public var isNonEmptyTokenList: Bool {
+    RawNonEmptyTokenListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asNonEmptyTokenList: NonEmptyTokenListSyntax? {
-    guard isNonEmptyTokenList else { return nil }
-    return NonEmptyTokenListSyntax(asSyntaxData)
+    isNonEmptyTokenList ? NonEmptyTokenListSyntax(data: syntax.data) : nil
   }
 
-  public var isCustomAttribute: Bool { return raw.kind == .customAttribute }
+  public var isCustomAttribute: Bool {
+    RawCustomAttributeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCustomAttribute: CustomAttributeSyntax? {
-    guard isCustomAttribute else { return nil }
-    return CustomAttributeSyntax(asSyntaxData)
+    isCustomAttribute ? CustomAttributeSyntax(data: syntax.data) : nil
   }
 
-  public var isAttribute: Bool { return raw.kind == .attribute }
+  public var isAttribute: Bool {
+    RawAttributeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAttribute: AttributeSyntax? {
-    guard isAttribute else { return nil }
-    return AttributeSyntax(asSyntaxData)
+    isAttribute ? AttributeSyntax(data: syntax.data) : nil
   }
 
-  public var isAttributeList: Bool { return raw.kind == .attributeList }
+  public var isAttributeList: Bool {
+    RawAttributeListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAttributeList: AttributeListSyntax? {
-    guard isAttributeList else { return nil }
-    return AttributeListSyntax(asSyntaxData)
+    isAttributeList ? AttributeListSyntax(data: syntax.data) : nil
   }
 
-  public var isSpecializeAttributeSpecList: Bool { return raw.kind == .specializeAttributeSpecList }
+  public var isSpecializeAttributeSpecList: Bool {
+    RawSpecializeAttributeSpecListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSpecializeAttributeSpecList: SpecializeAttributeSpecListSyntax? {
-    guard isSpecializeAttributeSpecList else { return nil }
-    return SpecializeAttributeSpecListSyntax(asSyntaxData)
+    isSpecializeAttributeSpecList ? SpecializeAttributeSpecListSyntax(data: syntax.data) : nil
   }
 
-  public var isAvailabilityEntry: Bool { return raw.kind == .availabilityEntry }
+  public var isAvailabilityEntry: Bool {
+    RawAvailabilityEntrySyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAvailabilityEntry: AvailabilityEntrySyntax? {
-    guard isAvailabilityEntry else { return nil }
-    return AvailabilityEntrySyntax(asSyntaxData)
+    isAvailabilityEntry ? AvailabilityEntrySyntax(data: syntax.data) : nil
   }
 
-  public var isLabeledSpecializeEntry: Bool { return raw.kind == .labeledSpecializeEntry }
+  public var isLabeledSpecializeEntry: Bool {
+    RawLabeledSpecializeEntrySyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asLabeledSpecializeEntry: LabeledSpecializeEntrySyntax? {
-    guard isLabeledSpecializeEntry else { return nil }
-    return LabeledSpecializeEntrySyntax(asSyntaxData)
+    isLabeledSpecializeEntry ? LabeledSpecializeEntrySyntax(data: syntax.data) : nil
   }
 
-  public var isTargetFunctionEntry: Bool { return raw.kind == .targetFunctionEntry }
+  public var isTargetFunctionEntry: Bool {
+    RawTargetFunctionEntrySyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTargetFunctionEntry: TargetFunctionEntrySyntax? {
-    guard isTargetFunctionEntry else { return nil }
-    return TargetFunctionEntrySyntax(asSyntaxData)
+    isTargetFunctionEntry ? TargetFunctionEntrySyntax(data: syntax.data) : nil
   }
 
-  public var isNamedAttributeStringArgument: Bool { return raw.kind == .namedAttributeStringArgument }
+  public var isNamedAttributeStringArgument: Bool {
+    RawNamedAttributeStringArgumentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asNamedAttributeStringArgument: NamedAttributeStringArgumentSyntax? {
-    guard isNamedAttributeStringArgument else { return nil }
-    return NamedAttributeStringArgumentSyntax(asSyntaxData)
+    isNamedAttributeStringArgument ? NamedAttributeStringArgumentSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclName: Bool { return raw.kind == .declName }
+  public var isDeclName: Bool {
+    RawDeclNameSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclName: DeclNameSyntax? {
-    guard isDeclName else { return nil }
-    return DeclNameSyntax(asSyntaxData)
+    isDeclName ? DeclNameSyntax(data: syntax.data) : nil
   }
 
-  public var isImplementsAttributeArguments: Bool { return raw.kind == .implementsAttributeArguments }
+  public var isImplementsAttributeArguments: Bool {
+    RawImplementsAttributeArgumentsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asImplementsAttributeArguments: ImplementsAttributeArgumentsSyntax? {
-    guard isImplementsAttributeArguments else { return nil }
-    return ImplementsAttributeArgumentsSyntax(asSyntaxData)
+    isImplementsAttributeArguments ? ImplementsAttributeArgumentsSyntax(data: syntax.data) : nil
   }
 
-  public var isObjCSelectorPiece: Bool { return raw.kind == .objCSelectorPiece }
+  public var isObjCSelectorPiece: Bool {
+    RawObjCSelectorPieceSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjCSelectorPiece: ObjCSelectorPieceSyntax? {
-    guard isObjCSelectorPiece else { return nil }
-    return ObjCSelectorPieceSyntax(asSyntaxData)
+    isObjCSelectorPiece ? ObjCSelectorPieceSyntax(data: syntax.data) : nil
   }
 
-  public var isObjCSelector: Bool { return raw.kind == .objCSelector }
+  public var isObjCSelector: Bool {
+    RawObjCSelectorSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asObjCSelector: ObjCSelectorSyntax? {
-    guard isObjCSelector else { return nil }
-    return ObjCSelectorSyntax(asSyntaxData)
+    isObjCSelector ? ObjCSelectorSyntax(data: syntax.data) : nil
   }
 
-  public var isDifferentiableAttributeArguments: Bool { return raw.kind == .differentiableAttributeArguments }
+  public var isDifferentiableAttributeArguments: Bool {
+    RawDifferentiableAttributeArgumentsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDifferentiableAttributeArguments: DifferentiableAttributeArgumentsSyntax? {
-    guard isDifferentiableAttributeArguments else { return nil }
-    return DifferentiableAttributeArgumentsSyntax(asSyntaxData)
+    isDifferentiableAttributeArguments ? DifferentiableAttributeArgumentsSyntax(data: syntax.data) : nil
   }
 
-  public var isDifferentiabilityParamsClause: Bool { return raw.kind == .differentiabilityParamsClause }
+  public var isDifferentiabilityParamsClause: Bool {
+    RawDifferentiabilityParamsClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDifferentiabilityParamsClause: DifferentiabilityParamsClauseSyntax? {
-    guard isDifferentiabilityParamsClause else { return nil }
-    return DifferentiabilityParamsClauseSyntax(asSyntaxData)
+    isDifferentiabilityParamsClause ? DifferentiabilityParamsClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isDifferentiabilityParams: Bool { return raw.kind == .differentiabilityParams }
+  public var isDifferentiabilityParams: Bool {
+    RawDifferentiabilityParamsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDifferentiabilityParams: DifferentiabilityParamsSyntax? {
-    guard isDifferentiabilityParams else { return nil }
-    return DifferentiabilityParamsSyntax(asSyntaxData)
+    isDifferentiabilityParams ? DifferentiabilityParamsSyntax(data: syntax.data) : nil
   }
 
-  public var isDifferentiabilityParamList: Bool { return raw.kind == .differentiabilityParamList }
+  public var isDifferentiabilityParamList: Bool {
+    RawDifferentiabilityParamListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDifferentiabilityParamList: DifferentiabilityParamListSyntax? {
-    guard isDifferentiabilityParamList else { return nil }
-    return DifferentiabilityParamListSyntax(asSyntaxData)
+    isDifferentiabilityParamList ? DifferentiabilityParamListSyntax(data: syntax.data) : nil
   }
 
-  public var isDifferentiabilityParam: Bool { return raw.kind == .differentiabilityParam }
+  public var isDifferentiabilityParam: Bool {
+    RawDifferentiabilityParamSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDifferentiabilityParam: DifferentiabilityParamSyntax? {
-    guard isDifferentiabilityParam else { return nil }
-    return DifferentiabilityParamSyntax(asSyntaxData)
+    isDifferentiabilityParam ? DifferentiabilityParamSyntax(data: syntax.data) : nil
   }
 
-  public var isDerivativeRegistrationAttributeArguments: Bool { return raw.kind == .derivativeRegistrationAttributeArguments }
+  public var isDerivativeRegistrationAttributeArguments: Bool {
+    RawDerivativeRegistrationAttributeArgumentsSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDerivativeRegistrationAttributeArguments: DerivativeRegistrationAttributeArgumentsSyntax? {
-    guard isDerivativeRegistrationAttributeArguments else { return nil }
-    return DerivativeRegistrationAttributeArgumentsSyntax(asSyntaxData)
+    isDerivativeRegistrationAttributeArguments ? DerivativeRegistrationAttributeArgumentsSyntax(data: syntax.data) : nil
   }
 
-  public var isQualifiedDeclName: Bool { return raw.kind == .qualifiedDeclName }
+  public var isQualifiedDeclName: Bool {
+    RawQualifiedDeclNameSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asQualifiedDeclName: QualifiedDeclNameSyntax? {
-    guard isQualifiedDeclName else { return nil }
-    return QualifiedDeclNameSyntax(asSyntaxData)
+    isQualifiedDeclName ? QualifiedDeclNameSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionDeclName: Bool { return raw.kind == .functionDeclName }
+  public var isFunctionDeclName: Bool {
+    RawFunctionDeclNameSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionDeclName: FunctionDeclNameSyntax? {
-    guard isFunctionDeclName else { return nil }
-    return FunctionDeclNameSyntax(asSyntaxData)
+    isFunctionDeclName ? FunctionDeclNameSyntax(data: syntax.data) : nil
   }
 
-  public var isBackDeployAttributeSpecList: Bool { return raw.kind == .backDeployAttributeSpecList }
+  public var isBackDeployAttributeSpecList: Bool {
+    RawBackDeployAttributeSpecListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asBackDeployAttributeSpecList: BackDeployAttributeSpecListSyntax? {
-    guard isBackDeployAttributeSpecList else { return nil }
-    return BackDeployAttributeSpecListSyntax(asSyntaxData)
+    isBackDeployAttributeSpecList ? BackDeployAttributeSpecListSyntax(data: syntax.data) : nil
   }
 
-  public var isBackDeployVersionList: Bool { return raw.kind == .backDeployVersionList }
+  public var isBackDeployVersionList: Bool {
+    RawBackDeployVersionListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asBackDeployVersionList: BackDeployVersionListSyntax? {
-    guard isBackDeployVersionList else { return nil }
-    return BackDeployVersionListSyntax(asSyntaxData)
+    isBackDeployVersionList ? BackDeployVersionListSyntax(data: syntax.data) : nil
   }
 
-  public var isBackDeployVersionArgument: Bool { return raw.kind == .backDeployVersionArgument }
+  public var isBackDeployVersionArgument: Bool {
+    RawBackDeployVersionArgumentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asBackDeployVersionArgument: BackDeployVersionArgumentSyntax? {
-    guard isBackDeployVersionArgument else { return nil }
-    return BackDeployVersionArgumentSyntax(asSyntaxData)
+    isBackDeployVersionArgument ? BackDeployVersionArgumentSyntax(data: syntax.data) : nil
   }
 
-  public var isContinueStmt: Bool { return raw.kind == .continueStmt }
+  public var isContinueStmt: Bool {
+    RawContinueStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asContinueStmt: ContinueStmtSyntax? {
-    guard isContinueStmt else { return nil }
-    return ContinueStmtSyntax(asSyntaxData)
+    isContinueStmt ? ContinueStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isWhileStmt: Bool { return raw.kind == .whileStmt }
+  public var isWhileStmt: Bool {
+    RawWhileStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asWhileStmt: WhileStmtSyntax? {
-    guard isWhileStmt else { return nil }
-    return WhileStmtSyntax(asSyntaxData)
+    isWhileStmt ? WhileStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isDeferStmt: Bool { return raw.kind == .deferStmt }
+  public var isDeferStmt: Bool {
+    RawDeferStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeferStmt: DeferStmtSyntax? {
-    guard isDeferStmt else { return nil }
-    return DeferStmtSyntax(asSyntaxData)
+    isDeferStmt ? DeferStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isExpressionStmt: Bool { return raw.kind == .expressionStmt }
+  public var isExpressionStmt: Bool {
+    RawExpressionStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asExpressionStmt: ExpressionStmtSyntax? {
-    guard isExpressionStmt else { return nil }
-    return ExpressionStmtSyntax(asSyntaxData)
+    isExpressionStmt ? ExpressionStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isSwitchCaseList: Bool { return raw.kind == .switchCaseList }
+  public var isSwitchCaseList: Bool {
+    RawSwitchCaseListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSwitchCaseList: SwitchCaseListSyntax? {
-    guard isSwitchCaseList else { return nil }
-    return SwitchCaseListSyntax(asSyntaxData)
+    isSwitchCaseList ? SwitchCaseListSyntax(data: syntax.data) : nil
   }
 
-  public var isRepeatWhileStmt: Bool { return raw.kind == .repeatWhileStmt }
+  public var isRepeatWhileStmt: Bool {
+    RawRepeatWhileStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asRepeatWhileStmt: RepeatWhileStmtSyntax? {
-    guard isRepeatWhileStmt else { return nil }
-    return RepeatWhileStmtSyntax(asSyntaxData)
+    isRepeatWhileStmt ? RepeatWhileStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isGuardStmt: Bool { return raw.kind == .guardStmt }
+  public var isGuardStmt: Bool {
+    RawGuardStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGuardStmt: GuardStmtSyntax? {
-    guard isGuardStmt else { return nil }
-    return GuardStmtSyntax(asSyntaxData)
+    isGuardStmt ? GuardStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isWhereClause: Bool { return raw.kind == .whereClause }
+  public var isWhereClause: Bool {
+    RawWhereClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asWhereClause: WhereClauseSyntax? {
-    guard isWhereClause else { return nil }
-    return WhereClauseSyntax(asSyntaxData)
+    isWhereClause ? WhereClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isForInStmt: Bool { return raw.kind == .forInStmt }
+  public var isForInStmt: Bool {
+    RawForInStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asForInStmt: ForInStmtSyntax? {
-    guard isForInStmt else { return nil }
-    return ForInStmtSyntax(asSyntaxData)
+    isForInStmt ? ForInStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isSwitchStmt: Bool { return raw.kind == .switchStmt }
+  public var isSwitchStmt: Bool {
+    RawSwitchStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSwitchStmt: SwitchStmtSyntax? {
-    guard isSwitchStmt else { return nil }
-    return SwitchStmtSyntax(asSyntaxData)
+    isSwitchStmt ? SwitchStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isCatchClauseList: Bool { return raw.kind == .catchClauseList }
+  public var isCatchClauseList: Bool {
+    RawCatchClauseListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCatchClauseList: CatchClauseListSyntax? {
-    guard isCatchClauseList else { return nil }
-    return CatchClauseListSyntax(asSyntaxData)
+    isCatchClauseList ? CatchClauseListSyntax(data: syntax.data) : nil
   }
 
-  public var isDoStmt: Bool { return raw.kind == .doStmt }
+  public var isDoStmt: Bool {
+    RawDoStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDoStmt: DoStmtSyntax? {
-    guard isDoStmt else { return nil }
-    return DoStmtSyntax(asSyntaxData)
+    isDoStmt ? DoStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isReturnStmt: Bool { return raw.kind == .returnStmt }
+  public var isReturnStmt: Bool {
+    RawReturnStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asReturnStmt: ReturnStmtSyntax? {
-    guard isReturnStmt else { return nil }
-    return ReturnStmtSyntax(asSyntaxData)
+    isReturnStmt ? ReturnStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isYieldStmt: Bool { return raw.kind == .yieldStmt }
+  public var isYieldStmt: Bool {
+    RawYieldStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asYieldStmt: YieldStmtSyntax? {
-    guard isYieldStmt else { return nil }
-    return YieldStmtSyntax(asSyntaxData)
+    isYieldStmt ? YieldStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isYieldList: Bool { return raw.kind == .yieldList }
+  public var isYieldList: Bool {
+    RawYieldListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asYieldList: YieldListSyntax? {
-    guard isYieldList else { return nil }
-    return YieldListSyntax(asSyntaxData)
+    isYieldList ? YieldListSyntax(data: syntax.data) : nil
   }
 
-  public var isFallthroughStmt: Bool { return raw.kind == .fallthroughStmt }
+  public var isFallthroughStmt: Bool {
+    RawFallthroughStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFallthroughStmt: FallthroughStmtSyntax? {
-    guard isFallthroughStmt else { return nil }
-    return FallthroughStmtSyntax(asSyntaxData)
+    isFallthroughStmt ? FallthroughStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isBreakStmt: Bool { return raw.kind == .breakStmt }
+  public var isBreakStmt: Bool {
+    RawBreakStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asBreakStmt: BreakStmtSyntax? {
-    guard isBreakStmt else { return nil }
-    return BreakStmtSyntax(asSyntaxData)
+    isBreakStmt ? BreakStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isCaseItemList: Bool { return raw.kind == .caseItemList }
+  public var isCaseItemList: Bool {
+    RawCaseItemListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCaseItemList: CaseItemListSyntax? {
-    guard isCaseItemList else { return nil }
-    return CaseItemListSyntax(asSyntaxData)
+    isCaseItemList ? CaseItemListSyntax(data: syntax.data) : nil
   }
 
-  public var isCatchItemList: Bool { return raw.kind == .catchItemList }
+  public var isCatchItemList: Bool {
+    RawCatchItemListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCatchItemList: CatchItemListSyntax? {
-    guard isCatchItemList else { return nil }
-    return CatchItemListSyntax(asSyntaxData)
+    isCatchItemList ? CatchItemListSyntax(data: syntax.data) : nil
   }
 
-  public var isConditionElement: Bool { return raw.kind == .conditionElement }
+  public var isConditionElement: Bool {
+    RawConditionElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asConditionElement: ConditionElementSyntax? {
-    guard isConditionElement else { return nil }
-    return ConditionElementSyntax(asSyntaxData)
+    isConditionElement ? ConditionElementSyntax(data: syntax.data) : nil
   }
 
-  public var isAvailabilityCondition: Bool { return raw.kind == .availabilityCondition }
+  public var isAvailabilityCondition: Bool {
+    RawAvailabilityConditionSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAvailabilityCondition: AvailabilityConditionSyntax? {
-    guard isAvailabilityCondition else { return nil }
-    return AvailabilityConditionSyntax(asSyntaxData)
+    isAvailabilityCondition ? AvailabilityConditionSyntax(data: syntax.data) : nil
   }
 
-  public var isMatchingPatternCondition: Bool { return raw.kind == .matchingPatternCondition }
+  public var isMatchingPatternCondition: Bool {
+    RawMatchingPatternConditionSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMatchingPatternCondition: MatchingPatternConditionSyntax? {
-    guard isMatchingPatternCondition else { return nil }
-    return MatchingPatternConditionSyntax(asSyntaxData)
+    isMatchingPatternCondition ? MatchingPatternConditionSyntax(data: syntax.data) : nil
   }
 
-  public var isOptionalBindingCondition: Bool { return raw.kind == .optionalBindingCondition }
+  public var isOptionalBindingCondition: Bool {
+    RawOptionalBindingConditionSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asOptionalBindingCondition: OptionalBindingConditionSyntax? {
-    guard isOptionalBindingCondition else { return nil }
-    return OptionalBindingConditionSyntax(asSyntaxData)
+    isOptionalBindingCondition ? OptionalBindingConditionSyntax(data: syntax.data) : nil
   }
 
-  public var isUnavailabilityCondition: Bool { return raw.kind == .unavailabilityCondition }
+  public var isUnavailabilityCondition: Bool {
+    RawUnavailabilityConditionSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asUnavailabilityCondition: UnavailabilityConditionSyntax? {
-    guard isUnavailabilityCondition else { return nil }
-    return UnavailabilityConditionSyntax(asSyntaxData)
+    isUnavailabilityCondition ? UnavailabilityConditionSyntax(data: syntax.data) : nil
   }
 
-  public var isConditionElementList: Bool { return raw.kind == .conditionElementList }
+  public var isConditionElementList: Bool {
+    RawConditionElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asConditionElementList: ConditionElementListSyntax? {
-    guard isConditionElementList else { return nil }
-    return ConditionElementListSyntax(asSyntaxData)
+    isConditionElementList ? ConditionElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isDeclarationStmt: Bool { return raw.kind == .declarationStmt }
+  public var isDeclarationStmt: Bool {
+    RawDeclarationStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDeclarationStmt: DeclarationStmtSyntax? {
-    guard isDeclarationStmt else { return nil }
-    return DeclarationStmtSyntax(asSyntaxData)
+    isDeclarationStmt ? DeclarationStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isThrowStmt: Bool { return raw.kind == .throwStmt }
+  public var isThrowStmt: Bool {
+    RawThrowStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asThrowStmt: ThrowStmtSyntax? {
-    guard isThrowStmt else { return nil }
-    return ThrowStmtSyntax(asSyntaxData)
+    isThrowStmt ? ThrowStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isIfStmt: Bool { return raw.kind == .ifStmt }
+  public var isIfStmt: Bool {
+    RawIfStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIfStmt: IfStmtSyntax? {
-    guard isIfStmt else { return nil }
-    return IfStmtSyntax(asSyntaxData)
+    isIfStmt ? IfStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isElseIfContinuation: Bool { return raw.kind == .elseIfContinuation }
+  public var isElseIfContinuation: Bool {
+    RawElseIfContinuationSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asElseIfContinuation: ElseIfContinuationSyntax? {
-    guard isElseIfContinuation else { return nil }
-    return ElseIfContinuationSyntax(asSyntaxData)
+    isElseIfContinuation ? ElseIfContinuationSyntax(data: syntax.data) : nil
   }
 
-  public var isElseBlock: Bool { return raw.kind == .elseBlock }
+  public var isElseBlock: Bool {
+    RawElseBlockSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asElseBlock: ElseBlockSyntax? {
-    guard isElseBlock else { return nil }
-    return ElseBlockSyntax(asSyntaxData)
+    isElseBlock ? ElseBlockSyntax(data: syntax.data) : nil
   }
 
-  public var isSwitchCase: Bool { return raw.kind == .switchCase }
+  public var isSwitchCase: Bool {
+    RawSwitchCaseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSwitchCase: SwitchCaseSyntax? {
-    guard isSwitchCase else { return nil }
-    return SwitchCaseSyntax(asSyntaxData)
+    isSwitchCase ? SwitchCaseSyntax(data: syntax.data) : nil
   }
 
-  public var isSwitchDefaultLabel: Bool { return raw.kind == .switchDefaultLabel }
+  public var isSwitchDefaultLabel: Bool {
+    RawSwitchDefaultLabelSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSwitchDefaultLabel: SwitchDefaultLabelSyntax? {
-    guard isSwitchDefaultLabel else { return nil }
-    return SwitchDefaultLabelSyntax(asSyntaxData)
+    isSwitchDefaultLabel ? SwitchDefaultLabelSyntax(data: syntax.data) : nil
   }
 
-  public var isCaseItem: Bool { return raw.kind == .caseItem }
+  public var isCaseItem: Bool {
+    RawCaseItemSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCaseItem: CaseItemSyntax? {
-    guard isCaseItem else { return nil }
-    return CaseItemSyntax(asSyntaxData)
+    isCaseItem ? CaseItemSyntax(data: syntax.data) : nil
   }
 
-  public var isCatchItem: Bool { return raw.kind == .catchItem }
+  public var isCatchItem: Bool {
+    RawCatchItemSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCatchItem: CatchItemSyntax? {
-    guard isCatchItem else { return nil }
-    return CatchItemSyntax(asSyntaxData)
+    isCatchItem ? CatchItemSyntax(data: syntax.data) : nil
   }
 
-  public var isSwitchCaseLabel: Bool { return raw.kind == .switchCaseLabel }
+  public var isSwitchCaseLabel: Bool {
+    RawSwitchCaseLabelSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSwitchCaseLabel: SwitchCaseLabelSyntax? {
-    guard isSwitchCaseLabel else { return nil }
-    return SwitchCaseLabelSyntax(asSyntaxData)
+    isSwitchCaseLabel ? SwitchCaseLabelSyntax(data: syntax.data) : nil
   }
 
-  public var isCatchClause: Bool { return raw.kind == .catchClause }
+  public var isCatchClause: Bool {
+    RawCatchClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCatchClause: CatchClauseSyntax? {
-    guard isCatchClause else { return nil }
-    return CatchClauseSyntax(asSyntaxData)
+    isCatchClause ? CatchClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isPoundAssertStmt: Bool { return raw.kind == .poundAssertStmt }
+  public var isPoundAssertStmt: Bool {
+    RawPoundAssertStmtSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPoundAssertStmt: PoundAssertStmtSyntax? {
-    guard isPoundAssertStmt else { return nil }
-    return PoundAssertStmtSyntax(asSyntaxData)
+    isPoundAssertStmt ? PoundAssertStmtSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericWhereClause: Bool { return raw.kind == .genericWhereClause }
+  public var isGenericWhereClause: Bool {
+    RawGenericWhereClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericWhereClause: GenericWhereClauseSyntax? {
-    guard isGenericWhereClause else { return nil }
-    return GenericWhereClauseSyntax(asSyntaxData)
+    isGenericWhereClause ? GenericWhereClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericRequirementList: Bool { return raw.kind == .genericRequirementList }
+  public var isGenericRequirementList: Bool {
+    RawGenericRequirementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericRequirementList: GenericRequirementListSyntax? {
-    guard isGenericRequirementList else { return nil }
-    return GenericRequirementListSyntax(asSyntaxData)
+    isGenericRequirementList ? GenericRequirementListSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericRequirement: Bool { return raw.kind == .genericRequirement }
+  public var isGenericRequirement: Bool {
+    RawGenericRequirementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericRequirement: GenericRequirementSyntax? {
-    guard isGenericRequirement else { return nil }
-    return GenericRequirementSyntax(asSyntaxData)
+    isGenericRequirement ? GenericRequirementSyntax(data: syntax.data) : nil
   }
 
-  public var isSameTypeRequirement: Bool { return raw.kind == .sameTypeRequirement }
+  public var isSameTypeRequirement: Bool {
+    RawSameTypeRequirementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSameTypeRequirement: SameTypeRequirementSyntax? {
-    guard isSameTypeRequirement else { return nil }
-    return SameTypeRequirementSyntax(asSyntaxData)
+    isSameTypeRequirement ? SameTypeRequirementSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericParameterList: Bool { return raw.kind == .genericParameterList }
+  public var isGenericParameterList: Bool {
+    RawGenericParameterListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericParameterList: GenericParameterListSyntax? {
-    guard isGenericParameterList else { return nil }
-    return GenericParameterListSyntax(asSyntaxData)
+    isGenericParameterList ? GenericParameterListSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericParameter: Bool { return raw.kind == .genericParameter }
+  public var isGenericParameter: Bool {
+    RawGenericParameterSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericParameter: GenericParameterSyntax? {
-    guard isGenericParameter else { return nil }
-    return GenericParameterSyntax(asSyntaxData)
+    isGenericParameter ? GenericParameterSyntax(data: syntax.data) : nil
   }
 
-  public var isPrimaryAssociatedTypeList: Bool { return raw.kind == .primaryAssociatedTypeList }
+  public var isPrimaryAssociatedTypeList: Bool {
+    RawPrimaryAssociatedTypeListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrimaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax? {
-    guard isPrimaryAssociatedTypeList else { return nil }
-    return PrimaryAssociatedTypeListSyntax(asSyntaxData)
+    isPrimaryAssociatedTypeList ? PrimaryAssociatedTypeListSyntax(data: syntax.data) : nil
   }
 
-  public var isPrimaryAssociatedType: Bool { return raw.kind == .primaryAssociatedType }
+  public var isPrimaryAssociatedType: Bool {
+    RawPrimaryAssociatedTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrimaryAssociatedType: PrimaryAssociatedTypeSyntax? {
-    guard isPrimaryAssociatedType else { return nil }
-    return PrimaryAssociatedTypeSyntax(asSyntaxData)
+    isPrimaryAssociatedType ? PrimaryAssociatedTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericParameterClause: Bool { return raw.kind == .genericParameterClause }
+  public var isGenericParameterClause: Bool {
+    RawGenericParameterClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericParameterClause: GenericParameterClauseSyntax? {
-    guard isGenericParameterClause else { return nil }
-    return GenericParameterClauseSyntax(asSyntaxData)
+    isGenericParameterClause ? GenericParameterClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isConformanceRequirement: Bool { return raw.kind == .conformanceRequirement }
+  public var isConformanceRequirement: Bool {
+    RawConformanceRequirementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asConformanceRequirement: ConformanceRequirementSyntax? {
-    guard isConformanceRequirement else { return nil }
-    return ConformanceRequirementSyntax(asSyntaxData)
+    isConformanceRequirement ? ConformanceRequirementSyntax(data: syntax.data) : nil
   }
 
-  public var isPrimaryAssociatedTypeClause: Bool { return raw.kind == .primaryAssociatedTypeClause }
+  public var isPrimaryAssociatedTypeClause: Bool {
+    RawPrimaryAssociatedTypeClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asPrimaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? {
-    guard isPrimaryAssociatedTypeClause else { return nil }
-    return PrimaryAssociatedTypeClauseSyntax(asSyntaxData)
+    isPrimaryAssociatedTypeClause ? PrimaryAssociatedTypeClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isSimpleTypeIdentifier: Bool { return raw.kind == .simpleTypeIdentifier }
+  public var isSimpleTypeIdentifier: Bool {
+    RawSimpleTypeIdentifierSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asSimpleTypeIdentifier: SimpleTypeIdentifierSyntax? {
-    guard isSimpleTypeIdentifier else { return nil }
-    return SimpleTypeIdentifierSyntax(asSyntaxData)
+    isSimpleTypeIdentifier ? SimpleTypeIdentifierSyntax(data: syntax.data) : nil
   }
 
-  public var isMemberTypeIdentifier: Bool { return raw.kind == .memberTypeIdentifier }
+  public var isMemberTypeIdentifier: Bool {
+    RawMemberTypeIdentifierSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMemberTypeIdentifier: MemberTypeIdentifierSyntax? {
-    guard isMemberTypeIdentifier else { return nil }
-    return MemberTypeIdentifierSyntax(asSyntaxData)
+    isMemberTypeIdentifier ? MemberTypeIdentifierSyntax(data: syntax.data) : nil
   }
 
-  public var isClassRestrictionType: Bool { return raw.kind == .classRestrictionType }
+  public var isClassRestrictionType: Bool {
+    RawClassRestrictionTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asClassRestrictionType: ClassRestrictionTypeSyntax? {
-    guard isClassRestrictionType else { return nil }
-    return ClassRestrictionTypeSyntax(asSyntaxData)
+    isClassRestrictionType ? ClassRestrictionTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isArrayType: Bool { return raw.kind == .arrayType }
+  public var isArrayType: Bool {
+    RawArrayTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asArrayType: ArrayTypeSyntax? {
-    guard isArrayType else { return nil }
-    return ArrayTypeSyntax(asSyntaxData)
+    isArrayType ? ArrayTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isDictionaryType: Bool { return raw.kind == .dictionaryType }
+  public var isDictionaryType: Bool {
+    RawDictionaryTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asDictionaryType: DictionaryTypeSyntax? {
-    guard isDictionaryType else { return nil }
-    return DictionaryTypeSyntax(asSyntaxData)
+    isDictionaryType ? DictionaryTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isMetatypeType: Bool { return raw.kind == .metatypeType }
+  public var isMetatypeType: Bool {
+    RawMetatypeTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asMetatypeType: MetatypeTypeSyntax? {
-    guard isMetatypeType else { return nil }
-    return MetatypeTypeSyntax(asSyntaxData)
+    isMetatypeType ? MetatypeTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isOptionalType: Bool { return raw.kind == .optionalType }
+  public var isOptionalType: Bool {
+    RawOptionalTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asOptionalType: OptionalTypeSyntax? {
-    guard isOptionalType else { return nil }
-    return OptionalTypeSyntax(asSyntaxData)
+    isOptionalType ? OptionalTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isConstrainedSugarType: Bool { return raw.kind == .constrainedSugarType }
+  public var isConstrainedSugarType: Bool {
+    RawConstrainedSugarTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asConstrainedSugarType: ConstrainedSugarTypeSyntax? {
-    guard isConstrainedSugarType else { return nil }
-    return ConstrainedSugarTypeSyntax(asSyntaxData)
+    isConstrainedSugarType ? ConstrainedSugarTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isImplicitlyUnwrappedOptionalType: Bool { return raw.kind == .implicitlyUnwrappedOptionalType }
+  public var isImplicitlyUnwrappedOptionalType: Bool {
+    RawImplicitlyUnwrappedOptionalTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asImplicitlyUnwrappedOptionalType: ImplicitlyUnwrappedOptionalTypeSyntax? {
-    guard isImplicitlyUnwrappedOptionalType else { return nil }
-    return ImplicitlyUnwrappedOptionalTypeSyntax(asSyntaxData)
+    isImplicitlyUnwrappedOptionalType ? ImplicitlyUnwrappedOptionalTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isCompositionTypeElement: Bool { return raw.kind == .compositionTypeElement }
+  public var isCompositionTypeElement: Bool {
+    RawCompositionTypeElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCompositionTypeElement: CompositionTypeElementSyntax? {
-    guard isCompositionTypeElement else { return nil }
-    return CompositionTypeElementSyntax(asSyntaxData)
+    isCompositionTypeElement ? CompositionTypeElementSyntax(data: syntax.data) : nil
   }
 
-  public var isCompositionTypeElementList: Bool { return raw.kind == .compositionTypeElementList }
+  public var isCompositionTypeElementList: Bool {
+    RawCompositionTypeElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCompositionTypeElementList: CompositionTypeElementListSyntax? {
-    guard isCompositionTypeElementList else { return nil }
-    return CompositionTypeElementListSyntax(asSyntaxData)
+    isCompositionTypeElementList ? CompositionTypeElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isCompositionType: Bool { return raw.kind == .compositionType }
+  public var isCompositionType: Bool {
+    RawCompositionTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asCompositionType: CompositionTypeSyntax? {
-    guard isCompositionType else { return nil }
-    return CompositionTypeSyntax(asSyntaxData)
+    isCompositionType ? CompositionTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isTupleTypeElement: Bool { return raw.kind == .tupleTypeElement }
+  public var isTupleTypeElement: Bool {
+    RawTupleTypeElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTupleTypeElement: TupleTypeElementSyntax? {
-    guard isTupleTypeElement else { return nil }
-    return TupleTypeElementSyntax(asSyntaxData)
+    isTupleTypeElement ? TupleTypeElementSyntax(data: syntax.data) : nil
   }
 
-  public var isTupleTypeElementList: Bool { return raw.kind == .tupleTypeElementList }
+  public var isTupleTypeElementList: Bool {
+    RawTupleTypeElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTupleTypeElementList: TupleTypeElementListSyntax? {
-    guard isTupleTypeElementList else { return nil }
-    return TupleTypeElementListSyntax(asSyntaxData)
+    isTupleTypeElementList ? TupleTypeElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isTupleType: Bool { return raw.kind == .tupleType }
+  public var isTupleType: Bool {
+    RawTupleTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTupleType: TupleTypeSyntax? {
-    guard isTupleType else { return nil }
-    return TupleTypeSyntax(asSyntaxData)
+    isTupleType ? TupleTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isFunctionType: Bool { return raw.kind == .functionType }
+  public var isFunctionType: Bool {
+    RawFunctionTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asFunctionType: FunctionTypeSyntax? {
-    guard isFunctionType else { return nil }
-    return FunctionTypeSyntax(asSyntaxData)
+    isFunctionType ? FunctionTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isAttributedType: Bool { return raw.kind == .attributedType }
+  public var isAttributedType: Bool {
+    RawAttributedTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAttributedType: AttributedTypeSyntax? {
-    guard isAttributedType else { return nil }
-    return AttributedTypeSyntax(asSyntaxData)
+    isAttributedType ? AttributedTypeSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericArgumentList: Bool { return raw.kind == .genericArgumentList }
+  public var isGenericArgumentList: Bool {
+    RawGenericArgumentListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericArgumentList: GenericArgumentListSyntax? {
-    guard isGenericArgumentList else { return nil }
-    return GenericArgumentListSyntax(asSyntaxData)
+    isGenericArgumentList ? GenericArgumentListSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericArgument: Bool { return raw.kind == .genericArgument }
+  public var isGenericArgument: Bool {
+    RawGenericArgumentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericArgument: GenericArgumentSyntax? {
-    guard isGenericArgument else { return nil }
-    return GenericArgumentSyntax(asSyntaxData)
+    isGenericArgument ? GenericArgumentSyntax(data: syntax.data) : nil
   }
 
-  public var isGenericArgumentClause: Bool { return raw.kind == .genericArgumentClause }
+  public var isGenericArgumentClause: Bool {
+    RawGenericArgumentClauseSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asGenericArgumentClause: GenericArgumentClauseSyntax? {
-    guard isGenericArgumentClause else { return nil }
-    return GenericArgumentClauseSyntax(asSyntaxData)
+    isGenericArgumentClause ? GenericArgumentClauseSyntax(data: syntax.data) : nil
   }
 
-  public var isTypeAnnotation: Bool { return raw.kind == .typeAnnotation }
+  public var isTypeAnnotation: Bool {
+    RawTypeAnnotationSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTypeAnnotation: TypeAnnotationSyntax? {
-    guard isTypeAnnotation else { return nil }
-    return TypeAnnotationSyntax(asSyntaxData)
+    isTypeAnnotation ? TypeAnnotationSyntax(data: syntax.data) : nil
   }
 
-  public var isEnumCasePattern: Bool { return raw.kind == .enumCasePattern }
+  public var isEnumCasePattern: Bool {
+    RawEnumCasePatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asEnumCasePattern: EnumCasePatternSyntax? {
-    guard isEnumCasePattern else { return nil }
-    return EnumCasePatternSyntax(asSyntaxData)
+    isEnumCasePattern ? EnumCasePatternSyntax(data: syntax.data) : nil
   }
 
-  public var isIsTypePattern: Bool { return raw.kind == .isTypePattern }
+  public var isIsTypePattern: Bool {
+    RawIsTypePatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIsTypePattern: IsTypePatternSyntax? {
-    guard isIsTypePattern else { return nil }
-    return IsTypePatternSyntax(asSyntaxData)
+    isIsTypePattern ? IsTypePatternSyntax(data: syntax.data) : nil
   }
 
-  public var isOptionalPattern: Bool { return raw.kind == .optionalPattern }
+  public var isOptionalPattern: Bool {
+    RawOptionalPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asOptionalPattern: OptionalPatternSyntax? {
-    guard isOptionalPattern else { return nil }
-    return OptionalPatternSyntax(asSyntaxData)
+    isOptionalPattern ? OptionalPatternSyntax(data: syntax.data) : nil
   }
 
-  public var isIdentifierPattern: Bool { return raw.kind == .identifierPattern }
+  public var isIdentifierPattern: Bool {
+    RawIdentifierPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asIdentifierPattern: IdentifierPatternSyntax? {
-    guard isIdentifierPattern else { return nil }
-    return IdentifierPatternSyntax(asSyntaxData)
+    isIdentifierPattern ? IdentifierPatternSyntax(data: syntax.data) : nil
   }
 
-  public var isAsTypePattern: Bool { return raw.kind == .asTypePattern }
+  public var isAsTypePattern: Bool {
+    RawAsTypePatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAsTypePattern: AsTypePatternSyntax? {
-    guard isAsTypePattern else { return nil }
-    return AsTypePatternSyntax(asSyntaxData)
+    isAsTypePattern ? AsTypePatternSyntax(data: syntax.data) : nil
   }
 
-  public var isTuplePattern: Bool { return raw.kind == .tuplePattern }
+  public var isTuplePattern: Bool {
+    RawTuplePatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTuplePattern: TuplePatternSyntax? {
-    guard isTuplePattern else { return nil }
-    return TuplePatternSyntax(asSyntaxData)
+    isTuplePattern ? TuplePatternSyntax(data: syntax.data) : nil
   }
 
-  public var isWildcardPattern: Bool { return raw.kind == .wildcardPattern }
+  public var isWildcardPattern: Bool {
+    RawWildcardPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asWildcardPattern: WildcardPatternSyntax? {
-    guard isWildcardPattern else { return nil }
-    return WildcardPatternSyntax(asSyntaxData)
+    isWildcardPattern ? WildcardPatternSyntax(data: syntax.data) : nil
   }
 
-  public var isTuplePatternElement: Bool { return raw.kind == .tuplePatternElement }
+  public var isTuplePatternElement: Bool {
+    RawTuplePatternElementSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTuplePatternElement: TuplePatternElementSyntax? {
-    guard isTuplePatternElement else { return nil }
-    return TuplePatternElementSyntax(asSyntaxData)
+    isTuplePatternElement ? TuplePatternElementSyntax(data: syntax.data) : nil
   }
 
-  public var isExpressionPattern: Bool { return raw.kind == .expressionPattern }
+  public var isExpressionPattern: Bool {
+    RawExpressionPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asExpressionPattern: ExpressionPatternSyntax? {
-    guard isExpressionPattern else { return nil }
-    return ExpressionPatternSyntax(asSyntaxData)
+    isExpressionPattern ? ExpressionPatternSyntax(data: syntax.data) : nil
   }
 
-  public var isTuplePatternElementList: Bool { return raw.kind == .tuplePatternElementList }
+  public var isTuplePatternElementList: Bool {
+    RawTuplePatternElementListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asTuplePatternElementList: TuplePatternElementListSyntax? {
-    guard isTuplePatternElementList else { return nil }
-    return TuplePatternElementListSyntax(asSyntaxData)
+    isTuplePatternElementList ? TuplePatternElementListSyntax(data: syntax.data) : nil
   }
 
-  public var isValueBindingPattern: Bool { return raw.kind == .valueBindingPattern }
+  public var isValueBindingPattern: Bool {
+    RawValueBindingPatternSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asValueBindingPattern: ValueBindingPatternSyntax? {
-    guard isValueBindingPattern else { return nil }
-    return ValueBindingPatternSyntax(asSyntaxData)
+    isValueBindingPattern ? ValueBindingPatternSyntax(data: syntax.data) : nil
   }
 
-  public var isAvailabilitySpecList: Bool { return raw.kind == .availabilitySpecList }
+  public var isAvailabilitySpecList: Bool {
+    RawAvailabilitySpecListSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAvailabilitySpecList: AvailabilitySpecListSyntax? {
-    guard isAvailabilitySpecList else { return nil }
-    return AvailabilitySpecListSyntax(asSyntaxData)
+    isAvailabilitySpecList ? AvailabilitySpecListSyntax(data: syntax.data) : nil
   }
 
-  public var isAvailabilityArgument: Bool { return raw.kind == .availabilityArgument }
+  public var isAvailabilityArgument: Bool {
+    RawAvailabilityArgumentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAvailabilityArgument: AvailabilityArgumentSyntax? {
-    guard isAvailabilityArgument else { return nil }
-    return AvailabilityArgumentSyntax(asSyntaxData)
+    isAvailabilityArgument ? AvailabilityArgumentSyntax(data: syntax.data) : nil
   }
 
-  public var isAvailabilityLabeledArgument: Bool { return raw.kind == .availabilityLabeledArgument }
+  public var isAvailabilityLabeledArgument: Bool {
+    RawAvailabilityLabeledArgumentSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAvailabilityLabeledArgument: AvailabilityLabeledArgumentSyntax? {
-    guard isAvailabilityLabeledArgument else { return nil }
-    return AvailabilityLabeledArgumentSyntax(asSyntaxData)
+    isAvailabilityLabeledArgument ? AvailabilityLabeledArgumentSyntax(data: syntax.data) : nil
   }
 
-  public var isAvailabilityVersionRestriction: Bool { return raw.kind == .availabilityVersionRestriction }
+  public var isAvailabilityVersionRestriction: Bool {
+    RawAvailabilityVersionRestrictionSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asAvailabilityVersionRestriction: AvailabilityVersionRestrictionSyntax? {
-    guard isAvailabilityVersionRestriction else { return nil }
-    return AvailabilityVersionRestrictionSyntax(asSyntaxData)
+    isAvailabilityVersionRestriction ? AvailabilityVersionRestrictionSyntax(data: syntax.data) : nil
   }
 
-  public var isVersionTuple: Bool { return raw.kind == .versionTuple }
+  public var isVersionTuple: Bool {
+    RawVersionTupleSyntax.isValid(syntaxKind: syntaxKind)
+  }
   public var asVersionTuple: VersionTupleSyntax? {
-    guard isVersionTuple else { return nil }
-    return VersionTupleSyntax(asSyntaxData)
+    isVersionTuple ? VersionTupleSyntax(data: syntax.data) : nil
   }
 }
 
@@ -1527,518 +1774,262 @@ extension Syntax {
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
     switch self.as(SyntaxEnum.self) {
-    case .token(let node):
-      return node
-    case .unknown(let node):
-      return node
-    case .decl(let node):
-      return node
-    case .expr(let node):
-      return node
-    case .stmt(let node):
-      return node
-    case .type(let node):
-      return node
-    case .pattern(let node):
-      return node
-    case .unknownDecl(let node):
-      return node
-    case .unknownExpr(let node):
-      return node
-    case .unknownStmt(let node):
-      return node
-    case .unknownType(let node):
-      return node
-    case .unknownPattern(let node):
-      return node
-    case .codeBlockItem(let node):
-      return node
-    case .codeBlockItemList(let node):
-      return node
-    case .codeBlock(let node):
-      return node
-    case .inOutExpr(let node):
-      return node
-    case .poundColumnExpr(let node):
-      return node
-    case .tupleExprElementList(let node):
-      return node
-    case .arrayElementList(let node):
-      return node
-    case .dictionaryElementList(let node):
-      return node
-    case .stringLiteralSegments(let node):
-      return node
-    case .tryExpr(let node):
-      return node
-    case .awaitExpr(let node):
-      return node
-    case .declNameArgument(let node):
-      return node
-    case .declNameArgumentList(let node):
-      return node
-    case .declNameArguments(let node):
-      return node
-    case .identifierExpr(let node):
-      return node
-    case .superRefExpr(let node):
-      return node
-    case .nilLiteralExpr(let node):
-      return node
-    case .discardAssignmentExpr(let node):
-      return node
-    case .assignmentExpr(let node):
-      return node
-    case .sequenceExpr(let node):
-      return node
-    case .exprList(let node):
-      return node
-    case .poundLineExpr(let node):
-      return node
-    case .poundFileExpr(let node):
-      return node
-    case .poundFileIDExpr(let node):
-      return node
-    case .poundFilePathExpr(let node):
-      return node
-    case .poundFunctionExpr(let node):
-      return node
-    case .poundDsohandleExpr(let node):
-      return node
-    case .symbolicReferenceExpr(let node):
-      return node
-    case .prefixOperatorExpr(let node):
-      return node
-    case .binaryOperatorExpr(let node):
-      return node
-    case .arrowExpr(let node):
-      return node
-    case .floatLiteralExpr(let node):
-      return node
-    case .tupleExpr(let node):
-      return node
-    case .arrayExpr(let node):
-      return node
-    case .dictionaryExpr(let node):
-      return node
-    case .tupleExprElement(let node):
-      return node
-    case .arrayElement(let node):
-      return node
-    case .dictionaryElement(let node):
-      return node
-    case .integerLiteralExpr(let node):
-      return node
-    case .booleanLiteralExpr(let node):
-      return node
-    case .ternaryExpr(let node):
-      return node
-    case .memberAccessExpr(let node):
-      return node
-    case .isExpr(let node):
-      return node
-    case .asExpr(let node):
-      return node
-    case .typeExpr(let node):
-      return node
-    case .closureCaptureItem(let node):
-      return node
-    case .closureCaptureItemList(let node):
-      return node
-    case .closureCaptureSignature(let node):
-      return node
-    case .closureParam(let node):
-      return node
-    case .closureParamList(let node):
-      return node
-    case .closureSignature(let node):
-      return node
-    case .closureExpr(let node):
-      return node
-    case .unresolvedPatternExpr(let node):
-      return node
-    case .multipleTrailingClosureElement(let node):
-      return node
-    case .multipleTrailingClosureElementList(let node):
-      return node
-    case .functionCallExpr(let node):
-      return node
-    case .subscriptExpr(let node):
-      return node
-    case .optionalChainingExpr(let node):
-      return node
-    case .forcedValueExpr(let node):
-      return node
-    case .postfixUnaryExpr(let node):
-      return node
-    case .specializeExpr(let node):
-      return node
-    case .stringSegment(let node):
-      return node
-    case .expressionSegment(let node):
-      return node
-    case .stringLiteralExpr(let node):
-      return node
-    case .regexLiteralExpr(let node):
-      return node
-    case .keyPathExpr(let node):
-      return node
-    case .keyPathBaseExpr(let node):
-      return node
-    case .objcNamePiece(let node):
-      return node
-    case .objcName(let node):
-      return node
-    case .objcKeyPathExpr(let node):
-      return node
-    case .objcSelectorExpr(let node):
-      return node
-    case .postfixIfConfigExpr(let node):
-      return node
-    case .editorPlaceholderExpr(let node):
-      return node
-    case .objectLiteralExpr(let node):
-      return node
-    case .typeInitializerClause(let node):
-      return node
-    case .typealiasDecl(let node):
-      return node
-    case .associatedtypeDecl(let node):
-      return node
-    case .functionParameterList(let node):
-      return node
-    case .parameterClause(let node):
-      return node
-    case .returnClause(let node):
-      return node
-    case .functionSignature(let node):
-      return node
-    case .ifConfigClause(let node):
-      return node
-    case .ifConfigClauseList(let node):
-      return node
-    case .ifConfigDecl(let node):
-      return node
-    case .poundErrorDecl(let node):
-      return node
-    case .poundWarningDecl(let node):
-      return node
-    case .poundSourceLocation(let node):
-      return node
-    case .poundSourceLocationArgs(let node):
-      return node
-    case .declModifierDetail(let node):
-      return node
-    case .declModifier(let node):
-      return node
-    case .inheritedType(let node):
-      return node
-    case .inheritedTypeList(let node):
-      return node
-    case .typeInheritanceClause(let node):
-      return node
-    case .classDecl(let node):
-      return node
-    case .actorDecl(let node):
-      return node
-    case .structDecl(let node):
-      return node
-    case .protocolDecl(let node):
-      return node
-    case .extensionDecl(let node):
-      return node
-    case .memberDeclBlock(let node):
-      return node
-    case .memberDeclList(let node):
-      return node
-    case .memberDeclListItem(let node):
-      return node
-    case .sourceFile(let node):
-      return node
-    case .initializerClause(let node):
-      return node
-    case .functionParameter(let node):
-      return node
-    case .modifierList(let node):
-      return node
-    case .functionDecl(let node):
-      return node
-    case .initializerDecl(let node):
-      return node
-    case .deinitializerDecl(let node):
-      return node
-    case .subscriptDecl(let node):
-      return node
-    case .accessLevelModifier(let node):
-      return node
-    case .accessPathComponent(let node):
-      return node
-    case .accessPath(let node):
-      return node
-    case .importDecl(let node):
-      return node
-    case .accessorParameter(let node):
-      return node
-    case .accessorDecl(let node):
-      return node
-    case .accessorList(let node):
-      return node
-    case .accessorBlock(let node):
-      return node
-    case .patternBinding(let node):
-      return node
-    case .patternBindingList(let node):
-      return node
-    case .variableDecl(let node):
-      return node
-    case .enumCaseElement(let node):
-      return node
-    case .enumCaseElementList(let node):
-      return node
-    case .enumCaseDecl(let node):
-      return node
-    case .enumDecl(let node):
-      return node
-    case .operatorDecl(let node):
-      return node
-    case .identifierList(let node):
-      return node
-    case .operatorPrecedenceAndTypes(let node):
-      return node
-    case .precedenceGroupDecl(let node):
-      return node
-    case .precedenceGroupAttributeList(let node):
-      return node
-    case .precedenceGroupRelation(let node):
-      return node
-    case .precedenceGroupNameList(let node):
-      return node
-    case .precedenceGroupNameElement(let node):
-      return node
-    case .precedenceGroupAssignment(let node):
-      return node
-    case .precedenceGroupAssociativity(let node):
-      return node
-    case .tokenList(let node):
-      return node
-    case .nonEmptyTokenList(let node):
-      return node
-    case .customAttribute(let node):
-      return node
-    case .attribute(let node):
-      return node
-    case .attributeList(let node):
-      return node
-    case .specializeAttributeSpecList(let node):
-      return node
-    case .availabilityEntry(let node):
-      return node
-    case .labeledSpecializeEntry(let node):
-      return node
-    case .targetFunctionEntry(let node):
-      return node
-    case .namedAttributeStringArgument(let node):
-      return node
-    case .declName(let node):
-      return node
-    case .implementsAttributeArguments(let node):
-      return node
-    case .objCSelectorPiece(let node):
-      return node
-    case .objCSelector(let node):
-      return node
-    case .differentiableAttributeArguments(let node):
-      return node
-    case .differentiabilityParamsClause(let node):
-      return node
-    case .differentiabilityParams(let node):
-      return node
-    case .differentiabilityParamList(let node):
-      return node
-    case .differentiabilityParam(let node):
-      return node
-    case .derivativeRegistrationAttributeArguments(let node):
-      return node
-    case .qualifiedDeclName(let node):
-      return node
-    case .functionDeclName(let node):
-      return node
-    case .backDeployAttributeSpecList(let node):
-      return node
-    case .backDeployVersionList(let node):
-      return node
-    case .backDeployVersionArgument(let node):
-      return node
-    case .continueStmt(let node):
-      return node
-    case .whileStmt(let node):
-      return node
-    case .deferStmt(let node):
-      return node
-    case .expressionStmt(let node):
-      return node
-    case .switchCaseList(let node):
-      return node
-    case .repeatWhileStmt(let node):
-      return node
-    case .guardStmt(let node):
-      return node
-    case .whereClause(let node):
-      return node
-    case .forInStmt(let node):
-      return node
-    case .switchStmt(let node):
-      return node
-    case .catchClauseList(let node):
-      return node
-    case .doStmt(let node):
-      return node
-    case .returnStmt(let node):
-      return node
-    case .yieldStmt(let node):
-      return node
-    case .yieldList(let node):
-      return node
-    case .fallthroughStmt(let node):
-      return node
-    case .breakStmt(let node):
-      return node
-    case .caseItemList(let node):
-      return node
-    case .catchItemList(let node):
-      return node
-    case .conditionElement(let node):
-      return node
-    case .availabilityCondition(let node):
-      return node
-    case .matchingPatternCondition(let node):
-      return node
-    case .optionalBindingCondition(let node):
-      return node
-    case .unavailabilityCondition(let node):
-      return node
-    case .conditionElementList(let node):
-      return node
-    case .declarationStmt(let node):
-      return node
-    case .throwStmt(let node):
-      return node
-    case .ifStmt(let node):
-      return node
-    case .elseIfContinuation(let node):
-      return node
-    case .elseBlock(let node):
-      return node
-    case .switchCase(let node):
-      return node
-    case .switchDefaultLabel(let node):
-      return node
-    case .caseItem(let node):
-      return node
-    case .catchItem(let node):
-      return node
-    case .switchCaseLabel(let node):
-      return node
-    case .catchClause(let node):
-      return node
-    case .poundAssertStmt(let node):
-      return node
-    case .genericWhereClause(let node):
-      return node
-    case .genericRequirementList(let node):
-      return node
-    case .genericRequirement(let node):
-      return node
-    case .sameTypeRequirement(let node):
-      return node
-    case .genericParameterList(let node):
-      return node
-    case .genericParameter(let node):
-      return node
-    case .primaryAssociatedTypeList(let node):
-      return node
-    case .primaryAssociatedType(let node):
-      return node
-    case .genericParameterClause(let node):
-      return node
-    case .conformanceRequirement(let node):
-      return node
-    case .primaryAssociatedTypeClause(let node):
-      return node
-    case .simpleTypeIdentifier(let node):
-      return node
-    case .memberTypeIdentifier(let node):
-      return node
-    case .classRestrictionType(let node):
-      return node
-    case .arrayType(let node):
-      return node
-    case .dictionaryType(let node):
-      return node
-    case .metatypeType(let node):
-      return node
-    case .optionalType(let node):
-      return node
-    case .constrainedSugarType(let node):
-      return node
-    case .implicitlyUnwrappedOptionalType(let node):
-      return node
-    case .compositionTypeElement(let node):
-      return node
-    case .compositionTypeElementList(let node):
-      return node
-    case .compositionType(let node):
-      return node
-    case .tupleTypeElement(let node):
-      return node
-    case .tupleTypeElementList(let node):
-      return node
-    case .tupleType(let node):
-      return node
-    case .functionType(let node):
-      return node
-    case .attributedType(let node):
-      return node
-    case .genericArgumentList(let node):
-      return node
-    case .genericArgument(let node):
-      return node
-    case .genericArgumentClause(let node):
-      return node
-    case .typeAnnotation(let node):
-      return node
-    case .enumCasePattern(let node):
-      return node
-    case .isTypePattern(let node):
-      return node
-    case .optionalPattern(let node):
-      return node
-    case .identifierPattern(let node):
-      return node
-    case .asTypePattern(let node):
-      return node
-    case .tuplePattern(let node):
-      return node
-    case .wildcardPattern(let node):
-      return node
-    case .tuplePatternElement(let node):
-      return node
-    case .expressionPattern(let node):
-      return node
-    case .tuplePatternElementList(let node):
-      return node
-    case .valueBindingPattern(let node):
-      return node
-    case .availabilitySpecList(let node):
-      return node
-    case .availabilityArgument(let node):
-      return node
-    case .availabilityLabeledArgument(let node):
-      return node
-    case .availabilityVersionRestriction(let node):
-      return node
-    case .versionTuple(let node):
-      return node
+    case .token(let node): return node
+    case .unknown(let node): return node
+    case .decl(let node): return node
+    case .expr(let node): return node
+    case .stmt(let node): return node
+    case .type(let node): return node
+    case .pattern(let node): return node
+    case .unknownDecl(let node): return node
+    case .unknownExpr(let node): return node
+    case .unknownStmt(let node): return node
+    case .unknownType(let node): return node
+    case .unknownPattern(let node): return node
+    case .codeBlockItem(let node): return node
+    case .codeBlockItemList(let node): return node
+    case .codeBlock(let node): return node
+    case .inOutExpr(let node): return node
+    case .poundColumnExpr(let node): return node
+    case .tupleExprElementList(let node): return node
+    case .arrayElementList(let node): return node
+    case .dictionaryElementList(let node): return node
+    case .stringLiteralSegments(let node): return node
+    case .tryExpr(let node): return node
+    case .awaitExpr(let node): return node
+    case .declNameArgument(let node): return node
+    case .declNameArgumentList(let node): return node
+    case .declNameArguments(let node): return node
+    case .identifierExpr(let node): return node
+    case .superRefExpr(let node): return node
+    case .nilLiteralExpr(let node): return node
+    case .discardAssignmentExpr(let node): return node
+    case .assignmentExpr(let node): return node
+    case .sequenceExpr(let node): return node
+    case .exprList(let node): return node
+    case .poundLineExpr(let node): return node
+    case .poundFileExpr(let node): return node
+    case .poundFileIDExpr(let node): return node
+    case .poundFilePathExpr(let node): return node
+    case .poundFunctionExpr(let node): return node
+    case .poundDsohandleExpr(let node): return node
+    case .symbolicReferenceExpr(let node): return node
+    case .prefixOperatorExpr(let node): return node
+    case .binaryOperatorExpr(let node): return node
+    case .arrowExpr(let node): return node
+    case .floatLiteralExpr(let node): return node
+    case .tupleExpr(let node): return node
+    case .arrayExpr(let node): return node
+    case .dictionaryExpr(let node): return node
+    case .tupleExprElement(let node): return node
+    case .arrayElement(let node): return node
+    case .dictionaryElement(let node): return node
+    case .integerLiteralExpr(let node): return node
+    case .booleanLiteralExpr(let node): return node
+    case .ternaryExpr(let node): return node
+    case .memberAccessExpr(let node): return node
+    case .isExpr(let node): return node
+    case .asExpr(let node): return node
+    case .typeExpr(let node): return node
+    case .closureCaptureItem(let node): return node
+    case .closureCaptureItemList(let node): return node
+    case .closureCaptureSignature(let node): return node
+    case .closureParam(let node): return node
+    case .closureParamList(let node): return node
+    case .closureSignature(let node): return node
+    case .closureExpr(let node): return node
+    case .unresolvedPatternExpr(let node): return node
+    case .multipleTrailingClosureElement(let node): return node
+    case .multipleTrailingClosureElementList(let node): return node
+    case .functionCallExpr(let node): return node
+    case .subscriptExpr(let node): return node
+    case .optionalChainingExpr(let node): return node
+    case .forcedValueExpr(let node): return node
+    case .postfixUnaryExpr(let node): return node
+    case .specializeExpr(let node): return node
+    case .stringSegment(let node): return node
+    case .expressionSegment(let node): return node
+    case .stringLiteralExpr(let node): return node
+    case .regexLiteralExpr(let node): return node
+    case .keyPathExpr(let node): return node
+    case .keyPathBaseExpr(let node): return node
+    case .objcNamePiece(let node): return node
+    case .objcName(let node): return node
+    case .objcKeyPathExpr(let node): return node
+    case .objcSelectorExpr(let node): return node
+    case .postfixIfConfigExpr(let node): return node
+    case .editorPlaceholderExpr(let node): return node
+    case .objectLiteralExpr(let node): return node
+    case .typeInitializerClause(let node): return node
+    case .typealiasDecl(let node): return node
+    case .associatedtypeDecl(let node): return node
+    case .functionParameterList(let node): return node
+    case .parameterClause(let node): return node
+    case .returnClause(let node): return node
+    case .functionSignature(let node): return node
+    case .ifConfigClause(let node): return node
+    case .ifConfigClauseList(let node): return node
+    case .ifConfigDecl(let node): return node
+    case .poundErrorDecl(let node): return node
+    case .poundWarningDecl(let node): return node
+    case .poundSourceLocation(let node): return node
+    case .poundSourceLocationArgs(let node): return node
+    case .declModifierDetail(let node): return node
+    case .declModifier(let node): return node
+    case .inheritedType(let node): return node
+    case .inheritedTypeList(let node): return node
+    case .typeInheritanceClause(let node): return node
+    case .classDecl(let node): return node
+    case .actorDecl(let node): return node
+    case .structDecl(let node): return node
+    case .protocolDecl(let node): return node
+    case .extensionDecl(let node): return node
+    case .memberDeclBlock(let node): return node
+    case .memberDeclList(let node): return node
+    case .memberDeclListItem(let node): return node
+    case .sourceFile(let node): return node
+    case .initializerClause(let node): return node
+    case .functionParameter(let node): return node
+    case .modifierList(let node): return node
+    case .functionDecl(let node): return node
+    case .initializerDecl(let node): return node
+    case .deinitializerDecl(let node): return node
+    case .subscriptDecl(let node): return node
+    case .accessLevelModifier(let node): return node
+    case .accessPathComponent(let node): return node
+    case .accessPath(let node): return node
+    case .importDecl(let node): return node
+    case .accessorParameter(let node): return node
+    case .accessorDecl(let node): return node
+    case .accessorList(let node): return node
+    case .accessorBlock(let node): return node
+    case .patternBinding(let node): return node
+    case .patternBindingList(let node): return node
+    case .variableDecl(let node): return node
+    case .enumCaseElement(let node): return node
+    case .enumCaseElementList(let node): return node
+    case .enumCaseDecl(let node): return node
+    case .enumDecl(let node): return node
+    case .operatorDecl(let node): return node
+    case .identifierList(let node): return node
+    case .operatorPrecedenceAndTypes(let node): return node
+    case .precedenceGroupDecl(let node): return node
+    case .precedenceGroupAttributeList(let node): return node
+    case .precedenceGroupRelation(let node): return node
+    case .precedenceGroupNameList(let node): return node
+    case .precedenceGroupNameElement(let node): return node
+    case .precedenceGroupAssignment(let node): return node
+    case .precedenceGroupAssociativity(let node): return node
+    case .tokenList(let node): return node
+    case .nonEmptyTokenList(let node): return node
+    case .customAttribute(let node): return node
+    case .attribute(let node): return node
+    case .attributeList(let node): return node
+    case .specializeAttributeSpecList(let node): return node
+    case .availabilityEntry(let node): return node
+    case .labeledSpecializeEntry(let node): return node
+    case .targetFunctionEntry(let node): return node
+    case .namedAttributeStringArgument(let node): return node
+    case .declName(let node): return node
+    case .implementsAttributeArguments(let node): return node
+    case .objCSelectorPiece(let node): return node
+    case .objCSelector(let node): return node
+    case .differentiableAttributeArguments(let node): return node
+    case .differentiabilityParamsClause(let node): return node
+    case .differentiabilityParams(let node): return node
+    case .differentiabilityParamList(let node): return node
+    case .differentiabilityParam(let node): return node
+    case .derivativeRegistrationAttributeArguments(let node): return node
+    case .qualifiedDeclName(let node): return node
+    case .functionDeclName(let node): return node
+    case .backDeployAttributeSpecList(let node): return node
+    case .backDeployVersionList(let node): return node
+    case .backDeployVersionArgument(let node): return node
+    case .continueStmt(let node): return node
+    case .whileStmt(let node): return node
+    case .deferStmt(let node): return node
+    case .expressionStmt(let node): return node
+    case .switchCaseList(let node): return node
+    case .repeatWhileStmt(let node): return node
+    case .guardStmt(let node): return node
+    case .whereClause(let node): return node
+    case .forInStmt(let node): return node
+    case .switchStmt(let node): return node
+    case .catchClauseList(let node): return node
+    case .doStmt(let node): return node
+    case .returnStmt(let node): return node
+    case .yieldStmt(let node): return node
+    case .yieldList(let node): return node
+    case .fallthroughStmt(let node): return node
+    case .breakStmt(let node): return node
+    case .caseItemList(let node): return node
+    case .catchItemList(let node): return node
+    case .conditionElement(let node): return node
+    case .availabilityCondition(let node): return node
+    case .matchingPatternCondition(let node): return node
+    case .optionalBindingCondition(let node): return node
+    case .unavailabilityCondition(let node): return node
+    case .conditionElementList(let node): return node
+    case .declarationStmt(let node): return node
+    case .throwStmt(let node): return node
+    case .ifStmt(let node): return node
+    case .elseIfContinuation(let node): return node
+    case .elseBlock(let node): return node
+    case .switchCase(let node): return node
+    case .switchDefaultLabel(let node): return node
+    case .caseItem(let node): return node
+    case .catchItem(let node): return node
+    case .switchCaseLabel(let node): return node
+    case .catchClause(let node): return node
+    case .poundAssertStmt(let node): return node
+    case .genericWhereClause(let node): return node
+    case .genericRequirementList(let node): return node
+    case .genericRequirement(let node): return node
+    case .sameTypeRequirement(let node): return node
+    case .genericParameterList(let node): return node
+    case .genericParameter(let node): return node
+    case .primaryAssociatedTypeList(let node): return node
+    case .primaryAssociatedType(let node): return node
+    case .genericParameterClause(let node): return node
+    case .conformanceRequirement(let node): return node
+    case .primaryAssociatedTypeClause(let node): return node
+    case .simpleTypeIdentifier(let node): return node
+    case .memberTypeIdentifier(let node): return node
+    case .classRestrictionType(let node): return node
+    case .arrayType(let node): return node
+    case .dictionaryType(let node): return node
+    case .metatypeType(let node): return node
+    case .optionalType(let node): return node
+    case .constrainedSugarType(let node): return node
+    case .implicitlyUnwrappedOptionalType(let node): return node
+    case .compositionTypeElement(let node): return node
+    case .compositionTypeElementList(let node): return node
+    case .compositionType(let node): return node
+    case .tupleTypeElement(let node): return node
+    case .tupleTypeElementList(let node): return node
+    case .tupleType(let node): return node
+    case .functionType(let node): return node
+    case .attributedType(let node): return node
+    case .genericArgumentList(let node): return node
+    case .genericArgument(let node): return node
+    case .genericArgumentClause(let node): return node
+    case .typeAnnotation(let node): return node
+    case .enumCasePattern(let node): return node
+    case .isTypePattern(let node): return node
+    case .optionalPattern(let node): return node
+    case .identifierPattern(let node): return node
+    case .asTypePattern(let node): return node
+    case .tuplePattern(let node): return node
+    case .wildcardPattern(let node): return node
+    case .tuplePatternElement(let node): return node
+    case .expressionPattern(let node): return node
+    case .tuplePatternElementList(let node): return node
+    case .valueBindingPattern(let node): return node
+    case .availabilitySpecList(let node): return node
+    case .availabilityArgument(let node): return node
+    case .availabilityLabeledArgument(let node): return node
+    case .availabilityVersionRestriction(let node): return node
+    case .versionTuple(let node): return node
     }
   }
 }

@@ -24,29 +24,20 @@ public enum SyntaxEnum {
   case unknown(UnknownSyntax)
   case token(TokenSyntax)
 % for node in SYNTAX_NODES:
-%   if node.is_base():
-  case ${node.swift_syntax_kind}(Unknown${node.name})
-%   else:
   case ${node.swift_syntax_kind}(${node.name})
-%   end
 % end
 }
 
 public extension Syntax {
   /// Get an enum that can be used to exhaustively switch over all syntax nodes.
   func `as`(_: SyntaxEnum.Type) -> SyntaxEnum {
-    switch raw.kind {
+    switch raw.syntaxKind {
     case .token:
       return .token(TokenSyntax(self)!)
     case .unknown:
       return .unknown(UnknownSyntax(self)!)
 % for node in SYNTAX_NODES:
-    case .${node.swift_syntax_kind}:
-%   if node.is_base():
-      return .${node.swift_syntax_kind}(Unknown${node.name}(self)!)
-%   else:
-      return .${node.swift_syntax_kind}(${node.name}(self)!)
-%   end
+    case .${node.swift_syntax_kind}: return .${node.swift_syntax_kind}(.init(data: data))
 % end
     }
   }

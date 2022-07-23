@@ -30,10 +30,10 @@ guaranted to be structurally (if not syntactically) valid.
 %   if node.is_buildable():
 %     Builder = node.name + "Builder"
 public struct ${Builder} {
-  private var layout =
-    Array<RawSyntax?>(repeating: nil, count: ${len(node.children)})
+  private var layout: [RawSyntax?] = .init(repeating: nil, count: ${len(node.children)})
+  private var arena: SyntaxArena
 
-  internal init() {}
+  internal init(arena: SyntaxArena) { self.arena = arena }
 %     for child in node.children:
 %       child_node = NODE_MAP.get(child.syntax_kind)
 %       if child_node and child_node.is_syntax_collection():
@@ -46,11 +46,11 @@ public struct ${Builder} {
   public mutating func add${child_elt}(_ elt: ${child_elt_type}) {
     let idx = ${node.name}.Cursor.${child.swift_name}.rawValue
     if let list = layout[idx] {
-      layout[idx] = list.appending(elt.raw)
+      layout[idx] = list.insertingChild(elt.raw, at: list.children.count, arena: arena)
     } else {
-      layout[idx] = RawSyntax.create(kind: SyntaxKind.${child.swift_syntax_kind},
-        layout: [elt.raw], length: elt.raw.totalLength,
-        presence: SourcePresence.present)
+      layout[idx] = RawSyntax.makeLayout(arena: arena, kind: .${child_node.swift_syntax_kind}, uninitializedCount: 1) { buffer in
+        buffer.baseAddress!.initialize(to: elt.raw)
+      }
     }
   }
 %       else:
@@ -66,13 +66,23 @@ public struct ${Builder} {
 %     for (idx, child) in enumerate(node.children):
 %       if not child.is_optional:
     if (layout[${idx}] == nil) {
-      layout[${idx}] = ${make_missing_swift_child(child)}
+%         if child.is_token():
+%           token = child.main_token()
+%           tok_kind = token.swift_kind() if token else "unknown"
+      layout[${idx}] = Raw${child.type_name}.makeBlank(arena: arena, tokenKind: .${tok_kind}).raw
+%         else:
+      layout[${idx}] = Raw${child.type_name}.makeBlank(arena: arena).raw
+%         end
     }
 %       end
 %     end
 
-    return .forRoot(RawSyntax.createAndCalcLength(kind: .${node.swift_syntax_kind},
-      layout: layout, presence: .present))
+    let raw = RawSyntax.makeLayout(arena: arena, kind: .${node.swift_syntax_kind},
+                                   uninitializedCount: ${len(node.children)}) { buffer in
+      _ = buffer.initialize(from: layout)
+    }
+
+    return SyntaxData(rootRaw: raw, arena: arena)
   }
 }
 
@@ -85,11 +95,11 @@ extension ${node.name} {
   ///            incrementally build the structure of the node.
   /// - Returns: A `${node.name}` with all the fields populated in the builder
   ///            closure.
-  public init(_ build: (inout ${Builder}) -> Void) {
-    var builder = ${Builder}()
+  public init(arena: SyntaxArena = .default, _ build: (inout ${Builder}) -> Void) {
+    var builder = ${Builder}(arena: arena)
     build(&builder)
     let data = builder.buildData()
-    self.init(data)
+    self.init(data: data)
   }
 }
 

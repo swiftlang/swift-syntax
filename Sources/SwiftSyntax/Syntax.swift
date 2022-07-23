@@ -13,327 +13,203 @@
 /// A Syntax node represents a tree of nodes with tokens at the leaves.
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
-public struct Syntax: SyntaxProtocol, SyntaxHashable {
-  let data: SyntaxData
-
-  public var _syntaxNode: Syntax {
-    return self
+///
+/// `Syntax` is a type erased syntax node.
+///
+/// To cast a `Syntax` to the concrete type, use `init?(_:)` on each concrete
+/// type. E.g.:
+///
+///    let syntax: Syntax = createASyntax()
+///    if let funcDeclSyntax = FuncDeclSyntax(syntax) {
+///      // Do something on 'funcDeclSyntax'...
+///    }
+///
+public struct Syntax: SyntaxProtocol, Hashable {
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    return true
   }
 
-  init(_ data: SyntaxData) {
-    self.data = data
+  internal var data: SyntaxData
+  internal init(data: SyntaxData) { self.data = data }
+
+  public init(syntax: Syntax) {
+    self = syntax
   }
 
-  public func _validateLayout() {
-    // Check the layout of the concrete type
-    return self.asProtocol(SyntaxProtocol.self)._validateLayout()
+  public var syntax: Syntax { self }
+
+  @_spi(RawSyntax)
+  public init(raw: RawSyntax, arena: SyntaxArena) {
+    self.init(data: .init(rootRaw: raw, arena: arena))
   }
 
-  /// Create a `Syntax` node from a specialized syntax node.
-  public init<S: SyntaxProtocol>(_ syntax: S) {
-    self = syntax._syntaxNode
-  }
-
-  /// Create a `Syntax` node from a specialized optional syntax node.
-  public init?<S: SyntaxProtocol>(_ syntax: S?) {
-    guard let syntax = syntax else { return nil }
-    self = syntax._syntaxNode
-  }
-  
-  public init(fromProtocol syntax: SyntaxProtocol) {
-    self = syntax._syntaxNode
-  }
-  
-  public init?(fromProtocol syntax: SyntaxProtocol?) {
-    guard let syntax = syntax else { return nil }
-    self = syntax._syntaxNode
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    return data.nodeId.hash(into: &hasher)
-  }
-
-  public static func ==(lhs: Syntax, rhs: Syntax) -> Bool {
-    return lhs.data.nodeId == rhs.data.nodeId
-  }
-}
-
-// Casting functions to specialized syntax nodes.
-extension Syntax {
-  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return self.as(syntaxType) != nil
-  }
-
-  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return S.init(self)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self.asProtocol(SyntaxProtocol.self))
+  public init<T: SyntaxProtocol>(_ other: T) {
+    self.init(syntax: other.syntax)
   }
 }
 
 extension Syntax: CustomReflectable {
-  /// Reconstructs the real syntax type for this type from the node's kind and
-  /// provides a mirror that reflects this type.
   public var customMirror: Mirror {
     return Mirror(reflecting: self.asProtocol(SyntaxProtocol.self))
-  }
-}
-
-extension Syntax: Identifiable {
-  public typealias ID = SyntaxIdentifier
-}
-
-/// Protocol that provides a common Hashable implementation for all syntax nodes
-public protocol SyntaxHashable: Hashable {
-  var _syntaxNode: Syntax { get }
-}
-
-public extension SyntaxHashable {
-  func hash(into hasher: inout Hasher) {
-    return _syntaxNode.data.nodeId.hash(into: &hasher)
-  }
-
-  static func ==(lhs: Self, rhs: Self) -> Bool {
-    return lhs._syntaxNode.data.nodeId == rhs._syntaxNode.data.nodeId
   }
 }
 
 /// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-public protocol SyntaxProtocol: CustomStringConvertible,
-    CustomDebugStringConvertible, TextOutputStreamable {
-
-  /// Retrieve the generic syntax node that is represented by this node.
-  /// Do not retrieve this property directly. Use `Syntax(self)` instead.
-  var _syntaxNode: Syntax { get }
-
-  /// Converts the given `Syntax` node to this type. Returns `nil` if the
-  /// conversion is not possible.
-  init?(_ syntaxNode: Syntax)
-
-  /// Check that the raw layout of this node is valid. Used to verify a node's
-  /// integrity after it has been rewritten by the syntax rewriter.
-  /// Results in an assertion failure if the layout is invalid.
-  func _validateLayout()
-
-  /// Returns the underlying syntax node type.
-  var syntaxNodeType: SyntaxProtocol.Type { get }
-}
-
-internal extension SyntaxProtocol {
-  var data: SyntaxData {
-    return _syntaxNode.data
-  }
-
-  /// Access the raw syntax assuming the node is a Syntax.
-  var raw: RawSyntax {
-    return _syntaxNode.data.raw
-  }
+public protocol SyntaxProtocol: TextOutputStreamable, CustomStringConvertible, CustomDebugStringConvertible {
+  static func isValid(syntaxKind: SyntaxKind) -> Bool
+  var syntax: Syntax { get }
+  init?<Node: SyntaxProtocol>(_ other: Node)
 }
 
 public extension SyntaxProtocol {
-  /// A sequence over the `present` children of this node.
-  var children: SyntaxChildren {
-    return SyntaxChildren(_syntaxNode)
+  @usableFromInline
+  internal var data: SyntaxData {
+    _read { yield syntax.data }
   }
 
-  /// The index of this node in a `SyntaxChildren` collection.
-  var index: SyntaxChildrenIndex {
-    return SyntaxChildrenIndex(self.data.absoluteRaw.info)
+  @_spi(RawSyntax)
+  var raw: RawSyntax {
+    _read { yield syntax.data.raw }
   }
 
-  /// Whether or not this node is marked as `present`.
-  var isPresent: Bool {
-    return raw.isPresent
+  var arena: SyntaxArena {
+    data.arena
   }
 
-  /// Whether or not this node is marked as `missing`.
-  var isMissing: Bool {
-    return raw.isMissing
+  var syntaxKind: SyntaxKind {
+    raw.syntaxKind
   }
 
-  /// Whether or not this node is a token one.
   var isToken: Bool {
-    return raw.isToken
+    raw.isToken
   }
 
   /// Whether or not this node represents an SyntaxCollection.
   var isCollection: Bool {
-    // We need to provide a custom implementation for is(SyntaxCollection.self)
-    // since SyntaxCollection has generic or self requirements and can thus
-    // not be used as a method argument.
-    return raw.kind.isSyntaxCollection
+    raw.isCollection
   }
 
   /// Whether or not this node represents an unknown node.
   var isUnknown: Bool {
-    return raw.kind.isUnknown
+    raw.isUnknown
+  }
+  
+  var byteLength: Int {
+    raw.byteLength
   }
 
-  /// The parent of this syntax node, or `nil` if this node is the root.
-  var parent: Syntax? {
-    return data.parent
-  }
-
-  /// The index of this node in the parent's children.
-  var indexInParent: Int {
-    return data.indexInParent
-  }
-
-  /// Whether or not this node has a parent.
-  var hasParent: Bool {
-    return parent != nil
-  }
-
-  /// Recursively walks through the tree to find the token semantically before
-  /// this node.
-  var previousToken: TokenSyntax? {
-    guard let parent = self.parent else {
-      return nil
-    }
-    let siblings = PresentRawSyntaxChildren(parent)
-    for absoluteRaw in siblings[..<self.index].reversed() {
-      let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
-      if let token = child.lastToken {
-        return token
-      }
-    }
-    return parent.previousToken
-  }
-
-  /// Recursively walks through the tree to find the next token semantically
-  /// after this node.
-  var nextToken: TokenSyntax? {
-    guard let parent = self.parent else {
-      return nil
-    }
-    let siblings = PresentRawSyntaxChildren(parent)
-    let nextSiblingIndex = siblings.index(after: self.index)
-    for absoluteRaw in siblings[nextSiblingIndex...] {
-      let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
-      if let token = child.firstToken {
-        return token
-      }
-    }
-    return parent.nextToken
-  }
-
-  /// Returns the first token node that is part of this syntax node.
-  var firstToken: TokenSyntax? {
-    if isMissing { return nil }
-    if let token = _syntaxNode.as(TokenSyntax.self) {
-      return token
-    }
-
-    for child in children {
-      if let token = child.firstToken {
-        return token
-      }
-    }
-    return nil
-  }
-
-  /// Returns the last token node that is part of this syntax node.
-  var lastToken: TokenSyntax? {
-    if isMissing { return nil }
-    if let token = _syntaxNode.as(TokenSyntax.self) {
-      return token
-    }
-
-    for child in children.reversed() {
-      if let tok = child.lastToken {
-        return tok
-      }
-    }
-    return nil
-  }
-
-  /// The absolute position of the starting point of this node. If the first token
-  /// is with leading trivia, the position points to the start of the leading
-  /// trivia.
-  var position: AbsolutePosition {
-    return data.position
-  }
-
-  /// The absolute position of the starting point of this node, skipping any
-  /// leading trivia attached to the first token syntax.
-  var positionAfterSkippingLeadingTrivia: AbsolutePosition {
-    return data.positionAfterSkippingLeadingTrivia
-  }
-
-  /// The end position of this node's content, before any trailing trivia.
-  var endPositionBeforeTrailingTrivia: AbsolutePosition {
-    return data.endPositionBeforeTrailingTrivia
-  }
-
-  /// The end position of this node, including its trivia.
-  var endPosition: AbsolutePosition {
-    return data.endPosition
-  }
-
-  /// The textual byte length of this node including leading and trailing trivia.
+  @available(*, deprecated, renamed: "byteLength")
   var byteSize: Int {
-    return totalLength.utf8Length
+    byteLength
   }
 
   /// The byte source range of this node including leading and trailing trivia.
   var byteRange: ByteSourceRange {
-    return ByteSourceRange(offset: position.utf8Offset, length: byteSize)
+    return ByteSourceRange(offset: position.utf8Offset, length: byteLength)
   }
 
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   var contentLength: SourceLength {
-    return raw.contentLength
+    SourceLength(utf8Length: byteLength)
+  }
+
+  var root: Syntax {
+    Syntax(data: data.root)
+  }
+
+  /// The parent of this syntax node, or `nil` if this node is the root.
+  var parent: Syntax? {
+    data.parent.map(Syntax.init(data:))
+  }
+
+  /// The index of this node in the parent's children.
+  var indexInParent: Int? {
+    data.indexInParent
+  }
+
+  /// Whether or not this node has a parent.
+  var hasParent: Bool {
+    data.parent != nil
+  }
+
+  var byteOffset: Int {
+    data.byteOffset
+  }
+
+  var indexInTree: Int {
+    data.indexInTree
+  }
+
+  /// Checked-cast this instance to `Node` syntax type.
+  func `as`<Node: SyntaxProtocol>(_: Node.Type) -> Node? {
+    Node(self)
+  }
+
+  /// Check if this instance can be cast to the specified syntax type.
+  func `is`<Node: SyntaxProtocol>(_: Node.Type) -> Bool {
+    Node.isValid(syntaxKind: self.syntaxKind)
+  }
+
+  /// Create a new tree making this node the root.
+  func asRoot() -> Self {
+    Self(raw: raw, arena: arena)!
+  }
+
+  @_spi(RawSyntax)
+  init?(raw: RawSyntax, arena: SyntaxArena) {
+    self.init(Syntax(data: .init(rootRaw: raw, arena: arena)))
+  }
+
+  /// A sequence over the "present" children of this node.
+  var children: SyntaxChildren {
+    return SyntaxChildren(in: self.syntax)
+  }
+
+  var leadingTriviaLength: Int {
+    raw.leadingTriviaByteLength
+  }
+
+  var trailingTriviaLength: Int {
+    raw.trailingTriviaByteLength
   }
 
   /// The leading trivia of this syntax node. Leading trivia is attached to
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
   var leadingTrivia: Trivia? {
-    get {
-      return raw.formLeadingTrivia()
-    }
-    set {
-      self = withLeadingTrivia(newValue ?? [])
-    }
+    get { raw.leadingTrivia.map { Trivia.make(arena: raw.arena, raw: $0) } }
+    set { self = withLeadingTrivia(newValue ?? []) }
   }
 
   /// The trailing trivia of this syntax node. Trailing trivia is attached to
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
   var trailingTrivia: Trivia? {
-    get {
-      return raw.formTrailingTrivia()
-    }
-    set {
-      self = withTrailingTrivia(newValue ?? [])
-    }
-  }
-
-  /// The length this node's leading trivia takes up spelled out in source.
-  var leadingTriviaLength: SourceLength {
-    return raw.leadingTriviaLength
-  }
-
-  /// The length this node's trailing trivia takes up spelled out in source.
-  var trailingTriviaLength: SourceLength {
-    return raw.trailingTriviaLength
+    get { raw.trailingTrivia.map { Trivia.make(arena: raw.arena, raw: $0) } }
+    set { self = withTrailingTrivia(newValue ?? []) }
   }
 
   /// Returns a new syntax node with its leading trivia replaced
   /// by the provided trivia.
   func withLeadingTrivia(_ leadingTrivia: Trivia) -> Self {
-    return Self(Syntax(data.withLeadingTrivia(leadingTrivia)))!
+    guard let newRaw = raw.withLeadingTrivia(leadingTrivia) else {
+      return self
+    }
+    let data = data.replacingSelf(with: newRaw, arena: newRaw.arena)
+    return Self(Syntax(data: data))!
   }
 
   /// Returns a new syntax node with its trailing trivia replaced
   /// by the provided trivia.
   func withTrailingTrivia(_ trailingTrivia: Trivia) -> Self {
-    return Self(Syntax(data.withTrailingTrivia(trailingTrivia)))!
+    guard let newRaw = raw.withTrailingTrivia(trailingTrivia) else {
+      return self
+    }
+    let data = data.replacingSelf(with: newRaw, arena: newRaw.arena)
+    return Self(Syntax(data: data))!
   }
 
   /// Returns a new syntax node with its leading trivia removed.
@@ -350,293 +226,311 @@ public extension SyntaxProtocol {
   func withoutTrivia() -> Self {
     return withoutLeadingTrivia().withoutTrailingTrivia()
   }
+}
 
-  /// The length of this node including all of its trivia.
-  var totalLength: SourceLength {
-    return raw.totalLength
+extension SyntaxProtocol /*: TextOutputStreamable */ {
+  /// Prints the raw value of this node to the provided stream.
+  /// - Parameter stream: The stream to which to print the raw tree.
+  public func write<Target: TextOutputStream>(to target: inout Target) {
+    raw.write(to: &target)
   }
-
-  /// When isImplicit is true, the syntax node doesn't include any
-  /// underlying tokens, e.g. an empty CodeBlockItemList.
-  var isImplicit: Bool {
-    return leadingTrivia == nil
+}
+extension SyntaxProtocol /*: CustomStringConvertible */ {
+  public var description: String {
+    var description = ""
+    raw.write(to: &description)
+    return description
   }
-
-  /// The textual byte length of this node exluding leading and trailing trivia.
-  var byteSizeAfterTrimmingTrivia: Int {
-    return contentLength.utf8Length
-  }
-
-  /// The root of the tree in which this node resides.
-  var root: Syntax {
-    var this = _syntaxNode
-    while let parent = this.parent {
-      this = parent
-    }
-    return this
-  }
-
-  /// Sequence of tokens that are part of this Syntax node.
-  var tokens: TokenSequence {
-    return TokenSequence(_syntaxNode)
-  }
-
-  /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
-  ///
-  /// The provided classified ranges are consecutive and cover the full source
-  /// text of the node. The ranges may also span multiple tokens, if multiple
-  /// consecutive tokens would have the same classification then a single classified
-  /// range is provided for all of them.
-  var classifications: SyntaxClassifications {
-    let fullRange = ByteSourceRange(offset: 0, length: byteSize)
-    return SyntaxClassifications(_syntaxNode, in: fullRange)
-  }
-
-  /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
-  /// a relative range.
-  ///
-  /// The provided classified ranges may extend beyond the provided `range`.
-  /// Active classifications (non-`none`) will extend the range to include the
-  /// full classified range (e.g. from the beginning of the comment block), while
-  /// `none` classified ranges will extend to the beginning or end of the token
-  /// that the `range` touches.
-  /// It is guaranteed that no classified range will be provided that doesn't
-  /// intersect the provided `range`.
-  ///
-  /// - Parameters:
-  ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
-  /// - Returns: Sequence of `SyntaxClassifiedRange`s.
-  func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
-    return SyntaxClassifications(_syntaxNode, in: range)
-  }
-
-  /// The `SyntaxClassifiedRange` for a relative byte offset.
-  /// - Parameters:
-  ///   - at: The relative to the node byte offset.
-  /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
-  ///   at the given offset is unclassified.
-  func classification(at offset: Int) -> SyntaxClassifiedRange? {
-    let classifications = SyntaxClassifications(_syntaxNode, in: ByteSourceRange(offset: offset, length: 1))
-    var iterator = classifications.makeIterator()
-    return iterator.next()
-  }
-
-  /// The `SyntaxClassifiedRange` for an absolute position.
-  /// - Parameters:
-  ///   - at: The absolute position.
-  /// - Returns: The `SyntaxClassifiedRange` for the position or nil if the source text
-  ///   at the given position is unclassified.
-  func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
-    let relativeOffset = position.utf8Offset - self.position.utf8Offset
-    return self.classification(at: relativeOffset)
-  }
-
-  /// Returns a value representing the unique identity of the node.
-  var id: SyntaxIdentifier {
-    return data.nodeId
-  }
-
-  /// A source-accurate description of this node.
-  var description: String {
-    return data.raw.description
-  }
-
+}
+extension SyntaxProtocol /*: CustomDebugStringConvertible */ {
   /// Returns a description used by dump.
-  var debugDescription: String {
+  public var debugDescription: String {
     return String(reflecting: type(of: self))
   }
+}
 
-  /// Dumps the syntax node and all of its children for debugging purposes.
-  var recursiveDescription: String {
-    var result = ""
-    dump(self, to: &result)
-    return result
+extension SyntaxProtocol /*: Hashable */ {
+  public func hash(into hasher: inout Hasher) {
+    data.hash(into: &hasher)
   }
-
-  /// Prints the raw value of this node to the provided stream.
-  /// - Parameter stream: The stream to which to print the raw tree.
-  func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
-    data.raw.write(to: &target)
+  public static func ==(lhs: Self, rhs: Self) -> Bool {
+    lhs.data == rhs.data
   }
 }
 
-/// Sequence of tokens that are part of the provided Syntax node.
-public struct TokenSequence: Sequence {
-  public struct Iterator: IteratorProtocol {
-    var nextToken: TokenSyntax?
-    let endPosition: AbsolutePosition
-
-    init(_ token: TokenSyntax?, endPosition: AbsolutePosition) {
-      self.nextToken = token
-      self.endPosition = endPosition
-    }
-
-    public mutating func next() -> TokenSyntax? {
-      guard let token = self.nextToken else { return nil }
-      self.nextToken = token.nextToken
-      // Make sure we stop once we reach the end of the containing node.
-      if let nextTok = self.nextToken, nextTok.position >= self.endPosition {
-        self.nextToken = nil
-      }
-      return token
-    }
-  }
-
-  let node: Syntax
-
-  public init(_ node: Syntax) {
-    self.node = node
-  }
-
-  public func makeIterator() -> Iterator {
-    return Iterator(node.firstToken, endPosition: node.endPosition)
-  }
-
-  public func reversed() -> ReversedTokenSequence {
-    return ReversedTokenSequence(node)
-  }
-}
-
-extension TokenSequence: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, unlabeledChildren: self.map{ $0 })
-  }
-}
-
-/// Reverse sequence of tokens that are part of the provided Syntax node.
-public struct ReversedTokenSequence: Sequence {
-  public struct Iterator: IteratorProtocol {
-    var nextToken: TokenSyntax?
-    let startPosition: AbsolutePosition
-
-    init(_ token: TokenSyntax?, startPosition: AbsolutePosition) {
-      self.nextToken = token
-      self.startPosition = startPosition
-    }
-
-    public mutating func next() -> TokenSyntax? {
-      guard let token = self.nextToken else { return nil }
-      self.nextToken = token.previousToken
-      // Make sure we stop once we went beyond the start of the containing node.
-      if let nextTok = self.nextToken, nextTok.position < self.startPosition {
-        self.nextToken = nil
-      }
-      return token
-    }
-  }
-
-  let node: Syntax
-
-  public init(_ node: Syntax) {
-    self.node = node
-  }
-
-  public func makeIterator() -> Iterator {
-    return Iterator(node.lastToken, startPosition: node.position)
-  }
-
-  public func reversed() -> TokenSequence {
-    return TokenSequence(node)
-  }
-}
-
-extension ReversedTokenSequence: CustomReflectable {
-  public var customMirror: Mirror {
-    return Mirror(self, unlabeledChildren: self.map{ $0 })
-  }
-}
-
-/// Represents a node from the syntax tree.
-///
-/// This is a more efficient representation than `Syntax` because it avoids casts
-/// to `Syntax` for representing the parent hierarchy.
-/// It provides generic information, like the node's position, range, and
-/// a unique `id`, while still allowing getting the associated `Syntax`
-/// object if necessary.
-///
-/// `SyntaxParser` uses `SyntaxNode` to efficiently report which syntax nodes
-/// got re-used during incremental re-parsing.
-public struct SyntaxNode {
-  let absoluteRaw: AbsoluteRawSyntax
-  let parents: ArraySlice<AbsoluteRawSyntax>
-
-  internal init(node: AbsoluteRawSyntax, parents: ArraySlice<AbsoluteRawSyntax>) {
-    self.absoluteRaw = node
-    self.parents = parents
-  }
-
-  internal var raw: RawSyntax {
-    return absoluteRaw.raw
-  }
-
-  /// Converts this node to a `SyntaxData` object.
-  ///
-  /// This operation results in wrapping all of the node's parents into
-  /// `SyntaxData` objects. There's a cost associated with it that should be
-  /// taken into account before used inside performance critical code.
-  internal var asSyntaxData: SyntaxData {
-    return SyntaxData(absoluteRaw, parent: parent?.asSyntax)
-  }
-
-  /// Converts this node to a `Syntax` object.
-  ///
-  /// This operation results in wrapping this node and all of its parents into
-  /// `Syntax` objects. There's a cost associated with it that should be taken
-  /// into account before used inside performance critical code.
-  public var asSyntax: Syntax {
-    return Syntax(self.asSyntaxData)
-  }
-
-  /// The parent of this syntax node, or `nil` if this node is the root.
-  public var parent: SyntaxNode? {
-    guard !parents.isEmpty else { return nil }
-    return SyntaxNode(node: parents.last!, parents: parents.dropLast())
-  }
-
-  /// The absolute position of the starting point of this node.
-  public var position: AbsolutePosition {
-    return absoluteRaw.position
-  }
-
-  /// The end position of this node, including its trivia.
-  public var endPosition: AbsolutePosition {
-    return absoluteRaw.endPosition
-  }
-
-  /// The textual byte length of this node including leading and trailing trivia.
-  public var byteSize: Int {
-    return totalLength.utf8Length
-  }
-
-  /// The byte source range of this node including leading and trailing trivia.
-  public var byteRange: ByteSourceRange {
-    return ByteSourceRange(offset: position.utf8Offset, length: byteSize)
-  }
-
-  /// The length of this node including all of its trivia.
-  public var totalLength: SourceLength {
-    return raw.totalLength
-  }
-}
-
-extension SyntaxNode: Identifiable {
-  /// Returns a value representing the unique identity of the node.
+extension SyntaxProtocol /*: Identifiable */ {
   public var id: SyntaxIdentifier {
-    return absoluteRaw.info.nodeId
+    return data.id
   }
 }
 
-extension SyntaxNode: CustomStringConvertible, TextOutputStreamable {
-  /// A source-accurate description of this node.
-  public var description: String {
-    return raw.description
+
+/// Represents a token syntax node.
+///
+/// Token syntax is a "leaf" node in the syntax tree. It holds a chunk of the
+/// actual source code the syntax tree represents.
+public struct TokenSyntax: SyntaxProtocol, Hashable {
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    return syntaxKind == .token
+  }
+  public let syntax: Syntax
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard other.syntaxKind == .token else { return nil }
+    self.init(data: other.data)
   }
 
-  /// Prints the raw value of this node to the provided stream.
-  /// - Parameter stream: The stream to which to print the raw tree.
-  public func write<Target>(to target: inout Target)
-    where Target: TextOutputStream {
-      raw.write(to: &target)
+  public var isMissing: Bool {
+    raw.isMissing
+  }
+
+  public var isPresent: Bool {
+    !isMissing
+  }
+
+  public var presence: SourcePresence {
+    return raw.isMissing ? .missing : .present
+  }
+
+  public var tokenKind: TokenKind {
+    get { raw.tokenKind }
+    set { self = withKind(newValue) }
+  }
+
+  public func withUnsafeTokenText<T>(_ body: (StringRef) -> T) -> T {
+    body(raw.tokenText!)
+  }
+
+  public func withUnsafeLeadingTriviaText<T>(_ body: (StringRef) -> T) -> T {
+    raw.leadingTrivia!.withUnsafeText(body)
+  }
+
+  public func withUnsafeTrailingTriviaText<T>(_ body: (StringRef) -> T) -> T {
+    raw.trailingTrivia!.withUnsafeText(body)
+  }
+
+  public var text: String {
+    get { String(stringRef: raw.tokenText!) }
+    set { self = withTokenText(newValue) }
+  }
+
+  public var leadingTriviaText: String {
+    get { String(describing: raw.leadingTrivia!) }
+    set { self = withLeadingTriviaText(newValue) }
+  }
+
+  public var trailingTriviaText: String {
+    get { String(describing: raw.trailingTrivia!) }
+    set { self = withTrailingTriviaText(newValue) }
+  }
+
+  public var leadingTriviaLength: Int {
+    raw.leadingTriviaByteLength
+  }
+
+  public var trailingTriviaLength: Int {
+    raw.trailingTriviaByteLength
+  }
+
+  public var leadingTrivia: Trivia {
+    get { Trivia.make(arena: raw.arena, raw: raw.leadingTrivia!) }
+    set { self = withLeadingTrivia(newValue) }
+  }
+
+  public var trailingTrivia: Trivia {
+    get { Trivia.make(arena: raw.arena, raw: raw.trailingTrivia!) }
+    set { self = withTrailingTrivia(newValue) }
+  }
+
+  public func withKind(_ newValue: TokenKind) -> TokenSyntax {
+    let newRaw = raw.withTokenKind(newValue)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
+  }
+
+  public func withTokenText(_ newValue: String) -> TokenSyntax {
+    let newRaw = raw.withTokenText(newValue)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
+  }
+
+  public func withLeadingTriviaText(_ newValue: String) -> TokenSyntax {
+    let newRaw = RawSyntax.makeParsedToken(
+      arena: arena, kind: tokenKind, text: text,
+      leadingTrivia: newValue, trailingTrivia: trailingTriviaText)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
+  }
+
+  public func withTrailingTriviaText(_ newValue: String) -> TokenSyntax {
+    let newRaw = RawSyntax.makeParsedToken(
+      arena: arena, kind: tokenKind, text: text,
+      leadingTrivia: leadingTriviaText, trailingTrivia: newValue)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
+  }
+
+  public func withLeadingTrivia(_ newValue: Trivia) -> TokenSyntax {
+    let newRaw = RawSyntax.makeMaterializedToken(
+      arena: arena, kind: raw.tokenKind, text: text,
+      leadingTrivia: newValue, trailingTrivia: trailingTrivia)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
+  }
+
+  public func withTrailingTrivia(_ newValue: Trivia) -> TokenSyntax {
+    let newRaw = RawSyntax.makeMaterializedToken(
+      arena: arena, kind: raw.tokenKind, text: text,
+      leadingTrivia: leadingTrivia, trailingTrivia: newValue)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
+  }
+}
+
+extension TokenSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    Mirror(self, children: [
+      "text": text,
+      "leadingTrivia": leadingTrivia,
+      "trailingTrivia": trailingTrivia,
+      "tokenKind": tokenKind,
+    ])
+  }
+}
+
+/// A protocol for "list" syntax nodes.
+///
+/// This protcol implements most interface of the concrete type.
+public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection, MutableCollection, CustomReflectable
+  where Index == Int, Element: SyntaxProtocol, SubSequence == Slice<Self> {}
+
+public extension SyntaxCollection {
+  /// The number of elements in the list.
+  var count: Int { return raw.children.count }
+
+  /// Create a new node inserting an element at the specified index.
+  func inserting(_ element: Element, at index: Index) -> Self {
+    let newRaw = raw.insertingChild(element.raw, at: index, arena: arena)
+    return Self(Syntax(data: data.replacingSelf(with: newRaw, arena: arena)))!
+  }
+
+  /// Create a new node prepending an element to the existing elements.
+  func prepending(_ syntax: Element) -> Self {
+    inserting(syntax, at: 0)
+  }
+
+  /// Create a new node appending an element to the existing elements.
+  func appending(_ syntax: Element) -> Self {
+    inserting(syntax, at: count)
+  }
+
+  /// Create a new node replacing a an element with the specified value.
+  func replacing(childAt index: Index, with element: Element) -> Self {
+    let newRaw = raw.replacingChild(at: index, with: element.raw, arena: arena)
+    return Self(Syntax(data: data.replacingSelf(with: newRaw, arena: arena)))!
+  }
+
+  /// Create a new node replacing the elements in the specified range with the
+  /// specified elements.
+  func replacingSubrange<C: Collection>(_ subrange: Range<Index>, with elements: C) -> Self where C.Element == Element {
+    let rawElements = elements.map { $0.raw }
+    let newRaw = raw.replacingChildSubrange(subrange, with: rawElements, arena: arena)
+    return Self(Syntax(data: data.replacingSelf(with: newRaw, arena: arena)))!
+  }
+
+  /// Creates a new instance by removing the syntax element at the
+  /// provided index.
+  ///
+  /// - Parameter index: The index of the element to remove from the collection.
+  /// - Returns: A new `Self` instance with the element at the provided index
+  ///   removed.
+  func removing(childAt index: Int) -> Self {
+    let newRaw = raw.removingChild(at: index, arena: arena)
+    return Self(Syntax(data: data.replacingSelf(with: newRaw, arena: arena)))!
+  }
+
+  /// Creates a new instance by removing the first element.
+  ///
+  /// - Returns: A new `Self` instance with the first element removed.
+  func removingFirst() -> Self {
+    return removing(childAt: 0)
+  }
+
+  /// Creates a new instance by removing the first element.
+  ///
+  /// - Returns: A new `Self` instance with the last element removed.
+  func removingLast() -> Self {
+    return removing(childAt: self.count - 1)
+  }
+}
+
+public extension SyntaxCollection {
+  mutating func insert(_ syntax: Element, at index: Index) {
+    self = self.inserting(syntax, at: index)
+  }
+
+  mutating func prepend(_ syntax: Element) {
+    self = self.prepending(syntax)
+  }
+
+  mutating func append(_ syntax: Element) {
+    self = self.appending(syntax)
+  }
+
+  mutating func replace(childAt index: Index, with syntax: Element) {
+    self = self.replacing(childAt: index, with: syntax)
+  }
+
+  mutating func replaceSubrange<C: Collection>(_ subrange: Range<Index>, with elements: C) where Element == C.Element {
+    self = self.replacingSubrange(subrange, with: elements)
+  }
+}
+
+public extension SyntaxCollection /*: BidirectionalCollection */ {
+  var startIndex: Index { raw.children.startIndex }
+  var endIndex: Index { raw.children.endIndex }
+
+  func index(after i: Index) -> Index {
+    i + 1
+  }
+  func index(before i: Index) -> Index {
+    i - 1
+  }
+
+  subscript(position: Index) -> Element {
+    // FIXME: (performance) data.child(at:) is a O(n) operation.
+    // SyntaxCollection should provide its own Index to avoid O(n)
+    get { Element(Syntax(data: data.child(at: position)!))! }
+    set { self = replacing(childAt: position, with: newValue) }
+  }
+
+  subscript(bounds: Range<Index>) -> SubSequence {
+    get { Slice(base: self, bounds: bounds) }
+    set { self = self.replacingSubrange(bounds, with: newValue) }
+  }
+}
+
+public extension SyntaxCollection /*: CustomReflectable*/ {
+  var customMirror: Mirror {
+    return Mirror(self, unlabeledChildren: self)
+  }
+}
+
+public struct UnknownSyntax: SyntaxProtocol, Hashable, CustomReflectable {
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    syntaxKind == .unknown
+  }
+  public let syntax: Syntax
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
+  }
+
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
+  }
+
+  public var customMirror: Mirror {
+    return Mirror(self, children: [:])
   }
 }

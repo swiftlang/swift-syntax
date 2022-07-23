@@ -53,6 +53,7 @@ public class TokenTests: XCTestCase {
     XCTAssertEqual(tok2.contentLength.utf8Length, 3)
   }
 
+  /*
   public func testKeywordRoundTripping() throws {
     let someKeywords = [
       TokenKind.associatedtypeKeyword,
@@ -121,4 +122,5 @@ public class TokenTests: XCTestCase {
       XCTAssertEqual(keyword, constructedKeyword)
     }
   }
+  ∫*/
 }

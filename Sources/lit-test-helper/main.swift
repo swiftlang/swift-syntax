@@ -211,7 +211,8 @@ func getSwiftLanguageVersionInfo(args: CommandLineArguments) -> (languageVersion
 /// Rewrites a parsed tree with all constructed nodes.
 class TreeReconstructor : SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> Syntax {
-    let token = SyntaxFactory.makeToken(token.tokenKind, presence: token.presence,
+    let token = SyntaxFactory.makeToken(arena: token.arena, token.tokenKind,
+                                        tokenText: token.text,
                                         leadingTrivia: token.leadingTrivia,
                                         trailingTrivia: token.trailingTrivia)
     return Syntax(token)

@@ -34,7 +34,7 @@ open class SyntaxVisitor {
   /// Walk all nodes of the given syntax tree, calling the corresponding `visit` 
   /// function for every node that is being visited.
   public func walk<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
-    visit(node.data)
+    visit(node.syntax)
   }
 
 % for node in SYNTAX_NODES:
@@ -76,41 +76,30 @@ open class SyntaxVisitor {
 
 % for node in SYNTAX_NODES:
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImpl${node.name}(_ data: SyntaxData) {
+  private func visitImpl${node.name}(_ node: Syntax) {
 %   if node.is_base():
-      let node = Unknown${node.name}(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = Unknown${node.name}(data: node.data)
 %   else:
-      let node = ${node.name}(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
-        visitChildren(node)
-      }
-      visitPost(node)
+    let node = ${node.name}(data: node.data)
 %   end
+    if visit(node) == .visitChildren {
+      for child in node.children { visit(child) }
+    }
+    visitPost(node)
   }
-
 % end
 
-  private func visit(_ data: SyntaxData) {
-    switch data.raw.kind {
+  private func visit(_ node: Syntax) {
+    switch node.syntaxKind {
     case .token:
-      let node = TokenSyntax(data)
+      let node = TokenSyntax(data: node.data)
       _ = visit(node)
       // No children to visit.
       visitPost(node)
     case .unknown:
-      let node = UnknownSyntax(data)
-      let needsChildren = (visit(node) == .visitChildren)
-      // Avoid calling into visitChildren if possible.
-      if needsChildren && node.raw.numberOfChildren > 0 {
-        visitChildren(node)
+      let node = UnknownSyntax(data: node.data)
+      if visit(node) == .visitChildren {
+        for child in node.children { visit(child) }
       }
       visitPost(node)
     // The implementation of every generated case goes into its own function. This
@@ -118,18 +107,8 @@ open class SyntaxVisitor {
     // case statement next to each other in debug builds, causing it to allocate
     // ~50KB per call to this function. rdar://55929175
   % for node in SYNTAX_NODES:
-    case .${node.swift_syntax_kind}:
-      visitImpl${node.name}(data)
+    case .${node.swift_syntax_kind}: visitImpl${node.name}(node)
   % end
-    }
-  }
-
-  private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
-    let syntaxNode = Syntax(node)
-    let parentBox = SyntaxBox(syntaxNode)
-    for childRaw in PresentRawSyntaxChildren(syntaxNode) {
-      let childData = SyntaxData(childRaw, parentBox: parentBox)
-      visit(childData)
     }
   }
 }

@@ -125,16 +125,16 @@ public final class SourceLocationConverter {
   public init(file: String, tree: SourceFileSyntax) {
     self.file = file
     (self.lines, endOfFile) = computeLines(tree: tree)
-    assert(tree.byteSize == endOfFile.utf8Offset)
+    assert(tree.byteLength == endOfFile.utf8Offset)
   }
 
   /// - Parameters:
   ///   - file: The file path associated with the syntax tree.
   ///   - source: The source code to convert positions to line/columns for.
-  public init(file: String, source: String) {
+  public init(file: String, source: UnsafeBufferPointer<UInt8>) {
     self.file = file
     (self.lines, endOfFile) = computeLines(source)
-    assert(source.utf8.count == endOfFile.utf8Offset)
+    assert(source.count == endOfFile.utf8Offset)
   }
 
   /// Convert a `AbsolutePosition` to a `SourceLocation`. If the position is
@@ -227,63 +227,6 @@ public final class SourceLocationConverter {
   }
 }
 
-public extension Syntax {
-  /// The starting location, in the provided file, of this Syntax node.
-  /// - Parameters:
-  ///   - converter: The `SourceLocationConverter` that was previously
-  ///     initialized using the root tree of this node.
-  ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
-  ///                         the node's location. Defaults to `true`.
-  func startLocation(
-    converter: SourceLocationConverter,
-    afterLeadingTrivia: Bool = true
-  ) -> SourceLocation {
-    let pos = afterLeadingTrivia ?
-      data.positionAfterSkippingLeadingTrivia :
-      data.position
-    return converter.location(for: pos)
-  }
-
-  /// The ending location, in the provided file, of this Syntax node.
-  /// - Parameters:
-  ///   - converter: The `SourceLocationConverter` that was previously
-  ///     initialized using the root tree of this node.
-  ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
-  ///                          the node's location. Defaults to `false`.
-  func endLocation(
-    converter: SourceLocationConverter,
-    afterTrailingTrivia: Bool = false
-  ) -> SourceLocation {
-    var pos = data.position
-    pos += raw.leadingTriviaLength
-    pos += raw.contentLength
-    if afterTrailingTrivia {
-      pos += raw.trailingTriviaLength
-    }
-    return converter.location(for: pos)
-  }
-
-  /// The source range, in the provided file, of this Syntax node.
-  /// - Parameters:
-  ///   - converter: The `SourceLocationConverter` that was previously
-  ///     initialized using the root tree of this node.
-  ///   - afterLeadingTrivia: Whether to skip leading trivia when getting
-  ///                          the node's start location. Defaults to `true`.
-  ///   - afterTrailingTrivia: Whether to skip trailing trivia when getting
-  ///                          the node's end location. Defaults to `false`.
-  func sourceRange(
-    converter: SourceLocationConverter,
-    afterLeadingTrivia: Bool = true,
-    afterTrailingTrivia: Bool = false
-  ) -> SourceRange {
-    let start = startLocation(converter: converter, 
-                              afterLeadingTrivia: afterLeadingTrivia)
-    let end = endLocation(converter: converter, 
-                          afterTrailingTrivia: afterTrailingTrivia)
-    return SourceRange(start: start, end: end)
-  }
-}
-
 public extension SyntaxProtocol {
   /// The starting location, in the provided file, of this Syntax node.
   /// - Parameters:
@@ -295,8 +238,9 @@ public extension SyntaxProtocol {
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    return _syntaxNode.startLocation(converter: converter, 
-                                    afterLeadingTrivia: afterLeadingTrivia)
+    let pos = afterLeadingTrivia ?
+      self.positionAfterSkippingLeadingTrivia : self.position
+    return converter.location(for: pos)
   }
 
   /// The ending location, in the provided file, of this Syntax node.
@@ -309,8 +253,9 @@ public extension SyntaxProtocol {
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
   ) -> SourceLocation {
-    return _syntaxNode.endLocation(converter: converter, 
-                                  afterTrailingTrivia: afterTrailingTrivia)
+    let pos = afterTrailingTrivia ?
+      self.endPosition : self.endPositionBeforeTrailingTrivia
+    return converter.location(for: pos)
   }
 
   /// The source range, in the provided file, of this Syntax node.
@@ -326,9 +271,11 @@ public extension SyntaxProtocol {
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    return _syntaxNode.sourceRange(converter: converter, 
-                                  afterLeadingTrivia: afterLeadingTrivia,
-                                  afterTrailingTrivia: afterTrailingTrivia)
+    let start = startLocation(converter: converter,
+                              afterLeadingTrivia: afterLeadingTrivia)
+    let end = endLocation(converter: converter,
+                          afterTrailingTrivia: afterTrailingTrivia)
+    return SourceRange(start: start, end: end)
   }
 }
 
@@ -346,15 +293,14 @@ fileprivate func computeLines(
     lines.append(position)
   }
   var curPrefix: SourceLength = .zero
-  for token in tree.tokens {
-    curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
-  }
+  curPrefix = tree.raw.forEachLineLength(prefix: .zero, body: addLine)
   position += curPrefix
   return (lines, position)
 }
 
-fileprivate func computeLines(_ source: String) ->
-    ([AbsolutePosition], AbsolutePosition) {
+fileprivate func computeLines(
+  _ source: UnsafeBufferPointer<UInt8>
+) -> ([AbsolutePosition], AbsolutePosition) {
   var lines: [AbsolutePosition] = []
   // First line starts from the beginning.
   lines.append(.startOfFile)
@@ -364,19 +310,20 @@ fileprivate func computeLines(_ source: String) ->
     lines.append(position)
   }
   var curPrefix: SourceLength = .zero
-  curPrefix = source.forEachLineLength(prefix: curPrefix, body: addLine)
+  curPrefix = StringRef(baseAddress: source.baseAddress, count: source.count)
+    .forEachLineLength(prefix: curPrefix, body: addLine)
   position += curPrefix
   return (lines, position)
 }
 
-fileprivate extension String {
+fileprivate extension StringRef {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero, body: (SourceLength) -> ()
   ) -> SourceLength {
-    let utf8 = self.utf8
+    let utf8 = self
     let startIndex = utf8.startIndex
     let endIndex = utf8.endIndex
     var curIdx = startIndex
@@ -412,11 +359,11 @@ fileprivate extension String {
   }
 
   func containsSwiftNewline() -> Bool {
-    return utf8.contains { $0 == 10 || $0 == 13 }
+    return self.contains { $0 == 10 || $0 == 13 }
   }
 }
 
-fileprivate extension TriviaPiece {
+fileprivate extension RawTriviaPiece {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
@@ -450,7 +397,7 @@ fileprivate extension TriviaPiece {
          let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
       assert(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
-      lineLength += SourceLength(utf8Length: text.utf8.count)
+      lineLength += SourceLength(utf8Length: text.count)
     case let .blockComment(text),
          let .docBlockComment(text),
          let .garbageText(text):
@@ -460,7 +407,7 @@ fileprivate extension TriviaPiece {
   }
 }
 
-fileprivate extension Trivia {
+fileprivate extension RawSyntaxData.MaterializedToken {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
@@ -468,42 +415,46 @@ fileprivate extension Trivia {
     prefix: SourceLength = .zero, body: (SourceLength) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
-    for piece in self {
+    for piece in leadingTrivia {
+      curPrefix = piece.forEachLineLength(prefix: curPrefix, body: body)
+    }
+    curPrefix = self.tokenText.forEachLineLength(prefix: curPrefix, body: body)
+    for piece in trailingTrivia {
       curPrefix = piece.forEachLineLength(prefix: curPrefix, body: body)
     }
     return curPrefix
   }
 }
 
-fileprivate extension TokenKind {
+fileprivate extension RawSyntaxData.ParsedToken {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero, body: (SourceLength) -> ()
   ) -> SourceLength {
-    switch self {
-      case let .stringLiteral(text),
-           let .unknown(text),
-           let .stringSegment(text):
-        return text.forEachLineLength(prefix: prefix, body: body)
-      default:
-        return prefix + self.sourceLength
-    }
+    return wholeText.forEachLineLength(prefix: prefix, body: body)
   }
 }
 
-fileprivate extension TokenSyntax {
+fileprivate extension RawSyntax {
   /// Walks and passes to `body` the `SourceLength` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover `SourceLength` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero, body: (SourceLength) -> ()
   ) -> SourceLength {
-    var curPrefix = prefix
-    curPrefix = self.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.tokenKind.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
-    return curPrefix
+    switch raw.payload {
+    case .parsedToken(let dat):
+      return dat.forEachLineLength(body: body)
+    case .materializedToken(let dat):
+      return dat.forEachLineLength(body: body)
+    case .layout(let dat):
+      var prefix = prefix
+      for case let child? in dat.layout {
+        prefix = child.forEachLineLength(body: body)
+      }
+      return prefix
+    }
   }
 }

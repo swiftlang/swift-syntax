@@ -82,7 +82,7 @@ extension SyntaxClassification {
   }
 }
 
-extension RawTokenKind {
+extension TokenKind {
   internal var classification: SyntaxClassification {
     switch (self) {
 % for token in SYNTAX_TOKENS:

@@ -1,0 +1,54 @@
+%{
+  from gyb_syntax_support import *
+  # -*- mode: Swift -*-
+  # Ignore the following admonition; it applies to the resulting .swift file only
+}%
+//// Automatically Generated From SyntaxNodes.swift.gyb.
+//// Do Not Edit Directly!
+//===------------ SyntaxValidation.swift - Layout validation --------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2022 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+
+/// Check that the `layout` is valid for the given 'SyntaxKind'.
+///
+/// Note that this only validates the immediate children.
+/// Results in an assertion failure if the layout is invalid.
+func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
+#if DEBUG
+  switch kind {
+  case .unknown:
+    break
+  case .token:
+    assertionFailure("validateLayout for .token kind is not supported")
+% for node in SYNTAX_NODES:
+  case .${node.swift_syntax_kind}:
+%   if node.is_buildable():
+    assert(layout.count == ${len(node.children)})
+%     for (idx, child) in enumerate(node.children):
+%       if not child.is_optional:
+    assert(layout[${idx}] != nil)
+%       end
+    layout[${idx}].map { child in
+      assert(Raw${child.type_name}.isValid(syntaxKind: child.syntaxKind))
+    }
+%     end
+%   elif node.is_syntax_collection():
+    for element in layout {
+      assert(element != nil)
+      assert(Raw${node.collection_element_type}.isValid(syntaxKind: element!.syntaxKind))
+    }
+%   end
+    break
+% end
+  }
+#endif
+}

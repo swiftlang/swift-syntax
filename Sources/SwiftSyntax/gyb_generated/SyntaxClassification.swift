@@ -107,7 +107,7 @@ extension SyntaxClassification {
   }
 }
 
-extension RawTokenKind {
+extension TokenKind {
   internal var classification: SyntaxClassification {
     switch (self) {
     case .associatedtypeKeyword:

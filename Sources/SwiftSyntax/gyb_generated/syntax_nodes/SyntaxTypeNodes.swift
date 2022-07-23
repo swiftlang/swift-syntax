@@ -15,33 +15,31 @@
 
 // MARK: - UnknownTypeSyntax
 
-public struct UnknownTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct UnknownTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawUnknownTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `UnknownTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .unknownType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `UnknownTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .unknownType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
-  }
-
-
-  public func _validateLayout() {
-    // We are verifying an unknown node. Since we don’t know anything about it
-    // we need to assume it’s valid.
+  /// FIXME:
+  /// Initialize `UnknownTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 }
 
@@ -54,104 +52,77 @@ extension UnknownTypeSyntax: CustomReflectable {
 
 // MARK: - SimpleTypeIdentifierSyntax
 
-public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case name
     case genericArgumentClause
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawSimpleTypeIdentifierSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `SimpleTypeIdentifierSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .simpleTypeIdentifier else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `SimpleTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .simpleTypeIdentifier)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `SimpleTypeIdentifierSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var name: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.name,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.name.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withName(value)
     }
   }
+  public func withName(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
 
-  /// Returns a copy of the receiver with its `name` replaced.
-  /// - param newChild: The new `name` to replace the node's
-  ///                   current `name`, if present.
-  public func withName(
-    _ newChild: TokenSyntax?) -> SimpleTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
-    let newData = data.replacingChild(raw, at: Cursor.name)
-    return SimpleTypeIdentifierSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.name.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericArgumentClause,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GenericArgumentClauseSyntax(childData!)
+      let childData = data.child(at: Cursor.genericArgumentClause.rawValue)
+      return childData.map { GenericArgumentClauseSyntax(data: $0) }
     }
     set(value) {
       self = withGenericArgumentClause(value)
     }
   }
+  public func withGenericArgumentClause(_ newChild: GenericArgumentClauseSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
 
-  /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
-  /// - param newChild: The new `genericArgumentClause` to replace the node's
-  ///                   current `genericArgumentClause`, if present.
-  public func withGenericArgumentClause(
-    _ newChild: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericArgumentClause)
-    return SimpleTypeIdentifierSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is GenericArgumentClauseSyntax or missing
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericArgumentClauseSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.genericArgumentClause.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension SimpleTypeIdentifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
+      "name": Syntax(name).asProtocol(SyntaxProtocol.self) as Any,
       "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -159,7 +130,8 @@ extension SimpleTypeIdentifierSyntax: CustomReflectable {
 
 // MARK: - MemberTypeIdentifierSyntax
 
-public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case baseType
     case period
@@ -167,160 +139,108 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case genericArgumentClause
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawMemberTypeIdentifierSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `MemberTypeIdentifierSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .memberTypeIdentifier else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `MemberTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .memberTypeIdentifier)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `MemberTypeIdentifierSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var baseType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.baseType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.baseType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withBaseType(value)
     }
   }
+  public func withBaseType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(
-    _ newChild: TypeSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.baseType)
-    return MemberTypeIdentifierSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.baseType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var period: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.period,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.period.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withPeriod(value)
     }
   }
+  public func withPeriod(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
 
-  /// Returns a copy of the receiver with its `period` replaced.
-  /// - param newChild: The new `period` to replace the node's
-  ///                   current `period`, if present.
-  public func withPeriod(
-    _ newChild: TokenSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
-    let newData = data.replacingChild(raw, at: Cursor.period)
-    return MemberTypeIdentifierSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.period.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var name: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.name,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.name.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withName(value)
     }
   }
+  public func withName(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
 
-  /// Returns a copy of the receiver with its `name` replaced.
-  /// - param newChild: The new `name` to replace the node's
-  ///                   current `name`, if present.
-  public func withName(
-    _ newChild: TokenSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
-    let newData = data.replacingChild(raw, at: Cursor.name)
-    return MemberTypeIdentifierSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.name.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      let childData = data.child(at: Cursor.genericArgumentClause,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return GenericArgumentClauseSyntax(childData!)
+      let childData = data.child(at: Cursor.genericArgumentClause.rawValue)
+      return childData.map { GenericArgumentClauseSyntax(data: $0) }
     }
     set(value) {
       self = withGenericArgumentClause(value)
     }
   }
+  public func withGenericArgumentClause(_ newChild: GenericArgumentClauseSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
 
-  /// Returns a copy of the receiver with its `genericArgumentClause` replaced.
-  /// - param newChild: The new `genericArgumentClause` to replace the node's
-  ///                   current `genericArgumentClause`, if present.
-  public func withGenericArgumentClause(
-    _ newChild: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.genericArgumentClause)
-    return MemberTypeIdentifierSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 4)
-    // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #3 child is GenericArgumentClauseSyntax or missing
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(GenericArgumentClauseSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.genericArgumentClause.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension MemberTypeIdentifierSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
-      "period": Syntax(period).asProtocol(SyntaxProtocol.self),
-      "name": Syntax(name).asProtocol(SyntaxProtocol.self),
+      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self) as Any,
+      "period": Syntax(period).asProtocol(SyntaxProtocol.self) as Any,
+      "name": Syntax(name).asProtocol(SyntaxProtocol.self) as Any,
       "genericArgumentClause": genericArgumentClause.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
@@ -328,217 +248,166 @@ extension MemberTypeIdentifierSyntax: CustomReflectable {
 
 // MARK: - ClassRestrictionTypeSyntax
 
-public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case classKeyword
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawClassRestrictionTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `ClassRestrictionTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .classRestrictionType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `ClassRestrictionTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .classRestrictionType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `ClassRestrictionTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var classKeyword: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.classKeyword,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.classKeyword.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withClassKeyword(value)
     }
   }
+  public func withClassKeyword(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .classKeyword).raw
 
-  /// Returns a copy of the receiver with its `classKeyword` replaced.
-  /// - param newChild: The new `classKeyword` to replace the node's
-  ///                   current `classKeyword`, if present.
-  public func withClassKeyword(
-    _ newChild: TokenSyntax?) -> ClassRestrictionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.classKeyword)
-    let newData = data.replacingChild(raw, at: Cursor.classKeyword)
-    return ClassRestrictionTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 1)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.classKeyword.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension ClassRestrictionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self),
+      "classKeyword": Syntax(classKeyword).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - ArrayTypeSyntax
 
-public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct ArrayTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case leftSquareBracket
     case elementType
     case rightSquareBracket
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawArrayTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `ArrayTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .arrayType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `ArrayTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .arrayType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `ArrayTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var leftSquareBracket: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftSquareBracket,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.leftSquareBracket.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withLeftSquareBracket(value)
     }
   }
+  public func withLeftSquareBracket(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
 
-  /// Returns a copy of the receiver with its `leftSquareBracket` replaced.
-  /// - param newChild: The new `leftSquareBracket` to replace the node's
-  ///                   current `leftSquareBracket`, if present.
-  public func withLeftSquareBracket(
-    _ newChild: TokenSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
-    let newData = data.replacingChild(raw, at: Cursor.leftSquareBracket)
-    return ArrayTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.leftSquareBracket.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var elementType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.elementType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.elementType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withElementType(value)
     }
   }
+  public func withElementType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `elementType` replaced.
-  /// - param newChild: The new `elementType` to replace the node's
-  ///                   current `elementType`, if present.
-  public func withElementType(
-    _ newChild: TypeSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.elementType)
-    return ArrayTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.elementType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var rightSquareBracket: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightSquareBracket,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.rightSquareBracket.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withRightSquareBracket(value)
     }
   }
+  public func withRightSquareBracket(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
 
-  /// Returns a copy of the receiver with its `rightSquareBracket` replaced.
-  /// - param newChild: The new `rightSquareBracket` to replace the node's
-  ///                   current `rightSquareBracket`, if present.
-  public func withRightSquareBracket(
-    _ newChild: TokenSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
-    let newData = data.replacingChild(raw, at: Cursor.rightSquareBracket)
-    return ArrayTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is TypeSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.rightSquareBracket.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension ArrayTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquareBracket": Syntax(leftSquareBracket).asProtocol(SyntaxProtocol.self),
-      "elementType": Syntax(elementType).asProtocol(SyntaxProtocol.self),
-      "rightSquareBracket": Syntax(rightSquareBracket).asProtocol(SyntaxProtocol.self),
+      "leftSquareBracket": Syntax(leftSquareBracket).asProtocol(SyntaxProtocol.self) as Any,
+      "elementType": Syntax(elementType).asProtocol(SyntaxProtocol.self) as Any,
+      "rightSquareBracket": Syntax(rightSquareBracket).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - DictionaryTypeSyntax
 
-public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct DictionaryTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case leftSquareBracket
     case keyType
@@ -547,681 +416,505 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case rightSquareBracket
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawDictionaryTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `DictionaryTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .dictionaryType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `DictionaryTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .dictionaryType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `DictionaryTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var leftSquareBracket: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftSquareBracket,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.leftSquareBracket.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withLeftSquareBracket(value)
     }
   }
+  public func withLeftSquareBracket(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftSquareBracket).raw
 
-  /// Returns a copy of the receiver with its `leftSquareBracket` replaced.
-  /// - param newChild: The new `leftSquareBracket` to replace the node's
-  ///                   current `leftSquareBracket`, if present.
-  public func withLeftSquareBracket(
-    _ newChild: TokenSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftSquareBracket)
-    let newData = data.replacingChild(raw, at: Cursor.leftSquareBracket)
-    return DictionaryTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.leftSquareBracket.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var keyType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.keyType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.keyType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withKeyType(value)
     }
   }
+  public func withKeyType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `keyType` replaced.
-  /// - param newChild: The new `keyType` to replace the node's
-  ///                   current `keyType`, if present.
-  public func withKeyType(
-    _ newChild: TypeSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.keyType)
-    return DictionaryTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.keyType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var colon: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.colon,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.colon.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withColon(value)
     }
   }
+  public func withColon(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .colon).raw
 
-  /// Returns a copy of the receiver with its `colon` replaced.
-  /// - param newChild: The new `colon` to replace the node's
-  ///                   current `colon`, if present.
-  public func withColon(
-    _ newChild: TokenSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.colon)
-    let newData = data.replacingChild(raw, at: Cursor.colon)
-    return DictionaryTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.colon.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var valueType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.valueType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.valueType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withValueType(value)
     }
   }
+  public func withValueType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `valueType` replaced.
-  /// - param newChild: The new `valueType` to replace the node's
-  ///                   current `valueType`, if present.
-  public func withValueType(
-    _ newChild: TypeSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.valueType)
-    return DictionaryTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.valueType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var rightSquareBracket: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightSquareBracket,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.rightSquareBracket.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withRightSquareBracket(value)
     }
   }
+  public func withRightSquareBracket(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightSquareBracket).raw
 
-  /// Returns a copy of the receiver with its `rightSquareBracket` replaced.
-  /// - param newChild: The new `rightSquareBracket` to replace the node's
-  ///                   current `rightSquareBracket`, if present.
-  public func withRightSquareBracket(
-    _ newChild: TokenSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightSquareBracket)
-    let newData = data.replacingChild(raw, at: Cursor.rightSquareBracket)
-    return DictionaryTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 5)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is TypeSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #3 child is TypeSyntax 
-    assert(rawChildren[3].raw != nil)
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #4 child is TokenSyntax 
-    assert(rawChildren[4].raw != nil)
-    if let raw = rawChildren[4].raw {
-      let info = rawChildren[4].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.rightSquareBracket.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension DictionaryTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftSquareBracket": Syntax(leftSquareBracket).asProtocol(SyntaxProtocol.self),
-      "keyType": Syntax(keyType).asProtocol(SyntaxProtocol.self),
-      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self),
-      "valueType": Syntax(valueType).asProtocol(SyntaxProtocol.self),
-      "rightSquareBracket": Syntax(rightSquareBracket).asProtocol(SyntaxProtocol.self),
+      "leftSquareBracket": Syntax(leftSquareBracket).asProtocol(SyntaxProtocol.self) as Any,
+      "keyType": Syntax(keyType).asProtocol(SyntaxProtocol.self) as Any,
+      "colon": Syntax(colon).asProtocol(SyntaxProtocol.self) as Any,
+      "valueType": Syntax(valueType).asProtocol(SyntaxProtocol.self) as Any,
+      "rightSquareBracket": Syntax(rightSquareBracket).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - MetatypeTypeSyntax
 
-public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct MetatypeTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case baseType
     case period
     case typeOrProtocol
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawMetatypeTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `MetatypeTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .metatypeType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `MetatypeTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .metatypeType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `MetatypeTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var baseType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.baseType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.baseType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withBaseType(value)
     }
   }
+  public func withBaseType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(
-    _ newChild: TypeSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.baseType)
-    return MetatypeTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.baseType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var period: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.period,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.period.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withPeriod(value)
     }
   }
+  public func withPeriod(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .period).raw
 
-  /// Returns a copy of the receiver with its `period` replaced.
-  /// - param newChild: The new `period` to replace the node's
-  ///                   current `period`, if present.
-  public func withPeriod(
-    _ newChild: TokenSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.period)
-    let newData = data.replacingChild(raw, at: Cursor.period)
-    return MetatypeTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.period.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var typeOrProtocol: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.typeOrProtocol,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.typeOrProtocol.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withTypeOrProtocol(value)
     }
   }
+  public func withTypeOrProtocol(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
 
-  /// Returns a copy of the receiver with its `typeOrProtocol` replaced.
-  /// - param newChild: The new `typeOrProtocol` to replace the node's
-  ///                   current `typeOrProtocol`, if present.
-  public func withTypeOrProtocol(
-    _ newChild: TokenSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
-    let newData = data.replacingChild(raw, at: Cursor.typeOrProtocol)
-    return MetatypeTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
-    // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.typeOrProtocol.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension MetatypeTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
-      "period": Syntax(period).asProtocol(SyntaxProtocol.self),
-      "typeOrProtocol": Syntax(typeOrProtocol).asProtocol(SyntaxProtocol.self),
+      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self) as Any,
+      "period": Syntax(period).asProtocol(SyntaxProtocol.self) as Any,
+      "typeOrProtocol": Syntax(typeOrProtocol).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - OptionalTypeSyntax
 
-public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct OptionalTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case wrappedType
     case questionMark
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawOptionalTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `OptionalTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .optionalType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `OptionalTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .optionalType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `OptionalTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var wrappedType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.wrappedType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.wrappedType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withWrappedType(value)
     }
   }
+  public func withWrappedType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `wrappedType` replaced.
-  /// - param newChild: The new `wrappedType` to replace the node's
-  ///                   current `wrappedType`, if present.
-  public func withWrappedType(
-    _ newChild: TypeSyntax?) -> OptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.wrappedType)
-    return OptionalTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.wrappedType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var questionMark: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.questionMark,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.questionMark.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withQuestionMark(value)
     }
   }
+  public func withQuestionMark(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .postfixQuestionMark).raw
 
-  /// Returns a copy of the receiver with its `questionMark` replaced.
-  /// - param newChild: The new `questionMark` to replace the node's
-  ///                   current `questionMark`, if present.
-  public func withQuestionMark(
-    _ newChild: TokenSyntax?) -> OptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.postfixQuestionMark)
-    let newData = data.replacingChild(raw, at: Cursor.questionMark)
-    return OptionalTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.questionMark.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension OptionalTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wrappedType": Syntax(wrappedType).asProtocol(SyntaxProtocol.self),
-      "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self),
+      "wrappedType": Syntax(wrappedType).asProtocol(SyntaxProtocol.self) as Any,
+      "questionMark": Syntax(questionMark).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - ConstrainedSugarTypeSyntax
 
-public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case someOrAnySpecifier
     case baseType
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawConstrainedSugarTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `ConstrainedSugarTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .constrainedSugarType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `ConstrainedSugarTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .constrainedSugarType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `ConstrainedSugarTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var someOrAnySpecifier: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.someOrAnySpecifier,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.someOrAnySpecifier.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withSomeOrAnySpecifier(value)
     }
   }
+  public func withSomeOrAnySpecifier(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .identifier).raw
 
-  /// Returns a copy of the receiver with its `someOrAnySpecifier` replaced.
-  /// - param newChild: The new `someOrAnySpecifier` to replace the node's
-  ///                   current `someOrAnySpecifier`, if present.
-  public func withSomeOrAnySpecifier(
-    _ newChild: TokenSyntax?) -> ConstrainedSugarTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.identifier(""))
-    let newData = data.replacingChild(raw, at: Cursor.someOrAnySpecifier)
-    return ConstrainedSugarTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.someOrAnySpecifier.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var baseType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.baseType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.baseType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withBaseType(value)
     }
   }
+  public func withBaseType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(
-    _ newChild: TypeSyntax?) -> ConstrainedSugarTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.baseType)
-    return ConstrainedSugarTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is TypeSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.baseType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension ConstrainedSugarTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "someOrAnySpecifier": Syntax(someOrAnySpecifier).asProtocol(SyntaxProtocol.self),
-      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
+      "someOrAnySpecifier": Syntax(someOrAnySpecifier).asProtocol(SyntaxProtocol.self) as Any,
+      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
 
-public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case wrappedType
     case exclamationMark
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawImplicitlyUnwrappedOptionalTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `ImplicitlyUnwrappedOptionalTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .implicitlyUnwrappedOptionalType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `ImplicitlyUnwrappedOptionalTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .implicitlyUnwrappedOptionalType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `ImplicitlyUnwrappedOptionalTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var wrappedType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.wrappedType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.wrappedType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withWrappedType(value)
     }
   }
+  public func withWrappedType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `wrappedType` replaced.
-  /// - param newChild: The new `wrappedType` to replace the node's
-  ///                   current `wrappedType`, if present.
-  public func withWrappedType(
-    _ newChild: TypeSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.wrappedType)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.wrappedType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var exclamationMark: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.exclamationMark,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.exclamationMark.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withExclamationMark(value)
     }
   }
+  public func withExclamationMark(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .exclamationMark).raw
 
-  /// Returns a copy of the receiver with its `exclamationMark` replaced.
-  /// - param newChild: The new `exclamationMark` to replace the node's
-  ///                   current `exclamationMark`, if present.
-  public func withExclamationMark(
-    _ newChild: TokenSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.exclamationMark)
-    let newData = data.replacingChild(raw, at: Cursor.exclamationMark)
-    return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 2)
-    // Check child #0 child is TypeSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
-    // Check child #1 child is TokenSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.exclamationMark.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension ImplicitlyUnwrappedOptionalTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "wrappedType": Syntax(wrappedType).asProtocol(SyntaxProtocol.self),
-      "exclamationMark": Syntax(exclamationMark).asProtocol(SyntaxProtocol.self),
+      "wrappedType": Syntax(wrappedType).asProtocol(SyntaxProtocol.self) as Any,
+      "exclamationMark": Syntax(exclamationMark).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - CompositionTypeSyntax
 
-public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct CompositionTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case elements
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawCompositionTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `CompositionTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .compositionType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `CompositionTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .compositionType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `CompositionTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var elements: CompositionTypeElementListSyntax {
     get {
-      let childData = data.child(at: Cursor.elements,
-                                 parent: Syntax(self))
-      return CompositionTypeElementListSyntax(childData!)
+      let childData = data.child(at: Cursor.elements.rawValue)
+      return CompositionTypeElementListSyntax(data: childData!)
     }
     set(value) {
       self = withElements(value)
@@ -1236,107 +929,89 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: CompositionTypeElementSyntax) -> CompositionTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+    if let col = raw.children[Cursor.elements.rawValue] {
+      collection = col.appending(element.raw, arena: self.arena)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.compositionTypeElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeEmptyLayout(arena: arena, kind: .compositionTypeElementList)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.elements)
-    return CompositionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(at: Cursor.elements.rawValue,
+                                     with: collection, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
+  public func withElements(_ newChild: CompositionTypeElementListSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawCompositionTypeElementListSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `elements` replaced.
-  /// - param newChild: The new `elements` to replace the node's
-  ///                   current `elements`, if present.
-  public func withElements(
-    _ newChild: CompositionTypeElementListSyntax?) -> CompositionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.compositionTypeElementList)
-    let newData = data.replacingChild(raw, at: Cursor.elements)
-    return CompositionTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 1)
-    // Check child #0 child is CompositionTypeElementListSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(CompositionTypeElementListSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.elements.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension CompositionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
+      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - TupleTypeSyntax
 
-public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct TupleTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case leftParen
     case elements
     case rightParen
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawTupleTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `TupleTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .tupleType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `TupleTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .tupleType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `TupleTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.leftParen.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withLeftParen(value)
     }
   }
+  public func withLeftParen(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
 
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> TupleTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
-    return TupleTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.leftParen.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var elements: TupleTypeElementListSyntax {
     get {
-      let childData = data.child(at: Cursor.elements,
-                                 parent: Syntax(self))
-      return TupleTypeElementListSyntax(childData!)
+      let childData = data.child(at: Cursor.elements.rawValue)
+      return TupleTypeElementListSyntax(data: childData!)
     }
     set(value) {
       self = withElements(value)
@@ -1351,95 +1026,57 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `elements` collection.
   public func addElement(_ element: TupleTypeElementSyntax) -> TupleTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.elements] {
-      collection = col.appending(element.raw)
+    if let col = raw.children[Cursor.elements.rawValue] {
+      collection = col.appending(element.raw, arena: self.arena)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeEmptyLayout(arena: arena, kind: .tupleTypeElementList)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.elements)
-    return TupleTypeSyntax(newData)
+    let newRaw = raw.replacingChild(at: Cursor.elements.rawValue,
+                                     with: collection, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
+  public func withElements(_ newChild: TupleTypeElementListSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTupleTypeElementListSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `elements` replaced.
-  /// - param newChild: The new `elements` to replace the node's
-  ///                   current `elements`, if present.
-  public func withElements(
-    _ newChild: TupleTypeElementListSyntax?) -> TupleTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleTypeElementList)
-    let newData = data.replacingChild(raw, at: Cursor.elements)
-    return TupleTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.elements.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.rightParen.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withRightParen(value)
     }
   }
+  public func withRightParen(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
 
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> TupleTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
-    return TupleTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is TupleTypeElementListSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TupleTypeElementListSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.rightParen.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension TupleTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
-      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self) as Any,
+      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - FunctionTypeSyntax
 
-public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct FunctionTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case leftParen
     case arguments
@@ -1450,53 +1087,52 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     case returnType
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawFunctionTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `FunctionTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .functionType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `FunctionTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .functionType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `FunctionTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var leftParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.leftParen,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.leftParen.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withLeftParen(value)
     }
   }
+  public func withLeftParen(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .leftParen).raw
 
-  /// Returns a copy of the receiver with its `leftParen` replaced.
-  /// - param newChild: The new `leftParen` to replace the node's
-  ///                   current `leftParen`, if present.
-  public func withLeftParen(
-    _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.leftParen)
-    let newData = data.replacingChild(raw, at: Cursor.leftParen)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.leftParen.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var arguments: TupleTypeElementListSyntax {
     get {
-      let childData = data.child(at: Cursor.arguments,
-                                 parent: Syntax(self))
-      return TupleTypeElementListSyntax(childData!)
+      let childData = data.child(at: Cursor.arguments.rawValue)
+      return TupleTypeElementListSyntax(data: childData!)
     }
     set(value) {
       self = withArguments(value)
@@ -1511,274 +1147,182 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `arguments` collection.
   public func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.arguments] {
-      collection = col.appending(element.raw)
+    if let col = raw.children[Cursor.arguments.rawValue] {
+      collection = col.appending(element.raw, arena: self.arena)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.tupleTypeElementList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeEmptyLayout(arena: arena, kind: .tupleTypeElementList)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.arguments)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(at: Cursor.arguments.rawValue,
+                                     with: collection, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
+  public func withArguments(_ newChild: TupleTypeElementListSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTupleTypeElementListSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `arguments` replaced.
-  /// - param newChild: The new `arguments` to replace the node's
-  ///                   current `arguments`, if present.
-  public func withArguments(
-    _ newChild: TupleTypeElementListSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.tupleTypeElementList)
-    let newData = data.replacingChild(raw, at: Cursor.arguments)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.arguments.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var rightParen: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.rightParen,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.rightParen.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withRightParen(value)
     }
   }
+  public func withRightParen(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .rightParen).raw
 
-  /// Returns a copy of the receiver with its `rightParen` replaced.
-  /// - param newChild: The new `rightParen` to replace the node's
-  ///                   current `rightParen`, if present.
-  public func withRightParen(
-    _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.rightParen)
-    let newData = data.replacingChild(raw, at: Cursor.rightParen)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.rightParen.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var asyncKeyword: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.asyncKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.asyncKeyword.rawValue)
+      return childData.map { TokenSyntax(data: $0) }
     }
     set(value) {
       self = withAsyncKeyword(value)
     }
   }
+  public func withAsyncKeyword(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
 
-  /// Returns a copy of the receiver with its `asyncKeyword` replaced.
-  /// - param newChild: The new `asyncKeyword` to replace the node's
-  ///                   current `asyncKeyword`, if present.
-  public func withAsyncKeyword(
-    _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.asyncKeyword)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.asyncKeyword.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var throwsOrRethrowsKeyword: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.throwsOrRethrowsKeyword,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.throwsOrRethrowsKeyword.rawValue)
+      return childData.map { TokenSyntax(data: $0) }
     }
     set(value) {
       self = withThrowsOrRethrowsKeyword(value)
     }
   }
+  public func withThrowsOrRethrowsKeyword(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
 
-  /// Returns a copy of the receiver with its `throwsOrRethrowsKeyword` replaced.
-  /// - param newChild: The new `throwsOrRethrowsKeyword` to replace the node's
-  ///                   current `throwsOrRethrowsKeyword`, if present.
-  public func withThrowsOrRethrowsKeyword(
-    _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.throwsOrRethrowsKeyword)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.throwsOrRethrowsKeyword.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var arrow: TokenSyntax {
     get {
-      let childData = data.child(at: Cursor.arrow,
-                                 parent: Syntax(self))
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.arrow.rawValue)
+      return TokenSyntax(data: childData!)
     }
     set(value) {
       self = withArrow(value)
     }
   }
+  public func withArrow(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTokenSyntax.makeBlank(arena: arena, tokenKind: .arrow).raw
 
-  /// Returns a copy of the receiver with its `arrow` replaced.
-  /// - param newChild: The new `arrow` to replace the node's
-  ///                   current `arrow`, if present.
-  public func withArrow(
-    _ newChild: TokenSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missingToken(TokenKind.arrow)
-    let newData = data.replacingChild(raw, at: Cursor.arrow)
-    return FunctionTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.arrow.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var returnType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.returnType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.returnType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withReturnType(value)
     }
   }
+  public func withReturnType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `returnType` replaced.
-  /// - param newChild: The new `returnType` to replace the node's
-  ///                   current `returnType`, if present.
-  public func withReturnType(
-    _ newChild: TypeSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.returnType)
-    return FunctionTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 7)
-    // Check child #0 child is TokenSyntax 
-    assert(rawChildren[0].raw != nil)
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is TupleTypeElementListSyntax 
-    assert(rawChildren[1].raw != nil)
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TupleTypeElementListSyntax.self))
-    }
-    // Check child #2 child is TokenSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #3 child is TokenSyntax or missing
-    if let raw = rawChildren[3].raw {
-      let info = rawChildren[3].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #4 child is TokenSyntax or missing
-    if let raw = rawChildren[4].raw {
-      let info = rawChildren[4].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #5 child is TokenSyntax 
-    assert(rawChildren[5].raw != nil)
-    if let raw = rawChildren[5].raw {
-      let info = rawChildren[5].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #6 child is TypeSyntax 
-    assert(rawChildren[6].raw != nil)
-    if let raw = rawChildren[6].raw {
-      let info = rawChildren[6].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.returnType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
 extension FunctionTypeSyntax: CustomReflectable {
   public var customMirror: Mirror {
     return Mirror(self, children: [
-      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self),
-      "arguments": Syntax(arguments).asProtocol(SyntaxProtocol.self),
-      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self),
+      "leftParen": Syntax(leftParen).asProtocol(SyntaxProtocol.self) as Any,
+      "arguments": Syntax(arguments).asProtocol(SyntaxProtocol.self) as Any,
+      "rightParen": Syntax(rightParen).asProtocol(SyntaxProtocol.self) as Any,
       "asyncKeyword": asyncKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "throwsOrRethrowsKeyword": throwsOrRethrowsKeyword.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "arrow": Syntax(arrow).asProtocol(SyntaxProtocol.self),
-      "returnType": Syntax(returnType).asProtocol(SyntaxProtocol.self),
+      "arrow": Syntax(arrow).asProtocol(SyntaxProtocol.self) as Any,
+      "returnType": Syntax(returnType).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
 
 // MARK: - AttributedTypeSyntax
 
-public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct AttributedTypeSyntax: TypeSyntaxProtocol, Hashable, Identifiable {
+  public typealias ID = SyntaxIdentifier
   enum Cursor: Int {
     case specifier
     case attributes
     case baseType
   }
 
-  public let _syntaxNode: Syntax
+  public static func isValid(syntaxKind: SyntaxKind) -> Bool {
+    RawAttributedTypeSyntax.isValid(syntaxKind: syntaxKind)
+  }
+  public let syntax: Syntax
 
   /// Converts the given `Syntax` node to a `AttributedTypeSyntax` if possible. Returns
   /// `nil` if the conversion is not possible.
-  public init?(_ syntax: Syntax) {
-    guard syntax.raw.kind == .attributedType else { return nil }
-    self._syntaxNode = syntax
+  @inlinable
+  public init?<Node: SyntaxProtocol>(_ other: Node) {
+    guard Self.isValid(syntaxKind: other.syntax.syntaxKind) else { return nil }
+    self.init(data: other.data)
   }
 
   /// Creates a `AttributedTypeSyntax` node from the given `SyntaxData`. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
-  internal init(_ data: SyntaxData) {
-    assert(data.raw.kind == .attributedType)
-    self._syntaxNode = Syntax(data)
-  }
-
-  public var syntaxNodeType: SyntaxProtocol.Type {
-    return Swift.type(of: self)
+  /// FIXME:
+  /// Initialize `AttributedTypeSyntax` unsafely assuming `syntax` is valid.
+  @usableFromInline
+  init(data: SyntaxData) {
+    assert(Self.isValid(syntaxKind: data.raw.syntaxKind))
+    self.syntax = Syntax(data: data)
   }
 
   public var specifier: TokenSyntax? {
     get {
-      let childData = data.child(at: Cursor.specifier,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return TokenSyntax(childData!)
+      let childData = data.child(at: Cursor.specifier.rawValue)
+      return childData.map { TokenSyntax(data: $0) }
     }
     set(value) {
       self = withSpecifier(value)
     }
   }
+  public func withSpecifier(_ newChild: TokenSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
 
-  /// Returns a copy of the receiver with its `specifier` replaced.
-  /// - param newChild: The new `specifier` to replace the node's
-  ///                   current `specifier`, if present.
-  public func withSpecifier(
-    _ newChild: TokenSyntax?) -> AttributedTypeSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.specifier)
-    return AttributedTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.specifier.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var attributes: AttributeListSyntax? {
     get {
-      let childData = data.child(at: Cursor.attributes,
-                                 parent: Syntax(self))
-      if childData == nil { return nil }
-      return AttributeListSyntax(childData!)
+      let childData = data.child(at: Cursor.attributes.rawValue)
+      return childData.map { AttributeListSyntax(data: $0) }
     }
     set(value) {
       self = withAttributes(value)
@@ -1793,77 +1337,39 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///            appended to its `attributes` collection.
   public func addAttribute(_ element: Syntax) -> AttributedTypeSyntax {
     var collection: RawSyntax
-    if let col = raw[Cursor.attributes] {
-      collection = col.appending(element.raw)
+    if let col = raw.children[Cursor.attributes.rawValue] {
+      collection = col.appending(element.raw, arena: self.arena)
     } else {
-      collection = RawSyntax.create(kind: SyntaxKind.attributeList,
-        layout: [element.raw], length: element.raw.totalLength, presence: .present)
+      collection = RawSyntax.makeEmptyLayout(arena: arena, kind: .attributeList)
     }
-    let newData = data.replacingChild(collection,
-                                      at: Cursor.attributes)
-    return AttributedTypeSyntax(newData)
+    let newRaw = raw.replacingChild(at: Cursor.attributes.rawValue,
+                                     with: collection, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
+  public func withAttributes(_ newChild: AttributeListSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
 
-  /// Returns a copy of the receiver with its `attributes` replaced.
-  /// - param newChild: The new `attributes` to replace the node's
-  ///                   current `attributes`, if present.
-  public func withAttributes(
-    _ newChild: AttributeListSyntax?) -> AttributedTypeSyntax {
-    let raw = newChild?.raw
-    let newData = data.replacingChild(raw, at: Cursor.attributes)
-    return AttributedTypeSyntax(newData)
+    let newRaw = raw.replacingChild(
+      at: Cursor.attributes.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 
   public var baseType: TypeSyntax {
     get {
-      let childData = data.child(at: Cursor.baseType,
-                                 parent: Syntax(self))
-      return TypeSyntax(childData!)
+      let childData = data.child(at: Cursor.baseType.rawValue)
+      return TypeSyntax(data: childData!)
     }
     set(value) {
       self = withBaseType(value)
     }
   }
+  public func withBaseType(_ newChild: TypeSyntax?) -> Self {
+    let newChildRaw = newChild?.raw
+      ?? RawTypeSyntax.makeBlank(arena: arena).raw
 
-  /// Returns a copy of the receiver with its `baseType` replaced.
-  /// - param newChild: The new `baseType` to replace the node's
-  ///                   current `baseType`, if present.
-  public func withBaseType(
-    _ newChild: TypeSyntax?) -> AttributedTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
-    let newData = data.replacingChild(raw, at: Cursor.baseType)
-    return AttributedTypeSyntax(newData)
-  }
-
-
-  public func _validateLayout() {
-    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
-    assert(rawChildren.count == 3)
-    // Check child #0 child is TokenSyntax or missing
-    if let raw = rawChildren[0].raw {
-      let info = rawChildren[0].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TokenSyntax.self))
-    }
-    // Check child #1 child is AttributeListSyntax or missing
-    if let raw = rawChildren[1].raw {
-      let info = rawChildren[1].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(AttributeListSyntax.self))
-    }
-    // Check child #2 child is TypeSyntax 
-    assert(rawChildren[2].raw != nil)
-    if let raw = rawChildren[2].raw {
-      let info = rawChildren[2].syntaxInfo
-      let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
-      let syntaxData = SyntaxData(absoluteRaw, parent: Syntax(self))
-      let syntaxChild = Syntax(syntaxData)
-      assert(syntaxChild.is(TypeSyntax.self))
-    }
+    let newRaw = raw.replacingChild(
+      at: Cursor.baseType.rawValue, with: newChildRaw, arena: arena)
+    return Self(data: data.replacingSelf(with: newRaw, arena: arena))
   }
 }
 
@@ -1872,8 +1378,7 @@ extension AttributedTypeSyntax: CustomReflectable {
     return Mirror(self, children: [
       "specifier": specifier.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
       "attributes": attributes.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self),
+      "baseType": Syntax(baseType).asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }
-

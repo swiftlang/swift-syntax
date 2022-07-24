@@ -30,7 +30,7 @@ final class StructTests: XCTestCase {
       genericWhereClause: GenericWhereClause {
         GenericRequirement(body: ConformanceRequirement(leftTypeIdentifier: "A", rightTypeIdentifier: "X"))
         GenericRequirement(body: SameTypeRequirement(
-            leftTypeIdentifier: "A.P", equalityToken: .identifier("=="), rightTypeIdentifier: "D"))
+            leftTypeIdentifier: "A.P", equalityToken: .spacedBinaryOperator("=="), rightTypeIdentifier: "D"))
       }
     ) {}
     let testStruct = StructDecl(
@@ -48,7 +48,7 @@ final class StructTests: XCTestCase {
     XCTAssertEqual(text, """
     ␣public struct TestStruct {
         /// A nested struct
-    struct NestedStruct < A, B: C, D > where A: X, A.P==D {
+    struct NestedStruct < A, B: C, D > where A: X, A.P == D {
         }
     }
     """)

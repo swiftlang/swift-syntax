@@ -328,7 +328,7 @@ def run_code_generation(toolchain, build_dir, multiroot_data_file, release, verb
     # Tell other projects in the unified build to use local dependencies
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = os.path.join(toolchain, "lib", "swift", "macosx")
-    return call(swiftpm_call, env=env, verbose=verbose) == 0
+    return check_call(swiftpm_call, env=env, verbose=verbose) == 0
 
 
 def make_dir_if_needed(path):
@@ -656,6 +656,7 @@ def generate_source_code_command(args):
         printerr("FAIL: Generating .gyb files failed")
         printerr("Executing: %s" % " ".join(e.cmd))
         printerr(e.output)
+        raise SystemExit(1)
     
     if not args.gyb_only:
         run_code_generation(

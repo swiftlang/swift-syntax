@@ -264,7 +264,7 @@ public enum SyntaxFactory {
   public static func makeBlankAwaitExpr(presence: SourcePresence = .present) -> AwaitExprSyntax {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .awaitExpr,
       layout: [
-      RawSyntax.missingToken(TokenKind.identifier("")),
+      RawSyntax.missingToken(TokenKind.contextualKeyword("")),
       RawSyntax.missing(SyntaxKind.expr),
     ], length: .zero, presence: presence))
     return AwaitExprSyntax(data)

@@ -67,11 +67,10 @@ let EXPR_NODES: [Node] = [
        kind: "Expr",
        children: [
          Child(name: "AwaitKeyword",
-               kind: "IdentifierToken",
+               kind: "ContextualKeywordToken",
                textChoices: [
                  "await"
-               ],
-               classification: "Keyword"),
+               ]),
          Child(name: "Expression",
                kind: "Expr")
        ]),

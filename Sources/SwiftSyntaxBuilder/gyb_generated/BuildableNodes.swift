@@ -374,7 +374,7 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      awaitKeyword: TokenSyntax.identifier(awaitKeyword),
+      awaitKeyword: TokenSyntax.contextualKeyword(awaitKeyword),
       expression: expression
     )
   }

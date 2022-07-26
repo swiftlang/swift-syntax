@@ -1,6 +1,7 @@
 import XCTest
 import SwiftSyntax
 import SwiftSyntaxParser
+import _SwiftSyntaxTestSupport
 
 fileprivate class FuncRenamer: SyntaxRewriter {
   override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
@@ -15,8 +16,8 @@ public class AbsolutePositionTests: XCTestCase {
 
   public func testVisitor() {
     XCTAssertNoThrow(try {
-      let source = try String(contentsOf: getInput("visitor.swift"))
-      let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
+      let source = try String(contentsOf: getTestInput("visitor.swift"))
+      let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
       XCTAssertEqual(0, parsed.position.utf8Offset)
       XCTAssertEqual(source.count,
         parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
@@ -27,8 +28,8 @@ public class AbsolutePositionTests: XCTestCase {
 
   public func testClosure() {
     XCTAssertNoThrow(try {
-      let source = try String(contentsOf: getInput("closure.swift"))
-      let parsed = try SyntaxParser.parse(getInput("closure.swift"))
+      let source = try String(contentsOf: getTestInput("closure.swift"))
+      let parsed = try SyntaxParser.parse(getTestInput("closure.swift"))
       XCTAssertEqual(source.count, 
         parsed.eofToken.positionAfterSkippingLeadingTrivia.utf8Offset)
       XCTAssertEqual(0, parsed.position.utf8Offset)
@@ -38,7 +39,7 @@ public class AbsolutePositionTests: XCTestCase {
 
   public func testRename() {
     XCTAssertNoThrow(try {
-      let parsed = try SyntaxParser.parse(getInput("visitor.swift"))
+      let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
       let renamed = FuncRenamer().visit(parsed).as(SourceFileSyntax.self)!
       let renamedSource = renamed.description
       XCTAssertEqual(renamedSource.count, 

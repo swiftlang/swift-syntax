@@ -30,20 +30,15 @@ extension TokenSyntax {
     let contextualClassification = self.data.contextualClassification
     let relativeOffset = raw.tokenLeadingTriviaLength.utf8Length
     let absoluteOffset = position.utf8Offset + relativeOffset
-    let classifiedRange = raw.withUnsafeTokenText(
-      relativeOffset: relativeOffset
-    ) { (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
-      return tokText!.classify(offset: absoluteOffset,
-        contextualClassification: contextualClassification)
-    }
-    return classifiedRange
+    return TokenKindAndText(kind: raw.rawTokenKind, text: raw.tokenText).classify(
+      offset: absoluteOffset, contextualClassification: contextualClassification)
   }
 }
 
-extension UnsafeTriviaPiece {
+extension RawTriviaPiece {
   func classify(offset: Int) -> SyntaxClassifiedRange {
-    let range = ByteSourceRange(offset: offset, length: length)
-    switch self.kind {
+    let range = ByteSourceRange(offset: offset, length: byteLength)
+    switch self {
       case .lineComment: return .init(kind: .lineComment, range: range)
       case .blockComment: return .init(kind: .blockComment, range: range)
       case .docLineComment: return .init(kind: .docLineComment, range: range)
@@ -53,11 +48,15 @@ extension UnsafeTriviaPiece {
   }
 }
 
-extension UnsafeTokenText {
+struct TokenKindAndText {
+  let kind: RawTokenKind
+  let text: SyntaxText
+
   func classify(
     offset: Int, contextualClassification: (SyntaxClassification, Bool)?
   ) -> SyntaxClassifiedRange {
-    let range = ByteSourceRange(offset: offset, length: length)
+    let range = ByteSourceRange(offset: offset, length: text.count)
+
     if let contextualClassify = contextualClassification {
       let (classify, force) = contextualClassify
       if kind == .identifier || force {
@@ -68,12 +67,12 @@ extension UnsafeTokenText {
   }
 
   fileprivate func contextFreeClassification() -> SyntaxClassification {
-    if case .unknown = kind, customText.hasPrefix(.asciiDoubleQuote) {
+    if kind == .unknown, text.hasPrefix("\"") {
       return .stringLiteral
     }
-    if case .identifier = kind,
-        customText.hasPrefix(.asciiLeftAngleBracket, .asciiPound) &&
-        customText.hasSuffix(.asciiPound, .asciiRightAngleBracket) {
+    if kind == .identifier,
+       text.hasPrefix("<#"),
+       text.hasSuffix("#>") {
       return .editorPlaceholder
     }
     return kind.classification
@@ -277,9 +276,9 @@ fileprivate struct FastTokenSequence: Sequence {
 /// Provides a sequence of `SyntaxClassifiedRange`s for a token.
 fileprivate struct TokenClassificationIterator: IteratorProtocol {
   enum State {
-    case atLeadingTrivia(Int)
+    case atLeadingTrivia(RawTriviaPieceBuffer, Int)
     case atTokenText
-    case atTrailingTrivia(Int)
+    case atTrailingTrivia(RawTriviaPieceBuffer, Int)
   }
 
   let token: AbsoluteNode
@@ -290,7 +289,7 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
     assert(token.raw.isToken)
     self.token = token
     self.offset = Int(token.position.offset)
-    self.state = .atLeadingTrivia(0)
+    self.state = .atLeadingTrivia(token.raw.tokenLeadingTriviaPieces, 0)
   }
 
   var relativeOffset: Int { return offset - Int(token.position.offset) }
@@ -298,46 +297,35 @@ fileprivate struct TokenClassificationIterator: IteratorProtocol {
   mutating func next() -> SyntaxClassifiedRange? {
     while true {
       switch state {
-      case .atLeadingTrivia(let index):
-        let classifiedRangeOpt = token.raw.withUnsafeLeadingTriviaPiece(
-          at: index, relativeOffset: relativeOffset
-        ) { (trivia: UnsafeTriviaPiece?) -> SyntaxClassifiedRange? in
-          guard let trivia = trivia else { return nil }
-          return trivia.classify(offset: offset)
-        }
-        guard let classifiedRange = classifiedRangeOpt else {
-          // Move on to token text.
+      case .atLeadingTrivia(let pieces, let index):
+        guard index < pieces.count else {
           state = .atTokenText
           break
         }
-        state = .atLeadingTrivia(index+1)
+        let classifiedRange = pieces[index].classify(offset: offset)
+        state = .atLeadingTrivia(pieces, index+1)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange
 
       case .atTokenText:
-        let classifiedRange = token.raw.withUnsafeTokenText(
-          relativeOffset: relativeOffset
-        ) { (tokText: UnsafeTokenText?) -> SyntaxClassifiedRange in
-          return tokText!.classify(offset: offset, contextualClassification: token.classification)
-        }
+        let classifiedRange = TokenKindAndText(
+          kind: token.raw.rawTokenKind, text: token.raw.tokenText)
+          .classify(offset: offset, contextualClassification: token.classification)
+
         // Move on to trailing trivia.
-        state = .atTrailingTrivia(0)
+        state = .atTrailingTrivia(token.raw.tokenTrailingTriviaPieces, 0)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange
 
-      case .atTrailingTrivia(let index):
-        let classifiedRangeOpt = token.raw.withUnsafeTrailingTriviaPiece(
-          at: index, relativeOffset: relativeOffset
-        ) { (trivia: UnsafeTriviaPiece?) -> SyntaxClassifiedRange? in
-          guard let trivia = trivia else { return nil }
-          return trivia.classify(offset: offset)
+      case .atTrailingTrivia(let pieces, let index):
+        guard index < pieces.count else {
+          return nil
         }
-        guard let classifiedRange = classifiedRangeOpt else {
-          return nil // Finish iteration.
-        }
-        state = .atTrailingTrivia(index+1)
+        let classifiedRange = pieces[index].classify(offset: offset)
+
+        state = .atTrailingTrivia(pieces, index+1)
         offset = classifiedRange.endOffset
         guard classifiedRange.kind != .none else { break }
         return classifiedRange

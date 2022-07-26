@@ -1,6 +1,7 @@
 {
   "Syntax": [
     "RawSyntax.swift",
+    "RawSyntax+CSwiftSyntax.swift",
     "SyntaxChildren.swift",
     "SyntaxData.swift",
     "SyntaxEnum.swift",
@@ -45,6 +46,7 @@
   ],
   "Internal": [
     "_SyntaxParserInterop.swift",
+    "SyntaxArena.swift",
     "CNodes.swift",
     "AtomicCounter.swift",
     "SyntaxVerifier.swift",

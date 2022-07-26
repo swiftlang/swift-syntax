@@ -215,7 +215,25 @@ class SyntaxBox: CustomStringConvertible,
 /// SyntaxData is an implementation detail, and should not be exposed to clients
 /// of SwiftSyntax.
 struct SyntaxData {
-  private let parentBox: SyntaxBox?
+  private enum ParentOrArena {
+    // For non-root nodes.
+    case parent(SyntaxBox)
+    // For root node.
+    case arena(SyntaxArena)
+  }
+  private let parentOrArena: ParentOrArena
+  private var arena: SyntaxArena {
+    switch parentOrArena {
+    case .arena(let arena): return arena
+    case .parent(let parentBox): return parentBox.value.data.arena
+    }
+  }
+  private var parentBox: SyntaxBox? {
+    switch parentOrArena {
+    case .parent(let parentBox): return parentBox
+    case .arena(_): return nil
+    }
+  }
   var parent: Syntax? {
     return parentBox?.value
   }
@@ -247,28 +265,23 @@ struct SyntaxData {
     return absoluteRaw.endPosition
   }
 
+  /// "designated" memberwise initializer of `SyntaxData`.
+  private init(_ absoluteRaw: AbsoluteRawSyntax, parentOrArena: ParentOrArena) {
+    self.parentOrArena = parentOrArena
+    self.absoluteRaw = absoluteRaw
+  }
+
   /// Creates a `SyntaxData` with the provided raw syntax and parent.
   /// - Parameters:
   ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
   ///   - parent: The parent of this node, or `nil` if this node is the root.
-  init(_ absoluteRaw: AbsoluteRawSyntax, parent: Syntax?) {
-    self.absoluteRaw = absoluteRaw
-    self.parentBox = parent.map(SyntaxBox.init)
-  }
-
-  /// Creates a `SyntaxData` with the provided raw syntax and parent.
-  /// - Parameters:
-  ///   - absoluteRaw: The underlying `AbsoluteRawSyntax` of this node.
-  ///   - parentBox: The boxed parent of this node, or `nil` if this node is the 
-  ///                root.
-  init(_ absoluteRaw: AbsoluteRawSyntax, parentBox: SyntaxBox?) {
-    self.absoluteRaw = absoluteRaw
-    self.parentBox = parentBox
+  init(_ absoluteRaw: AbsoluteRawSyntax, parent: Syntax) {
+    self.init(absoluteRaw, parentOrArena: .parent(SyntaxBox(parent)))
   }
 
   /// Creates a `SyntaxData` for a root raw node.
   static func forRoot(_ raw: RawSyntax) -> SyntaxData {
-    return SyntaxData(.forRoot(raw), parent: nil)
+    SyntaxData(.forRoot(raw), parentOrArena: .arena(raw.arena))
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -335,7 +348,7 @@ struct SyntaxData {
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
   func replacingChild(_ child: RawSyntax?, at index: Int) -> SyntaxData {
-    let newRaw = raw.replacingChild(index, with: child)
+    let newRaw = raw.replacingChild(at: index, with: child, arena: raw.arena)
     return replacingSelf(newRaw)
   }
 

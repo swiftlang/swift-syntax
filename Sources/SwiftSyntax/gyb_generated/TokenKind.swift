@@ -712,7 +712,7 @@ public enum TokenKind: Hashable {
     case .yield: return false
     }
   }
-  
+
   var kind: String {
     switch self {
     case .eof: return "eof"
@@ -1121,1083 +1121,875 @@ extension TokenKind: Equatable {
   }
 }
 
-extension TokenKind {
-  static func fromRawValue(kind: CTokenKind,
-                           textBuffer: UnsafeBufferPointer<UInt8>) -> TokenKind {
-    switch kind {
-    case 0: return .eof
-    case 1:
-      return .associatedtypeKeyword
-    case 2:
-      return .classKeyword
-    case 3:
-      return .deinitKeyword
-    case 4:
-      return .enumKeyword
-    case 5:
-      return .extensionKeyword
-    case 6:
-      return .funcKeyword
-    case 7:
-      return .importKeyword
-    case 8:
-      return .initKeyword
-    case 9:
-      return .inoutKeyword
-    case 10:
-      return .letKeyword
-    case 11:
-      return .operatorKeyword
-    case 12:
-      return .precedencegroupKeyword
-    case 13:
-      return .protocolKeyword
-    case 14:
-      return .structKeyword
-    case 15:
-      return .subscriptKeyword
-    case 16:
-      return .typealiasKeyword
-    case 17:
-      return .varKeyword
-    case 18:
-      return .fileprivateKeyword
-    case 19:
-      return .internalKeyword
-    case 20:
-      return .privateKeyword
-    case 21:
-      return .publicKeyword
-    case 22:
-      return .staticKeyword
-    case 23:
-      return .deferKeyword
-    case 24:
-      return .ifKeyword
-    case 25:
-      return .guardKeyword
-    case 26:
-      return .doKeyword
-    case 27:
-      return .repeatKeyword
-    case 28:
-      return .elseKeyword
-    case 29:
-      return .forKeyword
-    case 30:
-      return .inKeyword
-    case 31:
-      return .whileKeyword
-    case 32:
-      return .returnKeyword
-    case 33:
-      return .breakKeyword
-    case 34:
-      return .continueKeyword
-    case 35:
-      return .fallthroughKeyword
-    case 36:
-      return .switchKeyword
-    case 37:
-      return .caseKeyword
-    case 38:
-      return .defaultKeyword
-    case 39:
-      return .whereKeyword
-    case 40:
-      return .catchKeyword
-    case 50:
-      return .throwKeyword
-    case 41:
-      return .asKeyword
-    case 42:
-      return .anyKeyword
-    case 43:
-      return .falseKeyword
-    case 44:
-      return .isKeyword
-    case 45:
-      return .nilKeyword
-    case 46:
-      return .rethrowsKeyword
-    case 47:
-      return .superKeyword
-    case 48:
-      return .selfKeyword
-    case 49:
-      return .capitalSelfKeyword
-    case 51:
-      return .trueKeyword
-    case 52:
-      return .tryKeyword
-    case 53:
-      return .throwsKeyword
-    case 54:
-      return .__file__Keyword
-    case 55:
-      return .__line__Keyword
-    case 56:
-      return .__column__Keyword
-    case 57:
-      return .__function__Keyword
-    case 58:
-      return .__dso_handle__Keyword
-    case 59:
-      return .wildcardKeyword
-    case 88:
-      return .leftParen
-    case 89:
-      return .rightParen
-    case 90:
-      return .leftBrace
-    case 91:
-      return .rightBrace
-    case 92:
-      return .leftSquareBracket
-    case 93:
-      return .rightSquareBracket
-    case 94:
-      return .leftAngle
-    case 95:
-      return .rightAngle
-    case 85:
-      return .period
-    case 87:
-      return .prefixPeriod
-    case 84:
-      return .comma
-    case 118:
-      return .ellipsis
-    case 82:
-      return .colon
-    case 83:
-      return .semicolon
-    case 86:
-      return .equal
-    case 80:
-      return .atSign
-    case 81:
-      return .pound
-    case 96:
-      return .prefixAmpersand
-    case 78:
-      return .arrow
-    case 79:
-      return .backtick
-    case 100:
-      return .backslash
-    case 99:
-      return .exclamationMark
-    case 97:
-      return .postfixQuestionMark
-    case 98:
-      return .infixQuestionMark
-    case 102:
-      return .stringQuote
-    case 120:
-      return .singleQuote
-    case 103:
-      return .multilineStringQuote
-    case 74:
-      return .poundKeyPathKeyword
-    case 69:
-      return .poundLineKeyword
-    case 73:
-      return .poundSelectorKeyword
-    case 68:
-      return .poundFileKeyword
-    case 122:
-      return .poundFileIDKeyword
-    case 121:
-      return .poundFilePathKeyword
-    case 70:
-      return .poundColumnKeyword
-    case 72:
-      return .poundFunctionKeyword
-    case 71:
-      return .poundDsohandleKeyword
-    case 117:
-      return .poundAssertKeyword
-    case 65:
-      return .poundSourceLocationKeyword
-    case 66:
-      return .poundWarningKeyword
-    case 67:
-      return .poundErrorKeyword
-    case 64:
-      return .poundIfKeyword
-    case 62:
-      return .poundElseKeyword
-    case 63:
-      return .poundElseifKeyword
-    case 61:
-      return .poundEndifKeyword
-    case 60:
-      return .poundAvailableKeyword
-    case 123:
-      return .poundUnavailableKeyword
-    case 76:
-      return .poundFileLiteralKeyword
-    case 77:
-      return .poundImageLiteralKeyword
-    case 75:
-      return .poundColorLiteralKeyword
-    case 111:
-      return .integerLiteral(.fromBuffer(textBuffer))
-    case 112:
-      return .floatingLiteral(.fromBuffer(textBuffer))
-    case 113:
-      return .stringLiteral(.fromBuffer(textBuffer))
-    case 124:
-      return .regexLiteral(.fromBuffer(textBuffer))
-    case 115:
-      return .unknown(.fromBuffer(textBuffer))
-    case 105:
-      return .identifier(.fromBuffer(textBuffer))
-    case 107:
-      return .unspacedBinaryOperator(.fromBuffer(textBuffer))
-    case 108:
-      return .spacedBinaryOperator(.fromBuffer(textBuffer))
-    case 110:
-      return .postfixOperator(.fromBuffer(textBuffer))
-    case 109:
-      return .prefixOperator(.fromBuffer(textBuffer))
-    case 106:
-      return .dollarIdentifier(.fromBuffer(textBuffer))
-    case 114:
-      return .contextualKeyword(.fromBuffer(textBuffer))
-    case 119:
-      return .rawStringDelimiter(.fromBuffer(textBuffer))
-    case 104:
-      return .stringSegment(.fromBuffer(textBuffer))
-    case 101:
-      return .stringInterpolationAnchor
-    case 116:
-      return .yield
-    default:
-      if !textBuffer.isEmpty {
-        // Default to an unknown token with the passed text if we don't know
-        // its kind.
-        return .unknown(.fromBuffer(textBuffer))
-      } else {
-        // If we were not passed the token's text, we cannot recover since we
-        // would lose roundtripness.
-        fatalError("unexpected token kind \(kind)")
-      }
-    }
-  }
-
-  static func hasText(kind: CTokenKind) -> Bool {
-    switch kind {
-    case 0: return false
-    case 1:
-      return false
-    case 2:
-      return false
-    case 3:
-      return false
-    case 4:
-      return false
-    case 5:
-      return false
-    case 6:
-      return false
-    case 7:
-      return false
-    case 8:
-      return false
-    case 9:
-      return false
-    case 10:
-      return false
-    case 11:
-      return false
-    case 12:
-      return false
-    case 13:
-      return false
-    case 14:
-      return false
-    case 15:
-      return false
-    case 16:
-      return false
-    case 17:
-      return false
-    case 18:
-      return false
-    case 19:
-      return false
-    case 20:
-      return false
-    case 21:
-      return false
-    case 22:
-      return false
-    case 23:
-      return false
-    case 24:
-      return false
-    case 25:
-      return false
-    case 26:
-      return false
-    case 27:
-      return false
-    case 28:
-      return false
-    case 29:
-      return false
-    case 30:
-      return false
-    case 31:
-      return false
-    case 32:
-      return false
-    case 33:
-      return false
-    case 34:
-      return false
-    case 35:
-      return false
-    case 36:
-      return false
-    case 37:
-      return false
-    case 38:
-      return false
-    case 39:
-      return false
-    case 40:
-      return false
-    case 50:
-      return false
-    case 41:
-      return false
-    case 42:
-      return false
-    case 43:
-      return false
-    case 44:
-      return false
-    case 45:
-      return false
-    case 46:
-      return false
-    case 47:
-      return false
-    case 48:
-      return false
-    case 49:
-      return false
-    case 51:
-      return false
-    case 52:
-      return false
-    case 53:
-      return false
-    case 54:
-      return false
-    case 55:
-      return false
-    case 56:
-      return false
-    case 57:
-      return false
-    case 58:
-      return false
-    case 59:
-      return false
-    case 88:
-      return false
-    case 89:
-      return false
-    case 90:
-      return false
-    case 91:
-      return false
-    case 92:
-      return false
-    case 93:
-      return false
-    case 94:
-      return false
-    case 95:
-      return false
-    case 85:
-      return false
-    case 87:
-      return false
-    case 84:
-      return false
-    case 118:
-      return false
-    case 82:
-      return false
-    case 83:
-      return false
-    case 86:
-      return false
-    case 80:
-      return false
-    case 81:
-      return false
-    case 96:
-      return false
-    case 78:
-      return false
-    case 79:
-      return false
-    case 100:
-      return false
-    case 99:
-      return false
-    case 97:
-      return false
-    case 98:
-      return false
-    case 102:
-      return false
-    case 120:
-      return false
-    case 103:
-      return false
-    case 74:
-      return false
-    case 69:
-      return false
-    case 73:
-      return false
-    case 68:
-      return false
-    case 122:
-      return false
-    case 121:
-      return false
-    case 70:
-      return false
-    case 72:
-      return false
-    case 71:
-      return false
-    case 117:
-      return false
-    case 65:
-      return false
-    case 66:
-      return false
-    case 67:
-      return false
-    case 64:
-      return false
-    case 62:
-      return false
-    case 63:
-      return false
-    case 61:
-      return false
-    case 60:
-      return false
-    case 123:
-      return false
-    case 76:
-      return false
-    case 77:
-      return false
-    case 75:
-      return false
-    case 111:
-      return true
-    case 112:
-      return true
-    case 113:
-      return true
-    case 124:
-      return true
-    case 115:
-      return true
-    case 105:
-      return true
-    case 107:
-      return true
-    case 108:
-      return true
-    case 110:
-      return true
-    case 109:
-      return true
-    case 106:
-      return true
-    case 114:
-      return true
-    case 119:
-      return true
-    case 104:
-      return true
-    case 101:
-      return false
-    case 116:
-      return false
-    default:
-      fatalError("unexpected token kind \(kind)")
-    }
-  }
-}
-
 /// Plain token kind value, without an associated `String` value.
-internal enum RawTokenKind: CTokenKind {
-  case eof = 0
-  case associatedtypeKeyword = 1
-  case classKeyword = 2
-  case deinitKeyword = 3
-  case enumKeyword = 4
-  case extensionKeyword = 5
-  case funcKeyword = 6
-  case importKeyword = 7
-  case initKeyword = 8
-  case inoutKeyword = 9
-  case letKeyword = 10
-  case operatorKeyword = 11
-  case precedencegroupKeyword = 12
-  case protocolKeyword = 13
-  case structKeyword = 14
-  case subscriptKeyword = 15
-  case typealiasKeyword = 16
-  case varKeyword = 17
-  case fileprivateKeyword = 18
-  case internalKeyword = 19
-  case privateKeyword = 20
-  case publicKeyword = 21
-  case staticKeyword = 22
-  case deferKeyword = 23
-  case ifKeyword = 24
-  case guardKeyword = 25
-  case doKeyword = 26
-  case repeatKeyword = 27
-  case elseKeyword = 28
-  case forKeyword = 29
-  case inKeyword = 30
-  case whileKeyword = 31
-  case returnKeyword = 32
-  case breakKeyword = 33
-  case continueKeyword = 34
-  case fallthroughKeyword = 35
-  case switchKeyword = 36
-  case caseKeyword = 37
-  case defaultKeyword = 38
-  case whereKeyword = 39
-  case catchKeyword = 40
-  case throwKeyword = 50
-  case asKeyword = 41
-  case anyKeyword = 42
-  case falseKeyword = 43
-  case isKeyword = 44
-  case nilKeyword = 45
-  case rethrowsKeyword = 46
-  case superKeyword = 47
-  case selfKeyword = 48
-  case capitalSelfKeyword = 49
-  case trueKeyword = 51
-  case tryKeyword = 52
-  case throwsKeyword = 53
-  case __file__Keyword = 54
-  case __line__Keyword = 55
-  case __column__Keyword = 56
-  case __function__Keyword = 57
-  case __dso_handle__Keyword = 58
-  case wildcardKeyword = 59
-  case leftParen = 88
-  case rightParen = 89
-  case leftBrace = 90
-  case rightBrace = 91
-  case leftSquareBracket = 92
-  case rightSquareBracket = 93
-  case leftAngle = 94
-  case rightAngle = 95
-  case period = 85
-  case prefixPeriod = 87
-  case comma = 84
-  case ellipsis = 118
-  case colon = 82
-  case semicolon = 83
-  case equal = 86
-  case atSign = 80
-  case pound = 81
-  case prefixAmpersand = 96
-  case arrow = 78
-  case backtick = 79
-  case backslash = 100
-  case exclamationMark = 99
-  case postfixQuestionMark = 97
-  case infixQuestionMark = 98
-  case stringQuote = 102
-  case singleQuote = 120
-  case multilineStringQuote = 103
-  case poundKeyPathKeyword = 74
-  case poundLineKeyword = 69
-  case poundSelectorKeyword = 73
-  case poundFileKeyword = 68
-  case poundFileIDKeyword = 122
-  case poundFilePathKeyword = 121
-  case poundColumnKeyword = 70
-  case poundFunctionKeyword = 72
-  case poundDsohandleKeyword = 71
-  case poundAssertKeyword = 117
-  case poundSourceLocationKeyword = 65
-  case poundWarningKeyword = 66
-  case poundErrorKeyword = 67
-  case poundIfKeyword = 64
-  case poundElseKeyword = 62
-  case poundElseifKeyword = 63
-  case poundEndifKeyword = 61
-  case poundAvailableKeyword = 60
-  case poundUnavailableKeyword = 123
-  case poundFileLiteralKeyword = 76
-  case poundImageLiteralKeyword = 77
-  case poundColorLiteralKeyword = 75
-  case integerLiteral = 111
-  case floatingLiteral = 112
-  case stringLiteral = 113
-  case regexLiteral = 124
-  case unknown = 115
-  case identifier = 105
-  case unspacedBinaryOperator = 107
-  case spacedBinaryOperator = 108
-  case postfixOperator = 110
-  case prefixOperator = 109
-  case dollarIdentifier = 106
-  case contextualKeyword = 114
-  case rawStringDelimiter = 119
-  case stringSegment = 104
-  case stringInterpolationAnchor = 101
-  case yield = 116
+public enum RawTokenKind {
+  case eof
+  case associatedtypeKeyword
+  case classKeyword
+  case deinitKeyword
+  case enumKeyword
+  case extensionKeyword
+  case funcKeyword
+  case importKeyword
+  case initKeyword
+  case inoutKeyword
+  case letKeyword
+  case operatorKeyword
+  case precedencegroupKeyword
+  case protocolKeyword
+  case structKeyword
+  case subscriptKeyword
+  case typealiasKeyword
+  case varKeyword
+  case fileprivateKeyword
+  case internalKeyword
+  case privateKeyword
+  case publicKeyword
+  case staticKeyword
+  case deferKeyword
+  case ifKeyword
+  case guardKeyword
+  case doKeyword
+  case repeatKeyword
+  case elseKeyword
+  case forKeyword
+  case inKeyword
+  case whileKeyword
+  case returnKeyword
+  case breakKeyword
+  case continueKeyword
+  case fallthroughKeyword
+  case switchKeyword
+  case caseKeyword
+  case defaultKeyword
+  case whereKeyword
+  case catchKeyword
+  case throwKeyword
+  case asKeyword
+  case anyKeyword
+  case falseKeyword
+  case isKeyword
+  case nilKeyword
+  case rethrowsKeyword
+  case superKeyword
+  case selfKeyword
+  case capitalSelfKeyword
+  case trueKeyword
+  case tryKeyword
+  case throwsKeyword
+  case __file__Keyword
+  case __line__Keyword
+  case __column__Keyword
+  case __function__Keyword
+  case __dso_handle__Keyword
+  case wildcardKeyword
+  case leftParen
+  case rightParen
+  case leftBrace
+  case rightBrace
+  case leftSquareBracket
+  case rightSquareBracket
+  case leftAngle
+  case rightAngle
+  case period
+  case prefixPeriod
+  case comma
+  case ellipsis
+  case colon
+  case semicolon
+  case equal
+  case atSign
+  case pound
+  case prefixAmpersand
+  case arrow
+  case backtick
+  case backslash
+  case exclamationMark
+  case postfixQuestionMark
+  case infixQuestionMark
+  case stringQuote
+  case singleQuote
+  case multilineStringQuote
+  case poundKeyPathKeyword
+  case poundLineKeyword
+  case poundSelectorKeyword
+  case poundFileKeyword
+  case poundFileIDKeyword
+  case poundFilePathKeyword
+  case poundColumnKeyword
+  case poundFunctionKeyword
+  case poundDsohandleKeyword
+  case poundAssertKeyword
+  case poundSourceLocationKeyword
+  case poundWarningKeyword
+  case poundErrorKeyword
+  case poundIfKeyword
+  case poundElseKeyword
+  case poundElseifKeyword
+  case poundEndifKeyword
+  case poundAvailableKeyword
+  case poundUnavailableKeyword
+  case poundFileLiteralKeyword
+  case poundImageLiteralKeyword
+  case poundColorLiteralKeyword
+  case integerLiteral
+  case floatingLiteral
+  case stringLiteral
+  case regexLiteral
+  case unknown
+  case identifier
+  case unspacedBinaryOperator
+  case spacedBinaryOperator
+  case postfixOperator
+  case prefixOperator
+  case dollarIdentifier
+  case contextualKeyword
+  case rawStringDelimiter
+  case stringSegment
+  case stringInterpolationAnchor
+  case yield
 
   static func fromRawValue(_ rawValue: CTokenKind) -> RawTokenKind {
-    return RawTokenKind(rawValue: rawValue)!
+    switch rawValue {
+    case 0: return .eof
+    case 1: return .associatedtypeKeyword
+    case 2: return .classKeyword
+    case 3: return .deinitKeyword
+    case 4: return .enumKeyword
+    case 5: return .extensionKeyword
+    case 6: return .funcKeyword
+    case 7: return .importKeyword
+    case 8: return .initKeyword
+    case 9: return .inoutKeyword
+    case 10: return .letKeyword
+    case 11: return .operatorKeyword
+    case 12: return .precedencegroupKeyword
+    case 13: return .protocolKeyword
+    case 14: return .structKeyword
+    case 15: return .subscriptKeyword
+    case 16: return .typealiasKeyword
+    case 17: return .varKeyword
+    case 18: return .fileprivateKeyword
+    case 19: return .internalKeyword
+    case 20: return .privateKeyword
+    case 21: return .publicKeyword
+    case 22: return .staticKeyword
+    case 23: return .deferKeyword
+    case 24: return .ifKeyword
+    case 25: return .guardKeyword
+    case 26: return .doKeyword
+    case 27: return .repeatKeyword
+    case 28: return .elseKeyword
+    case 29: return .forKeyword
+    case 30: return .inKeyword
+    case 31: return .whileKeyword
+    case 32: return .returnKeyword
+    case 33: return .breakKeyword
+    case 34: return .continueKeyword
+    case 35: return .fallthroughKeyword
+    case 36: return .switchKeyword
+    case 37: return .caseKeyword
+    case 38: return .defaultKeyword
+    case 39: return .whereKeyword
+    case 40: return .catchKeyword
+    case 50: return .throwKeyword
+    case 41: return .asKeyword
+    case 42: return .anyKeyword
+    case 43: return .falseKeyword
+    case 44: return .isKeyword
+    case 45: return .nilKeyword
+    case 46: return .rethrowsKeyword
+    case 47: return .superKeyword
+    case 48: return .selfKeyword
+    case 49: return .capitalSelfKeyword
+    case 51: return .trueKeyword
+    case 52: return .tryKeyword
+    case 53: return .throwsKeyword
+    case 54: return .__file__Keyword
+    case 55: return .__line__Keyword
+    case 56: return .__column__Keyword
+    case 57: return .__function__Keyword
+    case 58: return .__dso_handle__Keyword
+    case 59: return .wildcardKeyword
+    case 88: return .leftParen
+    case 89: return .rightParen
+    case 90: return .leftBrace
+    case 91: return .rightBrace
+    case 92: return .leftSquareBracket
+    case 93: return .rightSquareBracket
+    case 94: return .leftAngle
+    case 95: return .rightAngle
+    case 85: return .period
+    case 87: return .prefixPeriod
+    case 84: return .comma
+    case 118: return .ellipsis
+    case 82: return .colon
+    case 83: return .semicolon
+    case 86: return .equal
+    case 80: return .atSign
+    case 81: return .pound
+    case 96: return .prefixAmpersand
+    case 78: return .arrow
+    case 79: return .backtick
+    case 100: return .backslash
+    case 99: return .exclamationMark
+    case 97: return .postfixQuestionMark
+    case 98: return .infixQuestionMark
+    case 102: return .stringQuote
+    case 120: return .singleQuote
+    case 103: return .multilineStringQuote
+    case 74: return .poundKeyPathKeyword
+    case 69: return .poundLineKeyword
+    case 73: return .poundSelectorKeyword
+    case 68: return .poundFileKeyword
+    case 122: return .poundFileIDKeyword
+    case 121: return .poundFilePathKeyword
+    case 70: return .poundColumnKeyword
+    case 72: return .poundFunctionKeyword
+    case 71: return .poundDsohandleKeyword
+    case 117: return .poundAssertKeyword
+    case 65: return .poundSourceLocationKeyword
+    case 66: return .poundWarningKeyword
+    case 67: return .poundErrorKeyword
+    case 64: return .poundIfKeyword
+    case 62: return .poundElseKeyword
+    case 63: return .poundElseifKeyword
+    case 61: return .poundEndifKeyword
+    case 60: return .poundAvailableKeyword
+    case 123: return .poundUnavailableKeyword
+    case 76: return .poundFileLiteralKeyword
+    case 77: return .poundImageLiteralKeyword
+    case 75: return .poundColorLiteralKeyword
+    case 111: return .integerLiteral
+    case 112: return .floatingLiteral
+    case 113: return .stringLiteral
+    case 124: return .regexLiteral
+    case 115: return .unknown
+    case 105: return .identifier
+    case 107: return .unspacedBinaryOperator
+    case 108: return .spacedBinaryOperator
+    case 110: return .postfixOperator
+    case 109: return .prefixOperator
+    case 106: return .dollarIdentifier
+    case 114: return .contextualKeyword
+    case 119: return .rawStringDelimiter
+    case 104: return .stringSegment
+    case 101: return .stringInterpolationAnchor
+    case 116: return .yield
+    default: fatalError("unknown raw value")
+    }
+  }
+
+  var defaultText: SyntaxText? {
+    switch self {
+    case .eof: return ""
+    case .associatedtypeKeyword: return "associatedtype"
+    case .classKeyword: return "class"
+    case .deinitKeyword: return "deinit"
+    case .enumKeyword: return "enum"
+    case .extensionKeyword: return "extension"
+    case .funcKeyword: return "func"
+    case .importKeyword: return "import"
+    case .initKeyword: return "init"
+    case .inoutKeyword: return "inout"
+    case .letKeyword: return "let"
+    case .operatorKeyword: return "operator"
+    case .precedencegroupKeyword: return "precedencegroup"
+    case .protocolKeyword: return "protocol"
+    case .structKeyword: return "struct"
+    case .subscriptKeyword: return "subscript"
+    case .typealiasKeyword: return "typealias"
+    case .varKeyword: return "var"
+    case .fileprivateKeyword: return "fileprivate"
+    case .internalKeyword: return "internal"
+    case .privateKeyword: return "private"
+    case .publicKeyword: return "public"
+    case .staticKeyword: return "static"
+    case .deferKeyword: return "defer"
+    case .ifKeyword: return "if"
+    case .guardKeyword: return "guard"
+    case .doKeyword: return "do"
+    case .repeatKeyword: return "repeat"
+    case .elseKeyword: return "else"
+    case .forKeyword: return "for"
+    case .inKeyword: return "in"
+    case .whileKeyword: return "while"
+    case .returnKeyword: return "return"
+    case .breakKeyword: return "break"
+    case .continueKeyword: return "continue"
+    case .fallthroughKeyword: return "fallthrough"
+    case .switchKeyword: return "switch"
+    case .caseKeyword: return "case"
+    case .defaultKeyword: return "default"
+    case .whereKeyword: return "where"
+    case .catchKeyword: return "catch"
+    case .throwKeyword: return "throw"
+    case .asKeyword: return "as"
+    case .anyKeyword: return "Any"
+    case .falseKeyword: return "false"
+    case .isKeyword: return "is"
+    case .nilKeyword: return "nil"
+    case .rethrowsKeyword: return "rethrows"
+    case .superKeyword: return "super"
+    case .selfKeyword: return "self"
+    case .capitalSelfKeyword: return "Self"
+    case .trueKeyword: return "true"
+    case .tryKeyword: return "try"
+    case .throwsKeyword: return "throws"
+    case .__file__Keyword: return "__FILE__"
+    case .__line__Keyword: return "__LINE__"
+    case .__column__Keyword: return "__COLUMN__"
+    case .__function__Keyword: return "__FUNCTION__"
+    case .__dso_handle__Keyword: return "__DSO_HANDLE__"
+    case .wildcardKeyword: return "_"
+    case .leftParen: return "("
+    case .rightParen: return ")"
+    case .leftBrace: return "{"
+    case .rightBrace: return "}"
+    case .leftSquareBracket: return "["
+    case .rightSquareBracket: return "]"
+    case .leftAngle: return "<"
+    case .rightAngle: return ">"
+    case .period: return "."
+    case .prefixPeriod: return "."
+    case .comma: return ","
+    case .ellipsis: return "..."
+    case .colon: return ":"
+    case .semicolon: return ";"
+    case .equal: return "="
+    case .atSign: return "@"
+    case .pound: return "#"
+    case .prefixAmpersand: return "&"
+    case .arrow: return "->"
+    case .backtick: return "`"
+    case .backslash: return "\\"
+    case .exclamationMark: return "!"
+    case .postfixQuestionMark: return "?"
+    case .infixQuestionMark: return "?"
+    case .stringQuote: return "\""
+    case .singleQuote: return "\'"
+    case .multilineStringQuote: return "\"\"\""
+    case .poundKeyPathKeyword: return "#keyPath"
+    case .poundLineKeyword: return "#line"
+    case .poundSelectorKeyword: return "#selector"
+    case .poundFileKeyword: return "#file"
+    case .poundFileIDKeyword: return "#fileID"
+    case .poundFilePathKeyword: return "#filePath"
+    case .poundColumnKeyword: return "#column"
+    case .poundFunctionKeyword: return "#function"
+    case .poundDsohandleKeyword: return "#dsohandle"
+    case .poundAssertKeyword: return "#assert"
+    case .poundSourceLocationKeyword: return "#sourceLocation"
+    case .poundWarningKeyword: return "#warning"
+    case .poundErrorKeyword: return "#error"
+    case .poundIfKeyword: return "#if"
+    case .poundElseKeyword: return "#else"
+    case .poundElseifKeyword: return "#elseif"
+    case .poundEndifKeyword: return "#endif"
+    case .poundAvailableKeyword: return "#available"
+    case .poundUnavailableKeyword: return "#unavailable"
+    case .poundFileLiteralKeyword: return "#fileLiteral"
+    case .poundImageLiteralKeyword: return "#imageLiteral"
+    case .poundColorLiteralKeyword: return "#colorLiteral"
+    case .stringInterpolationAnchor: return ")"
+    case .yield: return "yield"
+    default: return nil
+    }
   }
 }
 
 extension TokenKind {
-  internal func withUnsafeTokenText<Result>(
-    _ body: (UnsafeTokenText) -> Result
-  ) -> Result {
-    switch self {
-    case .eof:
-      return body(.init(kind: .eof, length: 0))
+  static func fromRaw(kind rawKind: RawTokenKind, text: SyntaxText) -> TokenKind {
+    switch rawKind {
+    case .eof: return .eof
     case .associatedtypeKeyword:
-      let length = 14
-      return body(.init(kind: .associatedtypeKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .associatedtypeKeyword
     case .classKeyword:
-      let length = 5
-      return body(.init(kind: .classKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .classKeyword
     case .deinitKeyword:
-      let length = 6
-      return body(.init(kind: .deinitKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .deinitKeyword
     case .enumKeyword:
-      let length = 4
-      return body(.init(kind: .enumKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .enumKeyword
     case .extensionKeyword:
-      let length = 9
-      return body(.init(kind: .extensionKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .extensionKeyword
     case .funcKeyword:
-      let length = 4
-      return body(.init(kind: .funcKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .funcKeyword
     case .importKeyword:
-      let length = 6
-      return body(.init(kind: .importKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .importKeyword
     case .initKeyword:
-      let length = 4
-      return body(.init(kind: .initKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .initKeyword
     case .inoutKeyword:
-      let length = 5
-      return body(.init(kind: .inoutKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .inoutKeyword
     case .letKeyword:
-      let length = 3
-      return body(.init(kind: .letKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .letKeyword
     case .operatorKeyword:
-      let length = 8
-      return body(.init(kind: .operatorKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .operatorKeyword
     case .precedencegroupKeyword:
-      let length = 15
-      return body(.init(kind: .precedencegroupKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .precedencegroupKeyword
     case .protocolKeyword:
-      let length = 8
-      return body(.init(kind: .protocolKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .protocolKeyword
     case .structKeyword:
-      let length = 6
-      return body(.init(kind: .structKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .structKeyword
     case .subscriptKeyword:
-      let length = 9
-      return body(.init(kind: .subscriptKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .subscriptKeyword
     case .typealiasKeyword:
-      let length = 9
-      return body(.init(kind: .typealiasKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .typealiasKeyword
     case .varKeyword:
-      let length = 3
-      return body(.init(kind: .varKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .varKeyword
     case .fileprivateKeyword:
-      let length = 11
-      return body(.init(kind: .fileprivateKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .fileprivateKeyword
     case .internalKeyword:
-      let length = 8
-      return body(.init(kind: .internalKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .internalKeyword
     case .privateKeyword:
-      let length = 7
-      return body(.init(kind: .privateKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .privateKeyword
     case .publicKeyword:
-      let length = 6
-      return body(.init(kind: .publicKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .publicKeyword
     case .staticKeyword:
-      let length = 6
-      return body(.init(kind: .staticKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .staticKeyword
     case .deferKeyword:
-      let length = 5
-      return body(.init(kind: .deferKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .deferKeyword
     case .ifKeyword:
-      let length = 2
-      return body(.init(kind: .ifKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .ifKeyword
     case .guardKeyword:
-      let length = 5
-      return body(.init(kind: .guardKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .guardKeyword
     case .doKeyword:
-      let length = 2
-      return body(.init(kind: .doKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .doKeyword
     case .repeatKeyword:
-      let length = 6
-      return body(.init(kind: .repeatKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .repeatKeyword
     case .elseKeyword:
-      let length = 4
-      return body(.init(kind: .elseKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .elseKeyword
     case .forKeyword:
-      let length = 3
-      return body(.init(kind: .forKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .forKeyword
     case .inKeyword:
-      let length = 2
-      return body(.init(kind: .inKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .inKeyword
     case .whileKeyword:
-      let length = 5
-      return body(.init(kind: .whileKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .whileKeyword
     case .returnKeyword:
-      let length = 6
-      return body(.init(kind: .returnKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .returnKeyword
     case .breakKeyword:
-      let length = 5
-      return body(.init(kind: .breakKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .breakKeyword
     case .continueKeyword:
-      let length = 8
-      return body(.init(kind: .continueKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .continueKeyword
     case .fallthroughKeyword:
-      let length = 11
-      return body(.init(kind: .fallthroughKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .fallthroughKeyword
     case .switchKeyword:
-      let length = 6
-      return body(.init(kind: .switchKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .switchKeyword
     case .caseKeyword:
-      let length = 4
-      return body(.init(kind: .caseKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .caseKeyword
     case .defaultKeyword:
-      let length = 7
-      return body(.init(kind: .defaultKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .defaultKeyword
     case .whereKeyword:
-      let length = 5
-      return body(.init(kind: .whereKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .whereKeyword
     case .catchKeyword:
-      let length = 5
-      return body(.init(kind: .catchKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .catchKeyword
     case .throwKeyword:
-      let length = 5
-      return body(.init(kind: .throwKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .throwKeyword
     case .asKeyword:
-      let length = 2
-      return body(.init(kind: .asKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .asKeyword
     case .anyKeyword:
-      let length = 3
-      return body(.init(kind: .anyKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .anyKeyword
     case .falseKeyword:
-      let length = 5
-      return body(.init(kind: .falseKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .falseKeyword
     case .isKeyword:
-      let length = 2
-      return body(.init(kind: .isKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .isKeyword
     case .nilKeyword:
-      let length = 3
-      return body(.init(kind: .nilKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .nilKeyword
     case .rethrowsKeyword:
-      let length = 8
-      return body(.init(kind: .rethrowsKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .rethrowsKeyword
     case .superKeyword:
-      let length = 5
-      return body(.init(kind: .superKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .superKeyword
     case .selfKeyword:
-      let length = 4
-      return body(.init(kind: .selfKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .selfKeyword
     case .capitalSelfKeyword:
-      let length = 4
-      return body(.init(kind: .capitalSelfKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .capitalSelfKeyword
     case .trueKeyword:
-      let length = 4
-      return body(.init(kind: .trueKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .trueKeyword
     case .tryKeyword:
-      let length = 3
-      return body(.init(kind: .tryKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .tryKeyword
     case .throwsKeyword:
-      let length = 6
-      return body(.init(kind: .throwsKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .throwsKeyword
     case .__file__Keyword:
-      let length = 8
-      return body(.init(kind: .__file__Keyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .__file__Keyword
     case .__line__Keyword:
-      let length = 8
-      return body(.init(kind: .__line__Keyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .__line__Keyword
     case .__column__Keyword:
-      let length = 10
-      return body(.init(kind: .__column__Keyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .__column__Keyword
     case .__function__Keyword:
-      let length = 12
-      return body(.init(kind: .__function__Keyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .__function__Keyword
     case .__dso_handle__Keyword:
-      let length = 14
-      return body(.init(kind: .__dso_handle__Keyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .__dso_handle__Keyword
     case .wildcardKeyword:
-      let length = 1
-      return body(.init(kind: .wildcardKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .wildcardKeyword
     case .leftParen:
-      let length = 1
-      return body(.init(kind: .leftParen, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .leftParen
     case .rightParen:
-      let length = 1
-      return body(.init(kind: .rightParen, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .rightParen
     case .leftBrace:
-      let length = 1
-      return body(.init(kind: .leftBrace, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .leftBrace
     case .rightBrace:
-      let length = 1
-      return body(.init(kind: .rightBrace, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .rightBrace
     case .leftSquareBracket:
-      let length = 1
-      return body(.init(kind: .leftSquareBracket, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .leftSquareBracket
     case .rightSquareBracket:
-      let length = 1
-      return body(.init(kind: .rightSquareBracket, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .rightSquareBracket
     case .leftAngle:
-      let length = 1
-      return body(.init(kind: .leftAngle, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .leftAngle
     case .rightAngle:
-      let length = 1
-      return body(.init(kind: .rightAngle, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .rightAngle
     case .period:
-      let length = 1
-      return body(.init(kind: .period, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .period
     case .prefixPeriod:
-      let length = 1
-      return body(.init(kind: .prefixPeriod, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .prefixPeriod
     case .comma:
-      let length = 1
-      return body(.init(kind: .comma, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .comma
     case .ellipsis:
-      let length = 3
-      return body(.init(kind: .ellipsis, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .ellipsis
     case .colon:
-      let length = 1
-      return body(.init(kind: .colon, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .colon
     case .semicolon:
-      let length = 1
-      return body(.init(kind: .semicolon, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .semicolon
     case .equal:
-      let length = 1
-      return body(.init(kind: .equal, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .equal
     case .atSign:
-      let length = 1
-      return body(.init(kind: .atSign, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .atSign
     case .pound:
-      let length = 1
-      return body(.init(kind: .pound, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .pound
     case .prefixAmpersand:
-      let length = 1
-      return body(.init(kind: .prefixAmpersand, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .prefixAmpersand
     case .arrow:
-      let length = 2
-      return body(.init(kind: .arrow, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .arrow
     case .backtick:
-      let length = 1
-      return body(.init(kind: .backtick, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .backtick
     case .backslash:
-      let length = 1
-      return body(.init(kind: .backslash, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .backslash
     case .exclamationMark:
-      let length = 1
-      return body(.init(kind: .exclamationMark, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .exclamationMark
     case .postfixQuestionMark:
-      let length = 1
-      return body(.init(kind: .postfixQuestionMark, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .postfixQuestionMark
     case .infixQuestionMark:
-      let length = 1
-      return body(.init(kind: .infixQuestionMark, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .infixQuestionMark
     case .stringQuote:
-      let length = 1
-      return body(.init(kind: .stringQuote, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .stringQuote
     case .singleQuote:
-      let length = 1
-      return body(.init(kind: .singleQuote, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .singleQuote
     case .multilineStringQuote:
-      let length = 3
-      return body(.init(kind: .multilineStringQuote, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .multilineStringQuote
     case .poundKeyPathKeyword:
-      let length = 8
-      return body(.init(kind: .poundKeyPathKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundKeyPathKeyword
     case .poundLineKeyword:
-      let length = 5
-      return body(.init(kind: .poundLineKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundLineKeyword
     case .poundSelectorKeyword:
-      let length = 9
-      return body(.init(kind: .poundSelectorKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundSelectorKeyword
     case .poundFileKeyword:
-      let length = 5
-      return body(.init(kind: .poundFileKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundFileKeyword
     case .poundFileIDKeyword:
-      let length = 7
-      return body(.init(kind: .poundFileIDKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundFileIDKeyword
     case .poundFilePathKeyword:
-      let length = 9
-      return body(.init(kind: .poundFilePathKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundFilePathKeyword
     case .poundColumnKeyword:
-      let length = 7
-      return body(.init(kind: .poundColumnKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundColumnKeyword
     case .poundFunctionKeyword:
-      let length = 9
-      return body(.init(kind: .poundFunctionKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundFunctionKeyword
     case .poundDsohandleKeyword:
-      let length = 10
-      return body(.init(kind: .poundDsohandleKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundDsohandleKeyword
     case .poundAssertKeyword:
-      let length = 7
-      return body(.init(kind: .poundAssertKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundAssertKeyword
     case .poundSourceLocationKeyword:
-      let length = 15
-      return body(.init(kind: .poundSourceLocationKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundSourceLocationKeyword
     case .poundWarningKeyword:
-      let length = 8
-      return body(.init(kind: .poundWarningKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundWarningKeyword
     case .poundErrorKeyword:
-      let length = 6
-      return body(.init(kind: .poundErrorKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundErrorKeyword
     case .poundIfKeyword:
-      let length = 3
-      return body(.init(kind: .poundIfKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundIfKeyword
     case .poundElseKeyword:
-      let length = 5
-      return body(.init(kind: .poundElseKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundElseKeyword
     case .poundElseifKeyword:
-      let length = 7
-      return body(.init(kind: .poundElseifKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundElseifKeyword
     case .poundEndifKeyword:
-      let length = 6
-      return body(.init(kind: .poundEndifKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundEndifKeyword
     case .poundAvailableKeyword:
-      let length = 10
-      return body(.init(kind: .poundAvailableKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundAvailableKeyword
     case .poundUnavailableKeyword:
-      let length = 12
-      return body(.init(kind: .poundUnavailableKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundUnavailableKeyword
     case .poundFileLiteralKeyword:
-      let length = 12
-      return body(.init(kind: .poundFileLiteralKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundFileLiteralKeyword
     case .poundImageLiteralKeyword:
-      let length = 13
-      return body(.init(kind: .poundImageLiteralKeyword, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundImageLiteralKeyword
     case .poundColorLiteralKeyword:
-      let length = 13
-      return body(.init(kind: .poundColorLiteralKeyword, length: length))
-    case .integerLiteral(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .integerLiteral, length: length, customText: buf))
-      })!
-    case .floatingLiteral(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .floatingLiteral, length: length, customText: buf))
-      })!
-    case .stringLiteral(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .stringLiteral, length: length, customText: buf))
-      })!
-    case .regexLiteral(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .regexLiteral, length: length, customText: buf))
-      })!
-    case .unknown(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .unknown, length: length, customText: buf))
-      })!
-    case .identifier(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .identifier, length: length, customText: buf))
-      })!
-    case .unspacedBinaryOperator(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .unspacedBinaryOperator, length: length, customText: buf))
-      })!
-    case .spacedBinaryOperator(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .spacedBinaryOperator, length: length, customText: buf))
-      })!
-    case .postfixOperator(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .postfixOperator, length: length, customText: buf))
-      })!
-    case .prefixOperator(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .prefixOperator, length: length, customText: buf))
-      })!
-    case .dollarIdentifier(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .dollarIdentifier, length: length, customText: buf))
-      })!
-    case .contextualKeyword(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .contextualKeyword, length: length, customText: buf))
-      })!
-    case .rawStringDelimiter(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .rawStringDelimiter, length: length, customText: buf))
-      })!
-    case .stringSegment(var text):
-      text.makeContiguousUTF8()
-      let length = text.utf8.count
-      return text.utf8.withContiguousStorageIfAvailable({ (buf: UnsafeBufferPointer<UInt8>) in
-        return body(.init(kind: .stringSegment, length: length, customText: buf))
-      })!
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .poundColorLiteralKeyword
+    case .integerLiteral:
+      return .integerLiteral(String(syntaxText: text))
+    case .floatingLiteral:
+      return .floatingLiteral(String(syntaxText: text))
+    case .stringLiteral:
+      return .stringLiteral(String(syntaxText: text))
+    case .regexLiteral:
+      return .regexLiteral(String(syntaxText: text))
+    case .unknown:
+      return .unknown(String(syntaxText: text))
+    case .identifier:
+      return .identifier(String(syntaxText: text))
+    case .unspacedBinaryOperator:
+      return .unspacedBinaryOperator(String(syntaxText: text))
+    case .spacedBinaryOperator:
+      return .spacedBinaryOperator(String(syntaxText: text))
+    case .postfixOperator:
+      return .postfixOperator(String(syntaxText: text))
+    case .prefixOperator:
+      return .prefixOperator(String(syntaxText: text))
+    case .dollarIdentifier:
+      return .dollarIdentifier(String(syntaxText: text))
+    case .contextualKeyword:
+      return .contextualKeyword(String(syntaxText: text))
+    case .rawStringDelimiter:
+      return .rawStringDelimiter(String(syntaxText: text))
+    case .stringSegment:
+      return .stringSegment(String(syntaxText: text))
     case .stringInterpolationAnchor:
-      let length = 1
-      return body(.init(kind: .stringInterpolationAnchor, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .stringInterpolationAnchor
     case .yield:
-      let length = 5
-      return body(.init(kind: .yield, length: length))
+      assert(text.isEmpty || rawKind.defaultText == text)
+      return .yield
+    }
+  }
+
+  func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
+    switch self {
+    case .eof: return (.eof, nil)
+    case .associatedtypeKeyword: return (.associatedtypeKeyword, nil)
+    case .classKeyword: return (.classKeyword, nil)
+    case .deinitKeyword: return (.deinitKeyword, nil)
+    case .enumKeyword: return (.enumKeyword, nil)
+    case .extensionKeyword: return (.extensionKeyword, nil)
+    case .funcKeyword: return (.funcKeyword, nil)
+    case .importKeyword: return (.importKeyword, nil)
+    case .initKeyword: return (.initKeyword, nil)
+    case .inoutKeyword: return (.inoutKeyword, nil)
+    case .letKeyword: return (.letKeyword, nil)
+    case .operatorKeyword: return (.operatorKeyword, nil)
+    case .precedencegroupKeyword: return (.precedencegroupKeyword, nil)
+    case .protocolKeyword: return (.protocolKeyword, nil)
+    case .structKeyword: return (.structKeyword, nil)
+    case .subscriptKeyword: return (.subscriptKeyword, nil)
+    case .typealiasKeyword: return (.typealiasKeyword, nil)
+    case .varKeyword: return (.varKeyword, nil)
+    case .fileprivateKeyword: return (.fileprivateKeyword, nil)
+    case .internalKeyword: return (.internalKeyword, nil)
+    case .privateKeyword: return (.privateKeyword, nil)
+    case .publicKeyword: return (.publicKeyword, nil)
+    case .staticKeyword: return (.staticKeyword, nil)
+    case .deferKeyword: return (.deferKeyword, nil)
+    case .ifKeyword: return (.ifKeyword, nil)
+    case .guardKeyword: return (.guardKeyword, nil)
+    case .doKeyword: return (.doKeyword, nil)
+    case .repeatKeyword: return (.repeatKeyword, nil)
+    case .elseKeyword: return (.elseKeyword, nil)
+    case .forKeyword: return (.forKeyword, nil)
+    case .inKeyword: return (.inKeyword, nil)
+    case .whileKeyword: return (.whileKeyword, nil)
+    case .returnKeyword: return (.returnKeyword, nil)
+    case .breakKeyword: return (.breakKeyword, nil)
+    case .continueKeyword: return (.continueKeyword, nil)
+    case .fallthroughKeyword: return (.fallthroughKeyword, nil)
+    case .switchKeyword: return (.switchKeyword, nil)
+    case .caseKeyword: return (.caseKeyword, nil)
+    case .defaultKeyword: return (.defaultKeyword, nil)
+    case .whereKeyword: return (.whereKeyword, nil)
+    case .catchKeyword: return (.catchKeyword, nil)
+    case .throwKeyword: return (.throwKeyword, nil)
+    case .asKeyword: return (.asKeyword, nil)
+    case .anyKeyword: return (.anyKeyword, nil)
+    case .falseKeyword: return (.falseKeyword, nil)
+    case .isKeyword: return (.isKeyword, nil)
+    case .nilKeyword: return (.nilKeyword, nil)
+    case .rethrowsKeyword: return (.rethrowsKeyword, nil)
+    case .superKeyword: return (.superKeyword, nil)
+    case .selfKeyword: return (.selfKeyword, nil)
+    case .capitalSelfKeyword: return (.capitalSelfKeyword, nil)
+    case .trueKeyword: return (.trueKeyword, nil)
+    case .tryKeyword: return (.tryKeyword, nil)
+    case .throwsKeyword: return (.throwsKeyword, nil)
+    case .__file__Keyword: return (.__file__Keyword, nil)
+    case .__line__Keyword: return (.__line__Keyword, nil)
+    case .__column__Keyword: return (.__column__Keyword, nil)
+    case .__function__Keyword: return (.__function__Keyword, nil)
+    case .__dso_handle__Keyword: return (.__dso_handle__Keyword, nil)
+    case .wildcardKeyword: return (.wildcardKeyword, nil)
+    case .leftParen: return (.leftParen, nil)
+    case .rightParen: return (.rightParen, nil)
+    case .leftBrace: return (.leftBrace, nil)
+    case .rightBrace: return (.rightBrace, nil)
+    case .leftSquareBracket: return (.leftSquareBracket, nil)
+    case .rightSquareBracket: return (.rightSquareBracket, nil)
+    case .leftAngle: return (.leftAngle, nil)
+    case .rightAngle: return (.rightAngle, nil)
+    case .period: return (.period, nil)
+    case .prefixPeriod: return (.prefixPeriod, nil)
+    case .comma: return (.comma, nil)
+    case .ellipsis: return (.ellipsis, nil)
+    case .colon: return (.colon, nil)
+    case .semicolon: return (.semicolon, nil)
+    case .equal: return (.equal, nil)
+    case .atSign: return (.atSign, nil)
+    case .pound: return (.pound, nil)
+    case .prefixAmpersand: return (.prefixAmpersand, nil)
+    case .arrow: return (.arrow, nil)
+    case .backtick: return (.backtick, nil)
+    case .backslash: return (.backslash, nil)
+    case .exclamationMark: return (.exclamationMark, nil)
+    case .postfixQuestionMark: return (.postfixQuestionMark, nil)
+    case .infixQuestionMark: return (.infixQuestionMark, nil)
+    case .stringQuote: return (.stringQuote, nil)
+    case .singleQuote: return (.singleQuote, nil)
+    case .multilineStringQuote: return (.multilineStringQuote, nil)
+    case .poundKeyPathKeyword: return (.poundKeyPathKeyword, nil)
+    case .poundLineKeyword: return (.poundLineKeyword, nil)
+    case .poundSelectorKeyword: return (.poundSelectorKeyword, nil)
+    case .poundFileKeyword: return (.poundFileKeyword, nil)
+    case .poundFileIDKeyword: return (.poundFileIDKeyword, nil)
+    case .poundFilePathKeyword: return (.poundFilePathKeyword, nil)
+    case .poundColumnKeyword: return (.poundColumnKeyword, nil)
+    case .poundFunctionKeyword: return (.poundFunctionKeyword, nil)
+    case .poundDsohandleKeyword: return (.poundDsohandleKeyword, nil)
+    case .poundAssertKeyword: return (.poundAssertKeyword, nil)
+    case .poundSourceLocationKeyword: return (.poundSourceLocationKeyword, nil)
+    case .poundWarningKeyword: return (.poundWarningKeyword, nil)
+    case .poundErrorKeyword: return (.poundErrorKeyword, nil)
+    case .poundIfKeyword: return (.poundIfKeyword, nil)
+    case .poundElseKeyword: return (.poundElseKeyword, nil)
+    case .poundElseifKeyword: return (.poundElseifKeyword, nil)
+    case .poundEndifKeyword: return (.poundEndifKeyword, nil)
+    case .poundAvailableKeyword: return (.poundAvailableKeyword, nil)
+    case .poundUnavailableKeyword: return (.poundUnavailableKeyword, nil)
+    case .poundFileLiteralKeyword: return (.poundFileLiteralKeyword, nil)
+    case .poundImageLiteralKeyword: return (.poundImageLiteralKeyword, nil)
+    case .poundColorLiteralKeyword: return (.poundColorLiteralKeyword, nil)
+    case .integerLiteral(let str): return (.integerLiteral, str)
+    case .floatingLiteral(let str): return (.floatingLiteral, str)
+    case .stringLiteral(let str): return (.stringLiteral, str)
+    case .regexLiteral(let str): return (.regexLiteral, str)
+    case .unknown(let str): return (.unknown, str)
+    case .identifier(let str): return (.identifier, str)
+    case .unspacedBinaryOperator(let str): return (.unspacedBinaryOperator, str)
+    case .spacedBinaryOperator(let str): return (.spacedBinaryOperator, str)
+    case .postfixOperator(let str): return (.postfixOperator, str)
+    case .prefixOperator(let str): return (.prefixOperator, str)
+    case .dollarIdentifier(let str): return (.dollarIdentifier, str)
+    case .contextualKeyword(let str): return (.contextualKeyword, str)
+    case .rawStringDelimiter(let str): return (.rawStringDelimiter, str)
+    case .stringSegment(let str): return (.stringSegment, str)
+    case .stringInterpolationAnchor: return (.stringInterpolationAnchor, nil)
+    case .yield: return (.yield, nil)
     }
   }
 }

@@ -6055,9 +6055,8 @@ open class SyntaxVisitor {
 
   private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
     let syntaxNode = Syntax(node)
-    let parentBox = SyntaxBox(syntaxNode)
     for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {
-      let childData = SyntaxData(childRaw, parentBox: parentBox)
+      let childData = SyntaxData(childRaw, parent: syntaxNode)
       visit(childData)
     }
   }

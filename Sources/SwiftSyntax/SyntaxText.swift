@@ -21,7 +21,16 @@ import Glibc
 /// This type does not own the string data. The data reside in some other buffer
 /// whose lifetime extends past that of the SyntaxText.
 ///
-/// `SyntaxText` conforms to `Collection` where the element is `UInt8`.
+/// `SyntaxText` is a `Collection` of `UInt8` which is _expected_ to be a UTF8
+/// encoded byte sequence. However, since that is essentialy just a span of a
+/// memory buffer, it may contain ill-formed UTF8 sequences. And their
+/// comparision (e.g.`==`, hasPrefix()) are purely based on the byte squences,
+/// without any Unicode normalization or anything.
+///
+/// Since it's just a byte sequence, `SyntaxText` can represent the exact source
+/// buffer regardless of whether it is a valid UTF8. When creating
+/// `Swift.String`, ill-formed UTF8 sequences are replaced with the Unicode
+/// replacement character (`\u{FFFD}`).
 @_spi(Testing) // SPI name is subject to change
 public struct SyntaxText {
   var buffer: UnsafeBufferPointer<UInt8>
@@ -42,6 +51,13 @@ public struct SyntaxText {
     self.init(baseAddress: string.utf8Start, count: string.utf8CodeUnitCount)
   }
 
+  /// Creates a `SyntaxText` over the same memory as the given slice.
+  public init(rebasing slice: SubSequence) {
+    self.init(
+      baseAddress: slice.base.baseAddress?.advanced(by: slice.startIndex),
+      count: slice.count)
+  }
+
   /// Base address of the memory range this string refers to.
   public var baseAddress: UnsafePointer<UInt8>? {
     buffer.baseAddress
@@ -59,22 +75,19 @@ public struct SyntaxText {
 
   /// Returns `true` if the memory range of this string is a part of `other`.
   ///
-  /// `text[n ..< m].isSliceOf(text)` is always true as long as `n` and `m` are
-  /// valid indices.
-  public func isSliceOf(_ other: SyntaxText) -> Bool {
-    guard !isEmpty && !other.isEmpty else {
-      return isEmpty == other.isEmpty
+  /// `SyntaxText(rebasing: text[n ..< m]).isSliceOf(text)` is always true as
+  /// long as `n` and `m` are valid indices.
+  public func isSlice(of other: SyntaxText) -> Bool {
+    // If either of it is empty, returns 'true' only if both are empty.
+    // Otherwise, returns 'false'.
+    guard !self.isEmpty && !other.isEmpty else {
+      return self.isEmpty && other.isEmpty
     }
-    return (other.baseAddress! <= baseAddress! &&
-            baseAddress! + count <= other.baseAddress! + other.count)
+    return (other.baseAddress! <= self.baseAddress! &&
+            self.baseAddress! + count <= other.baseAddress! + other.count)
   }
 
   /// Returns `true` if `other` is a substring of this `SyntaxText`.
-  ///
-  /// This should not be used because `SyntaxText` is a `Collection<UInt8>` and
-  /// `contains(_:)` is usually for checking a collection contains the element.
-  /// Using `contains(_:)` for subsequence is confusing.
-  @available(*, deprecated, message: "Use 'firstRange(of:) != nil'")
   public func contains(_ other: SyntaxText) -> Bool {
     return firstRange(of: other) != nil
   }
@@ -83,12 +96,14 @@ public struct SyntaxText {
   /// string. Returns `nil` if `other` is not found.
   public func firstRange(of other: SyntaxText) -> Range<Index>? {
     if other.isEmpty { return nil }
-    let needle = other.baseAddress!
     let stop = self.count - other.count
     var start = 0
-    // If 'other' is longer than 'self', stop < 0.
+    // If 'other' is longer than 'self', 'stop' is less than zero, so the
+    // condition is never satisfied.
     while start <= stop {
-      if compareMemory(self.baseAddress! + start, needle, other.count) {
+      // Force unwrappings are safe because we know 'self' and 'other' are both
+      // not empty.
+      if compareMemory(self.baseAddress! + start, other.baseAddress!, other.count) {
         return start ..< (start + other.count)
       } else {
         start += 1
@@ -101,14 +116,16 @@ public struct SyntaxText {
   public func hasPrefix(_ other: SyntaxText) -> Bool {
     guard self.count >= other.count else { return false }
     guard !other.isEmpty else { return true }
-    return self[0..<other.count] == other
+    let prefixSlice = self[0 ..< other.count]
+    return Self(rebasing: prefixSlice) == other
   }
 
   /// Returns `true` if the string ends with the specified suffix.
   public func hasSuffix(_ other: SyntaxText) -> Bool {
     guard self.count >= other.count else { return false }
     guard !other.isEmpty else { return true }
-    return self[(self.count - other.count)..<self.count] == other
+    let suffixSlice = self[(self.count - other.count) ..< self.count]
+    return Self(rebasing: suffixSlice) == other
   }
 }
 
@@ -116,20 +133,13 @@ public struct SyntaxText {
 extension SyntaxText: RandomAccessCollection {
   public typealias Element = UInt8
   public typealias Index = Int
-  public typealias SubSequence = SyntaxText
+  public typealias SubSequence = Slice<SyntaxText>
 
   public var startIndex: Index { buffer.startIndex }
   public var endIndex: Index { buffer.endIndex }
 
-  public subscript(bounds: Range<Index>) -> SyntaxText {
-    if isEmpty && bounds.isEmpty { return self }
-    return SyntaxText(
-      baseAddress: buffer.baseAddress! + bounds.lowerBound,
-      count: bounds.count)
-  }
-
   public subscript(position: Index) -> Element {
-    unsafeAddress { buffer.baseAddress!.advanced(by: position) }
+    get { return buffer[position] }
   }
 }
 
@@ -174,11 +184,9 @@ extension String {
       self = ""
       return
     }
-    let count = syntaxText.count
     if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
-      self.init(unsafeUninitializedCapacity: count) { strBuffer in
-        copyMemory(strBuffer.baseAddress!, syntaxText.baseAddress!, count)
-        return count
+      self.init(unsafeUninitializedCapacity: syntaxText.count) { strBuffer in
+        strBuffer.initialize(from: syntaxText.buffer).1
       }
     } else {
       self.init(decoding: syntaxText, as: UTF8.self)
@@ -209,18 +217,5 @@ private func compareMemory(
 #else
   return UnsafeBufferPointer(start: s1, count: count)
     .elementsEqual(UnsafeBufferPointer(start: s2, count: count))
-#endif
-}
-
-private func copyMemory(
-  _ dst: UnsafeMutablePointer<UInt8>, _ src: UnsafePointer<UInt8>, _ count: Int
-) {
-  assert(count > 0)
-#if canImport(Darwin)
-  Darwin.memcpy(dst, src, count)
-#elseif canImport(Glibc)
-  Glibc.memcpy(dst, src, count)
-#else
-  dst.initialize(from: src, count: count)
 #endif
 }

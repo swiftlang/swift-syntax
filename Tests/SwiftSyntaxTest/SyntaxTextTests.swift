@@ -27,26 +27,27 @@ final class SyntaxTextTests: XCTestCase {
   func testSlice() throws {
     let text: SyntaxText = "0123456789"
 
-    let slice1 = text[0..<4]
-    let slice2 = text[0..<text.count]
-    let slice3 = text[3..<text.count]
-    XCTAssert(slice1.isSliceOf(text))
-    XCTAssert(slice2.isSliceOf(text))
-    XCTAssert(slice3.isSliceOf(text))
+    let slice1 = SyntaxText(rebasing: text[0..<4])
+    let slice2 = SyntaxText(rebasing: text[0..<text.count])
+    let slice3 = SyntaxText(rebasing: text[3..<text.count])
+    XCTAssert(slice1.isSlice(of: text))
+    XCTAssert(slice2.isSlice(of: text))
+    XCTAssert(slice3.isSlice(of: text))
     XCTAssertNotNil(text.firstRange(of: slice1))
     XCTAssertNotNil(text.firstRange(of: slice2))
     XCTAssertNotNil(text.firstRange(of: slice3))
 
     let empty: SyntaxText = ""
-    let emptySlice: SyntaxText = empty[...]
-    XCTAssertTrue(emptySlice.isSliceOf(empty))
+    let emptySlice: SyntaxText = SyntaxText(rebasing: empty[...])
+    XCTAssertTrue(emptySlice.isSlice(of: empty))
+    XCTAssertEqual(emptySlice, "")
   }
 
   func testFirstRange() throws {
     let text: SyntaxText = "0123456789012345"
 
     XCTAssertEqual(text.firstRange(of: ""), nil)
-    XCTAssertEqual(text.firstRange(of: SyntaxText("012")[1..<1]), nil)
+    XCTAssertEqual(text.firstRange(of: SyntaxText(rebasing: SyntaxText("012")[1..<1])), nil)
     XCTAssertEqual(text.firstRange(of: "abc"), nil)
     XCTAssertEqual(text.firstRange(of: "01234567890123456"), nil)
 
@@ -57,9 +58,20 @@ final class SyntaxTextTests: XCTestCase {
     XCTAssertEqual(text.firstRange(of: "234"), 2 ..< 5)
     XCTAssertEqual(text.firstRange(of: "9012345"), 9 ..< 16)
 
-    XCTAssertEqual(text[2..<12].firstRange(of: "123"), nil)
-    XCTAssertEqual(text[5...].firstRange(of: "5"), 0 ..< 1)
-    XCTAssertEqual(text[5...].firstRange(of: "0"), 5 ..< 6)
+    XCTAssertEqual(SyntaxText(rebasing: text[2..<12]).firstRange(of: "123"), nil)
+    XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "5"), 0 ..< 1)
+    XCTAssertEqual(SyntaxText(rebasing: text[5...]).firstRange(of: "0"), 5 ..< 6)
+  }
+
+  func testContains() throws {
+    let text: SyntaxText = "0123456789012345"
+    XCTAssertTrue(text.contains("123"))
+    XCTAssertTrue(text.contains("0123456789012345"))
+    XCTAssertTrue(text.contains("9012345"))
+
+    XCTAssertFalse(text.contains(""))
+    XCTAssertFalse(text.contains("foo"))
+    XCTAssertFalse(text.contains("01234567890123456"))
   }
 
   func testHasPrefixSuffix() throws {
@@ -83,8 +95,8 @@ final class SyntaxTextTests: XCTestCase {
   func testWithSyntaxText() throws {
     var str = "Lorem ipsum"
     str.withSyntaxText { text in
-      XCTAssertEqual(text[0..<5], "Lorem")
-      XCTAssertEqual(text[6..<9], "ips")
+      XCTAssertEqual(SyntaxText(rebasing: text[0..<5]), "Lorem")
+      XCTAssertEqual(SyntaxText(rebasing: text[6..<9]), "ips")
     }
   }
 }

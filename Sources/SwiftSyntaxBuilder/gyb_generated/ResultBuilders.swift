@@ -83,6 +83,12 @@ public struct CodeBlockItemListBuilder {
   }
 }
 
+public extension CodeBlockItemList {
+  init(@CodeBlockItemListBuilder itemsBuilder: () -> CodeBlockItemList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct TupleExprElementListBuilder {
 
@@ -153,6 +159,12 @@ public struct TupleExprElementListBuilder {
       let element = source.createTupleExprElement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
+  }
+}
+
+public extension TupleExprElementList {
+  init(@TupleExprElementListBuilder itemsBuilder: () -> TupleExprElementList) {
+    self = itemsBuilder()
   }
 }
 
@@ -229,6 +241,12 @@ public struct ArrayElementListBuilder {
   }
 }
 
+public extension ArrayElementList {
+  init(@ArrayElementListBuilder itemsBuilder: () -> ArrayElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct DictionaryElementListBuilder {
 
@@ -302,6 +320,12 @@ public struct DictionaryElementListBuilder {
   }
 }
 
+public extension DictionaryElementList {
+  init(@DictionaryElementListBuilder itemsBuilder: () -> DictionaryElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct StringLiteralSegmentsBuilder {
 
@@ -368,6 +392,12 @@ public struct StringLiteralSegmentsBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createSyntaxBuildable() })
+  }
+}
+
+public extension StringLiteralSegments {
+  init(@StringLiteralSegmentsBuilder itemsBuilder: () -> StringLiteralSegments) {
+    self = itemsBuilder()
   }
 }
 
@@ -440,6 +470,12 @@ public struct DeclNameArgumentListBuilder {
   }
 }
 
+public extension DeclNameArgumentList {
+  init(@DeclNameArgumentListBuilder itemsBuilder: () -> DeclNameArgumentList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct ExprListBuilder {
 
@@ -506,6 +542,12 @@ public struct ExprListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createExprBuildable() })
+  }
+}
+
+public extension ExprList {
+  init(@ExprListBuilder itemsBuilder: () -> ExprList) {
+    self = itemsBuilder()
   }
 }
 
@@ -582,6 +624,12 @@ public struct ClosureCaptureItemListBuilder {
   }
 }
 
+public extension ClosureCaptureItemList {
+  init(@ClosureCaptureItemListBuilder itemsBuilder: () -> ClosureCaptureItemList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct ClosureParamListBuilder {
 
@@ -655,6 +703,12 @@ public struct ClosureParamListBuilder {
   }
 }
 
+public extension ClosureParamList {
+  init(@ClosureParamListBuilder itemsBuilder: () -> ClosureParamList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct MultipleTrailingClosureElementListBuilder {
 
@@ -724,6 +778,12 @@ public struct MultipleTrailingClosureElementListBuilder {
   }
 }
 
+public extension MultipleTrailingClosureElementList {
+  init(@MultipleTrailingClosureElementListBuilder itemsBuilder: () -> MultipleTrailingClosureElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct ObjcNameBuilder {
 
@@ -790,6 +850,12 @@ public struct ObjcNameBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createObjcNamePiece() })
+  }
+}
+
+public extension ObjcName {
+  init(@ObjcNameBuilder itemsBuilder: () -> ObjcName) {
+    self = itemsBuilder()
   }
 }
 
@@ -866,6 +932,12 @@ public struct FunctionParameterListBuilder {
   }
 }
 
+public extension FunctionParameterList {
+  init(@FunctionParameterListBuilder itemsBuilder: () -> FunctionParameterList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct IfConfigClauseListBuilder {
 
@@ -932,6 +1004,12 @@ public struct IfConfigClauseListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createIfConfigClause() })
+  }
+}
+
+public extension IfConfigClauseList {
+  init(@IfConfigClauseListBuilder itemsBuilder: () -> IfConfigClauseList) {
+    self = itemsBuilder()
   }
 }
 
@@ -1008,6 +1086,12 @@ public struct InheritedTypeListBuilder {
   }
 }
 
+public extension InheritedTypeList {
+  init(@InheritedTypeListBuilder itemsBuilder: () -> InheritedTypeList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct MemberDeclListBuilder {
 
@@ -1074,6 +1158,12 @@ public struct MemberDeclListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createMemberDeclListItem() })
+  }
+}
+
+public extension MemberDeclList {
+  init(@MemberDeclListBuilder itemsBuilder: () -> MemberDeclList) {
+    self = itemsBuilder()
   }
 }
 
@@ -1146,6 +1236,12 @@ public struct ModifierListBuilder {
   }
 }
 
+public extension ModifierList {
+  init(@ModifierListBuilder itemsBuilder: () -> ModifierList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct AccessPathBuilder {
 
@@ -1215,6 +1311,12 @@ public struct AccessPathBuilder {
   }
 }
 
+public extension AccessPath {
+  init(@AccessPathBuilder itemsBuilder: () -> AccessPath) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct AccessorListBuilder {
 
@@ -1281,6 +1383,12 @@ public struct AccessorListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createAccessorDecl() })
+  }
+}
+
+public extension AccessorList {
+  init(@AccessorListBuilder itemsBuilder: () -> AccessorList) {
+    self = itemsBuilder()
   }
 }
 
@@ -1357,6 +1465,12 @@ public struct PatternBindingListBuilder {
   }
 }
 
+public extension PatternBindingList {
+  init(@PatternBindingListBuilder itemsBuilder: () -> PatternBindingList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct EnumCaseElementListBuilder {
 
@@ -1430,6 +1544,12 @@ public struct EnumCaseElementListBuilder {
   }
 }
 
+public extension EnumCaseElementList {
+  init(@EnumCaseElementListBuilder itemsBuilder: () -> EnumCaseElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct IdentifierListBuilder {
 
@@ -1496,6 +1616,12 @@ public struct IdentifierListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component)
+  }
+}
+
+public extension IdentifierList {
+  init(@IdentifierListBuilder itemsBuilder: () -> IdentifierList) {
+    self = itemsBuilder()
   }
 }
 
@@ -1568,6 +1694,12 @@ public struct PrecedenceGroupAttributeListBuilder {
   }
 }
 
+public extension PrecedenceGroupAttributeList {
+  init(@PrecedenceGroupAttributeListBuilder itemsBuilder: () -> PrecedenceGroupAttributeList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct PrecedenceGroupNameListBuilder {
 
@@ -1634,6 +1766,12 @@ public struct PrecedenceGroupNameListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createPrecedenceGroupNameElement() })
+  }
+}
+
+public extension PrecedenceGroupNameList {
+  init(@PrecedenceGroupNameListBuilder itemsBuilder: () -> PrecedenceGroupNameList) {
+    self = itemsBuilder()
   }
 }
 
@@ -1706,6 +1844,12 @@ public struct TokenListBuilder {
   }
 }
 
+public extension TokenList {
+  init(@TokenListBuilder itemsBuilder: () -> TokenList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct NonEmptyTokenListBuilder {
 
@@ -1772,6 +1916,12 @@ public struct NonEmptyTokenListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component)
+  }
+}
+
+public extension NonEmptyTokenList {
+  init(@NonEmptyTokenListBuilder itemsBuilder: () -> NonEmptyTokenList) {
+    self = itemsBuilder()
   }
 }
 
@@ -1844,6 +1994,12 @@ public struct AttributeListBuilder {
   }
 }
 
+public extension AttributeList {
+  init(@AttributeListBuilder itemsBuilder: () -> AttributeList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct SpecializeAttributeSpecListBuilder {
 
@@ -1913,6 +2069,12 @@ public struct SpecializeAttributeSpecListBuilder {
   }
 }
 
+public extension SpecializeAttributeSpecList {
+  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () -> SpecializeAttributeSpecList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct ObjCSelectorBuilder {
 
@@ -1979,6 +2141,12 @@ public struct ObjCSelectorBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createObjCSelectorPiece() })
+  }
+}
+
+public extension ObjCSelector {
+  init(@ObjCSelectorBuilder itemsBuilder: () -> ObjCSelector) {
+    self = itemsBuilder()
   }
 }
 
@@ -2055,6 +2223,12 @@ public struct DifferentiabilityParamListBuilder {
   }
 }
 
+public extension DifferentiabilityParamList {
+  init(@DifferentiabilityParamListBuilder itemsBuilder: () -> DifferentiabilityParamList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct BackDeployVersionListBuilder {
 
@@ -2121,6 +2295,12 @@ public struct BackDeployVersionListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createBackDeployVersionArgument() })
+  }
+}
+
+public extension BackDeployVersionList {
+  init(@BackDeployVersionListBuilder itemsBuilder: () -> BackDeployVersionList) {
+    self = itemsBuilder()
   }
 }
 
@@ -2193,6 +2373,12 @@ public struct SwitchCaseListBuilder {
   }
 }
 
+public extension SwitchCaseList {
+  init(@SwitchCaseListBuilder itemsBuilder: () -> SwitchCaseList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct CatchClauseListBuilder {
 
@@ -2259,6 +2445,12 @@ public struct CatchClauseListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createCatchClause() })
+  }
+}
+
+public extension CatchClauseList {
+  init(@CatchClauseListBuilder itemsBuilder: () -> CatchClauseList) {
+    self = itemsBuilder()
   }
 }
 
@@ -2335,6 +2527,12 @@ public struct CaseItemListBuilder {
   }
 }
 
+public extension CaseItemList {
+  init(@CaseItemListBuilder itemsBuilder: () -> CaseItemList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct CatchItemListBuilder {
 
@@ -2405,6 +2603,12 @@ public struct CatchItemListBuilder {
       let element = source.createCatchItem()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
+  }
+}
+
+public extension CatchItemList {
+  init(@CatchItemListBuilder itemsBuilder: () -> CatchItemList) {
+    self = itemsBuilder()
   }
 }
 
@@ -2481,6 +2685,12 @@ public struct ConditionElementListBuilder {
   }
 }
 
+public extension ConditionElementList {
+  init(@ConditionElementListBuilder itemsBuilder: () -> ConditionElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct GenericRequirementListBuilder {
 
@@ -2551,6 +2761,12 @@ public struct GenericRequirementListBuilder {
       let element = source.createGenericRequirement()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
+  }
+}
+
+public extension GenericRequirementList {
+  init(@GenericRequirementListBuilder itemsBuilder: () -> GenericRequirementList) {
+    self = itemsBuilder()
   }
 }
 
@@ -2627,6 +2843,12 @@ public struct GenericParameterListBuilder {
   }
 }
 
+public extension GenericParameterList {
+  init(@GenericParameterListBuilder itemsBuilder: () -> GenericParameterList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct PrimaryAssociatedTypeListBuilder {
 
@@ -2700,6 +2922,12 @@ public struct PrimaryAssociatedTypeListBuilder {
   }
 }
 
+public extension PrimaryAssociatedTypeList {
+  init(@PrimaryAssociatedTypeListBuilder itemsBuilder: () -> PrimaryAssociatedTypeList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct CompositionTypeElementListBuilder {
 
@@ -2766,6 +2994,12 @@ public struct CompositionTypeElementListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createCompositionTypeElement() })
+  }
+}
+
+public extension CompositionTypeElementList {
+  init(@CompositionTypeElementListBuilder itemsBuilder: () -> CompositionTypeElementList) {
+    self = itemsBuilder()
   }
 }
 
@@ -2842,6 +3076,12 @@ public struct TupleTypeElementListBuilder {
   }
 }
 
+public extension TupleTypeElementList {
+  init(@TupleTypeElementListBuilder itemsBuilder: () -> TupleTypeElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct GenericArgumentListBuilder {
 
@@ -2912,6 +3152,12 @@ public struct GenericArgumentListBuilder {
       let element = source.createGenericArgument()
       return index < lastIndex ? element.ensuringTrailingComma() : element
     }))
+  }
+}
+
+public extension GenericArgumentList {
+  init(@GenericArgumentListBuilder itemsBuilder: () -> GenericArgumentList) {
+    self = itemsBuilder()
   }
 }
 
@@ -2988,6 +3234,12 @@ public struct TuplePatternElementListBuilder {
   }
 }
 
+public extension TuplePatternElementList {
+  init(@TuplePatternElementListBuilder itemsBuilder: () -> TuplePatternElementList) {
+    self = itemsBuilder()
+  }
+}
+
 @resultBuilder
 public struct AvailabilitySpecListBuilder {
 
@@ -3054,6 +3306,12 @@ public struct AvailabilitySpecListBuilder {
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
     return .init(component.map { $0.createAvailabilityArgument() })
+  }
+}
+
+public extension AvailabilitySpecList {
+  init(@AvailabilitySpecListBuilder itemsBuilder: () -> AvailabilitySpecList) {
+    self = itemsBuilder()
   }
 }
 

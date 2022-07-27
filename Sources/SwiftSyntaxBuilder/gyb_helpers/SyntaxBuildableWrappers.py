@@ -159,6 +159,9 @@ class SyntaxBuildableType:
     return self.syntax_kind == other.syntax_kind and \
            self.is_optional == other.is_optional and \
            self.token_kind == other.token_kind
+  
+  def __hash__(self):
+    return hash((self.syntax_kind, self.is_optional, self.token_kind))
 
   def _optional_question_mark(self):
     if self.is_optional:

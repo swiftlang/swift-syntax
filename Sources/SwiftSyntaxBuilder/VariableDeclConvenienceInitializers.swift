@@ -17,13 +17,13 @@ extension VariableDecl {
     _ letOrVarKeyword: TokenSyntax,
     name: ExpressibleAsIdentifierPattern,
     type: ExpressibleAsTypeAnnotation? = nil,
-    initializer: ExpressibleAsExprBuildable? = nil
+    initializer: ExpressibleAsInitializerClause? = nil
   ) {
     self.init(letOrVarKeyword: letOrVarKeyword) {
       PatternBinding(
         pattern: name,
         typeAnnotation: type,
-        initializer: initializer.map { InitializerClause(value: $0) }
+        initializer: initializer
       )
     }
   }

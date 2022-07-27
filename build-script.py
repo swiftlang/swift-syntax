@@ -6,6 +6,7 @@ import platform
 import subprocess
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Optional
 
 
@@ -206,14 +207,7 @@ def generate_gyb_files_helper(
     clear_gyb_files_from_previous_run(
         sources_dir, destination_dir, verbose)
 
-    # Generate the new .swift files in `temp_files_dir` and only copy them
-    # to `destiantion_dir` if they are different than the
-    # files already residing there. This way we don't touch the generated .swift
-    # files if they haven't changed and don't trigger a rebuild.
-    for gyb_file in os.listdir(sources_dir):
-        if not gyb_file.endswith(".gyb"):
-            continue
-
+    def generate_gyb_file(gyb_file):
         gyb_file_path = os.path.join(sources_dir, gyb_file)
 
         # Slice off the '.gyb' to get the name for the output file
@@ -229,6 +223,14 @@ def generate_gyb_files_helper(
             additional_gyb_flags=[],
             verbose=verbose,
         )
+
+    # Generate the new .swift files in `temp_files_dir` and only copy them
+    # to `destiantion_dir` if they are different than the
+    # files already residing there. This way we don't touch the generated .swift
+    # files if they haven't changed and don't trigger a rebuild.
+    gyb_files = [file for file in os.listdir(sources_dir) if file.endswith(".gyb")]
+    with ThreadPoolExecutor() as executor:
+        executor.map(generate_gyb_file, gyb_files)
 
 
 # Generate the syntax node `.swift` files from `SyntaxNodes.swift.gyb.template`.

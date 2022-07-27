@@ -15,31 +15,33 @@ final class FunctionTests: XCTestCase {
     let signature = FunctionSignature(input: input, output: "Int")
     
     let buildable = FunctionDecl(identifier: .identifier("fibonacci"), signature: signature) {
-      IfStmt(conditions: ExprList([
-        IntegerLiteralExpr(digits: "n"),
-        BinaryOperatorExpr("<="),
-        IntegerLiteralExpr(1),
-      ]), body: ifCodeBlock)
-
-      ReturnStmt(expression: SequenceExpr(elements: ExprList([
-        FunctionCallExpr("fibonacci") {
-          SequenceExpr(elements: ExprList([
-            IntegerLiteralExpr(digits: "n"),
-            BinaryOperatorExpr("-"),
-            IntegerLiteralExpr(1),
-          ]))
+      IfStmt(
+        conditions: ExprList {
+          IntegerLiteralExpr(digits: "n")
+          BinaryOperatorExpr("<=")
+          IntegerLiteralExpr(1)
         },
+        body: ifCodeBlock)
 
-        BinaryOperatorExpr("+"),
+      ReturnStmt(expression: SequenceExpr(elements: ExprList {
+        FunctionCallExpr("fibonacci") {
+          SequenceExpr(elements: ExprList {
+            IntegerLiteralExpr(digits: "n")
+            BinaryOperatorExpr("-")
+            IntegerLiteralExpr(1)
+          })
+        }
+
+        BinaryOperatorExpr("+")
 
         FunctionCallExpr(MemberAccessExpr(base: "self", name: "fibonacci")) {
-          SequenceExpr(elements: ExprList([
-            IntegerLiteralExpr(digits: "n"),
-            BinaryOperatorExpr("-"),
-            IntegerLiteralExpr(2),
-          ]))
-        },
-      ])))
+          SequenceExpr(elements: ExprList {
+            IntegerLiteralExpr(digits: "n")
+            BinaryOperatorExpr("-")
+            IntegerLiteralExpr(2)
+          })
+        }
+      }))
     }
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 

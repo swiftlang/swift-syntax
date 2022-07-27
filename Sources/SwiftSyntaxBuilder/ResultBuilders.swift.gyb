@@ -102,4 +102,10 @@ public struct ${type.result_builder()} {
   }
 }
 
+public extension ${type.buildable()} {
+  init(@${type.result_builder()} itemsBuilder: () -> ${type.buildable()}) {
+    self = itemsBuilder()
+  }
+}
+
 % end

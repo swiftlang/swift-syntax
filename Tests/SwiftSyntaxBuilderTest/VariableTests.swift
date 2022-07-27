@@ -74,14 +74,16 @@ final class VariableTests: XCTestCase {
   func testConvenienceInitializer() {
     let leadingTrivia = Trivia.garbageText("␣")
 
-    let testCases: [UInt: (TokenSyntax, String, String, String)] = [
-      #line: (.let, "foo", "Int", "␣let foo: Int"),
-      #line: (.var, "bar", "Baz", "␣var bar: Baz")
+    let testCases: [UInt: (TokenSyntax, String, String?, ExpressibleAsExprBuildable?, String)] = [
+      #line: (.let, "foo", "Int", nil, "␣let foo: Int"),
+      #line: (.var, "bar", "Baz", nil, "␣var bar: Baz"),
+      #line: (.var, "typed", "String", StringLiteralExpr("abc"), #"␣var typed: String = "abc""#),
+      #line: (.let, "inferred", nil, "typed", "␣let inferred = typed"),
     ]
 
     for (line, testCase) in testCases {
-      let (keyword, name, type, expected) = testCase
-      let builder = VariableDecl(keyword, name: name, type: type)
+      let (keyword, name, type, initializer, expected) = testCase
+      let builder = VariableDecl(keyword, name: name, type: type, initializer: initializer)
       let syntax = builder.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 
       XCTAssertEqual(syntax.description, expected, line: line)

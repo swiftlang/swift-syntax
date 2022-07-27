@@ -21,7 +21,7 @@ final class VariableTests: XCTestCase {
       PatternBinding(
         pattern: "d",
         typeAnnotation: DictionaryType(keyType: "String", valueType: "Int"),
-        initializer: InitializerClause(value: DictionaryExpr()))
+        initializer: DictionaryExpr())
     }
 
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
@@ -30,14 +30,13 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplicitTrailingCommas() {
     let buildable = VariableDecl(letOrVarKeyword: .let, bindings: [
-      PatternBinding(pattern: "a", initializer: InitializerClause(
-        value: ArrayExpr(leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
-          for i in 1...3 {
-            ArrayElement(
-              expression: IntegerLiteralExpr(i),
-              trailingComma: .comma.withoutTrailingTrivia().withTrailingTrivia(.newline))
-          }
-        }))
+      PatternBinding(pattern: "a", initializer: ArrayExpr(leftSquare: .`leftSquareBracket`.withTrailingTrivia(.newline)) {
+        for i in 1...3 {
+          ArrayElement(
+            expression: IntegerLiteralExpr(i),
+            trailingComma: .comma.withoutTrailingTrivia().withTrailingTrivia(.newline))
+        }
+      })
     ])
     let syntax = buildable.buildSyntax(format: Format())
     XCTAssertEqual(syntax.description, "let a = [\n1,\n2,\n3,\n]")
@@ -45,16 +44,16 @@ final class VariableTests: XCTestCase {
 
   func testMultiPatternVariableDecl() {
     let buildable = VariableDecl(letOrVarKeyword: .let) {
-      PatternBinding(pattern: "a", initializer: InitializerClause(value: ArrayExpr {
+      PatternBinding(pattern: "a", initializer: ArrayExpr {
         for i in 1...3 {
           ArrayElement(expression: IntegerLiteralExpr(i))
         }
-      }))
-      PatternBinding(pattern: "d", initializer: InitializerClause(value: DictionaryExpr {
+      })
+      PatternBinding(pattern: "d", initializer: DictionaryExpr {
         for i in 1...3 {
           DictionaryElement(keyExpression: StringLiteralExpr("key\(i)"), valueExpression: IntegerLiteralExpr(i))
         }
-      }))
+      })
       PatternBinding(pattern: "i", typeAnnotation: "Int")
       PatternBinding(pattern: "s", typeAnnotation: "String")
     }

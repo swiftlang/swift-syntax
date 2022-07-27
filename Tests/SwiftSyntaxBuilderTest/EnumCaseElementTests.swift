@@ -16,10 +16,10 @@ final class EnumCaseElementTests: XCTestCase {
       EnumCaseDecl {
         EnumCaseElement(
           identifier: "goodMorning",
-          rawValue: InitializerClause(value: StringLiteralExpr("Good Morning")))
+          rawValue: StringLiteralExpr("Good Morning"))
         EnumCaseElement(
           identifier: "helloWorld",
-          rawValue: InitializerClause(value: StringLiteralExpr("Hello World")))
+          rawValue: StringLiteralExpr("Hello World"))
         EnumCaseElement(identifier: "hi")
       }
     }

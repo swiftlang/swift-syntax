@@ -5,7 +5,7 @@
 
 ## Some Example Usages
 
-[**Swift AST Explorer**](https://swift-ast-explorer.kishikawakatsumi.com/): a Swift AST visualizer.
+[**Swift AST Explorer**](https://swift-ast-explorer.com/): a Swift AST visualizer.
 
 [**swift-format**](https://github.com/apple/swift-format): formatting technology for Swift source code.
 

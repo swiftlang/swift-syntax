@@ -44,6 +44,16 @@ BASE_KIND_FILES = {
 }
 
 
+def fail_for_called_process_error(
+    succinct_description: str,
+    error: subprocess.CalledProcessError
+):
+    printerr(f"FAIL: {succinct_description}")
+    printerr(f"Executing: {escapeCmd(error.cmd)}")
+    printerr(error.output)
+    raise SystemExit(1)
+
+
 # -----------------------------------------------------------------------------
 # Xcode Projects Generation
 
@@ -72,7 +82,7 @@ def note(message: str):
 
 def fatal_error(message: str):
     printerr(message)
-    sys.exit(1)
+    raise SystemExit(1)
 
 
 def escapeCmdArg(arg: str) -> str:
@@ -82,10 +92,14 @@ def escapeCmdArg(arg: str) -> str:
         return arg
 
 
+def escapeCmd(cmd: List[str]) -> str:
+    return " ".join([escapeCmdArg(arg) for arg in cmd])
+
+
 def call(cmd: List[str], env: Dict[str, str] = dict(os.environ), stdout=None,
          stderr=subprocess.STDOUT, verbose: bool = False):
     if verbose:
-        print(" ".join([escapeCmdArg(arg) for arg in cmd]))
+        print(escapeCmd(cmd))
     process = subprocess.Popen(cmd, env=env, stdout=stdout, stderr=stderr)
     process.wait()
 
@@ -95,7 +109,7 @@ def call(cmd: List[str], env: Dict[str, str] = dict(os.environ), stdout=None,
 def check_call(cmd: List[str], cwd: Optional[str] = None,
                env: Dict[str, str] = dict(os.environ), verbose: bool = False):
     if verbose:
-        print(" ".join([escapeCmdArg(arg) for arg in cmd]))
+        print(escapeCmd(cmd))
     subprocess.check_call(cmd, cwd=cwd, env=env, stderr=subprocess.STDOUT)
 
 
@@ -317,7 +331,7 @@ def generate_gyb_files(
 def run_code_generation(
     toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
     release: bool, verbose: bool, swiftsyntaxbuilder_destination: str
-) -> bool:
+):
     print("** Running code generation **")
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
@@ -340,7 +354,7 @@ def run_code_generation(
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
         os.path.join(toolchain, "lib", "swift", "macosx")
-    return check_call(swiftpm_call, env=env, verbose=verbose) == 0
+    check_call(swiftpm_call, env=env, verbose=verbose)
 
 
 def make_dir_if_needed(path):
@@ -493,14 +507,20 @@ def verify_code_generated_files(
 
     self_swiftsyntaxbuilder_generated_dir = tempfile.mkdtemp()
 
-    run_code_generation(
-        toolchain=toolchain,
-        build_dir=realpath(build_dir),
-        multiroot_data_file=multiroot_data_file,
-        release=release,
-        verbose=verbose,
-        swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir
-    )
+    try:
+        run_code_generation(
+            toolchain=toolchain,
+            build_dir=realpath(build_dir),
+            multiroot_data_file=multiroot_data_file,
+            release=release,
+            verbose=verbose,
+            swiftsyntaxbuilder_destination=self_swiftsyntaxbuilder_generated_dir
+        )
+    except subprocess.CalledProcessError as e:
+        fail_for_called_process_error(
+            "Source generation using SwiftSyntaxBuilder failed",
+            e
+        )
 
     print("** Verifing code generated files **")
 
@@ -542,34 +562,25 @@ def verify_c_syntax_nodes_match():
 def run_tests(
     toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
     release: bool, filecheck_exec: Optional[str], skip_lit_tests: bool, verbose: bool
-) -> bool:
+):
     print("** Running SwiftSyntax Tests **")
 
-    if skip_lit_tests:
-        lit_success = True
-    else:
-        lit_success = run_lit_tests(
+    if not skip_lit_tests:
+        run_lit_tests(
             toolchain=toolchain,
             build_dir=build_dir,
             release=release,
             filecheck_exec=filecheck_exec,
             verbose=verbose,
         )
-    if not lit_success:
-        return False
 
-    xctest_success = run_xctests(
+    run_xctests(
         toolchain=toolchain,
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
         verbose=verbose,
     )
-    if not xctest_success:
-        return False
-
-    return True
-
 
 # -----------------------------------------------------------------------------
 # Lit Tests
@@ -602,7 +613,9 @@ Refer to README.md for more information.
         )
 
 
-def find_lit_test_helper_exec(toolchain: str, build_dir: Optional[str], release: bool):
+def find_lit_test_helper_exec(
+    toolchain: str, build_dir: Optional[str], release: bool
+) -> str:
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
         action="build",
@@ -644,7 +657,7 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
     # Don't show all commands if verbose is not enabled
     if not verbose:
         lit_call.extend(["--succinct"])
-    return call(lit_call, verbose=verbose) == 0
+    check_call(lit_call, verbose=verbose)
 
 
 # -----------------------------------------------------------------------------
@@ -673,7 +686,7 @@ def run_xctests(toolchain: str, build_dir: Optional[str],
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
         os.path.join(toolchain, "lib", "swift", "macosx")
-    return call(swiftpm_call, env=env, verbose=verbose) == 0
+    check_call(swiftpm_call, env=env, verbose=verbose)
 
 # -----------------------------------------------------------------------------
 # Arugment Parsing functions
@@ -691,21 +704,22 @@ def generate_source_code_command(args):
             add_source_locations=args.add_source_locations,
         )
     except subprocess.CalledProcessError as e:
-        printerr("FAIL: Generating .gyb files failed")
-        printerr("Executing: %s" % " ".join(e.cmd))
-        printerr(e.output)
-        raise SystemExit(1)
+        fail_for_called_process_error("Generating .gyb files failed", e)
 
-    if not args.gyb_only:
-        destination = os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
-        run_code_generation(
-            toolchain=args.toolchain,
-            build_dir=realpath(args.build_dir),
-            multiroot_data_file=args.multiroot_data_file,
-            release=args.release,
-            verbose=args.verbose,
-            swiftsyntaxbuilder_destination=destination
-        )
+    try:
+        if not args.gyb_only:
+            destination = os.path.join(SWIFTSYNTAXBUILDER_DIR, "generated")
+            run_code_generation(
+                toolchain=args.toolchain,
+                build_dir=realpath(args.build_dir),
+                multiroot_data_file=args.multiroot_data_file,
+                release=args.release,
+                verbose=args.verbose,
+                swiftsyntaxbuilder_destination=destination
+            )
+    except subprocess.CalledProcessError as e:
+        fail_for_called_process_error(
+            "Source generation using SwiftSyntaxBuilder failed", e)
 
 
 def verify_source_code_command(args):
@@ -750,9 +764,7 @@ def build_command(args):
         builder.build("SwiftSyntaxBuilder")
         builder.build("SwiftSyntaxBuilderGeneration")
     except subprocess.CalledProcessError as e:
-        printerr("FAIL: Building SwiftSyntax failed")
-        printerr("Executing: %s" % " ".join(e.cmd))
-        printerr(e.output)
+        fail_for_called_process_error("Building SwiftSyntax failed", e)
 
 
 def test_command(args):
@@ -768,7 +780,7 @@ def test_command(args):
 
         builder.build("lit-test-helper")
 
-        success = run_tests(
+        run_tests(
             toolchain=args.toolchain,
             build_dir=realpath(args.build_dir),
             multiroot_data_file=args.multiroot_data_file,
@@ -777,17 +789,9 @@ def test_command(args):
             skip_lit_tests=args.skip_lit_tests,
             verbose=args.verbose,
         )
-        if not success:
-            # An error message has already been printed by the failing test
-            # suite
-            sys.exit(1)
-        else:
-            print("** All tests passed **")
+        print("** All tests passed **")
     except subprocess.CalledProcessError as e:
-        printerr("FAIL: Running tests failed")
-        printerr("Executing: %s" % " ".join(e.cmd))
-        printerr(e.output)
-        sys.exit(1)
+        fail_for_called_process_error("Running tests failed", e)
 
 
 # -----------------------------------------------------------------------------

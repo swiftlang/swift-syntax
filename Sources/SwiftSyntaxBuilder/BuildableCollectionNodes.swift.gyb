@@ -1,6 +1,6 @@
 %{
   from gyb_syntax_support import SYNTAX_NODES
-  from gyb_helpers import flat_documentation, SyntaxBuildableChild, SyntaxBuildableNode
+  from gyb_helpers import flat_documentation, conformance_clause, SyntaxBuildableChild, SyntaxBuildableNode
   # -*- mode: Swift -*-
   # Ignore the following admonition it applies to the resulting .swift file only
 }%
@@ -20,7 +20,9 @@
 
 import SwiftSyntax
 
-% for node in [SyntaxBuildableNode(syntax_node) for syntax_node in SYNTAX_NODES if syntax_node.is_syntax_collection()]:
+% collection_nodes = [SyntaxBuildableNode(syntax_node) for syntax_node in SYNTAX_NODES if syntax_node.is_syntax_collection()]
+%
+% for node in collection_nodes:
 %   type = node.type()
 %   element_type = node.collection_element_type()
 %   if node.documentation():
@@ -88,12 +90,41 @@ public struct ${type.buildable()}: ExpressibleByArrayLiteral, SyntaxBuildable, $
   }
 }
 
-% if not type.generated_expressible_as_conformances():
-extension Array: ${type.expressible_as()} where Element == ${element_type.expressible_as()} {
+extension Array: ${type.expressible_as()} {
   public func create${type.buildable_base_name()}() -> ${type.buildable()} {
-    return ${type.buildable()}(self)
+    if let self = self as? [${element_type.expressible_as()}] {
+      return ${type.buildable()}(self)
+    } else {
+      fatalError("Cannot create ${type.buildable_base_name()} from non-${element_type.expressible_as()} array")
+    }
   }
 }
+
+% end
+
+% collection_types = {node.type() for node in collection_nodes}
+% remaining = {}
+% for node in collection_nodes:
+%   for conformance in node.type().transitive_expressible_as_conformances():
+%     if conformance not in collection_types:
+%       remaining[conformance] = remaining.get(conformance, []) + [node]
+%     end
+%   end
+% end
+
+% for conformance, nodes in sorted(remaining.items(), key=lambda item: item[0].syntax_kind):
+
+extension Array: ${conformance.expressible_as()} {
+  public func create${conformance.buildable()}() -> ${conformance.buildable()} {
+%   for node in nodes:
+    if let self = self as? [${node.collection_element_type().expressible_as()}] {
+      return ${node.type().buildable()}(self).create${conformance.buildable()}()
+    }
+%   end
+    fatalError("Cannot create ${conformance.buildable()} from this array")
+  }
+}
+
 % end
 
 % end

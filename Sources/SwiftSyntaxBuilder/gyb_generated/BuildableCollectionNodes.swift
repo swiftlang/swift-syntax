@@ -64,6 +64,15 @@ public struct CodeBlockItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   }
 }
 
+extension Array: ExpressibleAsCodeBlockItemList {
+  public func createCodeBlockItemList() -> CodeBlockItemList {
+    if let self = self as? [ExpressibleAsCodeBlockItem] {
+      return CodeBlockItemList(self)
+    } else {
+      fatalError("Cannot create CodeBlockItemList from non-ExpressibleAsCodeBlockItem array")
+    }
+  }
+}
 
 /// `TupleExprElementList` represents a collection of `TupleExprElement`s.
 public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsTupleExprElementList {
@@ -115,9 +124,13 @@ public struct TupleExprElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
-extension Array: ExpressibleAsTupleExprElementList where Element == ExpressibleAsTupleExprElement {
+extension Array: ExpressibleAsTupleExprElementList {
   public func createTupleExprElementList() -> TupleExprElementList {
-    return TupleExprElementList(self)
+    if let self = self as? [ExpressibleAsTupleExprElement] {
+      return TupleExprElementList(self)
+    } else {
+      fatalError("Cannot create TupleExprElementList from non-ExpressibleAsTupleExprElement array")
+    }
   }
 }
 
@@ -171,9 +184,13 @@ public struct ArrayElementList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   }
 }
 
-extension Array: ExpressibleAsArrayElementList where Element == ExpressibleAsArrayElement {
+extension Array: ExpressibleAsArrayElementList {
   public func createArrayElementList() -> ArrayElementList {
-    return ArrayElementList(self)
+    if let self = self as? [ExpressibleAsArrayElement] {
+      return ArrayElementList(self)
+    } else {
+      fatalError("Cannot create ArrayElementList from non-ExpressibleAsArrayElement array")
+    }
   }
 }
 
@@ -227,9 +244,13 @@ public struct DictionaryElementList: ExpressibleByArrayLiteral, SyntaxBuildable,
   }
 }
 
-extension Array: ExpressibleAsDictionaryElementList where Element == ExpressibleAsDictionaryElement {
+extension Array: ExpressibleAsDictionaryElementList {
   public func createDictionaryElementList() -> DictionaryElementList {
-    return DictionaryElementList(self)
+    if let self = self as? [ExpressibleAsDictionaryElement] {
+      return DictionaryElementList(self)
+    } else {
+      fatalError("Cannot create DictionaryElementList from non-ExpressibleAsDictionaryElement array")
+    }
   }
 }
 
@@ -283,9 +304,13 @@ public struct StringLiteralSegments: ExpressibleByArrayLiteral, SyntaxBuildable,
   }
 }
 
-extension Array: ExpressibleAsStringLiteralSegments where Element == ExpressibleAsSyntaxBuildable {
+extension Array: ExpressibleAsStringLiteralSegments {
   public func createStringLiteralSegments() -> StringLiteralSegments {
-    return StringLiteralSegments(self)
+    if let self = self as? [ExpressibleAsSyntaxBuildable] {
+      return StringLiteralSegments(self)
+    } else {
+      fatalError("Cannot create StringLiteralSegments from non-ExpressibleAsSyntaxBuildable array")
+    }
   }
 }
 
@@ -339,9 +364,13 @@ public struct DeclNameArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
-extension Array: ExpressibleAsDeclNameArgumentList where Element == ExpressibleAsDeclNameArgument {
+extension Array: ExpressibleAsDeclNameArgumentList {
   public func createDeclNameArgumentList() -> DeclNameArgumentList {
-    return DeclNameArgumentList(self)
+    if let self = self as? [ExpressibleAsDeclNameArgument] {
+      return DeclNameArgumentList(self)
+    } else {
+      fatalError("Cannot create DeclNameArgumentList from non-ExpressibleAsDeclNameArgument array")
+    }
   }
 }
 
@@ -395,6 +424,15 @@ public struct ExprList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   }
 }
 
+extension Array: ExpressibleAsExprList {
+  public func createExprList() -> ExprList {
+    if let self = self as? [ExpressibleAsExprBuildable] {
+      return ExprList(self)
+    } else {
+      fatalError("Cannot create ExprList from non-ExpressibleAsExprBuildable array")
+    }
+  }
+}
 
 /// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItem`s.
 public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsClosureCaptureItemList {
@@ -446,9 +484,13 @@ public struct ClosureCaptureItemList: ExpressibleByArrayLiteral, SyntaxBuildable
   }
 }
 
-extension Array: ExpressibleAsClosureCaptureItemList where Element == ExpressibleAsClosureCaptureItem {
+extension Array: ExpressibleAsClosureCaptureItemList {
   public func createClosureCaptureItemList() -> ClosureCaptureItemList {
-    return ClosureCaptureItemList(self)
+    if let self = self as? [ExpressibleAsClosureCaptureItem] {
+      return ClosureCaptureItemList(self)
+    } else {
+      fatalError("Cannot create ClosureCaptureItemList from non-ExpressibleAsClosureCaptureItem array")
+    }
   }
 }
 
@@ -502,9 +544,13 @@ public struct ClosureParamList: ExpressibleByArrayLiteral, SyntaxBuildable, Expr
   }
 }
 
-extension Array: ExpressibleAsClosureParamList where Element == ExpressibleAsClosureParam {
+extension Array: ExpressibleAsClosureParamList {
   public func createClosureParamList() -> ClosureParamList {
-    return ClosureParamList(self)
+    if let self = self as? [ExpressibleAsClosureParam] {
+      return ClosureParamList(self)
+    } else {
+      fatalError("Cannot create ClosureParamList from non-ExpressibleAsClosureParam array")
+    }
   }
 }
 
@@ -558,9 +604,13 @@ public struct MultipleTrailingClosureElementList: ExpressibleByArrayLiteral, Syn
   }
 }
 
-extension Array: ExpressibleAsMultipleTrailingClosureElementList where Element == ExpressibleAsMultipleTrailingClosureElement {
+extension Array: ExpressibleAsMultipleTrailingClosureElementList {
   public func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList {
-    return MultipleTrailingClosureElementList(self)
+    if let self = self as? [ExpressibleAsMultipleTrailingClosureElement] {
+      return MultipleTrailingClosureElementList(self)
+    } else {
+      fatalError("Cannot create MultipleTrailingClosureElementList from non-ExpressibleAsMultipleTrailingClosureElement array")
+    }
   }
 }
 
@@ -614,9 +664,13 @@ public struct ObjcName: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleA
   }
 }
 
-extension Array: ExpressibleAsObjcName where Element == ExpressibleAsObjcNamePiece {
+extension Array: ExpressibleAsObjcName {
   public func createObjcName() -> ObjcName {
-    return ObjcName(self)
+    if let self = self as? [ExpressibleAsObjcNamePiece] {
+      return ObjcName(self)
+    } else {
+      fatalError("Cannot create ObjcName from non-ExpressibleAsObjcNamePiece array")
+    }
   }
 }
 
@@ -670,9 +724,13 @@ public struct FunctionParameterList: ExpressibleByArrayLiteral, SyntaxBuildable,
   }
 }
 
-extension Array: ExpressibleAsFunctionParameterList where Element == ExpressibleAsFunctionParameter {
+extension Array: ExpressibleAsFunctionParameterList {
   public func createFunctionParameterList() -> FunctionParameterList {
-    return FunctionParameterList(self)
+    if let self = self as? [ExpressibleAsFunctionParameter] {
+      return FunctionParameterList(self)
+    } else {
+      fatalError("Cannot create FunctionParameterList from non-ExpressibleAsFunctionParameter array")
+    }
   }
 }
 
@@ -726,9 +784,13 @@ public struct IfConfigClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   }
 }
 
-extension Array: ExpressibleAsIfConfigClauseList where Element == ExpressibleAsIfConfigClause {
+extension Array: ExpressibleAsIfConfigClauseList {
   public func createIfConfigClauseList() -> IfConfigClauseList {
-    return IfConfigClauseList(self)
+    if let self = self as? [ExpressibleAsIfConfigClause] {
+      return IfConfigClauseList(self)
+    } else {
+      fatalError("Cannot create IfConfigClauseList from non-ExpressibleAsIfConfigClause array")
+    }
   }
 }
 
@@ -782,9 +844,13 @@ public struct InheritedTypeList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   }
 }
 
-extension Array: ExpressibleAsInheritedTypeList where Element == ExpressibleAsInheritedType {
+extension Array: ExpressibleAsInheritedTypeList {
   public func createInheritedTypeList() -> InheritedTypeList {
-    return InheritedTypeList(self)
+    if let self = self as? [ExpressibleAsInheritedType] {
+      return InheritedTypeList(self)
+    } else {
+      fatalError("Cannot create InheritedTypeList from non-ExpressibleAsInheritedType array")
+    }
   }
 }
 
@@ -838,6 +904,15 @@ public struct MemberDeclList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
 }
 
+extension Array: ExpressibleAsMemberDeclList {
+  public func createMemberDeclList() -> MemberDeclList {
+    if let self = self as? [ExpressibleAsMemberDeclListItem] {
+      return MemberDeclList(self)
+    } else {
+      fatalError("Cannot create MemberDeclList from non-ExpressibleAsMemberDeclListItem array")
+    }
+  }
+}
 
 /// `ModifierList` represents a collection of `DeclModifier`s.
 public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsModifierList {
@@ -889,9 +964,13 @@ public struct ModifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   }
 }
 
-extension Array: ExpressibleAsModifierList where Element == ExpressibleAsDeclModifier {
+extension Array: ExpressibleAsModifierList {
   public func createModifierList() -> ModifierList {
-    return ModifierList(self)
+    if let self = self as? [ExpressibleAsDeclModifier] {
+      return ModifierList(self)
+    } else {
+      fatalError("Cannot create ModifierList from non-ExpressibleAsDeclModifier array")
+    }
   }
 }
 
@@ -945,9 +1024,13 @@ public struct AccessPath: ExpressibleByArrayLiteral, SyntaxBuildable, Expressibl
   }
 }
 
-extension Array: ExpressibleAsAccessPath where Element == ExpressibleAsAccessPathComponent {
+extension Array: ExpressibleAsAccessPath {
   public func createAccessPath() -> AccessPath {
-    return AccessPath(self)
+    if let self = self as? [ExpressibleAsAccessPathComponent] {
+      return AccessPath(self)
+    } else {
+      fatalError("Cannot create AccessPath from non-ExpressibleAsAccessPathComponent array")
+    }
   }
 }
 
@@ -1001,6 +1084,15 @@ public struct AccessorList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   }
 }
 
+extension Array: ExpressibleAsAccessorList {
+  public func createAccessorList() -> AccessorList {
+    if let self = self as? [ExpressibleAsAccessorDecl] {
+      return AccessorList(self)
+    } else {
+      fatalError("Cannot create AccessorList from non-ExpressibleAsAccessorDecl array")
+    }
+  }
+}
 
 /// `PatternBindingList` represents a collection of `PatternBinding`s.
 public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, ExpressibleAsPatternBindingList {
@@ -1052,9 +1144,13 @@ public struct PatternBindingList: ExpressibleByArrayLiteral, SyntaxBuildable, Ex
   }
 }
 
-extension Array: ExpressibleAsPatternBindingList where Element == ExpressibleAsPatternBinding {
+extension Array: ExpressibleAsPatternBindingList {
   public func createPatternBindingList() -> PatternBindingList {
-    return PatternBindingList(self)
+    if let self = self as? [ExpressibleAsPatternBinding] {
+      return PatternBindingList(self)
+    } else {
+      fatalError("Cannot create PatternBindingList from non-ExpressibleAsPatternBinding array")
+    }
   }
 }
 
@@ -1108,9 +1204,13 @@ public struct EnumCaseElementList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   }
 }
 
-extension Array: ExpressibleAsEnumCaseElementList where Element == ExpressibleAsEnumCaseElement {
+extension Array: ExpressibleAsEnumCaseElementList {
   public func createEnumCaseElementList() -> EnumCaseElementList {
-    return EnumCaseElementList(self)
+    if let self = self as? [ExpressibleAsEnumCaseElement] {
+      return EnumCaseElementList(self)
+    } else {
+      fatalError("Cannot create EnumCaseElementList from non-ExpressibleAsEnumCaseElement array")
+    }
   }
 }
 
@@ -1162,9 +1262,13 @@ public struct IdentifierList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
 }
 
-extension Array: ExpressibleAsIdentifierList where Element == TokenSyntax {
+extension Array: ExpressibleAsIdentifierList {
   public func createIdentifierList() -> IdentifierList {
-    return IdentifierList(self)
+    if let self = self as? [TokenSyntax] {
+      return IdentifierList(self)
+    } else {
+      fatalError("Cannot create IdentifierList from non-TokenSyntax array")
+    }
   }
 }
 
@@ -1218,9 +1322,13 @@ public struct PrecedenceGroupAttributeList: ExpressibleByArrayLiteral, SyntaxBui
   }
 }
 
-extension Array: ExpressibleAsPrecedenceGroupAttributeList where Element == ExpressibleAsSyntaxBuildable {
+extension Array: ExpressibleAsPrecedenceGroupAttributeList {
   public func createPrecedenceGroupAttributeList() -> PrecedenceGroupAttributeList {
-    return PrecedenceGroupAttributeList(self)
+    if let self = self as? [ExpressibleAsSyntaxBuildable] {
+      return PrecedenceGroupAttributeList(self)
+    } else {
+      fatalError("Cannot create PrecedenceGroupAttributeList from non-ExpressibleAsSyntaxBuildable array")
+    }
   }
 }
 
@@ -1274,9 +1382,13 @@ public struct PrecedenceGroupNameList: ExpressibleByArrayLiteral, SyntaxBuildabl
   }
 }
 
-extension Array: ExpressibleAsPrecedenceGroupNameList where Element == ExpressibleAsPrecedenceGroupNameElement {
+extension Array: ExpressibleAsPrecedenceGroupNameList {
   public func createPrecedenceGroupNameList() -> PrecedenceGroupNameList {
-    return PrecedenceGroupNameList(self)
+    if let self = self as? [ExpressibleAsPrecedenceGroupNameElement] {
+      return PrecedenceGroupNameList(self)
+    } else {
+      fatalError("Cannot create PrecedenceGroupNameList from non-ExpressibleAsPrecedenceGroupNameElement array")
+    }
   }
 }
 
@@ -1328,9 +1440,13 @@ public struct TokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressible
   }
 }
 
-extension Array: ExpressibleAsTokenList where Element == TokenSyntax {
+extension Array: ExpressibleAsTokenList {
   public func createTokenList() -> TokenList {
-    return TokenList(self)
+    if let self = self as? [TokenSyntax] {
+      return TokenList(self)
+    } else {
+      fatalError("Cannot create TokenList from non-TokenSyntax array")
+    }
   }
 }
 
@@ -1382,9 +1498,13 @@ public struct NonEmptyTokenList: ExpressibleByArrayLiteral, SyntaxBuildable, Exp
   }
 }
 
-extension Array: ExpressibleAsNonEmptyTokenList where Element == TokenSyntax {
+extension Array: ExpressibleAsNonEmptyTokenList {
   public func createNonEmptyTokenList() -> NonEmptyTokenList {
-    return NonEmptyTokenList(self)
+    if let self = self as? [TokenSyntax] {
+      return NonEmptyTokenList(self)
+    } else {
+      fatalError("Cannot create NonEmptyTokenList from non-TokenSyntax array")
+    }
   }
 }
 
@@ -1438,9 +1558,13 @@ public struct AttributeList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   }
 }
 
-extension Array: ExpressibleAsAttributeList where Element == ExpressibleAsSyntaxBuildable {
+extension Array: ExpressibleAsAttributeList {
   public func createAttributeList() -> AttributeList {
-    return AttributeList(self)
+    if let self = self as? [ExpressibleAsSyntaxBuildable] {
+      return AttributeList(self)
+    } else {
+      fatalError("Cannot create AttributeList from non-ExpressibleAsSyntaxBuildable array")
+    }
   }
 }
 
@@ -1494,9 +1618,13 @@ public struct SpecializeAttributeSpecList: ExpressibleByArrayLiteral, SyntaxBuil
   }
 }
 
-extension Array: ExpressibleAsSpecializeAttributeSpecList where Element == ExpressibleAsSyntaxBuildable {
+extension Array: ExpressibleAsSpecializeAttributeSpecList {
   public func createSpecializeAttributeSpecList() -> SpecializeAttributeSpecList {
-    return SpecializeAttributeSpecList(self)
+    if let self = self as? [ExpressibleAsSyntaxBuildable] {
+      return SpecializeAttributeSpecList(self)
+    } else {
+      fatalError("Cannot create SpecializeAttributeSpecList from non-ExpressibleAsSyntaxBuildable array")
+    }
   }
 }
 
@@ -1550,9 +1678,13 @@ public struct ObjCSelector: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   }
 }
 
-extension Array: ExpressibleAsObjCSelector where Element == ExpressibleAsObjCSelectorPiece {
+extension Array: ExpressibleAsObjCSelector {
   public func createObjCSelector() -> ObjCSelector {
-    return ObjCSelector(self)
+    if let self = self as? [ExpressibleAsObjCSelectorPiece] {
+      return ObjCSelector(self)
+    } else {
+      fatalError("Cannot create ObjCSelector from non-ExpressibleAsObjCSelectorPiece array")
+    }
   }
 }
 
@@ -1606,9 +1738,13 @@ public struct DifferentiabilityParamList: ExpressibleByArrayLiteral, SyntaxBuild
   }
 }
 
-extension Array: ExpressibleAsDifferentiabilityParamList where Element == ExpressibleAsDifferentiabilityParam {
+extension Array: ExpressibleAsDifferentiabilityParamList {
   public func createDifferentiabilityParamList() -> DifferentiabilityParamList {
-    return DifferentiabilityParamList(self)
+    if let self = self as? [ExpressibleAsDifferentiabilityParam] {
+      return DifferentiabilityParamList(self)
+    } else {
+      fatalError("Cannot create DifferentiabilityParamList from non-ExpressibleAsDifferentiabilityParam array")
+    }
   }
 }
 
@@ -1662,9 +1798,13 @@ public struct BackDeployVersionList: ExpressibleByArrayLiteral, SyntaxBuildable,
   }
 }
 
-extension Array: ExpressibleAsBackDeployVersionList where Element == ExpressibleAsBackDeployVersionArgument {
+extension Array: ExpressibleAsBackDeployVersionList {
   public func createBackDeployVersionList() -> BackDeployVersionList {
-    return BackDeployVersionList(self)
+    if let self = self as? [ExpressibleAsBackDeployVersionArgument] {
+      return BackDeployVersionList(self)
+    } else {
+      fatalError("Cannot create BackDeployVersionList from non-ExpressibleAsBackDeployVersionArgument array")
+    }
   }
 }
 
@@ -1718,9 +1858,13 @@ public struct SwitchCaseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expres
   }
 }
 
-extension Array: ExpressibleAsSwitchCaseList where Element == ExpressibleAsSyntaxBuildable {
+extension Array: ExpressibleAsSwitchCaseList {
   public func createSwitchCaseList() -> SwitchCaseList {
-    return SwitchCaseList(self)
+    if let self = self as? [ExpressibleAsSyntaxBuildable] {
+      return SwitchCaseList(self)
+    } else {
+      fatalError("Cannot create SwitchCaseList from non-ExpressibleAsSyntaxBuildable array")
+    }
   }
 }
 
@@ -1774,9 +1918,13 @@ public struct CatchClauseList: ExpressibleByArrayLiteral, SyntaxBuildable, Expre
   }
 }
 
-extension Array: ExpressibleAsCatchClauseList where Element == ExpressibleAsCatchClause {
+extension Array: ExpressibleAsCatchClauseList {
   public func createCatchClauseList() -> CatchClauseList {
-    return CatchClauseList(self)
+    if let self = self as? [ExpressibleAsCatchClause] {
+      return CatchClauseList(self)
+    } else {
+      fatalError("Cannot create CatchClauseList from non-ExpressibleAsCatchClause array")
+    }
   }
 }
 
@@ -1830,9 +1978,13 @@ public struct CaseItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
   }
 }
 
-extension Array: ExpressibleAsCaseItemList where Element == ExpressibleAsCaseItem {
+extension Array: ExpressibleAsCaseItemList {
   public func createCaseItemList() -> CaseItemList {
-    return CaseItemList(self)
+    if let self = self as? [ExpressibleAsCaseItem] {
+      return CaseItemList(self)
+    } else {
+      fatalError("Cannot create CaseItemList from non-ExpressibleAsCaseItem array")
+    }
   }
 }
 
@@ -1886,9 +2038,13 @@ public struct CatchItemList: ExpressibleByArrayLiteral, SyntaxBuildable, Express
   }
 }
 
-extension Array: ExpressibleAsCatchItemList where Element == ExpressibleAsCatchItem {
+extension Array: ExpressibleAsCatchItemList {
   public func createCatchItemList() -> CatchItemList {
-    return CatchItemList(self)
+    if let self = self as? [ExpressibleAsCatchItem] {
+      return CatchItemList(self)
+    } else {
+      fatalError("Cannot create CatchItemList from non-ExpressibleAsCatchItem array")
+    }
   }
 }
 
@@ -1942,9 +2098,13 @@ public struct ConditionElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
-extension Array: ExpressibleAsConditionElementList where Element == ExpressibleAsConditionElement {
+extension Array: ExpressibleAsConditionElementList {
   public func createConditionElementList() -> ConditionElementList {
-    return ConditionElementList(self)
+    if let self = self as? [ExpressibleAsConditionElement] {
+      return ConditionElementList(self)
+    } else {
+      fatalError("Cannot create ConditionElementList from non-ExpressibleAsConditionElement array")
+    }
   }
 }
 
@@ -1998,9 +2158,13 @@ public struct GenericRequirementList: ExpressibleByArrayLiteral, SyntaxBuildable
   }
 }
 
-extension Array: ExpressibleAsGenericRequirementList where Element == ExpressibleAsGenericRequirement {
+extension Array: ExpressibleAsGenericRequirementList {
   public func createGenericRequirementList() -> GenericRequirementList {
-    return GenericRequirementList(self)
+    if let self = self as? [ExpressibleAsGenericRequirement] {
+      return GenericRequirementList(self)
+    } else {
+      fatalError("Cannot create GenericRequirementList from non-ExpressibleAsGenericRequirement array")
+    }
   }
 }
 
@@ -2054,9 +2218,13 @@ public struct GenericParameterList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
-extension Array: ExpressibleAsGenericParameterList where Element == ExpressibleAsGenericParameter {
+extension Array: ExpressibleAsGenericParameterList {
   public func createGenericParameterList() -> GenericParameterList {
-    return GenericParameterList(self)
+    if let self = self as? [ExpressibleAsGenericParameter] {
+      return GenericParameterList(self)
+    } else {
+      fatalError("Cannot create GenericParameterList from non-ExpressibleAsGenericParameter array")
+    }
   }
 }
 
@@ -2110,9 +2278,13 @@ public struct PrimaryAssociatedTypeList: ExpressibleByArrayLiteral, SyntaxBuilda
   }
 }
 
-extension Array: ExpressibleAsPrimaryAssociatedTypeList where Element == ExpressibleAsPrimaryAssociatedType {
+extension Array: ExpressibleAsPrimaryAssociatedTypeList {
   public func createPrimaryAssociatedTypeList() -> PrimaryAssociatedTypeList {
-    return PrimaryAssociatedTypeList(self)
+    if let self = self as? [ExpressibleAsPrimaryAssociatedType] {
+      return PrimaryAssociatedTypeList(self)
+    } else {
+      fatalError("Cannot create PrimaryAssociatedTypeList from non-ExpressibleAsPrimaryAssociatedType array")
+    }
   }
 }
 
@@ -2166,9 +2338,13 @@ public struct CompositionTypeElementList: ExpressibleByArrayLiteral, SyntaxBuild
   }
 }
 
-extension Array: ExpressibleAsCompositionTypeElementList where Element == ExpressibleAsCompositionTypeElement {
+extension Array: ExpressibleAsCompositionTypeElementList {
   public func createCompositionTypeElementList() -> CompositionTypeElementList {
-    return CompositionTypeElementList(self)
+    if let self = self as? [ExpressibleAsCompositionTypeElement] {
+      return CompositionTypeElementList(self)
+    } else {
+      fatalError("Cannot create CompositionTypeElementList from non-ExpressibleAsCompositionTypeElement array")
+    }
   }
 }
 
@@ -2222,9 +2398,13 @@ public struct TupleTypeElementList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
-extension Array: ExpressibleAsTupleTypeElementList where Element == ExpressibleAsTupleTypeElement {
+extension Array: ExpressibleAsTupleTypeElementList {
   public func createTupleTypeElementList() -> TupleTypeElementList {
-    return TupleTypeElementList(self)
+    if let self = self as? [ExpressibleAsTupleTypeElement] {
+      return TupleTypeElementList(self)
+    } else {
+      fatalError("Cannot create TupleTypeElementList from non-ExpressibleAsTupleTypeElement array")
+    }
   }
 }
 
@@ -2278,9 +2458,13 @@ public struct GenericArgumentList: ExpressibleByArrayLiteral, SyntaxBuildable, E
   }
 }
 
-extension Array: ExpressibleAsGenericArgumentList where Element == ExpressibleAsGenericArgument {
+extension Array: ExpressibleAsGenericArgumentList {
   public func createGenericArgumentList() -> GenericArgumentList {
-    return GenericArgumentList(self)
+    if let self = self as? [ExpressibleAsGenericArgument] {
+      return GenericArgumentList(self)
+    } else {
+      fatalError("Cannot create GenericArgumentList from non-ExpressibleAsGenericArgument array")
+    }
   }
 }
 
@@ -2334,9 +2518,13 @@ public struct TuplePatternElementList: ExpressibleByArrayLiteral, SyntaxBuildabl
   }
 }
 
-extension Array: ExpressibleAsTuplePatternElementList where Element == ExpressibleAsTuplePatternElement {
+extension Array: ExpressibleAsTuplePatternElementList {
   public func createTuplePatternElementList() -> TuplePatternElementList {
-    return TuplePatternElementList(self)
+    if let self = self as? [ExpressibleAsTuplePatternElement] {
+      return TuplePatternElementList(self)
+    } else {
+      fatalError("Cannot create TuplePatternElementList from non-ExpressibleAsTuplePatternElement array")
+    }
   }
 }
 
@@ -2390,9 +2578,75 @@ public struct AvailabilitySpecList: ExpressibleByArrayLiteral, SyntaxBuildable, 
   }
 }
 
-extension Array: ExpressibleAsAvailabilitySpecList where Element == ExpressibleAsAvailabilityArgument {
+extension Array: ExpressibleAsAvailabilitySpecList {
   public func createAvailabilitySpecList() -> AvailabilitySpecList {
-    return AvailabilitySpecList(self)
+    if let self = self as? [ExpressibleAsAvailabilityArgument] {
+      return AvailabilitySpecList(self)
+    } else {
+      fatalError("Cannot create AvailabilitySpecList from non-ExpressibleAsAvailabilityArgument array")
+    }
   }
 }
+
+
+
+
+extension Array: ExpressibleAsAccessorBlock {
+  public func createAccessorBlock() -> AccessorBlock {
+    if let self = self as? [ExpressibleAsAccessorDecl] {
+      return AccessorList(self).createAccessorBlock()
+    }
+    fatalError("Cannot create AccessorBlock from this array")
+  }
+}
+
+
+extension Array: ExpressibleAsCodeBlock {
+  public func createCodeBlock() -> CodeBlock {
+    if let self = self as? [ExpressibleAsCodeBlockItem] {
+      return CodeBlockItemList(self).createCodeBlock()
+    }
+    fatalError("Cannot create CodeBlock from this array")
+  }
+}
+
+
+extension Array: ExpressibleAsConditionElement {
+  public func createConditionElement() -> ConditionElement {
+    if let self = self as? [ExpressibleAsExprBuildable] {
+      return ExprList(self).createConditionElement()
+    }
+    fatalError("Cannot create ConditionElement from this array")
+  }
+}
+
+
+extension Array: ExpressibleAsMemberDeclBlock {
+  public func createMemberDeclBlock() -> MemberDeclBlock {
+    if let self = self as? [ExpressibleAsMemberDeclListItem] {
+      return MemberDeclList(self).createMemberDeclBlock()
+    }
+    fatalError("Cannot create MemberDeclBlock from this array")
+  }
+}
+
+
+extension Array: ExpressibleAsSyntaxBuildable {
+  public func createSyntaxBuildable() -> SyntaxBuildable {
+    if let self = self as? [ExpressibleAsCodeBlockItem] {
+      return CodeBlockItemList(self).createSyntaxBuildable()
+    }
+    if let self = self as? [ExpressibleAsExprBuildable] {
+      return ExprList(self).createSyntaxBuildable()
+    }
+    if let self = self as? [ExpressibleAsMemberDeclListItem] {
+      return MemberDeclList(self).createSyntaxBuildable()
+    }
+    if let self = self as? [ExpressibleAsAccessorDecl] {
+      return AccessorList(self).createSyntaxBuildable()
+    }
+    fatalError("Cannot create SyntaxBuildable from this array")
+  }
+}
+
 

@@ -26,7 +26,7 @@ final class ExpressibleBuildablesTests: XCTestCase {
     """)
   }
 
-  func testExpressibleAsCodeBlockItem() {
+  func testDeclExpressibleAsCodeBlockItem() {
     let myCodeBlock = SourceFile(eofToken: .eof) {
       StructDecl(identifier: "MyStruct1") {}
 
@@ -39,6 +39,23 @@ final class ExpressibleBuildablesTests: XCTestCase {
     struct MyStruct1 {
     }
     struct MyStruct2 {
+    }
+    """)
+  }
+
+  func testExprExpressibleAsCodeBlockItem() {
+    let myCodeBlock = CodeBlock(leftBrace: .leftBrace.withLeadingTrivia([])) {
+      FunctionCallExpr("print") { TupleExprElement(expression: StringLiteralExpr("Hello world")) }
+      IntegerLiteralExpr(42)
+      "someIdentifier"
+    }
+    
+    let syntax = myCodeBlock.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, """
+    {
+        print("Hello world")
+        42
+        someIdentifier
     }
     """)
   }

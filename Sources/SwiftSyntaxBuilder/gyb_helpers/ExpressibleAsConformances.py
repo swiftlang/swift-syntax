@@ -18,7 +18,7 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'ExprList': [
         'ConditionElement'
     ],
-    'FunctionCallExpr': [
+    'ExprBuildable': [
         'CodeBlockItem'
     ],
     'MemberDeclList': [

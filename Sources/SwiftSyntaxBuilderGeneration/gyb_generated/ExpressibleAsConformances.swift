@@ -32,7 +32,7 @@ let SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES: [String: [String]] = [
   "ExprList": [
     "ConditionElement",
   ],
-  "FunctionCallExpr": [
+  "ExprBuildable": [
     "CodeBlockItem",
   ],
   "MemberDeclList": [

@@ -41,6 +41,8 @@ final class SyntaxTextTests: XCTestCase {
     let emptySlice: SyntaxText = SyntaxText(rebasing: empty[...])
     XCTAssertTrue(emptySlice.isSlice(of: empty))
     XCTAssertEqual(emptySlice, "")
+
+    XCTAssertEqual(SyntaxText(rebasing: text[2..<2]), SyntaxText(rebasing: text[3..<3]))
   }
 
   func testFirstRange() throws {

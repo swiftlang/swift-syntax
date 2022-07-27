@@ -148,7 +148,7 @@ extension SyntaxText: Hashable {
     if lhs.buffer.count != rhs.buffer.count {
       return false
     }
-    if lhs.buffer.baseAddress == rhs.buffer.baseAddress {
+    if lhs.isEmpty || lhs.buffer.baseAddress == rhs.buffer.baseAddress {
       return true
     }
     return compareMemory(lhs.baseAddress!, rhs.baseAddress!, lhs.count)

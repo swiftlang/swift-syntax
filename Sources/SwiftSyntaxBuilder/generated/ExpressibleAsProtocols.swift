@@ -27,13 +27,17 @@ func createMemberDeclListItem() -> MemberDeclListItem {
     return MemberDeclListItem(decl: self)
   }
 }
-public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList {
+public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList, ExpressibleAsCodeBlockItem {
   func createExprBuildable() -> ExprBuildable
 }
 public extension ExpressibleAsExprBuildable {
   /// Conformance to `ExpressibleAsExprList`
 func createExprList() -> ExprList {
     return ExprList([self])
+  }
+  /// Conformance to ExpressibleAsCodeBlockItem
+func createCodeBlockItem() -> CodeBlockItem {
+    return CodeBlockItem(item: self)
   }
 }
 public protocol ExpressibleAsPatternBuildable {
@@ -222,7 +226,7 @@ public extension ExpressibleAsAssignmentExpr {
     return createAssignmentExpr()
   }
 }
-public protocol ExpressibleAsSequenceExpr: ExpressibleAsCodeBlockItem, ExpressibleAsTupleExprElement, ExpressibleAsExprBuildable {
+public protocol ExpressibleAsSequenceExpr: ExpressibleAsTupleExprElement, ExpressibleAsExprBuildable {
   func createSequenceExpr() -> SequenceExpr
 }
 public extension ExpressibleAsSequenceExpr {
@@ -528,14 +532,10 @@ func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElemen
 public protocol ExpressibleAsMultipleTrailingClosureElementList {
   func createMultipleTrailingClosureElementList() -> MultipleTrailingClosureElementList
 }
-public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsCodeBlockItem, ExpressibleAsExprBuildable {
+public protocol ExpressibleAsFunctionCallExpr: ExpressibleAsExprBuildable {
   func createFunctionCallExpr() -> FunctionCallExpr
 }
 public extension ExpressibleAsFunctionCallExpr {
-  /// Conformance to ExpressibleAsCodeBlockItem
-func createCodeBlockItem() -> CodeBlockItem {
-    return CodeBlockItem(item: self)
-  }
   func createExprBuildable() -> ExprBuildable {
     return createFunctionCallExpr()
   }

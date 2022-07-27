@@ -15,11 +15,12 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'DictionaryType': [
         'TypeAnnotation'
     ],
+    'ExprBuildable': [
+        'CodeBlockItem',
+        'InitializerClause'
+    ],
     'ExprList': [
         'ConditionElement'
-    ],
-    'ExprBuildable': [
-        'CodeBlockItem'
     ],
     'MemberDeclList': [
         'MemberDeclBlock'

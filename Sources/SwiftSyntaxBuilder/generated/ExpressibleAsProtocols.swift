@@ -27,7 +27,7 @@ func createMemberDeclListItem() -> MemberDeclListItem {
     return MemberDeclListItem(decl: self)
   }
 }
-public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList, ExpressibleAsCodeBlockItem {
+public protocol ExpressibleAsExprBuildable: ExpressibleAsExprList, ExpressibleAsCodeBlockItem, ExpressibleAsInitializerClause {
   func createExprBuildable() -> ExprBuildable
 }
 public extension ExpressibleAsExprBuildable {
@@ -38,6 +38,10 @@ func createExprList() -> ExprList {
   /// Conformance to ExpressibleAsCodeBlockItem
 func createCodeBlockItem() -> CodeBlockItem {
     return CodeBlockItem(item: self)
+  }
+  /// Conformance to ExpressibleAsInitializerClause
+func createInitializerClause() -> InitializerClause {
+    return InitializerClause(value: self)
   }
 }
 public protocol ExpressibleAsPatternBuildable {

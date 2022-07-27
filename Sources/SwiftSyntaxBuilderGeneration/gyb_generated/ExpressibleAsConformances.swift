@@ -29,11 +29,12 @@ let SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES: [String: [String]] = [
   "DictionaryType": [
     "TypeAnnotation",
   ],
-  "ExprList": [
-    "ConditionElement",
-  ],
   "ExprBuildable": [
     "CodeBlockItem",
+    "InitializerClause",
+  ],
+  "ExprList": [
+    "ConditionElement",
   ],
   "MemberDeclList": [
     "MemberDeclBlock",

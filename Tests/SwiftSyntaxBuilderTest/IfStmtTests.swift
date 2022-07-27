@@ -36,4 +36,33 @@ final class IfStmtTests: XCTestCase {
       }
       """)
   }
+
+  func testIfLetStmt() {
+    let buildable = IfStmt(
+      conditions: OptionalBindingCondition(
+        letOrVarKeyword: .let,
+        pattern: "x",
+        initializer: InitializerClause(value: "y")
+      )
+    ) {}
+    let syntax = buildable.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, """
+      if let x = y {
+      }
+      """)
+  }
+
+  func testIfCaseStmt() {
+    let buildable = IfStmt(
+      conditions: MatchingPatternCondition(
+        pattern: ExpressionPattern(expression: MemberAccessExpr(name: "x")),
+        initializer: InitializerClause(value: "y")
+      )
+    ) {}
+    let syntax = buildable.buildSyntax(format: Format())
+    XCTAssertEqual(syntax.description, """
+      if case .x = y {
+      }
+      """)
+  }
 }

@@ -36,8 +36,14 @@ let SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES: [String: [String]] = [
   "ExprList": [
     "ConditionElement",
   ],
+  "MatchingPatternCondition": [
+    "ConditionElement",
+  ],
   "MemberDeclList": [
     "MemberDeclBlock",
+  ],
+  "OptionalBindingCondition": [
+    "ConditionElement",
   ],
   "SequenceExpr": [
     "CodeBlockItem",

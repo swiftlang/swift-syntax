@@ -22,8 +22,14 @@ SYNTAX_BUILDABLE_EXPRESSIBLE_AS_CONFORMANCES = {
     'ExprList': [
         'ConditionElement'
     ],
+    'MatchingPatternCondition': [
+        'ConditionElement'
+    ],
     'MemberDeclList': [
         'MemberDeclBlock'
+    ],
+    'OptionalBindingCondition': [
+        'ConditionElement'
     ],
     'SequenceExpr': [
         'CodeBlockItem',

@@ -13,12 +13,18 @@
 import SwiftSyntax
 
 extension VariableDecl {
-  public init(_ letOrVarKeyword: TokenSyntax,
-              name: ExpressibleAsIdentifierPattern,
-              type: ExpressibleAsTypeAnnotation) {
+  public init(
+    _ letOrVarKeyword: TokenSyntax,
+    name: ExpressibleAsIdentifierPattern,
+    type: ExpressibleAsTypeAnnotation? = nil,
+    initializer: ExpressibleAsExprBuildable? = nil
+  ) {
     self.init(letOrVarKeyword: letOrVarKeyword) {
-      PatternBinding(pattern: name.createIdentifierPattern(),
-                     typeAnnotation: type.createTypeAnnotation())
+      PatternBinding(
+        pattern: name,
+        typeAnnotation: type,
+        initializer: initializer.map { InitializerClause(value: $0) }
+      )
     }
   }
 }

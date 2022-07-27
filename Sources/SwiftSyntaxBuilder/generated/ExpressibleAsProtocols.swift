@@ -1488,18 +1488,26 @@ public extension ExpressibleAsAvailabilityCondition {
     return createAvailabilityCondition()
   }
 }
-public protocol ExpressibleAsMatchingPatternCondition: ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleAsMatchingPatternCondition: ExpressibleAsConditionElement {
   func createMatchingPatternCondition() -> MatchingPatternCondition
 }
 public extension ExpressibleAsMatchingPatternCondition {
+  /// Conformance to ExpressibleAsConditionElement
+func createConditionElement() -> ConditionElement {
+    return ConditionElement(condition: self)
+  }
   func createSyntaxBuildable() -> SyntaxBuildable {
     return createMatchingPatternCondition()
   }
 }
-public protocol ExpressibleAsOptionalBindingCondition: ExpressibleAsSyntaxBuildable {
+public protocol ExpressibleAsOptionalBindingCondition: ExpressibleAsConditionElement {
   func createOptionalBindingCondition() -> OptionalBindingCondition
 }
 public extension ExpressibleAsOptionalBindingCondition {
+  /// Conformance to ExpressibleAsConditionElement
+func createConditionElement() -> ConditionElement {
+    return ConditionElement(condition: self)
+  }
   func createSyntaxBuildable() -> SyntaxBuildable {
     return createOptionalBindingCondition()
   }

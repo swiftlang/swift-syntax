@@ -1,6 +1,13 @@
 import XCTest
 import SwiftSyntax
 
+private extension String {
+  // This implementation is really slow; to use it outside a test it should be optimized.
+  func trimmingTrailingWhitespace() -> String {
+    return self.replacingOccurrences(of: "[ ]+\\n", with: "\n", options: .regularExpression)
+  }
+}
+
 
 public class CustomReflectableTests: XCTestCase {
 
@@ -23,9 +30,9 @@ public class CustomReflectableTests: XCTestCase {
                    expectedDumped: """
                                    ▿ SwiftSyntax.TokenSyntax
                                      - text: "associatedtype"
-                                     ▿ leadingTrivia: SwiftSyntax.Trivia
+                                     ▿ leadingTrivia:
                                        - pieces: 0 elements
-                                     ▿ trailingTrivia: SwiftSyntax.Trivia
+                                     ▿ trailingTrivia:
                                        - pieces: 0 elements
                                      - tokenKind: SwiftSyntax.TokenKind.associatedtypeKeyword
 
@@ -48,16 +55,16 @@ public class CustomReflectableTests: XCTestCase {
                                      ▿ SwiftSyntax.TokenSequence
                                        ▿ SwiftSyntax.TokenSyntax
                                          - text: "["
-                                         ▿ leadingTrivia: SwiftSyntax.Trivia
+                                         ▿ leadingTrivia:
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia: SwiftSyntax.Trivia
+                                         ▿ trailingTrivia:
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
                                        ▿ SwiftSyntax.TokenSyntax
                                          - text: "]"
-                                         ▿ leadingTrivia: SwiftSyntax.Trivia
+                                         ▿ leadingTrivia:
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia: SwiftSyntax.Trivia
+                                         ▿ trailingTrivia:
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
 
@@ -81,16 +88,16 @@ public class CustomReflectableTests: XCTestCase {
                                      ▿ SwiftSyntax.ReversedTokenSequence
                                        ▿ SwiftSyntax.TokenSyntax
                                          - text: "]"
-                                         ▿ leadingTrivia: SwiftSyntax.Trivia
+                                         ▿ leadingTrivia:
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia: SwiftSyntax.Trivia
+                                         ▿ trailingTrivia:
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
                                        ▿ SwiftSyntax.TokenSyntax
                                          - text: "["
-                                         ▿ leadingTrivia: SwiftSyntax.Trivia
+                                         ▿ leadingTrivia:
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia: SwiftSyntax.Trivia
+                                         ▿ trailingTrivia:
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
 
@@ -125,9 +132,9 @@ public class CustomReflectableTests: XCTestCase {
                                          ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
                                            ▿ digits: SwiftSyntax.TokenSyntax
                                              - text: "1"
-                                             ▿ leadingTrivia: SwiftSyntax.Trivia
+                                             ▿ leadingTrivia:
                                                - pieces: 0 elements
-                                             ▿ trailingTrivia: SwiftSyntax.Trivia
+                                             ▿ trailingTrivia:
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "1"
@@ -138,9 +145,9 @@ public class CustomReflectableTests: XCTestCase {
                                          ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
                                            ▿ digits: SwiftSyntax.TokenSyntax
                                              - text: "2"
-                                             ▿ leadingTrivia: SwiftSyntax.Trivia
+                                             ▿ leadingTrivia:
                                                - pieces: 0 elements
-                                             ▿ trailingTrivia: SwiftSyntax.Trivia
+                                             ▿ trailingTrivia:
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "2"
@@ -178,9 +185,9 @@ public class CustomReflectableTests: XCTestCase {
                                            ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
                                              ▿ digits: SwiftSyntax.TokenSyntax
                                                - text: "1"
-                                               ▿ leadingTrivia: SwiftSyntax.Trivia
+                                               ▿ leadingTrivia:
                                                  - pieces: 0 elements
-                                               ▿ trailingTrivia: SwiftSyntax.Trivia
+                                               ▿ trailingTrivia:
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "1"
@@ -191,9 +198,9 @@ public class CustomReflectableTests: XCTestCase {
                                            ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
                                              ▿ digits: SwiftSyntax.TokenSyntax
                                                - text: "2"
-                                               ▿ leadingTrivia: SwiftSyntax.Trivia
+                                               ▿ leadingTrivia:
                                                  - pieces: 0 elements
-                                               ▿ trailingTrivia: SwiftSyntax.Trivia
+                                               ▿ trailingTrivia: 
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "2"
@@ -206,7 +213,7 @@ public class CustomReflectableTests: XCTestCase {
     testCases.forEach { keyAndValue in
       let (key: line, value: testCase) = keyAndValue
       let actualDumped = dumped(testCase.syntax)
-      XCTAssertEqual(testCase.expectedDumped, actualDumped, line: line)
+      XCTAssertEqual(testCase.expectedDumped.trimmingTrailingWhitespace(), actualDumped.trimmingTrailingWhitespace(), line: line)
     }
   }
 

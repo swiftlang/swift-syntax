@@ -47,5 +47,6 @@
     "CNodes.swift",
     "AtomicCounter.swift",
     "SyntaxVerifier.swift",
+    "BumpPtrAllocator.swift",
   ]
 }

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Bump-pointer allocation.
-struct BumpPtrAllocator {
+class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
   static private var SLAB_SIZE: Int = 4096
@@ -32,13 +32,26 @@ struct BumpPtrAllocator {
     totalSizeAllocated = 0
   }
 
+  deinit {
+    /// Deallocate all memory.
+    totalSizeAllocated = 0
+    currentPtr = nil
+    endPtr = nil
+    while !slabs.isEmpty {
+      slabs.removeLast().deallocate()
+    }
+    while !customSizeSlabs.isEmpty {
+      customSizeSlabs.removeLast().deallocate()
+    }
+  }
+
   /// Calculate the size of the slab at the index.
   private static func slabSize(at index: Int) -> Int {
     // Double the slab size every 'GLOWTH_DELAY' slabs.
     return SLAB_SIZE * (1 << min(30, index / GLOWTH_DELAY))
   }
 
-  private mutating func startNewSlab() {
+  private func startNewSlab() {
     let newSlabSize = Self.slabSize(at: slabs.count)
     let newSlab = Slab.allocate(
       byteCount: newSlabSize, alignment: Self.SLAB_ALIGNMENT)
@@ -48,7 +61,7 @@ struct BumpPtrAllocator {
   }
 
   /// Allocate 'byteCount' of memory.
-  mutating func allocate(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
+  func allocate(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
 
     precondition(alignment <= Self.SLAB_ALIGNMENT)
     guard byteCount > 0 else {
@@ -61,14 +74,14 @@ struct BumpPtrAllocator {
     // Check if the current slab have enough space.
     if !slabs.isEmpty {
       let aligned = currentPtr!.alignedUp(toMultipleOf: alignment)
-      if (aligned + byteCount <= endPtr!) {
+      if aligned + byteCount <= endPtr! {
         currentPtr = aligned + byteCount
         return .init(start: aligned, count: byteCount)
       }
     }
 
     // If the size is too big, allocate a dedicated slab for it.
-    if (byteCount >= Self.SLAB_SIZE) {
+    if byteCount >= Self.SLAB_SIZE {
       let customSlab = Slab.allocate(
         byteCount: byteCount, alignment: alignment)
       customSizeSlabs.append(customSlab)
@@ -84,8 +97,7 @@ struct BumpPtrAllocator {
   }
 
   /// Allocate a chunk of memory of `MemoryLayout<T>.stride * count'.
-  mutating func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
-
+  func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
     let allocated = allocate(byteCount: MemoryLayout<T>.stride * count,
                              alignment: MemoryLayout<T>.alignment)
     return allocated.bindMemory(to: T.self)
@@ -97,18 +109,5 @@ struct BumpPtrAllocator {
       slab.baseAddress! <= address && address < slab.baseAddress! + slab.count
     }
     return slabs.contains(where: test(_:)) || customSizeSlabs.contains(where: test(_:))
-  }
-
-  /// Deallocate all memory.
-  mutating func reset() {
-    totalSizeAllocated = 0
-    currentPtr = nil
-    endPtr = nil
-    while !slabs.isEmpty {
-      slabs.removeLast().deallocate()
-    }
-    while !customSizeSlabs.isEmpty {
-      customSizeSlabs.removeLast().deallocate()
-    }
   }
 }

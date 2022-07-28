@@ -91,6 +91,10 @@ let package = Package(
       linkerSettings: swiftSyntaxParserLinkerSettings
     ),
     .target(
+      name: "_SwiftSyntaxTestSupport",
+      dependencies: ["SwiftSyntax"]
+    ),
+    .target(
       name: "lit-test-helper",
       dependencies: ["SwiftSyntax", "SwiftSyntaxParser"]
     ),
@@ -121,7 +125,7 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftSyntaxTest",
-      dependencies: ["SwiftSyntax"]
+      dependencies: ["SwiftSyntax", "_SwiftSyntaxTestSupport"]
     ),
     .testTarget(
       name: "SwiftSyntaxBuilderTest",
@@ -129,7 +133,7 @@ let package = Package(
     ),
     .testTarget(
       name: "SwiftSyntaxParserTest",
-      dependencies: ["SwiftSyntaxParser"],
+      dependencies: ["SwiftSyntaxParser", "_SwiftSyntaxTestSupport"],
       exclude: ["Inputs"]
     ),
     .testTarget(

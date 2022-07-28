@@ -48,7 +48,7 @@ BASE_KIND_FILES = {
 def fail_for_called_process_error(
     succinct_description: str,
     error: subprocess.CalledProcessError
-):
+) -> None:
     printerr(f"FAIL: {succinct_description}")
     printerr(f"Executing: {escapeCmd(error.cmd)}")
     printerr(error.output)
@@ -59,7 +59,7 @@ def fail_for_called_process_error(
 # Xcode Projects Generation
 
 
-def xcode_gen(config: str):
+def xcode_gen(config: str) -> None:
     print("** Generate SwiftSyntax as an Xcode project **")
     os.chdir(PACKAGE_DIR)
     swiftpm_call = ["swift", "package", "generate-xcodeproj"]
@@ -72,16 +72,16 @@ def xcode_gen(config: str):
 # Helpers
 
 
-def printerr(message: str):
+def printerr(message: str) -> None:
     print(message, file=sys.stderr)
 
 
-def note(message: str):
+def note(message: str) -> None:
     print("--- %s: note: %s" % (os.path.basename(sys.argv[0]), message))
     sys.stdout.flush()
 
 
-def fatal_error(message: str):
+def fatal_error(message: str) -> None:
     printerr(message)
     raise SystemExit(1)
 
@@ -97,8 +97,9 @@ def escapeCmd(cmd: List[str]) -> str:
     return " ".join([escapeCmdArg(arg) for arg in cmd])
 
 
-def call(cmd: List[str], env: Dict[str, str] = dict(os.environ), stdout=None,
-         stderr=subprocess.STDOUT, verbose: bool = False):
+def call(cmd: List[str], env: Dict[str, str] = dict(os.environ),
+         stdout: Optional[int] = None, stderr: Optional[int] = subprocess.STDOUT,
+         verbose: bool = False) -> int:
     if verbose:
         print(escapeCmd(cmd))
     process = subprocess.Popen(cmd, env=env, stdout=stdout, stderr=stderr)
@@ -108,7 +109,7 @@ def call(cmd: List[str], env: Dict[str, str] = dict(os.environ), stdout=None,
 
 
 def check_call(cmd: List[str], cwd: Optional[str] = None,
-               env: Dict[str, str] = dict(os.environ), verbose: bool = False):
+               env: Dict[str, str] = dict(os.environ), verbose: bool = False) -> None:
     if verbose:
         print(escapeCmd(cmd))
     subprocess.check_call(cmd, cwd=cwd, env=env, stderr=subprocess.STDOUT)
@@ -124,7 +125,7 @@ def realpath(path: Optional[str]) -> Optional[str]:
 # Generating gyb Files
 
 
-def check_gyb_exec(gyb_exec: str):
+def check_gyb_exec(gyb_exec: str) -> None:
     if not os.path.exists(gyb_exec):
         fatal_error(
             """
@@ -139,10 +140,9 @@ Refer to README.md for more information.
         )
 
 
-def check_rsync():
-    with open(os.devnull, "w") as DEVNULL:
-        if call(["rsync", "--version"], stdout=DEVNULL) != 0:
-            fatal_error("Error: Could not find rsync.")
+def check_rsync() -> None:
+    if call(["rsync", "--version"], stdout=subprocess.DEVNULL) != 0:
+        fatal_error("Error: Could not find rsync.")
 
 
 def generate_single_gyb_file(
@@ -154,7 +154,7 @@ def generate_single_gyb_file(
     add_source_locations: bool,
     additional_gyb_flags: List[str],
     verbose: bool,
-):
+) -> None:
     # Source locations are added by default by gyb, and cleared by passing
     # `--line-directive=` (nothing following the `=`) to the generator. Our
     # flag is the reverse; we don't want them by default, only if requested.
@@ -195,7 +195,7 @@ def generate_gyb_files_helper(
     gyb_exec: str,
     add_source_locations: bool,
     verbose: bool,
-):
+) -> None:
     temp_files_dir = tempfile.gettempdir()
     make_dir_if_needed(temp_files_dir)
 
@@ -207,7 +207,7 @@ def generate_gyb_files_helper(
     clear_gyb_files_from_previous_run(
         sources_dir, destination_dir, verbose)
 
-    def generate_gyb_file(gyb_file):
+    def generate_gyb_file(gyb_file: str) -> None:
         gyb_file_path = os.path.join(sources_dir, gyb_file)
 
         # Slice off the '.gyb' to get the name for the output file
@@ -242,7 +242,7 @@ def generate_syntax_node_template_gyb_files(
     gyb_exec: str,
     add_source_locations: bool,
     verbose: bool
-):
+) -> None:
     temp_files_dir = tempfile.gettempdir()
     make_dir_if_needed(temp_files_dir)
 
@@ -286,7 +286,7 @@ def generate_gyb_files(
     swiftsyntaxbuilder_destination: Optional[str] = None,
     swiftsyntaxparser_destination: Optional[str] = None,
     swiftsyntaxbuildergenerator_destination: Optional[str] = None
-):
+) -> None:
     print("** Generating gyb Files **")
 
     check_gyb_exec(gyb_exec)
@@ -333,7 +333,7 @@ def generate_gyb_files(
 def run_code_generation(
     toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
     release: bool, verbose: bool, swiftsyntaxbuilder_destination: str
-):
+) -> None:
     print("** Running code generation **")
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
@@ -359,7 +359,7 @@ def run_code_generation(
     check_call(swiftpm_call, env=env, verbose=verbose)
 
 
-def make_dir_if_needed(path):
+def make_dir_if_needed(path: str) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
 
@@ -368,7 +368,7 @@ def make_dir_if_needed(path):
 # corresponding `.gyb` file in the `Sources` directory.
 def clear_gyb_files_from_previous_run(
     sources_dir: str, destination_dir: str, verbose: bool
-):
+) -> None:
     for previous_gyb_gen_file in os.listdir(destination_dir):
         if previous_gyb_gen_file.endswith(".swift"):
             gyb_file = os.path.join(
@@ -419,7 +419,7 @@ class Builder(object):
         release: bool,
         verbose: bool,
         disable_sandbox: bool = False,
-    ):
+    ) -> None:
         self.swiftpm_call = get_swiftpm_invocation(
             toolchain=toolchain,
             action="build",
@@ -434,7 +434,7 @@ class Builder(object):
         self.verbose = verbose
         self.toolchain = toolchain
 
-    def build(self, product_name: str):
+    def build(self, product_name: str) -> None:
         print("** Building " + product_name + " **")
         command = list(self.swiftpm_call)
         command.extend(["--product", product_name])
@@ -452,7 +452,7 @@ class Builder(object):
 # Testing
 
 
-def verify_generated_files(gyb_exec: str, verbose: bool):
+def verify_generated_files(gyb_exec: str, verbose: bool) -> None:
     user_swiftsyntax_generated_dir = os.path.join(
         SWIFTSYNTAX_DIR, "gyb_generated"
     )
@@ -502,7 +502,7 @@ def verify_generated_files(gyb_exec: str, verbose: bool):
 def verify_code_generated_files(
     toolchain: str, build_dir: Optional[str],  multiroot_data_file: Optional[str],
     release: bool, verbose: bool
-):
+) -> None:
     user_swiftsyntaxbuilder_generated_dir = os.path.join(
         SWIFTSYNTAXBUILDER_DIR, "generated"
     )
@@ -532,7 +532,8 @@ def verify_code_generated_files(
     )
 
 
-def check_generated_files_match(self_generated_dir: str, user_generated_dir: str):
+def check_generated_files_match(self_generated_dir: str,
+                                user_generated_dir: str) -> None:
     command = [
         "diff",
         "--recursive",
@@ -545,7 +546,7 @@ def check_generated_files_match(self_generated_dir: str, user_generated_dir: str
     check_call(command)
 
 
-def verify_c_syntax_nodes_match():
+def verify_c_syntax_nodes_match() -> None:
     print("** Validating that the C data types match **")
 
     swift_syntax_c_definitions = os.path.join(
@@ -564,7 +565,7 @@ def verify_c_syntax_nodes_match():
 def run_tests(
     toolchain: str, build_dir: Optional[str], multiroot_data_file: Optional[str],
     release: bool, filecheck_exec: Optional[str], skip_lit_tests: bool, verbose: bool
-):
+) -> None:
     print("** Running SwiftSyntax Tests **")
 
     if not skip_lit_tests:
@@ -588,7 +589,7 @@ def run_tests(
 # Lit Tests
 
 
-def check_lit_exec():
+def check_lit_exec() -> None:
     if not os.path.exists(LIT_EXEC):
         fatal_error(
             """
@@ -602,7 +603,7 @@ Refer to README.md for more information.
         )
 
 
-def check_incr_transfer_roundtrip_exec():
+def check_incr_transfer_roundtrip_exec() -> None:
     if not os.path.exists(INCR_TRANSFER_ROUNDTRIP_EXEC):
         fatal_error(
             """
@@ -633,7 +634,7 @@ def find_lit_test_helper_exec(
 
 
 def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
-                  filecheck_exec: Optional[str], verbose: bool):
+                  filecheck_exec: Optional[str], verbose: bool) -> None:
     print("** Running lit-based tests **")
 
     check_lit_exec()
@@ -667,7 +668,8 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
 
 
 def run_xctests(toolchain: str, build_dir: Optional[str],
-                multiroot_data_file: Optional[str], release: bool, verbose: bool):
+                multiroot_data_file: Optional[str], release: bool,
+                verbose: bool) -> None:
     print("** Running XCTests **")
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
@@ -694,11 +696,11 @@ def run_xctests(toolchain: str, build_dir: Optional[str],
 # Arugment Parsing functions
 
 
-def generate_xcodeproj(args):
+def generate_xcodeproj(args: argparse.Namespace) -> None:
     xcode_gen(config=args.xcconfig_path)
 
 
-def generate_source_code_command(args):
+def generate_source_code_command(args: argparse.Namespace) -> None:
     try:
         generate_gyb_files(
             args.gyb_exec,
@@ -724,7 +726,7 @@ def generate_source_code_command(args):
             "Source generation using SwiftSyntaxBuilder failed", e)
 
 
-def verify_source_code_command(args):
+def verify_source_code_command(args: argparse.Namespace) -> None:
     try:
         verify_generated_files(args.gyb_exec, verbose=args.verbose)
 
@@ -749,7 +751,7 @@ def verify_source_code_command(args):
         raise SystemExit(1)
 
 
-def build_command(args):
+def build_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
             toolchain=args.toolchain,
@@ -769,7 +771,7 @@ def build_command(args):
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 
 
-def test_command(args):
+def test_command(args: argparse.Namespace) -> None:
     try:
         builder = Builder(
             toolchain=args.toolchain,
@@ -819,8 +821,8 @@ section for arguments that need to be specified for this.
 """
 
 
-def parse_args():
-    def add_default_build_arguments(parser):
+def parse_args() -> argparse.Namespace:
+    def add_default_build_arguments(parser: argparse.ArgumentParser) -> None:
         parser.add_argument(
             "-r", "--release", action="store_true", help="Build in release mode."
         )
@@ -956,7 +958,7 @@ def parse_args():
 # -----------------------------------------------------------------------------
 
 
-def main():
+def main() -> None:
     args = parse_args()
     args.func(args)
 

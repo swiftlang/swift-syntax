@@ -13,9 +13,9 @@ import SwiftSyntaxBuilder
 let source = SourceFile {
   ImportDecl(path: "Foundation")
   ImportDecl(path: "UIKit")
-  ClassDecl(classKeyword: .class, identifier: "SomeViewController", membersBuilder: {
+  ClassDecl(identifier: "SomeViewController") {
     VariableDecl(.let, name: "tableView", type: "UITableView")
-  })
+  }
 }
 
 let syntax = source.buildSyntax(format: Format())

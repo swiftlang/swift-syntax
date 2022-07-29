@@ -1,11 +1,11 @@
-# Examples
+# Snippets (Examples)
 
-- Command line tool to add one to every integer literal in a source file [AddOneToIntegerLiterals.swift](https://github.com/apple/swift-syntax/blob/main/Examples/AddOneToIntegerLiterals.swift).
-- Code-generate a simple source file using SwiftSyntaxBuilder [CodeGenerationUsingSwiftSyntaxBuilder.swift](https://github.com/apple/swift-syntax/blob/95fe6182b755346eee74b499109b4ab9eaf38651/Examples/CodeGenerationUsingSwiftSyntaxBuilder.swift)
+- Command line tool to add one to every integer literal in a source file [AddOneToIntegerLiterals.swift](AddOneToIntegerLiterals.swift).
+- Code-generate a simple source file using SwiftSyntaxBuilder [CodeGenerationUsingSwiftSyntaxBuilder.swift](CodeGenerationUsingSwiftSyntaxBuilder.swift)
 
 ## Some Example Usages
 
-[**Swift AST Explorer**](https://swift-ast-explorer.kishikawakatsumi.com/): a Swift AST visualizer.
+[**Swift AST Explorer**](https://swift-ast-explorer.com/): a Swift AST visualizer.
 
 [**swift-format**](https://github.com/apple/swift-format): formatting technology for Swift source code.
 

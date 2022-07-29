@@ -58,7 +58,7 @@ public class SyntaxFactoryTests: XCTestCase {
   public func testTokenSyntax() {
     let tok = SyntaxFactory.makeStructKeyword()
     XCTAssertEqual("\(tok)", "struct ")
-    XCTAssertTrue(tok.isPresent)
+    XCTAssertEqual(tok.presence, .present)
 
     let preSpacedTok = tok.withLeadingTrivia(.spaces(3))
     XCTAssertEqual("\(preSpacedTok)", "   struct ")

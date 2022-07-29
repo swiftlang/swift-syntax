@@ -24,7 +24,16 @@ public enum SyntaxVisitorContinueKind {
 }
 
 open class SyntaxVisitor {
-  public init() {}
+  public let viewMode: SyntaxTreeViewMode
+
+  @available(*, deprecated, message: "Use init(viewMode:) instead")
+  public convenience init() {
+    self.init(viewMode: .sourceAccurate)
+  }
+
+  public init(viewMode: SyntaxTreeViewMode) {
+    self.viewMode = viewMode
+  }
 
   /// Walk all nodes of the given syntax tree, calling the corresponding `visit` 
   /// function for every node that is being visited.
@@ -5873,7 +5882,7 @@ open class SyntaxVisitor {
   private func visitChildren<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) {
     let syntaxNode = Syntax(node)
     let parentBox = SyntaxBox(syntaxNode)
-    for childRaw in PresentRawSyntaxChildren(syntaxNode) {
+    for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {
       let childData = SyntaxData(childRaw, parentBox: parentBox)
       visit(childData)
     }

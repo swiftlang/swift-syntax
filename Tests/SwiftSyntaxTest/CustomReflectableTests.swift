@@ -43,7 +43,7 @@ public class CustomReflectableTests: XCTestCase {
         let expr = SyntaxFactory.makeArrayExpr(leftSquare: leftToken,
                                                elements: elements,
                                                rightSquare: rightToken)
-        return .init(syntax: expr.tokens,
+        return .init(syntax: expr.tokens(viewMode: .sourceAccurate),
                      expectedDumped: """
                                      ▿ SwiftSyntax.TokenSequence
                                        ▿ SwiftSyntax.TokenSyntax
@@ -76,7 +76,7 @@ public class CustomReflectableTests: XCTestCase {
         let expr = SyntaxFactory.makeArrayExpr(leftSquare: leftToken,
                                                elements: elements,
                                                rightSquare: rightToken)
-        return .init(syntax: expr.tokens.reversed(),
+        return .init(syntax: expr.tokens(viewMode: .sourceAccurate).reversed(),
                      expectedDumped: """
                                      ▿ SwiftSyntax.ReversedTokenSequence
                                        ▿ SwiftSyntax.TokenSyntax

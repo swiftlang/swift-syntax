@@ -135,9 +135,14 @@ internal extension SyntaxProtocol {
 }
 
 public extension SyntaxProtocol {
-  /// A sequence over the `present` children of this node.
+  @available(*, deprecated, message: "Use children(viewMode:) instead")
   var children: SyntaxChildren {
-    return SyntaxChildren(_syntaxNode)
+    return children(viewMode: .sourceAccurate)
+  }
+
+  /// A sequence over the `present` children of this node.
+  func children(viewMode: SyntaxTreeViewMode) -> SyntaxChildren {
+    return SyntaxChildren(_syntaxNode, viewMode: viewMode)
   }
 
   /// The index of this node in a `SyntaxChildren` collection.
@@ -147,12 +152,12 @@ public extension SyntaxProtocol {
 
   /// Whether or not this node is marked as `present`.
   var isPresent: Bool {
-    return raw.isPresent
+    return raw.presence == .present
   }
 
   /// Whether or not this node is marked as `missing`.
   var isMissing: Bool {
-    return raw.isMissing
+    return raw.presence == .missing
   }
 
   /// Whether or not this node is a token one.
@@ -191,45 +196,63 @@ public extension SyntaxProtocol {
   /// Recursively walks through the tree to find the token semantically before
   /// this node.
   var previousToken: TokenSyntax? {
+    return self.previousToken(viewMode: .sourceAccurate)
+  }
+
+  /// Recursively walks through the tree to find the token semantically before
+  /// this node.
+  func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
     guard let parent = self.parent else {
       return nil
     }
-    let siblings = PresentRawSyntaxChildren(parent)
+    let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
     for absoluteRaw in siblings[..<self.index].reversed() {
       let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
-      if let token = child.lastToken {
+      if let token = child.lastToken(viewMode: viewMode) {
         return token
       }
     }
-    return parent.previousToken
+    return parent.previousToken(viewMode: viewMode)
   }
 
   /// Recursively walks through the tree to find the next token semantically
   /// after this node.
   var nextToken: TokenSyntax? {
+    return self.nextToken(viewMode: .sourceAccurate)
+  }
+
+  /// Recursively walks through the tree to find the next token semantically
+  /// after this node.
+  func nextToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
     guard let parent = self.parent else {
       return nil
     }
-    let siblings = PresentRawSyntaxChildren(parent)
+    let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
     let nextSiblingIndex = siblings.index(after: self.index)
     for absoluteRaw in siblings[nextSiblingIndex...] {
       let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
-      if let token = child.firstToken {
+      if let token = child.firstToken(viewMode: viewMode) {
         return token
       }
     }
-    return parent.nextToken
+    return parent.nextToken(viewMode: viewMode)
+  }
+
+  /// Returns the first token in this syntax node in the source accurate view of
+  /// the syntax tree.
+  var firstToken: TokenSyntax? {
+    return self.firstToken(viewMode: .sourceAccurate)
   }
 
   /// Returns the first token node that is part of this syntax node.
-  var firstToken: TokenSyntax? {
-    if isMissing { return nil }
+  func firstToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    guard viewMode.shouldTraverse(node: raw) else { return nil }
     if let token = _syntaxNode.as(TokenSyntax.self) {
       return token
     }
 
-    for child in children {
-      if let token = child.firstToken {
+    for child in children(viewMode: viewMode) {
+      if let token = child.firstToken(viewMode: viewMode) {
         return token
       }
     }
@@ -238,13 +261,18 @@ public extension SyntaxProtocol {
 
   /// Returns the last token node that is part of this syntax node.
   var lastToken: TokenSyntax? {
-    if isMissing { return nil }
+    return self.lastToken(viewMode: .sourceAccurate)
+  }
+
+  /// Returns the last token node that is part of this syntax node.
+  func lastToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    guard viewMode.shouldTraverse(node: raw) else { return nil }
     if let token = _syntaxNode.as(TokenSyntax.self) {
       return token
     }
 
-    for child in children.reversed() {
-      if let tok = child.lastToken {
+    for child in children(viewMode: viewMode).reversed() {
+      if let tok = child.lastToken(viewMode: viewMode) {
         return tok
       }
     }
@@ -377,8 +405,14 @@ public extension SyntaxProtocol {
   }
 
   /// Sequence of tokens that are part of this Syntax node.
+  @available(*, deprecated, message: "Use tokens(viewMode:) instead")
   var tokens: TokenSequence {
-    return TokenSequence(_syntaxNode)
+    return tokens(viewMode: .sourceAccurate)
+  }
+
+  /// Sequence of tokens that are part of this Syntax node.
+  func tokens(viewMode: SyntaxTreeViewMode) -> TokenSequence {
+    return TokenSequence(_syntaxNode, viewMode: viewMode)
   }
 
   /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
@@ -466,15 +500,17 @@ public struct TokenSequence: Sequence {
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?
     let endPosition: AbsolutePosition
+    let viewMode: SyntaxTreeViewMode
 
-    init(_ token: TokenSyntax?, endPosition: AbsolutePosition) {
+    init(_ token: TokenSyntax?, endPosition: AbsolutePosition, viewMode: SyntaxTreeViewMode) {
       self.nextToken = token
       self.endPosition = endPosition
+      self.viewMode = viewMode
     }
 
     public mutating func next() -> TokenSyntax? {
       guard let token = self.nextToken else { return nil }
-      self.nextToken = token.nextToken
+      self.nextToken = token.nextToken(viewMode: viewMode)
       // Make sure we stop once we reach the end of the containing node.
       if let nextTok = self.nextToken, nextTok.position >= self.endPosition {
         self.nextToken = nil
@@ -484,17 +520,19 @@ public struct TokenSequence: Sequence {
   }
 
   let node: Syntax
+  let viewMode: SyntaxTreeViewMode
 
-  public init(_ node: Syntax) {
+  public init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
     self.node = node
+    self.viewMode = viewMode
   }
 
   public func makeIterator() -> Iterator {
-    return Iterator(node.firstToken, endPosition: node.endPosition)
+    return Iterator(node.firstToken(viewMode: viewMode), endPosition: node.endPosition, viewMode: viewMode)
   }
 
   public func reversed() -> ReversedTokenSequence {
-    return ReversedTokenSequence(node)
+    return ReversedTokenSequence(node, viewMode: viewMode)
   }
 }
 
@@ -509,15 +547,17 @@ public struct ReversedTokenSequence: Sequence {
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?
     let startPosition: AbsolutePosition
+    let viewMode: SyntaxTreeViewMode
 
-    init(_ token: TokenSyntax?, startPosition: AbsolutePosition) {
+    init(_ token: TokenSyntax?, startPosition: AbsolutePosition, viewMode: SyntaxTreeViewMode) {
       self.nextToken = token
       self.startPosition = startPosition
+      self.viewMode = viewMode
     }
 
     public mutating func next() -> TokenSyntax? {
       guard let token = self.nextToken else { return nil }
-      self.nextToken = token.previousToken
+      self.nextToken = token.previousToken(viewMode: viewMode)
       // Make sure we stop once we went beyond the start of the containing node.
       if let nextTok = self.nextToken, nextTok.position < self.startPosition {
         self.nextToken = nil
@@ -527,17 +567,19 @@ public struct ReversedTokenSequence: Sequence {
   }
 
   let node: Syntax
+  let viewMode: SyntaxTreeViewMode
 
-  public init(_ node: Syntax) {
+  public init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
     self.node = node
+    self.viewMode = viewMode
   }
 
   public func makeIterator() -> Iterator {
-    return Iterator(node.lastToken, startPosition: node.position)
+    return Iterator(node.lastToken(viewMode: viewMode), startPosition: node.position, viewMode: viewMode)
   }
 
   public func reversed() -> TokenSequence {
-    return TokenSequence(node)
+    return TokenSequence(node, viewMode: viewMode)
   }
 }
 

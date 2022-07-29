@@ -304,7 +304,7 @@ public struct IncrementalParseLookup {
       if !edits.edits.isEmpty && edits.edits.first!.range.offset > nextSibling.endPosition.utf8Offset {
         return true
       }
-      if let nextToken = nextSibling.raw.firstPresentToken {
+      if let nextToken = nextSibling.raw.firstToken(viewMode: .sourceAccurate) {
         nextLeafNodeLength = nextToken.totalLength - nextToken.trailingTriviaLength
       }
     }
@@ -350,6 +350,7 @@ fileprivate struct SyntaxCursor {
   var parents: [AbsoluteRawSyntax]
   var node: AbsoluteRawSyntax
   var finished: Bool
+  let viewMode = SyntaxTreeViewMode.sourceAccurate
 
   init(root: AbsoluteRawSyntax) {
     self.node = root
@@ -368,7 +369,7 @@ fileprivate struct SyntaxCursor {
     var parents = ArraySlice(self.parents)
     var node = self.node
     while !parents.isEmpty {
-      if let sibling = node.nextSibling(parent: parents.last!) {
+      if let sibling = node.nextSibling(parent: parents.last!, viewMode: viewMode) {
         return sibling
       }
       node = parents.removeLast()
@@ -380,7 +381,7 @@ fileprivate struct SyntaxCursor {
   /// Moves to the first child of the current node.
   /// - Returns: False if the node has no children.
   mutating func advanceToFirstChild() -> Bool {
-    guard let child = node.firstChild else { return false }
+    guard let child = node.firstChild(viewMode: viewMode) else { return false }
     parents.append(node)
     node = child
     return true
@@ -391,7 +392,7 @@ fileprivate struct SyntaxCursor {
   /// - Returns: False if it run out of nodes to walk to.
   mutating func advanceToNextSibling() -> Bool {
     while !parents.isEmpty {
-      if let sibling = node.nextSibling(parent: parents.last!) {
+      if let sibling = node.nextSibling(parent: parents.last!, viewMode: viewMode) {
         node = sibling
         return true
       }

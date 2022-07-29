@@ -99,7 +99,7 @@ public class ClassificationTests: XCTestCase {
     let source = "let x: Int"
     let tree = try! SyntaxParser.parse(source: source)
     do {
-      let tokens = Array(tree.tokens)
+      let tokens = Array(tree.tokens(viewMode: .sourceAccurate))
       XCTAssertEqual(tokens.count, 4)
       guard tokens.count == 4 else {
         return
@@ -115,7 +115,7 @@ public class ClassificationTests: XCTestCase {
       XCTAssertEqual(classif[3].range, ByteSourceRange(offset: 7, length: 3))
     }
     do {
-      let tok = tree.lastToken!.previousToken!
+      let tok = tree.lastToken(viewMode: .sourceAccurate)!.previousToken(viewMode: .sourceAccurate)!
       XCTAssertEqual("\(tok)", "Int")
       let classif = Array(tok.classifications).first!
       XCTAssertEqual(classif.kind, .typeIdentifier)

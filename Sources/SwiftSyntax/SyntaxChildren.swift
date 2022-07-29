@@ -251,15 +251,17 @@ struct RawSyntaxChildren: BidirectionalCollection {
 
 /// Collection that contains the `present` child nodes of an
 /// `AbsoluteRawSyntax` node.
-struct PresentRawSyntaxChildren: BidirectionalCollection {
+struct NonNilRawSyntaxChildren: BidirectionalCollection {
   typealias Element = AbsoluteRawSyntax
   typealias Index = SyntaxChildrenIndex
 
   struct Iterator: IteratorProtocol {
     var iterator: RawSyntaxChildren.Iterator
+    let viewMode: SyntaxTreeViewMode
 
-    init(allChildren: RawSyntaxChildren) {
+    init(allChildren: RawSyntaxChildren, viewMode: SyntaxTreeViewMode) {
       self.iterator = allChildren.makeIterator()
+      self.viewMode = viewMode
     }
 
     mutating func next() -> AbsoluteRawSyntax? {
@@ -269,12 +271,14 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
         guard let (node, info) = self.iterator.next() else {
           return nil
         }
-        if let node = node, node.isPresent {
+        if let node = node, viewMode.shouldTraverse(node: node) {
           return AbsoluteRawSyntax(raw: node, info: info)
         }
       }
     }
   }
+
+  let viewMode: SyntaxTreeViewMode
 
   /// The underlying collection which contains all children. The present
   /// children are filtered from this collection.
@@ -286,7 +290,7 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
   }
 
   func makeIterator() -> Iterator {
-    return Iterator(allChildren: allChildren)
+    return Iterator(allChildren: allChildren, viewMode: viewMode)
   }
 
   /// Advances the index to the next present node in the given collection. If
@@ -294,13 +298,14 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
   /// If no present node exists in the given collection after the index, the
   /// collection's `endIndex` is returned.
   private static func presentIndex(after index: SyntaxChildrenIndex,
-                                   in children: RawSyntaxChildren)
+                                   in children: RawSyntaxChildren,
+                                   viewMode: SyntaxTreeViewMode)
       -> SyntaxChildrenIndex {
     var advancedIndex = index
     while true {
       if advancedIndex != children.endIndex {
         let node = children[advancedIndex].raw
-        if let node = node, node.isPresent {
+        if let node = node, viewMode.shouldTraverse(node: node) {
           // Found a present node. Return its index.
           return advancedIndex
         }
@@ -317,13 +322,14 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
   /// If the node at the given index is already present, it is not reversed.
   /// Behavior is undefined if no present index exists before the given index.
   private static func presentIndex(before index: SyntaxChildrenIndex,
-                                   in children: RawSyntaxChildren)
+                                   in children: RawSyntaxChildren,
+                                   viewMode: SyntaxTreeViewMode)
       -> SyntaxChildrenIndex {
     var reversedIndex = index
     while true {
       if reversedIndex < children.endIndex,
           let node = children[reversedIndex].raw,
-          node.isPresent {
+         viewMode.shouldTraverse(node: node) {
         return reversedIndex
       }
 #if DEBUG
@@ -340,7 +346,9 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
 
   func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
     let nextIndex = allChildren.index(after: index)
-    return Self.presentIndex(after: nextIndex, in: allChildren)
+    return Self.presentIndex(after: nextIndex,
+                             in: allChildren,
+                             viewMode: viewMode)
   }
 
   func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
@@ -349,7 +357,8 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
     // index. The start index points to the first present node. Hence there is
     // a present node before us.
     return Self.presentIndex(before: allChildren.index(before: index),
-                             in: allChildren)
+                             in: allChildren,
+                             viewMode: viewMode)
   }
 
   subscript(position: SyntaxChildrenIndex) -> AbsoluteRawSyntax {
@@ -358,16 +367,18 @@ struct PresentRawSyntaxChildren: BidirectionalCollection {
     return AbsoluteRawSyntax(raw: node!, info: info)
   }
 
-  init(_ parent: AbsoluteRawSyntax) {
+  init(_ parent: AbsoluteRawSyntax, viewMode: SyntaxTreeViewMode) {
     let allChildren = RawSyntaxChildren(parent)
 
     self.allChildren = allChildren
     self.startIndex = Self.presentIndex(after: allChildren.startIndex,
-                                        in: allChildren)
+                                        in: allChildren,
+                                        viewMode: viewMode)
+    self.viewMode = viewMode
   }
 
-  init(_ node: Syntax) {
-    self.init(node.data.absoluteRaw)
+  init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
+    self.init(node.data.absoluteRaw, viewMode: viewMode)
   }
 }
 
@@ -378,7 +389,7 @@ public struct SyntaxChildren: BidirectionalCollection {
 
   /// The collection that contains the raw child nodes. `Syntax` nodes are
   /// generated from these.
-  private let rawChildren: PresentRawSyntaxChildren
+  private let rawChildren: NonNilRawSyntaxChildren
 
   /// The parent node of the children. Used to build the `Syntax` nodes.
   private let parent: Syntax
@@ -400,8 +411,8 @@ public struct SyntaxChildren: BidirectionalCollection {
     return Syntax(data)
   }
 
-  internal init(_ node: Syntax) {
-    self.rawChildren = PresentRawSyntaxChildren(node)
+  internal init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
+    self.rawChildren = NonNilRawSyntaxChildren(node, viewMode: viewMode)
     self.parent = node
   }
 }

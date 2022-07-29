@@ -89,6 +89,7 @@ fileprivate struct AbsoluteNode {
   /// the classification should apply unconditionally, otherwise it should apply
   /// only for identifiers.
   let classification: (SyntaxClassification, Bool)?
+  let viewMode = SyntaxTreeViewMode.sourceAccurate
 
   /// Use this constructor for the root node.
   init(
@@ -119,7 +120,7 @@ fileprivate struct AbsoluteNode {
     var curPos = position.advancedToFirstChild()
     for i in 0..<raw.numberOfChildren {
       let childOpt = raw.child(at: i)
-      if let child = childOpt, child.isPresent {
+      if let child = childOpt, viewMode.shouldTraverse(node: child) {
         return AbsoluteNode(raw: child, position: curPos, parent: self)
       }
       curPos = curPos.advancedBySibling(childOpt)
@@ -131,7 +132,7 @@ fileprivate struct AbsoluteNode {
     var curPos = position.advancedBySibling(raw)
     for i in Int(position.indexInParent+1) ..< parent.raw.numberOfChildren {
       let siblingOpt = parent.raw.child(at: i)
-      if let sibling = siblingOpt, sibling.isPresent {
+      if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
         return AbsoluteNode(raw: sibling, position: curPos, parent: parent)
       }
       curPos = curPos.advancedBySibling(siblingOpt)

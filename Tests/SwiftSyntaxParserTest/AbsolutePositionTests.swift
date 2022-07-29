@@ -58,7 +58,7 @@ public class AbsolutePositionTests: XCTestCase {
           return .skipChildren
         }
       }
-      let visitor = Visitor()
+      let visitor = Visitor(viewMode: .sourceAccurate)
       visitor.walk(parsed)
     }())
   }

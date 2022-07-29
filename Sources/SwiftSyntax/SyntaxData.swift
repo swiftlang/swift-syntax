@@ -144,11 +144,11 @@ struct AbsoluteRawSyntax {
   }
 
   /// Returns first `present` child.
-  var firstChild: AbsoluteRawSyntax? {
+  func firstChild(viewMode: SyntaxTreeViewMode) -> AbsoluteRawSyntax? {
     var curInfo = info.advancedToFirstChild()
     for i in 0..<raw.numberOfChildren {
       let childOpt = raw.child(at: i)
-      if let child = childOpt, child.isPresent {
+      if let child = childOpt, viewMode.shouldTraverse(node: child) {
         return AbsoluteRawSyntax(raw: child, info: curInfo)
       }
       curInfo = curInfo.advancedBySibling(childOpt)
@@ -157,11 +157,11 @@ struct AbsoluteRawSyntax {
   }
 
   /// Returns next `present` sibling.
-  func nextSibling(parent: AbsoluteRawSyntax) -> AbsoluteRawSyntax? {
+  func nextSibling(parent: AbsoluteRawSyntax, viewMode: SyntaxTreeViewMode) -> AbsoluteRawSyntax? {
     var curInfo = info.advancedBySibling(raw)
     for i in Int(info.indexInParent+1) ..< parent.raw.numberOfChildren {
       let siblingOpt = parent.raw.child(at: i)
-      if let sibling = siblingOpt, sibling.isPresent {
+      if let sibling = siblingOpt, viewMode.shouldTraverse(node: sibling) {
         return AbsoluteRawSyntax(raw: sibling, info: curInfo)
       }
       curInfo = curInfo.advancedBySibling(siblingOpt)

@@ -417,6 +417,10 @@ func performRoundtrip(args: CommandLineArguments) throws {
 }
 
 class NodePrinter: SyntaxAnyVisitor {
+  init() {
+    super.init(viewMode: .sourceAccurate)
+  }
+
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     assert(!node.isUnknown)
     print("<\(type(of: node.asProtocol(SyntaxProtocol.self)))>", terminator: "")
@@ -501,6 +505,7 @@ func diagnose(args: CommandLineArguments) throws {
     init(diagnosticHandler: @escaping ((Diagnostic) -> Void), _ converter: SourceLocationConverter) {
       self.diagnosticHandler = diagnosticHandler
       self.converter = converter
+      super.init(viewMode: ._all)
     }
     override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
       if node.isUnknown {

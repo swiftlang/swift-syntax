@@ -15,7 +15,7 @@ public class SyntaxVisitorTests: XCTestCase {
     }
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let counter = FuncCounter()
+      let counter = FuncCounter(viewMode: .fixedUp)
       let hashBefore = parsed.hashValue
       counter.walk(parsed)
       XCTAssertEqual(counter.funcCount, 3)
@@ -73,7 +73,7 @@ public class SyntaxVisitorTests: XCTestCase {
 
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getTestInput("nested-blocks.swift"))
-      let visitor = VisitCollections()
+      let visitor = VisitCollections(viewMode: .fixedUp)
       visitor.walk(parsed)
       XCTAssertEqual(4, visitor.numberOfCodeBlockItems)
     }())
@@ -89,7 +89,7 @@ public class SyntaxVisitorTests: XCTestCase {
     }
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(getTestInput("visitor.swift"))
-      let counter = FuncCounter()
+      let counter = FuncCounter(viewMode: .fixedUp)
       let hashBefore = parsed.hashValue
       counter.walk(parsed)
       XCTAssertEqual(counter.funcCount, 3)

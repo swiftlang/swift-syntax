@@ -46,7 +46,7 @@ public class ParseFileTests: XCTestCase {
         return .skipChildren
       }
     }
-    let v = Visitor()
+    let v = Visitor(viewMode: .fixedUp)
     let currentFile = URL(fileURLWithPath: #file)
     let parsed = try! SyntaxParser.parse(currentFile)
     v.walk(parsed)

@@ -20,7 +20,7 @@ public class CustomReflectableTests: XCTestCase {
     let testCases: [UInt: TestCase] = [
       #line: .init(syntax: SyntaxFactory.makeUnknownSyntax(tokens: []),
                    expectedDumped: """
-                                   - SwiftSyntax.UnknownSyntax
+                                   - UnknownSyntax
 
                                    """),
       #line: .init(syntax: SyntaxFactory.makeToken(.associatedtypeKeyword,
@@ -28,11 +28,11 @@ public class CustomReflectableTests: XCTestCase {
                                                    leadingTrivia: [],
                                                    trailingTrivia: []),
                    expectedDumped: """
-                                   ▿ SwiftSyntax.TokenSyntax
+                                   ▿ associatedtypeKeyword
                                      - text: "associatedtype"
-                                     ▿ leadingTrivia:
+                                     ▿ leadingTrivia: []
                                        - pieces: 0 elements
-                                     ▿ trailingTrivia:
+                                     ▿ trailingTrivia: []
                                        - pieces: 0 elements
                                      - tokenKind: SwiftSyntax.TokenKind.associatedtypeKeyword
 
@@ -53,18 +53,18 @@ public class CustomReflectableTests: XCTestCase {
         return .init(syntax: expr.tokens(viewMode: .sourceAccurate),
                      expectedDumped: """
                                      ▿ SwiftSyntax.TokenSequence
-                                       ▿ SwiftSyntax.TokenSyntax
+                                       ▿ leftSquareBracket
                                          - text: "["
-                                         ▿ leadingTrivia:
+                                         ▿ leadingTrivia: []
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia:
+                                         ▿ trailingTrivia: []
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
-                                       ▿ SwiftSyntax.TokenSyntax
+                                       ▿ rightSquareBracket
                                          - text: "]"
-                                         ▿ leadingTrivia:
+                                         ▿ leadingTrivia: []
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia:
+                                         ▿ trailingTrivia: []
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
 
@@ -86,18 +86,18 @@ public class CustomReflectableTests: XCTestCase {
         return .init(syntax: expr.tokens(viewMode: .sourceAccurate).reversed(),
                      expectedDumped: """
                                      ▿ SwiftSyntax.ReversedTokenSequence
-                                       ▿ SwiftSyntax.TokenSyntax
+                                       ▿ rightSquareBracket
                                          - text: "]"
-                                         ▿ leadingTrivia:
+                                         ▿ leadingTrivia: []
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia:
+                                         ▿ trailingTrivia: []
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
-                                       ▿ SwiftSyntax.TokenSyntax
+                                       ▿ leftSquareBracket
                                          - text: "["
-                                         ▿ leadingTrivia:
+                                         ▿ leadingTrivia: []
                                            - pieces: 0 elements
-                                         ▿ trailingTrivia:
+                                         ▿ trailingTrivia: []
                                            - pieces: 0 elements
                                          - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
 
@@ -125,38 +125,38 @@ public class CustomReflectableTests: XCTestCase {
         let tuples = SyntaxFactory.makeTupleExprElementList(elements)
         return .init(syntax: tuples,
                      expectedDumped: """
-                                     ▿ SwiftSyntax.TupleExprElementListSyntax
-                                       ▿ SwiftSyntax.TupleExprElementSyntax
+                                     ▿ TupleExprElementListSyntax
+                                       ▿ TupleExprElementSyntax
                                          - garbageBeforeLabel: nil
                                          - label: nil
                                          - garbageBetweenLabelAndColon: nil
                                          - colon: nil
                                          - garbageBetweenColonAndExpression: nil
-                                         ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                         ▿ expression: IntegerLiteralExprSyntax
                                            - garbageBeforeDigits: nil
-                                           ▿ digits: SwiftSyntax.TokenSyntax
+                                           ▿ digits: integerLiteral("1")
                                              - text: "1"
-                                             ▿ leadingTrivia:
+                                             ▿ leadingTrivia: []
                                                - pieces: 0 elements
-                                             ▿ trailingTrivia:
+                                             ▿ trailingTrivia: []
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "1"
                                          - garbageBetweenExpressionAndTrailingComma: nil
                                          - trailingComma: nil
-                                       ▿ SwiftSyntax.TupleExprElementSyntax
+                                       ▿ TupleExprElementSyntax
                                          - garbageBeforeLabel: nil
                                          - label: nil
                                          - garbageBetweenLabelAndColon: nil
                                          - colon: nil
                                          - garbageBetweenColonAndExpression: nil
-                                         ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                         ▿ expression: IntegerLiteralExprSyntax
                                            - garbageBeforeDigits: nil
-                                           ▿ digits: SwiftSyntax.TokenSyntax
+                                           ▿ digits: integerLiteral("2")
                                              - text: "2"
-                                             ▿ leadingTrivia:
+                                             ▿ leadingTrivia: []
                                                - pieces: 0 elements
-                                             ▿ trailingTrivia:
+                                             ▿ trailingTrivia: []
                                                - pieces: 0 elements
                                              ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                - integerLiteral: "2"
@@ -188,44 +188,44 @@ public class CustomReflectableTests: XCTestCase {
         return .init(syntax: tuples.reversed(),
                      expectedDumped: """
                                      ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>
-                                       ▿ _base: SwiftSyntax.TupleExprElementListSyntax
-                                         ▿ SwiftSyntax.TupleExprElementSyntax
+                                       ▿ _base: TupleExprElementListSyntax
+                                         ▿ TupleExprElementSyntax
                                            - garbageBeforeLabel: nil
                                            - label: nil
                                            - garbageBetweenLabelAndColon: nil
                                            - colon: nil
                                            - garbageBetweenColonAndExpression: nil
-                                           ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                           ▿ expression: IntegerLiteralExprSyntax
                                              - garbageBeforeDigits: nil
-                                             ▿ digits: SwiftSyntax.TokenSyntax
+                                             ▿ digits: integerLiteral("1")
                                                - text: "1"
-                                               ▿ leadingTrivia:
+                                               ▿ leadingTrivia: []
                                                  - pieces: 0 elements
-                                               ▿ trailingTrivia:
+                                               ▿ trailingTrivia: []
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "1"
                                            - garbageBetweenExpressionAndTrailingComma: nil
                                            - trailingComma: nil
-                                         ▿ SwiftSyntax.TupleExprElementSyntax
+                                         ▿ TupleExprElementSyntax
                                            - garbageBeforeLabel: nil
                                            - label: nil
                                            - garbageBetweenLabelAndColon: nil
                                            - colon: nil
                                            - garbageBetweenColonAndExpression: nil
-                                           ▿ expression: SwiftSyntax.IntegerLiteralExprSyntax
+                                           ▿ expression: IntegerLiteralExprSyntax
                                              - garbageBeforeDigits: nil
-                                             ▿ digits: SwiftSyntax.TokenSyntax
+                                             ▿ digits: integerLiteral("2")
                                                - text: "2"
-                                               ▿ leadingTrivia:
+                                               ▿ leadingTrivia: []
                                                  - pieces: 0 elements
-                                               ▿ trailingTrivia:
+                                               ▿ trailingTrivia: []
                                                  - pieces: 0 elements
                                                ▿ tokenKind: SwiftSyntax.TokenKind.integerLiteral
                                                  - integerLiteral: "2"
                                            - garbageBetweenExpressionAndTrailingComma: nil
                                            - trailingComma: nil
-                                     
+
                                      """)
       }(),
     ]

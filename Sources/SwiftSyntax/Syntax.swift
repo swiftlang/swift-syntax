@@ -469,22 +469,13 @@ public extension SyntaxProtocol {
   var id: SyntaxIdentifier {
     return data.nodeId
   }
+}
 
+/// Provides the source-accurate text for a node
+public extension SyntaxProtocol {
   /// A source-accurate description of this node.
   var description: String {
     return data.raw.description
-  }
-
-  /// Returns a description used by dump.
-  var debugDescription: String {
-    return String(reflecting: type(of: self))
-  }
-
-  /// Dumps the syntax node and all of its children for debugging purposes.
-  var recursiveDescription: String {
-    var result = ""
-    dump(self, to: &result)
-    return result
   }
 
   /// Prints the raw value of this node to the provided stream.
@@ -492,6 +483,93 @@ public extension SyntaxProtocol {
   func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
     data.raw.write(to: &target)
+  }
+}
+
+/// Provides debug descriptions for a node
+public extension SyntaxProtocol {
+  /// A simple description of this node (ie. its type).
+  var debugDescription: String {
+    debugDescription()
+  }
+
+  /// Same as `debugDescription` but includes all children.
+  var recursiveDescription: String {
+    debugDescription(includeChildren: true)
+  }
+
+  /// Returns a summarized dump of this node.
+  /// - Parameters:
+  ///   - includeChildren: Whether to also dump children, false by default.
+  ///   - includeTrivia: Add trivia to each dumped node, which the default
+  ///   dump skips.
+  ///   - converter: The location converter for the root of the tree. Adds
+  ///   `[startLine:startCol...endLine:endCol]` to each node.
+  ///   - mark: Adds `***` around the given node, intended to highlight it in
+  ///   the dump.
+  ///   - indentLevel: The starting indent level, 0 by default. Each level is 2
+  ///   spaces.
+  func debugDescription(includeChildren: Bool = false, includeTrivia: Bool = false,
+                        converter: SourceLocationConverter? = nil, mark: SyntaxProtocol? = nil,
+                        indentLevel: Int = 0) -> String {
+    var str = ""
+    debugWrite(to: &str, includeChildren: includeChildren, includeTrivia: includeTrivia,
+               converter: converter, mark: mark, indentLevel: indentLevel)
+    return str
+  }
+
+  private func debugWrite<Target: TextOutputStream>(to target: inout Target,
+                                                    includeChildren: Bool, includeTrivia: Bool,
+                                                    converter: SourceLocationConverter? = nil, mark: SyntaxProtocol? = nil,
+                                                    indentLevel: Int) {
+    if let mark = mark, self.id == mark.id {
+      target.write("*** ")
+    }
+
+    if let token = Syntax(self).as(TokenSyntax.self) {
+      target.write(String(describing: token.tokenKind))
+      if includeTrivia {
+        if let leadingTrivia, !leadingTrivia.isEmpty {
+          target.write(" leadingTrivia=\(leadingTrivia.debugDescription)")
+        }
+        if let trailingTrivia, !trailingTrivia.isEmpty {
+          target.write(" trailingTrivia=\(trailingTrivia.debugDescription)")
+        }
+      }
+    } else {
+      target.write(String(describing: syntaxNodeType))
+    }
+
+    let allChildren = children(viewMode: ._all)
+    if includeChildren {
+      if !allChildren.isEmpty {
+        target.write(" children=\(allChildren.count)")
+      }
+    }
+
+    if let converter = converter {
+      let range = sourceRange(converter: converter)
+      target.write(" [\(range.start)...\(range.end)]")
+    }
+
+    if isMissing {
+      target.write(" MISSING")
+    }
+
+    if let mark = mark, self.id == mark.id {
+      target.write(" ***")
+    }
+
+    if includeChildren {
+      let childIndentLevel = indentLevel + 1
+      for (num, child) in allChildren.enumerated() {
+        target.write("\n")
+        target.write(String(repeating: " ", count: childIndentLevel * 2))
+        target.write("\(num): ")
+        child.debugWrite(to: &target, includeChildren: includeChildren, includeTrivia: includeTrivia,
+                         converter: converter, mark: mark, indentLevel: childIndentLevel)
+      }
+    }
   }
 }
 

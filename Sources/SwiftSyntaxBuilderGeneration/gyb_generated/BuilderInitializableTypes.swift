@@ -30,4 +30,5 @@ let BUILDER_INITIALIZABLE_TYPES: [String: String?] = [
   "CaseItemList": nil,
   "GenericArgumentList": nil,
   "TuplePatternElementList": nil,
+  "ExprList": nil,
 ]

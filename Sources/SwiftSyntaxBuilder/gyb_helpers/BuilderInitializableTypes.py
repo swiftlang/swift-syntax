@@ -16,4 +16,5 @@ BUILDER_INITIALIZABLE_TYPES = {
     'CaseItemList': None,
     'GenericArgumentList': None,
     'TuplePatternElementList': None,
+    'ExprList': None,
 }

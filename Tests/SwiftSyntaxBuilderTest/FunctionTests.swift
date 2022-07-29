@@ -23,25 +23,25 @@ final class FunctionTests: XCTestCase {
         },
         body: ifCodeBlock)
 
-      ReturnStmt(expression: SequenceExpr(elements: ExprList {
+      ReturnStmt(expression: SequenceExpr {
         FunctionCallExpr("fibonacci") {
-          SequenceExpr(elements: ExprList {
+          SequenceExpr {
             IntegerLiteralExpr(digits: "n")
             BinaryOperatorExpr("-")
             IntegerLiteralExpr(1)
-          })
+          }
         }
 
         BinaryOperatorExpr("+")
 
         FunctionCallExpr(MemberAccessExpr(base: "self", name: "fibonacci")) {
-          SequenceExpr(elements: ExprList {
+          SequenceExpr {
             IntegerLiteralExpr(digits: "n")
             BinaryOperatorExpr("-")
             IntegerLiteralExpr(2)
-          })
+          }
         }
-      }))
+      })
     }
     let syntax = buildable.buildSyntax(format: Format(), leadingTrivia: leadingTrivia)
 

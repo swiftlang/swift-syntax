@@ -842,6 +842,18 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
     self.elements = elements.createExprList()
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leadingTrivia: Trivia = [],
+    @ExprListBuilder elementsBuilder: () -> ExpressibleAsExprList = { ExprList([]) }
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      elements: elementsBuilder()
+    )
+  }
 
   /// Builds a `SequenceExprSyntax`.
   /// - Parameter format: The `Format` to use.
@@ -10987,6 +10999,24 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
     assert(rightParen.text == ")")
   }
 
+  /// A convenience initializer that allows:
+  ///  - Initializing syntax collections using result builders
+  ///  - Initializing tokens without default text using strings
+  public init(
+    leadingTrivia: Trivia = [],
+    leftParen: TokenSyntax = TokenSyntax.`leftParen`,
+    trailingComma: TokenSyntax? = nil,
+    rightParen: TokenSyntax = TokenSyntax.`rightParen`,
+    @ExprListBuilder elementListBuilder: () -> ExpressibleAsExprList = { ExprList([]) }
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      leftParen: leftParen,
+      elementList: elementListBuilder(),
+      trailingComma: trailingComma,
+      rightParen: rightParen
+    )
+  }
 
   /// Builds a `YieldListSyntax`.
   /// - Parameter format: The `Format` to use.

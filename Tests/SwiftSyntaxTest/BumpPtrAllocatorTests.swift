@@ -1,9 +1,5 @@
-#if DEBUG
-// 'BumpPtrAllocator' is not a public API. Test it only when the module is built
-// with @testable (i.e. `DEBUG`)
-
 import XCTest
-@testable import SwiftSyntax
+@_spi(Testing) import SwiftSyntax
 
 final class BumpPtrAllocatorTests: XCTestCase {
 
@@ -35,9 +31,9 @@ final class BumpPtrAllocatorTests: XCTestCase {
       XCTAssertTrue(allocator.contains(address: typedBuffer.baseAddress!))
       XCTAssertTrue(allocator.contains(address: typedBuffer.baseAddress!.advanced(by: typedBuffer.count)))
 
-      XCTAssertEqual(allocator.totalSizeAllocated,
+      XCTAssertEqual(allocator.totalByteSizeAllocated,
                      42 + MemoryLayout<UInt64>.stride * 12)
+      XCTAssert(allocator.totalMemorySize >= allocator.totalByteSizeAllocated)
     }
 }
 
-#endif

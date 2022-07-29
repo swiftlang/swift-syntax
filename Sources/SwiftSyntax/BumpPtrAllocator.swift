@@ -11,7 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 /// Bump-pointer allocation.
-class BumpPtrAllocator {
+@_spi(Testing)
+public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
   static private var SLAB_SIZE: Int = 4096
@@ -19,29 +20,32 @@ class BumpPtrAllocator {
   static private var SLAB_ALIGNMENT: Int = 8
 
   private var slabs: [Slab]
+  /// Points to the next unused address in `slabs.last`.
   private var currentPtr: UnsafeMutableRawPointer?
+  /// Points to the end address of `slabs.last`. If `slabs` is not empty, this
+  /// is equivalent to `slabs.last!.baseAddress! + slabs.last!.count`
   private var endPtr: UnsafeMutableRawPointer?
   private var customSizeSlabs: [Slab]
-  private(set) var totalSizeAllocated: Int
+  private var _totalBytesAllocated: Int
 
-  init() {
+  public init() {
     slabs = []
     currentPtr = nil
     endPtr = nil
     customSizeSlabs = []
-    totalSizeAllocated = 0
+    _totalBytesAllocated = 0
   }
 
   deinit {
     /// Deallocate all memory.
-    totalSizeAllocated = 0
+    _totalBytesAllocated = 0
     currentPtr = nil
     endPtr = nil
-    while !slabs.isEmpty {
-      slabs.removeLast().deallocate()
+    while let slab = slabs.popLast() {
+      slab.deallocate()
     }
-    while !customSizeSlabs.isEmpty {
-      customSizeSlabs.removeLast().deallocate()
+    while let slab = customSizeSlabs.popLast() {
+      slab.deallocate()
     }
   }
 
@@ -61,7 +65,10 @@ class BumpPtrAllocator {
   }
 
   /// Allocate 'byteCount' of memory.
-  func allocate(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
+  ///
+  /// The returned buffer is not bound to any types, nor initialized.
+  /// Clients should never call `deallocate()` on the returned buffer.
+  public func allocate(byteCount: Int, alignment: Int) -> UnsafeMutableRawBufferPointer {
 
     precondition(alignment <= Self.SLAB_ALIGNMENT)
     guard byteCount > 0 else {
@@ -69,9 +76,9 @@ class BumpPtrAllocator {
     }
 
     // Track the total size we allocated.
-    totalSizeAllocated += byteCount
+    _totalBytesAllocated += byteCount
 
-    // Check if the current slab have enough space.
+    // Check if the current slab has enough space.
     if !slabs.isEmpty {
       let aligned = currentPtr!.alignedUp(toMultipleOf: alignment)
       if aligned + byteCount <= endPtr! {
@@ -96,18 +103,45 @@ class BumpPtrAllocator {
     return .init(start: aligned, count: byteCount)
   }
 
-  /// Allocate a chunk of memory of `MemoryLayout<T>.stride * count'.
-  func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
+  /// Allocate a chunk of bound memory of `MemoryLayout<T>.stride * count'.
+  ///
+  /// The returned buffer is bound to the type, but not initialized.
+  /// Clients should never call `deallocate()` on the returned buffer.
+  /// In general, using `BumpPtrAllocator` for placing non-trivial values (e.g.
+  /// class instances, existentials, etc.) is strongly discouraged because they
+  /// are not automatically deinitialized.
+  public func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {
     let allocated = allocate(byteCount: MemoryLayout<T>.stride * count,
                              alignment: MemoryLayout<T>.alignment)
     return allocated.bindMemory(to: T.self)
   }
 
   /// Check if the address is managed by this allocator.
-  func contains(address: UnsafeRawPointer) -> Bool {
+  public func contains(address: UnsafeRawPointer) -> Bool {
     func test(_ slab: Slab) -> Bool {
       slab.baseAddress! <= address && address < slab.baseAddress! + slab.count
     }
     return slabs.contains(where: test(_:)) || customSizeSlabs.contains(where: test(_:))
+  }
+
+  /// Estimated total memory size this allocator itself is consuming.
+  ///
+  /// This is always bigger than or equal to `totalByteSizeAllocated`.
+  public var totalMemorySize: Int {
+    var size = 0
+    /// Slab sizes.
+    size = slabs.reduce(size, { $0 + $1.count })
+    size = customSizeSlabs.reduce(size, { $0 + $1.count })
+    /// And the size of slab storage.
+    size += MemoryLayout<Slab>.stride * (slabs.capacity + customSizeSlabs.capacity)
+    return size
+  }
+
+  /// Total number of bytes allocated to the clients.
+  ///
+  /// This allocator is wasting `totalMemorySize - totalByteSizeAllocated` bytes
+  /// of memory.
+  public var totalByteSizeAllocated: Int {
+    _totalBytesAllocated
   }
 }

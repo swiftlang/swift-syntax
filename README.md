@@ -43,11 +43,11 @@ Then, import `SwiftSyntax` in your Swift code.
 
 ## Documentation
 
-Documentation can be found [here](https://github.com/apple/swift-syntax/blob/main/Documentation) and some examples of using SwiftSyntax can be found [here](https://github.com/apple/swift-syntax/blob/main/Examples).
+Documentation can be found [here](Documentation) and some examples of using SwiftSyntax can be found [here](Snippets).
 
 ## Contributing
 
-Start contributing to SwiftSyntax see [this guide](https://github.com/apple/swift-syntax/blob/main/CONTRIBUTING.md) for more information.
+Start contributing to SwiftSyntax see [this guide](CONTRIBUTING.md) for more information.
 
 ## Reporting Issues
 

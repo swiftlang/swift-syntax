@@ -15,16 +15,18 @@ Its API is designed for performance-critical applications. It uses value types a
 Add this repository to the `Package.swift` manifest of your project:
 
 ```swift
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
   name: "MyTool",
   dependencies: [
-    .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .exact("<#Specify Release tag#>")),
+    .package(url: "https://github.com/apple/swift-syntax.git", exact: "<#Specify Release tag#>"),
   ],
   targets: [
-    .target(name: "MyTool", dependencies: ["SwiftSyntax"]),
+    .target(name: "MyTool", dependencies: [
+      .product(name: "SwiftSyntax", package: "swift-syntax"),
+    ]),
   ]
 )
 ```

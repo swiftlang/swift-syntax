@@ -58,6 +58,48 @@ open class SyntaxRewriter {
     return PatternSyntax(visitChildren(node))
   }
 
+  /// Visit a `MissingSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingSyntax) -> Syntax {
+    return Syntax(visitChildren(node))
+  }
+
+  /// Visit a `MissingDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(visitChildren(node))
+  }
+
+  /// Visit a `MissingExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+
+  /// Visit a `MissingStmtSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingStmtSyntax) -> StmtSyntax {
+    return StmtSyntax(visitChildren(node))
+  }
+
+  /// Visit a `MissingTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingTypeSyntax) -> TypeSyntax {
+    return TypeSyntax(visitChildren(node))
+  }
+
+  /// Visit a `MissingPatternSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingPatternSyntax) -> PatternSyntax {
+    return PatternSyntax(visitChildren(node))
+  }
+
   /// Visit a `CodeBlockItemSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1900,6 +1942,66 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnknownPatternSyntax(_ data: SyntaxData) -> Syntax {
       let node = UnknownPatternSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMissingSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MissingSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return visit(node)
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMissingDeclSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MissingDeclSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMissingExprSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MissingExprSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMissingStmtSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MissingStmtSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMissingTypeSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MissingTypeSyntax(data)
+      // Accessing _syntaxNode directly is faster than calling Syntax(node)
+      visitPre(node._syntaxNode)
+      defer { visitPost(node._syntaxNode) }
+      if let newNode = visitAny(node._syntaxNode) { return newNode }
+      return Syntax(visit(node))
+  }
+
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplMissingPatternSyntax(_ data: SyntaxData) -> Syntax {
+      let node = MissingPatternSyntax(data)
       // Accessing _syntaxNode directly is faster than calling Syntax(node)
       visitPre(node._syntaxNode)
       defer { visitPost(node._syntaxNode) }
@@ -4399,16 +4501,6 @@ open class SyntaxRewriter {
       return visitImplTokenSyntax
     case .unknown:
       return visitImplUnknownSyntax
-    case .decl:
-      return visitImplDeclSyntax
-    case .expr:
-      return visitImplExprSyntax
-    case .stmt:
-      return visitImplStmtSyntax
-    case .type:
-      return visitImplTypeSyntax
-    case .pattern:
-      return visitImplPatternSyntax
     case .unknownDecl:
       return visitImplUnknownDeclSyntax
     case .unknownExpr:
@@ -4419,6 +4511,18 @@ open class SyntaxRewriter {
       return visitImplUnknownTypeSyntax
     case .unknownPattern:
       return visitImplUnknownPatternSyntax
+    case .missing:
+      return visitImplMissingSyntax
+    case .missingDecl:
+      return visitImplMissingDeclSyntax
+    case .missingExpr:
+      return visitImplMissingExprSyntax
+    case .missingStmt:
+      return visitImplMissingStmtSyntax
+    case .missingType:
+      return visitImplMissingTypeSyntax
+    case .missingPattern:
+      return visitImplMissingPatternSyntax
     case .codeBlockItem:
       return visitImplCodeBlockItemSyntax
     case .codeBlockItemList:
@@ -4922,16 +5026,6 @@ open class SyntaxRewriter {
       return visitImplTokenSyntax(data)
     case .unknown:
       return visitImplUnknownSyntax(data)
-    case .decl:
-      return visitImplDeclSyntax(data)
-    case .expr:
-      return visitImplExprSyntax(data)
-    case .stmt:
-      return visitImplStmtSyntax(data)
-    case .type:
-      return visitImplTypeSyntax(data)
-    case .pattern:
-      return visitImplPatternSyntax(data)
     case .unknownDecl:
       return visitImplUnknownDeclSyntax(data)
     case .unknownExpr:
@@ -4942,6 +5036,18 @@ open class SyntaxRewriter {
       return visitImplUnknownTypeSyntax(data)
     case .unknownPattern:
       return visitImplUnknownPatternSyntax(data)
+    case .missing:
+      return visitImplMissingSyntax(data)
+    case .missingDecl:
+      return visitImplMissingDeclSyntax(data)
+    case .missingExpr:
+      return visitImplMissingExprSyntax(data)
+    case .missingStmt:
+      return visitImplMissingStmtSyntax(data)
+    case .missingType:
+      return visitImplMissingTypeSyntax(data)
+    case .missingPattern:
+      return visitImplMissingPatternSyntax(data)
     case .codeBlockItem:
       return visitImplCodeBlockItemSyntax(data)
     case .codeBlockItemList:

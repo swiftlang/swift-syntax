@@ -52,6 +52,45 @@ extension UnknownStmtSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MissingStmtSyntax
+
+public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MissingStmtSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .missingStmt else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MissingStmtSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .missingStmt)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 0)
+  }
+}
+
+extension MissingStmtSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+    ])
+  }
+}
+
 // MARK: - ContinueStmtSyntax
 
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
@@ -526,7 +565,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ExpressionStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ExpressionStmtSyntax(newData)
   }
@@ -711,7 +750,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `condition`, if present.
   public func withCondition(
     _ newChild: ExprSyntax?) -> RepeatWhileStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.condition)
     return RepeatWhileStmtSyntax(newData)
   }
@@ -1162,7 +1201,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> ForInStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return ForInStmtSyntax(newData)
   }
@@ -1226,7 +1265,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `sequenceExpr`, if present.
   public func withSequenceExpr(
     _ newChild: ExprSyntax?) -> ForInStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.sequenceExpr)
     return ForInStmtSyntax(newData)
   }
@@ -1516,7 +1555,7 @@ public struct SwitchStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> SwitchStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return SwitchStmtSyntax(newData)
   }
@@ -2337,7 +2376,7 @@ public struct DeclarationStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `declaration`, if present.
   public func withDeclaration(
     _ newChild: DeclSyntax?) -> DeclarationStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.decl)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingDecl)
     let newData = data.replacingChild(raw, at: Cursor.declaration)
     return DeclarationStmtSyntax(newData)
   }
@@ -2432,7 +2471,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ThrowStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ThrowStmtSyntax(newData)
   }
@@ -2847,7 +2886,7 @@ public struct PoundAssertStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                   current `condition`, if present.
   public func withCondition(
     _ newChild: ExprSyntax?) -> PoundAssertStmtSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.condition)
     return PoundAssertStmtSyntax(newData)
   }

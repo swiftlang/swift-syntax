@@ -52,6 +52,45 @@ extension UnknownExprSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MissingExprSyntax
+
+public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MissingExprSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .missingExpr else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MissingExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .missingExpr)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 0)
+  }
+}
+
+extension MissingExprSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+    ])
+  }
+}
+
 // MARK: - InOutExprSyntax
 
 public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
@@ -118,7 +157,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> InOutExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return InOutExprSyntax(newData)
   }
@@ -319,7 +358,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> TryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return TryExprSyntax(newData)
   }
@@ -433,7 +472,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> AwaitExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return AwaitExprSyntax(newData)
   }
@@ -1571,7 +1610,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `postfixExpression`, if present.
   public func withPostfixExpression(
     _ newChild: ExprSyntax?) -> PrefixOperatorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.postfixExpression)
     return PrefixOperatorExprSyntax(newData)
   }
@@ -2535,7 +2574,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `conditionExpression`, if present.
   public func withConditionExpression(
     _ newChild: ExprSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.conditionExpression)
     return TernaryExprSyntax(newData)
   }
@@ -2577,7 +2616,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `firstChoice`, if present.
   public func withFirstChoice(
     _ newChild: ExprSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.firstChoice)
     return TernaryExprSyntax(newData)
   }
@@ -2619,7 +2658,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `secondChoice`, if present.
   public func withSecondChoice(
     _ newChild: ExprSyntax?) -> TernaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.secondChoice)
     return TernaryExprSyntax(newData)
   }
@@ -2923,7 +2962,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `typeName`, if present.
   public func withTypeName(
     _ newChild: TypeSyntax?) -> IsExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.typeName)
     return IsExprSyntax(newData)
   }
@@ -3051,7 +3090,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `typeName`, if present.
   public func withTypeName(
     _ newChild: TypeSyntax?) -> AsExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.typeName)
     return AsExprSyntax(newData)
   }
@@ -3143,7 +3182,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> TypeExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return TypeExprSyntax(newData)
   }
@@ -3404,7 +3443,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> UnresolvedPatternExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return UnresolvedPatternExprSyntax(newData)
   }
@@ -3482,7 +3521,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `calledExpression`, if present.
   public func withCalledExpression(
     _ newChild: ExprSyntax?) -> FunctionCallExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.calledExpression)
     return FunctionCallExprSyntax(newData)
   }
@@ -3753,7 +3792,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `calledExpression`, if present.
   public func withCalledExpression(
     _ newChild: ExprSyntax?) -> SubscriptExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.calledExpression)
     return SubscriptExprSyntax(newData)
   }
@@ -4020,7 +4059,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> OptionalChainingExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return OptionalChainingExprSyntax(newData)
   }
@@ -4125,7 +4164,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ForcedValueExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ForcedValueExprSyntax(newData)
   }
@@ -4230,7 +4269,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> PostfixUnaryExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return PostfixUnaryExprSyntax(newData)
   }
@@ -4335,7 +4374,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> SpecializeExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return SpecializeExprSyntax(newData)
   }
@@ -4777,7 +4816,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> KeyPathExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return KeyPathExprSyntax(newData)
   }
@@ -5221,7 +5260,7 @@ public struct ObjcSelectorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                   current `name`, if present.
   public func withName(
     _ newChild: ExprSyntax?) -> ObjcSelectorExprSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.name)
     return ObjcSelectorExprSyntax(newData)
   }

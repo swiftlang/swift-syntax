@@ -54,7 +54,7 @@ extension Syntax {
       return node
     case .unknown(let node):
       return node
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}(let node):
       return node
 % end

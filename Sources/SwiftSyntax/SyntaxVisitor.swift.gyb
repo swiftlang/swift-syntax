@@ -126,7 +126,7 @@ open class SyntaxVisitor {
     // circumvents an issue where the compiler allocates stack space for every
     // case statement next to each other in debug builds, causing it to allocate
     // ~50KB per call to this function. rdar://55929175
-  % for node in SYNTAX_NODES:
+  % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
       visitImpl${node.name}(data)
   % end

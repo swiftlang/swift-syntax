@@ -13,6 +13,45 @@
 //===----------------------------------------------------------------------===//
 
 
+// MARK: - MissingSyntax
+
+public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MissingSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .missing else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MissingSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .missing)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 0)
+  }
+}
+
+extension MissingSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+    ])
+  }
+}
+
 // MARK: - CodeBlockItemSyntax
 
 /// 
@@ -666,7 +705,7 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> TupleExprElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return TupleExprElementSyntax(newData)
   }
@@ -789,7 +828,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ArrayElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ArrayElementSyntax(newData)
   }
@@ -896,7 +935,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `keyExpression`, if present.
   public func withKeyExpression(
     _ newChild: ExprSyntax?) -> DictionaryElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.keyExpression)
     return DictionaryElementSyntax(newData)
   }
@@ -938,7 +977,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `valueExpression`, if present.
   public func withValueExpression(
     _ newChild: ExprSyntax?) -> DictionaryElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.valueExpression)
     return DictionaryElementSyntax(newData)
   }
@@ -1151,7 +1190,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ClosureCaptureItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ClosureCaptureItemSyntax(newData)
   }
@@ -2384,7 +2423,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: TypeSyntax?) -> TypeInitializerClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return TypeInitializerClauseSyntax(newData)
   }
@@ -2645,7 +2684,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `returnType`, if present.
   public func withReturnType(
     _ newChild: TypeSyntax?) -> ReturnClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.returnType)
     return ReturnClauseSyntax(newData)
   }
@@ -3542,7 +3581,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `typeName`, if present.
   public func withTypeName(
     _ newChild: TypeSyntax?) -> InheritedTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.typeName)
     return InheritedTypeSyntax(newData)
   }
@@ -3932,7 +3971,7 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `decl`, if present.
   public func withDecl(
     _ newChild: DeclSyntax?) -> MemberDeclListItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.decl)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingDecl)
     let newData = data.replacingChild(raw, at: Cursor.decl)
     return MemberDeclListItemSyntax(newData)
   }
@@ -4183,7 +4222,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `value`, if present.
   public func withValue(
     _ newChild: ExprSyntax?) -> InitializerClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.value)
     return InitializerClauseSyntax(newData)
   }
@@ -5089,7 +5128,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> PatternBindingSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return PatternBindingSyntax(newData)
   }
@@ -6195,7 +6234,7 @@ public struct CustomAttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `attributeName`, if present.
   public func withAttributeName(
     _ newChild: TypeSyntax?) -> CustomAttributeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.attributeName)
     return CustomAttributeSyntax(newData)
   }
@@ -9264,7 +9303,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `guardResult`, if present.
   public func withGuardResult(
     _ newChild: ExprSyntax?) -> WhereClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.guardResult)
     return WhereClauseSyntax(newData)
   }
@@ -9852,7 +9891,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> MatchingPatternConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return MatchingPatternConditionSyntax(newData)
   }
@@ -10021,7 +10060,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> OptionalBindingConditionSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return OptionalBindingConditionSyntax(newData)
   }
@@ -10795,7 +10834,7 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> CaseItemSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return CaseItemSyntax(newData)
   }
@@ -11610,7 +11649,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftTypeIdentifier`, if present.
   public func withLeftTypeIdentifier(
     _ newChild: TypeSyntax?) -> SameTypeRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.leftTypeIdentifier)
     return SameTypeRequirementSyntax(newData)
   }
@@ -11652,7 +11691,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightTypeIdentifier`, if present.
   public func withRightTypeIdentifier(
     _ newChild: TypeSyntax?) -> SameTypeRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.rightTypeIdentifier)
     return SameTypeRequirementSyntax(newData)
   }
@@ -12228,7 +12267,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `leftTypeIdentifier`, if present.
   public func withLeftTypeIdentifier(
     _ newChild: TypeSyntax?) -> ConformanceRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.leftTypeIdentifier)
     return ConformanceRequirementSyntax(newData)
   }
@@ -12270,7 +12309,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `rightTypeIdentifier`, if present.
   public func withRightTypeIdentifier(
     _ newChild: TypeSyntax?) -> ConformanceRequirementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.rightTypeIdentifier)
     return ConformanceRequirementSyntax(newData)
   }
@@ -12520,7 +12559,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> CompositionTypeElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return CompositionTypeElementSyntax(newData)
   }
@@ -12719,7 +12758,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> TupleTypeElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return TupleTypeElementSyntax(newData)
   }
@@ -12922,7 +12961,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `argumentType`, if present.
   public func withArgumentType(
     _ newChild: TypeSyntax?) -> GenericArgumentSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.argumentType)
     return GenericArgumentSyntax(newData)
   }
@@ -13204,7 +13243,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> TypeAnnotationSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return TypeAnnotationSyntax(newData)
   }
@@ -13334,7 +13373,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> TuplePatternElementSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return TuplePatternElementSyntax(newData)
   }

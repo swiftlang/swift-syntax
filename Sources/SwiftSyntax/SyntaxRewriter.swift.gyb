@@ -157,7 +157,7 @@ open class SyntaxRewriter {
       return visitImplTokenSyntax
     case .unknown:
       return visitImplUnknownSyntax
-  % for node in SYNTAX_NODES:
+  % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
       return visitImpl${node.name}
   % end
@@ -176,7 +176,7 @@ open class SyntaxRewriter {
       return visitImplTokenSyntax(data)
     case .unknown:
       return visitImplUnknownSyntax(data)
-  % for node in SYNTAX_NODES:
+  % for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
       return visitImpl${node.name}(data)
   % end

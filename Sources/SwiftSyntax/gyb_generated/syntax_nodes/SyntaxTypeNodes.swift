@@ -52,6 +52,45 @@ extension UnknownTypeSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MissingTypeSyntax
+
+public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MissingTypeSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .missingType else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MissingTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .missingType)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 0)
+  }
+}
+
+extension MissingTypeSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+    ])
+  }
+}
+
 // MARK: - SimpleTypeIdentifierSyntax
 
 public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
@@ -204,7 +243,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> MemberTypeIdentifierSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return MemberTypeIdentifierSyntax(newData)
   }
@@ -466,7 +505,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `elementType`, if present.
   public func withElementType(
     _ newChild: TypeSyntax?) -> ArrayTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.elementType)
     return ArrayTypeSyntax(newData)
   }
@@ -605,7 +644,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `keyType`, if present.
   public func withKeyType(
     _ newChild: TypeSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.keyType)
     return DictionaryTypeSyntax(newData)
   }
@@ -647,7 +686,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `valueType`, if present.
   public func withValueType(
     _ newChild: TypeSyntax?) -> DictionaryTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.valueType)
     return DictionaryTypeSyntax(newData)
   }
@@ -783,7 +822,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> MetatypeTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return MetatypeTypeSyntax(newData)
   }
@@ -919,7 +958,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `wrappedType`, if present.
   public func withWrappedType(
     _ newChild: TypeSyntax?) -> OptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.wrappedType)
     return OptionalTypeSyntax(newData)
   }
@@ -1045,7 +1084,7 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> ConstrainedSugarTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return ConstrainedSugarTypeSyntax(newData)
   }
@@ -1129,7 +1168,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
   ///                   current `wrappedType`, if present.
   public func withWrappedType(
     _ newChild: TypeSyntax?) -> ImplicitlyUnwrappedOptionalTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.wrappedType)
     return ImplicitlyUnwrappedOptionalTypeSyntax(newData)
   }
@@ -1634,7 +1673,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `returnType`, if present.
   public func withReturnType(
     _ newChild: TypeSyntax?) -> FunctionTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.returnType)
     return FunctionTypeSyntax(newData)
   }
@@ -1830,7 +1869,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                   current `baseType`, if present.
   public func withBaseType(
     _ newChild: TypeSyntax?) -> AttributedTypeSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.baseType)
     return AttributedTypeSyntax(newData)
   }

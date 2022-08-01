@@ -16,16 +16,17 @@
 public enum SyntaxEnum {
   case unknown(UnknownSyntax)
   case token(TokenSyntax)
-  case decl(UnknownDeclSyntax)
-  case expr(UnknownExprSyntax)
-  case stmt(UnknownStmtSyntax)
-  case type(UnknownTypeSyntax)
-  case pattern(UnknownPatternSyntax)
   case unknownDecl(UnknownDeclSyntax)
   case unknownExpr(UnknownExprSyntax)
   case unknownStmt(UnknownStmtSyntax)
   case unknownType(UnknownTypeSyntax)
   case unknownPattern(UnknownPatternSyntax)
+  case missing(MissingSyntax)
+  case missingDecl(MissingDeclSyntax)
+  case missingExpr(MissingExprSyntax)
+  case missingStmt(MissingStmtSyntax)
+  case missingType(MissingTypeSyntax)
+  case missingPattern(MissingPatternSyntax)
   case codeBlockItem(CodeBlockItemSyntax)
   case codeBlockItemList(CodeBlockItemListSyntax)
   case codeBlock(CodeBlockSyntax)
@@ -280,16 +281,6 @@ public extension Syntax {
       return .token(TokenSyntax(self)!)
     case .unknown:
       return .unknown(UnknownSyntax(self)!)
-    case .decl:
-      return .decl(UnknownDeclSyntax(self)!)
-    case .expr:
-      return .expr(UnknownExprSyntax(self)!)
-    case .stmt:
-      return .stmt(UnknownStmtSyntax(self)!)
-    case .type:
-      return .type(UnknownTypeSyntax(self)!)
-    case .pattern:
-      return .pattern(UnknownPatternSyntax(self)!)
     case .unknownDecl:
       return .unknownDecl(UnknownDeclSyntax(self)!)
     case .unknownExpr:
@@ -300,6 +291,18 @@ public extension Syntax {
       return .unknownType(UnknownTypeSyntax(self)!)
     case .unknownPattern:
       return .unknownPattern(UnknownPatternSyntax(self)!)
+    case .missing:
+      return .missing(MissingSyntax(self)!)
+    case .missingDecl:
+      return .missingDecl(MissingDeclSyntax(self)!)
+    case .missingExpr:
+      return .missingExpr(MissingExprSyntax(self)!)
+    case .missingStmt:
+      return .missingStmt(MissingStmtSyntax(self)!)
+    case .missingType:
+      return .missingType(MissingTypeSyntax(self)!)
+    case .missingPattern:
+      return .missingPattern(MissingPatternSyntax(self)!)
     case .codeBlockItem:
       return .codeBlockItem(CodeBlockItemSyntax(self)!)
     case .codeBlockItemList:

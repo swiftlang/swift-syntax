@@ -45,4 +45,14 @@ public class SyntaxChildrenTests: XCTestCase {
     try XCTAssertNext(&fixedUpIterator) { $0.as(TokenSyntax.self)?.tokenKind == .returnKeyword }
     XCTAssertNextIsNil(&fixedUpIterator)
   }
+
+  public func testMissingNodes() throws {
+    let node = SyntaxFactory.makeDeclarationStmt(declaration: DeclSyntax(SyntaxFactory.makeBlankMissingDecl()))
+
+    var sourceAccurateIt = node.children(viewMode: .sourceAccurate).makeIterator()
+    XCTAssertNextIsNil(&sourceAccurateIt)
+    
+    var fixedUpIt = node.children(viewMode: .fixedUp).makeIterator()
+    try XCTAssertNext(&fixedUpIt) { $0.is(MissingDeclSyntax.self) }
+  }
 }

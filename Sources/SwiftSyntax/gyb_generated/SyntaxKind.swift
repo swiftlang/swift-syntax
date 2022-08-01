@@ -16,16 +16,17 @@
 internal enum SyntaxKind: CSyntaxKind {
   case token = 0
   case unknown = 1
-  case decl = 87
-  case expr = 88
-  case stmt = 89
-  case type = 90
-  case pattern = 91
   case unknownDecl = 2
   case unknownExpr = 24
   case unknownStmt = 71
   case unknownType = 211
   case unknownPattern = 201
+  case missing = 260
+  case missingDecl = 261
+  case missingExpr = 262
+  case missingStmt = 263
+  case missingType = 264
+  case missingPattern = 265
   case codeBlockItem = 92
   case codeBlockItemList = 163
   case codeBlock = 93

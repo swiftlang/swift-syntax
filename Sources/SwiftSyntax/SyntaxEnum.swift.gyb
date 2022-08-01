@@ -23,7 +23,7 @@
 public enum SyntaxEnum {
   case unknown(UnknownSyntax)
   case token(TokenSyntax)
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
 %   if node.is_base():
   case ${node.swift_syntax_kind}(Unknown${node.name})
 %   else:
@@ -40,7 +40,7 @@ public extension Syntax {
       return .token(TokenSyntax(self)!)
     case .unknown:
       return .unknown(UnknownSyntax(self)!)
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
     case .${node.swift_syntax_kind}:
 %   if node.is_base():
       return .${node.swift_syntax_kind}(Unknown${node.name}(self)!)

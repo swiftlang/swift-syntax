@@ -142,7 +142,7 @@ public struct InOutExprSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.prefixAmpersand)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .inOutExpr,
@@ -231,7 +231,7 @@ public struct TryExprSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.tryKeyword)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .tryExpr,
@@ -277,7 +277,7 @@ public struct AwaitExprSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.contextualKeyword(""))
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .awaitExpr,
@@ -936,7 +936,7 @@ public struct PrefixOperatorExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .prefixOperatorExpr,
@@ -1287,7 +1287,7 @@ public struct TupleExprElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .tupleExprElement,
@@ -1330,7 +1330,7 @@ public struct ArrayElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .arrayElement,
@@ -1383,13 +1383,13 @@ public struct DictionaryElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.colon)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .dictionaryElement,
@@ -1523,19 +1523,19 @@ public struct TernaryExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.infixQuestionMark)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[3] == nil) {
       layout[3] = RawSyntax.missingToken(TokenKind.colon)
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.expr)
+      layout[4] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .ternaryExpr,
@@ -1637,7 +1637,7 @@ public struct IsExprSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.isKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .isExpr,
@@ -1688,7 +1688,7 @@ public struct AsExprSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.asKeyword)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .asExpr,
@@ -1726,7 +1726,7 @@ public struct TypeExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .typeExpr,
@@ -1790,7 +1790,7 @@ public struct ClosureCaptureItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.expr)
+      layout[3] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .closureCaptureItem,
@@ -2067,7 +2067,7 @@ public struct UnresolvedPatternExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .unresolvedPatternExpr,
@@ -2196,7 +2196,7 @@ public struct FunctionCallExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[2] == nil) {
       layout[2] = RawSyntax.missing(SyntaxKind.tupleExprElementList)
@@ -2274,7 +2274,7 @@ public struct SubscriptExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
@@ -2326,7 +2326,7 @@ public struct OptionalChainingExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.postfixQuestionMark)
@@ -2372,7 +2372,7 @@ public struct ForcedValueExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.exclamationMark)
@@ -2418,7 +2418,7 @@ public struct PostfixUnaryExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.postfixOperator(""))
@@ -2464,7 +2464,7 @@ public struct SpecializeExprSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missing(SyntaxKind.genericArgumentClause)
@@ -2737,7 +2737,7 @@ public struct KeyPathExprSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.backslash)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .keyPathExpr,
@@ -2955,7 +2955,7 @@ public struct ObjcSelectorExprSyntaxBuilder {
       layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
     }
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.expr)
+      layout[4] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[5] == nil) {
       layout[5] = RawSyntax.missingToken(TokenKind.rightParen)
@@ -3153,7 +3153,7 @@ public struct TypeInitializerClauseSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.equal)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .typeInitializerClause,
@@ -3428,7 +3428,7 @@ public struct ReturnClauseSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.arrow)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .returnClause,
@@ -3993,7 +3993,7 @@ public struct InheritedTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .inheritedType,
@@ -4492,7 +4492,7 @@ public struct ExtensionDeclSyntaxBuilder {
       layout[2] = RawSyntax.missingToken(TokenKind.extensionKeyword)
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.type)
+      layout[3] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[6] == nil) {
       layout[6] = RawSyntax.missing(SyntaxKind.memberDeclBlock)
@@ -4598,7 +4598,7 @@ public struct MemberDeclListItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.decl)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingDecl)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .memberDeclListItem,
@@ -4696,7 +4696,7 @@ public struct InitializerClauseSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.equal)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .initializerClause,
@@ -5518,7 +5518,7 @@ public struct PatternBindingSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .patternBinding,
@@ -6311,7 +6311,7 @@ public struct CustomAttributeSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.atSign)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .customAttribute,
@@ -7447,7 +7447,7 @@ public struct ExpressionStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .expressionStmt,
@@ -7519,7 +7519,7 @@ public struct RepeatWhileStmtSyntaxBuilder {
       layout[4] = RawSyntax.missingToken(TokenKind.whileKeyword)
     }
     if (layout[5] == nil) {
-      layout[5] = RawSyntax.missing(SyntaxKind.expr)
+      layout[5] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .repeatWhileStmt,
@@ -7633,7 +7633,7 @@ public struct WhereClauseSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.whereKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .whereClause,
@@ -7729,13 +7729,13 @@ public struct ForInStmtSyntaxBuilder {
       layout[2] = RawSyntax.missingToken(TokenKind.forKeyword)
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[6] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
     if (layout[8] == nil) {
       layout[8] = RawSyntax.missingToken(TokenKind.inKeyword)
     }
     if (layout[9] == nil) {
-      layout[9] = RawSyntax.missing(SyntaxKind.expr)
+      layout[9] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[11] == nil) {
       layout[11] = RawSyntax.missing(SyntaxKind.codeBlock)
@@ -7815,7 +7815,7 @@ public struct SwitchStmtSyntaxBuilder {
       layout[2] = RawSyntax.missingToken(TokenKind.switchKeyword)
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.expr)
+      layout[3] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[4] == nil) {
       layout[4] = RawSyntax.missingToken(TokenKind.leftBrace)
@@ -8293,7 +8293,7 @@ public struct MatchingPatternConditionSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.caseKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
     if (layout[3] == nil) {
       layout[3] = RawSyntax.missing(SyntaxKind.initializerClause)
@@ -8352,7 +8352,7 @@ public struct OptionalBindingConditionSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.letKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .optionalBindingCondition,
@@ -8458,7 +8458,7 @@ public struct DeclarationStmtSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.decl)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingDecl)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .declarationStmt,
@@ -8504,7 +8504,7 @@ public struct ThrowStmtSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.throwKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.expr)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .throwStmt,
@@ -8819,7 +8819,7 @@ public struct CaseItemSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .caseItem,
@@ -9050,7 +9050,7 @@ public struct PoundAssertStmtSyntaxBuilder {
       layout[1] = RawSyntax.missingToken(TokenKind.leftParen)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.expr)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
     if (layout[5] == nil) {
       layout[5] = RawSyntax.missingToken(TokenKind.rightParen)
@@ -9196,13 +9196,13 @@ public struct SameTypeRequirementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.spacedBinaryOperator(""))
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .sameTypeRequirement,
@@ -9417,13 +9417,13 @@ public struct ConformanceRequirementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.colon)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .conformanceRequirement,
@@ -9579,7 +9579,7 @@ public struct MemberTypeIdentifierSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.period)
@@ -9674,7 +9674,7 @@ public struct ArrayTypeSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[2] == nil) {
       layout[2] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
@@ -9738,13 +9738,13 @@ public struct DictionaryTypeSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.leftSquareBracket)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[2] == nil) {
       layout[2] = RawSyntax.missingToken(TokenKind.colon)
     }
     if (layout[3] == nil) {
-      layout[3] = RawSyntax.missing(SyntaxKind.type)
+      layout[3] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[4] == nil) {
       layout[4] = RawSyntax.missingToken(TokenKind.rightSquareBracket)
@@ -9795,7 +9795,7 @@ public struct MetatypeTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.period)
@@ -9844,7 +9844,7 @@ public struct OptionalTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.postfixQuestionMark)
@@ -9893,7 +9893,7 @@ public struct ConstrainedSugarTypeSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.identifier(""))
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .constrainedSugarType,
@@ -9936,7 +9936,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.exclamationMark)
@@ -9982,7 +9982,7 @@ public struct CompositionTypeElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .compositionTypeElement,
@@ -10099,7 +10099,7 @@ public struct TupleTypeElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[4] == nil) {
-      layout[4] = RawSyntax.missing(SyntaxKind.type)
+      layout[4] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .tupleTypeElement,
@@ -10245,7 +10245,7 @@ public struct FunctionTypeSyntaxBuilder {
       layout[5] = RawSyntax.missingToken(TokenKind.arrow)
     }
     if (layout[6] == nil) {
-      layout[6] = RawSyntax.missing(SyntaxKind.type)
+      layout[6] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .functionType,
@@ -10299,7 +10299,7 @@ public struct AttributedTypeSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .attributedType,
@@ -10342,7 +10342,7 @@ public struct GenericArgumentSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.type)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .genericArgument,
@@ -10448,7 +10448,7 @@ public struct TypeAnnotationSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.colon)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .typeAnnotation,
@@ -10550,7 +10550,7 @@ public struct IsTypePatternSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.isKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.type)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .isTypePattern,
@@ -10593,7 +10593,7 @@ public struct OptionalPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.postfixQuestionMark)
@@ -10682,13 +10682,13 @@ public struct AsTypePatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
     if (layout[1] == nil) {
       layout[1] = RawSyntax.missingToken(TokenKind.asKeyword)
     }
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.type)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingType)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .asTypePattern,
@@ -10844,7 +10844,7 @@ public struct TuplePatternElementSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[2] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .tuplePatternElement,
@@ -10882,7 +10882,7 @@ public struct ExpressionPatternSyntaxBuilder {
 
   internal mutating func buildData() -> SyntaxData {
     if (layout[0] == nil) {
-      layout[0] = RawSyntax.missing(SyntaxKind.expr)
+      layout[0] = RawSyntax.missing(SyntaxKind.missingExpr)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .expressionPattern,
@@ -10928,7 +10928,7 @@ public struct ValueBindingPatternSyntaxBuilder {
       layout[0] = RawSyntax.missingToken(TokenKind.letKeyword)
     }
     if (layout[1] == nil) {
-      layout[1] = RawSyntax.missing(SyntaxKind.pattern)
+      layout[1] = RawSyntax.missing(SyntaxKind.missingPattern)
     }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .valueBindingPattern,

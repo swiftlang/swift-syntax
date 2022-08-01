@@ -49,6 +49,42 @@ extension SyntaxNode {
     return UnknownPatternSyntax(asSyntaxData)
   }
 
+  public var isMissing: Bool { return raw.kind == .missing }
+  public var asMissing: MissingSyntax? {
+    guard isMissing else { return nil }
+    return MissingSyntax(asSyntaxData)
+  }
+
+  public var isMissingDecl: Bool { return raw.kind == .missingDecl }
+  public var asMissingDecl: MissingDeclSyntax? {
+    guard isMissingDecl else { return nil }
+    return MissingDeclSyntax(asSyntaxData)
+  }
+
+  public var isMissingExpr: Bool { return raw.kind == .missingExpr }
+  public var asMissingExpr: MissingExprSyntax? {
+    guard isMissingExpr else { return nil }
+    return MissingExprSyntax(asSyntaxData)
+  }
+
+  public var isMissingStmt: Bool { return raw.kind == .missingStmt }
+  public var asMissingStmt: MissingStmtSyntax? {
+    guard isMissingStmt else { return nil }
+    return MissingStmtSyntax(asSyntaxData)
+  }
+
+  public var isMissingType: Bool { return raw.kind == .missingType }
+  public var asMissingType: MissingTypeSyntax? {
+    guard isMissingType else { return nil }
+    return MissingTypeSyntax(asSyntaxData)
+  }
+
+  public var isMissingPattern: Bool { return raw.kind == .missingPattern }
+  public var asMissingPattern: MissingPatternSyntax? {
+    guard isMissingPattern else { return nil }
+    return MissingPatternSyntax(asSyntaxData)
+  }
+
   public var isCodeBlockItem: Bool { return raw.kind == .codeBlockItem }
   public var asCodeBlockItem: CodeBlockItemSyntax? {
     guard isCodeBlockItem else { return nil }
@@ -1531,16 +1567,6 @@ extension Syntax {
       return node
     case .unknown(let node):
       return node
-    case .decl(let node):
-      return node
-    case .expr(let node):
-      return node
-    case .stmt(let node):
-      return node
-    case .type(let node):
-      return node
-    case .pattern(let node):
-      return node
     case .unknownDecl(let node):
       return node
     case .unknownExpr(let node):
@@ -1550,6 +1576,18 @@ extension Syntax {
     case .unknownType(let node):
       return node
     case .unknownPattern(let node):
+      return node
+    case .missing(let node):
+      return node
+    case .missingDecl(let node):
+      return node
+    case .missingExpr(let node):
+      return node
+    case .missingStmt(let node):
+      return node
+    case .missingType(let node):
+      return node
+    case .missingPattern(let node):
       return node
     case .codeBlockItem(let node):
       return node

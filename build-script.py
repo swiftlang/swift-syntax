@@ -230,7 +230,13 @@ def generate_gyb_files_helper(
     # files if they haven't changed and don't trigger a rebuild.
     gyb_files = [file for file in os.listdir(sources_dir) if file.endswith(".gyb")]
     with ThreadPoolExecutor() as executor:
-        executor.map(generate_gyb_file, gyb_files)
+        results = executor.map(generate_gyb_file, gyb_files)
+        # An exception raised in a thread managed by `ThreadPoolExecutor` only gets
+        # raised if its value is retrieved. Iterate over all the 'None' results to cause
+        # the exceptions to be propagated.
+        for _ in results:
+            pass
+
 
 
 # Generate the syntax node `.swift` files from `SyntaxNodes.swift.gyb.template`.

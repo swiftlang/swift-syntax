@@ -3531,9 +3531,6 @@ public struct IfConfigClauseSyntaxBuilder {
     if (layout[0] == nil) {
       layout[0] = RawSyntax.missingToken(TokenKind.poundIfKeyword)
     }
-    if (layout[2] == nil) {
-      layout[2] = RawSyntax.missing(SyntaxKind.unknown)
-    }
 
     return .forRoot(RawSyntax.createAndCalcLength(kind: .ifConfigClause,
       layout: layout, presence: .present))

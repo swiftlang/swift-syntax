@@ -1648,11 +1648,11 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionSignatureSyntax(data)
   }
-  public static func makeIfConfigClause(poundKeyword: TokenSyntax, condition: ExprSyntax?, elements: Syntax) -> IfConfigClauseSyntax {
+  public static func makeIfConfigClause(poundKeyword: TokenSyntax, condition: ExprSyntax?, elements: Syntax?) -> IfConfigClauseSyntax {
     let layout: [RawSyntax?] = [
       poundKeyword.raw,
       condition?.raw,
-      elements.raw,
+      elements?.raw,
     ]
     let raw = RawSyntax.createAndCalcLength(kind: SyntaxKind.ifConfigClause,
       layout: layout, presence: SourcePresence.present)
@@ -1665,7 +1665,7 @@ public enum SyntaxFactory {
       layout: [
       RawSyntax.missingToken(TokenKind.poundIfKeyword),
       nil,
-      RawSyntax.missing(SyntaxKind.unknown),
+      nil,
     ], length: .zero, presence: presence))
     return IfConfigClauseSyntax(data)
   }

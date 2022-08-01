@@ -4956,7 +4956,7 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
 public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   let poundKeyword: TokenSyntax
   let condition: ExprBuildable?
-  let elements: SyntaxBuildable
+  let elements: SyntaxBuildable?
 
   /// The leading trivia attached to this syntax node once built.
   /// This is typically used to add comments (e.g. for documentation).
@@ -4971,13 +4971,13 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     leadingTrivia: Trivia = [],
     poundKeyword: TokenSyntax,
     condition: ExpressibleAsExprBuildable? = nil,
-    elements: ExpressibleAsSyntaxBuildable
+    elements: ExpressibleAsSyntaxBuildable? = nil
   ) {
     self.leadingTrivia = leadingTrivia
     self.poundKeyword = poundKeyword
     assert(poundKeyword.text == "#if" || poundKeyword.text == "#elseif" || poundKeyword.text == "#else")
     self.condition = condition?.createExprBuildable()
-    self.elements = elements.createSyntaxBuildable()
+    self.elements = elements?.createSyntaxBuildable()
   }
 
 
@@ -4989,7 +4989,7 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
     let result = SyntaxFactory.makeIfConfigClause(
       poundKeyword: poundKeyword,
       condition: condition?.buildExpr(format: format, leadingTrivia: nil),
-      elements: elements.buildSyntax(format: format, leadingTrivia: nil)
+      elements: elements?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia)

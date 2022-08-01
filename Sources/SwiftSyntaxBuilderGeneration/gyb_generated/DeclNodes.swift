@@ -148,6 +148,7 @@ let DECL_NODES: [Node] = [
                classification: "BuildConfigId"),
          Child(name: "Elements",
                kind: "Syntax",
+               isOptional: true,
                nodeChoices: [
                  Child(name: "Statements",
                        kind: "CodeBlockItemList"),

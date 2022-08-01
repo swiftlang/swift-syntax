@@ -2926,10 +2926,11 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return IfConfigClauseSyntax(newData)
   }
 
-  public var elements: Syntax {
+  public var elements: Syntax? {
     get {
       let childData = data.child(at: Cursor.elements,
                                  parent: Syntax(self))
+      if childData == nil { return nil }
       return Syntax(childData!)
     }
     set(value) {
@@ -2942,7 +2943,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                   current `elements`, if present.
   public func withElements(
     _ newChild: Syntax?) -> IfConfigClauseSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.unknown)
+    let raw = newChild?.raw
     let newData = data.replacingChild(raw, at: Cursor.elements)
     return IfConfigClauseSyntax(newData)
   }
@@ -2968,8 +2969,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
       let syntaxChild = Syntax(syntaxData)
       assert(syntaxChild.is(ExprSyntax.self))
     }
-    // Check child #2 child is Syntax 
-    assert(rawChildren[2].raw != nil)
+    // Check child #2 child is Syntax or missing
     if let raw = rawChildren[2].raw {
       let info = rawChildren[2].syntaxInfo
       let absoluteRaw = AbsoluteRawSyntax(raw: raw, info: info)
@@ -2985,7 +2985,7 @@ extension IfConfigClauseSyntax: CustomReflectable {
     return Mirror(self, children: [
       "poundKeyword": Syntax(poundKeyword).asProtocol(SyntaxProtocol.self),
       "condition": condition.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
-      "elements": Syntax(elements).asProtocol(SyntaxProtocol.self),
+      "elements": elements.map(Syntax.init)?.asProtocol(SyntaxProtocol.self) as Any,
     ])
   }
 }

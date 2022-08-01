@@ -8,6 +8,7 @@
     "SyntaxTraits.swift",
     "SourcePresence.swift",
     "TokenKind.swift",
+    "SyntaxTreeViewMode.swift",
     "Trivia.swift",
   ],
   "Syntax nodes": [

@@ -17,7 +17,7 @@ public class VisitorPerformanceTests: XCTestCase {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(inputFile)
 
-      let emptyVisitor = EmptyVisitor()
+      let emptyVisitor = EmptyVisitor(viewMode: .sourceAccurate)
 
       measure {
         emptyVisitor.walk(parsed)
@@ -45,7 +45,7 @@ public class VisitorPerformanceTests: XCTestCase {
     XCTAssertNoThrow(try {
       let parsed = try SyntaxParser.parse(inputFile)
 
-      let emptyVisitor = EmptyAnyVisitor()
+      let emptyVisitor = EmptyAnyVisitor(viewMode: .sourceAccurate)
 
       measure {
         emptyVisitor.walk(parsed)

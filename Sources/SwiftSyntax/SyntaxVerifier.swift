@@ -30,6 +30,10 @@ public class SyntaxVerifier: SyntaxAnyVisitor {
 
   var unknownNodes: [Syntax] = []
 
+  init() {
+    super.init(viewMode: ._all)
+  }
+
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     if node.isUnknown {
       unknownNodes.append(node)

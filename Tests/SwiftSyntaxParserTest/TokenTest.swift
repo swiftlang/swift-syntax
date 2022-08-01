@@ -44,7 +44,7 @@ public class TokenTests: XCTestCase {
   public func testTokenLgnth() {
     let source = "\"\"\"\n\\(a)\n\"\"\""
     let tree = try! SyntaxParser.parse(source: source)
-    let tok = tree.firstToken!
+    let tok = tree.firstToken(viewMode: .sourceAccurate)!
     XCTAssertTrue(tok.tokenKind == .multilineStringQuote)
     XCTAssertEqual(tok.contentLength.utf8Length, 3)
 

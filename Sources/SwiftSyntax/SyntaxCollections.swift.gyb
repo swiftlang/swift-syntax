@@ -250,7 +250,7 @@ extension ${node.name}: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 

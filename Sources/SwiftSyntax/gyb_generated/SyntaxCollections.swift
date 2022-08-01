@@ -235,7 +235,7 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -484,7 +484,7 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -733,7 +733,7 @@ extension ArrayElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -982,7 +982,7 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -1231,7 +1231,7 @@ extension StringLiteralSegmentsSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -1480,7 +1480,7 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -1729,7 +1729,7 @@ extension ExprListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -1978,7 +1978,7 @@ extension ClosureCaptureItemListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -2227,7 +2227,7 @@ extension ClosureParamListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -2476,7 +2476,7 @@ extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -2725,7 +2725,7 @@ extension ObjcNameSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -2974,7 +2974,7 @@ extension FunctionParameterListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -3223,7 +3223,7 @@ extension IfConfigClauseListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -3472,7 +3472,7 @@ extension InheritedTypeListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -3721,7 +3721,7 @@ extension MemberDeclListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -3970,7 +3970,7 @@ extension ModifierListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -4219,7 +4219,7 @@ extension AccessPathSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -4468,7 +4468,7 @@ extension AccessorListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -4717,7 +4717,7 @@ extension PatternBindingListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -4963,7 +4963,7 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -5212,7 +5212,7 @@ extension IdentifierListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -5461,7 +5461,7 @@ extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -5710,7 +5710,7 @@ extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -5959,7 +5959,7 @@ extension TokenListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -6208,7 +6208,7 @@ extension NonEmptyTokenListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -6457,7 +6457,7 @@ extension AttributeListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -6705,7 +6705,7 @@ extension SpecializeAttributeSpecListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -6954,7 +6954,7 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -7203,7 +7203,7 @@ extension DifferentiabilityParamListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -7452,7 +7452,7 @@ extension BackDeployVersionListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -7701,7 +7701,7 @@ extension SwitchCaseListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -7950,7 +7950,7 @@ extension CatchClauseListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -8199,7 +8199,7 @@ extension CaseItemListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -8448,7 +8448,7 @@ extension CatchItemListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -8697,7 +8697,7 @@ extension ConditionElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -8946,7 +8946,7 @@ extension GenericRequirementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -9195,7 +9195,7 @@ extension GenericParameterListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -9444,7 +9444,7 @@ extension PrimaryAssociatedTypeListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -9693,7 +9693,7 @@ extension CompositionTypeElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -9942,7 +9942,7 @@ extension TupleTypeElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -10191,7 +10191,7 @@ extension GenericArgumentListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -10440,7 +10440,7 @@ extension TuplePatternElementListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 
@@ -10689,7 +10689,7 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can 
     // use the low-level and faster RawSyntaxChildren collection instead of
-    // PresentRawSyntaxChildren.
+    // NonNilRawSyntaxChildren.
     return RawSyntaxChildren(self.data.absoluteRaw)
   }
 

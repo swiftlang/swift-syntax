@@ -2,24 +2,34 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxParser
 
+fileprivate extension SyntaxProtocol {
+  func token(at index: Int, viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    var token = self.firstToken(viewMode: viewMode)
+    for _ in 0..<index {
+      token = token?.nextToken(viewMode: viewMode)
+    }
+    return token
+  }
+}
+
 public class SyntaxTests: XCTestCase {
 
   public func testSyntaxAPI() {
     let source = "struct A { func f() {} }"
     let tree = try! SyntaxParser.parse(source: source)
 
-    XCTAssertEqual("\(tree.firstToken!)", "struct ")
-    XCTAssertEqual("\(tree.firstToken!.nextToken!)", "A ")
-    let funcKW = tree.firstToken!.nextToken!.nextToken!.nextToken!
+    XCTAssertEqual("\(tree.token(at: 0, viewMode: .sourceAccurate)!)", "struct ")
+    XCTAssertEqual("\(tree.token(at: 1, viewMode: .sourceAccurate)!)", "A ")
+    let funcKW = tree.token(at: 3, viewMode: .sourceAccurate)!
     XCTAssertEqual("\(funcKW)", "func ")
-    XCTAssertEqual("\(funcKW.nextToken!.nextToken!.nextToken!.nextToken!.nextToken!.nextToken!)", "}")
+    XCTAssertEqual("\(tree.token(at: 9, viewMode: .sourceAccurate)!)", "}")
 
-    XCTAssertEqual(tree.lastToken!.tokenKind, .eof)
-    XCTAssertEqual("\(funcKW.parent!.lastToken!)", "} ")
-    XCTAssertEqual("\(funcKW.nextToken!.previousToken!)", "func ")
-    XCTAssertEqual("\(funcKW.previousToken!)", "{ ")
+    XCTAssertEqual(tree.lastToken(viewMode: .sourceAccurate)!.tokenKind, .eof)
+    XCTAssertEqual("\(funcKW.parent!.lastToken(viewMode: .sourceAccurate)!)", "} ")
+    XCTAssertEqual("\(funcKW.nextToken(viewMode: .sourceAccurate)!.previousToken(viewMode: .sourceAccurate)!)", "func ")
+    XCTAssertEqual("\(funcKW.previousToken(viewMode: .sourceAccurate)!)", "{ ")
 
-    let toks = Array(funcKW.parent!.tokens)
+    let toks = Array(funcKW.parent!.tokens(viewMode: .sourceAccurate))
     XCTAssertEqual(toks.count, 6)
     guard toks.count == 6 else {
       return
@@ -31,7 +41,7 @@ public class SyntaxTests: XCTestCase {
     XCTAssertEqual("\(toks[4])", "{")
     XCTAssertEqual("\(toks[5])", "} ")
 
-    let rtoks = Array(funcKW.parent!.tokens.reversed())
+    let rtoks = Array(funcKW.parent!.tokens(viewMode: .sourceAccurate).reversed())
     XCTAssertEqual(rtoks.count, 6)
     guard rtoks.count == 6 else {
       return

@@ -993,18 +993,8 @@ final class RawSyntax: ManagedBuffer<RawSyntaxBase, RawSyntaxDataElement> {
     return header.totalNodes
   }
 
-  /// Whether this node is present in the original source.
-  var isPresent: Bool {
-    return header.isPresent
-  }
-
-  /// Whether this node is missing from the original source.
-  var isMissing: Bool {
-    return !isPresent
-  }
-
   var presence: SourcePresence {
-    return isPresent ? .present : .missing
+    return header.isPresent ? .present : .missing
   }
 
   var totalLength: SourceLength {
@@ -1247,7 +1237,7 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
   /// - Parameter stream: The stream on which to output this node.
   func write<Target>(to target: inout Target)
     where Target: TextOutputStream {
-    guard isPresent else { return }
+    guard SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: self) else { return }
     if isToken {
       withUnsafeMutablePointers {
         $0.pointee.writeToken(to: &target, extraPtr: $1)
@@ -1269,11 +1259,11 @@ extension RawSyntax: TextOutputStreamable, CustomStringConvertible {
 
 extension RawSyntax {
   /// Return the first `present` token of a layout node or self if it is a token.
-  var firstPresentToken: RawSyntax? {
-    guard isPresent else { return nil }
+  func firstToken(viewMode: SyntaxTreeViewMode) -> RawSyntax? {
+    guard viewMode.shouldTraverse(node: self) else { return nil }
     if isToken { return self }
     for i in 0..<self.numberOfChildren {
-      if let token = self.child(at: i)?.firstPresentToken {
+      if let token = self.child(at: i)?.firstToken(viewMode: viewMode) {
         return token
       }
     }
@@ -1281,11 +1271,11 @@ extension RawSyntax {
   }
 
   /// Return the last `present` token of a layout node or self if it is a token.
-  var lastPresentToken: RawSyntax? {
-    guard isPresent else { return nil }
+  func lastToken(viewMode: SyntaxTreeViewMode) -> RawSyntax? {
+    guard viewMode.shouldTraverse(node: self) else { return nil }
     if isToken { return self }
     for i in (0..<self.numberOfChildren).reversed() {
-      if let token = self.child(at: i)?.lastPresentToken {
+      if let token = self.child(at: i)?.lastToken(viewMode: viewMode) {
         return token
       }
     }
@@ -1293,24 +1283,24 @@ extension RawSyntax {
   }
 
   func formLeadingTrivia() -> Trivia? {
-    guard let token = self.firstPresentToken else { return nil }
+    guard let token = self.firstToken(viewMode: .sourceAccurate) else { return nil }
     return token.formTokenLeadingTrivia()
   }
 
   func formTrailingTrivia() -> Trivia? {
-    guard let token = self.lastPresentToken else { return nil }
+    guard let token = self.lastToken(viewMode: .sourceAccurate) else { return nil }
     return token.formTokenTrailingTrivia()
   }
 }
 
 extension RawSyntax {
   var leadingTriviaLength: SourceLength {
-    guard let token = self.firstPresentToken else { return .zero }
+    guard let token = self.firstToken(viewMode: .sourceAccurate) else { return .zero }
     return token.tokenLeadingTriviaLength
   }
 
   var trailingTriviaLength: SourceLength {
-    guard let token = self.lastPresentToken else { return .zero }
+    guard let token = self.lastToken(viewMode: .sourceAccurate) else { return .zero }
     return token.tokenTrailingTriviaLength
   }
 

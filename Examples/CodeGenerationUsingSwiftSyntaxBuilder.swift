@@ -1,7 +1,7 @@
 import SwiftSyntaxBuilder
 
 /// This example will print the following example:
-/// 
+///
 ///```
 /// import Foundation
 /// import UIKit

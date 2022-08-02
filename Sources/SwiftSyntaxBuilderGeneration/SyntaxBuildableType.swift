@@ -10,6 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+import SwiftSyntaxBuilder
+
 /// Wrapper around the syntax kind strings to provide functionality specific to
 /// SwiftSyntaxBuilder. In particular, this includes the functionality to create
 /// the `*Buildable`, `ExpressibleAs*` and `*Syntax` Swift types from the syntax
@@ -43,17 +46,17 @@ struct SyntaxBuildableType: Hashable {
   /// with fixed test), return an expression of the form ` = defaultValue`
   /// that can be used as the default value for a function parameter.
   /// Otherwise, return the empty string.
-  var defaultInitialization: String {
+  var defaultInitialization: ExpressibleAsExprBuildable? {
     if isOptional {
-      return " = nil"
+      return "nil"
     } else if isToken {
       if let token = token, token.text != nil {
-        return " = TokenSyntax.`\(lowercaseFirstWord(name: token.name))`"
+        return MemberAccessExpr(base: "TokenSyntax", name: lowercaseFirstWord(name: token.name))
       } else if tokenKind == "EOFToken" {
-        return " = TokenSyntax.eof"
+        return MemberAccessExpr(base: "TokenSyntax", name: "eof")
       }
     }
-    return ""
+    return nil
   }
 
   /// Whether the type is a syntax collection.

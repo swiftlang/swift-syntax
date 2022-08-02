@@ -45,7 +45,7 @@ extension Node {
 
   /// Assuming this node has a single child without a default value, that child.
   var singleNonDefaultedChild: Child {
-    let nonDefaultedParams = children.filter(\.type.defaultInitialization.isEmpty)
+    let nonDefaultedParams = children.filter { $0.type.defaultInitialization == nil }
     assert(nonDefaultedParams.count == 1)
     return nonDefaultedParams[0]
   }

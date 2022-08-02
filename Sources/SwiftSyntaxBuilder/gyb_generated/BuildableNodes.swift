@@ -61,11 +61,11 @@ public struct CodeBlockItem: SyntaxBuildable, ExpressibleAsCodeBlockItem {
   /// - Returns: The built `CodeBlockItemSyntax`.
   func buildCodeBlockItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockItemSyntax {
     let result = SyntaxFactory.makeCodeBlockItem(
-      garbage: garbageBeforeItem?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeItem?.buildGarbageNodes(format: format, leadingTrivia: nil),
       item: item.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenItemAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenItemAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       semicolon: semicolon,
-      garbage: garbageBetweenSemicolonAndErrorTokens?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSemicolonAndErrorTokens?.buildGarbageNodes(format: format, leadingTrivia: nil),
       errorTokens: errorTokens?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -160,11 +160,11 @@ public struct CodeBlock: SyntaxBuildable, ExpressibleAsCodeBlock {
   /// - Returns: The built `CodeBlockSyntax`.
   func buildCodeBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CodeBlockSyntax {
     let result = SyntaxFactory.makeCodeBlock(
-      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
-      garbage: garbageBetweenLeftBraceAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBraceAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
-      garbage: garbageBetweenStatementsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenStatementsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -228,9 +228,9 @@ public struct InOutExpr: ExprBuildable, ExpressibleAsInOutExpr {
   /// - Returns: The built `InOutExprSyntax`.
   func buildInOutExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InOutExprSyntax {
     let result = SyntaxFactory.makeInOutExpr(
-      garbage: garbageBeforeAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ampersand: ampersand,
-      garbage: garbageBetweenAmpersandAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAmpersandAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -292,7 +292,7 @@ public struct PoundColumnExpr: ExprBuildable, ExpressibleAsPoundColumnExpr {
   /// - Returns: The built `PoundColumnExprSyntax`.
   func buildPoundColumnExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundColumnExprSyntax {
     let result = SyntaxFactory.makePoundColumnExpr(
-      garbage: garbageBeforePoundColumn?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundColumn?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundColumn: poundColumn
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -371,11 +371,11 @@ public struct TryExpr: ExprBuildable, ExpressibleAsTryExpr {
   /// - Returns: The built `TryExprSyntax`.
   func buildTryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TryExprSyntax {
     let result = SyntaxFactory.makeTryExpr(
-      garbage: garbageBeforeTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tryKeyword: tryKeyword,
-      garbage: garbageBetweenTryKeywordAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTryKeywordAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionOrExclamationMark: questionOrExclamationMark,
-      garbage: garbageBetweenQuestionOrExclamationMarkAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenQuestionOrExclamationMarkAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -463,9 +463,9 @@ public struct AwaitExpr: ExprBuildable, ExpressibleAsAwaitExpr {
   /// - Returns: The built `AwaitExprSyntax`.
   func buildAwaitExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AwaitExprSyntax {
     let result = SyntaxFactory.makeAwaitExpr(
-      garbage: garbageBeforeAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       awaitKeyword: awaitKeyword,
-      garbage: garbageBetweenAwaitKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAwaitKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -535,9 +535,9 @@ public struct DeclNameArgument: SyntaxBuildable, ExpressibleAsDeclNameArgument {
   /// - Returns: The built `DeclNameArgumentSyntax`.
   func buildDeclNameArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentSyntax {
     let result = SyntaxFactory.makeDeclNameArgument(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -610,11 +610,11 @@ public struct DeclNameArguments: SyntaxBuildable, ExpressibleAsDeclNameArguments
   /// - Returns: The built `DeclNameArgumentsSyntax`.
   func buildDeclNameArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameArgumentsSyntax {
     let result = SyntaxFactory.makeDeclNameArguments(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildDeclNameArgumentList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -677,9 +677,9 @@ public struct IdentifierExpr: ExprBuildable, ExpressibleAsIdentifierExpr {
   /// - Returns: The built `IdentifierExprSyntax`.
   func buildIdentifierExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierExprSyntax {
     let result = SyntaxFactory.makeIdentifierExpr(
-      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -741,7 +741,7 @@ public struct SuperRefExpr: ExprBuildable, ExpressibleAsSuperRefExpr {
   /// - Returns: The built `SuperRefExprSyntax`.
   func buildSuperRefExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SuperRefExprSyntax {
     let result = SyntaxFactory.makeSuperRefExpr(
-      garbage: garbageBeforeSuperKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeSuperKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       superKeyword: superKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -803,7 +803,7 @@ public struct NilLiteralExpr: ExprBuildable, ExpressibleAsNilLiteralExpr {
   /// - Returns: The built `NilLiteralExprSyntax`.
   func buildNilLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NilLiteralExprSyntax {
     let result = SyntaxFactory.makeNilLiteralExpr(
-      garbage: garbageBeforeNilKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeNilKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       nilKeyword: nilKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -865,7 +865,7 @@ public struct DiscardAssignmentExpr: ExprBuildable, ExpressibleAsDiscardAssignme
   /// - Returns: The built `DiscardAssignmentExprSyntax`.
   func buildDiscardAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DiscardAssignmentExprSyntax {
     let result = SyntaxFactory.makeDiscardAssignmentExpr(
-      garbage: garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wildcard: wildcard
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -927,7 +927,7 @@ public struct AssignmentExpr: ExprBuildable, ExpressibleAsAssignmentExpr {
   /// - Returns: The built `AssignmentExprSyntax`.
   func buildAssignmentExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssignmentExprSyntax {
     let result = SyntaxFactory.makeAssignmentExpr(
-      garbage: garbageBeforeAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignToken: assignToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1002,7 +1002,7 @@ public struct SequenceExpr: ExprBuildable, ExpressibleAsSequenceExpr {
   /// - Returns: The built `SequenceExprSyntax`.
   func buildSequenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SequenceExprSyntax {
     let result = SyntaxFactory.makeSequenceExpr(
-      garbage: garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildExprList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1064,7 +1064,7 @@ public struct PoundLineExpr: ExprBuildable, ExpressibleAsPoundLineExpr {
   /// - Returns: The built `PoundLineExprSyntax`.
   func buildPoundLineExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundLineExprSyntax {
     let result = SyntaxFactory.makePoundLineExpr(
-      garbage: garbageBeforePoundLine?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundLine?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundLine: poundLine
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1126,7 +1126,7 @@ public struct PoundFileExpr: ExprBuildable, ExpressibleAsPoundFileExpr {
   /// - Returns: The built `PoundFileExprSyntax`.
   func buildPoundFileExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileExprSyntax {
     let result = SyntaxFactory.makePoundFileExpr(
-      garbage: garbageBeforePoundFile?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundFile?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFile: poundFile
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1188,7 +1188,7 @@ public struct PoundFileIDExpr: ExprBuildable, ExpressibleAsPoundFileIDExpr {
   /// - Returns: The built `PoundFileIDExprSyntax`.
   func buildPoundFileIDExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFileIDExprSyntax {
     let result = SyntaxFactory.makePoundFileIDExpr(
-      garbage: garbageBeforePoundFileID?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundFileID?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFileID: poundFileID
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1250,7 +1250,7 @@ public struct PoundFilePathExpr: ExprBuildable, ExpressibleAsPoundFilePathExpr {
   /// - Returns: The built `PoundFilePathExprSyntax`.
   func buildPoundFilePathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFilePathExprSyntax {
     let result = SyntaxFactory.makePoundFilePathExpr(
-      garbage: garbageBeforePoundFilePath?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundFilePath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFilePath: poundFilePath
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1312,7 +1312,7 @@ public struct PoundFunctionExpr: ExprBuildable, ExpressibleAsPoundFunctionExpr {
   /// - Returns: The built `PoundFunctionExprSyntax`.
   func buildPoundFunctionExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundFunctionExprSyntax {
     let result = SyntaxFactory.makePoundFunctionExpr(
-      garbage: garbageBeforePoundFunction?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundFunction?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundFunction: poundFunction
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1374,7 +1374,7 @@ public struct PoundDsohandleExpr: ExprBuildable, ExpressibleAsPoundDsohandleExpr
   /// - Returns: The built `PoundDsohandleExprSyntax`.
   func buildPoundDsohandleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundDsohandleExprSyntax {
     let result = SyntaxFactory.makePoundDsohandleExpr(
-      garbage: garbageBeforePoundDsohandle?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundDsohandle?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundDsohandle: poundDsohandle
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1461,9 +1461,9 @@ public struct SymbolicReferenceExpr: ExprBuildable, ExpressibleAsSymbolicReferen
   /// - Returns: The built `SymbolicReferenceExprSyntax`.
   func buildSymbolicReferenceExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SymbolicReferenceExprSyntax {
     let result = SyntaxFactory.makeSymbolicReferenceExpr(
-      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1550,9 +1550,9 @@ public struct PrefixOperatorExpr: ExprBuildable, ExpressibleAsPrefixOperatorExpr
   /// - Returns: The built `PrefixOperatorExprSyntax`.
   func buildPrefixOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrefixOperatorExprSyntax {
     let result = SyntaxFactory.makePrefixOperatorExpr(
-      garbage: garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken,
-      garbage: garbageBetweenOperatorTokenAndPostfixExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOperatorTokenAndPostfixExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       postfixExpression: postfixExpression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1613,7 +1613,7 @@ public struct BinaryOperatorExpr: ExprBuildable, ExpressibleAsBinaryOperatorExpr
   /// - Returns: The built `BinaryOperatorExprSyntax`.
   func buildBinaryOperatorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BinaryOperatorExprSyntax {
     let result = SyntaxFactory.makeBinaryOperatorExpr(
-      garbage: garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1715,11 +1715,11 @@ public struct ArrowExpr: ExprBuildable, ExpressibleAsArrowExpr {
   /// - Returns: The built `ArrowExprSyntax`.
   func buildArrowExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrowExprSyntax {
     let result = SyntaxFactory.makeArrowExpr(
-      garbage: garbageBeforeAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
-      garbage: garbageBetweenAsyncKeywordAndThrowsToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsyncKeywordAndThrowsToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsToken: throwsToken,
-      garbage: garbageBetweenThrowsTokenAndArrowToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenThrowsTokenAndArrowToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrowToken: arrowToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1794,7 +1794,7 @@ public struct FloatLiteralExpr: ExprBuildable, ExpressibleAsFloatLiteralExpr {
   /// - Returns: The built `FloatLiteralExprSyntax`.
   func buildFloatLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FloatLiteralExprSyntax {
     let result = SyntaxFactory.makeFloatLiteralExpr(
-      garbage: garbageBeforeFloatingDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeFloatingDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
       floatingDigits: floatingDigits
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -1895,11 +1895,11 @@ public struct TupleExpr: ExprBuildable, ExpressibleAsTupleExpr {
   /// - Returns: The built `TupleExprSyntax`.
   func buildTupleExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprSyntax {
     let result = SyntaxFactory.makeTupleExpr(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elementList: elementList.buildTupleExprElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenElementListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElementListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2000,11 +2000,11 @@ public struct ArrayExpr: ExprBuildable, ExpressibleAsArrayExpr {
   /// - Returns: The built `ArrayExprSyntax`.
   func buildArrayExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayExprSyntax {
     let result = SyntaxFactory.makeArrayExpr(
-      garbage: garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
-      garbage: garbageBetweenLeftSquareAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftSquareAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildArrayElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenElementsAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElementsAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2083,11 +2083,11 @@ public struct DictionaryExpr: ExprBuildable, ExpressibleAsDictionaryExpr {
   /// - Returns: The built `DictionaryExprSyntax`.
   func buildDictionaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryExprSyntax {
     let result = SyntaxFactory.makeDictionaryExpr(
-      garbage: garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
-      garbage: garbageBetweenLeftSquareAndContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftSquareAndContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
       content: content.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenContentAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenContentAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2174,13 +2174,13 @@ public struct TupleExprElement: SyntaxBuildable, ExpressibleAsTupleExprElement, 
   /// - Returns: The built `TupleExprElementSyntax`.
   func buildTupleExprElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleExprElementSyntax {
     let result = SyntaxFactory.makeTupleExprElement(
-      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
-      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2258,9 +2258,9 @@ public struct ArrayElement: SyntaxBuildable, ExpressibleAsArrayElement, HasTrail
   /// - Returns: The built `ArrayElementSyntax`.
   func buildArrayElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayElementSyntax {
     let result = SyntaxFactory.makeArrayElement(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2351,13 +2351,13 @@ public struct DictionaryElement: SyntaxBuildable, ExpressibleAsDictionaryElement
   /// - Returns: The built `DictionaryElementSyntax`.
   func buildDictionaryElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryElementSyntax {
     let result = SyntaxFactory.makeDictionaryElement(
-      garbage: garbageBeforeKeyExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeKeyExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyExpression: keyExpression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenKeyExpressionAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenKeyExpressionAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndValueExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndValueExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       valueExpression: valueExpression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenValueExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenValueExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2440,7 +2440,7 @@ public struct IntegerLiteralExpr: ExprBuildable, ExpressibleAsIntegerLiteralExpr
   /// - Returns: The built `IntegerLiteralExprSyntax`.
   func buildIntegerLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IntegerLiteralExprSyntax {
     let result = SyntaxFactory.makeIntegerLiteralExpr(
-      garbage: garbageBeforeDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDigits?.buildGarbageNodes(format: format, leadingTrivia: nil),
       digits: digits
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2502,7 +2502,7 @@ public struct BooleanLiteralExpr: ExprBuildable, ExpressibleAsBooleanLiteralExpr
   /// - Returns: The built `BooleanLiteralExprSyntax`.
   func buildBooleanLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BooleanLiteralExprSyntax {
     let result = SyntaxFactory.makeBooleanLiteralExpr(
-      garbage: garbageBeforeBooleanLiteral?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBooleanLiteral?.buildGarbageNodes(format: format, leadingTrivia: nil),
       booleanLiteral: booleanLiteral
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2597,15 +2597,15 @@ public struct TernaryExpr: ExprBuildable, ExpressibleAsTernaryExpr {
   /// - Returns: The built `TernaryExprSyntax`.
   func buildTernaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TernaryExprSyntax {
     let result = SyntaxFactory.makeTernaryExpr(
-      garbage: garbageBeforeConditionExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeConditionExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditionExpression: conditionExpression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark,
-      garbage: garbageBetweenQuestionMarkAndFirstChoice?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenQuestionMarkAndFirstChoice?.buildGarbageNodes(format: format, leadingTrivia: nil),
       firstChoice: firstChoice.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenFirstChoiceAndColonMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenFirstChoiceAndColonMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colonMark: colonMark,
-      garbage: garbageBetweenColonMarkAndSecondChoice?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonMarkAndSecondChoice?.buildGarbageNodes(format: format, leadingTrivia: nil),
       secondChoice: secondChoice.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2691,13 +2691,13 @@ public struct MemberAccessExpr: ExprBuildable, ExpressibleAsMemberAccessExpr {
   /// - Returns: The built `MemberAccessExprSyntax`.
   func buildMemberAccessExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberAccessExprSyntax {
     let result = SyntaxFactory.makeMemberAccessExpr(
-      garbage: garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
       base: base?.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBaseAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBaseAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       dot: dot,
-      garbage: garbageBetweenDotAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDotAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2767,9 +2767,9 @@ public struct IsExpr: ExprBuildable, ExpressibleAsIsExpr {
   /// - Returns: The built `IsExprSyntax`.
   func buildIsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsExprSyntax {
     let result = SyntaxFactory.makeIsExpr(
-      garbage: garbageBeforeIsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       isTok: isTok,
-      garbage: garbageBetweenIsTokAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIsTokAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2848,11 +2848,11 @@ public struct AsExpr: ExprBuildable, ExpressibleAsAsExpr {
   /// - Returns: The built `AsExprSyntax`.
   func buildAsExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsExprSyntax {
     let result = SyntaxFactory.makeAsExpr(
-      garbage: garbageBeforeAsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asTok: asTok,
-      garbage: garbageBetweenAsTokAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsTokAndQuestionOrExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionOrExclamationMark: questionOrExclamationMark,
-      garbage: garbageBetweenQuestionOrExclamationMarkAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenQuestionOrExclamationMarkAndTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -2913,7 +2913,7 @@ public struct TypeExpr: ExprBuildable, ExpressibleAsTypeExpr {
   /// - Returns: The built `TypeExprSyntax`.
   func buildTypeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeExprSyntax {
     let result = SyntaxFactory.makeTypeExpr(
-      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3038,15 +3038,15 @@ public struct ClosureCaptureItem: SyntaxBuildable, ExpressibleAsClosureCaptureIt
   /// - Returns: The built `ClosureCaptureItemSyntax`.
   func buildClosureCaptureItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureItemSyntax {
     let result = SyntaxFactory.makeClosureCaptureItem(
-      garbage: garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       specifier: specifier?.buildTokenList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSpecifierAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSpecifierAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndAssignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignToken: assignToken,
-      garbage: garbageBetweenAssignTokenAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAssignTokenAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3157,11 +3157,11 @@ public struct ClosureCaptureSignature: SyntaxBuildable, ExpressibleAsClosureCapt
   /// - Returns: The built `ClosureCaptureSignatureSyntax`.
   func buildClosureCaptureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureCaptureSignatureSyntax {
     let result = SyntaxFactory.makeClosureCaptureSignature(
-      garbage: garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquare: leftSquare,
-      garbage: garbageBetweenLeftSquareAndItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftSquareAndItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
       items: items?.buildClosureCaptureItemList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenItemsAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenItemsAndRightSquare?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquare: rightSquare
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3225,9 +3225,9 @@ public struct ClosureParam: SyntaxBuildable, ExpressibleAsClosureParam, HasTrail
   /// - Returns: The built `ClosureParamSyntax`.
   func buildClosureParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureParamSyntax {
     let result = SyntaxFactory.makeClosureParam(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3381,19 +3381,19 @@ public struct ClosureSignature: SyntaxBuildable, ExpressibleAsClosureSignature {
   /// - Returns: The built `ClosureSignatureSyntax`.
   func buildClosureSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureSignatureSyntax {
     let result = SyntaxFactory.makeClosureSignature(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndCapture?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndCapture?.buildGarbageNodes(format: format, leadingTrivia: nil),
       capture: capture?.buildClosureCaptureSignature(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenCaptureAndInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaptureAndInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       input: input?.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInputAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInputAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
-      garbage: garbageBetweenAsyncKeywordAndThrowsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsyncKeywordAndThrowsTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsTok: throwsTok,
-      garbage: garbageBetweenThrowsTokAndOutput?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenThrowsTokAndOutput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       output: output?.buildReturnClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenOutputAndInTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOutputAndInTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inTok: inTok
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3500,13 +3500,13 @@ public struct ClosureExpr: ExprBuildable, ExpressibleAsClosureExpr {
   /// - Returns: The built `ClosureExprSyntax`.
   func buildClosureExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClosureExprSyntax {
     let result = SyntaxFactory.makeClosureExpr(
-      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
-      garbage: garbageBetweenLeftBraceAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBraceAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
       signature: signature?.buildClosureSignature(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSignatureAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSignatureAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil),
-      garbage: garbageBetweenStatementsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenStatementsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3567,7 +3567,7 @@ public struct UnresolvedPatternExpr: ExprBuildable, ExpressibleAsUnresolvedPatte
   /// - Returns: The built `UnresolvedPatternExprSyntax`.
   func buildUnresolvedPatternExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnresolvedPatternExprSyntax {
     let result = SyntaxFactory.makeUnresolvedPatternExpr(
-      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3645,11 +3645,11 @@ public struct MultipleTrailingClosureElement: SyntaxBuildable, ExpressibleAsMult
   /// - Returns: The built `MultipleTrailingClosureElementSyntax`.
   func buildMultipleTrailingClosureElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MultipleTrailingClosureElementSyntax {
     let result = SyntaxFactory.makeMultipleTrailingClosureElement(
-      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
-      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
       closure: closure.buildClosureExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3780,17 +3780,17 @@ public struct FunctionCallExpr: ExprBuildable, ExpressibleAsFunctionCallExpr {
   /// - Returns: The built `FunctionCallExprSyntax`.
   func buildFunctionCallExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionCallExprSyntax {
     let result = SyntaxFactory.makeFunctionCallExpr(
-      garbage: garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenCalledExpressionAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCalledExpressionAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentList: argumentList.buildTupleExprElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen,
-      garbage: garbageBetweenRightParenAndTrailingClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRightParenAndTrailingClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.buildGarbageNodes(format: format, leadingTrivia: nil),
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -3927,17 +3927,17 @@ public struct SubscriptExpr: ExprBuildable, ExpressibleAsSubscriptExpr {
   /// - Returns: The built `SubscriptExprSyntax`.
   func buildSubscriptExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptExprSyntax {
     let result = SyntaxFactory.makeSubscriptExpr(
-      garbage: garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeCalledExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       calledExpression: calledExpression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenCalledExpressionAndLeftBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCalledExpressionAndLeftBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBracket: leftBracket,
-      garbage: garbageBetweenLeftBracketAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBracketAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentList: argumentList.buildTupleExprElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentListAndRightBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentListAndRightBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBracket: rightBracket,
-      garbage: garbageBetweenRightBracketAndTrailingClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRightBracketAndTrailingClosure?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingClosure: trailingClosure?.buildClosureExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTrailingClosureAndAdditionalTrailingClosures?.buildGarbageNodes(format: format, leadingTrivia: nil),
       additionalTrailingClosures: additionalTrailingClosures?.buildMultipleTrailingClosureElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4007,9 +4007,9 @@ public struct OptionalChainingExpr: ExprBuildable, ExpressibleAsOptionalChaining
   /// - Returns: The built `OptionalChainingExprSyntax`.
   func buildOptionalChainingExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalChainingExprSyntax {
     let result = SyntaxFactory.makeOptionalChainingExpr(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4079,9 +4079,9 @@ public struct ForcedValueExpr: ExprBuildable, ExpressibleAsForcedValueExpr {
   /// - Returns: The built `ForcedValueExprSyntax`.
   func buildForcedValueExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForcedValueExprSyntax {
     let result = SyntaxFactory.makeForcedValueExpr(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       exclamationMark: exclamationMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4168,9 +4168,9 @@ public struct PostfixUnaryExpr: ExprBuildable, ExpressibleAsPostfixUnaryExpr {
   /// - Returns: The built `PostfixUnaryExprSyntax`.
   func buildPostfixUnaryExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixUnaryExprSyntax {
     let result = SyntaxFactory.makePostfixUnaryExpr(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndOperatorToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorToken: operatorToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4239,9 +4239,9 @@ public struct SpecializeExpr: ExprBuildable, ExpressibleAsSpecializeExpr {
   /// - Returns: The built `SpecializeExprSyntax`.
   func buildSpecializeExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SpecializeExprSyntax {
     let result = SyntaxFactory.makeSpecializeExpr(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4316,7 +4316,7 @@ public struct StringSegment: SyntaxBuildable, ExpressibleAsStringSegment {
   /// - Returns: The built `StringSegmentSyntax`.
   func buildStringSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringSegmentSyntax {
     let result = SyntaxFactory.makeStringSegment(
-      garbage: garbageBeforeContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeContent?.buildGarbageNodes(format: format, leadingTrivia: nil),
       content: content
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4436,15 +4436,15 @@ public struct ExpressionSegment: SyntaxBuildable, ExpressibleAsExpressionSegment
   /// - Returns: The built `ExpressionSegmentSyntax`.
   func buildExpressionSegment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionSegmentSyntax {
     let result = SyntaxFactory.makeExpressionSegment(
-      garbage: garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
       backslash: backslash,
-      garbage: garbageBetweenBackslashAndDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBackslashAndDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       delimiter: delimiter,
-      garbage: garbageBetweenDelimiterAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDelimiterAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndExpressions?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndExpressions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expressions: expressions.buildTupleExprElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4563,15 +4563,15 @@ public struct StringLiteralExpr: ExprBuildable, ExpressibleAsStringLiteralExpr {
   /// - Returns: The built `StringLiteralExprSyntax`.
   func buildStringLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StringLiteralExprSyntax {
     let result = SyntaxFactory.makeStringLiteralExpr(
-      garbage: garbageBeforeOpenDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeOpenDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       openDelimiter: openDelimiter,
-      garbage: garbageBetweenOpenDelimiterAndOpenQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOpenDelimiterAndOpenQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
       openQuote: openQuote,
-      garbage: garbageBetweenOpenQuoteAndSegments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOpenQuoteAndSegments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       segments: segments.buildStringLiteralSegments(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSegmentsAndCloseQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSegmentsAndCloseQuote?.buildGarbageNodes(format: format, leadingTrivia: nil),
       closeQuote: closeQuote,
-      garbage: garbageBetweenCloseQuoteAndCloseDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCloseQuoteAndCloseDelimiter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       closeDelimiter: closeDelimiter
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4646,7 +4646,7 @@ public struct RegexLiteralExpr: ExprBuildable, ExpressibleAsRegexLiteralExpr {
   /// - Returns: The built `RegexLiteralExprSyntax`.
   func buildRegexLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RegexLiteralExprSyntax {
     let result = SyntaxFactory.makeRegexLiteralExpr(
-      garbage: garbageBeforeRegex?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeRegex?.buildGarbageNodes(format: format, leadingTrivia: nil),
       regex: regex
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4724,11 +4724,11 @@ public struct KeyPathExpr: ExprBuildable, ExpressibleAsKeyPathExpr {
   /// - Returns: The built `KeyPathExprSyntax`.
   func buildKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathExprSyntax {
     let result = SyntaxFactory.makeKeyPathExpr(
-      garbage: garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBackslash?.buildGarbageNodes(format: format, leadingTrivia: nil),
       backslash: backslash,
-      garbage: garbageBetweenBackslashAndRootExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBackslashAndRootExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rootExpr: rootExpr?.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenRootExprAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRootExprAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4790,7 +4790,7 @@ public struct KeyPathBaseExpr: ExprBuildable, ExpressibleAsKeyPathBaseExpr {
   /// - Returns: The built `KeyPathBaseExprSyntax`.
   func buildKeyPathBaseExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> KeyPathBaseExprSyntax {
     let result = SyntaxFactory.makeKeyPathBaseExpr(
-      garbage: garbageBeforePeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4878,9 +4878,9 @@ public struct ObjcNamePiece: SyntaxBuildable, ExpressibleAsObjcNamePiece {
   /// - Returns: The built `ObjcNamePieceSyntax`.
   func buildObjcNamePiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcNamePieceSyntax {
     let result = SyntaxFactory.makeObjcNamePiece(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       dot: dot
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -4962,13 +4962,13 @@ public struct ObjcKeyPathExpr: ExprBuildable, ExpressibleAsObjcKeyPathExpr {
   /// - Returns: The built `ObjcKeyPathExprSyntax`.
   func buildObjcKeyPathExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcKeyPathExprSyntax {
     let result = SyntaxFactory.makeObjcKeyPathExpr(
-      garbage: garbageBeforeKeyPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeKeyPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyPath: keyPath,
-      garbage: garbageBetweenKeyPathAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenKeyPathAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildObjcName(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5108,17 +5108,17 @@ public struct ObjcSelectorExpr: ExprBuildable, ExpressibleAsObjcSelectorExpr {
   /// - Returns: The built `ObjcSelectorExprSyntax`.
   func buildObjcSelectorExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjcSelectorExprSyntax {
     let result = SyntaxFactory.makeObjcSelectorExpr(
-      garbage: garbageBeforePoundSelector?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundSelector?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundSelector: poundSelector,
-      garbage: garbageBetweenPoundSelectorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundSelectorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       kind: kind,
-      garbage: garbageBetweenKindAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenKindAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5187,9 +5187,9 @@ public struct PostfixIfConfigExpr: ExprBuildable, ExpressibleAsPostfixIfConfigEx
   /// - Returns: The built `PostfixIfConfigExprSyntax`.
   func buildPostfixIfConfigExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PostfixIfConfigExprSyntax {
     let result = SyntaxFactory.makePostfixIfConfigExpr(
-      garbage: garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBase?.buildGarbageNodes(format: format, leadingTrivia: nil),
       base: base?.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBaseAndConfig?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBaseAndConfig?.buildGarbageNodes(format: format, leadingTrivia: nil),
       config: config.buildIfConfigDecl(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5264,7 +5264,7 @@ public struct EditorPlaceholderExpr: ExprBuildable, ExpressibleAsEditorPlacehold
   /// - Returns: The built `EditorPlaceholderExprSyntax`.
   func buildEditorPlaceholderExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EditorPlaceholderExprSyntax {
     let result = SyntaxFactory.makeEditorPlaceholderExpr(
-      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5378,13 +5378,13 @@ public struct ObjectLiteralExpr: ExprBuildable, ExpressibleAsObjectLiteralExpr {
   /// - Returns: The built `ObjectLiteralExprSyntax`.
   func buildObjectLiteralExpr(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjectLiteralExprSyntax {
     let result = SyntaxFactory.makeObjectLiteralExpr(
-      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildTupleExprElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5454,9 +5454,9 @@ public struct TypeInitializerClause: SyntaxBuildable, ExpressibleAsTypeInitializ
   /// - Returns: The built `TypeInitializerClauseSyntax`.
   func buildTypeInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInitializerClauseSyntax {
     let result = SyntaxFactory.makeTypeInitializerClause(
-      garbage: garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equal: equal,
-      garbage: garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5598,19 +5598,19 @@ public struct TypealiasDecl: DeclBuildable, ExpressibleAsTypealiasDecl {
   /// - Returns: The built `TypealiasDeclSyntax`.
   func buildTypealiasDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypealiasDeclSyntax {
     let result = SyntaxFactory.makeTypealiasDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndTypealiasKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndTypealiasKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typealiasKeyword: typealiasKeyword,
-      garbage: garbageBetweenTypealiasKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypealiasKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer.buildTypeInitializerClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInitializerAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInitializerAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5758,19 +5758,19 @@ public struct AssociatedtypeDecl: DeclBuildable, ExpressibleAsAssociatedtypeDecl
   /// - Returns: The built `AssociatedtypeDeclSyntax`.
   func buildAssociatedtypeDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AssociatedtypeDeclSyntax {
     let result = SyntaxFactory.makeAssociatedtypeDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndAssociatedtypeKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndAssociatedtypeKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associatedtypeKeyword: associatedtypeKeyword,
-      garbage: garbageBetweenAssociatedtypeKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAssociatedtypeKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildTypeInitializerClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInitializerAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInitializerAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5871,11 +5871,11 @@ public struct ParameterClause: SyntaxBuildable, ExpressibleAsParameterClause {
   /// - Returns: The built `ParameterClauseSyntax`.
   func buildParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ParameterClauseSyntax {
     let result = SyntaxFactory.makeParameterClause(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameterList: parameterList.buildFunctionParameterList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenParameterListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenParameterListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -5939,9 +5939,9 @@ public struct ReturnClause: SyntaxBuildable, ExpressibleAsReturnClause {
   /// - Returns: The built `ReturnClauseSyntax`.
   func buildReturnClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnClauseSyntax {
     let result = SyntaxFactory.makeReturnClause(
-      garbage: garbageBeforeArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrow: arrow,
-      garbage: garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6048,13 +6048,13 @@ public struct FunctionSignature: SyntaxBuildable, ExpressibleAsFunctionSignature
   /// - Returns: The built `FunctionSignatureSyntax`.
   func buildFunctionSignature(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionSignatureSyntax {
     let result = SyntaxFactory.makeFunctionSignature(
-      garbage: garbageBeforeInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeInput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       input: input.buildParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInputAndAsyncOrReasyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInputAndAsyncOrReasyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncOrReasyncKeyword: asyncOrReasyncKeyword,
-      garbage: garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
-      garbage: garbageBetweenThrowsOrRethrowsKeywordAndOutput?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenThrowsOrRethrowsKeywordAndOutput?.buildGarbageNodes(format: format, leadingTrivia: nil),
       output: output?.buildReturnClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6126,11 +6126,11 @@ public struct IfConfigClause: SyntaxBuildable, ExpressibleAsIfConfigClause {
   /// - Returns: The built `IfConfigClauseSyntax`.
   func buildIfConfigClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigClauseSyntax {
     let result = SyntaxFactory.makeIfConfigClause(
-      garbage: garbageBeforePoundKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundKeyword: poundKeyword,
-      garbage: garbageBetweenPoundKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition?.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6194,9 +6194,9 @@ public struct IfConfigDecl: DeclBuildable, ExpressibleAsIfConfigDecl {
   /// - Returns: The built `IfConfigDeclSyntax`.
   func buildIfConfigDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfConfigDeclSyntax {
     let result = SyntaxFactory.makeIfConfigDecl(
-      garbage: garbageBeforeClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
       clauses: clauses.buildIfConfigClauseList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenClausesAndPoundEndif?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenClausesAndPoundEndif?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundEndif: poundEndif
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6284,13 +6284,13 @@ public struct PoundErrorDecl: DeclBuildable, ExpressibleAsPoundErrorDecl {
   /// - Returns: The built `PoundErrorDeclSyntax`.
   func buildPoundErrorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundErrorDeclSyntax {
     let result = SyntaxFactory.makePoundErrorDecl(
-      garbage: garbageBeforePoundError?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundError?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundError: poundError,
-      garbage: garbageBetweenPoundErrorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundErrorAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
       message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6378,13 +6378,13 @@ public struct PoundWarningDecl: DeclBuildable, ExpressibleAsPoundWarningDecl {
   /// - Returns: The built `PoundWarningDeclSyntax`.
   func buildPoundWarningDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundWarningDeclSyntax {
     let result = SyntaxFactory.makePoundWarningDecl(
-      garbage: garbageBeforePoundWarning?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundWarning?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundWarning: poundWarning,
-      garbage: garbageBetweenPoundWarningAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundWarningAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
       message: message.buildStringLiteralExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6472,13 +6472,13 @@ public struct PoundSourceLocation: DeclBuildable, ExpressibleAsPoundSourceLocati
   /// - Returns: The built `PoundSourceLocationSyntax`.
   func buildPoundSourceLocation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationSyntax {
     let result = SyntaxFactory.makePoundSourceLocation(
-      garbage: garbageBeforePoundSourceLocation?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundSourceLocation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundSourceLocation: poundSourceLocation,
-      garbage: garbageBetweenPoundSourceLocationAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundSourceLocationAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArgs?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArgs?.buildGarbageNodes(format: format, leadingTrivia: nil),
       args: args?.buildPoundSourceLocationArgs(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6630,19 +6630,19 @@ public struct PoundSourceLocationArgs: SyntaxBuildable, ExpressibleAsPoundSource
   /// - Returns: The built `PoundSourceLocationArgsSyntax`.
   func buildPoundSourceLocationArgs(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundSourceLocationArgsSyntax {
     let result = SyntaxFactory.makePoundSourceLocationArgs(
-      garbage: garbageBeforeFileArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeFileArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileArgLabel: fileArgLabel,
-      garbage: garbageBetweenFileArgLabelAndFileArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenFileArgLabelAndFileArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileArgColon: fileArgColon,
-      garbage: garbageBetweenFileArgColonAndFileName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenFileArgColonAndFileName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fileName: fileName,
-      garbage: garbageBetweenFileNameAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenFileNameAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
-      garbage: garbageBetweenCommaAndLineArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCommaAndLineArgLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       lineArgLabel: lineArgLabel,
-      garbage: garbageBetweenLineArgLabelAndLineArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLineArgLabelAndLineArgColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       lineArgColon: lineArgColon,
-      garbage: garbageBetweenLineArgColonAndLineNumber?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLineArgColonAndLineNumber?.buildGarbageNodes(format: format, leadingTrivia: nil),
       lineNumber: lineNumber
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6737,11 +6737,11 @@ public struct DeclModifierDetail: SyntaxBuildable, ExpressibleAsDeclModifierDeta
   /// - Returns: The built `DeclModifierDetailSyntax`.
   func buildDeclModifierDetail(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierDetailSyntax {
     let result = SyntaxFactory.makeDeclModifierDetail(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
       detail: detail,
-      garbage: garbageBetweenDetailAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDetailAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6805,9 +6805,9 @@ public struct DeclModifier: SyntaxBuildable, ExpressibleAsDeclModifier {
   /// - Returns: The built `DeclModifierSyntax`.
   func buildDeclModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclModifierSyntax {
     let result = SyntaxFactory.makeDeclModifier(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndDetail?.buildGarbageNodes(format: format, leadingTrivia: nil),
       detail: detail?.buildDeclModifierDetail(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6871,9 +6871,9 @@ public struct InheritedType: SyntaxBuildable, ExpressibleAsInheritedType, HasTra
   /// - Returns: The built `InheritedTypeSyntax`.
   func buildInheritedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InheritedTypeSyntax {
     let result = SyntaxFactory.makeInheritedType(
-      garbage: garbageBeforeTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeTypeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeName: typeName.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -6965,9 +6965,9 @@ public struct TypeInheritanceClause: SyntaxBuildable, ExpressibleAsTypeInheritan
   /// - Returns: The built `TypeInheritanceClauseSyntax`.
   func buildTypeInheritanceClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeInheritanceClauseSyntax {
     let result = SyntaxFactory.makeTypeInheritanceClause(
-      garbage: garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndInheritedTypeCollection?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndInheritedTypeCollection?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritedTypeCollection: inheritedTypeCollection.buildInheritedTypeList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7121,21 +7121,21 @@ public struct ClassDecl: DeclBuildable, ExpressibleAsClassDecl {
   /// - Returns: The built `ClassDeclSyntax`.
   func buildClassDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassDeclSyntax {
     let result = SyntaxFactory.makeClassDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       classKeyword: classKeyword,
-      garbage: garbageBetweenClassKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenClassKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7295,21 +7295,21 @@ public struct ActorDecl: DeclBuildable, ExpressibleAsActorDecl {
   /// - Returns: The built `ActorDeclSyntax`.
   func buildActorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ActorDeclSyntax {
     let result = SyntaxFactory.makeActorDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndActorKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndActorKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       actorKeyword: actorKeyword,
-      garbage: garbageBetweenActorKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenActorKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7469,21 +7469,21 @@ public struct StructDecl: DeclBuildable, ExpressibleAsStructDecl {
   /// - Returns: The built `StructDeclSyntax`.
   func buildStructDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> StructDeclSyntax {
     let result = SyntaxFactory.makeStructDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndStructKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndStructKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       structKeyword: structKeyword,
-      garbage: garbageBetweenStructKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenStructKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7643,21 +7643,21 @@ public struct ProtocolDecl: DeclBuildable, ExpressibleAsProtocolDecl {
   /// - Returns: The built `ProtocolDeclSyntax`.
   func buildProtocolDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ProtocolDeclSyntax {
     let result = SyntaxFactory.makeProtocolDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndProtocolKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndProtocolKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       protocolKeyword: protocolKeyword,
-      garbage: garbageBetweenProtocolKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenProtocolKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndPrimaryAssociatedTypeClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       primaryAssociatedTypeClause: primaryAssociatedTypeClause?.buildPrimaryAssociatedTypeClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7805,19 +7805,19 @@ public struct ExtensionDecl: DeclBuildable, ExpressibleAsExtensionDecl {
   /// - Returns: The built `ExtensionDeclSyntax`.
   func buildExtensionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExtensionDeclSyntax {
     let result = SyntaxFactory.makeExtensionDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndExtensionKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndExtensionKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       extensionKeyword: extensionKeyword,
-      garbage: garbageBetweenExtensionKeywordAndExtendedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExtensionKeywordAndExtendedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       extendedType: extendedType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExtendedTypeAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExtendedTypeAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7918,11 +7918,11 @@ public struct MemberDeclBlock: SyntaxBuildable, ExpressibleAsMemberDeclBlock {
   /// - Returns: The built `MemberDeclBlockSyntax`.
   func buildMemberDeclBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclBlockSyntax {
     let result = SyntaxFactory.makeMemberDeclBlock(
-      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
-      garbage: garbageBetweenLeftBraceAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBraceAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclList(format: format._indented(), leadingTrivia: nil),
-      garbage: garbageBetweenMembersAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenMembersAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -7987,9 +7987,9 @@ public struct MemberDeclListItem: SyntaxBuildable, ExpressibleAsMemberDeclListIt
   /// - Returns: The built `MemberDeclListItemSyntax`.
   func buildMemberDeclListItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberDeclListItemSyntax {
     let result = SyntaxFactory.makeMemberDeclListItem(
-      garbage: garbageBeforeDecl?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDecl?.buildGarbageNodes(format: format, leadingTrivia: nil),
       decl: decl.buildDecl(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDeclAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDeclAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       semicolon: semicolon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8070,9 +8070,9 @@ public struct SourceFile: SyntaxBuildable, ExpressibleAsSourceFile {
   /// - Returns: The built `SourceFileSyntax`.
   func buildSourceFile(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SourceFileSyntax {
     let result = SyntaxFactory.makeSourceFile(
-      garbage: garbageBeforeStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenStatementsAndEOFToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenStatementsAndEOFToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       eofToken: eofToken
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8136,9 +8136,9 @@ public struct InitializerClause: SyntaxBuildable, ExpressibleAsInitializerClause
   /// - Returns: The built `InitializerClauseSyntax`.
   func buildInitializerClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerClauseSyntax {
     let result = SyntaxFactory.makeInitializerClause(
-      garbage: garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeEqual?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equal: equal,
-      garbage: garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEqualAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8252,21 +8252,21 @@ public struct FunctionParameter: SyntaxBuildable, ExpressibleAsFunctionParameter
   /// - Returns: The built `FunctionParameterSyntax`.
   func buildFunctionParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionParameterSyntax {
     let result = SyntaxFactory.makeFunctionParameter(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndFirstName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndFirstName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       firstName: firstName,
-      garbage: garbageBetweenFirstNameAndSecondName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenFirstNameAndSecondName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       secondName: secondName,
-      garbage: garbageBetweenSecondNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSecondNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type?.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAndEllipsis?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAndEllipsis?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ellipsis: ellipsis,
-      garbage: garbageBetweenEllipsisAndDefaultArgument?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEllipsisAndDefaultArgument?.buildGarbageNodes(format: format, leadingTrivia: nil),
       defaultArgument: defaultArgument?.buildInitializerClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDefaultArgumentAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDefaultArgumentAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8442,21 +8442,21 @@ public struct FunctionDecl: DeclBuildable, ExpressibleAsFunctionDecl {
   /// - Returns: The built `FunctionDeclSyntax`.
   func buildFunctionDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclSyntax {
     let result = SyntaxFactory.makeFunctionDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndFuncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndFuncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       funcKeyword: funcKeyword,
-      garbage: garbageBetweenFuncKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenFuncKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
       signature: signature.buildFunctionSignature(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSignatureAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSignatureAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8617,21 +8617,21 @@ public struct InitializerDecl: DeclBuildable, ExpressibleAsInitializerDecl {
   /// - Returns: The built `InitializerDeclSyntax`.
   func buildInitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> InitializerDeclSyntax {
     let result = SyntaxFactory.makeInitializerDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndInitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndInitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initKeyword: initKeyword,
-      garbage: garbageBetweenInitKeywordAndOptionalMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInitKeywordAndOptionalMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       optionalMark: optionalMark,
-      garbage: garbageBetweenOptionalMarkAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOptionalMarkAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndSignature?.buildGarbageNodes(format: format, leadingTrivia: nil),
       signature: signature.buildFunctionSignature(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSignatureAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSignatureAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8743,13 +8743,13 @@ public struct DeinitializerDecl: DeclBuildable, ExpressibleAsDeinitializerDecl {
   /// - Returns: The built `DeinitializerDeclSyntax`.
   func buildDeinitializerDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeinitializerDeclSyntax {
     let result = SyntaxFactory.makeDeinitializerDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndDeinitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndDeinitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       deinitKeyword: deinitKeyword,
-      garbage: garbageBetweenDeinitKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDeinitKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8867,21 +8867,21 @@ public struct SubscriptDecl: DeclBuildable, ExpressibleAsSubscriptDecl {
   /// - Returns: The built `SubscriptDeclSyntax`.
   func buildSubscriptDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SubscriptDeclSyntax {
     let result = SyntaxFactory.makeSubscriptDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndSubscriptKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndSubscriptKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       subscriptKeyword: subscriptKeyword,
-      garbage: garbageBetweenSubscriptKeywordAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSubscriptKeywordAndGenericParameterClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterClause: genericParameterClause?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterClauseAndIndices?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterClauseAndIndices?.buildGarbageNodes(format: format, leadingTrivia: nil),
       indices: indices.buildParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenIndicesAndResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIndicesAndResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
       result: result.buildReturnClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenResultAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenResultAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndAccessor?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndAccessor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -8968,9 +8968,9 @@ public struct AccessLevelModifier: SyntaxBuildable, ExpressibleAsAccessLevelModi
   /// - Returns: The built `AccessLevelModifierSyntax`.
   func buildAccessLevelModifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessLevelModifierSyntax {
     let result = SyntaxFactory.makeAccessLevelModifier(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifier: modifier?.buildDeclModifierDetail(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9052,9 +9052,9 @@ public struct AccessPathComponent: SyntaxBuildable, ExpressibleAsAccessPathCompo
   /// - Returns: The built `AccessPathComponentSyntax`.
   func buildAccessPathComponent(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessPathComponentSyntax {
     let result = SyntaxFactory.makeAccessPathComponent(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndTrailingDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndTrailingDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingDot: trailingDot
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9143,15 +9143,15 @@ public struct ImportDecl: DeclBuildable, ExpressibleAsImportDecl {
   /// - Returns: The built `ImportDeclSyntax`.
   func buildImportDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImportDeclSyntax {
     let result = SyntaxFactory.makeImportDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndImportTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndImportTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       importTok: importTok,
-      garbage: garbageBetweenImportTokAndImportKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenImportTokAndImportKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       importKind: importKind,
-      garbage: garbageBetweenImportKindAndPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenImportKindAndPath?.buildGarbageNodes(format: format, leadingTrivia: nil),
       path: path.buildAccessPath(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9252,11 +9252,11 @@ public struct AccessorParameter: SyntaxBuildable, ExpressibleAsAccessorParameter
   /// - Returns: The built `AccessorParameterSyntax`.
   func buildAccessorParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorParameterSyntax {
     let result = SyntaxFactory.makeAccessorParameter(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9400,19 +9400,19 @@ public struct AccessorDecl: DeclBuildable, ExpressibleAsAccessorDecl {
   /// - Returns: The built `AccessorDeclSyntax`.
   func buildAccessorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorDeclSyntax {
     let result = SyntaxFactory.makeAccessorDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifier: modifier?.buildDeclModifier(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifierAndAccessorKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifierAndAccessorKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessorKind: accessorKind,
-      garbage: garbageBetweenAccessorKindAndParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAccessorKindAndParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameter: parameter?.buildAccessorParameter(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenParameterAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenParameterAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
-      garbage: garbageBetweenAsyncKeywordAndThrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsyncKeywordAndThrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsKeyword: throwsKeyword,
-      garbage: garbageBetweenThrowsKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenThrowsKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body?.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9491,11 +9491,11 @@ public struct AccessorBlock: SyntaxBuildable, ExpressibleAsAccessorBlock {
   /// - Returns: The built `AccessorBlockSyntax`.
   func buildAccessorBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AccessorBlockSyntax {
     let result = SyntaxFactory.makeAccessorBlock(
-      garbage: garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
-      garbage: garbageBetweenLeftBraceAndAccessors?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBraceAndAccessors?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessors: accessors.buildAccessorList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAccessorsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAccessorsAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9583,15 +9583,15 @@ public struct PatternBinding: SyntaxBuildable, ExpressibleAsPatternBinding, HasT
   /// - Returns: The built `PatternBindingSyntax`.
   func buildPatternBinding(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PatternBindingSyntax {
     let result = SyntaxFactory.makePatternBinding(
-      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInitializerAndAccessor?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInitializerAndAccessor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessor: accessor?.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAccessorAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAccessorAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9713,13 +9713,13 @@ public struct VariableDecl: DeclBuildable, ExpressibleAsVariableDecl {
   /// - Returns: The built `VariableDeclSyntax`.
   func buildVariableDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VariableDeclSyntax {
     let result = SyntaxFactory.makeVariableDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
-      garbage: garbageBetweenLetOrVarKeywordAndBindings?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLetOrVarKeywordAndBindings?.buildGarbageNodes(format: format, leadingTrivia: nil),
       bindings: bindings.buildPatternBindingList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9832,13 +9832,13 @@ public struct EnumCaseElement: SyntaxBuildable, ExpressibleAsEnumCaseElement, Ha
   /// - Returns: The built `EnumCaseElementSyntax`.
   func buildEnumCaseElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseElementSyntax {
     let result = SyntaxFactory.makeEnumCaseElement(
-      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndAssociatedValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndAssociatedValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associatedValue: associatedValue?.buildParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAssociatedValueAndRawValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAssociatedValueAndRawValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rawValue: rawValue?.buildInitializerClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenRawValueAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRawValueAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -9959,13 +9959,13 @@ public struct EnumCaseDecl: DeclBuildable, ExpressibleAsEnumCaseDecl {
   /// - Returns: The built `EnumCaseDeclSyntax`.
   func buildEnumCaseDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCaseDeclSyntax {
     let result = SyntaxFactory.makeEnumCaseDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
-      garbage: garbageBetweenCaseKeywordAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaseKeywordAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildEnumCaseElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10126,21 +10126,21 @@ public struct EnumDecl: DeclBuildable, ExpressibleAsEnumDecl {
   /// - Returns: The built `EnumDeclSyntax`.
   func buildEnumDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumDeclSyntax {
     let result = SyntaxFactory.makeEnumDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndEnumKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndEnumKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       enumKeyword: enumKeyword,
-      garbage: garbageBetweenEnumKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEnumKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndGenericParameters?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndGenericParameters?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameters: genericParameters?.buildGenericParameterClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParametersAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParametersAndInheritanceClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritanceClause: inheritanceClause?.buildTypeInheritanceClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritanceClauseAndGenericWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericWhereClause: genericWhereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericWhereClauseAndMembers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       members: members.buildMemberDeclBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10235,15 +10235,15 @@ public struct OperatorDecl: DeclBuildable, ExpressibleAsOperatorDecl {
   /// - Returns: The built `OperatorDeclSyntax`.
   func buildOperatorDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorDeclSyntax {
     let result = SyntaxFactory.makeOperatorDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndOperatorKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndOperatorKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorKeyword: operatorKeyword,
-      garbage: garbageBetweenOperatorKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOperatorKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndOperatorPrecedenceAndTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       operatorPrecedenceAndTypes: operatorPrecedenceAndTypes?.buildOperatorPrecedenceAndTypes(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10314,9 +10314,9 @@ public struct OperatorPrecedenceAndTypes: SyntaxBuildable, ExpressibleAsOperator
   /// - Returns: The built `OperatorPrecedenceAndTypesSyntax`.
   func buildOperatorPrecedenceAndTypes(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OperatorPrecedenceAndTypesSyntax {
     let result = SyntaxFactory.makeOperatorPrecedenceAndTypes(
-      garbage: garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       precedenceGroupAndDesignatedTypes: precedenceGroupAndDesignatedTypes.buildIdentifierList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10461,19 +10461,19 @@ public struct PrecedenceGroupDecl: DeclBuildable, ExpressibleAsPrecedenceGroupDe
   /// - Returns: The built `PrecedenceGroupDeclSyntax`.
   func buildPrecedenceGroupDecl(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupDeclSyntax {
     let result = SyntaxFactory.makePrecedenceGroupDecl(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndModifiers?.buildGarbageNodes(format: format, leadingTrivia: nil),
       modifiers: modifiers?.buildModifierList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenModifiersAndPrecedencegroupKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenModifiersAndPrecedencegroupKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       precedencegroupKeyword: precedencegroupKeyword,
-      garbage: garbageBetweenPrecedencegroupKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPrecedencegroupKeywordAndIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier,
-      garbage: garbageBetweenIdentifierAndLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIdentifierAndLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
-      garbage: garbageBetweenLeftBraceAndGroupAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBraceAndGroupAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       groupAttributes: groupAttributes.buildPrecedenceGroupAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGroupAttributesAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGroupAttributesAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10575,11 +10575,11 @@ public struct PrecedenceGroupRelation: SyntaxBuildable, ExpressibleAsPrecedenceG
   /// - Returns: The built `PrecedenceGroupRelationSyntax`.
   func buildPrecedenceGroupRelation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupRelationSyntax {
     let result = SyntaxFactory.makePrecedenceGroupRelation(
-      garbage: garbageBeforeHigherThanOrLowerThan?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeHigherThanOrLowerThan?.buildGarbageNodes(format: format, leadingTrivia: nil),
       higherThanOrLowerThan: higherThanOrLowerThan,
-      garbage: garbageBetweenHigherThanOrLowerThanAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenHigherThanOrLowerThanAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndOtherNames?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndOtherNames?.buildGarbageNodes(format: format, leadingTrivia: nil),
       otherNames: otherNames.buildPrecedenceGroupNameList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10661,9 +10661,9 @@ public struct PrecedenceGroupNameElement: SyntaxBuildable, ExpressibleAsPreceden
   /// - Returns: The built `PrecedenceGroupNameElementSyntax`.
   func buildPrecedenceGroupNameElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupNameElementSyntax {
     let result = SyntaxFactory.makePrecedenceGroupNameElement(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10760,11 +10760,11 @@ public struct PrecedenceGroupAssignment: SyntaxBuildable, ExpressibleAsPrecedenc
   /// - Returns: The built `PrecedenceGroupAssignmentSyntax`.
   func buildPrecedenceGroupAssignment(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssignmentSyntax {
     let result = SyntaxFactory.makePrecedenceGroupAssignment(
-      garbage: garbageBeforeAssignmentKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAssignmentKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       assignmentKeyword: assignmentKeyword,
-      garbage: garbageBetweenAssignmentKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAssignmentKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndFlag?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndFlag?.buildGarbageNodes(format: format, leadingTrivia: nil),
       flag: flag
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10861,11 +10861,11 @@ public struct PrecedenceGroupAssociativity: SyntaxBuildable, ExpressibleAsPreced
   /// - Returns: The built `PrecedenceGroupAssociativitySyntax`.
   func buildPrecedenceGroupAssociativity(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrecedenceGroupAssociativitySyntax {
     let result = SyntaxFactory.makePrecedenceGroupAssociativity(
-      garbage: garbageBeforeAssociativityKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAssociativityKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associativityKeyword: associativityKeyword,
-      garbage: garbageBetweenAssociativityKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAssociativityKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -10986,15 +10986,15 @@ public struct CustomAttribute: SyntaxBuildable, ExpressibleAsCustomAttribute {
   /// - Returns: The built `CustomAttributeSyntax`.
   func buildCustomAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CustomAttributeSyntax {
     let result = SyntaxFactory.makeCustomAttribute(
-      garbage: garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       atSignToken: atSignToken,
-      garbage: garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributeName: attributeName.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributeNameAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributeNameAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArgumentList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentList: argumentList?.buildTupleExprElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentListAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11093,17 +11093,17 @@ public struct Attribute: SyntaxBuildable, ExpressibleAsAttribute {
   /// - Returns: The built `AttributeSyntax`.
   func buildAttribute(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributeSyntax {
     let result = SyntaxFactory.makeAttribute(
-      garbage: garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAtSignToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       atSignToken: atSignToken,
-      garbage: garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAtSignTokenAndAttributeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributeName: attributeName,
-      garbage: garbageBetweenAttributeNameAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributeNameAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArgument?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArgument?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argument: argument?.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen,
-      garbage: garbageBetweenRightParenAndTokenList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRightParenAndTokenList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tokenList: tokenList?.buildTokenList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11211,13 +11211,13 @@ public struct AvailabilityEntry: SyntaxBuildable, ExpressibleAsAvailabilityEntry
   /// - Returns: The built `AvailabilityEntrySyntax`.
   func buildAvailabilityEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityEntrySyntax {
     let result = SyntaxFactory.makeAvailabilityEntry(
-      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
-      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndAvailabilityList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndAvailabilityList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilityList: availabilityList.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAvailabilityListAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAvailabilityListAndSemicolon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       semicolon: semicolon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11325,13 +11325,13 @@ public struct LabeledSpecializeEntry: SyntaxBuildable, ExpressibleAsLabeledSpeci
   /// - Returns: The built `LabeledSpecializeEntrySyntax`.
   func buildLabeledSpecializeEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LabeledSpecializeEntrySyntax {
     let result = SyntaxFactory.makeLabeledSpecializeEntry(
-      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
-      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value,
-      garbage: garbageBetweenValueAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenValueAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11453,13 +11453,13 @@ public struct TargetFunctionEntry: SyntaxBuildable, ExpressibleAsTargetFunctionE
   /// - Returns: The built `TargetFunctionEntrySyntax`.
   func buildTargetFunctionEntry(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TargetFunctionEntrySyntax {
     let result = SyntaxFactory.makeTargetFunctionEntry(
-      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
-      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndDeclname?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndDeclname?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declname: declname.buildDeclName(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDeclnameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDeclnameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11546,11 +11546,11 @@ public struct NamedAttributeStringArgument: SyntaxBuildable, ExpressibleAsNamedA
   /// - Returns: The built `NamedAttributeStringArgumentSyntax`.
   func buildNamedAttributeStringArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> NamedAttributeStringArgumentSyntax {
     let result = SyntaxFactory.makeNamedAttributeStringArgument(
-      garbage: garbageBeforeNameTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeNameTok?.buildGarbageNodes(format: format, leadingTrivia: nil),
       nameTok: nameTok,
-      garbage: garbageBetweenNameTokAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameTokAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndStringOrDeclname?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndStringOrDeclname?.buildGarbageNodes(format: format, leadingTrivia: nil),
       stringOrDeclname: stringOrDeclname.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11613,9 +11613,9 @@ public struct DeclName: SyntaxBuildable, ExpressibleAsDeclName {
   /// - Returns: The built `DeclNameSyntax`.
   func buildDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclNameSyntax {
     let result = SyntaxFactory.makeDeclName(
-      garbage: garbageBeforeDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11696,13 +11696,13 @@ public struct ImplementsAttributeArguments: SyntaxBuildable, ExpressibleAsImplem
   /// - Returns: The built `ImplementsAttributeArgumentsSyntax`.
   func buildImplementsAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplementsAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeImplementsAttributeArguments(
-      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildSimpleTypeIdentifier(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
-      garbage: garbageBetweenCommaAndDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCommaAndDeclBaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declBaseName: declBaseName.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDeclBaseNameAndDeclNameArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declNameArguments: declNameArguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11785,9 +11785,9 @@ public struct ObjCSelectorPiece: SyntaxBuildable, ExpressibleAsObjCSelectorPiece
   /// - Returns: The built `ObjCSelectorPieceSyntax`.
   func buildObjCSelectorPiece(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ObjCSelectorPieceSyntax {
     let result = SyntaxFactory.makeObjCSelectorPiece(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -11908,15 +11908,15 @@ public struct DifferentiableAttributeArguments: SyntaxBuildable, ExpressibleAsDi
   /// - Returns: The built `DifferentiableAttributeArgumentsSyntax`.
   func buildDifferentiableAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiableAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeDifferentiableAttributeArguments(
-      garbage: garbageBeforeDiffKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDiffKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffKind: diffKind,
-      garbage: garbageBetweenDiffKindAndDiffKindComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDiffKindAndDiffKindComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffKindComma: diffKindComma,
-      garbage: garbageBetweenDiffKindCommaAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDiffKindCommaAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDiffParamsAndDiffParamsComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDiffParamsAndDiffParamsComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParamsComma: diffParamsComma,
-      garbage: garbageBetweenDiffParamsCommaAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDiffParamsCommaAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildGenericWhereClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12012,11 +12012,11 @@ public struct DifferentiabilityParamsClause: SyntaxBuildable, ExpressibleAsDiffe
   /// - Returns: The built `DifferentiabilityParamsClauseSyntax`.
   func buildDifferentiabilityParamsClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsClauseSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParamsClause(
-      garbage: garbageBeforeWrtLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWrtLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrtLabel: wrtLabel,
-      garbage: garbageBetweenWrtLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWrtLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndParameters?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndParameters?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameters: parameters.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12090,11 +12090,11 @@ public struct DifferentiabilityParams: SyntaxBuildable, ExpressibleAsDifferentia
   /// - Returns: The built `DifferentiabilityParamsSyntax`.
   func buildDifferentiabilityParams(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamsSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParams(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParams: diffParams.buildDifferentiabilityParamList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenDiffParamsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDiffParamsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12159,9 +12159,9 @@ public struct DifferentiabilityParam: SyntaxBuildable, ExpressibleAsDifferentiab
   /// - Returns: The built `DifferentiabilityParamSyntax`.
   func buildDifferentiabilityParam(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DifferentiabilityParamSyntax {
     let result = SyntaxFactory.makeDifferentiabilityParam(
-      garbage: garbageBeforeParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeParameter?.buildGarbageNodes(format: format, leadingTrivia: nil),
       parameter: parameter.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenParameterAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenParameterAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12318,19 +12318,19 @@ public struct DerivativeRegistrationAttributeArguments: SyntaxBuildable, Express
   /// - Returns: The built `DerivativeRegistrationAttributeArgumentsSyntax`.
   func buildDerivativeRegistrationAttributeArguments(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let result = SyntaxFactory.makeDerivativeRegistrationAttributeArguments(
-      garbage: garbageBeforeOfLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeOfLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ofLabel: ofLabel,
-      garbage: garbageBetweenOfLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOfLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndOriginalDeclName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndOriginalDeclName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       originalDeclName: originalDeclName.buildQualifiedDeclName(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenOriginalDeclNameAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenOriginalDeclNameAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
-      garbage: garbageBetweenPeriodAndAccessorKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPeriodAndAccessorKind?.buildGarbageNodes(format: format, leadingTrivia: nil),
       accessorKind: accessorKind,
-      garbage: garbageBetweenAccessorKindAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAccessorKindAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
-      garbage: garbageBetweenCommaAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCommaAndDiffParams?.buildGarbageNodes(format: format, leadingTrivia: nil),
       diffParams: diffParams?.buildDifferentiabilityParamsClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12411,13 +12411,13 @@ public struct QualifiedDeclName: SyntaxBuildable, ExpressibleAsQualifiedDeclName
   /// - Returns: The built `QualifiedDeclNameSyntax`.
   func buildQualifiedDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> QualifiedDeclNameSyntax {
     let result = SyntaxFactory.makeQualifiedDeclName(
-      garbage: garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType?.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBaseTypeAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBaseTypeAndDot?.buildGarbageNodes(format: format, leadingTrivia: nil),
       dot: dot,
-      garbage: garbageBetweenDotAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDotAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12481,9 +12481,9 @@ public struct FunctionDeclName: SyntaxBuildable, ExpressibleAsFunctionDeclName {
   /// - Returns: The built `FunctionDeclNameSyntax`.
   func buildFunctionDeclName(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionDeclNameSyntax {
     let result = SyntaxFactory.makeFunctionDeclName(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments?.buildDeclNameArguments(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12579,11 +12579,11 @@ public struct BackDeployAttributeSpecList: SyntaxBuildable, ExpressibleAsBackDep
   /// - Returns: The built `BackDeployAttributeSpecListSyntax`.
   func buildBackDeployAttributeSpecList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployAttributeSpecListSyntax {
     let result = SyntaxFactory.makeBackDeployAttributeSpecList(
-      garbage: garbageBeforeBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       beforeLabel: beforeLabel,
-      garbage: garbageBetweenBeforeLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBeforeLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndVersionList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndVersionList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       versionList: versionList.buildBackDeployVersionList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12648,9 +12648,9 @@ public struct BackDeployVersionArgument: SyntaxBuildable, ExpressibleAsBackDeplo
   /// - Returns: The built `BackDeployVersionArgumentSyntax`.
   func buildBackDeployVersionArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BackDeployVersionArgumentSyntax {
     let result = SyntaxFactory.makeBackDeployVersionArgument(
-      garbage: garbageBeforeAvailabilityVersionRestriction?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAvailabilityVersionRestriction?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilityVersionRestriction: availabilityVersionRestriction.buildAvailabilityVersionRestriction(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAvailabilityVersionRestrictionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12732,9 +12732,9 @@ public struct ContinueStmt: StmtBuildable, ExpressibleAsContinueStmt {
   /// - Returns: The built `ContinueStmtSyntax`.
   func buildContinueStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ContinueStmtSyntax {
     let result = SyntaxFactory.makeContinueStmt(
-      garbage: garbageBeforeContinueKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeContinueKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       continueKeyword: continueKeyword,
-      garbage: garbageBetweenContinueKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenContinueKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12859,15 +12859,15 @@ public struct WhileStmt: StmtBuildable, ExpressibleAsWhileStmt {
   /// - Returns: The built `WhileStmtSyntax`.
   func buildWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhileStmtSyntax {
     let result = SyntaxFactory.makeWhileStmt(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whileKeyword: whileKeyword,
-      garbage: garbageBetweenWhileKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhileKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -12955,9 +12955,9 @@ public struct DeferStmt: StmtBuildable, ExpressibleAsDeferStmt {
   /// - Returns: The built `DeferStmtSyntax`.
   func buildDeferStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeferStmtSyntax {
     let result = SyntaxFactory.makeDeferStmt(
-      garbage: garbageBeforeDeferKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDeferKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       deferKeyword: deferKeyword,
-      garbage: garbageBetweenDeferKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDeferKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13018,7 +13018,7 @@ public struct ExpressionStmt: StmtBuildable, ExpressibleAsExpressionStmt {
   /// - Returns: The built `ExpressionStmtSyntax`.
   func buildExpressionStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionStmtSyntax {
     let result = SyntaxFactory.makeExpressionStmt(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13156,17 +13156,17 @@ public struct RepeatWhileStmt: StmtBuildable, ExpressibleAsRepeatWhileStmt {
   /// - Returns: The built `RepeatWhileStmtSyntax`.
   func buildRepeatWhileStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> RepeatWhileStmtSyntax {
     let result = SyntaxFactory.makeRepeatWhileStmt(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndRepeatKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndRepeatKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       repeatKeyword: repeatKeyword,
-      garbage: garbageBetweenRepeatKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRepeatKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBodyAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBodyAndWhileKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whileKeyword: whileKeyword,
-      garbage: garbageBetweenWhileKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhileKeywordAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13279,13 +13279,13 @@ public struct GuardStmt: StmtBuildable, ExpressibleAsGuardStmt {
   /// - Returns: The built `GuardStmtSyntax`.
   func buildGuardStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GuardStmtSyntax {
     let result = SyntaxFactory.makeGuardStmt(
-      garbage: garbageBeforeGuardKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeGuardKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       guardKeyword: guardKeyword,
-      garbage: garbageBetweenGuardKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGuardKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionsAndElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionsAndElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
-      garbage: garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13355,9 +13355,9 @@ public struct WhereClause: SyntaxBuildable, ExpressibleAsWhereClause {
   /// - Returns: The built `WhereClauseSyntax`.
   func buildWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WhereClauseSyntax {
     let result = SyntaxFactory.makeWhereClause(
-      garbage: garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereKeyword: whereKeyword,
-      garbage: garbageBetweenWhereKeywordAndGuardResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhereKeywordAndGuardResult?.buildGarbageNodes(format: format, leadingTrivia: nil),
       guardResult: guardResult.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13564,29 +13564,29 @@ public struct ForInStmt: StmtBuildable, ExpressibleAsForInStmt {
   /// - Returns: The built `ForInStmtSyntax`.
   func buildForInStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ForInStmtSyntax {
     let result = SyntaxFactory.makeForInStmt(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndForKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndForKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       forKeyword: forKeyword,
-      garbage: garbageBetweenForKeywordAndTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenForKeywordAndTryKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       tryKeyword: tryKeyword,
-      garbage: garbageBetweenTryKeywordAndAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTryKeywordAndAwaitKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       awaitKeyword: awaitKeyword,
-      garbage: garbageBetweenAwaitKeywordAndCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAwaitKeywordAndCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
-      garbage: garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAnnotationAndInKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAnnotationAndInKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inKeyword: inKeyword,
-      garbage: garbageBetweenInKeywordAndSequenceExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInKeywordAndSequenceExpr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       sequenceExpr: sequenceExpr.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSequenceExprAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSequenceExprAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhereClauseAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13737,19 +13737,19 @@ public struct SwitchStmt: StmtBuildable, ExpressibleAsSwitchStmt {
   /// - Returns: The built `SwitchStmtSyntax`.
   func buildSwitchStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchStmtSyntax {
     let result = SyntaxFactory.makeSwitchStmt(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndSwitchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndSwitchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       switchKeyword: switchKeyword,
-      garbage: garbageBetweenSwitchKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSwitchKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenExpressionAndLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenExpressionAndLeftBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftBrace: leftBrace,
-      garbage: garbageBetweenLeftBraceAndCases?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftBraceAndCases?.buildGarbageNodes(format: format, leadingTrivia: nil),
       cases: cases.buildSwitchCaseList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenCasesAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCasesAndRightBrace?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightBrace: rightBrace.withLeadingTrivia(.newline + format._makeIndent() + (rightBrace.leadingTrivia ?? []))
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13874,15 +13874,15 @@ public struct DoStmt: StmtBuildable, ExpressibleAsDoStmt {
   /// - Returns: The built `DoStmtSyntax`.
   func buildDoStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DoStmtSyntax {
     let result = SyntaxFactory.makeDoStmt(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndDoKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndDoKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       doKeyword: doKeyword,
-      garbage: garbageBetweenDoKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDoKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBodyAndCatchClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBodyAndCatchClauses?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchClauses: catchClauses?.buildCatchClauseList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -13952,9 +13952,9 @@ public struct ReturnStmt: StmtBuildable, ExpressibleAsReturnStmt {
   /// - Returns: The built `ReturnStmtSyntax`.
   func buildReturnStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ReturnStmtSyntax {
     let result = SyntaxFactory.makeReturnStmt(
-      garbage: garbageBeforeReturnKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeReturnKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnKeyword: returnKeyword,
-      garbage: garbageBetweenReturnKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenReturnKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression?.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14024,9 +14024,9 @@ public struct YieldStmt: StmtBuildable, ExpressibleAsYieldStmt {
   /// - Returns: The built `YieldStmtSyntax`.
   func buildYieldStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldStmtSyntax {
     let result = SyntaxFactory.makeYieldStmt(
-      garbage: garbageBeforeYieldKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeYieldKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       yieldKeyword: yieldKeyword,
-      garbage: garbageBetweenYieldKeywordAndYields?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenYieldKeywordAndYields?.buildGarbageNodes(format: format, leadingTrivia: nil),
       yields: yields.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14140,13 +14140,13 @@ public struct YieldList: SyntaxBuildable, ExpressibleAsYieldList {
   /// - Returns: The built `YieldListSyntax`.
   func buildYieldList(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> YieldListSyntax {
     let result = SyntaxFactory.makeYieldList(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndElementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elementList: elementList.buildExprList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenElementListAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElementListAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma,
-      garbage: garbageBetweenTrailingCommaAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTrailingCommaAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14202,7 +14202,7 @@ public struct FallthroughStmt: StmtBuildable, ExpressibleAsFallthroughStmt {
   /// - Returns: The built `FallthroughStmtSyntax`.
   func buildFallthroughStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FallthroughStmtSyntax {
     let result = SyntaxFactory.makeFallthroughStmt(
-      garbage: garbageBeforeFallthroughKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeFallthroughKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       fallthroughKeyword: fallthroughKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14290,9 +14290,9 @@ public struct BreakStmt: StmtBuildable, ExpressibleAsBreakStmt {
   /// - Returns: The built `BreakStmtSyntax`.
   func buildBreakStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> BreakStmtSyntax {
     let result = SyntaxFactory.makeBreakStmt(
-      garbage: garbageBeforeBreakKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBreakKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       breakKeyword: breakKeyword,
-      garbage: garbageBetweenBreakKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBreakKeywordAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14362,9 +14362,9 @@ public struct ConditionElement: SyntaxBuildable, ExpressibleAsConditionElement, 
   /// - Returns: The built `ConditionElementSyntax`.
   func buildConditionElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConditionElementSyntax {
     let result = SyntaxFactory.makeConditionElement(
-      garbage: garbageBeforeCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14456,13 +14456,13 @@ public struct AvailabilityCondition: SyntaxBuildable, ExpressibleAsAvailabilityC
   /// - Returns: The built `AvailabilityConditionSyntax`.
   func buildAvailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityConditionSyntax {
     let result = SyntaxFactory.makeAvailabilityCondition(
-      garbage: garbageBeforePoundAvailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundAvailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundAvailableKeyword: poundAvailableKeyword,
-      garbage: garbageBetweenPoundAvailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundAvailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndAvailabilitySpec?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndAvailabilitySpec?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAvailabilitySpecAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAvailabilitySpecAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14542,13 +14542,13 @@ public struct MatchingPatternCondition: SyntaxBuildable, ExpressibleAsMatchingPa
   /// - Returns: The built `MatchingPatternConditionSyntax`.
   func buildMatchingPatternCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MatchingPatternConditionSyntax {
     let result = SyntaxFactory.makeMatchingPatternCondition(
-      garbage: garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
-      garbage: garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaseKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14628,13 +14628,13 @@ public struct OptionalBindingCondition: SyntaxBuildable, ExpressibleAsOptionalBi
   /// - Returns: The built `OptionalBindingConditionSyntax`.
   func buildOptionalBindingCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalBindingConditionSyntax {
     let result = SyntaxFactory.makeOptionalBindingCondition(
-      garbage: garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
-      garbage: garbageBetweenLetOrVarKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLetOrVarKeywordAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAnnotationAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14716,13 +14716,13 @@ public struct UnavailabilityCondition: SyntaxBuildable, ExpressibleAsUnavailabil
   /// - Returns: The built `UnavailabilityConditionSyntax`.
   func buildUnavailabilityCondition(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> UnavailabilityConditionSyntax {
     let result = SyntaxFactory.makeUnavailabilityCondition(
-      garbage: garbageBeforePoundUnavailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundUnavailableKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundUnavailableKeyword: poundUnavailableKeyword,
-      garbage: garbageBetweenPoundUnavailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundUnavailableKeywordAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndAvailabilitySpec?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndAvailabilitySpec?.buildGarbageNodes(format: format, leadingTrivia: nil),
       availabilitySpec: availabilitySpec.buildAvailabilitySpecList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAvailabilitySpecAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAvailabilitySpecAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14777,7 +14777,7 @@ public struct DeclarationStmt: StmtBuildable, ExpressibleAsDeclarationStmt {
   /// - Returns: The built `DeclarationStmtSyntax`.
   func buildDeclarationStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DeclarationStmtSyntax {
     let result = SyntaxFactory.makeDeclarationStmt(
-      garbage: garbageBeforeDeclaration?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDeclaration?.buildGarbageNodes(format: format, leadingTrivia: nil),
       declaration: declaration.buildDecl(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14847,9 +14847,9 @@ public struct ThrowStmt: StmtBuildable, ExpressibleAsThrowStmt {
   /// - Returns: The built `ThrowStmtSyntax`.
   func buildThrowStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ThrowStmtSyntax {
     let result = SyntaxFactory.makeThrowStmt(
-      garbage: garbageBeforeThrowKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeThrowKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwKeyword: throwKeyword,
-      garbage: garbageBetweenThrowKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenThrowKeywordAndExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -14999,19 +14999,19 @@ public struct IfStmt: StmtBuildable, ExpressibleAsIfStmt {
   /// - Returns: The built `IfStmtSyntax`.
   func buildIfStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IfStmtSyntax {
     let result = SyntaxFactory.makeIfStmt(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndIfKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndIfKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifKeyword: ifKeyword,
-      garbage: garbageBetweenIfKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIfKeywordAndConditions?.buildGarbageNodes(format: format, leadingTrivia: nil),
       conditions: conditions.buildConditionElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBodyAndElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBodyAndElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
-      garbage: garbageBetweenElseKeywordAndElseBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElseKeywordAndElseBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseBody: elseBody?.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15072,7 +15072,7 @@ public struct ElseIfContinuation: SyntaxBuildable, ExpressibleAsElseIfContinuati
   /// - Returns: The built `ElseIfContinuationSyntax`.
   func buildElseIfContinuation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseIfContinuationSyntax {
     let result = SyntaxFactory.makeElseIfContinuation(
-      garbage: garbageBeforeIfStatement?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIfStatement?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ifStatement: ifStatement.buildIfStmt(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15154,9 +15154,9 @@ public struct ElseBlock: SyntaxBuildable, ExpressibleAsElseBlock {
   /// - Returns: The built `ElseBlockSyntax`.
   func buildElseBlock(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ElseBlockSyntax {
     let result = SyntaxFactory.makeElseBlock(
-      garbage: garbageBeforeElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeElseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elseKeyword: elseKeyword,
-      garbage: garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElseKeywordAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15249,11 +15249,11 @@ public struct SwitchCase: SyntaxBuildable, ExpressibleAsSwitchCase {
   /// - Returns: The built `SwitchCaseSyntax`.
   func buildSwitchCase(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseSyntax {
     let result = SyntaxFactory.makeSwitchCase(
-      garbage: garbageBeforeUnknownAttr?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeUnknownAttr?.buildGarbageNodes(format: format, leadingTrivia: nil),
       unknownAttr: unknownAttr?.buildAttribute(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenUnknownAttrAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenUnknownAttrAndLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenLabelAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndStatements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       statements: statements.buildCodeBlockItemList(format: format._indented(), leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15318,9 +15318,9 @@ public struct SwitchDefaultLabel: SyntaxBuildable, ExpressibleAsSwitchDefaultLab
   /// - Returns: The built `SwitchDefaultLabelSyntax`.
   func buildSwitchDefaultLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchDefaultLabelSyntax {
     let result = SyntaxFactory.makeSwitchDefaultLabel(
-      garbage: garbageBeforeDefaultKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeDefaultKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       defaultKeyword: defaultKeyword,
-      garbage: garbageBetweenDefaultKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenDefaultKeywordAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15392,11 +15392,11 @@ public struct CaseItem: SyntaxBuildable, ExpressibleAsCaseItem, HasTrailingComma
   /// - Returns: The built `CaseItemSyntax`.
   func buildCaseItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CaseItemSyntax {
     let result = SyntaxFactory.makeCaseItem(
-      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenWhereClauseAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhereClauseAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15480,11 +15480,11 @@ public struct CatchItem: SyntaxBuildable, ExpressibleAsCatchItem, HasTrailingCom
   /// - Returns: The built `CatchItemSyntax`.
   func buildCatchItem(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchItemSyntax {
     let result = SyntaxFactory.makeCatchItem(
-      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern?.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndWhereClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereClause: whereClause?.buildWhereClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenWhereClauseAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhereClauseAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15591,11 +15591,11 @@ public struct SwitchCaseLabel: SyntaxBuildable, ExpressibleAsSwitchCaseLabel {
   /// - Returns: The built `SwitchCaseLabelSyntax`.
   func buildSwitchCaseLabel(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SwitchCaseLabelSyntax {
     let result = SyntaxFactory.makeSwitchCaseLabel(
-      garbage: garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeCaseKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseKeyword: caseKeyword,
-      garbage: garbageBetweenCaseKeywordAndCaseItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaseKeywordAndCaseItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseItems: caseItems.buildCaseItemList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenCaseItemsAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaseItemsAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15689,11 +15689,11 @@ public struct CatchClause: SyntaxBuildable, ExpressibleAsCatchClause {
   /// - Returns: The built `CatchClauseSyntax`.
   func buildCatchClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CatchClauseSyntax {
     let result = SyntaxFactory.makeCatchClause(
-      garbage: garbageBeforeCatchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeCatchKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchKeyword: catchKeyword,
-      garbage: garbageBetweenCatchKeywordAndCatchItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCatchKeywordAndCatchItems?.buildGarbageNodes(format: format, leadingTrivia: nil),
       catchItems: catchItems?.buildCatchItemList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenCatchItemsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCatchItemsAndBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildCodeBlock(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15826,17 +15826,17 @@ public struct PoundAssertStmt: StmtBuildable, ExpressibleAsPoundAssertStmt {
   /// - Returns: The built `PoundAssertStmtSyntax`.
   func buildPoundAssertStmt(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PoundAssertStmtSyntax {
     let result = SyntaxFactory.makePoundAssertStmt(
-      garbage: garbageBeforePoundAssert?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePoundAssert?.buildGarbageNodes(format: format, leadingTrivia: nil),
       poundAssert: poundAssert,
-      garbage: garbageBetweenPoundAssertAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPoundAssertAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndCondition?.buildGarbageNodes(format: format, leadingTrivia: nil),
       condition: condition.buildExpr(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenConditionAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenConditionAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
-      garbage: garbageBetweenCommaAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCommaAndMessage?.buildGarbageNodes(format: format, leadingTrivia: nil),
       message: message,
-      garbage: garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenMessageAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15924,9 +15924,9 @@ public struct GenericWhereClause: SyntaxBuildable, ExpressibleAsGenericWhereClau
   /// - Returns: The built `GenericWhereClauseSyntax`.
   func buildGenericWhereClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericWhereClauseSyntax {
     let result = SyntaxFactory.makeGenericWhereClause(
-      garbage: garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWhereKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       whereKeyword: whereKeyword,
-      garbage: garbageBetweenWhereKeywordAndRequirementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWhereKeywordAndRequirementList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       requirementList: requirementList.buildGenericRequirementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -15990,9 +15990,9 @@ public struct GenericRequirement: SyntaxBuildable, ExpressibleAsGenericRequireme
   /// - Returns: The built `GenericRequirementSyntax`.
   func buildGenericRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericRequirementSyntax {
     let result = SyntaxFactory.makeGenericRequirement(
-      garbage: garbageBeforeBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBody?.buildGarbageNodes(format: format, leadingTrivia: nil),
       body: body.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBodyAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBodyAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16073,11 +16073,11 @@ public struct SameTypeRequirement: SyntaxBuildable, ExpressibleAsSameTypeRequire
   /// - Returns: The built `SameTypeRequirementSyntax`.
   func buildSameTypeRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SameTypeRequirementSyntax {
     let result = SyntaxFactory.makeSameTypeRequirement(
-      garbage: garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenLeftTypeIdentifierAndEqualityToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftTypeIdentifierAndEqualityToken?.buildGarbageNodes(format: format, leadingTrivia: nil),
       equalityToken: equalityToken,
-      garbage: garbageBetweenEqualityTokenAndRightTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEqualityTokenAndRightTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16234,21 +16234,21 @@ public struct LayoutRequirement: SyntaxBuildable, ExpressibleAsLayoutRequirement
   /// - Returns: The built `LayoutRequirementSyntax`.
   func buildLayoutRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> LayoutRequirementSyntax {
     let result = SyntaxFactory.makeLayoutRequirement(
-      garbage: garbageBeforeTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeIdentifier: typeIdentifier.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndLayoutConstraint?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndLayoutConstraint?.buildGarbageNodes(format: format, leadingTrivia: nil),
       layoutConstraint: layoutConstraint,
-      garbage: garbageBetweenLayoutConstraintAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLayoutConstraintAndLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndSize?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndSize?.buildGarbageNodes(format: format, leadingTrivia: nil),
       size: size,
-      garbage: garbageBetweenSizeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSizeAndComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       comma: comma,
-      garbage: garbageBetweenCommaAndAlignment?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCommaAndAlignment?.buildGarbageNodes(format: format, leadingTrivia: nil),
       alignment: alignment,
-      garbage: garbageBetweenAlignmentAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAlignmentAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16367,15 +16367,15 @@ public struct GenericParameter: SyntaxBuildable, ExpressibleAsGenericParameter, 
   /// - Returns: The built `GenericParameterSyntax`.
   func buildGenericParameter(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterSyntax {
     let result = SyntaxFactory.makeGenericParameter(
-      garbage: garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndInheritedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndInheritedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inheritedType: inheritedType?.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInheritedTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInheritedTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16473,9 +16473,9 @@ public struct PrimaryAssociatedType: SyntaxBuildable, ExpressibleAsPrimaryAssoci
   /// - Returns: The built `PrimaryAssociatedTypeSyntax`.
   func buildPrimaryAssociatedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedType(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16580,11 +16580,11 @@ public struct GenericParameterClause: SyntaxBuildable, ExpressibleAsGenericParam
   /// - Returns: The built `GenericParameterClauseSyntax`.
   func buildGenericParameterClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericParameterClauseSyntax {
     let result = SyntaxFactory.makeGenericParameterClause(
-      garbage: garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
-      garbage: garbageBetweenLeftAngleBracketAndGenericParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftAngleBracketAndGenericParameterList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericParameterList: genericParameterList.buildGenericParameterList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenGenericParameterListAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenGenericParameterListAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16656,11 +16656,11 @@ public struct ConformanceRequirement: SyntaxBuildable, ExpressibleAsConformanceR
   /// - Returns: The built `ConformanceRequirementSyntax`.
   func buildConformanceRequirement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConformanceRequirementSyntax {
     let result = SyntaxFactory.makeConformanceRequirement(
-      garbage: garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftTypeIdentifier: leftTypeIdentifier.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenLeftTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftTypeIdentifierAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndRightTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndRightTypeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightTypeIdentifier: rightTypeIdentifier.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16733,11 +16733,11 @@ public struct PrimaryAssociatedTypeClause: SyntaxBuildable, ExpressibleAsPrimary
   /// - Returns: The built `PrimaryAssociatedTypeClauseSyntax`.
   func buildPrimaryAssociatedTypeClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> PrimaryAssociatedTypeClauseSyntax {
     let result = SyntaxFactory.makePrimaryAssociatedTypeClause(
-      garbage: garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
-      garbage: garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList?.buildGarbageNodes(format: format, leadingTrivia: nil),
       primaryAssociatedTypeList: primaryAssociatedTypeList.buildPrimaryAssociatedTypeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16800,9 +16800,9 @@ public struct SimpleTypeIdentifier: TypeBuildable, ExpressibleAsSimpleTypeIdenti
   /// - Returns: The built `SimpleTypeIdentifierSyntax`.
   func buildSimpleTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> SimpleTypeIdentifierSyntax {
     let result = SyntaxFactory.makeSimpleTypeIdentifier(
-      garbage: garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16888,13 +16888,13 @@ public struct MemberTypeIdentifier: TypeBuildable, ExpressibleAsMemberTypeIdenti
   /// - Returns: The built `MemberTypeIdentifierSyntax`.
   func buildMemberTypeIdentifier(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MemberTypeIdentifierSyntax {
     let result = SyntaxFactory.makeMemberTypeIdentifier(
-      garbage: garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
-      garbage: garbageBetweenPeriodAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPeriodAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndGenericArgumentClause?.buildGarbageNodes(format: format, leadingTrivia: nil),
       genericArgumentClause: genericArgumentClause?.buildGenericArgumentClause(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -16956,7 +16956,7 @@ public struct ClassRestrictionType: TypeBuildable, ExpressibleAsClassRestriction
   /// - Returns: The built `ClassRestrictionTypeSyntax`.
   func buildClassRestrictionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ClassRestrictionTypeSyntax {
     let result = SyntaxFactory.makeClassRestrictionType(
-      garbage: garbageBeforeClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeClassKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       classKeyword: classKeyword
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17035,11 +17035,11 @@ public struct ArrayType: TypeBuildable, ExpressibleAsArrayType {
   /// - Returns: The built `ArrayTypeSyntax`.
   func buildArrayType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ArrayTypeSyntax {
     let result = SyntaxFactory.makeArrayType(
-      garbage: garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquareBracket: leftSquareBracket,
-      garbage: garbageBetweenLeftSquareBracketAndElementType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftSquareBracketAndElementType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elementType: elementType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenElementTypeAndRightSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElementTypeAndRightSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquareBracket: rightSquareBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17135,15 +17135,15 @@ public struct DictionaryType: TypeBuildable, ExpressibleAsDictionaryType {
   /// - Returns: The built `DictionaryTypeSyntax`.
   func buildDictionaryType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> DictionaryTypeSyntax {
     let result = SyntaxFactory.makeDictionaryType(
-      garbage: garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftSquareBracket: leftSquareBracket,
-      garbage: garbageBetweenLeftSquareBracketAndKeyType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftSquareBracketAndKeyType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       keyType: keyType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenKeyTypeAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenKeyTypeAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndValueType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndValueType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       valueType: valueType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenValueTypeAndRightSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenValueTypeAndRightSquareBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightSquareBracket: rightSquareBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17244,11 +17244,11 @@ public struct MetatypeType: TypeBuildable, ExpressibleAsMetatypeType {
   /// - Returns: The built `MetatypeTypeSyntax`.
   func buildMetatypeType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> MetatypeTypeSyntax {
     let result = SyntaxFactory.makeMetatypeType(
-      garbage: garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenBaseTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
-      garbage: garbageBetweenPeriodAndTypeOrProtocol?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPeriodAndTypeOrProtocol?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeOrProtocol: typeOrProtocol
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17318,9 +17318,9 @@ public struct OptionalType: TypeBuildable, ExpressibleAsOptionalType {
   /// - Returns: The built `OptionalTypeSyntax`.
   func buildOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalTypeSyntax {
     let result = SyntaxFactory.makeOptionalType(
-      garbage: garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenWrappedTypeAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWrappedTypeAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17408,9 +17408,9 @@ public struct ConstrainedSugarType: TypeBuildable, ExpressibleAsConstrainedSugar
   /// - Returns: The built `ConstrainedSugarTypeSyntax`.
   func buildConstrainedSugarType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ConstrainedSugarTypeSyntax {
     let result = SyntaxFactory.makeConstrainedSugarType(
-      garbage: garbageBeforeSomeOrAnySpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeSomeOrAnySpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       someOrAnySpecifier: someOrAnySpecifier,
-      garbage: garbageBetweenSomeOrAnySpecifierAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSomeOrAnySpecifierAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17480,9 +17480,9 @@ public struct ImplicitlyUnwrappedOptionalType: TypeBuildable, ExpressibleAsImpli
   /// - Returns: The built `ImplicitlyUnwrappedOptionalTypeSyntax`.
   func buildImplicitlyUnwrappedOptionalType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     let result = SyntaxFactory.makeImplicitlyUnwrappedOptionalType(
-      garbage: garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWrappedType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wrappedType: wrappedType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenWrappedTypeAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWrappedTypeAndExclamationMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       exclamationMark: exclamationMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17552,9 +17552,9 @@ public struct CompositionTypeElement: SyntaxBuildable, ExpressibleAsCompositionT
   /// - Returns: The built `CompositionTypeElementSyntax`.
   func buildCompositionTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeElementSyntax {
     let result = SyntaxFactory.makeCompositionTypeElement(
-      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAndAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAndAmpersand?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ampersand: ampersand
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17609,7 +17609,7 @@ public struct CompositionType: TypeBuildable, ExpressibleAsCompositionType {
   /// - Returns: The built `CompositionTypeSyntax`.
   func buildCompositionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> CompositionTypeSyntax {
     let result = SyntaxFactory.makeCompositionType(
-      garbage: garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildCompositionTypeElementList(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17730,21 +17730,21 @@ public struct TupleTypeElement: SyntaxBuildable, ExpressibleAsTupleTypeElement, 
   /// - Returns: The built `TupleTypeElementSyntax`.
   func buildTupleTypeElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeElementSyntax {
     let result = SyntaxFactory.makeTupleTypeElement(
-      garbage: garbageBeforeInOut?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeInOut?.buildGarbageNodes(format: format, leadingTrivia: nil),
       inOut: inOut,
-      garbage: garbageBetweenInOutAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInOutAndName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       name: name,
-      garbage: garbageBetweenNameAndSecondName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenNameAndSecondName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       secondName: secondName,
-      garbage: garbageBetweenSecondNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSecondNameAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAndEllipsis?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAndEllipsis?.buildGarbageNodes(format: format, leadingTrivia: nil),
       ellipsis: ellipsis,
-      garbage: garbageBetweenEllipsisAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEllipsisAndInitializer?.buildGarbageNodes(format: format, leadingTrivia: nil),
       initializer: initializer?.buildInitializerClause(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenInitializerAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenInitializerAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17839,11 +17839,11 @@ public struct TupleType: TypeBuildable, ExpressibleAsTupleType {
   /// - Returns: The built `TupleTypeSyntax`.
   func buildTupleType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TupleTypeSyntax {
     let result = SyntaxFactory.makeTupleType(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildTupleTypeElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenElementsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElementsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -17957,19 +17957,19 @@ public struct FunctionType: TypeBuildable, ExpressibleAsFunctionType {
   /// - Returns: The built `FunctionTypeSyntax`.
   func buildFunctionType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> FunctionTypeSyntax {
     let result = SyntaxFactory.makeFunctionType(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildTupleTypeElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen,
-      garbage: garbageBetweenRightParenAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenRightParenAndAsyncKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asyncKeyword: asyncKeyword,
-      garbage: garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       throwsOrRethrowsKeyword: throwsOrRethrowsKeyword,
-      garbage: garbageBetweenThrowsOrRethrowsKeywordAndArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenThrowsOrRethrowsKeywordAndArrow?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arrow: arrow,
-      garbage: garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArrowAndReturnType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       returnType: returnType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18047,11 +18047,11 @@ public struct AttributedType: TypeBuildable, ExpressibleAsAttributedType {
   /// - Returns: The built `AttributedTypeSyntax`.
   func buildAttributedType(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AttributedTypeSyntax {
     let result = SyntaxFactory.makeAttributedType(
-      garbage: garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeSpecifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       specifier: specifier,
-      garbage: garbageBetweenSpecifierAndAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSpecifierAndAttributes?.buildGarbageNodes(format: format, leadingTrivia: nil),
       attributes: attributes?.buildAttributeList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenAttributesAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAttributesAndBaseType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       baseType: baseType.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18121,9 +18121,9 @@ public struct GenericArgument: SyntaxBuildable, ExpressibleAsGenericArgument, Ha
   /// - Returns: The built `GenericArgumentSyntax`.
   func buildGenericArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentSyntax {
     let result = SyntaxFactory.makeGenericArgument(
-      garbage: garbageBeforeArgumentType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeArgumentType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       argumentType: argumentType.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentTypeAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18228,11 +18228,11 @@ public struct GenericArgumentClause: SyntaxBuildable, ExpressibleAsGenericArgume
   /// - Returns: The built `GenericArgumentClauseSyntax`.
   func buildGenericArgumentClause(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> GenericArgumentClauseSyntax {
     let result = SyntaxFactory.makeGenericArgumentClause(
-      garbage: garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftAngleBracket: leftAngleBracket,
-      garbage: garbageBetweenLeftAngleBracketAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftAngleBracketAndArguments?.buildGarbageNodes(format: format, leadingTrivia: nil),
       arguments: arguments.buildGenericArgumentList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenArgumentsAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenArgumentsAndRightAngleBracket?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightAngleBracket: rightAngleBracket
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18296,9 +18296,9 @@ public struct TypeAnnotation: SyntaxBuildable, ExpressibleAsTypeAnnotation {
   /// - Returns: The built `TypeAnnotationSyntax`.
   func buildTypeAnnotation(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TypeAnnotationSyntax {
     let result = SyntaxFactory.makeTypeAnnotation(
-      garbage: garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18404,13 +18404,13 @@ public struct EnumCasePattern: PatternBuildable, ExpressibleAsEnumCasePattern {
   /// - Returns: The built `EnumCasePatternSyntax`.
   func buildEnumCasePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> EnumCasePatternSyntax {
     let result = SyntaxFactory.makeEnumCasePattern(
-      garbage: garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type?.buildType(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenTypeAndPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       period: period,
-      garbage: garbageBetweenPeriodAndCaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPeriodAndCaseName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       caseName: caseName,
-      garbage: garbageBetweenCaseNameAndAssociatedTuple?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenCaseNameAndAssociatedTuple?.buildGarbageNodes(format: format, leadingTrivia: nil),
       associatedTuple: associatedTuple?.buildTuplePattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18480,9 +18480,9 @@ public struct IsTypePattern: PatternBuildable, ExpressibleAsIsTypePattern {
   /// - Returns: The built `IsTypePatternSyntax`.
   func buildIsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IsTypePatternSyntax {
     let result = SyntaxFactory.makeIsTypePattern(
-      garbage: garbageBeforeIsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       isKeyword: isKeyword,
-      garbage: garbageBetweenIsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenIsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18552,9 +18552,9 @@ public struct OptionalPattern: PatternBuildable, ExpressibleAsOptionalPattern {
   /// - Returns: The built `OptionalPatternSyntax`.
   func buildOptionalPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> OptionalPatternSyntax {
     let result = SyntaxFactory.makeOptionalPattern(
-      garbage: garbageBeforeSubPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeSubPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       subPattern: subPattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenSubPatternAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenSubPatternAndQuestionMark?.buildGarbageNodes(format: format, leadingTrivia: nil),
       questionMark: questionMark
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18615,7 +18615,7 @@ public struct IdentifierPattern: PatternBuildable, ExpressibleAsIdentifierPatter
   /// - Returns: The built `IdentifierPatternSyntax`.
   func buildIdentifierPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> IdentifierPatternSyntax {
     let result = SyntaxFactory.makeIdentifierPattern(
-      garbage: garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeIdentifier?.buildGarbageNodes(format: format, leadingTrivia: nil),
       identifier: identifier
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18693,11 +18693,11 @@ public struct AsTypePattern: PatternBuildable, ExpressibleAsAsTypePattern {
   /// - Returns: The built `AsTypePatternSyntax`.
   func buildAsTypePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AsTypePatternSyntax {
     let result = SyntaxFactory.makeAsTypePattern(
-      garbage: garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndAsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndAsKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       asKeyword: asKeyword,
-      garbage: garbageBetweenAsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenAsKeywordAndType?.buildGarbageNodes(format: format, leadingTrivia: nil),
       type: type.buildType(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18798,11 +18798,11 @@ public struct TuplePattern: PatternBuildable, ExpressibleAsTuplePattern {
   /// - Returns: The built `TuplePatternSyntax`.
   func buildTuplePattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternSyntax {
     let result = SyntaxFactory.makeTuplePattern(
-      garbage: garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLeftParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       leftParen: leftParen,
-      garbage: garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLeftParenAndElements?.buildGarbageNodes(format: format, leadingTrivia: nil),
       elements: elements.buildTuplePatternElementList(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenElementsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenElementsAndRightParen?.buildGarbageNodes(format: format, leadingTrivia: nil),
       rightParen: rightParen
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18872,9 +18872,9 @@ public struct WildcardPattern: PatternBuildable, ExpressibleAsWildcardPattern {
   /// - Returns: The built `WildcardPatternSyntax`.
   func buildWildcardPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> WildcardPatternSyntax {
     let result = SyntaxFactory.makeWildcardPattern(
-      garbage: garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeWildcard?.buildGarbageNodes(format: format, leadingTrivia: nil),
       wildcard: wildcard,
-      garbage: garbageBetweenWildcardAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenWildcardAndTypeAnnotation?.buildGarbageNodes(format: format, leadingTrivia: nil),
       typeAnnotation: typeAnnotation?.buildTypeAnnotation(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -18987,13 +18987,13 @@ public struct TuplePatternElement: SyntaxBuildable, ExpressibleAsTuplePatternEle
   /// - Returns: The built `TuplePatternElementSyntax`.
   func buildTuplePatternElement(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> TuplePatternElementSyntax {
     let result = SyntaxFactory.makeTuplePatternElement(
-      garbage: garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabelName?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelName: labelName,
-      garbage: garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelNameAndLabelColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       labelColon: labelColon,
-      garbage: garbageBetweenLabelColonAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelColonAndPattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       pattern: pattern.buildPattern(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenPatternAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatternAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -19062,7 +19062,7 @@ public struct ExpressionPattern: PatternBuildable, ExpressibleAsExpressionPatter
   /// - Returns: The built `ExpressionPatternSyntax`.
   func buildExpressionPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ExpressionPatternSyntax {
     let result = SyntaxFactory.makeExpressionPattern(
-      garbage: garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeExpression?.buildGarbageNodes(format: format, leadingTrivia: nil),
       expression: expression.buildExpr(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -19132,9 +19132,9 @@ public struct ValueBindingPattern: PatternBuildable, ExpressibleAsValueBindingPa
   /// - Returns: The built `ValueBindingPatternSyntax`.
   func buildValueBindingPattern(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ValueBindingPatternSyntax {
     let result = SyntaxFactory.makeValueBindingPattern(
-      garbage: garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLetOrVarKeyword?.buildGarbageNodes(format: format, leadingTrivia: nil),
       letOrVarKeyword: letOrVarKeyword,
-      garbage: garbageBetweenLetOrVarKeywordAndValuePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLetOrVarKeywordAndValuePattern?.buildGarbageNodes(format: format, leadingTrivia: nil),
       valuePattern: valuePattern.buildPattern(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -19205,9 +19205,9 @@ public struct AvailabilityArgument: SyntaxBuildable, ExpressibleAsAvailabilityAr
   /// - Returns: The built `AvailabilityArgumentSyntax`.
   func buildAvailabilityArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityArgumentSyntax {
     let result = SyntaxFactory.makeAvailabilityArgument(
-      garbage: garbageBeforeEntry?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeEntry?.buildGarbageNodes(format: format, leadingTrivia: nil),
       entry: entry.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenEntryAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenEntryAndTrailingComma?.buildGarbageNodes(format: format, leadingTrivia: nil),
       trailingComma: trailingComma
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -19302,11 +19302,11 @@ public struct AvailabilityLabeledArgument: SyntaxBuildable, ExpressibleAsAvailab
   /// - Returns: The built `AvailabilityLabeledArgumentSyntax`.
   func buildAvailabilityLabeledArgument(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityLabeledArgumentSyntax {
     let result = SyntaxFactory.makeAvailabilityLabeledArgument(
-      garbage: garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeLabel?.buildGarbageNodes(format: format, leadingTrivia: nil),
       label: label,
-      garbage: garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenLabelAndColon?.buildGarbageNodes(format: format, leadingTrivia: nil),
       colon: colon,
-      garbage: garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenColonAndValue?.buildGarbageNodes(format: format, leadingTrivia: nil),
       value: value.buildSyntax(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -19388,9 +19388,9 @@ public struct AvailabilityVersionRestriction: SyntaxBuildable, ExpressibleAsAvai
   /// - Returns: The built `AvailabilityVersionRestrictionSyntax`.
   func buildAvailabilityVersionRestriction(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> AvailabilityVersionRestrictionSyntax {
     let result = SyntaxFactory.makeAvailabilityVersionRestriction(
-      garbage: garbageBeforePlatform?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforePlatform?.buildGarbageNodes(format: format, leadingTrivia: nil),
       platform: platform,
-      garbage: garbageBetweenPlatformAndVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPlatformAndVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
       version: version?.buildVersionTuple(format: format, leadingTrivia: nil)
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
@@ -19485,11 +19485,11 @@ public struct VersionTuple: SyntaxBuildable, ExpressibleAsVersionTuple {
   /// - Returns: The built `VersionTupleSyntax`.
   func buildVersionTuple(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> VersionTupleSyntax {
     let result = SyntaxFactory.makeVersionTuple(
-      garbage: garbageBeforeMajorMinor?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBeforeMajorMinor?.buildGarbageNodes(format: format, leadingTrivia: nil),
       majorMinor: majorMinor.buildSyntax(format: format, leadingTrivia: nil),
-      garbage: garbageBetweenMajorMinorAndPatchPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenMajorMinorAndPatchPeriod?.buildGarbageNodes(format: format, leadingTrivia: nil),
       patchPeriod: patchPeriod,
-      garbage: garbageBetweenPatchPeriodAndPatchVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
+      garbageBetweenPatchPeriodAndPatchVersion?.buildGarbageNodes(format: format, leadingTrivia: nil),
       patchVersion: patchVersion
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])

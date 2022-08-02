@@ -61,7 +61,7 @@ public protocol ExpressibleAsSyntaxBuildable: ExpressibleAsGarbageNodes, Express
 }
 public extension ExpressibleAsSyntaxBuildable {
   /// Conformance to `ExpressibleAsGarbageNodes`
-func createGarbageNodes() -> GarbageNodes {
+  func createGarbageNodes() -> GarbageNodes {
     return GarbageNodes([self])
   }
   /// Conformance to `ExpressibleAsStringLiteralSegments`

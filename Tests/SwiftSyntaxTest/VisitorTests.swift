@@ -27,16 +27,16 @@ public class VisitorTests: XCTestCase {
   public func testVisitGarbage() throws {
     // This is just bunch of garbage
     let garbageReturnStmt = SyntaxFactory.makeReturnStmt(
-      garbage: SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("starting"), presence: .present)), Syntax(SyntaxFactory.makeToken(.identifier("garbage"), presence: .present))]),
+      SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("starting"), presence: .present)), Syntax(SyntaxFactory.makeToken(.identifier("garbage"), presence: .present))]),
       returnKeyword: SyntaxFactory.makeReturnKeyword(trailingTrivia: [.spaces(1)]),
-      garbage: SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("middle"), presence: .present))]),
-      expression: ExprSyntax(SyntaxFactory.makeNilLiteralExpr(garbage: SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("end"), presence: .present))]), nilKeyword: SyntaxFactory.makeToken(.nilKeyword, presence: .present)))
+      SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("middle"), presence: .present))]),
+      expression: ExprSyntax(SyntaxFactory.makeNilLiteralExpr(SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("end"), presence: .present))]), nilKeyword: SyntaxFactory.makeToken(.nilKeyword, presence: .present)))
     )
 
     // This is more real-world where the user wrote null instead of nil.
     let misspelledNil = SyntaxFactory.makeReturnStmt(
       returnKeyword: SyntaxFactory.makeReturnKeyword(trailingTrivia: [.spaces(1)]),
-      expression: ExprSyntax(SyntaxFactory.makeNilLiteralExpr(garbage: SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("null"), presence: .present))]), nilKeyword: SyntaxFactory.makeToken(.nilKeyword, presence: .missing)))
+      expression: ExprSyntax(SyntaxFactory.makeNilLiteralExpr(SyntaxFactory.makeGarbageNodes([Syntax(SyntaxFactory.makeToken(.identifier("null"), presence: .present))]), nilKeyword: SyntaxFactory.makeToken(.nilKeyword, presence: .missing)))
     )
 
     // Test SyntaxVisitor

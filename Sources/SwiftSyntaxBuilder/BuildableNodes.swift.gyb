@@ -117,7 +117,15 @@ public struct ${type.buildable()}${conformance_clause(conformances)} {
   /// - Returns: The built `${type.syntax()}`.
   func build${type.base_name()}(format: Format, leadingTrivia additionalLeadingTrivia: Trivia? = nil) -> ${type.syntax()} {
     let result = SyntaxFactory.make${type.base_name()}(
-      ${',\n      '.join(['%s: %s' % (child.factory_parameter_name(), child.generate_expr_build_syntax_node(child.name(), 'format')) for child in children])}
+    % parameters = []
+    % for (index, child) in enumerate(children):
+    %   comma = ',' if index != len(children) - 1 else ''
+    %   if child.child.is_garbage_nodes():
+      ${child.generate_expr_build_syntax_node(child.name(), 'format')}${comma}
+    %   else:
+      ${child.name()}: ${child.generate_expr_build_syntax_node(child.name(), 'format')}${comma}
+    %   end
+    % end
     )
     let combinedLeadingTrivia = leadingTrivia + (additionalLeadingTrivia ?? []) + (result.leadingTrivia ?? [])
     return result.withLeadingTrivia(combinedLeadingTrivia.addingSpacingAfterNewlinesIfNeeded())

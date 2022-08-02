@@ -123,7 +123,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MissingPatternSyntax(data)
   }
-  public static func makeCodeBlockItem(garbage garbageBeforeItem: GarbageNodesSyntax? = nil, item: Syntax, garbage garbageBetweenItemAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax?, garbage garbageBetweenSemicolonAndErrorTokens: GarbageNodesSyntax? = nil, errorTokens: Syntax?) -> CodeBlockItemSyntax {
+  public static func makeCodeBlockItem(_ garbageBeforeItem: GarbageNodesSyntax? = nil, item: Syntax, _ garbageBetweenItemAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax?, _ garbageBetweenSemicolonAndErrorTokens: GarbageNodesSyntax? = nil, errorTokens: Syntax?) -> CodeBlockItemSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeItem?.raw,
       item.raw,
@@ -164,7 +164,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CodeBlockItemListSyntax(data)
   }
-  public static func makeCodeBlock(garbage garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, garbage garbageBetweenLeftBraceAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, garbage garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> CodeBlockSyntax {
+  public static func makeCodeBlock(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> CodeBlockSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftBrace?.raw,
       leftBrace.raw,
@@ -205,7 +205,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GarbageNodesSyntax(data)
   }
-  public static func makeInOutExpr(garbage garbageBeforeAmpersand: GarbageNodesSyntax? = nil, ampersand: TokenSyntax, garbage garbageBetweenAmpersandAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> InOutExprSyntax {
+  public static func makeInOutExpr(_ garbageBeforeAmpersand: GarbageNodesSyntax? = nil, ampersand: TokenSyntax, _ garbageBetweenAmpersandAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> InOutExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAmpersand?.raw,
       ampersand.raw,
@@ -228,7 +228,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return InOutExprSyntax(data)
   }
-  public static func makePoundColumnExpr(garbage garbageBeforePoundColumn: GarbageNodesSyntax? = nil, poundColumn: TokenSyntax) -> PoundColumnExprSyntax {
+  public static func makePoundColumnExpr(_ garbageBeforePoundColumn: GarbageNodesSyntax? = nil, poundColumn: TokenSyntax) -> PoundColumnExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundColumn?.raw,
       poundColumn.raw,
@@ -303,7 +303,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return StringLiteralSegmentsSyntax(data)
   }
-  public static func makeTryExpr(garbage garbageBeforeTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax, garbage garbageBetweenTryKeywordAndQuestionOrExclamationMark: GarbageNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, garbage garbageBetweenQuestionOrExclamationMarkAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> TryExprSyntax {
+  public static func makeTryExpr(_ garbageBeforeTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax, _ garbageBetweenTryKeywordAndQuestionOrExclamationMark: GarbageNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ garbageBetweenQuestionOrExclamationMarkAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> TryExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeTryKeyword?.raw,
       tryKeyword.raw,
@@ -330,7 +330,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TryExprSyntax(data)
   }
-  public static func makeAwaitExpr(garbage garbageBeforeAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax, garbage garbageBetweenAwaitKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> AwaitExprSyntax {
+  public static func makeAwaitExpr(_ garbageBeforeAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax, _ garbageBetweenAwaitKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> AwaitExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAwaitKeyword?.raw,
       awaitKeyword.raw,
@@ -353,7 +353,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AwaitExprSyntax(data)
   }
-  public static func makeDeclNameArgument(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> DeclNameArgumentSyntax {
+  public static func makeDeclNameArgument(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> DeclNameArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -390,7 +390,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeclNameArgumentListSyntax(data)
   }
-  public static func makeDeclNameArguments(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentListSyntax, garbage garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclNameArgumentsSyntax {
+  public static func makeDeclNameArguments(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentListSyntax, _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclNameArgumentsSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -417,7 +417,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeclNameArgumentsSyntax(data)
   }
-  public static func makeIdentifierExpr(garbage garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> IdentifierExprSyntax {
+  public static func makeIdentifierExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> IdentifierExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIdentifier?.raw,
       identifier.raw,
@@ -440,7 +440,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IdentifierExprSyntax(data)
   }
-  public static func makeSuperRefExpr(garbage garbageBeforeSuperKeyword: GarbageNodesSyntax? = nil, superKeyword: TokenSyntax) -> SuperRefExprSyntax {
+  public static func makeSuperRefExpr(_ garbageBeforeSuperKeyword: GarbageNodesSyntax? = nil, superKeyword: TokenSyntax) -> SuperRefExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeSuperKeyword?.raw,
       superKeyword.raw,
@@ -459,7 +459,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SuperRefExprSyntax(data)
   }
-  public static func makeNilLiteralExpr(garbage garbageBeforeNilKeyword: GarbageNodesSyntax? = nil, nilKeyword: TokenSyntax) -> NilLiteralExprSyntax {
+  public static func makeNilLiteralExpr(_ garbageBeforeNilKeyword: GarbageNodesSyntax? = nil, nilKeyword: TokenSyntax) -> NilLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeNilKeyword?.raw,
       nilKeyword.raw,
@@ -478,7 +478,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return NilLiteralExprSyntax(data)
   }
-  public static func makeDiscardAssignmentExpr(garbage garbageBeforeWildcard: GarbageNodesSyntax? = nil, wildcard: TokenSyntax) -> DiscardAssignmentExprSyntax {
+  public static func makeDiscardAssignmentExpr(_ garbageBeforeWildcard: GarbageNodesSyntax? = nil, wildcard: TokenSyntax) -> DiscardAssignmentExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWildcard?.raw,
       wildcard.raw,
@@ -497,7 +497,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DiscardAssignmentExprSyntax(data)
   }
-  public static func makeAssignmentExpr(garbage garbageBeforeAssignToken: GarbageNodesSyntax? = nil, assignToken: TokenSyntax) -> AssignmentExprSyntax {
+  public static func makeAssignmentExpr(_ garbageBeforeAssignToken: GarbageNodesSyntax? = nil, assignToken: TokenSyntax) -> AssignmentExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAssignToken?.raw,
       assignToken.raw,
@@ -516,7 +516,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AssignmentExprSyntax(data)
   }
-  public static func makeSequenceExpr(garbage garbageBeforeElements: GarbageNodesSyntax? = nil, elements: ExprListSyntax) -> SequenceExprSyntax {
+  public static func makeSequenceExpr(_ garbageBeforeElements: GarbageNodesSyntax? = nil, elements: ExprListSyntax) -> SequenceExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeElements?.raw,
       elements.raw,
@@ -549,7 +549,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ExprListSyntax(data)
   }
-  public static func makePoundLineExpr(garbage garbageBeforePoundLine: GarbageNodesSyntax? = nil, poundLine: TokenSyntax) -> PoundLineExprSyntax {
+  public static func makePoundLineExpr(_ garbageBeforePoundLine: GarbageNodesSyntax? = nil, poundLine: TokenSyntax) -> PoundLineExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundLine?.raw,
       poundLine.raw,
@@ -568,7 +568,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundLineExprSyntax(data)
   }
-  public static func makePoundFileExpr(garbage garbageBeforePoundFile: GarbageNodesSyntax? = nil, poundFile: TokenSyntax) -> PoundFileExprSyntax {
+  public static func makePoundFileExpr(_ garbageBeforePoundFile: GarbageNodesSyntax? = nil, poundFile: TokenSyntax) -> PoundFileExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundFile?.raw,
       poundFile.raw,
@@ -587,7 +587,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundFileExprSyntax(data)
   }
-  public static func makePoundFileIDExpr(garbage garbageBeforePoundFileID: GarbageNodesSyntax? = nil, poundFileID: TokenSyntax) -> PoundFileIDExprSyntax {
+  public static func makePoundFileIDExpr(_ garbageBeforePoundFileID: GarbageNodesSyntax? = nil, poundFileID: TokenSyntax) -> PoundFileIDExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundFileID?.raw,
       poundFileID.raw,
@@ -606,7 +606,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundFileIDExprSyntax(data)
   }
-  public static func makePoundFilePathExpr(garbage garbageBeforePoundFilePath: GarbageNodesSyntax? = nil, poundFilePath: TokenSyntax) -> PoundFilePathExprSyntax {
+  public static func makePoundFilePathExpr(_ garbageBeforePoundFilePath: GarbageNodesSyntax? = nil, poundFilePath: TokenSyntax) -> PoundFilePathExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundFilePath?.raw,
       poundFilePath.raw,
@@ -625,7 +625,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundFilePathExprSyntax(data)
   }
-  public static func makePoundFunctionExpr(garbage garbageBeforePoundFunction: GarbageNodesSyntax? = nil, poundFunction: TokenSyntax) -> PoundFunctionExprSyntax {
+  public static func makePoundFunctionExpr(_ garbageBeforePoundFunction: GarbageNodesSyntax? = nil, poundFunction: TokenSyntax) -> PoundFunctionExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundFunction?.raw,
       poundFunction.raw,
@@ -644,7 +644,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundFunctionExprSyntax(data)
   }
-  public static func makePoundDsohandleExpr(garbage garbageBeforePoundDsohandle: GarbageNodesSyntax? = nil, poundDsohandle: TokenSyntax) -> PoundDsohandleExprSyntax {
+  public static func makePoundDsohandleExpr(_ garbageBeforePoundDsohandle: GarbageNodesSyntax? = nil, poundDsohandle: TokenSyntax) -> PoundDsohandleExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundDsohandle?.raw,
       poundDsohandle.raw,
@@ -663,7 +663,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundDsohandleExprSyntax(data)
   }
-  public static func makeSymbolicReferenceExpr(garbage garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SymbolicReferenceExprSyntax {
+  public static func makeSymbolicReferenceExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SymbolicReferenceExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIdentifier?.raw,
       identifier.raw,
@@ -686,7 +686,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SymbolicReferenceExprSyntax(data)
   }
-  public static func makePrefixOperatorExpr(garbage garbageBeforeOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax?, garbage garbageBetweenOperatorTokenAndPostfixExpression: GarbageNodesSyntax? = nil, postfixExpression: ExprSyntax) -> PrefixOperatorExprSyntax {
+  public static func makePrefixOperatorExpr(_ garbageBeforeOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax?, _ garbageBetweenOperatorTokenAndPostfixExpression: GarbageNodesSyntax? = nil, postfixExpression: ExprSyntax) -> PrefixOperatorExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeOperatorToken?.raw,
       operatorToken?.raw,
@@ -709,7 +709,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrefixOperatorExprSyntax(data)
   }
-  public static func makeBinaryOperatorExpr(garbage garbageBeforeOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax) -> BinaryOperatorExprSyntax {
+  public static func makeBinaryOperatorExpr(_ garbageBeforeOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax) -> BinaryOperatorExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeOperatorToken?.raw,
       operatorToken.raw,
@@ -728,7 +728,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return BinaryOperatorExprSyntax(data)
   }
-  public static func makeArrowExpr(garbage garbageBeforeAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, garbage garbageBetweenAsyncKeywordAndThrowsToken: GarbageNodesSyntax? = nil, throwsToken: TokenSyntax?, garbage garbageBetweenThrowsTokenAndArrowToken: GarbageNodesSyntax? = nil, arrowToken: TokenSyntax) -> ArrowExprSyntax {
+  public static func makeArrowExpr(_ garbageBeforeAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsToken: GarbageNodesSyntax? = nil, throwsToken: TokenSyntax?, _ garbageBetweenThrowsTokenAndArrowToken: GarbageNodesSyntax? = nil, arrowToken: TokenSyntax) -> ArrowExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAsyncKeyword?.raw,
       asyncKeyword?.raw,
@@ -755,7 +755,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ArrowExprSyntax(data)
   }
-  public static func makeFloatLiteralExpr(garbage garbageBeforeFloatingDigits: GarbageNodesSyntax? = nil, floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
+  public static func makeFloatLiteralExpr(_ garbageBeforeFloatingDigits: GarbageNodesSyntax? = nil, floatingDigits: TokenSyntax) -> FloatLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeFloatingDigits?.raw,
       floatingDigits.raw,
@@ -774,7 +774,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FloatLiteralExprSyntax(data)
   }
-  public static func makeTupleExpr(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil, elementList: TupleExprElementListSyntax, garbage garbageBetweenElementListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleExprSyntax {
+  public static func makeTupleExpr(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil, elementList: TupleExprElementListSyntax, _ garbageBetweenElementListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -801,7 +801,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TupleExprSyntax(data)
   }
-  public static func makeArrayExpr(garbage garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, garbage garbageBetweenLeftSquareAndElements: GarbageNodesSyntax? = nil, elements: ArrayElementListSyntax, garbage garbageBetweenElementsAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> ArrayExprSyntax {
+  public static func makeArrayExpr(_ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, _ garbageBetweenLeftSquareAndElements: GarbageNodesSyntax? = nil, elements: ArrayElementListSyntax, _ garbageBetweenElementsAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> ArrayExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftSquare?.raw,
       leftSquare.raw,
@@ -828,7 +828,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ArrayExprSyntax(data)
   }
-  public static func makeDictionaryExpr(garbage garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, garbage garbageBetweenLeftSquareAndContent: GarbageNodesSyntax? = nil, content: Syntax, garbage garbageBetweenContentAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> DictionaryExprSyntax {
+  public static func makeDictionaryExpr(_ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, _ garbageBetweenLeftSquareAndContent: GarbageNodesSyntax? = nil, content: Syntax, _ garbageBetweenContentAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> DictionaryExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftSquare?.raw,
       leftSquare.raw,
@@ -855,7 +855,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DictionaryExprSyntax(data)
   }
-  public static func makeTupleExprElement(garbage garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?, garbage garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, garbage garbageBetweenColonAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleExprElementSyntax {
+  public static func makeTupleExprElement(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleExprElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabel?.raw,
       label?.raw,
@@ -886,7 +886,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TupleExprElementSyntax(data)
   }
-  public static func makeArrayElement(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ArrayElementSyntax {
+  public static func makeArrayElement(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ArrayElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -909,7 +909,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ArrayElementSyntax(data)
   }
-  public static func makeDictionaryElement(garbage garbageBeforeKeyExpression: GarbageNodesSyntax? = nil, keyExpression: ExprSyntax, garbage garbageBetweenKeyExpressionAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndValueExpression: GarbageNodesSyntax? = nil, valueExpression: ExprSyntax, garbage garbageBetweenValueExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DictionaryElementSyntax {
+  public static func makeDictionaryElement(_ garbageBeforeKeyExpression: GarbageNodesSyntax? = nil, keyExpression: ExprSyntax, _ garbageBetweenKeyExpressionAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValueExpression: GarbageNodesSyntax? = nil, valueExpression: ExprSyntax, _ garbageBetweenValueExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DictionaryElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeKeyExpression?.raw,
       keyExpression.raw,
@@ -940,7 +940,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DictionaryElementSyntax(data)
   }
-  public static func makeIntegerLiteralExpr(garbage garbageBeforeDigits: GarbageNodesSyntax? = nil, digits: TokenSyntax) -> IntegerLiteralExprSyntax {
+  public static func makeIntegerLiteralExpr(_ garbageBeforeDigits: GarbageNodesSyntax? = nil, digits: TokenSyntax) -> IntegerLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDigits?.raw,
       digits.raw,
@@ -959,7 +959,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IntegerLiteralExprSyntax(data)
   }
-  public static func makeBooleanLiteralExpr(garbage garbageBeforeBooleanLiteral: GarbageNodesSyntax? = nil, booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
+  public static func makeBooleanLiteralExpr(_ garbageBeforeBooleanLiteral: GarbageNodesSyntax? = nil, booleanLiteral: TokenSyntax) -> BooleanLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBooleanLiteral?.raw,
       booleanLiteral.raw,
@@ -978,7 +978,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return BooleanLiteralExprSyntax(data)
   }
-  public static func makeTernaryExpr(garbage garbageBeforeConditionExpression: GarbageNodesSyntax? = nil, conditionExpression: ExprSyntax, garbage garbageBetweenConditionExpressionAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax, garbage garbageBetweenQuestionMarkAndFirstChoice: GarbageNodesSyntax? = nil, firstChoice: ExprSyntax, garbage garbageBetweenFirstChoiceAndColonMark: GarbageNodesSyntax? = nil, colonMark: TokenSyntax, garbage garbageBetweenColonMarkAndSecondChoice: GarbageNodesSyntax? = nil, secondChoice: ExprSyntax) -> TernaryExprSyntax {
+  public static func makeTernaryExpr(_ garbageBeforeConditionExpression: GarbageNodesSyntax? = nil, conditionExpression: ExprSyntax, _ garbageBetweenConditionExpressionAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax, _ garbageBetweenQuestionMarkAndFirstChoice: GarbageNodesSyntax? = nil, firstChoice: ExprSyntax, _ garbageBetweenFirstChoiceAndColonMark: GarbageNodesSyntax? = nil, colonMark: TokenSyntax, _ garbageBetweenColonMarkAndSecondChoice: GarbageNodesSyntax? = nil, secondChoice: ExprSyntax) -> TernaryExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeConditionExpression?.raw,
       conditionExpression.raw,
@@ -1013,7 +1013,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TernaryExprSyntax(data)
   }
-  public static func makeMemberAccessExpr(garbage garbageBeforeBase: GarbageNodesSyntax? = nil, base: ExprSyntax?, garbage garbageBetweenBaseAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax, garbage garbageBetweenDotAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> MemberAccessExprSyntax {
+  public static func makeMemberAccessExpr(_ garbageBeforeBase: GarbageNodesSyntax? = nil, base: ExprSyntax?, _ garbageBetweenBaseAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax, _ garbageBetweenDotAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> MemberAccessExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBase?.raw,
       base?.raw,
@@ -1044,7 +1044,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MemberAccessExprSyntax(data)
   }
-  public static func makeIsExpr(garbage garbageBeforeIsTok: GarbageNodesSyntax? = nil, isTok: TokenSyntax, garbage garbageBetweenIsTokAndTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax) -> IsExprSyntax {
+  public static func makeIsExpr(_ garbageBeforeIsTok: GarbageNodesSyntax? = nil, isTok: TokenSyntax, _ garbageBetweenIsTokAndTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax) -> IsExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIsTok?.raw,
       isTok.raw,
@@ -1067,7 +1067,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IsExprSyntax(data)
   }
-  public static func makeAsExpr(garbage garbageBeforeAsTok: GarbageNodesSyntax? = nil, asTok: TokenSyntax, garbage garbageBetweenAsTokAndQuestionOrExclamationMark: GarbageNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, garbage garbageBetweenQuestionOrExclamationMarkAndTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax) -> AsExprSyntax {
+  public static func makeAsExpr(_ garbageBeforeAsTok: GarbageNodesSyntax? = nil, asTok: TokenSyntax, _ garbageBetweenAsTokAndQuestionOrExclamationMark: GarbageNodesSyntax? = nil, questionOrExclamationMark: TokenSyntax?, _ garbageBetweenQuestionOrExclamationMarkAndTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax) -> AsExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAsTok?.raw,
       asTok.raw,
@@ -1094,7 +1094,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AsExprSyntax(data)
   }
-  public static func makeTypeExpr(garbage garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> TypeExprSyntax {
+  public static func makeTypeExpr(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> TypeExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeType?.raw,
       type.raw,
@@ -1113,7 +1113,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypeExprSyntax(data)
   }
-  public static func makeClosureCaptureItem(garbage garbageBeforeSpecifier: GarbageNodesSyntax? = nil, specifier: TokenListSyntax?, garbage garbageBetweenSpecifierAndName: GarbageNodesSyntax? = nil, name: TokenSyntax?, garbage garbageBetweenNameAndAssignToken: GarbageNodesSyntax? = nil, assignToken: TokenSyntax?, garbage garbageBetweenAssignTokenAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureCaptureItemSyntax {
+  public static func makeClosureCaptureItem(_ garbageBeforeSpecifier: GarbageNodesSyntax? = nil, specifier: TokenListSyntax?, _ garbageBetweenSpecifierAndName: GarbageNodesSyntax? = nil, name: TokenSyntax?, _ garbageBetweenNameAndAssignToken: GarbageNodesSyntax? = nil, assignToken: TokenSyntax?, _ garbageBetweenAssignTokenAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureCaptureItemSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeSpecifier?.raw,
       specifier?.raw,
@@ -1162,7 +1162,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClosureCaptureItemListSyntax(data)
   }
-  public static func makeClosureCaptureSignature(garbage garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, garbage garbageBetweenLeftSquareAndItems: GarbageNodesSyntax? = nil, items: ClosureCaptureItemListSyntax?, garbage garbageBetweenItemsAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> ClosureCaptureSignatureSyntax {
+  public static func makeClosureCaptureSignature(_ garbageBeforeLeftSquare: GarbageNodesSyntax? = nil, leftSquare: TokenSyntax, _ garbageBetweenLeftSquareAndItems: GarbageNodesSyntax? = nil, items: ClosureCaptureItemListSyntax?, _ garbageBetweenItemsAndRightSquare: GarbageNodesSyntax? = nil, rightSquare: TokenSyntax) -> ClosureCaptureSignatureSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftSquare?.raw,
       leftSquare.raw,
@@ -1189,7 +1189,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClosureCaptureSignatureSyntax(data)
   }
-  public static func makeClosureParam(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureParamSyntax {
+  public static func makeClosureParam(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ClosureParamSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -1226,7 +1226,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClosureParamListSyntax(data)
   }
-  public static func makeClosureSignature(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndCapture: GarbageNodesSyntax? = nil, capture: ClosureCaptureSignatureSyntax?, garbage garbageBetweenCaptureAndInput: GarbageNodesSyntax? = nil, input: Syntax?, garbage garbageBetweenInputAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, garbage garbageBetweenAsyncKeywordAndThrowsTok: GarbageNodesSyntax? = nil, throwsTok: TokenSyntax?, garbage garbageBetweenThrowsTokAndOutput: GarbageNodesSyntax? = nil, output: ReturnClauseSyntax?, garbage garbageBetweenOutputAndInTok: GarbageNodesSyntax? = nil, inTok: TokenSyntax) -> ClosureSignatureSyntax {
+  public static func makeClosureSignature(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndCapture: GarbageNodesSyntax? = nil, capture: ClosureCaptureSignatureSyntax?, _ garbageBetweenCaptureAndInput: GarbageNodesSyntax? = nil, input: Syntax?, _ garbageBetweenInputAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsTok: GarbageNodesSyntax? = nil, throwsTok: TokenSyntax?, _ garbageBetweenThrowsTokAndOutput: GarbageNodesSyntax? = nil, output: ReturnClauseSyntax?, _ garbageBetweenOutputAndInTok: GarbageNodesSyntax? = nil, inTok: TokenSyntax) -> ClosureSignatureSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -1269,7 +1269,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClosureSignatureSyntax(data)
   }
-  public static func makeClosureExpr(garbage garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, garbage garbageBetweenLeftBraceAndSignature: GarbageNodesSyntax? = nil, signature: ClosureSignatureSyntax?, garbage garbageBetweenSignatureAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, garbage garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> ClosureExprSyntax {
+  public static func makeClosureExpr(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndSignature: GarbageNodesSyntax? = nil, signature: ClosureSignatureSyntax?, _ garbageBetweenSignatureAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ garbageBetweenStatementsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> ClosureExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftBrace?.raw,
       leftBrace.raw,
@@ -1300,7 +1300,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClosureExprSyntax(data)
   }
-  public static func makeUnresolvedPatternExpr(garbage garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax) -> UnresolvedPatternExprSyntax {
+  public static func makeUnresolvedPatternExpr(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax) -> UnresolvedPatternExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePattern?.raw,
       pattern.raw,
@@ -1319,7 +1319,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return UnresolvedPatternExprSyntax(data)
   }
-  public static func makeMultipleTrailingClosureElement(garbage garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, garbage garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndClosure: GarbageNodesSyntax? = nil, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
+  public static func makeMultipleTrailingClosureElement(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndClosure: GarbageNodesSyntax? = nil, closure: ClosureExprSyntax) -> MultipleTrailingClosureElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabel?.raw,
       label.raw,
@@ -1360,7 +1360,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MultipleTrailingClosureElementListSyntax(data)
   }
-  public static func makeFunctionCallExpr(garbage garbageBeforeCalledExpression: GarbageNodesSyntax? = nil, calledExpression: ExprSyntax, garbage garbageBetweenCalledExpressionAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, garbage garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, garbage garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?, garbage garbageBetweenRightParenAndTrailingClosure: GarbageNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, garbage garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
+  public static func makeFunctionCallExpr(_ garbageBeforeCalledExpression: GarbageNodesSyntax? = nil, calledExpression: ExprSyntax, _ garbageBetweenCalledExpressionAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?, _ garbageBetweenRightParenAndTrailingClosure: GarbageNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> FunctionCallExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeCalledExpression?.raw,
       calledExpression.raw,
@@ -1399,7 +1399,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionCallExprSyntax(data)
   }
-  public static func makeSubscriptExpr(garbage garbageBeforeCalledExpression: GarbageNodesSyntax? = nil, calledExpression: ExprSyntax, garbage garbageBetweenCalledExpressionAndLeftBracket: GarbageNodesSyntax? = nil, leftBracket: TokenSyntax, garbage garbageBetweenLeftBracketAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, garbage garbageBetweenArgumentListAndRightBracket: GarbageNodesSyntax? = nil, rightBracket: TokenSyntax, garbage garbageBetweenRightBracketAndTrailingClosure: GarbageNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, garbage garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
+  public static func makeSubscriptExpr(_ garbageBeforeCalledExpression: GarbageNodesSyntax? = nil, calledExpression: ExprSyntax, _ garbageBetweenCalledExpressionAndLeftBracket: GarbageNodesSyntax? = nil, leftBracket: TokenSyntax, _ garbageBetweenLeftBracketAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax, _ garbageBetweenArgumentListAndRightBracket: GarbageNodesSyntax? = nil, rightBracket: TokenSyntax, _ garbageBetweenRightBracketAndTrailingClosure: GarbageNodesSyntax? = nil, trailingClosure: ClosureExprSyntax?, _ garbageBetweenTrailingClosureAndAdditionalTrailingClosures: GarbageNodesSyntax? = nil, additionalTrailingClosures: MultipleTrailingClosureElementListSyntax?) -> SubscriptExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeCalledExpression?.raw,
       calledExpression.raw,
@@ -1438,7 +1438,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SubscriptExprSyntax(data)
   }
-  public static func makeOptionalChainingExpr(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalChainingExprSyntax {
+  public static func makeOptionalChainingExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalChainingExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -1461,7 +1461,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return OptionalChainingExprSyntax(data)
   }
-  public static func makeForcedValueExpr(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndExclamationMark: GarbageNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ForcedValueExprSyntax {
+  public static func makeForcedValueExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndExclamationMark: GarbageNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ForcedValueExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -1484,7 +1484,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ForcedValueExprSyntax(data)
   }
-  public static func makePostfixUnaryExpr(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax) -> PostfixUnaryExprSyntax {
+  public static func makePostfixUnaryExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndOperatorToken: GarbageNodesSyntax? = nil, operatorToken: TokenSyntax) -> PostfixUnaryExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -1507,7 +1507,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PostfixUnaryExprSyntax(data)
   }
-  public static func makeSpecializeExpr(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax) -> SpecializeExprSyntax {
+  public static func makeSpecializeExpr(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax) -> SpecializeExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -1530,7 +1530,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SpecializeExprSyntax(data)
   }
-  public static func makeStringSegment(garbage garbageBeforeContent: GarbageNodesSyntax? = nil, content: TokenSyntax) -> StringSegmentSyntax {
+  public static func makeStringSegment(_ garbageBeforeContent: GarbageNodesSyntax? = nil, content: TokenSyntax) -> StringSegmentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeContent?.raw,
       content.raw,
@@ -1549,7 +1549,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return StringSegmentSyntax(data)
   }
-  public static func makeExpressionSegment(garbage garbageBeforeBackslash: GarbageNodesSyntax? = nil, backslash: TokenSyntax, garbage garbageBetweenBackslashAndDelimiter: GarbageNodesSyntax? = nil, delimiter: TokenSyntax?, garbage garbageBetweenDelimiterAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndExpressions: GarbageNodesSyntax? = nil, expressions: TupleExprElementListSyntax, garbage garbageBetweenExpressionsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ExpressionSegmentSyntax {
+  public static func makeExpressionSegment(_ garbageBeforeBackslash: GarbageNodesSyntax? = nil, backslash: TokenSyntax, _ garbageBetweenBackslashAndDelimiter: GarbageNodesSyntax? = nil, delimiter: TokenSyntax?, _ garbageBetweenDelimiterAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndExpressions: GarbageNodesSyntax? = nil, expressions: TupleExprElementListSyntax, _ garbageBetweenExpressionsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ExpressionSegmentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBackslash?.raw,
       backslash.raw,
@@ -1584,7 +1584,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ExpressionSegmentSyntax(data)
   }
-  public static func makeStringLiteralExpr(garbage garbageBeforeOpenDelimiter: GarbageNodesSyntax? = nil, openDelimiter: TokenSyntax?, garbage garbageBetweenOpenDelimiterAndOpenQuote: GarbageNodesSyntax? = nil, openQuote: TokenSyntax, garbage garbageBetweenOpenQuoteAndSegments: GarbageNodesSyntax? = nil, segments: StringLiteralSegmentsSyntax, garbage garbageBetweenSegmentsAndCloseQuote: GarbageNodesSyntax? = nil, closeQuote: TokenSyntax, garbage garbageBetweenCloseQuoteAndCloseDelimiter: GarbageNodesSyntax? = nil, closeDelimiter: TokenSyntax?) -> StringLiteralExprSyntax {
+  public static func makeStringLiteralExpr(_ garbageBeforeOpenDelimiter: GarbageNodesSyntax? = nil, openDelimiter: TokenSyntax?, _ garbageBetweenOpenDelimiterAndOpenQuote: GarbageNodesSyntax? = nil, openQuote: TokenSyntax, _ garbageBetweenOpenQuoteAndSegments: GarbageNodesSyntax? = nil, segments: StringLiteralSegmentsSyntax, _ garbageBetweenSegmentsAndCloseQuote: GarbageNodesSyntax? = nil, closeQuote: TokenSyntax, _ garbageBetweenCloseQuoteAndCloseDelimiter: GarbageNodesSyntax? = nil, closeDelimiter: TokenSyntax?) -> StringLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeOpenDelimiter?.raw,
       openDelimiter?.raw,
@@ -1619,7 +1619,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return StringLiteralExprSyntax(data)
   }
-  public static func makeRegexLiteralExpr(garbage garbageBeforeRegex: GarbageNodesSyntax? = nil, regex: TokenSyntax) -> RegexLiteralExprSyntax {
+  public static func makeRegexLiteralExpr(_ garbageBeforeRegex: GarbageNodesSyntax? = nil, regex: TokenSyntax) -> RegexLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeRegex?.raw,
       regex.raw,
@@ -1638,7 +1638,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return RegexLiteralExprSyntax(data)
   }
-  public static func makeKeyPathExpr(garbage garbageBeforeBackslash: GarbageNodesSyntax? = nil, backslash: TokenSyntax, garbage garbageBetweenBackslashAndRootExpr: GarbageNodesSyntax? = nil, rootExpr: ExprSyntax?, garbage garbageBetweenRootExprAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> KeyPathExprSyntax {
+  public static func makeKeyPathExpr(_ garbageBeforeBackslash: GarbageNodesSyntax? = nil, backslash: TokenSyntax, _ garbageBetweenBackslashAndRootExpr: GarbageNodesSyntax? = nil, rootExpr: ExprSyntax?, _ garbageBetweenRootExprAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> KeyPathExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBackslash?.raw,
       backslash.raw,
@@ -1665,7 +1665,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return KeyPathExprSyntax(data)
   }
-  public static func makeKeyPathBaseExpr(garbage garbageBeforePeriod: GarbageNodesSyntax? = nil, period: TokenSyntax) -> KeyPathBaseExprSyntax {
+  public static func makeKeyPathBaseExpr(_ garbageBeforePeriod: GarbageNodesSyntax? = nil, period: TokenSyntax) -> KeyPathBaseExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePeriod?.raw,
       period.raw,
@@ -1684,7 +1684,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return KeyPathBaseExprSyntax(data)
   }
-  public static func makeObjcNamePiece(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax?) -> ObjcNamePieceSyntax {
+  public static func makeObjcNamePiece(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax?) -> ObjcNamePieceSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -1721,7 +1721,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ObjcNameSyntax(data)
   }
-  public static func makeObjcKeyPathExpr(garbage garbageBeforeKeyPath: GarbageNodesSyntax? = nil, keyPath: TokenSyntax, garbage garbageBetweenKeyPathAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil, name: ObjcNameSyntax, garbage garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcKeyPathExprSyntax {
+  public static func makeObjcKeyPathExpr(_ garbageBeforeKeyPath: GarbageNodesSyntax? = nil, keyPath: TokenSyntax, _ garbageBetweenKeyPathAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil, name: ObjcNameSyntax, _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcKeyPathExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeKeyPath?.raw,
       keyPath.raw,
@@ -1752,7 +1752,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ObjcKeyPathExprSyntax(data)
   }
-  public static func makeObjcSelectorExpr(garbage garbageBeforePoundSelector: GarbageNodesSyntax? = nil, poundSelector: TokenSyntax, garbage garbageBetweenPoundSelectorAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndKind: GarbageNodesSyntax? = nil, kind: TokenSyntax?, garbage garbageBetweenKindAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, garbage garbageBetweenColonAndName: GarbageNodesSyntax? = nil, name: ExprSyntax, garbage garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcSelectorExprSyntax {
+  public static func makeObjcSelectorExpr(_ garbageBeforePoundSelector: GarbageNodesSyntax? = nil, poundSelector: TokenSyntax, _ garbageBetweenPoundSelectorAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndKind: GarbageNodesSyntax? = nil, kind: TokenSyntax?, _ garbageBetweenKindAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndName: GarbageNodesSyntax? = nil, name: ExprSyntax, _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjcSelectorExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundSelector?.raw,
       poundSelector.raw,
@@ -1791,7 +1791,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ObjcSelectorExprSyntax(data)
   }
-  public static func makePostfixIfConfigExpr(garbage garbageBeforeBase: GarbageNodesSyntax? = nil, base: ExprSyntax?, garbage garbageBetweenBaseAndConfig: GarbageNodesSyntax? = nil, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
+  public static func makePostfixIfConfigExpr(_ garbageBeforeBase: GarbageNodesSyntax? = nil, base: ExprSyntax?, _ garbageBetweenBaseAndConfig: GarbageNodesSyntax? = nil, config: IfConfigDeclSyntax) -> PostfixIfConfigExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBase?.raw,
       base?.raw,
@@ -1814,7 +1814,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PostfixIfConfigExprSyntax(data)
   }
-  public static func makeEditorPlaceholderExpr(garbage garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax) -> EditorPlaceholderExprSyntax {
+  public static func makeEditorPlaceholderExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax) -> EditorPlaceholderExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIdentifier?.raw,
       identifier.raw,
@@ -1833,7 +1833,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return EditorPlaceholderExprSyntax(data)
   }
-  public static func makeObjectLiteralExpr(garbage garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: TupleExprElementListSyntax, garbage garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjectLiteralExprSyntax {
+  public static func makeObjectLiteralExpr(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: TupleExprElementListSyntax, _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ObjectLiteralExprSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIdentifier?.raw,
       identifier.raw,
@@ -1864,7 +1864,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ObjectLiteralExprSyntax(data)
   }
-  public static func makeTypeInitializerClause(garbage garbageBeforeEqual: GarbageNodesSyntax? = nil, equal: TokenSyntax, garbage garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil, value: TypeSyntax) -> TypeInitializerClauseSyntax {
+  public static func makeTypeInitializerClause(_ garbageBeforeEqual: GarbageNodesSyntax? = nil, equal: TokenSyntax, _ garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil, value: TypeSyntax) -> TypeInitializerClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeEqual?.raw,
       equal.raw,
@@ -1887,7 +1887,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypeInitializerClauseSyntax(data)
   }
-  public static func makeTypealiasDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndTypealiasKeyword: GarbageNodesSyntax? = nil, typealiasKeyword: TokenSyntax, garbage garbageBetweenTypealiasKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndInitializer: GarbageNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax, garbage garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
+  public static func makeTypealiasDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndTypealiasKeyword: GarbageNodesSyntax? = nil, typealiasKeyword: TokenSyntax, _ garbageBetweenTypealiasKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInitializer: GarbageNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax, _ garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> TypealiasDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -1930,7 +1930,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypealiasDeclSyntax(data)
   }
-  public static func makeAssociatedtypeDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndAssociatedtypeKeyword: GarbageNodesSyntax? = nil, associatedtypeKeyword: TokenSyntax, garbage garbageBetweenAssociatedtypeKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndInitializer: GarbageNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax?, garbage garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
+  public static func makeAssociatedtypeDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndAssociatedtypeKeyword: GarbageNodesSyntax? = nil, associatedtypeKeyword: TokenSyntax, _ garbageBetweenAssociatedtypeKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndInitializer: GarbageNodesSyntax? = nil, initializer: TypeInitializerClauseSyntax?, _ garbageBetweenInitializerAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?) -> AssociatedtypeDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -1987,7 +1987,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionParameterListSyntax(data)
   }
-  public static func makeParameterClause(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndParameterList: GarbageNodesSyntax? = nil, parameterList: FunctionParameterListSyntax, garbage garbageBetweenParameterListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ParameterClauseSyntax {
+  public static func makeParameterClause(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndParameterList: GarbageNodesSyntax? = nil, parameterList: FunctionParameterListSyntax, _ garbageBetweenParameterListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> ParameterClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -2014,7 +2014,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ParameterClauseSyntax(data)
   }
-  public static func makeReturnClause(garbage garbageBeforeArrow: GarbageNodesSyntax? = nil, arrow: TokenSyntax, garbage garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil, returnType: TypeSyntax) -> ReturnClauseSyntax {
+  public static func makeReturnClause(_ garbageBeforeArrow: GarbageNodesSyntax? = nil, arrow: TokenSyntax, _ garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil, returnType: TypeSyntax) -> ReturnClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeArrow?.raw,
       arrow.raw,
@@ -2037,7 +2037,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ReturnClauseSyntax(data)
   }
-  public static func makeFunctionSignature(garbage garbageBeforeInput: GarbageNodesSyntax? = nil, input: ParameterClauseSyntax, garbage garbageBetweenInputAndAsyncOrReasyncKeyword: GarbageNodesSyntax? = nil, asyncOrReasyncKeyword: TokenSyntax?, garbage garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, garbage garbageBetweenThrowsOrRethrowsKeywordAndOutput: GarbageNodesSyntax? = nil, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
+  public static func makeFunctionSignature(_ garbageBeforeInput: GarbageNodesSyntax? = nil, input: ParameterClauseSyntax, _ garbageBetweenInputAndAsyncOrReasyncKeyword: GarbageNodesSyntax? = nil, asyncOrReasyncKeyword: TokenSyntax?, _ garbageBetweenAsyncOrReasyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ garbageBetweenThrowsOrRethrowsKeywordAndOutput: GarbageNodesSyntax? = nil, output: ReturnClauseSyntax?) -> FunctionSignatureSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeInput?.raw,
       input.raw,
@@ -2068,7 +2068,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionSignatureSyntax(data)
   }
-  public static func makeIfConfigClause(garbage garbageBeforePoundKeyword: GarbageNodesSyntax? = nil, poundKeyword: TokenSyntax, garbage garbageBetweenPoundKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax?, garbage garbageBetweenConditionAndElements: GarbageNodesSyntax? = nil, elements: Syntax) -> IfConfigClauseSyntax {
+  public static func makeIfConfigClause(_ garbageBeforePoundKeyword: GarbageNodesSyntax? = nil, poundKeyword: TokenSyntax, _ garbageBetweenPoundKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax?, _ garbageBetweenConditionAndElements: GarbageNodesSyntax? = nil, elements: Syntax) -> IfConfigClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundKeyword?.raw,
       poundKeyword.raw,
@@ -2109,7 +2109,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IfConfigClauseListSyntax(data)
   }
-  public static func makeIfConfigDecl(garbage garbageBeforeClauses: GarbageNodesSyntax? = nil, clauses: IfConfigClauseListSyntax, garbage garbageBetweenClausesAndPoundEndif: GarbageNodesSyntax? = nil, poundEndif: TokenSyntax) -> IfConfigDeclSyntax {
+  public static func makeIfConfigDecl(_ garbageBeforeClauses: GarbageNodesSyntax? = nil, clauses: IfConfigClauseListSyntax, _ garbageBetweenClausesAndPoundEndif: GarbageNodesSyntax? = nil, poundEndif: TokenSyntax) -> IfConfigDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeClauses?.raw,
       clauses.raw,
@@ -2132,7 +2132,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IfConfigDeclSyntax(data)
   }
-  public static func makePoundErrorDecl(garbage garbageBeforePoundError: GarbageNodesSyntax? = nil, poundError: TokenSyntax, garbage garbageBetweenPoundErrorAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? = nil, message: StringLiteralExprSyntax, garbage garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundErrorDeclSyntax {
+  public static func makePoundErrorDecl(_ garbageBeforePoundError: GarbageNodesSyntax? = nil, poundError: TokenSyntax, _ garbageBetweenPoundErrorAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? = nil, message: StringLiteralExprSyntax, _ garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundErrorDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundError?.raw,
       poundError.raw,
@@ -2163,7 +2163,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundErrorDeclSyntax(data)
   }
-  public static func makePoundWarningDecl(garbage garbageBeforePoundWarning: GarbageNodesSyntax? = nil, poundWarning: TokenSyntax, garbage garbageBetweenPoundWarningAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? = nil, message: StringLiteralExprSyntax, garbage garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundWarningDeclSyntax {
+  public static func makePoundWarningDecl(_ garbageBeforePoundWarning: GarbageNodesSyntax? = nil, poundWarning: TokenSyntax, _ garbageBetweenPoundWarningAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndMessage: GarbageNodesSyntax? = nil, message: StringLiteralExprSyntax, _ garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundWarningDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundWarning?.raw,
       poundWarning.raw,
@@ -2194,7 +2194,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundWarningDeclSyntax(data)
   }
-  public static func makePoundSourceLocation(garbage garbageBeforePoundSourceLocation: GarbageNodesSyntax? = nil, poundSourceLocation: TokenSyntax, garbage garbageBetweenPoundSourceLocationAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndArgs: GarbageNodesSyntax? = nil, args: PoundSourceLocationArgsSyntax?, garbage garbageBetweenArgsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundSourceLocationSyntax {
+  public static func makePoundSourceLocation(_ garbageBeforePoundSourceLocation: GarbageNodesSyntax? = nil, poundSourceLocation: TokenSyntax, _ garbageBetweenPoundSourceLocationAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArgs: GarbageNodesSyntax? = nil, args: PoundSourceLocationArgsSyntax?, _ garbageBetweenArgsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundSourceLocationSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundSourceLocation?.raw,
       poundSourceLocation.raw,
@@ -2225,7 +2225,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundSourceLocationSyntax(data)
   }
-  public static func makePoundSourceLocationArgs(garbage garbageBeforeFileArgLabel: GarbageNodesSyntax? = nil, fileArgLabel: TokenSyntax, garbage garbageBetweenFileArgLabelAndFileArgColon: GarbageNodesSyntax? = nil, fileArgColon: TokenSyntax, garbage garbageBetweenFileArgColonAndFileName: GarbageNodesSyntax? = nil, fileName: TokenSyntax, garbage garbageBetweenFileNameAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax, garbage garbageBetweenCommaAndLineArgLabel: GarbageNodesSyntax? = nil, lineArgLabel: TokenSyntax, garbage garbageBetweenLineArgLabelAndLineArgColon: GarbageNodesSyntax? = nil, lineArgColon: TokenSyntax, garbage garbageBetweenLineArgColonAndLineNumber: GarbageNodesSyntax? = nil, lineNumber: TokenSyntax) -> PoundSourceLocationArgsSyntax {
+  public static func makePoundSourceLocationArgs(_ garbageBeforeFileArgLabel: GarbageNodesSyntax? = nil, fileArgLabel: TokenSyntax, _ garbageBetweenFileArgLabelAndFileArgColon: GarbageNodesSyntax? = nil, fileArgColon: TokenSyntax, _ garbageBetweenFileArgColonAndFileName: GarbageNodesSyntax? = nil, fileName: TokenSyntax, _ garbageBetweenFileNameAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax, _ garbageBetweenCommaAndLineArgLabel: GarbageNodesSyntax? = nil, lineArgLabel: TokenSyntax, _ garbageBetweenLineArgLabelAndLineArgColon: GarbageNodesSyntax? = nil, lineArgColon: TokenSyntax, _ garbageBetweenLineArgColonAndLineNumber: GarbageNodesSyntax? = nil, lineNumber: TokenSyntax) -> PoundSourceLocationArgsSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeFileArgLabel?.raw,
       fileArgLabel.raw,
@@ -2268,7 +2268,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundSourceLocationArgsSyntax(data)
   }
-  public static func makeDeclModifierDetail(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndDetail: GarbageNodesSyntax? = nil, detail: TokenSyntax, garbage garbageBetweenDetailAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclModifierDetailSyntax {
+  public static func makeDeclModifierDetail(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndDetail: GarbageNodesSyntax? = nil, detail: TokenSyntax, _ garbageBetweenDetailAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DeclModifierDetailSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -2295,7 +2295,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeclModifierDetailSyntax(data)
   }
-  public static func makeDeclModifier(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndDetail: GarbageNodesSyntax? = nil, detail: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
+  public static func makeDeclModifier(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndDetail: GarbageNodesSyntax? = nil, detail: DeclModifierDetailSyntax?) -> DeclModifierSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -2318,7 +2318,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeclModifierSyntax(data)
   }
-  public static func makeInheritedType(garbage garbageBeforeTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax, garbage garbageBetweenTypeNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> InheritedTypeSyntax {
+  public static func makeInheritedType(_ garbageBeforeTypeName: GarbageNodesSyntax? = nil, typeName: TypeSyntax, _ garbageBetweenTypeNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> InheritedTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeTypeName?.raw,
       typeName.raw,
@@ -2355,7 +2355,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return InheritedTypeListSyntax(data)
   }
-  public static func makeTypeInheritanceClause(garbage garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndInheritedTypeCollection: GarbageNodesSyntax? = nil, inheritedTypeCollection: InheritedTypeListSyntax) -> TypeInheritanceClauseSyntax {
+  public static func makeTypeInheritanceClause(_ garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndInheritedTypeCollection: GarbageNodesSyntax? = nil, inheritedTypeCollection: InheritedTypeListSyntax) -> TypeInheritanceClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeColon?.raw,
       colon.raw,
@@ -2378,7 +2378,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypeInheritanceClauseSyntax(data)
   }
-  public static func makeClassDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndClassKeyword: GarbageNodesSyntax? = nil, classKeyword: TokenSyntax, garbage garbageBetweenClassKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
+  public static func makeClassDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndClassKeyword: GarbageNodesSyntax? = nil, classKeyword: TokenSyntax, _ garbageBetweenClassKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ClassDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2425,7 +2425,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClassDeclSyntax(data)
   }
-  public static func makeActorDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndActorKeyword: GarbageNodesSyntax? = nil, actorKeyword: TokenSyntax, garbage garbageBetweenActorKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
+  public static func makeActorDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndActorKeyword: GarbageNodesSyntax? = nil, actorKeyword: TokenSyntax, _ garbageBetweenActorKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ActorDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2472,7 +2472,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ActorDeclSyntax(data)
   }
-  public static func makeStructDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndStructKeyword: GarbageNodesSyntax? = nil, structKeyword: TokenSyntax, garbage garbageBetweenStructKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
+  public static func makeStructDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndStructKeyword: GarbageNodesSyntax? = nil, structKeyword: TokenSyntax, _ garbageBetweenStructKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> StructDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2519,7 +2519,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return StructDeclSyntax(data)
   }
-  public static func makeProtocolDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndProtocolKeyword: GarbageNodesSyntax? = nil, protocolKeyword: TokenSyntax, garbage garbageBetweenProtocolKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: GarbageNodesSyntax? = nil, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, garbage garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
+  public static func makeProtocolDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndProtocolKeyword: GarbageNodesSyntax? = nil, protocolKeyword: TokenSyntax, _ garbageBetweenProtocolKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndPrimaryAssociatedTypeClause: GarbageNodesSyntax? = nil, primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax?, _ garbageBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ProtocolDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2566,7 +2566,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ProtocolDeclSyntax(data)
   }
-  public static func makeExtensionDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndExtensionKeyword: GarbageNodesSyntax? = nil, extensionKeyword: TokenSyntax, garbage garbageBetweenExtensionKeywordAndExtendedType: GarbageNodesSyntax? = nil, extendedType: TypeSyntax, garbage garbageBetweenExtendedTypeAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ExtensionDeclSyntax {
+  public static func makeExtensionDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndExtensionKeyword: GarbageNodesSyntax? = nil, extensionKeyword: TokenSyntax, _ garbageBetweenExtensionKeywordAndExtendedType: GarbageNodesSyntax? = nil, extendedType: TypeSyntax, _ garbageBetweenExtendedTypeAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> ExtensionDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2609,7 +2609,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ExtensionDeclSyntax(data)
   }
-  public static func makeMemberDeclBlock(garbage garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, garbage garbageBetweenLeftBraceAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclListSyntax, garbage garbageBetweenMembersAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> MemberDeclBlockSyntax {
+  public static func makeMemberDeclBlock(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclListSyntax, _ garbageBetweenMembersAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> MemberDeclBlockSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftBrace?.raw,
       leftBrace.raw,
@@ -2650,7 +2650,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MemberDeclListSyntax(data)
   }
-  public static func makeMemberDeclListItem(garbage garbageBeforeDecl: GarbageNodesSyntax? = nil, decl: DeclSyntax, garbage garbageBetweenDeclAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax?) -> MemberDeclListItemSyntax {
+  public static func makeMemberDeclListItem(_ garbageBeforeDecl: GarbageNodesSyntax? = nil, decl: DeclSyntax, _ garbageBetweenDeclAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax?) -> MemberDeclListItemSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDecl?.raw,
       decl.raw,
@@ -2673,7 +2673,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MemberDeclListItemSyntax(data)
   }
-  public static func makeSourceFile(garbage garbageBeforeStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, garbage garbageBetweenStatementsAndEOFToken: GarbageNodesSyntax? = nil, eofToken: TokenSyntax) -> SourceFileSyntax {
+  public static func makeSourceFile(_ garbageBeforeStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax, _ garbageBetweenStatementsAndEOFToken: GarbageNodesSyntax? = nil, eofToken: TokenSyntax) -> SourceFileSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeStatements?.raw,
       statements.raw,
@@ -2696,7 +2696,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SourceFileSyntax(data)
   }
-  public static func makeInitializerClause(garbage garbageBeforeEqual: GarbageNodesSyntax? = nil, equal: TokenSyntax, garbage garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil, value: ExprSyntax) -> InitializerClauseSyntax {
+  public static func makeInitializerClause(_ garbageBeforeEqual: GarbageNodesSyntax? = nil, equal: TokenSyntax, _ garbageBetweenEqualAndValue: GarbageNodesSyntax? = nil, value: ExprSyntax) -> InitializerClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeEqual?.raw,
       equal.raw,
@@ -2719,7 +2719,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return InitializerClauseSyntax(data)
   }
-  public static func makeFunctionParameter(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndFirstName: GarbageNodesSyntax? = nil, firstName: TokenSyntax?, garbage garbageBetweenFirstNameAndSecondName: GarbageNodesSyntax? = nil, secondName: TokenSyntax?, garbage garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, garbage garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax?, garbage garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil, ellipsis: TokenSyntax?, garbage garbageBetweenEllipsisAndDefaultArgument: GarbageNodesSyntax? = nil, defaultArgument: InitializerClauseSyntax?, garbage garbageBetweenDefaultArgumentAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
+  public static func makeFunctionParameter(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndFirstName: GarbageNodesSyntax? = nil, firstName: TokenSyntax?, _ garbageBetweenFirstNameAndSecondName: GarbageNodesSyntax? = nil, secondName: TokenSyntax?, _ garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax?, _ garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil, ellipsis: TokenSyntax?, _ garbageBetweenEllipsisAndDefaultArgument: GarbageNodesSyntax? = nil, defaultArgument: InitializerClauseSyntax?, _ garbageBetweenDefaultArgumentAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> FunctionParameterSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2780,7 +2780,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ModifierListSyntax(data)
   }
-  public static func makeFunctionDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndFuncKeyword: GarbageNodesSyntax? = nil, funcKeyword: TokenSyntax, garbage garbageBetweenFuncKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? = nil, signature: FunctionSignatureSyntax, garbage garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> FunctionDeclSyntax {
+  public static func makeFunctionDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndFuncKeyword: GarbageNodesSyntax? = nil, funcKeyword: TokenSyntax, _ garbageBetweenFuncKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? = nil, signature: FunctionSignatureSyntax, _ garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> FunctionDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2827,7 +2827,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionDeclSyntax(data)
   }
-  public static func makeInitializerDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndInitKeyword: GarbageNodesSyntax? = nil, initKeyword: TokenSyntax, garbage garbageBetweenInitKeywordAndOptionalMark: GarbageNodesSyntax? = nil, optionalMark: TokenSyntax?, garbage garbageBetweenOptionalMarkAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? = nil, signature: FunctionSignatureSyntax, garbage garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
+  public static func makeInitializerDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndInitKeyword: GarbageNodesSyntax? = nil, initKeyword: TokenSyntax, _ garbageBetweenInitKeywordAndOptionalMark: GarbageNodesSyntax? = nil, optionalMark: TokenSyntax?, _ garbageBetweenOptionalMarkAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndSignature: GarbageNodesSyntax? = nil, signature: FunctionSignatureSyntax, _ garbageBetweenSignatureAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> InitializerDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2874,7 +2874,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return InitializerDeclSyntax(data)
   }
-  public static func makeDeinitializerDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndDeinitKeyword: GarbageNodesSyntax? = nil, deinitKeyword: TokenSyntax, garbage garbageBetweenDeinitKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
+  public static func makeDeinitializerDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndDeinitKeyword: GarbageNodesSyntax? = nil, deinitKeyword: TokenSyntax, _ garbageBetweenDeinitKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> DeinitializerDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2905,7 +2905,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeinitializerDeclSyntax(data)
   }
-  public static func makeSubscriptDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndSubscriptKeyword: GarbageNodesSyntax? = nil, subscriptKeyword: TokenSyntax, garbage garbageBetweenSubscriptKeywordAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParameterClauseAndIndices: GarbageNodesSyntax? = nil, indices: ParameterClauseSyntax, garbage garbageBetweenIndicesAndResult: GarbageNodesSyntax? = nil, result: ReturnClauseSyntax, garbage garbageBetweenResultAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndAccessor: GarbageNodesSyntax? = nil, accessor: Syntax?) -> SubscriptDeclSyntax {
+  public static func makeSubscriptDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndSubscriptKeyword: GarbageNodesSyntax? = nil, subscriptKeyword: TokenSyntax, _ garbageBetweenSubscriptKeywordAndGenericParameterClause: GarbageNodesSyntax? = nil, genericParameterClause: GenericParameterClauseSyntax?, _ garbageBetweenGenericParameterClauseAndIndices: GarbageNodesSyntax? = nil, indices: ParameterClauseSyntax, _ garbageBetweenIndicesAndResult: GarbageNodesSyntax? = nil, result: ReturnClauseSyntax, _ garbageBetweenResultAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndAccessor: GarbageNodesSyntax? = nil, accessor: Syntax?) -> SubscriptDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -2952,7 +2952,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SubscriptDeclSyntax(data)
   }
-  public static func makeAccessLevelModifier(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndModifier: GarbageNodesSyntax? = nil, modifier: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
+  public static func makeAccessLevelModifier(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndModifier: GarbageNodesSyntax? = nil, modifier: DeclModifierDetailSyntax?) -> AccessLevelModifierSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -2975,7 +2975,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AccessLevelModifierSyntax(data)
   }
-  public static func makeAccessPathComponent(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndTrailingDot: GarbageNodesSyntax? = nil, trailingDot: TokenSyntax?) -> AccessPathComponentSyntax {
+  public static func makeAccessPathComponent(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingDot: GarbageNodesSyntax? = nil, trailingDot: TokenSyntax?) -> AccessPathComponentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -3012,7 +3012,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AccessPathSyntax(data)
   }
-  public static func makeImportDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndImportTok: GarbageNodesSyntax? = nil, importTok: TokenSyntax, garbage garbageBetweenImportTokAndImportKind: GarbageNodesSyntax? = nil, importKind: TokenSyntax?, garbage garbageBetweenImportKindAndPath: GarbageNodesSyntax? = nil, path: AccessPathSyntax) -> ImportDeclSyntax {
+  public static func makeImportDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndImportTok: GarbageNodesSyntax? = nil, importTok: TokenSyntax, _ garbageBetweenImportTokAndImportKind: GarbageNodesSyntax? = nil, importKind: TokenSyntax?, _ garbageBetweenImportKindAndPath: GarbageNodesSyntax? = nil, path: AccessPathSyntax) -> ImportDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3047,7 +3047,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ImportDeclSyntax(data)
   }
-  public static func makeAccessorParameter(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> AccessorParameterSyntax {
+  public static func makeAccessorParameter(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> AccessorParameterSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -3074,7 +3074,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AccessorParameterSyntax(data)
   }
-  public static func makeAccessorDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifier: GarbageNodesSyntax? = nil, modifier: DeclModifierSyntax?, garbage garbageBetweenModifierAndAccessorKind: GarbageNodesSyntax? = nil, accessorKind: TokenSyntax, garbage garbageBetweenAccessorKindAndParameter: GarbageNodesSyntax? = nil, parameter: AccessorParameterSyntax?, garbage garbageBetweenParameterAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, garbage garbageBetweenAsyncKeywordAndThrowsKeyword: GarbageNodesSyntax? = nil, throwsKeyword: TokenSyntax?, garbage garbageBetweenThrowsKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
+  public static func makeAccessorDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifier: GarbageNodesSyntax? = nil, modifier: DeclModifierSyntax?, _ garbageBetweenModifierAndAccessorKind: GarbageNodesSyntax? = nil, accessorKind: TokenSyntax, _ garbageBetweenAccessorKindAndParameter: GarbageNodesSyntax? = nil, parameter: AccessorParameterSyntax?, _ garbageBetweenParameterAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsKeyword: GarbageNodesSyntax? = nil, throwsKeyword: TokenSyntax?, _ garbageBetweenThrowsKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax?) -> AccessorDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3131,7 +3131,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AccessorListSyntax(data)
   }
-  public static func makeAccessorBlock(garbage garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, garbage garbageBetweenLeftBraceAndAccessors: GarbageNodesSyntax? = nil, accessors: AccessorListSyntax, garbage garbageBetweenAccessorsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> AccessorBlockSyntax {
+  public static func makeAccessorBlock(_ garbageBeforeLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndAccessors: GarbageNodesSyntax? = nil, accessors: AccessorListSyntax, _ garbageBetweenAccessorsAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> AccessorBlockSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftBrace?.raw,
       leftBrace.raw,
@@ -3158,7 +3158,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AccessorBlockSyntax(data)
   }
-  public static func makePatternBinding(garbage garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, garbage garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?, garbage garbageBetweenInitializerAndAccessor: GarbageNodesSyntax? = nil, accessor: Syntax?, garbage garbageBetweenAccessorAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PatternBindingSyntax {
+  public static func makePatternBinding(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ garbageBetweenInitializerAndAccessor: GarbageNodesSyntax? = nil, accessor: Syntax?, _ garbageBetweenAccessorAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PatternBindingSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePattern?.raw,
       pattern.raw,
@@ -3207,7 +3207,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PatternBindingListSyntax(data)
   }
-  public static func makeVariableDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, garbage garbageBetweenLetOrVarKeywordAndBindings: GarbageNodesSyntax? = nil, bindings: PatternBindingListSyntax) -> VariableDeclSyntax {
+  public static func makeVariableDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ garbageBetweenLetOrVarKeywordAndBindings: GarbageNodesSyntax? = nil, bindings: PatternBindingListSyntax) -> VariableDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3238,7 +3238,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return VariableDeclSyntax(data)
   }
-  public static func makeEnumCaseElement(garbage garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndAssociatedValue: GarbageNodesSyntax? = nil, associatedValue: ParameterClauseSyntax?, garbage garbageBetweenAssociatedValueAndRawValue: GarbageNodesSyntax? = nil, rawValue: InitializerClauseSyntax?, garbage garbageBetweenRawValueAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> EnumCaseElementSyntax {
+  public static func makeEnumCaseElement(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndAssociatedValue: GarbageNodesSyntax? = nil, associatedValue: ParameterClauseSyntax?, _ garbageBetweenAssociatedValueAndRawValue: GarbageNodesSyntax? = nil, rawValue: InitializerClauseSyntax?, _ garbageBetweenRawValueAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> EnumCaseElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIdentifier?.raw,
       identifier.raw,
@@ -3283,7 +3283,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return EnumCaseElementListSyntax(data)
   }
-  public static func makeEnumCaseDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, garbage garbageBetweenCaseKeywordAndElements: GarbageNodesSyntax? = nil, elements: EnumCaseElementListSyntax) -> EnumCaseDeclSyntax {
+  public static func makeEnumCaseDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, _ garbageBetweenCaseKeywordAndElements: GarbageNodesSyntax? = nil, elements: EnumCaseElementListSyntax) -> EnumCaseDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3314,7 +3314,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return EnumCaseDeclSyntax(data)
   }
-  public static func makeEnumDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndEnumKeyword: GarbageNodesSyntax? = nil, enumKeyword: TokenSyntax, garbage garbageBetweenEnumKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndGenericParameters: GarbageNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax?, garbage garbageBetweenGenericParametersAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, garbage garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, garbage garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> EnumDeclSyntax {
+  public static func makeEnumDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndEnumKeyword: GarbageNodesSyntax? = nil, enumKeyword: TokenSyntax, _ garbageBetweenEnumKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndGenericParameters: GarbageNodesSyntax? = nil, genericParameters: GenericParameterClauseSyntax?, _ garbageBetweenGenericParametersAndInheritanceClause: GarbageNodesSyntax? = nil, inheritanceClause: TypeInheritanceClauseSyntax?, _ garbageBetweenInheritanceClauseAndGenericWhereClause: GarbageNodesSyntax? = nil, genericWhereClause: GenericWhereClauseSyntax?, _ garbageBetweenGenericWhereClauseAndMembers: GarbageNodesSyntax? = nil, members: MemberDeclBlockSyntax) -> EnumDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3361,7 +3361,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return EnumDeclSyntax(data)
   }
-  public static func makeOperatorDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndOperatorKeyword: GarbageNodesSyntax? = nil, operatorKeyword: TokenSyntax, garbage garbageBetweenOperatorKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: GarbageNodesSyntax? = nil, operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
+  public static func makeOperatorDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndOperatorKeyword: GarbageNodesSyntax? = nil, operatorKeyword: TokenSyntax, _ garbageBetweenOperatorKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndOperatorPrecedenceAndTypes: GarbageNodesSyntax? = nil, operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax?) -> OperatorDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3410,7 +3410,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IdentifierListSyntax(data)
   }
-  public static func makeOperatorPrecedenceAndTypes(garbage garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: GarbageNodesSyntax? = nil, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
+  public static func makeOperatorPrecedenceAndTypes(_ garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndPrecedenceGroupAndDesignatedTypes: GarbageNodesSyntax? = nil, precedenceGroupAndDesignatedTypes: IdentifierListSyntax) -> OperatorPrecedenceAndTypesSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeColon?.raw,
       colon.raw,
@@ -3433,7 +3433,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return OperatorPrecedenceAndTypesSyntax(data)
   }
-  public static func makePrecedenceGroupDecl(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, garbage garbageBetweenModifiersAndPrecedencegroupKeyword: GarbageNodesSyntax? = nil, precedencegroupKeyword: TokenSyntax, garbage garbageBetweenPrecedencegroupKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, garbage garbageBetweenIdentifierAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, garbage garbageBetweenLeftBraceAndGroupAttributes: GarbageNodesSyntax? = nil, groupAttributes: PrecedenceGroupAttributeListSyntax, garbage garbageBetweenGroupAttributesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> PrecedenceGroupDeclSyntax {
+  public static func makePrecedenceGroupDecl(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndModifiers: GarbageNodesSyntax? = nil, modifiers: ModifierListSyntax?, _ garbageBetweenModifiersAndPrecedencegroupKeyword: GarbageNodesSyntax? = nil, precedencegroupKeyword: TokenSyntax, _ garbageBetweenPrecedencegroupKeywordAndIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax, _ garbageBetweenIdentifierAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndGroupAttributes: GarbageNodesSyntax? = nil, groupAttributes: PrecedenceGroupAttributeListSyntax, _ garbageBetweenGroupAttributesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> PrecedenceGroupDeclSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -3490,7 +3490,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrecedenceGroupAttributeListSyntax(data)
   }
-  public static func makePrecedenceGroupRelation(garbage garbageBeforeHigherThanOrLowerThan: GarbageNodesSyntax? = nil, higherThanOrLowerThan: TokenSyntax, garbage garbageBetweenHigherThanOrLowerThanAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndOtherNames: GarbageNodesSyntax? = nil, otherNames: PrecedenceGroupNameListSyntax) -> PrecedenceGroupRelationSyntax {
+  public static func makePrecedenceGroupRelation(_ garbageBeforeHigherThanOrLowerThan: GarbageNodesSyntax? = nil, higherThanOrLowerThan: TokenSyntax, _ garbageBetweenHigherThanOrLowerThanAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndOtherNames: GarbageNodesSyntax? = nil, otherNames: PrecedenceGroupNameListSyntax) -> PrecedenceGroupRelationSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeHigherThanOrLowerThan?.raw,
       higherThanOrLowerThan.raw,
@@ -3531,7 +3531,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrecedenceGroupNameListSyntax(data)
   }
-  public static func makePrecedenceGroupNameElement(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
+  public static func makePrecedenceGroupNameElement(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrecedenceGroupNameElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -3554,7 +3554,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrecedenceGroupNameElementSyntax(data)
   }
-  public static func makePrecedenceGroupAssignment(garbage garbageBeforeAssignmentKeyword: GarbageNodesSyntax? = nil, assignmentKeyword: TokenSyntax, garbage garbageBetweenAssignmentKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndFlag: GarbageNodesSyntax? = nil, flag: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
+  public static func makePrecedenceGroupAssignment(_ garbageBeforeAssignmentKeyword: GarbageNodesSyntax? = nil, assignmentKeyword: TokenSyntax, _ garbageBetweenAssignmentKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndFlag: GarbageNodesSyntax? = nil, flag: TokenSyntax) -> PrecedenceGroupAssignmentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAssignmentKeyword?.raw,
       assignmentKeyword.raw,
@@ -3581,7 +3581,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrecedenceGroupAssignmentSyntax(data)
   }
-  public static func makePrecedenceGroupAssociativity(garbage garbageBeforeAssociativityKeyword: GarbageNodesSyntax? = nil, associativityKeyword: TokenSyntax, garbage garbageBetweenAssociativityKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
+  public static func makePrecedenceGroupAssociativity(_ garbageBeforeAssociativityKeyword: GarbageNodesSyntax? = nil, associativityKeyword: TokenSyntax, _ garbageBetweenAssociativityKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: TokenSyntax) -> PrecedenceGroupAssociativitySyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAssociativityKeyword?.raw,
       associativityKeyword.raw,
@@ -3636,7 +3636,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return NonEmptyTokenListSyntax(data)
   }
-  public static func makeCustomAttribute(garbage garbageBeforeAtSignToken: GarbageNodesSyntax? = nil, atSignToken: TokenSyntax, garbage garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil, attributeName: TypeSyntax, garbage garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, garbage garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax?, garbage garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?) -> CustomAttributeSyntax {
+  public static func makeCustomAttribute(_ garbageBeforeAtSignToken: GarbageNodesSyntax? = nil, atSignToken: TokenSyntax, _ garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil, attributeName: TypeSyntax, _ garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndArgumentList: GarbageNodesSyntax? = nil, argumentList: TupleExprElementListSyntax?, _ garbageBetweenArgumentListAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?) -> CustomAttributeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAtSignToken?.raw,
       atSignToken.raw,
@@ -3671,7 +3671,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CustomAttributeSyntax(data)
   }
-  public static func makeAttribute(garbage garbageBeforeAtSignToken: GarbageNodesSyntax? = nil, atSignToken: TokenSyntax, garbage garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil, attributeName: TokenSyntax, garbage garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, garbage garbageBetweenLeftParenAndArgument: GarbageNodesSyntax? = nil, argument: Syntax?, garbage garbageBetweenArgumentAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?, garbage garbageBetweenRightParenAndTokenList: GarbageNodesSyntax? = nil, tokenList: TokenListSyntax?) -> AttributeSyntax {
+  public static func makeAttribute(_ garbageBeforeAtSignToken: GarbageNodesSyntax? = nil, atSignToken: TokenSyntax, _ garbageBetweenAtSignTokenAndAttributeName: GarbageNodesSyntax? = nil, attributeName: TokenSyntax, _ garbageBetweenAttributeNameAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndArgument: GarbageNodesSyntax? = nil, argument: Syntax?, _ garbageBetweenArgumentAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?, _ garbageBetweenRightParenAndTokenList: GarbageNodesSyntax? = nil, tokenList: TokenListSyntax?) -> AttributeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAtSignToken?.raw,
       atSignToken.raw,
@@ -3738,7 +3738,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SpecializeAttributeSpecListSyntax(data)
   }
-  public static func makeAvailabilityEntry(garbage garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, garbage garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndAvailabilityList: GarbageNodesSyntax? = nil, availabilityList: AvailabilitySpecListSyntax, garbage garbageBetweenAvailabilityListAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax) -> AvailabilityEntrySyntax {
+  public static func makeAvailabilityEntry(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndAvailabilityList: GarbageNodesSyntax? = nil, availabilityList: AvailabilitySpecListSyntax, _ garbageBetweenAvailabilityListAndSemicolon: GarbageNodesSyntax? = nil, semicolon: TokenSyntax) -> AvailabilityEntrySyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabel?.raw,
       label.raw,
@@ -3769,7 +3769,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AvailabilityEntrySyntax(data)
   }
-  public static func makeLabeledSpecializeEntry(garbage garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, garbage garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: TokenSyntax, garbage garbageBetweenValueAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
+  public static func makeLabeledSpecializeEntry(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: TokenSyntax, _ garbageBetweenValueAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> LabeledSpecializeEntrySyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabel?.raw,
       label.raw,
@@ -3800,7 +3800,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return LabeledSpecializeEntrySyntax(data)
   }
-  public static func makeTargetFunctionEntry(garbage garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, garbage garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndDeclname: GarbageNodesSyntax? = nil, declname: DeclNameSyntax, garbage garbageBetweenDeclnameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
+  public static func makeTargetFunctionEntry(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndDeclname: GarbageNodesSyntax? = nil, declname: DeclNameSyntax, _ garbageBetweenDeclnameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TargetFunctionEntrySyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabel?.raw,
       label.raw,
@@ -3831,7 +3831,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TargetFunctionEntrySyntax(data)
   }
-  public static func makeNamedAttributeStringArgument(garbage garbageBeforeNameTok: GarbageNodesSyntax? = nil, nameTok: TokenSyntax, garbage garbageBetweenNameTokAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndStringOrDeclname: GarbageNodesSyntax? = nil, stringOrDeclname: Syntax) -> NamedAttributeStringArgumentSyntax {
+  public static func makeNamedAttributeStringArgument(_ garbageBeforeNameTok: GarbageNodesSyntax? = nil, nameTok: TokenSyntax, _ garbageBetweenNameTokAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndStringOrDeclname: GarbageNodesSyntax? = nil, stringOrDeclname: Syntax) -> NamedAttributeStringArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeNameTok?.raw,
       nameTok.raw,
@@ -3858,7 +3858,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return NamedAttributeStringArgumentSyntax(data)
   }
-  public static func makeDeclName(garbage garbageBeforeDeclBaseName: GarbageNodesSyntax? = nil, declBaseName: Syntax, garbage garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> DeclNameSyntax {
+  public static func makeDeclName(_ garbageBeforeDeclBaseName: GarbageNodesSyntax? = nil, declBaseName: Syntax, _ garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> DeclNameSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDeclBaseName?.raw,
       declBaseName.raw,
@@ -3881,7 +3881,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeclNameSyntax(data)
   }
-  public static func makeImplementsAttributeArguments(garbage garbageBeforeType: GarbageNodesSyntax? = nil, type: SimpleTypeIdentifierSyntax, garbage garbageBetweenTypeAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax, garbage garbageBetweenCommaAndDeclBaseName: GarbageNodesSyntax? = nil, declBaseName: Syntax, garbage garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
+  public static func makeImplementsAttributeArguments(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: SimpleTypeIdentifierSyntax, _ garbageBetweenTypeAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax, _ garbageBetweenCommaAndDeclBaseName: GarbageNodesSyntax? = nil, declBaseName: Syntax, _ garbageBetweenDeclBaseNameAndDeclNameArguments: GarbageNodesSyntax? = nil, declNameArguments: DeclNameArgumentsSyntax?) -> ImplementsAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeType?.raw,
       type.raw,
@@ -3912,7 +3912,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ImplementsAttributeArgumentsSyntax(data)
   }
-  public static func makeObjCSelectorPiece(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax?, garbage garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?) -> ObjCSelectorPieceSyntax {
+  public static func makeObjCSelectorPiece(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax?, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?) -> ObjCSelectorPieceSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name?.raw,
@@ -3949,7 +3949,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ObjCSelectorSyntax(data)
   }
-  public static func makeDifferentiableAttributeArguments(garbage garbageBeforeDiffKind: GarbageNodesSyntax? = nil, diffKind: TokenSyntax?, garbage garbageBetweenDiffKindAndDiffKindComma: GarbageNodesSyntax? = nil, diffKindComma: TokenSyntax?, garbage garbageBetweenDiffKindCommaAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?, garbage garbageBetweenDiffParamsAndDiffParamsComma: GarbageNodesSyntax? = nil, diffParamsComma: TokenSyntax?, garbage garbageBetweenDiffParamsCommaAndWhereClause: GarbageNodesSyntax? = nil, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
+  public static func makeDifferentiableAttributeArguments(_ garbageBeforeDiffKind: GarbageNodesSyntax? = nil, diffKind: TokenSyntax?, _ garbageBetweenDiffKindAndDiffKindComma: GarbageNodesSyntax? = nil, diffKindComma: TokenSyntax?, _ garbageBetweenDiffKindCommaAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?, _ garbageBetweenDiffParamsAndDiffParamsComma: GarbageNodesSyntax? = nil, diffParamsComma: TokenSyntax?, _ garbageBetweenDiffParamsCommaAndWhereClause: GarbageNodesSyntax? = nil, whereClause: GenericWhereClauseSyntax?) -> DifferentiableAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDiffKind?.raw,
       diffKind?.raw,
@@ -3984,7 +3984,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DifferentiableAttributeArgumentsSyntax(data)
   }
-  public static func makeDifferentiabilityParamsClause(garbage garbageBeforeWrtLabel: GarbageNodesSyntax? = nil, wrtLabel: TokenSyntax, garbage garbageBetweenWrtLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndParameters: GarbageNodesSyntax? = nil, parameters: Syntax) -> DifferentiabilityParamsClauseSyntax {
+  public static func makeDifferentiabilityParamsClause(_ garbageBeforeWrtLabel: GarbageNodesSyntax? = nil, wrtLabel: TokenSyntax, _ garbageBetweenWrtLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndParameters: GarbageNodesSyntax? = nil, parameters: Syntax) -> DifferentiabilityParamsClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWrtLabel?.raw,
       wrtLabel.raw,
@@ -4011,7 +4011,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DifferentiabilityParamsClauseSyntax(data)
   }
-  public static func makeDifferentiabilityParams(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamListSyntax, garbage garbageBetweenDiffParamsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DifferentiabilityParamsSyntax {
+  public static func makeDifferentiabilityParams(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamListSyntax, _ garbageBetweenDiffParamsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> DifferentiabilityParamsSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -4052,7 +4052,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DifferentiabilityParamListSyntax(data)
   }
-  public static func makeDifferentiabilityParam(garbage garbageBeforeParameter: GarbageNodesSyntax? = nil, parameter: Syntax, garbage garbageBetweenParameterAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DifferentiabilityParamSyntax {
+  public static func makeDifferentiabilityParam(_ garbageBeforeParameter: GarbageNodesSyntax? = nil, parameter: Syntax, _ garbageBetweenParameterAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> DifferentiabilityParamSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeParameter?.raw,
       parameter.raw,
@@ -4075,7 +4075,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DifferentiabilityParamSyntax(data)
   }
-  public static func makeDerivativeRegistrationAttributeArguments(garbage garbageBeforeOfLabel: GarbageNodesSyntax? = nil, ofLabel: TokenSyntax, garbage garbageBetweenOfLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndOriginalDeclName: GarbageNodesSyntax? = nil, originalDeclName: QualifiedDeclNameSyntax, garbage garbageBetweenOriginalDeclNameAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax?, garbage garbageBetweenPeriodAndAccessorKind: GarbageNodesSyntax? = nil, accessorKind: TokenSyntax?, garbage garbageBetweenAccessorKindAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, garbage garbageBetweenCommaAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
+  public static func makeDerivativeRegistrationAttributeArguments(_ garbageBeforeOfLabel: GarbageNodesSyntax? = nil, ofLabel: TokenSyntax, _ garbageBetweenOfLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndOriginalDeclName: GarbageNodesSyntax? = nil, originalDeclName: QualifiedDeclNameSyntax, _ garbageBetweenOriginalDeclNameAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax?, _ garbageBetweenPeriodAndAccessorKind: GarbageNodesSyntax? = nil, accessorKind: TokenSyntax?, _ garbageBetweenAccessorKindAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, _ garbageBetweenCommaAndDiffParams: GarbageNodesSyntax? = nil, diffParams: DifferentiabilityParamsClauseSyntax?) -> DerivativeRegistrationAttributeArgumentsSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeOfLabel?.raw,
       ofLabel.raw,
@@ -4118,7 +4118,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DerivativeRegistrationAttributeArgumentsSyntax(data)
   }
-  public static func makeQualifiedDeclName(garbage garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax?, garbage garbageBetweenBaseTypeAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax?, garbage garbageBetweenDotAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
+  public static func makeQualifiedDeclName(_ garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax?, _ garbageBetweenBaseTypeAndDot: GarbageNodesSyntax? = nil, dot: TokenSyntax?, _ garbageBetweenDotAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> QualifiedDeclNameSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBaseType?.raw,
       baseType?.raw,
@@ -4149,7 +4149,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return QualifiedDeclNameSyntax(data)
   }
-  public static func makeFunctionDeclName(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: Syntax, garbage garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
+  public static func makeFunctionDeclName(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: Syntax, _ garbageBetweenNameAndArguments: GarbageNodesSyntax? = nil, arguments: DeclNameArgumentsSyntax?) -> FunctionDeclNameSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -4172,7 +4172,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionDeclNameSyntax(data)
   }
-  public static func makeBackDeployAttributeSpecList(garbage garbageBeforeBeforeLabel: GarbageNodesSyntax? = nil, beforeLabel: TokenSyntax, garbage garbageBetweenBeforeLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndVersionList: GarbageNodesSyntax? = nil, versionList: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
+  public static func makeBackDeployAttributeSpecList(_ garbageBeforeBeforeLabel: GarbageNodesSyntax? = nil, beforeLabel: TokenSyntax, _ garbageBetweenBeforeLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndVersionList: GarbageNodesSyntax? = nil, versionList: BackDeployVersionListSyntax) -> BackDeployAttributeSpecListSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBeforeLabel?.raw,
       beforeLabel.raw,
@@ -4213,7 +4213,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return BackDeployVersionListSyntax(data)
   }
-  public static func makeBackDeployVersionArgument(garbage garbageBeforeAvailabilityVersionRestriction: GarbageNodesSyntax? = nil, availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, garbage garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> BackDeployVersionArgumentSyntax {
+  public static func makeBackDeployVersionArgument(_ garbageBeforeAvailabilityVersionRestriction: GarbageNodesSyntax? = nil, availabilityVersionRestriction: AvailabilityVersionRestrictionSyntax, _ garbageBetweenAvailabilityVersionRestrictionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> BackDeployVersionArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAvailabilityVersionRestriction?.raw,
       availabilityVersionRestriction.raw,
@@ -4236,7 +4236,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return BackDeployVersionArgumentSyntax(data)
   }
-  public static func makeContinueStmt(garbage garbageBeforeContinueKeyword: GarbageNodesSyntax? = nil, continueKeyword: TokenSyntax, garbage garbageBetweenContinueKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> ContinueStmtSyntax {
+  public static func makeContinueStmt(_ garbageBeforeContinueKeyword: GarbageNodesSyntax? = nil, continueKeyword: TokenSyntax, _ garbageBetweenContinueKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> ContinueStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeContinueKeyword?.raw,
       continueKeyword.raw,
@@ -4259,7 +4259,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ContinueStmtSyntax(data)
   }
-  public static func makeWhileStmt(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, garbage garbageBetweenWhileKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, garbage garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> WhileStmtSyntax {
+  public static func makeWhileStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> WhileStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -4294,7 +4294,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return WhileStmtSyntax(data)
   }
-  public static func makeDeferStmt(garbage garbageBeforeDeferKeyword: GarbageNodesSyntax? = nil, deferKeyword: TokenSyntax, garbage garbageBetweenDeferKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> DeferStmtSyntax {
+  public static func makeDeferStmt(_ garbageBeforeDeferKeyword: GarbageNodesSyntax? = nil, deferKeyword: TokenSyntax, _ garbageBetweenDeferKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> DeferStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDeferKeyword?.raw,
       deferKeyword.raw,
@@ -4317,7 +4317,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeferStmtSyntax(data)
   }
-  public static func makeExpressionStmt(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionStmtSyntax {
+  public static func makeExpressionStmt(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -4350,7 +4350,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SwitchCaseListSyntax(data)
   }
-  public static func makeRepeatWhileStmt(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndRepeatKeyword: GarbageNodesSyntax? = nil, repeatKeyword: TokenSyntax, garbage garbageBetweenRepeatKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, garbage garbageBetweenBodyAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, garbage garbageBetweenWhileKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
+  public static func makeRepeatWhileStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndRepeatKeyword: GarbageNodesSyntax? = nil, repeatKeyword: TokenSyntax, _ garbageBetweenRepeatKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndWhileKeyword: GarbageNodesSyntax? = nil, whileKeyword: TokenSyntax, _ garbageBetweenWhileKeywordAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax) -> RepeatWhileStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -4389,7 +4389,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return RepeatWhileStmtSyntax(data)
   }
-  public static func makeGuardStmt(garbage garbageBeforeGuardKeyword: GarbageNodesSyntax? = nil, guardKeyword: TokenSyntax, garbage garbageBetweenGuardKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, garbage garbageBetweenConditionsAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax, garbage garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> GuardStmtSyntax {
+  public static func makeGuardStmt(_ garbageBeforeGuardKeyword: GarbageNodesSyntax? = nil, guardKeyword: TokenSyntax, _ garbageBetweenGuardKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax, _ garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> GuardStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeGuardKeyword?.raw,
       guardKeyword.raw,
@@ -4420,7 +4420,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GuardStmtSyntax(data)
   }
-  public static func makeWhereClause(garbage garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil, whereKeyword: TokenSyntax, garbage garbageBetweenWhereKeywordAndGuardResult: GarbageNodesSyntax? = nil, guardResult: ExprSyntax) -> WhereClauseSyntax {
+  public static func makeWhereClause(_ garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil, whereKeyword: TokenSyntax, _ garbageBetweenWhereKeywordAndGuardResult: GarbageNodesSyntax? = nil, guardResult: ExprSyntax) -> WhereClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWhereKeyword?.raw,
       whereKeyword.raw,
@@ -4443,7 +4443,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return WhereClauseSyntax(data)
   }
-  public static func makeForInStmt(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndForKeyword: GarbageNodesSyntax? = nil, forKeyword: TokenSyntax, garbage garbageBetweenForKeywordAndTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax?, garbage garbageBetweenTryKeywordAndAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax?, garbage garbageBetweenAwaitKeywordAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax?, garbage garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, garbage garbageBetweenTypeAnnotationAndInKeyword: GarbageNodesSyntax? = nil, inKeyword: TokenSyntax, garbage garbageBetweenInKeywordAndSequenceExpr: GarbageNodesSyntax? = nil, sequenceExpr: ExprSyntax, garbage garbageBetweenSequenceExprAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, garbage garbageBetweenWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ForInStmtSyntax {
+  public static func makeForInStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndForKeyword: GarbageNodesSyntax? = nil, forKeyword: TokenSyntax, _ garbageBetweenForKeywordAndTryKeyword: GarbageNodesSyntax? = nil, tryKeyword: TokenSyntax?, _ garbageBetweenTryKeywordAndAwaitKeyword: GarbageNodesSyntax? = nil, awaitKeyword: TokenSyntax?, _ garbageBetweenAwaitKeywordAndCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax?, _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInKeyword: GarbageNodesSyntax? = nil, inKeyword: TokenSyntax, _ garbageBetweenInKeywordAndSequenceExpr: GarbageNodesSyntax? = nil, sequenceExpr: ExprSyntax, _ garbageBetweenSequenceExprAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ForInStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -4506,7 +4506,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ForInStmtSyntax(data)
   }
-  public static func makeSwitchStmt(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndSwitchKeyword: GarbageNodesSyntax? = nil, switchKeyword: TokenSyntax, garbage garbageBetweenSwitchKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, garbage garbageBetweenExpressionAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, garbage garbageBetweenLeftBraceAndCases: GarbageNodesSyntax? = nil, cases: SwitchCaseListSyntax, garbage garbageBetweenCasesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
+  public static func makeSwitchStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndSwitchKeyword: GarbageNodesSyntax? = nil, switchKeyword: TokenSyntax, _ garbageBetweenSwitchKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax, _ garbageBetweenExpressionAndLeftBrace: GarbageNodesSyntax? = nil, leftBrace: TokenSyntax, _ garbageBetweenLeftBraceAndCases: GarbageNodesSyntax? = nil, cases: SwitchCaseListSyntax, _ garbageBetweenCasesAndRightBrace: GarbageNodesSyntax? = nil, rightBrace: TokenSyntax) -> SwitchStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -4563,7 +4563,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CatchClauseListSyntax(data)
   }
-  public static func makeDoStmt(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndDoKeyword: GarbageNodesSyntax? = nil, doKeyword: TokenSyntax, garbage garbageBetweenDoKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, garbage garbageBetweenBodyAndCatchClauses: GarbageNodesSyntax? = nil, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
+  public static func makeDoStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndDoKeyword: GarbageNodesSyntax? = nil, doKeyword: TokenSyntax, _ garbageBetweenDoKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndCatchClauses: GarbageNodesSyntax? = nil, catchClauses: CatchClauseListSyntax?) -> DoStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -4598,7 +4598,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DoStmtSyntax(data)
   }
-  public static func makeReturnStmt(garbage garbageBeforeReturnKeyword: GarbageNodesSyntax? = nil, returnKeyword: TokenSyntax, garbage garbageBetweenReturnKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax?) -> ReturnStmtSyntax {
+  public static func makeReturnStmt(_ garbageBeforeReturnKeyword: GarbageNodesSyntax? = nil, returnKeyword: TokenSyntax, _ garbageBetweenReturnKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax?) -> ReturnStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeReturnKeyword?.raw,
       returnKeyword.raw,
@@ -4621,7 +4621,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ReturnStmtSyntax(data)
   }
-  public static func makeYieldStmt(garbage garbageBeforeYieldKeyword: GarbageNodesSyntax? = nil, yieldKeyword: TokenSyntax, garbage garbageBetweenYieldKeywordAndYields: GarbageNodesSyntax? = nil, yields: Syntax) -> YieldStmtSyntax {
+  public static func makeYieldStmt(_ garbageBeforeYieldKeyword: GarbageNodesSyntax? = nil, yieldKeyword: TokenSyntax, _ garbageBetweenYieldKeywordAndYields: GarbageNodesSyntax? = nil, yields: Syntax) -> YieldStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeYieldKeyword?.raw,
       yieldKeyword.raw,
@@ -4644,7 +4644,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return YieldStmtSyntax(data)
   }
-  public static func makeYieldList(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil, elementList: ExprListSyntax, garbage garbageBetweenElementListAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?, garbage garbageBetweenTrailingCommaAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> YieldListSyntax {
+  public static func makeYieldList(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElementList: GarbageNodesSyntax? = nil, elementList: ExprListSyntax, _ garbageBetweenElementListAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?, _ garbageBetweenTrailingCommaAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> YieldListSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -4675,7 +4675,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return YieldListSyntax(data)
   }
-  public static func makeFallthroughStmt(garbage garbageBeforeFallthroughKeyword: GarbageNodesSyntax? = nil, fallthroughKeyword: TokenSyntax) -> FallthroughStmtSyntax {
+  public static func makeFallthroughStmt(_ garbageBeforeFallthroughKeyword: GarbageNodesSyntax? = nil, fallthroughKeyword: TokenSyntax) -> FallthroughStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeFallthroughKeyword?.raw,
       fallthroughKeyword.raw,
@@ -4694,7 +4694,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FallthroughStmtSyntax(data)
   }
-  public static func makeBreakStmt(garbage garbageBeforeBreakKeyword: GarbageNodesSyntax? = nil, breakKeyword: TokenSyntax, garbage garbageBetweenBreakKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> BreakStmtSyntax {
+  public static func makeBreakStmt(_ garbageBeforeBreakKeyword: GarbageNodesSyntax? = nil, breakKeyword: TokenSyntax, _ garbageBetweenBreakKeywordAndLabel: GarbageNodesSyntax? = nil, label: TokenSyntax?) -> BreakStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBreakKeyword?.raw,
       breakKeyword.raw,
@@ -4745,7 +4745,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CatchItemListSyntax(data)
   }
-  public static func makeConditionElement(garbage garbageBeforeCondition: GarbageNodesSyntax? = nil, condition: Syntax, garbage garbageBetweenConditionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ConditionElementSyntax {
+  public static func makeConditionElement(_ garbageBeforeCondition: GarbageNodesSyntax? = nil, condition: Syntax, _ garbageBetweenConditionAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> ConditionElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeCondition?.raw,
       condition.raw,
@@ -4768,7 +4768,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ConditionElementSyntax(data)
   }
-  public static func makeAvailabilityCondition(garbage garbageBeforePoundAvailableKeyword: GarbageNodesSyntax? = nil, poundAvailableKeyword: TokenSyntax, garbage garbageBetweenPoundAvailableKeywordAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, garbage garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> AvailabilityConditionSyntax {
+  public static func makeAvailabilityCondition(_ garbageBeforePoundAvailableKeyword: GarbageNodesSyntax? = nil, poundAvailableKeyword: TokenSyntax, _ garbageBetweenPoundAvailableKeywordAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> AvailabilityConditionSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundAvailableKeyword?.raw,
       poundAvailableKeyword.raw,
@@ -4799,7 +4799,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AvailabilityConditionSyntax(data)
   }
-  public static func makeMatchingPatternCondition(garbage garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, garbage garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, garbage garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax) -> MatchingPatternConditionSyntax {
+  public static func makeMatchingPatternCondition(_ garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, _ garbageBetweenCaseKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax) -> MatchingPatternConditionSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeCaseKeyword?.raw,
       caseKeyword.raw,
@@ -4830,7 +4830,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MatchingPatternConditionSyntax(data)
   }
-  public static func makeOptionalBindingCondition(garbage garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, garbage garbageBetweenLetOrVarKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, garbage garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
+  public static func makeOptionalBindingCondition(_ garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ garbageBetweenLetOrVarKeywordAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?, _ garbageBetweenTypeAnnotationAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?) -> OptionalBindingConditionSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLetOrVarKeyword?.raw,
       letOrVarKeyword.raw,
@@ -4861,7 +4861,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return OptionalBindingConditionSyntax(data)
   }
-  public static func makeUnavailabilityCondition(garbage garbageBeforePoundUnavailableKeyword: GarbageNodesSyntax? = nil, poundUnavailableKeyword: TokenSyntax, garbage garbageBetweenPoundUnavailableKeywordAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, garbage garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> UnavailabilityConditionSyntax {
+  public static func makeUnavailabilityCondition(_ garbageBeforePoundUnavailableKeyword: GarbageNodesSyntax? = nil, poundUnavailableKeyword: TokenSyntax, _ garbageBetweenPoundUnavailableKeywordAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndAvailabilitySpec: GarbageNodesSyntax? = nil, availabilitySpec: AvailabilitySpecListSyntax, _ garbageBetweenAvailabilitySpecAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> UnavailabilityConditionSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundUnavailableKeyword?.raw,
       poundUnavailableKeyword.raw,
@@ -4906,7 +4906,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ConditionElementListSyntax(data)
   }
-  public static func makeDeclarationStmt(garbage garbageBeforeDeclaration: GarbageNodesSyntax? = nil, declaration: DeclSyntax) -> DeclarationStmtSyntax {
+  public static func makeDeclarationStmt(_ garbageBeforeDeclaration: GarbageNodesSyntax? = nil, declaration: DeclSyntax) -> DeclarationStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDeclaration?.raw,
       declaration.raw,
@@ -4925,7 +4925,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DeclarationStmtSyntax(data)
   }
-  public static func makeThrowStmt(garbage garbageBeforeThrowKeyword: GarbageNodesSyntax? = nil, throwKeyword: TokenSyntax, garbage garbageBetweenThrowKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ThrowStmtSyntax {
+  public static func makeThrowStmt(_ garbageBeforeThrowKeyword: GarbageNodesSyntax? = nil, throwKeyword: TokenSyntax, _ garbageBetweenThrowKeywordAndExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ThrowStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeThrowKeyword?.raw,
       throwKeyword.raw,
@@ -4948,7 +4948,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ThrowStmtSyntax(data)
   }
-  public static func makeIfStmt(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndIfKeyword: GarbageNodesSyntax? = nil, ifKeyword: TokenSyntax, garbage garbageBetweenIfKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, garbage garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, garbage garbageBetweenBodyAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax?, garbage garbageBetweenElseKeywordAndElseBody: GarbageNodesSyntax? = nil, elseBody: Syntax?) -> IfStmtSyntax {
+  public static func makeIfStmt(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndIfKeyword: GarbageNodesSyntax? = nil, ifKeyword: TokenSyntax, _ garbageBetweenIfKeywordAndConditions: GarbageNodesSyntax? = nil, conditions: ConditionElementListSyntax, _ garbageBetweenConditionsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax, _ garbageBetweenBodyAndElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax?, _ garbageBetweenElseKeywordAndElseBody: GarbageNodesSyntax? = nil, elseBody: Syntax?) -> IfStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -4991,7 +4991,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IfStmtSyntax(data)
   }
-  public static func makeElseIfContinuation(garbage garbageBeforeIfStatement: GarbageNodesSyntax? = nil, ifStatement: IfStmtSyntax) -> ElseIfContinuationSyntax {
+  public static func makeElseIfContinuation(_ garbageBeforeIfStatement: GarbageNodesSyntax? = nil, ifStatement: IfStmtSyntax) -> ElseIfContinuationSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIfStatement?.raw,
       ifStatement.raw,
@@ -5010,7 +5010,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ElseIfContinuationSyntax(data)
   }
-  public static func makeElseBlock(garbage garbageBeforeElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax, garbage garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ElseBlockSyntax {
+  public static func makeElseBlock(_ garbageBeforeElseKeyword: GarbageNodesSyntax? = nil, elseKeyword: TokenSyntax, _ garbageBetweenElseKeywordAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> ElseBlockSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeElseKeyword?.raw,
       elseKeyword.raw,
@@ -5033,7 +5033,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ElseBlockSyntax(data)
   }
-  public static func makeSwitchCase(garbage garbageBeforeUnknownAttr: GarbageNodesSyntax? = nil, unknownAttr: AttributeSyntax?, garbage garbageBetweenUnknownAttrAndLabel: GarbageNodesSyntax? = nil, label: Syntax, garbage garbageBetweenLabelAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
+  public static func makeSwitchCase(_ garbageBeforeUnknownAttr: GarbageNodesSyntax? = nil, unknownAttr: AttributeSyntax?, _ garbageBetweenUnknownAttrAndLabel: GarbageNodesSyntax? = nil, label: Syntax, _ garbageBetweenLabelAndStatements: GarbageNodesSyntax? = nil, statements: CodeBlockItemListSyntax) -> SwitchCaseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeUnknownAttr?.raw,
       unknownAttr?.raw,
@@ -5060,7 +5060,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SwitchCaseSyntax(data)
   }
-  public static func makeSwitchDefaultLabel(garbage garbageBeforeDefaultKeyword: GarbageNodesSyntax? = nil, defaultKeyword: TokenSyntax, garbage garbageBetweenDefaultKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> SwitchDefaultLabelSyntax {
+  public static func makeSwitchDefaultLabel(_ garbageBeforeDefaultKeyword: GarbageNodesSyntax? = nil, defaultKeyword: TokenSyntax, _ garbageBetweenDefaultKeywordAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> SwitchDefaultLabelSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeDefaultKeyword?.raw,
       defaultKeyword.raw,
@@ -5083,7 +5083,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SwitchDefaultLabelSyntax(data)
   }
-  public static func makeCaseItem(garbage garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, garbage garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CaseItemSyntax {
+  public static func makeCaseItem(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CaseItemSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePattern?.raw,
       pattern.raw,
@@ -5110,7 +5110,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CaseItemSyntax(data)
   }
-  public static func makeCatchItem(garbage garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax?, garbage garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, garbage garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CatchItemSyntax {
+  public static func makeCatchItem(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax?, _ garbageBetweenPatternAndWhereClause: GarbageNodesSyntax? = nil, whereClause: WhereClauseSyntax?, _ garbageBetweenWhereClauseAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> CatchItemSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePattern?.raw,
       pattern?.raw,
@@ -5137,7 +5137,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CatchItemSyntax(data)
   }
-  public static func makeSwitchCaseLabel(garbage garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, garbage garbageBetweenCaseKeywordAndCaseItems: GarbageNodesSyntax? = nil, caseItems: CaseItemListSyntax, garbage garbageBetweenCaseItemsAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> SwitchCaseLabelSyntax {
+  public static func makeSwitchCaseLabel(_ garbageBeforeCaseKeyword: GarbageNodesSyntax? = nil, caseKeyword: TokenSyntax, _ garbageBetweenCaseKeywordAndCaseItems: GarbageNodesSyntax? = nil, caseItems: CaseItemListSyntax, _ garbageBetweenCaseItemsAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax) -> SwitchCaseLabelSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeCaseKeyword?.raw,
       caseKeyword.raw,
@@ -5164,7 +5164,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SwitchCaseLabelSyntax(data)
   }
-  public static func makeCatchClause(garbage garbageBeforeCatchKeyword: GarbageNodesSyntax? = nil, catchKeyword: TokenSyntax, garbage garbageBetweenCatchKeywordAndCatchItems: GarbageNodesSyntax? = nil, catchItems: CatchItemListSyntax?, garbage garbageBetweenCatchItemsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> CatchClauseSyntax {
+  public static func makeCatchClause(_ garbageBeforeCatchKeyword: GarbageNodesSyntax? = nil, catchKeyword: TokenSyntax, _ garbageBetweenCatchKeywordAndCatchItems: GarbageNodesSyntax? = nil, catchItems: CatchItemListSyntax?, _ garbageBetweenCatchItemsAndBody: GarbageNodesSyntax? = nil, body: CodeBlockSyntax) -> CatchClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeCatchKeyword?.raw,
       catchKeyword.raw,
@@ -5191,7 +5191,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CatchClauseSyntax(data)
   }
-  public static func makePoundAssertStmt(garbage garbageBeforePoundAssert: GarbageNodesSyntax? = nil, poundAssert: TokenSyntax, garbage garbageBetweenPoundAssertAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax, garbage garbageBetweenConditionAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, garbage garbageBetweenCommaAndMessage: GarbageNodesSyntax? = nil, message: TokenSyntax?, garbage garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundAssertStmtSyntax {
+  public static func makePoundAssertStmt(_ garbageBeforePoundAssert: GarbageNodesSyntax? = nil, poundAssert: TokenSyntax, _ garbageBetweenPoundAssertAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndCondition: GarbageNodesSyntax? = nil, condition: ExprSyntax, _ garbageBetweenConditionAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, _ garbageBetweenCommaAndMessage: GarbageNodesSyntax? = nil, message: TokenSyntax?, _ garbageBetweenMessageAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> PoundAssertStmtSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePoundAssert?.raw,
       poundAssert.raw,
@@ -5230,7 +5230,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PoundAssertStmtSyntax(data)
   }
-  public static func makeGenericWhereClause(garbage garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil, whereKeyword: TokenSyntax, garbage garbageBetweenWhereKeywordAndRequirementList: GarbageNodesSyntax? = nil, requirementList: GenericRequirementListSyntax) -> GenericWhereClauseSyntax {
+  public static func makeGenericWhereClause(_ garbageBeforeWhereKeyword: GarbageNodesSyntax? = nil, whereKeyword: TokenSyntax, _ garbageBetweenWhereKeywordAndRequirementList: GarbageNodesSyntax? = nil, requirementList: GenericRequirementListSyntax) -> GenericWhereClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWhereKeyword?.raw,
       whereKeyword.raw,
@@ -5267,7 +5267,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericRequirementListSyntax(data)
   }
-  public static func makeGenericRequirement(garbage garbageBeforeBody: GarbageNodesSyntax? = nil, body: Syntax, garbage garbageBetweenBodyAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericRequirementSyntax {
+  public static func makeGenericRequirement(_ garbageBeforeBody: GarbageNodesSyntax? = nil, body: Syntax, _ garbageBetweenBodyAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericRequirementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBody?.raw,
       body.raw,
@@ -5290,7 +5290,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericRequirementSyntax(data)
   }
-  public static func makeSameTypeRequirement(garbage garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, garbage garbageBetweenLeftTypeIdentifierAndEqualityToken: GarbageNodesSyntax? = nil, equalityToken: TokenSyntax, garbage garbageBetweenEqualityTokenAndRightTypeIdentifier: GarbageNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> SameTypeRequirementSyntax {
+  public static func makeSameTypeRequirement(_ garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, _ garbageBetweenLeftTypeIdentifierAndEqualityToken: GarbageNodesSyntax? = nil, equalityToken: TokenSyntax, _ garbageBetweenEqualityTokenAndRightTypeIdentifier: GarbageNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> SameTypeRequirementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftTypeIdentifier?.raw,
       leftTypeIdentifier.raw,
@@ -5317,7 +5317,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SameTypeRequirementSyntax(data)
   }
-  public static func makeLayoutRequirement(garbage garbageBeforeTypeIdentifier: GarbageNodesSyntax? = nil, typeIdentifier: TypeSyntax, garbage garbageBetweenTypeIdentifierAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndLayoutConstraint: GarbageNodesSyntax? = nil, layoutConstraint: TokenSyntax, garbage garbageBetweenLayoutConstraintAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, garbage garbageBetweenLeftParenAndSize: GarbageNodesSyntax? = nil, size: TokenSyntax?, garbage garbageBetweenSizeAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, garbage garbageBetweenCommaAndAlignment: GarbageNodesSyntax? = nil, alignment: TokenSyntax?, garbage garbageBetweenAlignmentAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?) -> LayoutRequirementSyntax {
+  public static func makeLayoutRequirement(_ garbageBeforeTypeIdentifier: GarbageNodesSyntax? = nil, typeIdentifier: TypeSyntax, _ garbageBetweenTypeIdentifierAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndLayoutConstraint: GarbageNodesSyntax? = nil, layoutConstraint: TokenSyntax, _ garbageBetweenLayoutConstraintAndLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax?, _ garbageBetweenLeftParenAndSize: GarbageNodesSyntax? = nil, size: TokenSyntax?, _ garbageBetweenSizeAndComma: GarbageNodesSyntax? = nil, comma: TokenSyntax?, _ garbageBetweenCommaAndAlignment: GarbageNodesSyntax? = nil, alignment: TokenSyntax?, _ garbageBetweenAlignmentAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax?) -> LayoutRequirementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeTypeIdentifier?.raw,
       typeIdentifier.raw,
@@ -5378,7 +5378,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericParameterListSyntax(data)
   }
-  public static func makeGenericParameter(garbage garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, garbage garbageBetweenColonAndInheritedType: GarbageNodesSyntax? = nil, inheritedType: TypeSyntax?, garbage garbageBetweenInheritedTypeAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericParameterSyntax {
+  public static func makeGenericParameter(_ garbageBeforeAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndInheritedType: GarbageNodesSyntax? = nil, inheritedType: TypeSyntax?, _ garbageBetweenInheritedTypeAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericParameterSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeAttributes?.raw,
       attributes?.raw,
@@ -5427,7 +5427,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrimaryAssociatedTypeListSyntax(data)
   }
-  public static func makePrimaryAssociatedType(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
+  public static func makePrimaryAssociatedType(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> PrimaryAssociatedTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -5450,7 +5450,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrimaryAssociatedTypeSyntax(data)
   }
-  public static func makeGenericParameterClause(garbage garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, garbage garbageBetweenLeftAngleBracketAndGenericParameterList: GarbageNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, garbage garbageBetweenGenericParameterListAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
+  public static func makeGenericParameterClause(_ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ garbageBetweenLeftAngleBracketAndGenericParameterList: GarbageNodesSyntax? = nil, genericParameterList: GenericParameterListSyntax, _ garbageBetweenGenericParameterListAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericParameterClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
@@ -5477,7 +5477,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericParameterClauseSyntax(data)
   }
-  public static func makeConformanceRequirement(garbage garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, garbage garbageBetweenLeftTypeIdentifierAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndRightTypeIdentifier: GarbageNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> ConformanceRequirementSyntax {
+  public static func makeConformanceRequirement(_ garbageBeforeLeftTypeIdentifier: GarbageNodesSyntax? = nil, leftTypeIdentifier: TypeSyntax, _ garbageBetweenLeftTypeIdentifierAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndRightTypeIdentifier: GarbageNodesSyntax? = nil, rightTypeIdentifier: TypeSyntax) -> ConformanceRequirementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftTypeIdentifier?.raw,
       leftTypeIdentifier.raw,
@@ -5504,7 +5504,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ConformanceRequirementSyntax(data)
   }
-  public static func makePrimaryAssociatedTypeClause(garbage garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, garbage garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: GarbageNodesSyntax? = nil, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, garbage garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
+  public static func makePrimaryAssociatedTypeClause(_ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ garbageBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: GarbageNodesSyntax? = nil, primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax, _ garbageBetweenPrimaryAssociatedTypeListAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
@@ -5531,7 +5531,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return PrimaryAssociatedTypeClauseSyntax(data)
   }
-  public static func makeSimpleTypeIdentifier(garbage garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
+  public static func makeSimpleTypeIdentifier(_ garbageBeforeName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> SimpleTypeIdentifierSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeName?.raw,
       name.raw,
@@ -5554,7 +5554,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return SimpleTypeIdentifierSyntax(data)
   }
-  public static func makeMemberTypeIdentifier(garbage garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax, garbage garbageBetweenBaseTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, garbage garbageBetweenPeriodAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, garbage garbageBetweenNameAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
+  public static func makeMemberTypeIdentifier(_ garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax, _ garbageBetweenBaseTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, _ garbageBetweenPeriodAndName: GarbageNodesSyntax? = nil, name: TokenSyntax, _ garbageBetweenNameAndGenericArgumentClause: GarbageNodesSyntax? = nil, genericArgumentClause: GenericArgumentClauseSyntax?) -> MemberTypeIdentifierSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBaseType?.raw,
       baseType.raw,
@@ -5585,7 +5585,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MemberTypeIdentifierSyntax(data)
   }
-  public static func makeClassRestrictionType(garbage garbageBeforeClassKeyword: GarbageNodesSyntax? = nil, classKeyword: TokenSyntax) -> ClassRestrictionTypeSyntax {
+  public static func makeClassRestrictionType(_ garbageBeforeClassKeyword: GarbageNodesSyntax? = nil, classKeyword: TokenSyntax) -> ClassRestrictionTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeClassKeyword?.raw,
       classKeyword.raw,
@@ -5604,7 +5604,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ClassRestrictionTypeSyntax(data)
   }
-  public static func makeArrayType(garbage garbageBeforeLeftSquareBracket: GarbageNodesSyntax? = nil, leftSquareBracket: TokenSyntax, garbage garbageBetweenLeftSquareBracketAndElementType: GarbageNodesSyntax? = nil, elementType: TypeSyntax, garbage garbageBetweenElementTypeAndRightSquareBracket: GarbageNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> ArrayTypeSyntax {
+  public static func makeArrayType(_ garbageBeforeLeftSquareBracket: GarbageNodesSyntax? = nil, leftSquareBracket: TokenSyntax, _ garbageBetweenLeftSquareBracketAndElementType: GarbageNodesSyntax? = nil, elementType: TypeSyntax, _ garbageBetweenElementTypeAndRightSquareBracket: GarbageNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> ArrayTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftSquareBracket?.raw,
       leftSquareBracket.raw,
@@ -5631,7 +5631,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ArrayTypeSyntax(data)
   }
-  public static func makeDictionaryType(garbage garbageBeforeLeftSquareBracket: GarbageNodesSyntax? = nil, leftSquareBracket: TokenSyntax, garbage garbageBetweenLeftSquareBracketAndKeyType: GarbageNodesSyntax? = nil, keyType: TypeSyntax, garbage garbageBetweenKeyTypeAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndValueType: GarbageNodesSyntax? = nil, valueType: TypeSyntax, garbage garbageBetweenValueTypeAndRightSquareBracket: GarbageNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> DictionaryTypeSyntax {
+  public static func makeDictionaryType(_ garbageBeforeLeftSquareBracket: GarbageNodesSyntax? = nil, leftSquareBracket: TokenSyntax, _ garbageBetweenLeftSquareBracketAndKeyType: GarbageNodesSyntax? = nil, keyType: TypeSyntax, _ garbageBetweenKeyTypeAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValueType: GarbageNodesSyntax? = nil, valueType: TypeSyntax, _ garbageBetweenValueTypeAndRightSquareBracket: GarbageNodesSyntax? = nil, rightSquareBracket: TokenSyntax) -> DictionaryTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftSquareBracket?.raw,
       leftSquareBracket.raw,
@@ -5666,7 +5666,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return DictionaryTypeSyntax(data)
   }
-  public static func makeMetatypeType(garbage garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax, garbage garbageBetweenBaseTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, garbage garbageBetweenPeriodAndTypeOrProtocol: GarbageNodesSyntax? = nil, typeOrProtocol: TokenSyntax) -> MetatypeTypeSyntax {
+  public static func makeMetatypeType(_ garbageBeforeBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax, _ garbageBetweenBaseTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, _ garbageBetweenPeriodAndTypeOrProtocol: GarbageNodesSyntax? = nil, typeOrProtocol: TokenSyntax) -> MetatypeTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeBaseType?.raw,
       baseType.raw,
@@ -5693,7 +5693,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return MetatypeTypeSyntax(data)
   }
-  public static func makeOptionalType(garbage garbageBeforeWrappedType: GarbageNodesSyntax? = nil, wrappedType: TypeSyntax, garbage garbageBetweenWrappedTypeAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalTypeSyntax {
+  public static func makeOptionalType(_ garbageBeforeWrappedType: GarbageNodesSyntax? = nil, wrappedType: TypeSyntax, _ garbageBetweenWrappedTypeAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWrappedType?.raw,
       wrappedType.raw,
@@ -5716,7 +5716,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return OptionalTypeSyntax(data)
   }
-  public static func makeConstrainedSugarType(garbage garbageBeforeSomeOrAnySpecifier: GarbageNodesSyntax? = nil, someOrAnySpecifier: TokenSyntax, garbage garbageBetweenSomeOrAnySpecifierAndBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax) -> ConstrainedSugarTypeSyntax {
+  public static func makeConstrainedSugarType(_ garbageBeforeSomeOrAnySpecifier: GarbageNodesSyntax? = nil, someOrAnySpecifier: TokenSyntax, _ garbageBetweenSomeOrAnySpecifierAndBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax) -> ConstrainedSugarTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeSomeOrAnySpecifier?.raw,
       someOrAnySpecifier.raw,
@@ -5739,7 +5739,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ConstrainedSugarTypeSyntax(data)
   }
-  public static func makeImplicitlyUnwrappedOptionalType(garbage garbageBeforeWrappedType: GarbageNodesSyntax? = nil, wrappedType: TypeSyntax, garbage garbageBetweenWrappedTypeAndExclamationMark: GarbageNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
+  public static func makeImplicitlyUnwrappedOptionalType(_ garbageBeforeWrappedType: GarbageNodesSyntax? = nil, wrappedType: TypeSyntax, _ garbageBetweenWrappedTypeAndExclamationMark: GarbageNodesSyntax? = nil, exclamationMark: TokenSyntax) -> ImplicitlyUnwrappedOptionalTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWrappedType?.raw,
       wrappedType.raw,
@@ -5762,7 +5762,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return ImplicitlyUnwrappedOptionalTypeSyntax(data)
   }
-  public static func makeCompositionTypeElement(garbage garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax, garbage garbageBetweenTypeAndAmpersand: GarbageNodesSyntax? = nil, ampersand: TokenSyntax?) -> CompositionTypeElementSyntax {
+  public static func makeCompositionTypeElement(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax, _ garbageBetweenTypeAndAmpersand: GarbageNodesSyntax? = nil, ampersand: TokenSyntax?) -> CompositionTypeElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeType?.raw,
       type.raw,
@@ -5799,7 +5799,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CompositionTypeElementListSyntax(data)
   }
-  public static func makeCompositionType(garbage garbageBeforeElements: GarbageNodesSyntax? = nil, elements: CompositionTypeElementListSyntax) -> CompositionTypeSyntax {
+  public static func makeCompositionType(_ garbageBeforeElements: GarbageNodesSyntax? = nil, elements: CompositionTypeElementListSyntax) -> CompositionTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeElements?.raw,
       elements.raw,
@@ -5818,7 +5818,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return CompositionTypeSyntax(data)
   }
-  public static func makeTupleTypeElement(garbage garbageBeforeInOut: GarbageNodesSyntax? = nil, inOut: TokenSyntax?, garbage garbageBetweenInOutAndName: GarbageNodesSyntax? = nil, name: TokenSyntax?, garbage garbageBetweenNameAndSecondName: GarbageNodesSyntax? = nil, secondName: TokenSyntax?, garbage garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, garbage garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax, garbage garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil, ellipsis: TokenSyntax?, garbage garbageBetweenEllipsisAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?, garbage garbageBetweenInitializerAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
+  public static func makeTupleTypeElement(_ garbageBeforeInOut: GarbageNodesSyntax? = nil, inOut: TokenSyntax?, _ garbageBetweenInOutAndName: GarbageNodesSyntax? = nil, name: TokenSyntax?, _ garbageBetweenNameAndSecondName: GarbageNodesSyntax? = nil, secondName: TokenSyntax?, _ garbageBetweenSecondNameAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax?, _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax, _ garbageBetweenTypeAndEllipsis: GarbageNodesSyntax? = nil, ellipsis: TokenSyntax?, _ garbageBetweenEllipsisAndInitializer: GarbageNodesSyntax? = nil, initializer: InitializerClauseSyntax?, _ garbageBetweenInitializerAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TupleTypeElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeInOut?.raw,
       inOut?.raw,
@@ -5879,7 +5879,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TupleTypeElementListSyntax(data)
   }
-  public static func makeTupleType(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil, elements: TupleTypeElementListSyntax, garbage garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleTypeSyntax {
+  public static func makeTupleType(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil, elements: TupleTypeElementListSyntax, _ garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TupleTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -5906,7 +5906,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TupleTypeSyntax(data)
   }
-  public static func makeFunctionType(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: TupleTypeElementListSyntax, garbage garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax, garbage garbageBetweenRightParenAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, garbage garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, garbage garbageBetweenThrowsOrRethrowsKeywordAndArrow: GarbageNodesSyntax? = nil, arrow: TokenSyntax, garbage garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil, returnType: TypeSyntax) -> FunctionTypeSyntax {
+  public static func makeFunctionType(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndArguments: GarbageNodesSyntax? = nil, arguments: TupleTypeElementListSyntax, _ garbageBetweenArgumentsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax, _ garbageBetweenRightParenAndAsyncKeyword: GarbageNodesSyntax? = nil, asyncKeyword: TokenSyntax?, _ garbageBetweenAsyncKeywordAndThrowsOrRethrowsKeyword: GarbageNodesSyntax? = nil, throwsOrRethrowsKeyword: TokenSyntax?, _ garbageBetweenThrowsOrRethrowsKeywordAndArrow: GarbageNodesSyntax? = nil, arrow: TokenSyntax, _ garbageBetweenArrowAndReturnType: GarbageNodesSyntax? = nil, returnType: TypeSyntax) -> FunctionTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -5949,7 +5949,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return FunctionTypeSyntax(data)
   }
-  public static func makeAttributedType(garbage garbageBeforeSpecifier: GarbageNodesSyntax? = nil, specifier: TokenSyntax?, garbage garbageBetweenSpecifierAndAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, garbage garbageBetweenAttributesAndBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax) -> AttributedTypeSyntax {
+  public static func makeAttributedType(_ garbageBeforeSpecifier: GarbageNodesSyntax? = nil, specifier: TokenSyntax?, _ garbageBetweenSpecifierAndAttributes: GarbageNodesSyntax? = nil, attributes: AttributeListSyntax?, _ garbageBetweenAttributesAndBaseType: GarbageNodesSyntax? = nil, baseType: TypeSyntax) -> AttributedTypeSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeSpecifier?.raw,
       specifier?.raw,
@@ -5990,7 +5990,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericArgumentListSyntax(data)
   }
-  public static func makeGenericArgument(garbage garbageBeforeArgumentType: GarbageNodesSyntax? = nil, argumentType: TypeSyntax, garbage garbageBetweenArgumentTypeAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericArgumentSyntax {
+  public static func makeGenericArgument(_ garbageBeforeArgumentType: GarbageNodesSyntax? = nil, argumentType: TypeSyntax, _ garbageBetweenArgumentTypeAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> GenericArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeArgumentType?.raw,
       argumentType.raw,
@@ -6013,7 +6013,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericArgumentSyntax(data)
   }
-  public static func makeGenericArgumentClause(garbage garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, garbage garbageBetweenLeftAngleBracketAndArguments: GarbageNodesSyntax? = nil, arguments: GenericArgumentListSyntax, garbage garbageBetweenArgumentsAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericArgumentClauseSyntax {
+  public static func makeGenericArgumentClause(_ garbageBeforeLeftAngleBracket: GarbageNodesSyntax? = nil, leftAngleBracket: TokenSyntax, _ garbageBetweenLeftAngleBracketAndArguments: GarbageNodesSyntax? = nil, arguments: GenericArgumentListSyntax, _ garbageBetweenArgumentsAndRightAngleBracket: GarbageNodesSyntax? = nil, rightAngleBracket: TokenSyntax) -> GenericArgumentClauseSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftAngleBracket?.raw,
       leftAngleBracket.raw,
@@ -6040,7 +6040,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return GenericArgumentClauseSyntax(data)
   }
-  public static func makeTypeAnnotation(garbage garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> TypeAnnotationSyntax {
+  public static func makeTypeAnnotation(_ garbageBeforeColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> TypeAnnotationSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeColon?.raw,
       colon.raw,
@@ -6063,7 +6063,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TypeAnnotationSyntax(data)
   }
-  public static func makeEnumCasePattern(garbage garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax?, garbage garbageBetweenTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, garbage garbageBetweenPeriodAndCaseName: GarbageNodesSyntax? = nil, caseName: TokenSyntax, garbage garbageBetweenCaseNameAndAssociatedTuple: GarbageNodesSyntax? = nil, associatedTuple: TuplePatternSyntax?) -> EnumCasePatternSyntax {
+  public static func makeEnumCasePattern(_ garbageBeforeType: GarbageNodesSyntax? = nil, type: TypeSyntax?, _ garbageBetweenTypeAndPeriod: GarbageNodesSyntax? = nil, period: TokenSyntax, _ garbageBetweenPeriodAndCaseName: GarbageNodesSyntax? = nil, caseName: TokenSyntax, _ garbageBetweenCaseNameAndAssociatedTuple: GarbageNodesSyntax? = nil, associatedTuple: TuplePatternSyntax?) -> EnumCasePatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeType?.raw,
       type?.raw,
@@ -6094,7 +6094,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return EnumCasePatternSyntax(data)
   }
-  public static func makeIsTypePattern(garbage garbageBeforeIsKeyword: GarbageNodesSyntax? = nil, isKeyword: TokenSyntax, garbage garbageBetweenIsKeywordAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> IsTypePatternSyntax {
+  public static func makeIsTypePattern(_ garbageBeforeIsKeyword: GarbageNodesSyntax? = nil, isKeyword: TokenSyntax, _ garbageBetweenIsKeywordAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> IsTypePatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIsKeyword?.raw,
       isKeyword.raw,
@@ -6117,7 +6117,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IsTypePatternSyntax(data)
   }
-  public static func makeOptionalPattern(garbage garbageBeforeSubPattern: GarbageNodesSyntax? = nil, subPattern: PatternSyntax, garbage garbageBetweenSubPatternAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalPatternSyntax {
+  public static func makeOptionalPattern(_ garbageBeforeSubPattern: GarbageNodesSyntax? = nil, subPattern: PatternSyntax, _ garbageBetweenSubPatternAndQuestionMark: GarbageNodesSyntax? = nil, questionMark: TokenSyntax) -> OptionalPatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeSubPattern?.raw,
       subPattern.raw,
@@ -6140,7 +6140,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return OptionalPatternSyntax(data)
   }
-  public static func makeIdentifierPattern(garbage garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax) -> IdentifierPatternSyntax {
+  public static func makeIdentifierPattern(_ garbageBeforeIdentifier: GarbageNodesSyntax? = nil, identifier: TokenSyntax) -> IdentifierPatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeIdentifier?.raw,
       identifier.raw,
@@ -6159,7 +6159,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return IdentifierPatternSyntax(data)
   }
-  public static func makeAsTypePattern(garbage garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndAsKeyword: GarbageNodesSyntax? = nil, asKeyword: TokenSyntax, garbage garbageBetweenAsKeywordAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> AsTypePatternSyntax {
+  public static func makeAsTypePattern(_ garbageBeforePattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndAsKeyword: GarbageNodesSyntax? = nil, asKeyword: TokenSyntax, _ garbageBetweenAsKeywordAndType: GarbageNodesSyntax? = nil, type: TypeSyntax) -> AsTypePatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePattern?.raw,
       pattern.raw,
@@ -6186,7 +6186,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AsTypePatternSyntax(data)
   }
-  public static func makeTuplePattern(garbage garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, garbage garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil, elements: TuplePatternElementListSyntax, garbage garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TuplePatternSyntax {
+  public static func makeTuplePattern(_ garbageBeforeLeftParen: GarbageNodesSyntax? = nil, leftParen: TokenSyntax, _ garbageBetweenLeftParenAndElements: GarbageNodesSyntax? = nil, elements: TuplePatternElementListSyntax, _ garbageBetweenElementsAndRightParen: GarbageNodesSyntax? = nil, rightParen: TokenSyntax) -> TuplePatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLeftParen?.raw,
       leftParen.raw,
@@ -6213,7 +6213,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TuplePatternSyntax(data)
   }
-  public static func makeWildcardPattern(garbage garbageBeforeWildcard: GarbageNodesSyntax? = nil, wildcard: TokenSyntax, garbage garbageBetweenWildcardAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
+  public static func makeWildcardPattern(_ garbageBeforeWildcard: GarbageNodesSyntax? = nil, wildcard: TokenSyntax, _ garbageBetweenWildcardAndTypeAnnotation: GarbageNodesSyntax? = nil, typeAnnotation: TypeAnnotationSyntax?) -> WildcardPatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeWildcard?.raw,
       wildcard.raw,
@@ -6236,7 +6236,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return WildcardPatternSyntax(data)
   }
-  public static func makeTuplePatternElement(garbage garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, garbage garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, garbage garbageBetweenLabelColonAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, garbage garbageBetweenPatternAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TuplePatternElementSyntax {
+  public static func makeTuplePatternElement(_ garbageBeforeLabelName: GarbageNodesSyntax? = nil, labelName: TokenSyntax?, _ garbageBetweenLabelNameAndLabelColon: GarbageNodesSyntax? = nil, labelColon: TokenSyntax?, _ garbageBetweenLabelColonAndPattern: GarbageNodesSyntax? = nil, pattern: PatternSyntax, _ garbageBetweenPatternAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> TuplePatternElementSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabelName?.raw,
       labelName?.raw,
@@ -6267,7 +6267,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TuplePatternElementSyntax(data)
   }
-  public static func makeExpressionPattern(garbage garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionPatternSyntax {
+  public static func makeExpressionPattern(_ garbageBeforeExpression: GarbageNodesSyntax? = nil, expression: ExprSyntax) -> ExpressionPatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeExpression?.raw,
       expression.raw,
@@ -6300,7 +6300,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return TuplePatternElementListSyntax(data)
   }
-  public static func makeValueBindingPattern(garbage garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, garbage garbageBetweenLetOrVarKeywordAndValuePattern: GarbageNodesSyntax? = nil, valuePattern: PatternSyntax) -> ValueBindingPatternSyntax {
+  public static func makeValueBindingPattern(_ garbageBeforeLetOrVarKeyword: GarbageNodesSyntax? = nil, letOrVarKeyword: TokenSyntax, _ garbageBetweenLetOrVarKeywordAndValuePattern: GarbageNodesSyntax? = nil, valuePattern: PatternSyntax) -> ValueBindingPatternSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLetOrVarKeyword?.raw,
       letOrVarKeyword.raw,
@@ -6337,7 +6337,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AvailabilitySpecListSyntax(data)
   }
-  public static func makeAvailabilityArgument(garbage garbageBeforeEntry: GarbageNodesSyntax? = nil, entry: Syntax, garbage garbageBetweenEntryAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> AvailabilityArgumentSyntax {
+  public static func makeAvailabilityArgument(_ garbageBeforeEntry: GarbageNodesSyntax? = nil, entry: Syntax, _ garbageBetweenEntryAndTrailingComma: GarbageNodesSyntax? = nil, trailingComma: TokenSyntax?) -> AvailabilityArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeEntry?.raw,
       entry.raw,
@@ -6360,7 +6360,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AvailabilityArgumentSyntax(data)
   }
-  public static func makeAvailabilityLabeledArgument(garbage garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, garbage garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, garbage garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: Syntax) -> AvailabilityLabeledArgumentSyntax {
+  public static func makeAvailabilityLabeledArgument(_ garbageBeforeLabel: GarbageNodesSyntax? = nil, label: TokenSyntax, _ garbageBetweenLabelAndColon: GarbageNodesSyntax? = nil, colon: TokenSyntax, _ garbageBetweenColonAndValue: GarbageNodesSyntax? = nil, value: Syntax) -> AvailabilityLabeledArgumentSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeLabel?.raw,
       label.raw,
@@ -6387,7 +6387,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AvailabilityLabeledArgumentSyntax(data)
   }
-  public static func makeAvailabilityVersionRestriction(garbage garbageBeforePlatform: GarbageNodesSyntax? = nil, platform: TokenSyntax, garbage garbageBetweenPlatformAndVersion: GarbageNodesSyntax? = nil, version: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
+  public static func makeAvailabilityVersionRestriction(_ garbageBeforePlatform: GarbageNodesSyntax? = nil, platform: TokenSyntax, _ garbageBetweenPlatformAndVersion: GarbageNodesSyntax? = nil, version: VersionTupleSyntax?) -> AvailabilityVersionRestrictionSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforePlatform?.raw,
       platform.raw,
@@ -6410,7 +6410,7 @@ public enum SyntaxFactory {
     ], length: .zero, presence: presence))
     return AvailabilityVersionRestrictionSyntax(data)
   }
-  public static func makeVersionTuple(garbage garbageBeforeMajorMinor: GarbageNodesSyntax? = nil, majorMinor: Syntax, garbage garbageBetweenMajorMinorAndPatchPeriod: GarbageNodesSyntax? = nil, patchPeriod: TokenSyntax?, garbage garbageBetweenPatchPeriodAndPatchVersion: GarbageNodesSyntax? = nil, patchVersion: TokenSyntax?) -> VersionTupleSyntax {
+  public static func makeVersionTuple(_ garbageBeforeMajorMinor: GarbageNodesSyntax? = nil, majorMinor: Syntax, _ garbageBetweenMajorMinorAndPatchPeriod: GarbageNodesSyntax? = nil, patchPeriod: TokenSyntax?, _ garbageBetweenPatchPeriodAndPatchVersion: GarbageNodesSyntax? = nil, patchVersion: TokenSyntax?) -> VersionTupleSyntax {
     let layout: [RawSyntax?] = [
       garbageBeforeMajorMinor?.raw,
       majorMinor.raw,

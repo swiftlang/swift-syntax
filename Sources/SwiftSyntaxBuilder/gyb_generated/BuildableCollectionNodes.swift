@@ -92,7 +92,7 @@ public struct GarbageNodes: ExpressibleByArrayLiteral, SyntaxBuildable, Expressi
       $0.buildSyntax(format: format, leadingTrivia: nil)
     })
     if let leadingTrivia = leadingTrivia {
-      return result.withLeadingTrivia(leadingTrivia + (result.leadingTrivia ?? []))
+      return result.withLeadingTrivia((leadingTrivia + (result.leadingTrivia ?? [])).addingSpacingAfterNewlinesIfNeeded())
     } else {
       return result
     }

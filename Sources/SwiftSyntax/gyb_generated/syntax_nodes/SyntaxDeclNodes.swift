@@ -52,6 +52,45 @@ extension UnknownDeclSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MissingDeclSyntax
+
+public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MissingDeclSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .missingDecl else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MissingDeclSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .missingDecl)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 0)
+  }
+}
+
+extension MissingDeclSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+    ])
+  }
+}
+
 // MARK: - TypealiasDeclSyntax
 
 public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
@@ -2782,7 +2821,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                   current `extendedType`, if present.
   public func withExtendedType(
     _ newChild: TypeSyntax?) -> ExtensionDeclSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.extendedType)
     return ExtensionDeclSyntax(newData)
   }

@@ -91,6 +91,66 @@ open class SyntaxVisitor {
   /// The function called after visiting `UnknownPatternSyntax` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnknownPatternSyntax) {}
+  /// Visiting `MissingSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MissingSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingSyntax) {}
+  /// Visiting `MissingDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MissingDeclSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingDeclSyntax) {}
+  /// Visiting `MissingExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MissingExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingExprSyntax) {}
+  /// Visiting `MissingStmtSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MissingStmtSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingStmtSyntax) {}
+  /// Visiting `MissingTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MissingTypeSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingTypeSyntax) {}
+  /// Visiting `MissingPatternSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `MissingPatternSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingPatternSyntax) {}
   /// Visiting `CodeBlockItemSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2656,6 +2716,72 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnknownPatternSyntax(_ data: SyntaxData) {
       let node = UnknownPatternSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMissingSyntax(_ data: SyntaxData) {
+      let node = MissingSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMissingDeclSyntax(_ data: SyntaxData) {
+      let node = MissingDeclSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMissingExprSyntax(_ data: SyntaxData) {
+      let node = MissingExprSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMissingStmtSyntax(_ data: SyntaxData) {
+      let node = MissingStmtSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMissingTypeSyntax(_ data: SyntaxData) {
+      let node = MissingTypeSyntax(data)
+      let needsChildren = (visit(node) == .visitChildren)
+      // Avoid calling into visitChildren if possible.
+      if needsChildren && node.raw.numberOfChildren > 0 {
+        visitChildren(node)
+      }
+      visitPost(node)
+  }
+
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplMissingPatternSyntax(_ data: SyntaxData) {
+      let node = MissingPatternSyntax(data)
       let needsChildren = (visit(node) == .visitChildren)
       // Avoid calling into visitChildren if possible.
       if needsChildren && node.raw.numberOfChildren > 0 {
@@ -5368,16 +5494,6 @@ open class SyntaxVisitor {
     // circumvents an issue where the compiler allocates stack space for every
     // case statement next to each other in debug builds, causing it to allocate
     // ~50KB per call to this function. rdar://55929175
-    case .decl:
-      visitImplDeclSyntax(data)
-    case .expr:
-      visitImplExprSyntax(data)
-    case .stmt:
-      visitImplStmtSyntax(data)
-    case .type:
-      visitImplTypeSyntax(data)
-    case .pattern:
-      visitImplPatternSyntax(data)
     case .unknownDecl:
       visitImplUnknownDeclSyntax(data)
     case .unknownExpr:
@@ -5388,6 +5504,18 @@ open class SyntaxVisitor {
       visitImplUnknownTypeSyntax(data)
     case .unknownPattern:
       visitImplUnknownPatternSyntax(data)
+    case .missing:
+      visitImplMissingSyntax(data)
+    case .missingDecl:
+      visitImplMissingDeclSyntax(data)
+    case .missingExpr:
+      visitImplMissingExprSyntax(data)
+    case .missingStmt:
+      visitImplMissingStmtSyntax(data)
+    case .missingType:
+      visitImplMissingTypeSyntax(data)
+    case .missingPattern:
+      visitImplMissingPatternSyntax(data)
     case .codeBlockItem:
       visitImplCodeBlockItemSyntax(data)
     case .codeBlockItemList:

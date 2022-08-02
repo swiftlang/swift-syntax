@@ -83,7 +83,8 @@ public enum SyntaxFactory {
 %   end
 
 %   if not node.is_base():
-  public static func makeBlank${node.syntax_kind}(presence: SourcePresence = .present) -> ${node.name} {
+%   default_presence = 'missing' if node.is_missing() else 'present'
+  public static func makeBlank${node.syntax_kind}(presence: SourcePresence = .${default_presence}) -> ${node.name} {
     let data = SyntaxData.forRoot(RawSyntax.create(kind: .${node.swift_syntax_kind},
       layout: [
 %     for child in node.children:

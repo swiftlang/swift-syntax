@@ -99,6 +99,48 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: UnknownPatternSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+  override open func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  override open func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
   override open func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

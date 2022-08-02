@@ -52,6 +52,45 @@ extension UnknownPatternSyntax: CustomReflectable {
   }
 }
 
+// MARK: - MissingPatternSyntax
+
+public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+
+  public let _syntaxNode: Syntax
+
+  /// Converts the given `Syntax` node to a `MissingPatternSyntax` if possible. Returns
+  /// `nil` if the conversion is not possible.
+  public init?(_ syntax: Syntax) {
+    guard syntax.raw.kind == .missingPattern else { return nil }
+    self._syntaxNode = syntax
+  }
+
+  /// Creates a `MissingPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    assert(data.raw.kind == .missingPattern)
+    self._syntaxNode = Syntax(data)
+  }
+
+  public var syntaxNodeType: SyntaxProtocol.Type {
+    return Swift.type(of: self)
+  }
+
+
+  public func _validateLayout() {
+    let rawChildren = Array(RawSyntaxChildren(Syntax(self)))
+    assert(rawChildren.count == 0)
+  }
+}
+
+extension MissingPatternSyntax: CustomReflectable {
+  public var customMirror: Mirror {
+    return Mirror(self, children: [
+    ])
+  }
+}
+
 // MARK: - EnumCasePatternSyntax
 
 public struct EnumCasePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
@@ -287,7 +326,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> IsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return IsTypePatternSyntax(newData)
   }
@@ -371,7 +410,7 @@ public struct OptionalPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `subPattern`, if present.
   public func withSubPattern(
     _ newChild: PatternSyntax?) -> OptionalPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.subPattern)
     return OptionalPatternSyntax(newData)
   }
@@ -550,7 +589,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `pattern`, if present.
   public func withPattern(
     _ newChild: PatternSyntax?) -> AsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.pattern)
     return AsTypePatternSyntax(newData)
   }
@@ -592,7 +631,7 @@ public struct AsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `type`, if present.
   public func withType(
     _ newChild: TypeSyntax?) -> AsTypePatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.type)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingType)
     let newData = data.replacingChild(raw, at: Cursor.type)
     return AsTypePatternSyntax(newData)
   }
@@ -946,7 +985,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `expression`, if present.
   public func withExpression(
     _ newChild: ExprSyntax?) -> ExpressionPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.expr)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingExpr)
     let newData = data.replacingChild(raw, at: Cursor.expression)
     return ExpressionPatternSyntax(newData)
   }
@@ -1041,7 +1080,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                   current `valuePattern`, if present.
   public func withValuePattern(
     _ newChild: PatternSyntax?) -> ValueBindingPatternSyntax {
-    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.pattern)
+    let raw = newChild?.raw ?? RawSyntax.missing(SyntaxKind.missingPattern)
     let newData = data.replacingChild(raw, at: Cursor.valuePattern)
     return ValueBindingPatternSyntax(newData)
   }

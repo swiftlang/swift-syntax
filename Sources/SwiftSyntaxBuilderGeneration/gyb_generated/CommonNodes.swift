@@ -43,6 +43,24 @@ let COMMON_NODES: [Node] = [
   Node(name: "UnknownPattern",
        kind: "Pattern"),
 
+  Node(name: "Missing",
+       kind: "Syntax"),
+
+  Node(name: "MissingDecl",
+       kind: "Decl"),
+
+  Node(name: "MissingExpr",
+       kind: "Expr"),
+
+  Node(name: "MissingStmt",
+       kind: "Stmt"),
+
+  Node(name: "MissingType",
+       kind: "Type"),
+
+  Node(name: "MissingPattern",
+       kind: "Pattern"),
+
   Node(name: "CodeBlockItem",
        description: "A CodeBlockItem is any Syntax node that appears on its own line insidea CodeBlock.",
        kind: "Syntax",

@@ -48,9 +48,14 @@ class Node {
     return syntaxKind.contains("Unknown")
   }
 
+  /// Returns `True` if this node is an `Unknown` syntax subclass.
+  var isMissing: Bool {
+    return syntaxKind.contains("Missing")
+  }
+
   /// Returns `True` if this node should have a builder associated.
   var isBuildable: Bool {
-    return !isBase && !isUnknown && !isSyntaxCollection
+    return !isBase && !isUnknown && !isMissing && !isSyntaxCollection
   }
 
   /// Returns 'True' if this node shall not be created while parsing if it has no children.

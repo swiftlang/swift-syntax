@@ -22,7 +22,7 @@
 internal enum SyntaxKind: CSyntaxKind {
   case token = 0
   case unknown = 1
-% for node in SYNTAX_NODES:
+% for node in NON_BASE_SYNTAX_NODES:
   case ${node.swift_syntax_kind} = ${SYNTAX_NODE_SERIALIZATION_CODES[node.syntax_kind]}
 % end
 
